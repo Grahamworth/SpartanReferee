@@ -550,13 +550,22 @@ html.hide-tracking #stage #canvas { opacity: 0; }
 .chips button { font: 700 1rem var(--body); padding: 9px 14px; border: 1px solid var(--line); background: transparent; color: var(--white); cursor: pointer; }
 .chips button[aria-pressed="true"] { background: var(--white); color: var(--black); border-color: var(--white); }
 .chips.big button { font: italic 800 1.3rem var(--display); text-transform: uppercase; flex: 1; }
+.ex-tabs { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; margin: 10px -16px 4px; padding: 0 16px; }
+.ex-tabs::-webkit-scrollbar { display: none; }
+.ex-tabs button { flex: 0 0 auto; padding: 9px 14px; border: 0; border-bottom: 3px solid transparent; background: transparent; color: var(--muted); font: italic 800 1.15rem var(--display); text-transform: uppercase; cursor: pointer; }
+.ex-tabs button[aria-pressed="true"] { color: var(--white); border-bottom-color: var(--red); }
+.ex-pager { display: flex; align-items: flex-start; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.ex-pager::-webkit-scrollbar { display: none; }
+.ex-panel { flex: 0 0 100%; min-width: 0; box-sizing: border-box; scroll-snap-align: start; scroll-snap-stop: always; }
+.ex-name { margin: 10px 0 2px; font: italic 900 2.2rem var(--display); text-transform: uppercase; }
+.ex-flow { margin: 0 0 8px; }
 .best-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin: 10px 0 18px; padding: 12px 14px; border: 1px solid var(--line); }
 .best-score { display: grid; line-height: 1.1; }
 .best-score b { font: italic 900 3.2rem var(--display); }
 .best-score small { color: var(--muted); }
 .best-row .btn { flex: 0 0 auto; min-width: 120px; justify-content: center; }
 .board-title { margin: 18px 0 4px; font: italic 800 1.5rem var(--display); text-transform: uppercase; }
-#historyMore { margin-top: 10px; }
+.history-more { margin-top: 10px; }
 .board.history tr td.name small { line-height: 1.3; }
 .board { width: 100%; border-collapse: collapse; margin-top: 6px; font-variant-numeric: tabular-nums; }
 .board td { padding: 10px 8px; border-bottom: 1px solid var(--line); }
@@ -576,5 +585,3 @@ html.practice-mode .of { display: none !important; }
 .name-field input { font: inherit; padding: 12px; background: #222; color: #fff; border: 1px solid #555; }
 .name-gate .btn { justify-content: center; }
 .name-gate .error { margin: 0; color: #ff8a84; font-size: 1rem; }
-.name-google { display: grid; gap: 8px; }
-.name-google p { font-size: 0.95rem; }

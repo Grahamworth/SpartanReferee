@@ -311,3 +311,36 @@ test('signing in carries a phone’s burpee scores, bests and attempts to the ac
   assert.strictEqual(last.top.length, 1);
   assert.strictEqual(last.top[0].reps, 50);
 });
+
+test('each exercise has its own scoreboards and attempts, and the hand test is for admins only', async () => {
+  const { api, tick } = authed({ adminEmails: ['boss@example.com'] });
+  const post = (path, body, headers = DEV_A) => api.handle({ method: 'POST', path, headers, body });
+  const top = async (key) => (await api.handle({ method: 'GET', path: `scores/${key}`, headers: DEV_A, query: { period: 'all' } })).body.top.map((x) => x.reps);
+  assert.strictEqual((await post('scores/squats.1min', { reps: 40 })).status, 200);
+  assert.strictEqual((await post('scores/1min', { reps: 20 })).status, 200); // burpees: unchanged, and a separate board
+  assert.deepStrictEqual(await top('squats.1min'), [40]);
+  assert.deepStrictEqual(await top('1min'), [20]);
+  assert.deepStrictEqual(await top('pushups.5min'), []);
+  assert.strictEqual((await post('scores/squats.1min', { reps: 121 })).status, 400); // more than possible
+  assert.strictEqual((await api.handle({ method: 'GET', path: 'scores/rowing.1min', headers: DEV_A })).status, 404);
+  const attempt = { id: 'sq-attempt-1', exercise: 'squats', mode: '5min', reps: 100, status: 'full', at: 900000 };
+  assert.strictEqual((await post('scores/attempts', attempt)).status, 200);
+  assert.strictEqual((await post('scores/attempts', { ...attempt, id: 'sq-attempt-2', exercise: 'rowing' })).status, 400);
+  const mine = await api.handle({ method: 'GET', path: 'scores/attempts', headers: DEV_A });
+  assert.strictEqual(mine.body.attempts[0].exercise, 'squats');
+  assert.strictEqual(mine.body.bests['squats.1min'].reps, 40);
+  // the hand test: not for ordinary people, on any route
+  assert.strictEqual((await post('scores/practice.1min', { reps: 5 })).status, 403);
+  assert.strictEqual((await api.handle({ method: 'GET', path: 'scores/practice.1min', headers: DEV_A })).status, 403);
+  assert.strictEqual((await post('scores/attempts', { ...attempt, id: 'hand-1', exercise: 'practice', mode: 'free' })).status, 403);
+  const boss = (await post('auth/google', { idToken: 'ok:boss@example.com' }, DEV_C)).body.token;
+  assert.strictEqual((await post('scores/practice.1min', { reps: 5 }, bearer(boss, DEV_C))).status, 200);
+  assert.strictEqual((await post('scores/attempts', { ...attempt, id: 'hand-1', exercise: 'practice', mode: 'free' }, bearer(boss, DEV_C))).status, 200);
+  // signing in brings every exercise along
+  tick(60000);
+  await post('scores/situps.1min', { reps: 33 }, DEV_D);
+  await post('auth/google', { idToken: 'ok:boss@example.com' }, DEV_D);
+  const boards = (await api.handle({ method: 'GET', path: 'scores/situps.1min', headers: bearer(boss, DEV_C), query: { period: 'all' } })).body;
+  assert.strictEqual(boards.top[0].mine, true);
+  assert.strictEqual(boards.top[0].reps, 33);
+});

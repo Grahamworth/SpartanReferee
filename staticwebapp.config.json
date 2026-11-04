@@ -3,7 +3,8 @@
     ".onnx": "application/octet-stream",
     ".glb": "model/gltf-binary",
     ".webmanifest": "application/manifest+json",
-    ".apk": "application/vnd.android.package-archive"
+    ".apk": "application/vnd.android.package-archive",
+    ".mp4": "video/mp4"
   },
   "platform": {
     "apiRuntime": "node:20"

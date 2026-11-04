@@ -15,10 +15,13 @@ async function bests() {
     const recent = [...(r['1min'].recent || []).map((x) => ({ ...x, m: '1 min' })), ...(r['5min'].recent || []).map((x) => ({ ...x, m: '5 min' }))].sort((a, b) => b.at - a.at).slice(0, 8);
     $('bestsBox').innerHTML = `<div class="stat-grid" style="grid-template-columns:1fr 1fr">${card('1min', '1-minute best')}${card('5min', '5-minute best')}</div>
       ${recent.length ? `<p class="muted" style="margin:0">Latest: ${recent.map((x) => `${esc(x.m)} <b>${Number(x.reps)}</b> (${when(x.at)})`).join(' · ')}</p>` : '<p class="muted" style="margin:0">No challenges yet.</p>'}
-      <div class="row"><a class="btn btn-red" href="scoreboard.html">Burpee challenge</a></div>`;
+      <div class="row"><a class="btn btn-red" href="scoreboard.html">Spartans challenge</a></div>`;
   } catch (e) { $('bestsBox').innerHTML = `<p class="muted" style="margin:0">Couldn't load your bests: ${esc(e.message)}</p>`; }
 }
 bests();
+// five taps on the title: the sign-in that's hidden for now, for admins (the app has no address bar)
+let titleTaps = 0;
+document.querySelector('h1.brand').onclick = () => { if (++titleTaps >= 5) location.search = '?signin=1'; };
 
 async function render() {
   const me = await getMe(true), u = me.user, p = me.profile || {};
@@ -28,12 +31,16 @@ async function render() {
       <div style="flex:1"><b>${esc(u.name || p.name || '')}</b>${roles}<br><span class="muted">${esc(u.email)}</span></div>
       <button class="btn btn-ghost" id="out" type="button">Sign out</button></div>`;
     $('out').onclick = () => { signOut(); toast('Signed out'); render(); };
+  } else if (!new URLSearchParams(location.search).has('signin')) { // sign-in is hidden for now; admins use profile.html?signin=1
+    $('accountHead').hidden = !roles;
+    $('account').innerHTML = roles ? `<div class="form">${roles}</div>` : '';
   } else {
+    $('accountHead').hidden = false;
     $('account').innerHTML = `<div class="form"><p class="muted" style="margin:0">Sign in with Google to keep your profile, groups and chat name on any phone.${roles ? ' ' + roles : ''}</p><div id="gbtn"></div></div>`;
     googleButton($('gbtn'), (user) => { toast(`Signed in as ${user.email}`); render(); }, (e) => toast(e.message));
   }
   const f = $('profileForm');
-  f.name.value = p.name || ''; f.racerNo.value = p.racerNo || ''; f.country.value = p.country || ''; f.ageGroup.value = p.ageGroup || '';
+  f.name.value = p.name || ''; f.country.value = p.country || ''; f.ageGroup.value = p.ageGroup || '';
   $('spartanForm').spartanUrl.value = p.spartanUrl || '';
   $('judgeBox').innerHTML = me.judge
     ? `<p style="margin:0">✅ You’re a Burpee judge${me.admin ? ' (as an admin)' : ''}: Official judging is on your home page.</p><div class="row"><a class="btn btn-red" href="judging.html">Official judging</a></div>`
@@ -42,7 +49,7 @@ async function render() {
 }
 $('profileForm').onsubmit = async (e) => {
   e.preventDefault();
-  const f = e.target, body = { name: f.name.value, racerNo: f.racerNo.value, country: f.country.value, ageGroup: f.ageGroup.value };
+  const f = e.target, body = { name: f.name.value, country: f.country.value, ageGroup: f.ageGroup.value };
   try { await call('profile', { method: 'PUT', body }); if (body.name) setName(body.name); toast('Saved'); } catch (err) { toast(err.message); }
 };
 $('spartanForm').onsubmit = async (e) => {

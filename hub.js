@@ -1,6 +1,6 @@
 // The Spartans home page: the next race (the soonest upcoming event, with a countdown, a link to it and the full
 // list), your stats, the main buttons, and the Burpee Judge / Admin for referees and admins.
-import { call, esc, getMe, googleButton, inApp, signedIn } from './api-base.js';
+import { call, esc, getMe, inApp } from './api-base.js';
 import { editor, field, val } from './hub-edit.js';
 
 const $ = (id) => document.getElementById(id);
@@ -81,7 +81,7 @@ async function burpeeBests() {
     const b = (m) => (r[m] && r[m].best ? r[m].best.reps : null);
     const el = document.getElementById('burpeeBests'); if (!el) return;
     el.innerHTML = b('1min') != null || b('5min') != null
-      ? `Burpee bests: <b>1 minute ${b('1min') ?? '–'}</b> · <b>5 minutes ${b('5min') ?? '–'}</b> · <a href="scoreboard.html">Burpee challenge</a>`
+      ? `Burpee bests: <b>1 minute ${b('1min') ?? '–'}</b> · <b>5 minutes ${b('5min') ?? '–'}</b> · <a href="scoreboard.html">Spartans challenge</a>`
       : 'Burpee bests: none yet. <a href="scoreboard.html">Take the challenge</a>.';
   } catch { /* offline */ }
 }
@@ -114,11 +114,16 @@ if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.se
 load(); who();
 
 // First time in the app: nobody gets past this without a name, for the leaderboards and the chat. No account needed.
+// It shows at once, without waiting for the server, so a slow connection can't let anyone skip it.
+const savedName = () => { try { return localStorage.getItem('sp_name') || ''; } catch { return ''; } };
+const saveName = (v) => { try { localStorage.setItem('sp_name', v); } catch { /* private mode */ } };
 async function askName() {
   if (!inApp()) return;
-  let me;
-  try { me = await call('me'); } catch { return; } // no signal: asked next time
-  if (me.profile && me.profile.name) return;
+  const saved = savedName();
+  if (saved) { // named on this phone: if that was with no signal, the server gets it now
+    try { const me = await call('me'); if (!(me.profile && me.profile.name)) await call('profile', { method: 'PUT', body: { name: saved } }); } catch { /* next time */ }
+    return;
+  }
   const box = document.createElement('div');
   box.className = 'modal name-gate';
   box.innerHTML = `<form class="modal-card" novalidate>
@@ -127,25 +132,27 @@ async function askName() {
     <label class="name-field">Your name<input name="name" maxlength="30" autocomplete="name" required></label>
     <p class="error name-error" hidden></p>
     <button class="btn btn-red btn-big">Continue</button>
-    <div class="name-google" hidden><p class="muted">Or sign in, to keep your scores on any phone:</p><div id="nameGoogle"></div></div>
   </form>`;
   document.body.appendChild(box);
-  const form = box.firstChild, err = box.querySelector('.name-error');
+  const form = box.firstChild, err = box.querySelector('.name-error'), go = box.querySelector('button');
   const fail = (m) => { err.textContent = m; err.hidden = false; };
+  // already named on the server (a reinstall, say): nothing to ask
+  call('me').then((me) => { const n = me.profile && me.profile.name; if (n && box.isConnected) { saveName(n); box.remove(); } }).catch(() => {});
   form.onsubmit = async (e) => {
     e.preventDefault();
     const name = form.name.value.trim();
     if (!name) { fail('Enter your name to carry on.'); form.name.focus(); return; }
+    go.disabled = true; go.textContent = 'Saving…';
     try {
       await call('profile', { method: 'PUT', body: { name } });
-      try { localStorage.setItem('sp_name', name); } catch { /* private mode */ }
+      saveName(name);
       box.remove();
-    } catch (x) { fail(x.message); }
+    } catch (x) {
+      // No signal: keep it on the phone and let them in; the server gets it next time. A refused name stays here.
+      if (x instanceof TypeError || /couldn.t reach/i.test(x.message)) { saveName(name); box.remove(); return; }
+      go.disabled = false; go.textContent = 'Continue';
+      fail(x.message);
+    }
   };
-  const cfg = await call('config').catch(() => ({}));
-  if (cfg.signIn && !signedIn()) {
-    box.querySelector('.name-google').hidden = false;
-    googleButton(box.querySelector('#nameGoogle'), async () => { const now = await call('me').catch(() => ({})); if (now.profile && now.profile.name) location.reload(); else fail('Signed in. Now enter your name.'); }, (x) => fail(x.message));
-  }
 }
 askName();

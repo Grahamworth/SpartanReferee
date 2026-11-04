@@ -346,7 +346,15 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
   // signed-in account or the phone. Each person's best counts on a board; today and this week from the last 8 days
   // of attempts, all time from each person's best. A score has to be possible and can't arrive more often than the
   // challenge lasts.
-  const CHALLENGES = { '1min': { secs: 60, max: 70 }, '5min': { secs: 300, max: 260 } };
+  // The most that's possible, per exercise. Burpees keep their plain names (1min, 5min); the others are squats.1min and so on.
+  // 'practice' is the hand test, for admins only.
+  const EXERCISE_MAX = { burpees: [70, 260], squats: [120, 500], pushups: [100, 400], jacks: [200, 900], situps: [100, 400], practice: [300, 1200] };
+  const CHALLENGES = {};
+  for (const [ex, [one, five]] of Object.entries(EXERCISE_MAX)) {
+    const name = (m) => (ex === 'burpees' ? m : ex + '.' + m);
+    CHALLENGES[name('1min')] = { secs: 60, max: one, exercise: ex };
+    CHALLENGES[name('5min')] = { secs: 300, max: five, exercise: ex };
+  }
   const DAY = 24 * 3600 * 1000;
   const nameOf = async (id) => clean((await store.get('profile', id) || {}).name, 30) || 'Spartan';
   // A phone's scores, bests and attempts, moved to the account it's signed in to, so nobody is on a board twice.
@@ -371,8 +379,7 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
     for (const x of await store.list('attempt:' + dev)) { await store.put('attempt:' + uid, x.id, x); await store.remove('attempt:' + dev, x.id); }
   }
   // Every attempt each person makes, kept for good: their own history, whether or not it went on a scoreboard.
-  const ATTEMPT_MODES = { '1min': 70, '5min': 260, free: 5000 };
-  async function attempts(method, body, me) {
+  async function attempts(method, body, me, h) {
     if (!me) return reply(400, { error: 'This device has no id yet – reload the app' });
     if (method === 'GET') {
       const bests = {};
@@ -380,11 +387,14 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
       return reply(200, { attempts: (await store.list('attempt:' + me)).sort((x, y) => y.at - x.at), bests });
     }
     if (method !== 'POST') return null;
-    const b = body || {}, max = ATTEMPT_MODES[b.mode], reps = Math.round(Number(b.reps));
+    const b = body || {}, exercise = b.exercise === undefined ? 'burpees' : b.exercise, reps = Math.round(Number(b.reps));
+    if (exercise === 'practice' && !isAdmin(h)) return reply(403, { error: 'Admins only' });
+    const timed = CHALLENGES[exercise === 'burpees' ? b.mode : exercise + '.' + b.mode];
+    const max = b.mode === 'free' && EXERCISE_MAX[exercise] ? 5000 : timed && timed.max;
     if (!max || !/^[a-z0-9-]{6,40}$/i.test(String(b.id)) || !Number.isFinite(reps) || reps < 0 || reps > max) return reply(400, { error: 'That attempt isn’t possible' });
     const at = Number(b.at);
     await store.put('attempt:' + me, b.id, {
-      id: b.id, mode: b.mode, reps, noReps: Math.max(0, Math.round(Number(b.noReps) || 0)),
+      id: b.id, exercise, mode: b.mode, reps, noReps: Math.max(0, Math.round(Number(b.noReps) || 0)),
       durationMs: Math.max(0, Math.round(Number(b.durationMs) || 0)), status: b.status === 'full' ? 'full' : 'stopped',
       camera: b.camera === 'back' ? 'back' : 'front', submitted: !!b.submitted, at: at > 0 && at <= now() + DAY ? at : now(),
     });
@@ -394,11 +404,11 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
     const me = who(h);
     // Already signed in when this came in: anything still under the phone moves over when they open the menu.
     if (a === 'attempts' && method === 'GET' && session(h)) await carryScores(deviceOf(h), me);
-    if (a === 'attempts') return attempts(method, body, me);
+    if (a === 'attempts') return attempts(method, body, me, h);
     if (a === 'me' && method === 'GET') {
       if (!me) return reply(400, { error: 'This device has no id yet – reload the app' });
       const out = {};
-      for (const m of Object.keys(CHALLENGES)) {
+      for (const m of ['1min', '5min']) { // the burpee bests on the home and profile pages
         const best = await store.get('best:' + m, me);
         const recent = (await store.list('score:' + m)).filter((x) => x.who === me).sort((x, y) => y.at - x.at).slice(0, 10).map((x) => ({ reps: x.reps, noReps: x.noReps, at: x.at }));
         out[m] = { best: best ? { reps: best.reps, at: best.at } : null, recent };
@@ -406,6 +416,7 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
       return reply(200, out);
     }
     const c = CHALLENGES[a]; if (!c) return null;
+    if (c.exercise === 'practice' && !isAdmin(h)) return reply(403, { error: 'Admins only' });
     if (method === 'POST') {
       if (!me) return reply(400, { error: 'This device has no id yet – reload the app' });
       const reps = Math.round(Number(body && body.reps)), noReps = Math.max(0, Math.round(Number(body && body.noReps) || 0));

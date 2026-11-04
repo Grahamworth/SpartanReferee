@@ -1,11 +1,11 @@
 import { BurpeeJudge, GestureJudge, computeMetrics, DEFAULTS, LM } from './burpee.js';
-import { exercise, applyStrictness, PushupJudge, STRICTNESS_DEFAULT, strictnessWord, strictnessValue } from './exercises.js';
+import { EXERCISES, exercise, applyStrictness, PushupJudge, STRICTNESS_DEFAULT, strictnessWord, strictnessValue } from './exercises.js';
 import { PoseFilter, TRACKING } from './pose-filter.js';
 import { MultiTracker, MULTI_DEFAULTS, fromCrop, drawMasks, scanAreas, joinResults, unclaimedBoxes, boxArea } from './multi.js';
 import { loadFinder } from './finder.js';
 import { prepareDigits } from './ocr-prep.js';
 import { createReader, mirrorImage, ENGINES } from './readers.js';
-import { call, saveAttempt, loadLocalAttempts, bestAttempt, syncAttempts, loadAttempts } from './api-base.js';
+import { call, getMe, saveAttempt, loadLocalAttempts, bestAttempt, scoreKey, syncAttempts, loadAttempts } from './api-base.js';
 
 // The pose engine and models. Inside the Receiver and the Android/iPhone app they're built in (vendor/), so
 // judging works without internet; the website loads them from the internet (they're too big for the site).
@@ -36,8 +36,9 @@ const ctx = canvas.getContext('2d');
 const CFG = (new URLSearchParams(location.search).get('cfg') || '').replace(/[^a-z0-9]/gi, '');
 // a camera's judge can hide its tracking (it still tracks and counts): see cameraSettings
 const applyTracking = () => document.documentElement.classList.toggle('hide-tracking', !!CFG && !!new URLSearchParams(location.search).get('go') && settings.showTracking === false);
-// judge.html?mode=practice: Burpee practice, open to anyone (see the end of this file)
+// judge.html?mode=practice: the Spartans Challenge, open to anyone (see the end of this file)
 const PRACTICE = new URLSearchParams(location.search).get('mode') === 'practice';
+const CHALLENGE_EXERCISE = EXERCISES[new URLSearchParams(location.search).get('exercise')] ? new URLSearchParams(location.search).get('exercise') : 'burpees';
 const SETTINGS_KEY = CFG ? `burpeeJudge.settings.${CFG}` : PRACTICE ? 'burpeeJudge.settings.practice' : 'burpeeJudge.settings';
 const RESULTS_KEY = 'burpeeJudge.results';
 // The burpee limits, and how straight push-up arms must be, before the
@@ -79,8 +80,8 @@ const SPARTAN_DEFAULT = {
   exercise: 'burpees', people: 'multi', captureBib: true, strictness: 20,
   tracking: 'forgiving', model: 'full', speech: true, record: true, debug: false,
 };
-// The Burpee Challenge judges to the same Spartan setup, for one person with no number; the voice is their choice.
-if (PRACTICE) Object.assign(settings, SPARTAN_DEFAULT, { people: 'one', captureBib: false, record: false, speech: settings.speech });
+// The Spartans Challenge judges to the same Spartan setup, for one person with no number; the voice is their choice.
+if (PRACTICE) Object.assign(settings, SPARTAN_DEFAULT, { exercise: CHALLENGE_EXERCISE, people: 'one', captureBib: false, record: false, speech: settings.speech });
 const currentExercise = () => exercise(settings.exercise);
 const tracking = () => TRACKING[settings.tracking] || TRACKING.balanced;
 const metricOpts = () => ({ ...DEFAULTS, minVisibility: tracking().minVis, aspect: S.frame?.w && S.frame?.h ? S.frame.w / S.frame.h : 1 });
@@ -134,7 +135,7 @@ const CAMERA_SCREENS = new Set(['scan', 'position', 'countdown', 'count', 'done'
 const RULES_SCREENS = new Set(['home', 'setup', ...CAMERA_SCREENS]);
 
 function show(id) {
-  if (PRACTICE && id === 'home') id = 'setup'; // the Burpee Challenge has no station to set up
+  if (PRACTICE && id === 'home') id = 'setup'; // the Spartans Challenge has no station to set up
   document.querySelectorAll('.screen').forEach((el) => { el.hidden = el.id !== id; });
   $('stage').hidden = !CAMERA_SCREENS.has(id);
   S.screen = id;
@@ -828,7 +829,7 @@ function goPosition(bib, source = 'typed', conf = null) {
   setBibWord(source);
   if (PRACTICE) {
     $('posTitle').textContent = 'Getting ready…';
-    say('Step back until your whole body is in view.');
+    say(currentExercise().gestures ? 'Hold your hand up to the camera.' : 'Step back until your whole body is in view.');
   }
   show('position');
   loadLandmarker().catch((e) => showFlash(false, 'Pose model not loaded', e.message));
@@ -1453,7 +1454,7 @@ function onPose(t) {
 
   if (S.screen === 'countdown') {
     // Stepping out of the picture stops the countdown, so the clock can't start without them.
-    if (wholeBody(m)) S.lostSince = null;
+    if (currentExercise().gestures || wholeBody(m)) S.lostSince = null;
     else { S.lostSince ??= t; if (t - S.lostSince > 800) cancelCountdown(); }
     return;
   }
@@ -1470,7 +1471,7 @@ function onPose(t) {
     $('chkStand').textContent = extra ? `${ex.ready.check} (${extra})` : ex.ready.check;
     $('chkBody').classList.toggle('ok', body);
     $('chkStand').classList.toggle('ok', inPlace);
-    if (PRACTICE) $('posTitle').textContent = !body ? 'Get your whole body in view' : !inPlace ? ex.ready.title : 'Hold still';
+    if (PRACTICE) $('posTitle').textContent = ex.gestures ? ex.ready.title : !body ? 'Get your whole body in view' : !inPlace ? ex.ready.title : 'Hold still';
     if ((body && inPlace) || (ex.gestures && S.pose)) {
       S.readySince ??= t;
       if (t - S.readySince > 500) { if (PRACTICE) startCountdown(); else startAttempt(); }
@@ -2728,11 +2729,12 @@ $('atNumberSave').addEventListener('click', () => {
   $('atBib').textContent = bibTitle(r); $('atNumberSaved').hidden = false; setTimeout(() => { $('atNumberSaved').hidden = true; }, 2000);
 });
 
-// ---------------------------------------------------------------- Burpee Challenge (judge.html?mode=practice&challenge=...)
+// ---------------------------------------------------------------- Spartans Challenge (judge.html?mode=practice&exercise=...&challenge=...)
 // For anyone, to the Spartan setup, the phone's owner only (no race number, no station). Chosen on the menu
-// (scoreboard.html). Where to put the camera, then front or back; once they're fully in view a spoken countdown starts
-// it. Practice counts until they stop; the 1-minute and 5-minute challenges run out the clock and calling the last 5
-// seconds. Every attempt goes in their history; a full challenge can go on the scoreboard if they say so.
+// (scoreboard.html). Where to put the camera, then front or back; once they're in position a spoken countdown starts
+// it. Practice counts until they stop; the 1-minute and 5-minute challenges run out the clock, calling the last 5
+// seconds. Every attempt goes in their history; a full challenge can go on the scoreboard if they say so. The hand test
+// is for admins: the menu only shows it to them, this page sends anyone else back, and the server refuses their scores.
 const PRACTICE_REPS = 9999;
 const CHALLENGES = { free: { label: 'Practice', secs: 0 }, '1min': { label: '1 Minute', secs: 60 }, '5min': { label: '5 Minute', secs: 300 } };
 
@@ -2785,10 +2787,20 @@ function practiceHome() {
   if (!CHALLENGES[chosen]) { location.replace('scoreboard.html'); return; }
   S.challenge = { mode: chosen, ...CHALLENGES[chosen] };
   document.documentElement.classList.add('practice-mode');
-  document.title = `Burpee challenge: ${S.challenge.label}`;
+  const ex = currentExercise(), menu = `scoreboard.html?mode=${chosen}&exercise=${settings.exercise}`;
+  if (ex.gestures) {
+    $('setup').hidden = true;
+    getMe().then((me) => { if (!me.admin) location.replace('scoreboard.html'); else if (S.screen === 'setup') $('setup').hidden = false; });
+    document.querySelector('.setup-pictures').hidden = true;
+    document.querySelector('.setup-tips').hidden = true;
+    $('chkBody').hidden = true;
+  }
+  document.title = `Spartans challenge: ${ex.label}`;
+  $('setupEyebrow').textContent = `Spartans challenge · ${ex.label}`;
   $('setupTitle').textContent = S.challenge.label;
-  $('setupBack').href = `scoreboard.html?mode=${chosen}`;
-  $('doneMenu').href = `scoreboard.html?mode=${chosen}`;
+  $('setupFlow').textContent = ex.flow || '';
+  $('setupBack').href = menu;
+  $('doneMenu').href = menu;
   $('doneMenu').hidden = false;
   $('nextAthlete').textContent = 'Go again';
   $('setup').append($('homeError'));
@@ -2815,11 +2827,12 @@ function practiceHome() {
 function practiceDone(a, status) {
   const c = S.challenge;
   const full = !c.secs || status === 'time';
-  const before = bestAttempt(loadLocalAttempts(), c.mode, S.challengeBests);
-  const record = { id: a.id.replace(/[^a-z0-9-]/gi, '').slice(0, 40), mode: c.mode, reps: a.reps, noReps: a.noReps, durationMs: a.durationMs, status: full ? 'full' : 'stopped', camera: a.camera === 'back' ? 'back' : 'front', at: Date.now(), submitted: false };
+  const key = settings.exercise, unit = currentExercise().unit;
+  const before = bestAttempt(loadLocalAttempts(), key, c.mode, S.challengeBests);
+  const record = { id: a.id.replace(/[^a-z0-9-]/gi, '').slice(0, 40), exercise: key, mode: c.mode, reps: a.reps, noReps: a.noReps, durationMs: a.durationMs, status: full ? 'full' : 'stopped', camera: a.camera === 'back' ? 'back' : 'front', at: Date.now(), submitted: false };
   saveAttempt(record);
   $('callout').hidden = true;
-  $('doneLabel').textContent = c.label;
+  $('doneLabel').textContent = `${currentExercise().label}: ${c.label}`;
   $('done').classList.remove('bad'); $('done').classList.add('practice');
   $('doneAutoLine').hidden = true;
   const pb = full && a.reps > 0 && (!before || a.reps > before.reps);
@@ -2832,7 +2845,7 @@ function practiceDone(a, status) {
       $('submitYes').disabled = true;
       $('doneVideo').textContent = 'Submitting…';
       try {
-        await call(`scores/${c.mode}`, { method: 'POST', body: { reps: a.reps, noReps: a.noReps } });
+        await call(`scores/${scoreKey(key, c.mode)}`, { method: 'POST', body: { reps: a.reps, noReps: a.noReps } });
         saveAttempt({ ...record, submitted: true });
         $('submitAsk').hidden = true;
         $('doneVideo').textContent = `Submitted: ${a.reps} is on the scoreboard.`;
@@ -2842,7 +2855,7 @@ function practiceDone(a, status) {
       }
     };
   }
-  say(c.secs && full ? `Time! ${a.reps} burpees.${offer ? ' Submit your score?' : ''}` : `${a.reps} burpees.`);
+  say(c.secs && full ? `Time! ${a.reps} ${unit}.${offer ? ' Submit your score?' : ''}` : `${a.reps} ${unit}.`);
 }
 if (PRACTICE) {
   practiceHome();

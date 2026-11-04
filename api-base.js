@@ -80,7 +80,7 @@ export const inApp = () => !!(window.Capacitor && window.Capacitor.isNativePlatf
 
 export const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
-// ---------------------------------------------------------------- your burpee challenge attempts
+// ---------------------------------------------------------------- your Spartans Challenge attempts
 // Every attempt is kept on the phone first, then sent to the server (at once, or the next time there's signal).
 const ATTEMPTS_KEY = 'sp_burpeeAttempts';
 export function loadLocalAttempts() { try { return JSON.parse(ls.get(ATTEMPTS_KEY)) || []; } catch { return []; } }
@@ -109,9 +109,12 @@ export async function loadAttempts() {
   } catch { try { bests = JSON.parse(localStorage.getItem(ATTEMPTS_KEY + '.bests')) || {}; } catch { /* none yet */ } }
   return { attempts: loadLocalAttempts(), bests };
 }
+/** The scoreboard an exercise's challenge goes on: burpees are plain 1min / 5min, the others squats.1min and so on. */
+export const scoreKey = (exercise, mode) => (exercise === 'burpees' ? mode : `${exercise}.${mode}`);
 /** Your best in a mode: a timed challenge only counts if it ran the full time. */
-export function bestAttempt(attempts, mode, bests = {}) {
-  const all = attempts.filter((a) => a.mode === mode && a.status === 'full');
-  if (bests[mode]) all.push(bests[mode]);
+export function bestAttempt(attempts, exercise, mode, bests = {}) {
+  const all = attempts.filter((a) => (a.exercise || 'burpees') === exercise && a.mode === mode && a.status === 'full');
+  const server = bests[scoreKey(exercise, mode)];
+  if (server) all.push(server);
   return all.sort((x, y) => y.reps - x.reps || x.at - y.at)[0] || null;
 }

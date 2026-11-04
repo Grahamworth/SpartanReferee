@@ -52,6 +52,7 @@
   .diagram .tripod line { stroke: var(--muted); stroke-width: 3; }
   .diagram .phone { fill: var(--white); }
   code { background: #1d1d1d; padding: 1px 5px; border-radius: 4px; word-break: break-all; }
+  .promo video { display: block; width: 100%; max-width: 800px; background: #000; }
 </style>
 <link rel="stylesheet" href="looks.css">
 <script src="looks.js"></script>
@@ -61,6 +62,12 @@
   <a href="./" class="home-link">‹ Spartans home</a>
   <h1 class="brand">Set up <span>streaming</span></h1>
   <p class="muted">Two phones film the burpee zone. Each sends its picture to the judging laptop over <b>Tailscale</b> and to <b>YouTube</b>, each on its own connection. The laptop records both, runs the AI judge, and serves live view and replay to the laptop and an iPad. Allow about 20 minutes the first time and 5 minutes on the day.</p>
+
+  <section id="promo" class="promo">
+    <h2>See it in 30 seconds</h2>
+    <video controls playsinline preload="metadata" src="https://yellow-forest-09b984e03.6.azurestaticapps.net/broadcaster-receiver-promo.mp4#t=1.5" aria-label="Spartans Broadcaster and Burpee Judge Receiver promo video. It has no sound."></video>
+    <p class="muted">Spartans Broadcaster and Burpee Judge Receiver, as an animated demo.</p>
+  </section>
 
   <nav class="toc" aria-label="Sections">
     <a href="#need">What you need</a>

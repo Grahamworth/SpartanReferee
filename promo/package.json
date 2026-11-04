@@ -1,0 +1,1 @@
+{ "private": true, "type": "module", "description": "Exports promo.html to a video", "devDependencies": { "mp4-muxer": "^5.2.2" } }

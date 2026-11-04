@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Broadcaster and Receiver promo</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@1,800;1,900&family=Barlow:wght@500;700&display=swap">
+<style>html, body { margin: 0; background: #000; } canvas { display: block; }</style>
+</head>
+<body>
+<canvas id="c" width="1920" height="1080"></canvas>
+<script>
+// A short promo for Spartans Broadcaster and Burpee Judge Receiver, drawn frame by frame: renderAt(seconds) always gives
+// the same picture, so render.mjs can export it without dropped frames. Everything is illustration, no real footage.
+const W = 1920, H = 1080, DURATION = 30;
+const ctx = document.getElementById('c').getContext('2d');
+const RED = '#e2231a', GREEN = '#22c55e', WHITE = '#f4f5f6', MUTED = '#9aa1a8', INK = '#16191d', BLACK = '#0b0b0b', LINE = '#30353b';
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const ease = (p) => 1 - Math.pow(1 - p, 3);
+const lerp = (a, b, p) => a + (b - a) * p;
+
+function text(s, x, y, size, color = WHITE, { align = 'left', head = true, alpha = 1 } = {}) {
+  ctx.save();
+  ctx.globalAlpha *= alpha;
+  ctx.font = head ? `italic 900 ${size}px "Barlow Condensed"` : `600 ${size}px Barlow`;
+  ctx.fillStyle = color; ctx.textAlign = align; ctx.textBaseline = 'alphabetic';
+  ctx.fillText(s, x, y);
+  ctx.restore();
+}
+function box(x, y, w, h, r, fill, stroke, lw = 3) {
+  ctx.beginPath(); ctx.roundRect(x, y, w, h, r);
+  if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+  if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = lw; ctx.stroke(); }
+}
+// A caption that slides up and fades in at time a.
+function reveal(t, a, draw) {
+  const p = ease(prog(t, a, a + 0.45));
+  if (p <= 0) return;
+  ctx.save(); ctx.globalAlpha *= p; ctx.translate(0, (1 - p) * 26); draw(); ctx.restore();
+}
+function slash(x, y, w, h) { // the angled red bar used across the Spartans pages
+  ctx.fillStyle = RED; ctx.beginPath(); ctx.moveTo(x + h * 0.4, y); ctx.lineTo(x + w, y); ctx.lineTo(x + w - h * 0.4, y + h); ctx.lineTo(x, y + h); ctx.closePath(); ctx.fill();
+}
+
+// ---------------------------------------------------------------- the athlete, side-on
+const POSES = {
+  stand: { head: [0, .92], neck: [0, .82], hip: [0, .5], elbow: [.05, .66], hand: [.06, .5], knee: [.01, .26], foot: [0, 0] },
+  squat: { head: [.22, .5], neck: [.16, .42], hip: [-.12, .28], elbow: [.2, .22], hand: [.28, .02], knee: [.12, .22], foot: [0, 0] },
+  plank: { head: [.62, .08], neck: [.5, .06], hip: [.02, .07], elbow: [.56, .16], hand: [.5, 0], knee: [-.25, .05], foot: [-.5, 0] },
+  jump: { head: [0, 1.02], neck: [0, .92], hip: [0, .62], elbow: [.1, 1.02], hand: [.06, 1.2], knee: [.01, .38], foot: [0, .12] },
+};
+const REP = [[0, 'stand'], [.3, 'squat'], [.6, 'plank'], [1.05, 'plank'], [1.35, 'squat'], [1.65, 'stand'], [1.85, 'jump'], [2.05, 'stand'], [2.4, 'stand']];
+const REP_LEN = 2.4, JUMP_AT = 1.85;
+function poseAt(c) { // c: seconds into the rep
+  for (let i = 1; i < REP.length; i++) if (c <= REP[i][0]) {
+    const [ta, a] = REP[i - 1], [tb, b] = REP[i], p = (c - ta) / (tb - ta || 1), q = p * p * (3 - 2 * p), out = {};
+    for (const k in POSES[a]) out[k] = [lerp(POSES[a][k][0], POSES[b][k][0], q), lerp(POSES[a][k][1], POSES[b][k][1], q)];
+    return out;
+  }
+  return POSES.stand;
+}
+function athlete(x, y, s, pose, { line = WHITE, joint = RED, lw = 0.02, tracked = true } = {}) {
+  const P = (k) => [x + pose[k][0] * s, y - pose[k][1] * s];
+  const limbs = () => {
+    ctx.beginPath();
+    ctx.moveTo(...P('neck')); ctx.lineTo(...P('hip')); ctx.lineTo(...P('knee')); ctx.lineTo(...P('foot'));
+    ctx.moveTo(...P('neck')); ctx.lineTo(...P('elbow')); ctx.lineTo(...P('hand'));
+    ctx.stroke();
+  };
+  ctx.save();
+  ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  // the athlete, as the camera sees them
+  ctx.strokeStyle = '#0d1013'; ctx.lineWidth = Math.max(4, s * 0.085); limbs();
+  ctx.fillStyle = '#0d1013'; ctx.beginPath(); ctx.arc(...P('head'), s * 0.07, 0, 7); ctx.fill();
+  if (!tracked) { ctx.restore(); return; }
+  // the judge's tracking on top
+  ctx.strokeStyle = line; ctx.lineWidth = Math.max(2, s * lw); limbs();
+  ctx.beginPath(); ctx.moveTo(...P('neck')); ctx.lineTo(...P('head')); ctx.stroke();
+  ctx.fillStyle = joint;
+  ctx.beginPath(); ctx.arc(...P('head'), Math.max(3, s * 0.018), 0, 7); ctx.fill();
+  for (const k of ['neck', 'hip', 'knee', 'foot', 'elbow', 'hand']) { ctx.beginPath(); ctx.arc(...P(k), Math.max(3, s * 0.018), 0, 7); ctx.fill(); }
+  ctx.restore();
+}
+function field(x, y, w, h) { // a simple outdoor penalty area behind the athletes
+  ctx.save();
+  ctx.beginPath(); ctx.rect(x, y, w, h); ctx.clip();
+  let g = ctx.createLinearGradient(0, y, 0, y + h * .62); g.addColorStop(0, '#26394d'); g.addColorStop(1, '#46596a');
+  ctx.fillStyle = g; ctx.fillRect(x, y, w, h * .62);
+  ctx.fillStyle = '#20272e';
+  for (let i = 0; i < 7; i++) { ctx.beginPath(); ctx.arc(x + w * (i + .5) / 7, y + h * .62, w * (.07 + .03 * (i % 3)), Math.PI, 0); ctx.fill(); }
+  g = ctx.createLinearGradient(0, y + h * .62, 0, y + h); g.addColorStop(0, '#54493c'); g.addColorStop(1, '#33291f');
+  ctx.fillStyle = g; ctx.fillRect(x, y + h * .62, w, h * .38);
+  ctx.restore();
+}
+
+// ---------------------------------------------------------------- the devices
+function phone(x, y, w, h, draw) { // landscape
+  box(x - 14, y - 14, w + 28, h + 28, 30, '#050505', '#596069', 4);
+  ctx.save(); ctx.beginPath(); ctx.roundRect(x, y, w, h, 14); ctx.clip();
+  ctx.fillStyle = '#000'; ctx.fillRect(x, y, w, h); draw(x, y, w, h);
+  ctx.restore();
+}
+function laptop(x, y, w, h, draw) {
+  box(x - 16, y - 16, w + 32, h + 32, 16, '#050505', '#596069', 4);
+  ctx.fillStyle = '#596069';
+  ctx.beginPath(); ctx.moveTo(x - 70, y + h + 16); ctx.lineTo(x + w + 70, y + h + 16); ctx.lineTo(x + w + 110, y + h + 48); ctx.lineTo(x - 110, y + h + 48); ctx.closePath(); ctx.fill();
+  ctx.save(); ctx.beginPath(); ctx.rect(x, y, w, h); ctx.clip();
+  ctx.fillStyle = INK; ctx.fillRect(x, y, w, h); draw(x, y, w, h);
+  ctx.restore();
+}
+function liveDot(x, y, t, size = 20) {
+  box(x, y, size * 3.9, size * 1.7, 4, RED);
+  ctx.fillStyle = WHITE; ctx.globalAlpha *= .55 + .45 * Math.sin(t * 6) ** 2;
+  ctx.beginPath(); ctx.arc(x + size * .75, y + size * .85, size * .3, 0, 7); ctx.fill();
+  ctx.globalAlpha /= .55 + .45 * Math.sin(t * 6) ** 2;
+  text('LIVE', x + size * 1.3, y + size * 1.27, size * 1.15, WHITE);
+}
+// A code-like pattern for the scan moment. Decorative only: it doesn't encode anything.
+function codePattern(x, y, s) {
+  box(x, y, s, s, 6, WHITE);
+  const n = 21, c = (s - 24) / n;
+  for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) {
+    const corner = (a, b) => i >= a && i < a + 7 && j >= b && j < b + 7;
+    const inCorner = corner(0, 0) || corner(14, 0) || corner(0, 14);
+    const on = inCorner
+      ? (() => { const a = i >= 14 ? 14 : 0, b = j >= 14 ? 14 : 0, u = i - a, v = j - b; return u === 0 || u === 6 || v === 0 || v === 6 || (u >= 2 && u <= 4 && v >= 2 && v <= 4); })()
+      : ((i * 7 + j * 13 + i * j * 3) % 5) < 2;
+    if (on) { ctx.fillStyle = '#000'; ctx.fillRect(x + 12 + i * c, y + 12 + j * c, c + .5, c + .5); }
+  }
+}
+
+// ---------------------------------------------------------------- the scenes (each gets local time)
+function title(t, d) {
+  slash(W / 2 - 170, 240, 340, 18);
+  const p = ease(prog(t, .1, .7));
+  ctx.globalAlpha *= p;
+  text('EVERY CAMERA.', W / 2, 410, 150, WHITE, { align: 'center' });
+  reveal(t, .6, () => text('EVERY BURPEE.', W / 2, 570, 150, WHITE, { align: 'center' }));
+  reveal(t, 1.15, () => text('ONE LAPTOP.', W / 2, 730, 150, RED, { align: 'center' }));
+}
+function broadcaster(t, d) {
+  const px = 110, py = 230, pw = 900, ph = 500;
+  phone(px, py, pw, ph, (x, y, w, h) => {
+    const scanning = t < 2.4;
+    if (scanning) {
+      ctx.fillStyle = '#1b1f24'; ctx.fillRect(x, y, w, h);
+      const s = 300, cx = x + w / 2 - s / 2, cy = y + h / 2 - s / 2;
+      codePattern(cx, cy, s);
+      ctx.strokeStyle = t > 1.7 ? GREEN : WHITE; ctx.lineWidth = 8;
+      const m = 30, q = s + m * 2, a = 60;
+      for (const [ox, oy, dx, dy] of [[0, 0, 1, 1], [q, 0, -1, 1], [0, q, 1, -1], [q, q, -1, -1]]) {
+        ctx.beginPath(); ctx.moveTo(cx - m + ox + dx * a, cy - m + oy); ctx.lineTo(cx - m + ox, cy - m + oy); ctx.lineTo(cx - m + ox, cy - m + oy + dy * a); ctx.stroke();
+      }
+      if (t <= 1.7) { const ly = cy + s * ((t * .9) % 1); ctx.fillStyle = RED; ctx.fillRect(cx - 20, ly, s + 40, 5); }
+      text(t > 1.7 ? 'CONNECTED' : 'SCAN THE LAPTOP’S CODE', x + w / 2, y + 60, 42, t > 1.7 ? GREEN : WHITE, { align: 'center' });
+    } else {
+      field(x, y, w, h);
+      athlete(x + w * .46, y + h * .86, 300, poseAt(((t - 2.4) * 1) % REP_LEN), { tracked: false });
+      liveDot(x + 24, y + 22, t, 24);
+      text('CAMERA 1', x + w - 24, y + 56, 40, WHITE, { align: 'right' });
+    }
+  });
+  slash(1090, 212, 140, 12);
+  reveal(t, .15, () => { text('SPARTANS', 1090, 300, 96); text('BROADCASTER', 1090, 392, 96, RED); });
+  reveal(t, .9, () => text('Scan the laptop’s code to connect', 1090, 490, 40, WHITE, { head: false }));
+  reveal(t, 2.4, () => text('Film from any Android phone', 1090, 556, 40, WHITE, { head: false }));
+  reveal(t, 3.1, () => text('Stream to the laptop, YouTube too', 1090, 622, 40, WHITE, { head: false }));
+  reveal(t, 3.8, () => text('No watermark', 1090, 688, 40, WHITE, { head: false }));
+}
+function camTile(x, y, w, h, t, label, off, tracked = true) {
+  field(x, y, w, h);
+  athlete(x + w * .46, y + h * .86, h * .55, poseAt((t + off) % REP_LEN), { tracked });
+  liveDot(x + 10, y + 10, t, 13);
+  text(label, x + w - 12, y + 32, 26, WHITE, { align: 'right' });
+}
+function receiver(t, d) {
+  const lx = 900, ly = 200, lw = 860, lh = 500;
+  const sources = [[230, 170], [230, 430], [230, 690]];
+  sources.forEach(([px, py], i) => reveal(t, i * .25, () => {
+    phone(px - 130, py, 260, 146, (x, y, w, h) => camTile(x, y, w, h, t, '', i * .7, false));
+  }));
+  // the streams flowing to the laptop
+  ctx.save();
+  sources.forEach(([px, py], i) => {
+    const sx = px + 145, sy = py + 73, ex = lx - 30, ey = ly + 120 + i * 130;
+    const cx = (sx + ex) / 2, a = prog(t, .5 + i * .25, 1 + i * .25);
+    if (a <= 0) return;
+    ctx.strokeStyle = LINE; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(sx, sy); ctx.bezierCurveTo(cx, sy, cx, ey, sx + (ex - sx) * a, ey); ctx.stroke();
+    for (let k = 0; k < 5; k++) {
+      const u = (t * .55 + k / 5 + i * .13) % 1, v = 1 - u;
+      const bx = v ** 3 * sx + 3 * v * v * u * cx + 3 * v * u * u * cx + u ** 3 * ex, by = v ** 3 * sy + 3 * v * v * u * sy + 3 * v * u * u * ey + u ** 3 * ey;
+      ctx.fillStyle = RED; ctx.globalAlpha = a; ctx.beginPath(); ctx.arc(bx, by, 8, 0, 7); ctx.fill();
+    }
+  });
+  ctx.restore();
+  reveal(t, .6, () => laptop(lx, ly, lw, lh, (x, y, w, h) => {
+    ctx.fillStyle = BLACK; ctx.fillRect(x, y, w, 58);
+    text('VIDEO', x + 20, y + 42, 36); text('REVIEW', x + 112, y + 42, 36, RED);
+    const tw = (w - 36) / 2, th = (h - 90) / 2;
+    [[0, 0], [1, 0], [0, 1]].forEach(([c, r], i) => camTile(x + 12 + c * (tw + 12), y + 70 + r * (th + 8), tw, th - 4, t, `CAMERA ${i + 1}`, i * .7));
+  }));
+  reveal(t, 1.5, () => { slash(lx - 10, 800, 120, 10); text('BURPEE JUDGE RECEIVER', lx - 10, 884, 74); });
+  reveal(t, 2.2, () => text('Every camera, live on one Windows laptop', lx - 10, 950, 40, WHITE, { head: false }));
+}
+function judge(t, d) {
+  const vx = 80, vy = 110, vw = 1200, vh = 760;
+  field(vx, vy, vw, vh);
+  const T = t * 1.25, c = T % REP_LEN, n = Math.floor(T / REP_LEN);
+  // the second rep is a no rep: no jump
+  const noRep = n === 1;
+  const pose = noRep && c > 1.6 ? POSES.stand : poseAt(c);
+  const ax = vx + vw * .48, ay = vy + vh * .9, as = 500;
+  athlete(ax, ay, as, pose);
+  // the tracking box and its label, following the athlete
+  const xs = Object.values(pose).map((p) => ax + p[0] * as), ys = Object.values(pose).map((p) => ay - p[1] * as);
+  const bx = Math.min(...xs) - 50, by = Math.min(...ys) - 60, bw = Math.max(...xs) - Math.min(...xs) + 100, bh = Math.max(...ys) - Math.min(...ys) + 80;
+  const reps = (m) => { let r = 0; for (let i = 0; i < 99; i++) { if (i * REP_LEN + JUMP_AT > m) break; if (i !== 1) r++; } return r; };
+  const nr = T >= REP_LEN * 2 - .1 ? 1 : 0, count = reps(T);
+  ctx.setLineDash([16, 10]); box(bx, by, bw, bh, 4, null, GREEN, 4); ctx.setLineDash([]);
+  box(bx, by - 54, 130, 54, 4, GREEN);
+  text(`A1  ${count}`, bx + 14, by - 12, 44, BLACK);
+  box(vx, vy, vw, vh, 0, null, LINE, 4);
+  liveDot(vx + 20, vy + 20, t, 24);
+  const since = n !== 1 ? T - (n * REP_LEN + JUMP_AT) : -1;
+  if (since >= 0 && since < .5) { ctx.fillStyle = `rgba(34,197,94,${.32 * (1 - since / .5)})`; ctx.fillRect(vx, vy, vw, vh); }
+  const nrAge = T - (REP_LEN * 2 - .1);
+  if (nrAge >= 0 && nrAge < 1) {
+    ctx.fillStyle = `rgba(226,35,26,${.3 * (1 - nrAge)})`; ctx.fillRect(vx, vy, vw, vh);
+    box(vx + vw - 530, vy + 20, 510, 104, 8, RED);
+    text('NO REP', vx + vw - 275, vy + 66, 44, WHITE, { align: 'center' });
+    text('Jump – both feet off the ground', vx + vw - 275, vy + 106, 28, WHITE, { align: 'center', head: false });
+  }
+  const rx = 1330, rw = 510;
+  slash(rx, 110, 120, 10);
+  text('AI JUDGE', rx, 196, 96);
+  box(rx, 230, rw, 250, 8, INK, LINE);
+  text('ATHLETE 1', rx + 28, 288, 44, MUTED);
+  const bump = since >= 0 && since < .3 ? 1 + .22 * (1 - since / .3) : 1;
+  ctx.save(); ctx.translate(rx + 28, 450); ctx.scale(bump, bump); text(String(count), 0, 0, 170, WHITE); ctx.restore();
+  text('REPS', rx + 190, 450, 50, MUTED);
+  text(`${nr} NO REP${nr === 1 ? '' : 'S'}`, rx + rw - 24, 450, 40, nr ? RED : MUTED, { align: 'right' });
+  // each standard ticks at the moment the judge sees it in this rep; on the no rep, the jump gets a cross
+  const items = [['Chest to the ground', .6], ['Both feet off the ground', JUMP_AT], ['Full hip extension', JUMP_AT], ['Hands over the ears', JUMP_AT]];
+  items.forEach(([s, at], i) => {
+    const y = 540 + i * 66, seen = c >= at && !(noRep && i > 0);
+    const missed = i === 1 && T >= REP_LEN * 2 - .1 && T < REP_LEN * 2 + .9; // as long as the NO REP banner shows
+    ctx.lineCap = 'round'; ctx.lineWidth = 7;
+    if (missed) {
+      ctx.strokeStyle = RED; ctx.beginPath(); ctx.moveTo(rx + 6, y - 14); ctx.lineTo(rx + 34, y + 14); ctx.moveTo(rx + 34, y - 14); ctx.lineTo(rx + 6, y + 14); ctx.stroke();
+    } else if (seen) {
+      ctx.strokeStyle = GREEN; ctx.beginPath(); ctx.moveTo(rx + 4, y); ctx.lineTo(rx + 16, y + 13); ctx.lineTo(rx + 38, y - 13); ctx.stroke();
+    } else {
+      ctx.strokeStyle = LINE; ctx.lineWidth = 4; ctx.strokeRect(rx + 5, y - 15, 30, 30);
+    }
+    text(s, rx + 60, y + 14, 36, missed ? '#ff8a84' : seen ? WHITE : MUTED, { head: false });
+  });
+  text('Judged to the Spartan standard', rx, 840, 34, MUTED, { head: false });
+}
+function review(t, d) {
+  const vx = 80, vy = 110, vw = 1120, vh = 630;
+  field(vx, vy, vw, vh);
+  // scrubbing back through the recording, then playing a rep slowly
+  const scrub = t < 1.8 ? lerp(.92, .34, ease(t / 1.8)) : .34 + (t - 1.8) * .012;
+  const shown = t < 1.8 ? (scrub * 40) % REP_LEN : (.5 + (t - 1.8) * .55) % REP_LEN;
+  athlete(vx + vw * .48, vy + vh * .9, 420, poseAt(shown));
+  box(vx, vy, vw, vh, 0, null, LINE, 4);
+  box(vx + 20, vy + 20, 300, 48, 4, 'rgba(0,0,0,.65)');
+  text(t < 1.8 ? '◀◀ REWIND' : '½× REPLAY', vx + 36, vy + 58, 40, WHITE);
+  const ty = vy + vh + 56;
+  box(vx, ty, vw, 14, 7, LINE);
+  box(vx, ty, vw * scrub, 14, 7, RED);
+  for (let i = 0; i < 12; i++) { const mx = vx + vw * (.06 + i * .08); ctx.fillStyle = i === 7 ? RED : GREEN; ctx.fillRect(mx, ty - 14, 5, 42); }
+  ctx.fillStyle = WHITE; ctx.beginPath(); ctx.arc(vx + vw * scrub, ty + 7, 18, 0, 7); ctx.fill();
+  const rx = 1250, rw = 590;
+  slash(rx, 110, 120, 10);
+  text('REVIEW IT', rx, 196, 96);
+  const rows = [['ATHLETE 1', 12, 1], ['ATHLETE 2', 9, 0], ['ATHLETE 3', 14, 2]];
+  rows.forEach(([name, r, nr], i) => reveal(t, .3 + i * .3, () => {
+    const y = 240 + i * 136;
+    box(rx, y, rw, 118, 8, i === 0 ? '#2a1616' : INK, i === 0 ? RED : LINE);
+    text(name, rx + 26, y + 52, 42);
+    text(`${r} reps · ${nr} no rep${nr === 1 ? '' : 's'}`, rx + 26, y + 96, 30, MUTED, { head: false });
+    box(rx + rw - 150, y + 32, 124, 56, 6, RED);
+    text('WATCH', rx + rw - 88, y + 74, 38, WHITE, { align: 'center' });
+  }));
+  reveal(t, 1.5, () => text('Rewind any camera', rx, 690, 40, WHITE, { head: false }));
+  reveal(t, 2.2, () => text('See the tracking on every rep', rx, 748, 40, WHITE, { head: false }));
+  reveal(t, 2.9, () => text('Settle the protest', rx, 806, 40, WHITE, { head: false }));
+}
+function endCard(t, d) {
+  slash(W / 2 - 170, 215, 340, 18);
+  reveal(t, .1, () => text('SPARTANS BROADCASTER', W / 2, 390, 130, WHITE, { align: 'center' }));
+  reveal(t, .4, () => text('+', W / 2, 500, 90, RED, { align: 'center' }));
+  reveal(t, .6, () => text('BURPEE JUDGE RECEIVER', W / 2, 630, 130, WHITE, { align: 'center' }));
+  reveal(t, 1.2, () => text('Film on Android. Judge on Windows.', W / 2, 760, 52, MUTED, { align: 'center', head: false }));
+}
+
+// start, end, draw
+const SCENES = [[0, 3.2, title], [3.2, 9, broadcaster], [9, 13.8, receiver], [13.8, 21.8, judge], [21.8, 27, review], [27, DURATION, endCard]];
+window.DURATION = DURATION;
+window.renderAt = (t) => {
+  ctx.globalAlpha = 1; ctx.fillStyle = BLACK; ctx.fillRect(0, 0, W, H);
+  const FADE = .28;
+  for (const [a, b, draw] of SCENES) {
+    if (t < a || t >= b + (b === DURATION ? 1 : 0)) continue;
+    ctx.save();
+    ctx.globalAlpha = a === 0 ? 1 : b === DURATION ? Math.min(1, (t - a) / FADE) * Math.min(1, (b - t) / .5 + 0) : Math.min(1, (t - a) / FADE, (b - t) / FADE);
+    if (a === 0) ctx.globalAlpha = Math.min(1, t / .3, (b - t) / FADE);
+    draw(t - a, b - a);
+    ctx.restore();
+  }
+};
+window.ready = document.fonts.load('italic 900 40px "Barlow Condensed"').then(() => document.fonts.load('600 40px Barlow')).then(() => { renderAt(1.5); return true; });
+</script>
+</body>
+</html>
