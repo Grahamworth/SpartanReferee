@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0b0b0b">
+<title>Video review</title>
+<link rel="stylesheet" href="review.css">
+<script src="review.js" defer></script>
+</head>
+<body>
+<header>
+  <h1>Video <span>review</span></h1>
+  <nav class="tabs" role="tablist">
+    <button data-tab="live" class="on">Live</button>
+    <button data-tab="upload">Upload video</button>
+    <button data-tab="judge">AI judge</button>
+    <button data-tab="log">Log</button>
+  </nav>
+  <label class="dayPick">Day <select id="day" aria-label="Show this day"></select></label>
+  <div class="numSearch">
+    <input id="numSearch" inputmode="numeric" placeholder="Find athlete number" autocomplete="off" aria-label="Find athlete number">
+    <div id="numResults" class="numresults" hidden></div>
+  </div>
+  <div class="clock"><b id="clock">--:--:--</b><small id="who"></small></div>
+</header>
+
+<div id="offline" class="banner" hidden>Can't reach the judging laptop. Retrying…</div>
+<div id="athletePop" class="athletepop" hidden></div>
+
+<!-- Live: every camera live (with its AI judge), rewind through everything recorded -->
+<section id="live" class="pane">
+  <div class="dvr">
+    <button class="btn red" id="goLive">● Live</button>
+    <div class="tlwrap"><input id="timeline" type="range" min="0" max="1000" value="1000" aria-label="Rewind through the recordings"><div id="tlMarks" class="tlmarks"></div></div>
+    <b id="tlAt" class="at">LIVE</b>
+  </div>
+  <div class="dvr2">
+    <span class="viewpick" id="viewPick" role="group" aria-label="Cameras shown"></span>
+    <button class="btn red" id="pickBtnTop">Pick athlete</button>
+    <button class="btn" id="judgeRestart" title="Saves each judge's round, then starts it again">Restart judges</button>
+    <details class="more"><summary>Go to a time</summary>
+      <div class="find">
+        <label>Time <input id="when" type="datetime-local" step="1"></label>
+        <label>Show <select id="win">
+          <option value="20">20 s</option><option value="40" selected>40 s</option><option value="90">90 s</option><option value="180">3 min</option><option value="600">10 min</option>
+        </select></label>
+        <button id="go" class="btn red">Replay</button>
+        <span class="quick">
+          <button class="btn" data-ago="15">Last 15 s</button>
+          <button class="btn" data-ago="30">Last 30 s</button>
+          <button class="btn" data-ago="120">Last 2 min</button>
+        </span>
+      </div>
+    </details>
+  </div>
+  <div id="ranges" class="muted small"></div>
+  <div id="pickHint" class="banner pick" hidden>Click the athlete you want analysed, on either camera. <button class="btn" id="pickCancel">Cancel</button></div>
+  <div id="judgeSettings" class="settingsbox" hidden>
+    <div class="row"><b id="settingsTitle">Camera settings</b><span class="muted small" id="settingsNote">Saved for this camera on this device. Save restarts its judge with them.</span></div>
+    <iframe id="settingsFrame" title="Judge settings"></iframe>
+  </div>
+  <div id="liveSpot"></div>
+  <div id="replayGrid" class="grid"></div>
+  <div class="transport" id="transport" hidden>
+    <div class="timeline"><input id="scrub" type="range" min="0" max="1000" value="0"></div>
+    <div class="row">
+      <b id="at" class="at">--:--:--.-</b>
+      <button class="btn" data-step="-5">−5 s</button>
+      <button class="btn" data-step="-0.0333">◀ frame</button>
+      <button class="btn red" id="play">Play</button>
+      <button class="btn" data-step="0.0333">frame ▶</button>
+      <button class="btn" data-step="5">+5 s</button>
+      <span class="speeds"><button class="btn" data-rate="0.25">¼×</button><button class="btn" data-rate="0.5">½×</button><button class="btn on" data-rate="1">1×</button></span>
+      <button class="btn red" id="pickBtn">Pick athlete</button>
+    </div>
+  </div>
+</section>
+
+<!-- Upload video: judged as it plays, exactly like a live camera; everyone it tracks goes in the AI judge list -->
+<section id="upload" class="pane offstage">
+  <div class="row uploadbar">
+    <label class="btn red upload">Choose a video<input id="upFile" type="file" accept="video/*" hidden></label>
+    <button class="btn" id="upCfg">⚙ Config</button>
+    <span id="upStatus" class="muted">The AI judge is always on for uploads: it tracks everyone as the video plays and adds them to the AI judge list. A copy stays on the laptop for testing and training.</span>
+  </div>
+  <div id="upSettings" class="settingsbox" hidden>
+    <div class="row"><b>AI judge settings for uploaded videos</b><span class="muted small">Check them, then Save to start judging (Close: not now).</span></div>
+    <iframe id="upSettingsFrame" title="Upload judge settings"></iframe>
+  </div>
+  <div id="upStage" class="upstage"><div class="msg">Choose a video to judge it.</div></div>
+  <h2>Uploaded videos</h2>
+  <table class="list"><thead><tr><th>Video</th><th>Uploaded</th><th>Size</th><th>Athletes</th><th></th></tr></thead><tbody id="upList"></tbody></table>
+</section>
+
+<!-- AI judge: everyone tracked, for review -->
+<section id="judge" class="pane" hidden>
+  <div class="row filters">
+    <label>Number <input id="fNum" inputmode="numeric" placeholder="any" autocomplete="off"></label>
+    <label>Camera <select id="fCam"><option value="">All</option></select></label>
+    <label>Source <select id="fSrc"><option value="">Live and uploaded</option><option value="live">Live cameras</option><option value="upload">Uploaded videos</option></select></label>
+    <label>From <input id="fFrom" type="time" step="60"></label>
+    <label>To <input id="fTo" type="time" step="60"></label>
+    <button class="btn" id="fClear">Clear</button>
+    <span class="spacer"></span>
+    <button class="btn" id="whatCounts">What counts?</button>
+  </div>
+  <div id="proof" class="settingsbox" hidden>
+    <div class="row"><b id="proofTitle">Watch</b><span class="muted small" id="proofNote"></span><span class="spacer"></span>
+      <span class="speeds" id="proofSpeeds"><button class="btn" data-prate="0.25">¼×</button><button class="btn" data-prate="0.5">½×</button><button class="btn on" data-prate="1">1×</button></span>
+      <label class="check"><input type="checkbox" id="proofShow" checked> Skeleton</label>
+      <span id="proofSync" class="proofsync" title="If the skeleton runs ahead of or behind the athlete in this recording">Timing <button class="btn" data-shift="-100">−</button><b id="proofShift"></b><button class="btn" data-shift="100">+</button></span>
+      <button class="btn" id="proofLive">Open in Live</button><button class="btn" id="proofClose">Close</button></div>
+    <div class="proofstage"><video id="proofVideo" controls playsinline muted></video><canvas id="proofCanvas"></canvas></div>
+    <div id="proofReps" class="proofreps"></div>
+  </div>
+  <div id="analysis" class="settingsbox" hidden>
+    <div class="row"><b id="analysisTitle">Detailed analysis</b><span class="muted small" id="analysisNote"></span><span class="spacer"></span><button class="btn" id="analysisClose">Close</button></div>
+    <iframe id="analysisFrame" title="Detailed analysis"></iframe>
+  </div>
+  <div id="rulesBox" class="settingsbox" hidden>
+    <div class="row"><b>What counts</b><span class="muted small">The standard each rep is judged against.</span><span class="spacer"></span><button class="btn" id="rulesClose">Close</button></div>
+    <iframe id="rulesFrame" title="What counts"></iframe>
+  </div>
+  <div id="athleteBox">
+    <p id="athleteSummary" class="muted"></p>
+    <div id="athleteList" class="athletes"></div>
+  </div>
+</section>
+
+<!-- Log: camera connect/lost events, for protests -->
+<section id="log" class="pane" hidden>
+  <div class="row"><h2>Cameras</h2><button class="btn" id="csv">Download log (CSV)</button></div>
+  <table class="list"><thead><tr><th>Time</th><th>Camera</th><th>Event</th></tr></thead><tbody id="eventList"></tbody></table>
+</section>
+
+<!-- the AI judges on the live cameras: always running, shown on the Live tab while it's live, kept out of sight otherwise -->
+<div id="judgeGrid" class="grid judgegrid offstage"></div>
+
+<div id="toast"></div>
+</body>
+</html>

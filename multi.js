@@ -1,0 +1,549 @@
+// Several athletes in one camera view, each with their own judge and count
+// (test mode). Pure logic, no DOM, so it can be unit tested in Node.
+//
+// Every frame the pose model gives a list of people in no particular order.
+// Everyone in view gets a track, athlete or not. Each person is matched to the
+// track nearest where it was last seen, so counts stay with the right athlete
+// as they move and as a hand-held camera drifts; a person nobody matches
+// starts a new track. A track is only handed a body that could really be the
+// same person a moment later: no further than a person can move in the time
+// since (about two body heights a second), no flip between lying and standing
+// within a quarter of a second, and no clearly different top. Without these,
+// an athlete lost for a few frames (lying flat is hard to see) had their
+// track handed to whoever was standing nearest, and came back as someone new.
+//
+// Burpees are done on one patch of ground, so each track also has a home
+// spot: where its hips have been on average over the last few seconds. An
+// athlete's track is only handed a body near their home spot, so it can't
+// cling to someone walking past, and a missing athlete is looked for there.
+//
+// Only people who do the exercise count as athletes: a track becomes one at
+// its first good rep, and any no reps before it are reported then. If an
+// unfinished athlete went out of sight shortly before (the camera was moved,
+// or someone walked in front), and the clothes match, the new track carries
+// on that athlete's count instead of starting a new one (unless they walked
+// out of the side of the picture: then they've gone). Officials
+// and spectators walking or crouching never complete a rep, so they're never
+// labelled or counted. People far in the background are too small to track.
+// The model sometimes finds one person twice: two poses with the shoulders
+// and hips in the same places. The smaller copy is dropped. (Outlines alone
+// won't do: an athlete lying at an official's feet overlaps him.)
+//
+// A person's outline shrinks to a third of their height when they crouch, so
+// distances are measured against the tallest they've been lately (their
+// scale), and a track that's already an athlete wins a close call against a
+// newer one.
+//
+// Small people are often found on only some frames, and an official standing
+// next to an athlete can be the only one found on a frame. Position alone
+// would then hand him the athlete's track, so each track also remembers what
+// its person is wearing: the colour of the top (sampled across the torso) and
+// of the shorts, kept separately for standing and lying down, because a top
+// of two colours reads differently in each. Colour counts in every match, and
+// a clear mismatch in the same posture rules the match out. The colour is the
+// balance of red, green and blue, which shade and sun barely change;
+// brightness proved too unsteady on people this small.
+//
+// A person finder (finder.js), when the caller has one, looks for everyone
+// about twice a second; anyone it sees that hasn't been found
+// (unclaimedBoxes()) gets a zoomed second look of their own (boxArea()).
+//
+// The pose model shrinks the whole frame to a small square before looking, so
+// athletes far from the camera are found on only some frames. region() gives
+// the part of the frame around everyone being tracked, for the caller to zoom
+// into (fromCrop() maps the results back). The zoomed view must not jump to
+// the whole frame and back (the model loses people for a few frames each
+// time), so new people are found by a second look, twice a second
+// (wantsScan()), passed to update() as 'extra'. Athletes lined up one behind
+// the other from the camera are often found as one person, so that look is
+// taken with everyone already tracked painted over (drawMasks()), across the
+// whole area and its left and right parts (scanAreas()): whoever is still
+// found is someone new. It only adds people nobody is tracking.
+//
+// When someone being tracked isn't found in a frame, update() asks the
+// caller to look again (lookAgain): zoomed in on where they were, with the
+// people already found painted over. On a clip of three athletes in a row
+// this found the two still in view together on 44 frames in 72, against 5.
+import { computeMetrics } from './burpee.js';
+import { PoseFilter } from './pose-filter.js';
+
+export const MULTI_DEFAULTS = {
+  maxPeople: 5,       // poses asked of the model per frame
+  minSize: 0.1,       // smaller than this fraction of the frame height: background, not a new track
+  keepSize: 0.04,     // an existing track still follows its person down to this size (crouched, far off)
+  sameDist: 0.2,      // shoulders and hips this close (share of body size): one person found twice
+  matchDist: 1.0,     // furthest a track's person can have moved, in body heights (scale)
+  moveBase: 0.35,     // ...one frame later; the reach grows by moveRate a second after that
+  moveRate: 2,
+  homeDist: 0.7,      // an athlete's track only takes a body this near their home spot (body heights): room for a burpee, not for walking off
+  homeMs: 3000,
+  followMs: 150,      // seen this recently (about a frame ago) and dressed the same: still being followed
+  followColour: 0.1,       // how quickly the home spot follows them (copes with a drifting camera)
+  postureMs: 250,     // within this long, a body can't swing between lying and upright...
+  postureJump: 50,    // ...by more than this many degrees of torso tilt
+  colourGate: 0.2,    // clothes this different, in the same posture: not the same person
+  colourGateOther: 0.3, // ...compared with the other posture (only that one known yet)
+  scaleMs: 10000,     // how quickly the remembered tallest size fades
+  lostMs: 2000,       // unseen this long: the track pauses
+  forgetMs: 2000,     // unseen this long and never an athlete: dropped (only athletes need picking up again later)
+  rematchDist: 1.6,   // a paused track can be picked up again from this far
+  colourWeight: 3,    // how much a colour difference counts against a match
+  colourFrames: 5,    // colour samples a track needs before its colour counts
+  resumeColour: 0.3,  // a new track this different in colour doesn't carry on a lost athlete
+  zoomPad: 0.6,       // space kept around the people in the zoomed region (body heights)
+  zoomMin: 0.3,       // smallest region, as a share of the frame height
+  zoomBig: 0.3,       // people this big are found without zooming, so they don't widen the region
+  scanEveryMs: 500,   // look for new people this often
+  lookAgainMax: 2,    // most look-agains for missing people per frame (each costs a full pose search)
+  lookEveryMs: 0,     // and for any one person, no more often than this
+  claimedCover: 0.7,  // a finder box covering this much of someone found...
+  claimedFill: 0.3,   // ...which their outline fills this much of, is them
+  findEveryMs: 500,   // run the person finder this often (in the background)
+  twinDist: 0.6,      // a new athlete this close to one already counted (body heights)...
+  twinColour: 0.1,    // ...and dressed no more differently than this is a copy of them
+  leftoverDist: 0.35, // a person found this close to a tracked one, despite the paint: a leftover of them
+  hiVisGreen: 0.42,   // a top this green, this red and this little blue is hi-vis yellow (an official)
+  hiVisRed: 0.3,
+  hiVisBlue: 0.2,
+  edge: 0.04,         // an athlete last seen this close to the side of the picture has walked out of it
+  goneMs: 20000,      // an athlete out of sight this long has finished and gone: no more counts for them
+};
+
+// Where to take the look for new people: the area being watched (r, as
+// shares of the frame), and its left and right 60% (a person standing beside
+// another fills more of a narrower view).
+export function scanAreas(r) {
+  return [r, { ...r, w: r.w * 0.6 }, { ...r, x: r.x + r.w * 0.4, w: r.w * 0.6 }];
+}
+
+// People the person finder saw that nobody has been found as yet: its boxes
+// (shares of the frame) that don't match the outline of anyone in found
+// (landmark lists). A box is someone found when it covers most of their
+// outline and their outline fills a fair part of it (finder boxes have a
+// margin round the body); a second athlete half hidden behind another fails
+// one or the other.
+// Tiny boxes (far in the background) are left out. Biggest first.
+export function unclaimedBoxes(boxes, found, aspect = 1, o = MULTI_DEFAULTS) {
+  const outline = (lm) => {
+    const pts = lm.filter((p) => (p.visibility ?? 1) >= 0.5);
+    return pts.length < 4 ? null : { x0: Math.min(...pts.map((p) => p.x)), x1: Math.max(...pts.map((p) => p.x)), y0: Math.min(...pts.map((p) => p.y)), y1: Math.max(...pts.map((p) => p.y)) };
+  };
+  const area = (q) => Math.max(1e-6, (q.x1 - q.x0) * (q.y1 - q.y0));
+  const claims = (b, q) => {
+    const w = Math.min(b.x1, q.x1) - Math.max(b.x0, q.x0), h = Math.min(b.y1, q.y1) - Math.max(b.y0, q.y0);
+    if (w <= 0 || h <= 0) return false;
+    return (w * h) / area(q) > o.claimedCover && (w * h) / area(b) > o.claimedFill;
+  };
+  const size = (b) => Math.max(b.y1 - b.y0, (b.x1 - b.x0) * aspect);
+  const outlines = found.map(outline).filter(Boolean);
+  return boxes.filter((b) => size(b) >= o.minSize && !outlines.some((q) => claims(b, q)))
+    .sort((a, b) => size(b) - size(a));
+}
+
+// The part of the frame to zoom in on for a person the finder saw: their box
+// with a quarter of its size spare on each side, at least zoomMin tall.
+export function boxArea(b, o = MULTI_DEFAULTS) {
+  const pw = (b.x1 - b.x0) * 0.25, ph = (b.y1 - b.y0) * 0.25;
+  let x0 = b.x0 - pw, x1 = b.x1 + pw, y0 = b.y0 - ph, y1 = b.y1 + ph;
+  if (y1 - y0 < o.zoomMin) { const m = (y0 + y1) / 2; y0 = m - o.zoomMin / 2; y1 = m + o.zoomMin / 2; }
+  x0 = Math.max(0, x0); y0 = Math.max(0, y0); x1 = Math.min(1, x1); y1 = Math.min(1, y1);
+  return { x: x0, y: y0, w: x1 - x0, h: y1 - y0 };
+}
+
+// Several sets of results as one.
+export function joinResults(list) {
+  const ok = list.filter((r) => r?.landmarks?.length);
+  return { landmarks: ok.flatMap((r) => r.landmarks), worldLandmarks: ok.flatMap((r) => r.worldLandmarks || r.landmarks.map(() => null)) };
+}
+
+// Results found in a zoomed part of the frame, mapped back to the whole frame.
+// crop: {x, y, w, h} as shares of the frame.
+export function fromCrop(res, crop) {
+  if (!crop || !res) return res;
+  const map = (lm) => lm.map((p) => ({ ...p, x: crop.x + p.x * crop.w, y: crop.y + p.y * crop.h }));
+  return { ...res, landmarks: (res.landmarks || []).map(map) };
+}
+
+
+// What a person is wearing: { top, shorts }, each the [red, green] share of
+// r+g+b, from the median of several points (shorts null when the thighs
+// aren't seen). The top is sampled down the middle of the torso and, when both
+// sides are seen, across it. sample(x, y) gives [r, g, b] 0-255 at a point in
+// the frame (0-1 coordinates), or null.
+export function clothesColour(lm, sample, minVis = 0.3) {
+  if (!sample) return null;
+  const seen = (i) => lm[i] && (lm[i].visibility ?? 1) >= minVis;
+  const mid = (ids) => {
+    const pts = ids.filter(seen).map((i) => lm[i]);
+    return pts.length ? { x: pts.reduce((a, p) => a + p.x, 0) / pts.length, y: pts.reduce((a, p) => a + p.y, 0) / pts.length } : null;
+  };
+  const lerp = (a, b, k) => ({ x: a.x + (b.x - a.x) * k, y: a.y + (b.y - a.y) * k });
+  const balance = (pts) => {
+    const px = pts.map((p) => sample(p.x, p.y)).filter(Boolean);
+    if (px.length < 3) return null;
+    const median = (c) => px.map((p) => p[c]).sort((a, b) => a - b)[px.length >> 1];
+    const [r, g, b] = [0, 1, 2].map(median);
+    const sum = r + g + b + 1;
+    return [r / sum, g / sum];
+  };
+  const sh = mid([11, 12]), hip = mid([23, 24]);
+  if (!sh || !hip) return null;
+  const topPts = [0.3, 0.5, 0.7].map((k) => lerp(sh, hip, k));
+  if (seen(11) && seen(12) && seen(23) && seen(24)) {
+    for (const k of [0.4, 0.65]) {
+      const l = lerp(lm[11], lm[23], k), r = lerp(lm[12], lm[24], k);
+      topPts.push(lerp(l, r, 0.3), lerp(l, r, 0.7));
+    }
+  }
+  const top = balance(topPts);
+  if (!top) return null;
+  const knee = mid([25, 26]);
+  const shortsPts = knee ? [0.15, 0.3].map((k) => lerp(hip, knee, k)) : [];
+  for (const [h, k] of [[23, 25], [24, 26]]) if (seen(h) && seen(k)) shortsPts.push(lerp(lm[h], lm[k], 0.25));
+  return { top, shorts: balance(shortsPts) };
+}
+const colourDist = (a, b) => Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]);
+// How different two sets of clothes are: the top, with the shorts counting
+// half as much again when both are known.
+const clothesDist = (a, b) => (a.shorts && b.shorts
+  ? (colourDist(a.top, b.top) + 0.5 * colourDist(a.shorts, b.shorts)) / 1.5
+  : colourDist(a.top, b.top));
+// A hi-vis yellow top (officials' vests): lots of red and green, little blue.
+function hiVis(k, o) {
+  return ['up', 'down'].some((pos) => {
+    const c = k.colours[pos];
+    if (!c || c.n < 3) return false;
+    const [r, g] = c.top;
+    return g >= o.hiVisGreen && r >= o.hiVisRed && 1 - r - g <= o.hiVisBlue;
+  });
+}
+const posture = (box) => (box.tilt == null ? null : box.tilt < 45 ? 'up' : 'down');
+// How different person p's clothes are from what track k remembers, and
+// whether that's in the same posture: { d, same }, or null if k doesn't know
+// yet.
+function clothesGap(p, k, o) {
+  if (!p.colour) return null;
+  const pos = posture(p.box);
+  const known = (c) => c && c.n >= o.colourFrames;
+  const same = pos ? k.colours[pos] : null;
+  if (known(same)) return { d: clothesDist(p.colour, same), same: true };
+  const other = [k.colours.up, k.colours.down].find(known);
+  return other ? { d: clothesDist(p.colour, other), same: false } : null;
+}
+// Remember what track k's person wears in this posture (a running average).
+function learnClothes(k, p) {
+  const pos = posture(p.box);
+  if (!p.colour || !pos) return;
+  const c = k.colours[pos];
+  if (!c) { k.colours[pos] = { top: p.colour.top, shorts: p.colour.shorts, n: 1 }; return; }
+  const ease = (v, nv) => (v && nv ? v.map((x, i) => x + (nv[i] - x) * 0.15) : v ?? nv);
+  c.top = ease(c.top, p.colour.top);
+  c.shorts = ease(c.shorts, p.colour.shorts);
+  c.n++;
+}
+
+// Paint people over on a canvas showing part of the frame (crop, as shares
+// of the frame), so a second look finds whoever they were hiding. poses are
+// landmark lists in whole-frame coordinates.
+const MASK_BONES = [[11, 12], [11, 13], [13, 15], [12, 14], [14, 16], [11, 23], [12, 24], [23, 24], [23, 25], [25, 27], [24, 26], [26, 28], [0, 11], [0, 12]];
+export function drawMasks(ctx, poses, crop, W, H, colour = 'rgb(128,110,90)') {
+  ctx.save();
+  ctx.strokeStyle = ctx.fillStyle = colour;
+  ctx.lineCap = 'round';
+  for (const lm of poses) {
+    const px = (p) => [((p.x - crop.x) / crop.w) * W, ((p.y - crop.y) / crop.h) * H];
+    const ys = lm.map((p) => p.y);
+    ctx.lineWidth = Math.max(4, ((Math.max(...ys) - Math.min(...ys)) / crop.h) * H * 0.22);
+    ctx.beginPath();
+    for (const [a, b] of MASK_BONES) { ctx.moveTo(...px(lm[a])); ctx.lineTo(...px(lm[b])); }
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+// Where a person is in the frame, from the points the model is sure of.
+// aspect = frame width / height, so distances are the same across and down.
+export function personBox(lm, aspect = 1, minVis = 0.5) {
+  const pts = lm.filter((p) => (p.visibility ?? 1) >= minVis);
+  if (pts.length < 4) return null;
+  const xs = pts.map((p) => p.x * aspect), ys = pts.map((p) => p.y);
+  const x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys);
+  // Centre on the hips when seen: they move least through a burpee.
+  const hips = [lm[23], lm[24]].filter((p) => p && (p.visibility ?? 1) >= minVis);
+  const cx = hips.length ? hips.reduce((s, p) => s + p.x * aspect, 0) / hips.length : (x0 + x1) / 2;
+  const cy = hips.length ? hips.reduce((s, p) => s + p.y, 0) / hips.length : (y0 + y1) / 2;
+  // Torso tilt in the picture: 0 upright, 90 lying flat.
+  const mid = (a, b) => (lm[a] && lm[b] && (lm[a].visibility ?? 1) >= minVis && (lm[b].visibility ?? 1) >= minVis
+    ? { x: ((lm[a].x + lm[b].x) / 2) * aspect, y: (lm[a].y + lm[b].y) / 2 } : null);
+  const sh = mid(11, 12), hp = mid(23, 24);
+  const tilt = sh && hp ? (Math.atan2(Math.abs(sh.x - hp.x), Math.abs(sh.y - hp.y)) * 180) / Math.PI : null;
+  return { cx, cy, size: Math.max(x1 - x0, y1 - y0), top: y0, bottom: y1, x: (x0 + x1) / 2 / aspect, left: x0 / aspect, right: x1 / aspect, tilt };
+}
+
+// How far apart two poses' shoulders and hips are, as a share of the bigger
+// body: near 0 for one person found twice.
+const TORSO = [11, 12, 23, 24];
+function torsoDist(a, b, aspect) {
+  const d = TORSO.map((i) => Math.hypot((a.lm[i].x - b.lm[i].x) * aspect, a.lm[i].y - b.lm[i].y)).sort((x, y) => x - y);
+  return (d[1] + d[2]) / 2 / Math.max(a.box.size, b.box.size); // middle two: one bad point doesn't decide
+}
+
+export class MultiTracker {
+  // make(): a new judge for one athlete. tracking: PoseFilter options.
+  // metricOpts(): computeMetrics options.
+  constructor({ make, tracking, metricOpts, opts = {} }) {
+    this.o = { ...MULTI_DEFAULTS, ...opts };
+    this.make = make;
+    this.tracking = tracking;
+    this.metricOpts = metricOpts;
+    this.tracks = [];
+    this.nextId = 1;
+    this.nextLabel = 1;
+    this.zoom = null;      // current region, eased towards where people are
+    this.scanAt = -Infinity;
+  }
+
+  // True when it's time for a look at the whole frame for new people (only
+  // needed while region() is zoomed in).
+  wantsScan(t) {
+    if (!this.zoom || t - this.scanAt < this.o.scanEveryMs) return false;
+    this.scanAt = t;
+    return true;
+  }
+
+  // The part of the frame to look at next, {x, y, w, h} as shares of the
+  // frame, or null for the whole frame (nobody being tracked).
+  region(t, aspect = 1) {
+    const o = this.o;
+    // Small people only: someone big (an official right by the camera) is
+    // found anyway, and including them would undo the zoom for everyone else.
+    const recent = this.tracks.filter((k) => t - k.seenAt < o.lostMs && k.scale < o.zoomBig);
+    if (!recent.length) { this.zoom = null; return null; }
+    const pad = Math.max(...recent.map((k) => k.scale)) * o.zoomPad;
+    let x0 = Math.min(...recent.map((k) => k.box.left)) - pad / aspect, x1 = Math.max(...recent.map((k) => k.box.right)) + pad / aspect;
+    let y0 = Math.min(...recent.map((k) => k.box.top)) - pad, y1 = Math.max(...recent.map((k) => k.box.bottom)) + pad;
+    const grow = (a, b, min) => { const m = (a + b) / 2, half = Math.max((b - a) / 2, min / 2); return [m - half, m + half]; };
+    [y0, y1] = grow(y0, y1, o.zoomMin);
+    [x0, x1] = grow(x0, x1, o.zoomMin / aspect);
+    const want = { x0: Math.max(0, x0), x1: Math.min(1, x1), y0: Math.max(0, y0), y1: Math.min(1, y1) };
+    // Widen at once (nobody gets cut off); narrow gradually.
+    const z = this.zoom ?? want;
+    const ease = (cur, tgt, wider) => (wider ? tgt : cur + (tgt - cur) * 0.1);
+    this.zoom = {
+      x0: ease(z.x0, want.x0, want.x0 < z.x0), x1: ease(z.x1, want.x1, want.x1 > z.x1),
+      y0: ease(z.y0, want.y0, want.y0 < z.y0), y1: ease(z.y1, want.y1, want.y1 > z.y1),
+    };
+    const r = this.zoom;
+    return { x: r.x0, y: r.y0, w: r.x1 - r.x0, h: r.y1 - r.y0 };
+  }
+
+  // Athletes in the order they started.
+  get athletes() { return this.tracks.filter((k) => k.label != null).sort((a, b) => a.label - b.label); }
+
+  // res: PoseLandmarker result. sample(x, y): the frame's colour at a point
+  // (see clothesColour), or null to match on position alone. extra: results
+  // of a look at the whole frame (see wantsScan), for new people only.
+  // Returns events as [{track, ev}].
+  // lookAgain(k, poses): the caller's second look for missing track k, with
+  // poses (whole-frame landmark lists) painted over; returns results in
+  // whole-frame coordinates, or null.
+  update(res, t, aspect = 1, sample = null, extra = null, lookAgain = null) {
+    const o = this.o;
+    const read = (r) => (r?.landmarks || []).map((lm, i) => ({ lm, wlm: r.worldLandmarks?.[i], box: personBox(lm, aspect), colour: clothesColour(lm, sample) }))
+      .filter((p) => p.box && p.box.size >= o.keepSize);
+    const close = (p, box, scale) => Math.hypot(p.box.cx - box.cx, p.box.cy - box.cy) < o.leftoverDist * Math.max(scale, p.box.size);
+    // A leftover of person q: found right on top of them and not clearly
+    // dressed differently (someone else standing that close usually is).
+    const leftover = (p, q) => close(p, q.box, q.box.size) && !(p.colour && q.colour && clothesDist(p.colour, q.colour) > o.twinColour);
+    // Out of sight for goneMs: finished and gone. Their count stands, but
+    // nobody is matched to them or carries it on.
+    for (const k of this.tracks) if (k.label != null && !k.gone && t - k.seenAt > o.goneMs) k.gone = true;
+    const tracked = this.tracks.filter((k) => t - k.seenAt < o.lostMs);
+    const people = read(res)
+      .sort((a, b) => b.box.size - a.box.size)
+      .filter((p, i, all) => !all.slice(0, i).some((q) => torsoDist(p, q, aspect) < o.sameDist));
+    for (const p of read(extra)) {
+      if (!tracked.some((k) => close(p, k.box, k.scale)) && !people.some((q) => close(p, q.box, q.box.size))) people.push(p);
+    }
+
+    // How well person p fits track k (lower is better), or null if p can't
+    // be k's person.
+    const leftView = (k) => this._leftView(k);
+    const fit = (p, k) => {
+      if (k.gone) return null;
+      const gone = t - k.seenAt;
+      if (gone > o.lostMs && k.label == null) return null; // only athletes are picked up again after a gap
+      // Someone who walked out of the side of the picture can only be picked
+      // up again where they left.
+      const reach = gone <= o.lostMs ? Math.min(o.matchDist, o.moveBase + (o.moveRate * gone) / 1000)
+        : leftView(k) ? o.moveBase : o.rematchDist;
+      const size = Math.max(k.scale, p.box.size);
+      // After a gap, an athlete is looked for round their home spot.
+      const ref = gone > o.lostMs && k.label != null ? k.home : k.box;
+      const d = Math.hypot(p.box.cx - ref.cx, p.box.cy - ref.cy) / size;
+      if (d > reach) return null;
+      if (gone < o.postureMs && p.box.tilt != null && k.box.tilt != null && Math.abs(p.box.tilt - k.box.tilt) > o.postureJump) return null;
+      const gap = clothesGap(p, k, o);
+      // An athlete followed frame to frame in matching clothes can go anywhere
+      // (walking off at the end, say); picked up after losing them, or with
+      // clothes that don't clearly match, only near their home spot.
+      const following = gone <= o.followMs && gap && gap.same && gap.d <= o.followColour;
+      if (k.label != null && !following && Math.hypot(p.box.cx - k.home.cx, p.box.cy - k.home.cy) / size > o.homeDist) return null;
+      if (gap && gap.d > (gap.same ? o.colourGate : o.colourGateOther)) return null;
+      return d + (gap?.d ?? 0) * o.colourWeight + (gone > o.lostMs ? 0.5 : 0) + (k.label == null ? 0.3 : 0);
+    };
+
+    // Greedy matching, closest pair first.
+    const pairs = [];
+    for (const [pi, p] of people.entries()) {
+      for (const k of this.tracks) {
+        const d = fit(p, k);
+        if (d != null) pairs.push({ pi, k, d });
+      }
+    }
+    pairs.sort((a, b) => a.d - b.d);
+    const usedP = new Set(), usedK = new Set();
+    const seen = new Map();
+    for (const { pi, k } of pairs) {
+      if (usedP.has(pi) || usedK.has(k)) continue;
+      usedP.add(pi); usedK.add(k);
+      seen.set(k, people[pi]);
+    }
+    // Look again for people tracked a moment ago but not found this frame,
+    // athletes first, with everyone found painted over.
+    if (lookAgain) {
+      const missing = tracked.filter((k) => !seen.has(k) && !k.merged && t - (k.lookAt ?? -Infinity) >= o.lookEveryMs)
+        .sort((a, b) => (b.label != null) - (a.label != null) || b.seenAt - a.seenAt)
+        .slice(0, o.lookAgainMax);
+      for (const k of missing) {
+        k.lookAt = t;
+        const found = read(lookAgain(k, [...seen.values()].map((p) => p.lm)))
+          // not a leftover of someone already found (painted over, but not quite all)
+          .filter((p) => !people.some((q) => torsoDist(p, q, aspect) < o.sameDist || leftover(p, q)))
+          .map((p) => ({ p, d: fit(p, k) }))
+          .filter((x) => x.d != null)
+          .sort((a, b) => a.d - b.d)[0];
+        if (!found) continue;
+        people.push(found.p);
+        usedP.add(people.length - 1);
+        seen.set(k, found.p);
+      }
+    }
+    // A track started in the last second that nobody matched this frame,
+    // sitting on top of one that was matched, is the same person tracked
+    // twice: the new copy goes.
+    for (const k of this.tracks) {
+      if (seen.has(k) || k.label != null || t - k.bornAt > 1000) continue;
+      if ([...seen.keys()].some((m) => m !== k && Math.hypot(m.box.cx - k.box.cx, m.box.cy - k.box.cy) < 0.5 * Math.max(m.scale, k.scale))) k.merged = true;
+    }
+    for (const [pi, p] of people.entries()) {
+      if (usedP.has(pi) || p.box.size < o.minSize) continue;
+      const k = { id: this.nextId++, label: null, box: p.box, scale: p.box.size, colours: {}, home: { cx: p.box.cx, cy: p.box.cy }, seenAt: t, bornAt: t, filter: new PoseFilter(this.tracking), judge: this.make(), pose: null, metrics: null, early: [] };
+      this.tracks.push(k);
+      seen.set(k, p);
+    }
+
+    const events = [];
+    for (const k of this.tracks) {
+      if (k.merged) continue;
+      const p = seen.get(k);
+      if (p) {
+        k.scale = Math.max(p.box.size, k.scale * Math.exp(-(t - k.seenAt) / o.scaleMs));
+        const ease = 1 - Math.exp(-Math.max(0, t - k.seenAt) / o.homeMs);
+        k.home = { cx: k.home.cx + (p.box.cx - k.home.cx) * ease, cy: k.home.cy + (p.box.cy - k.home.cy) * ease };
+        k.box = p.box;
+        k.seenAt = t;
+        learnClothes(k, p);
+      }
+      k.pose = k.filter.update(p ? { lm: p.lm, wlm: p.wlm } : null, t);
+      k.metrics = k.pose ? computeMetrics(k.pose.lm, k.pose.wlm, this.metricOpts()) : null;
+      const ev = k.judge.update(k.metrics, t);
+      if (ev && k.label == null) {
+        k.early.push(ev);
+        if (ev.type !== 'rep') continue;
+        // Officials wear hi-vis: someone in a hi-vis top is never counted
+        // (with the camera on its side, an official standing up can look like
+        // a burpee).
+        if (hiVis(k, o)) { k.early = []; continue; }
+        // A copy of an athlete already counted (a second look found a leftover
+        // of them): right on top of them and dressed the same. Dropped.
+        if (this._twinOf(k, t)) { k.merged = true; continue; }
+        const lost = this._lostAthlete(k, t);
+        if (lost) this._carryOn(k, lost);
+        else k.label = this.nextLabel++;
+        for (const e of k.early) events.push({ track: k, ev: e });
+        if (ev.type === 'rep') Object.assign(ev, { count: k.judge.count, done: k.judge.done });
+        k.early = [];
+      } else if (ev) events.push({ track: k, ev });
+    }
+    this.tracks = this.tracks.filter((k) => !k.merged && (k.label != null || t - k.seenAt < o.forgetMs));
+    return events;
+  }
+
+  // The unfinished athlete, out of sight for a while, that new track k most
+  // likely is: k turned up on their home spot, k first appeared after they went missing (someone seen
+  // alongside them is someone else), clothes matching where both are known,
+  // most recently seen.
+  _lostAthlete(k, t) {
+    const o = this.o;
+    return this.athletes
+      .filter((a) => !a.judge.done && t - a.seenAt > o.lostMs && !a.gone && k.bornAt >= a.seenAt - 300 && (a.reoriented || (!this._leftView(a) &&
+        Math.hypot(k.box.cx - a.home.cx, k.box.cy - a.home.cy) < o.homeDist * Math.max(a.scale, k.scale))))
+      .filter((a) => !['up', 'down'].some((pos) => a.colours[pos]?.n >= o.colourFrames && k.colours[pos]?.n >= o.colourFrames &&
+        clothesDist(a.colours[pos], k.colours[pos]) > o.resumeColour))
+      .sort((a, b) => (a.reoriented && b.reoriented ? this._likeness(k, a) - this._likeness(k, b) : b.seenAt - a.seenAt))[0] ?? null;
+  }
+
+  // After the picture turned: how unlike athlete a new track k is (clothes where known, else left-to-right place).
+  _likeness(k, a) {
+    const pos = ['up', 'down'].filter((p) => a.colours[p]?.n >= this.o.colourFrames && k.colours[p]?.n >= this.o.colourFrames);
+    return pos.length ? pos.reduce((s, p) => s + clothesDist(a.colours[p], k.colours[p]), 0) / pos.length : Math.abs(a.box.cx - k.box.cx);
+  }
+
+  // Last seen at the side of the picture: walked out of it.
+  _leftView(a) { return a.box.left < this.o.edge || a.box.right > 1 - this.o.edge; }
+
+  // An athlete in view that new track k sits on top of, dressed the same.
+  _twinOf(k, t) {
+    const o = this.o;
+    return this.athletes.find((a) => !a.merged && t - a.seenAt < 500 &&
+      Math.hypot(a.box.cx - k.box.cx, a.box.cy - k.box.cy) < o.twinDist * Math.max(a.scale, k.scale) &&
+      !['up', 'down'].some((pos) => a.colours[pos]?.n >= 3 && k.colours[pos]?.n >= 3 && clothesDist(a.colours[pos], k.colours[pos]) > o.twinColour)) ?? null;
+  }
+
+  // The picture turned (a phone rotated from portrait to landscape or back): where everyone is no longer means
+  // anything. Every athlete counts as out of sight from now, without a home spot; the next person to do a rep
+  // carries on the athlete whose clothes match best (or, not known, who was in the same place left to right).
+  reorient(t) {
+    this.zoom = null;
+    for (const a of this.athletes) { a.reoriented = true; a.seenAt = Math.min(a.seenAt, t - this.o.lostMs - 1); }
+    this.tracks = this.tracks.filter((k) => k.label != null);
+  }
+
+  // Track k carries on athlete a: a's label, count, no reps and history.
+  _carryOn(k, a) {
+    const j = k.judge, old = a.judge;
+    j.count += old.count;
+    j.noReps += old.noReps;
+    for (const [r, n] of Object.entries(old.reasonCounts || {})) j.reasonCounts[r] = (j.reasonCounts[r] || 0) + n;
+    j.done = j.count >= j.o.targetReps;
+    k.label = a.label;
+    k.events = a.events; // the caller's record of a's reps, if it keeps one
+    if (a.bib && !k.bib) { k.bib = a.bib; k.bibConf = a.bibConf; } // and their race number, once read
+    if (a.picSize) { k.picSize = a.picSize; k.picAt = a.picAt; } // (the review's picture of them)
+    k.reported = a.reported;
+    if (a.proof?.length) k.proof = [...a.proof, ...(k.proof ?? [])]; // (what hasn't reached the review yet)
+    if (a.proofEvents?.length) k.proofEvents = [...a.proofEvents, ...(k.proofEvents ?? [])];
+    a.merged = true;
+  }
+
+  // End of the attempt: settle any rep in progress.
+  finish() {
+    const events = [];
+    for (const k of this.athletes) {
+      const ev = k.judge.finish();
+      if (ev) events.push({ track: k, ev });
+    }
+    return events;
+  }
+}

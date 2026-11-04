@@ -1,0 +1,16 @@
+{
+  "name": "spartans-api",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Spartans app backend: home page content and the chat (Azure Functions + Table Storage)",
+  "main": "src/functions.js",
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "dev": "node dev-server.js"
+  },
+  "dependencies": {
+    "@azure/data-tables": "^13.3.0",
+    "@azure/functions": "^4.5.0",
+    "google-auth-library": "^9.15.0"
+  }
+}

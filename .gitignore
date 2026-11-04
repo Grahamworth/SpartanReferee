@@ -1,0 +1,32 @@
+# Personal test videos: never commit or deploy these
+clips/
+test.mp4
+*.mp4
+*.mov
+*.webm
+*.mkv
+pub*.html
+
+# Built apps and packages (scripts/ rebuilds them; the published copies are in blob storage)
+downloads/
+*.zip
+*.apk
+*.aab
+*.ipa
+
+# Installed packages and build output
+node_modules/
+dist/
+
+# Secrets and local settings
+.env
+.env.*
+local.settings.json
+*.keystore
+*.jks
+
+# Tools and the operating system
+.claude/
+.vscode/
+Thumbs.db
+.DS_Store

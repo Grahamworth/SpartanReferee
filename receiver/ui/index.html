@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' app:; img-src 'self' app: data:; style-src 'self' app: 'unsafe-inline'; connect-src 'self' app: http://127.0.0.1:*">
+<title>Burpee Judge Receiver</title>
+<link rel="stylesheet" href="ui.css">
+<script src="ui.js" defer></script>
+</head>
+<body>
+<header>
+  <h1>Burpee <span>Judge</span> Receiver</h1>
+  <div class="hdr">
+    <div id="serverState" class="pill">Starting…</div>
+    <button id="verBtn" class="ver" title="Check for updates">v–</button>
+  </div>
+</header>
+
+<section class="update" id="updateBar" hidden>
+  <div><b id="updTitle">Update available</b> <span id="updText" class="muted"></span></div>
+  <button id="updLater" class="btn">Later</button>
+  <button id="updNow" class="btn red">Update now</button>
+</section>
+
+<section class="warn" id="oldWarn" hidden>
+  <div><b>An older streaming server is running on this laptop</b> (from the earlier setup script). Phones reach it instead of this app and get "authentication failed". Remove it: Windows will ask for permission. Its old recordings are kept.</div>
+  <button id="removeOld" class="btn red">Remove old server</button>
+</section>
+<section class="warn" id="portWarn" hidden>
+  <div><b>Another program is using the streaming ports</b> (1935, 8889 or 9997), so this app's server can't start. Close it, or restart the laptop.</div>
+</section>
+
+<!-- Setup, in order: each step goes green when done; folded to one line once they all are -->
+<section class="setupdone" id="setupDone" hidden>
+  <span class="tick">✓</span><b>Setup complete</b><span id="setupSummary" class="muted"></span>
+  <button class="btn" id="showSetup">Show setup</button>
+</section>
+<section class="setup" id="setupSteps">
+  <div class="step" id="stepTs">
+    <div class="num">1</div>
+    <div class="body"><h3>Tailscale on this laptop</h3><p id="tsText">Checking…</p></div>
+    <button id="tsBtn" class="btn red" hidden></button>
+  </div>
+  <div class="step" id="stepFw">
+    <div class="num">2</div>
+    <div class="body"><h3>Let phones and the iPad connect</h3><p id="fwText">Checking…</p></div>
+    <button id="fixFirewall" class="btn red" hidden>Allow</button>
+  </div>
+  <div class="step wide" id="stepPhones">
+    <div class="num">3</div>
+    <div class="body">
+      <h3>Set up each phone</h3>
+      <p>Scan this with each phone's camera: it shows how to install <b>Tailscale</b> and <b>Spartans Broadcaster</b> (Larix on an iPhone). Sign in to Tailscale <span id="tsAccount">with the same account as this laptop</span>. Then scan the phone's camera code below in the Broadcaster.</p>
+      <p id="phoneList" class="muted"></p>
+    </div>
+    <div class="qr small"><img id="phoneQr" alt="Phone setup QR code"></div>
+  </div>
+  <div class="step wide" id="stepIpad">
+    <div class="num">4</div>
+    <div class="body">
+      <h3>Watch and review on an iPad (optional)</h3>
+      <p>Install Tailscale on the iPad (same account), then scan this with its camera, or open <b id="reviewUrl"></b> in Safari. Tip: Share → Add to Home Screen.</p>
+    </div>
+    <div class="qr small"><img id="reviewQr" alt="Review page QR code"></div>
+  </div>
+</section>
+
+<main id="stations"></main>
+
+<section class="foot">
+  <form id="settingsForm">
+    <label>Cameras <input type="number" name="stations" min="1" max="12"></label>
+    <label><input type="checkbox" name="record"> Keep recordings for</label>
+    <label><input type="number" name="keepDays" min="1" max="90"> days</label>
+    <button class="btn" type="submit">Save</button>
+    <button class="btn" type="button" id="openRec">Open recordings</button>
+    <button class="btn" type="button" id="showLog">Server log</button>
+  </form>
+  <pre id="log" hidden></pre>
+</section>
+<div id="toast"></div>
+</body>
+</html>

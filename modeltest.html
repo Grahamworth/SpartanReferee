@@ -1,0 +1,20 @@
+<!doctype html><html><body style="margin:0;background:#888">
+<canvas id="c" style="width:800px;height:600px"></canvas>
+<script src="vendor/three.min.js"></script>
+<script src="vendor/GLTFLoader.js"></script>
+<script>
+const r = new THREE.WebGLRenderer({ canvas: c }); r.setSize(800, 600, false); r.outputEncoding = THREE.sRGBEncoding;
+const s = new THREE.Scene(); s.background = new THREE.Color(0x8899aa);
+s.add(new THREE.HemisphereLight(0xffffff, 0x444444, 1.2)); const d = new THREE.DirectionalLight(0xffffff, 1.5); d.position.set(3, 5, 4); s.add(d);
+const cam = new THREE.PerspectiveCamera(40, 4 / 3, 0.1, 100); cam.position.set(0, 1.2, 5); cam.lookAt(0, 0.9, 0);
+s.add(new THREE.AxesHelper(1));
+window.T = { s, cam, r };
+new THREE.GLTFLoader().load('vendor/models/Soldier.glb', (g) => {
+  window.G = g; s.add(g.scene);
+  const b = {}; g.scene.traverse((o) => { if (o.isBone) b[o.name.replace('mixamorig', '')] = o; });
+  window.B = b;
+  const box = new THREE.Box3().setFromObject(g.scene); window.BOX = box;
+  r.render(s, cam);
+});
+window.draw = () => { G.scene.updateMatrixWorld(true); r.render(s, cam); };
+</script></body></html>

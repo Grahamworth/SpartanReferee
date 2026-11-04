@@ -1,0 +1,15 @@
+{
+  "name": "spartans-app",
+  "version": "0.1.0",
+  "private": true,
+  "description": "The Spartans site packaged as Android and iPhone apps (Capacitor). Built by scripts/build-app.sh.",
+  "dependencies": {
+    "@capacitor/android": "^8.5.3",
+    "@capacitor/core": "^8.5.3",
+    "@capacitor/ios": "^8.5.3",
+    "@capgo/capacitor-social-login": "^8.7.5"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.5.3"
+  }
+}

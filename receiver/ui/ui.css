@@ -1,0 +1,83 @@
+:root { --bg: #1f2328; --ink: #282d34; --line: #414851; --red: #e2231a; --muted: #a8b0ba; --green: #33d17a; --amber: #ffb020; }
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--bg); color: #fff; font: 15px/1.45 "Segoe UI", system-ui, sans-serif; }
+header { display: flex; align-items: center; justify-content: space-between; padding: 16px 22px; border-bottom: 3px solid var(--red); }
+h1 { margin: 0; font: italic 900 28px "Segoe UI", sans-serif; text-transform: uppercase; letter-spacing: .5px; }
+h1 span { color: var(--red); }
+h2 { margin: 0 0 10px; font-size: 18px; text-transform: uppercase; }
+h3 { margin: 0 0 6px; font-size: 15px; }
+.pill { padding: 5px 12px; border-radius: 99px; background: #2f353d; color: var(--muted); font-weight: 600; }
+.pill.ok { background: rgba(51, 209, 122, .15); color: var(--green); }
+.pill.bad { background: rgba(226, 35, 26, .2); color: #ff6b6b; }
+.bar { display: flex; flex-wrap: wrap; gap: 10px 26px; padding: 14px 22px; background: var(--ink); }
+.bar .route b { color: #fff; } .bar .route { color: var(--muted); }
+.bar .route .tag { display: inline-block; font-size: 12px; font-weight: 700; text-transform: uppercase; padding: 1px 7px; margin-right: 6px; border-radius: 4px; background: #333; color: #ddd; }
+.bar .route .tag.direct { background: rgba(51, 209, 122, .18); color: var(--green); }
+.bar .route .tag.ts { background: rgba(110, 160, 255, .18); color: #8fb4ff; }
+.warn { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin: 14px 22px 0; padding: 12px 16px; background: #3a0d0b; border: 2px solid var(--red); }
+main { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 16px; padding: 18px 22px; }
+.card { background: var(--ink); border-top: 4px solid #333; padding: 14px; display: grid; gap: 10px; }
+.card.live { border-top-color: var(--green); }
+.card .top { display: flex; justify-content: space-between; align-items: center; }
+.card .name { font-size: 20px; font-weight: 800; text-transform: uppercase; }
+.status { font-weight: 700; color: var(--muted); }
+.status.live { color: var(--green); }
+.status small { display: block; font-weight: 400; color: var(--muted); }
+.tabs { display: flex; gap: 6px; }
+.tabs button { flex: 1; background: #2b3037; color: var(--muted); border: 0; padding: 7px; font-weight: 700; cursor: pointer; }
+.tabs button.on { background: #fff; color: #000; }
+.qr { background: #fff; padding: 8px; display: grid; place-items: center; }
+.qr img { width: 100%; max-width: 260px; image-rendering: pixelated; }
+.addr { font: 12px Consolas, monospace; color: #bbb; word-break: break-all; cursor: pointer; }
+.addr:hover { color: #fff; }
+.btn { background: #2f353d; color: #fff; border: 1px solid #4a525c; padding: 9px 14px; font-weight: 700; cursor: pointer; }
+.btn:hover { border-color: #888; }
+.btn.red { background: var(--red); border-color: var(--red); text-transform: uppercase; }
+.btn.red:disabled { background: #333; border-color: #333; color: #777; cursor: default; }
+.help { margin: 0 22px; padding: 16px; background: var(--ink); }
+.help .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
+.help ol { margin: 0; padding-left: 20px; } .help li { margin: 4px 0; } .help p { margin: 0; }
+a { color: #fff; }
+.foot { padding: 16px 22px 30px; }
+.foot form { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; color: var(--muted); }
+.foot input[type=number] { width: 60px; background: #2b3037; color: #fff; border: 1px solid #4a525c; padding: 6px; }
+#log { margin-top: 12px; max-height: 260px; overflow: auto; background: #000; color: #9f9; padding: 10px; font-size: 12px; }
+#toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: #2b2b2b; padding: 8px 14px; opacity: 0; transition: opacity .3s; pointer-events: none; }
+#toast.on { opacity: 1; }
+.hdr { display: flex; align-items: center; gap: 12px; }
+.setup { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 12px; padding: 16px 22px 0; }
+.step { display: flex; gap: 12px; align-items: flex-start; background: var(--ink); padding: 12px 14px; border-left: 4px solid var(--amber); }
+.step.done { border-left-color: var(--green); }
+.step .num { flex: none; width: 28px; height: 28px; border-radius: 50%; background: var(--amber); color: #000; font-weight: 900; display: grid; place-items: center; }
+.step.done .num { background: var(--green); font-size: 0; }
+.step.done .num::after { content: "✓"; font-size: 16px; }
+.step .body { flex: 1; } .step .body p { margin: 2px 0 0; color: #ccc; } .step .body b { color: #fff; }
+.step .btn { flex: none; align-self: center; }
+.step .qr.small { flex: none; width: 120px; padding: 5px; }
+.step .qr.small img { max-width: 110px; }
+#phoneList .on { color: var(--green); } #phoneList .off { color: var(--muted); }
+.hint { margin: 0; color: var(--muted); font-size: 13px; } .hint b { color: #fff; }
+.yt { display: grid; gap: 4px; color: var(--muted); font-size: 13px; }
+.yt input { background: #2b3037; color: #fff; border: 1px solid #4a525c; padding: 7px; }
+.setupdone { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 14px 22px 0; padding: 10px 14px; background: var(--ink); border-left: 4px solid var(--green); }
+.setupdone .tick { width: 24px; height: 24px; border-radius: 50%; background: var(--green); color: #000; font-weight: 900; display: grid; place-items: center; }
+.setupdone .muted { color: var(--muted); flex: 1; }
+.livebox { background: #000; aspect-ratio: 16 / 9; max-width: 100%; position: relative; cursor: zoom-in; }
+.livebox video { width: 100%; height: 100%; object-fit: contain; display: block; }
+.livebox .msg { position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); font-weight: 700; }
+.card .expand { width: 100%; }
+/* a card is as wide as its column: its live picture, tabs and buttons fit inside it (the video's own 1280 px
+   width was stretching the card past its column and the window scrolled sideways) */
+html, body { overflow-x: hidden; }
+main > .card { min-width: 0; grid-template-columns: minmax(0, 1fr); }
+.card .top { gap: 10px; flex-wrap: wrap; }
+.card .status { min-width: 0; text-align: right; }
+.tabs button { min-width: 0; }
+.livebox { width: 100%; }
+.livebox video { max-width: 100%; }
+.qr { width: 100%; }
+.ver { background: none; border: 0; color: var(--muted); font: inherit; font-size: 13px; cursor: pointer; margin-left: 10px; }
+.ver:hover { color: #fff; text-decoration: underline; }
+.update { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 14px 22px 0; padding: 12px 16px; background: rgba(51, 209, 122, .12); border: 2px solid var(--green); }
+.update > div { flex: 1; min-width: 0; }

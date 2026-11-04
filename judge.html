@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b0b0b">
+<title>Burpee Judge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;1,800;1,900&family=Barlow:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="styles.css">
+<link rel="manifest" href="manifest.webmanifest">
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js" defer></script>
+<script type="module" src="judge-gate.js"></script>
+<script type="module" src="app.js"></script>
+<link rel="stylesheet" href="looks.css">
+<script src="looks.js" data-dark-only></script>
+</head>
+<body>
+
+<div id="stage" hidden>
+  <video id="video" playsinline muted></video>
+  <canvas id="canvas"></canvas>
+  <p id="streamLost" class="stream-lost" hidden>Stream lost – reconnecting…</p>
+</div>
+
+<!-- BURPEE CHALLENGE: where to put the camera, then which camera (judge.html?mode=practice) -->
+<section id="setup" class="screen page" hidden>
+  <a href="scoreboard.html" class="home-link" id="setupBack">‹ Burpee challenge</a>
+  <p class="eyebrow">Burpee challenge</p>
+  <h1 id="setupTitle">1 Minute</h1>
+  <div class="setup-pictures">
+    <figure class="setup-good">
+      <figcaption><span aria-hidden="true">✓</span> Good setup</figcaption>
+      <svg viewBox="0 0 240 170" role="img" aria-label="Good setup: the phone is 2 to 3 metres away, and the whole body is in its view, standing with hands up and lying flat">
+        <path d="M24 91 L232 8 L232 140 L110 140 Z" fill="#22c55e" fill-opacity="0.2" stroke="#22c55e" stroke-width="1.5" stroke-dasharray="5 4"/>
+        <line x1="4" y1="140" x2="236" y2="140" stroke="#fff" stroke-width="2.5"/>
+        <path d="M19 104 L19 140 M19 110 L9 140 M19 110 L29 140" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+        <rect x="13" y="76" width="12" height="30" rx="2" fill="#0b0b0b" stroke="#fff" stroke-width="2.5"/>
+        <g fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="205" cy="53" r="7" fill="#fff" stroke="none"/>
+          <path d="M205 63 L205 100 L197 118 L197 139 M205 100 L213 118 L213 139 M205 67 L193 43 M205 67 L217 43"/>
+        </g>
+        <g fill="none" stroke="#fff" stroke-opacity="0.7" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="124" cy="130" r="6" fill="#fff" fill-opacity="0.7" stroke="none"/>
+          <path d="M134 133 L188 135 M140 134 L137 139"/>
+        </g>
+        <path d="M24 156 L205 156 M24 151 L24 161 M205 151 L205 161" stroke="#fff" stroke-width="2" fill="none"/>
+        <rect x="90" y="146" width="50" height="20" fill="#0b0b0b"/>
+        <text x="115" y="161" text-anchor="middle" fill="#fff" font-size="15" font-weight="700" font-family="Barlow, sans-serif">2–3 m</text>
+      </svg>
+      <p>Head to feet in view, standing and lying flat.</p>
+    </figure>
+    <figure class="setup-bad">
+      <figcaption><span aria-hidden="true">✕</span> Bad setup</figcaption>
+      <svg viewBox="0 0 240 170" role="img" aria-label="Bad setup: the phone is too close, so the head, hands and feet are outside its view">
+        <path d="M24 91 L232 8 L232 140 L110 140 Z" fill="#e2231a" fill-opacity="0.2" stroke="#e2231a" stroke-width="1.5" stroke-dasharray="5 4"/>
+        <line x1="4" y1="140" x2="236" y2="140" stroke="#fff" stroke-width="2.5"/>
+        <path d="M19 104 L19 140 M19 110 L9 140 M19 110 L29 140" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+        <rect x="13" y="76" width="12" height="30" rx="2" fill="#0b0b0b" stroke="#fff" stroke-width="2.5"/>
+        <path d="M78 68 L78 100 L70 118 L70 128 M78 100 L86 118 L86 128" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+        <g fill="none" stroke="#ff5a52" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="78" cy="53" r="7" fill="#ff5a52" stroke="none"/>
+          <path d="M78 63 L78 68 M78 67 L66 43 M78 67 L90 43 M70 128 L70 139 M86 128 L86 139"/>
+        </g>
+        <path d="M24 156 L78 156 M24 151 L24 161 M78 151 L78 161" stroke="#fff" stroke-width="2" fill="none"/>
+        <text x="88" y="161" fill="#fff" font-size="15" font-weight="700" font-family="Barlow, sans-serif">Too close</text>
+      </svg>
+      <p>Head, hands and feet out of view, so reps can't be counted.</p>
+    </figure>
+  </div>
+  <ul class="setup-tips">
+    <li>Prop the phone up, or have someone hold it steady, <b>2–3 m away and side-on to you</b>.</li>
+    <li>You need to be <b>fully in view, head to feet</b>, both standing and lying flat.</li>
+    <li>Keep other people out of the picture.</li>
+  </ul>
+  <div class="setup-cams">
+    <button type="button" id="startFront" class="btn btn-red btn-big">Start Front Camera</button>
+    <button type="button" id="startBack" class="btn btn-red btn-big">Start Back Camera</button>
+  </div>
+</section>
+
+<!-- HOME -->
+<section id="home" class="screen page">
+  <header class="masthead">
+    <div class="slash" aria-hidden="true"></div>
+    <button type="button" id="goSettings" class="cog-btn" aria-label="Settings">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M10.3 2h3.4l.5 2.6c.7.3 1.3.6 1.9 1.1l2.5-.9 1.7 2.9-2 1.7a7 7 0 0 1 0 2.2l2 1.7-1.7 2.9-2.5-.9c-.6.5-1.2.8-1.9 1.1l-.5 2.6h-3.4l-.5-2.6a7 7 0 0 1-1.9-1.1l-2.5.9-1.7-2.9 2-1.7a7 7 0 0 1 0-2.2l-2-1.7 1.7-2.9 2.5.9c.6-.5 1.2-.8 1.9-1.1L10.3 2zM12 8.6a3.4 3.4 0 1 0 0 6.8 3.4 3.4 0 0 0 0-6.8z"/></svg>
+    </button>
+    <a href="./" class="home-link">‹ Spartans home</a>
+    <p class="eyebrow">Penalty station</p>
+    <h1>Burpee<br>Judge</h1>
+    <p class="lede">Counts 30 penalty burpees live, to race standard. A rep only counts with chest to ground, both feet off the ground, full hip extension and hands over ears.</p>
+  </header>
+
+  <div class="panel">
+    <div class="field">
+      <span><span id="repsLabel">Burpees</span> each athlete must complete</span>
+      <div class="seg seg-big" role="radiogroup" aria-label="Reps required">
+        <button type="button" role="radio" data-reps="30">30</button>
+        <button type="button" role="radio" data-reps="custom">Custom</button>
+      </div>
+      <label for="customReps" id="customRepsWrap" class="field" hidden>
+        <span>Custom number of <span id="customUnit">burpees</span></span>
+        <input id="customReps" type="number" inputmode="numeric" min="1" max="200" step="1" placeholder="e.g. 20">
+      </label>
+    </div>
+
+    <label class="field" for="stationName">
+      <span>Station name</span>
+      <input id="stationName" type="text" placeholder="e.g. Spear throw – phone A" autocomplete="off">
+    </label>
+
+    <div class="field">
+      <span>Camera</span>
+      <div class="seg" role="radiogroup" aria-label="Camera">
+        <button type="button" id="camFront" role="radio" data-facing="user">Front (athlete sees screen)</button>
+        <button type="button" id="camBack" role="radio" data-facing="environment">Back</button>
+      </div>
+    </div>
+
+    <p id="exerciseBanner" class="exercise-banner" hidden></p>
+    <button type="button" id="openStation" class="btn btn-red btn-big">Open station</button>
+    <p id="homeStatus" class="status" aria-live="polite">Loading pose model…</p>
+    <p id="homeError" class="error" hidden></p>
+    <p id="homeSaved" class="saved-note" hidden role="status">Settings saved</p>
+  </div>
+
+  <nav class="links">
+    <button type="button" id="goResults" class="btn btn-ghost btn-big btn-results">Results <span id="resultsCount" class="badge">0</span></button>
+    <button type="button" id="testDetailed" class="btn btn-ghost">Detailed test with a video</button>
+    <button type="button" id="testRealtime" class="btn btn-ghost">Real-time test with a video</button>
+    <button type="button" id="openStream" class="btn btn-ghost">Judge a phone's stream (PC)</button>
+    <a class="btn btn-ghost" href="downloads/burpee-judge-receiver-setup.exe" title="The judging computer's app (Windows): receives the phones' streams, shows their QR codes, and judges them">Burpee Judge Receiver for PC (Windows)</a>
+    <a class="btn btn-ghost" href="streaming.html">Set up cameras and streaming (guide)</a>
+    <input id="testFile" type="file" accept="video/*" hidden>
+  </nav>
+
+  <section class="tips">
+    <h2>Station setup</h2>
+    <ol>
+      <li>Phone on a tripod or wedged steady at about hip height. Any shake can look like a jump.</li>
+      <li>Athlete 3–4 m away with their whole body in view, head to feet, including when lying down.</li>
+      <li>An angled or side-on view shows chest to ground best. Straight-on works if the floor in front of them is visible.</li>
+      <li>One athlete in view at a time. Keep spectators out of shot.</li>
+    </ol>
+  </section>
+</section>
+
+<!-- SCAN BIB -->
+<section id="scan" class="screen hud" hidden>
+  <div class="hud-top">
+    <div class="targetchip"><strong id="scanTarget">30</strong> <span id="scanUnit">burpees</span></div>
+    <h2 class="hud-title">Face the camera</h2>
+    <p class="hud-sub">Headband showing, near or far. The red box follows your head and only reads a number on your headband. If it can't, the marshal can type it in.</p>
+  </div>
+  <div class="hud-bottom">
+    <canvas id="ocrPeek" class="ocr-peek" aria-hidden="true" hidden></canvas>
+    <p class="reading" aria-live="polite">Reading: <strong id="ocrReading">–</strong></p>
+    <p class="reading-meta" id="ocrMeta"></p>
+    <form id="manualForm" class="manual" hidden>
+      <label for="manualBib" class="sr">Race number</label>
+      <input id="manualBib" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="Race number" autocomplete="off">
+      <button type="submit" class="btn btn-red">Confirm</button>
+      <p id="manualWarn" class="warn" hidden></p>
+    </form>
+    <div class="row">
+      <button type="button" id="typeBib" class="btn btn-ghost">Type number</button>
+    </div>
+  </div>
+</section>
+
+<!-- GET IN POSITION -->
+<section id="position" class="screen hud" hidden>
+  <div class="hud-top">
+    <div class="bibchip"><span class="bib-word">Bib</span> <strong id="posBib">–</strong></div>
+    <h2 class="hud-title" id="posTitle">Stand tall to start</h2>
+    <ul class="checks">
+      <li id="chkBody">Whole body in view</li>
+      <li id="chkStand">Standing tall</li>
+    </ul>
+  </div>
+  <div class="hud-bottom">
+    <div class="row">
+      <button type="button" id="wrongBib" class="btn btn-ghost">Wrong number</button>
+      <button type="button" id="forceStart" class="btn btn-ghost">Start now</button>
+    </div>
+  </div>
+</section>
+
+<!-- COUNTDOWN -->
+<section id="countdown" class="screen hud center" hidden>
+  <div id="countdownNum" class="countdown">3</div>
+</section>
+
+<!-- COUNTING -->
+<section id="count" class="screen hud" hidden>
+  <div class="hud-bar">
+    <div class="bibchip"><span class="bib-word">Bib</span> <strong id="cntBib">–</strong></div>
+    <div class="timer" id="cntTimer">0:00</div>
+    <div class="rec" id="recDot" hidden>REC</div>
+  </div>
+  <div id="multiList" class="multi-list" aria-live="polite"></div>
+  <div id="callout" class="callout" hidden></div>
+  <div class="counter">
+    <span id="cntNum" class="num">0</span><span class="of">/<span id="cntTarget">30</span></span>
+  </div>
+  <div id="flash" class="flash" hidden></div>
+  <p id="cntWarn" class="hud-warn" hidden></p>
+  <pre id="debug" class="debug" hidden></pre>
+  <div class="hud-bottom">
+    <div id="seek" class="seek" hidden>
+      <button type="button" id="seekPlay" class="btn btn-ghost seek-play" aria-label="Pause">❚❚</button>
+      <span id="seekTurn" class="seek-turn"><button type="button" id="turnLeft" class="btn btn-ghost seek-play" aria-label="Turn the video anticlockwise" title="Turn a sideways video upright">⟲</button><button type="button" id="turnRight" class="btn btn-ghost seek-play" aria-label="Turn the video clockwise" title="Turn a sideways video upright">⟳</button></span>
+      <input id="seekBar" type="range" min="0" max="1000" step="1" value="0" aria-label="Position in the video">
+      <span id="seekTime" class="seek-time">0:00 / 0:00</span>
+    </div>
+    <p id="testInfo" class="test-info" hidden></p>
+    <p class="norep-tally">No reps: <strong id="cntNoReps">0</strong></p>
+    <button type="button" id="endAttempt" class="btn btn-ghost">End attempt</button>
+  </div>
+</section>
+
+<!-- DONE -->
+<section id="done" class="screen done-screen" hidden>
+  <div class="done-tick"><svg class="big-icon" viewBox="0 0 100 100" aria-hidden="true"><path d="M18 52 L41 75 L84 27" fill="none" stroke="currentColor" stroke-width="13" stroke-linecap="square" stroke-linejoin="miter"/></svg></div>
+  <div class="done-cross"><svg class="big-icon" viewBox="0 0 100 100" aria-hidden="true"><path d="M22 22 L78 78 M78 22 L22 78" fill="none" stroke="currentColor" stroke-width="14" stroke-linecap="square"/></svg></div>
+  <p id="doneLabel" class="done-label">Complete</p>
+  <p class="done-num"><span id="doneReps">30</span><span class="of">/<span id="doneTarget">30</span></span></p>
+  <dl class="done-stats">
+    <div><dt class="bib-word">Bib</dt><dd id="doneBib">–</dd></div>
+    <div><dt>Time</dt><dd id="doneTime">–</dd></div>
+    <div><dt>No reps</dt><dd id="doneNoReps">0</dd></div>
+  </dl>
+  <ol id="doneMulti" class="done-multi"></ol>
+  <p id="doneVideo" class="done-note"></p>
+  <div id="submitAsk" class="submit-ask" hidden>
+    <p>Submit your score to the scoreboard?</p>
+    <div class="row">
+      <button type="button" id="submitYes" class="btn btn-dark btn-big">Yes, submit</button>
+      <button type="button" id="submitNo" class="btn btn-ghost btn-big">No thanks</button>
+    </div>
+  </div>
+  <button type="button" id="nextAthlete" class="btn btn-dark btn-big">Next athlete</button>
+  <a id="doneMenu" class="btn btn-ghost btn-big" href="scoreboard.html" hidden>Back to menu</a>
+  <p class="done-note" id="doneAutoLine">Ready for the next athlete in <span id="doneAuto">6</span>s</p>
+</section>
+
+<!-- PER-REP FLASH (whole screen) -->
+<div id="loader" class="loader" hidden role="status" aria-live="polite">
+  <div class="loader-spin" aria-hidden="true"></div>
+  <p id="loaderText">Loading…</p>
+</div>
+
+<div id="repFlash" class="rep-flash" hidden aria-live="assertive">
+  <span id="rfNum" class="rf-num">1</span>
+  <div class="rf-cross"><svg class="big-icon" viewBox="0 0 100 100" aria-hidden="true"><path d="M22 22 L78 78 M78 22 L22 78" fill="none" stroke="currentColor" stroke-width="14" stroke-linecap="square"/></svg></div>
+  <p id="rfReasons" class="rf-reasons"></p>
+</div>
+
+<!-- RESULTS -->
+<section id="results" class="screen page" hidden>
+  <header class="page-head">
+    <button type="button" class="btn btn-ghost back">‹ Back</button>
+    <h2>Results</h2>
+  </header>
+  <p class="status">Saved on this phone only. Tap an attempt to see every rep. Export from each phone to combine stations: the summary has one row per athlete, the rep log one row per burpee with what was measured.</p>
+  <div class="row">
+    <button type="button" id="exportCsv" class="btn btn-red">Export summary</button>
+    <button type="button" id="exportReps" class="btn btn-red">Export rep log</button>
+    <button type="button" id="clearResults" class="btn btn-ghost">Clear all</button>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Time</th><th>Bib</th><th>Reps</th><th>No reps</th><th>Took</th><th>Result</th><th>Video</th></tr></thead>
+      <tbody id="resultsBody"></tbody>
+    </table>
+  </div>
+  <p id="resultsEmpty" class="empty">No attempts yet. Each finished or ended attempt appears here with its video.</p>
+</section>
+
+<!-- ATTEMPT DETAIL -->
+<section id="attempt" class="screen page" hidden>
+  <header class="page-head">
+    <button type="button" id="attemptBack" class="btn btn-ghost">‹ Results</button>
+    <h2 id="atBib">Bib –</h2>
+  </header>
+  <div class="row at-number">
+    <label class="field" for="atNumber"><span>Athlete number (type it in if it wasn't read)</span><input id="atNumber" type="text" inputmode="numeric" maxlength="12" placeholder="No number"></label>
+    <button type="button" id="atNumberSave" class="btn btn-red">Save number</button>
+    <span id="atNumberSaved" class="status" hidden>Saved.</span>
+  </div>
+  <dl id="atFacts" class="facts"></dl>
+  <div class="row">
+    <button type="button" id="atPlay" class="btn btn-red">▶ Play video</button>
+    <button type="button" id="atVideo" class="btn btn-ghost">Save video</button>
+  </div>
+  <h3 class="subhead">Every rep</h3>
+  <div class="table-wrap">
+    <table class="reps-table">
+      <thead><tr id="atHead"></tr></thead>
+      <tbody id="atBody"></tbody>
+    </table>
+  </div>
+  <p class="status" id="atNote"></p>
+</section>
+
+<!-- SETTINGS -->
+<section id="settings" class="screen page" hidden>
+  <header class="page-head">
+    <button type="button" id="settingsBack" class="btn btn-ghost">‹ Back</button>
+    <h2>Settings</h2>
+  </header>
+  <form id="settingsForm" class="panel">
+    <div class="spartan-default">
+      <button type="button" id="spartanDefault" class="btn btn-red">Spartan default</button>
+      <p id="spartanDone" class="status" hidden>Spartan default set and saved.</p>
+      <p class="status">One tap for race day: burpees, several athletes at once, race numbers read from the head bands laid in front of them, lenient judging (strictness 20), forgiving body tracking, Full pose model, count called out, video recorded.</p>
+    </div>
+    <h3>Station</h3>
+    <label class="field" for="s_exercise"><span>Exercise</span>
+      <select id="s_exercise">
+        <option value="burpees">Burpees (Spartan penalty)</option>
+        <option value="squats">Air squats</option>
+        <option value="pushups">Push-ups</option>
+        <option value="jacks">Jumping jacks</option>
+        <option value="situps">Sit-ups</option>
+      </select>
+    </label>
+    <p class="status">Burpees is for race use. The others are judged against their own standards, which the "What counts?" button shows. </p>
+    <select id="s_people" hidden><option value="multi">Several at once</option></select>
+    <p class="status">Every athlete in view is tracked and counted separately, from their first good rep; their number is read from their head band when it's seen. Officials and spectators walking through aren't counted. Keep athletes from overlapping where you can.</p>
+    <label class="field" for="s_videoPace"><span>Uploaded test videos</span>
+      <select id="s_videoPace">
+        <option value="prepass">Analyse first, then play at normal speed – most accurate</option>
+        <option value="realtime">Real time – normal speed, judged as a live camera would be</option>
+        <option value="faster">Play while analysing, faster – fine for athletes in clear view</option>
+        <option value="accurate">Play while analysing, slower – better when athletes hide each other</option>
+      </select>
+    </label>
+    <p class="status">Analyse first: the app works through every frame (a progress bar shows how far), then plays the video at normal speed with each rep shown as it happens. Real time: the video plays at normal speed and the app judges only the frames it keeps up with, exactly as with a live camera at a race, so it shows how this phone would really do. Play while analysing: the video is slowed until the phone keeps up.</p>
+    <label class="field" for="s_orientation"><span>Camera orientation</span>
+      <select id="s_orientation">
+        <option value="auto">Auto – follows the phone</option>
+        <option value="left">Landscape – top of the phone on the left</option>
+        <option value="right">Landscape – top of the phone on the right</option>
+      </select>
+    </label>
+    <p class="status">Pick a landscape option when the phone stands on its side, as you look at its screen. It works even with rotation lock on. If the picture comes out upside down, pick the other side.</p>
+    <label class="field" for="s_model"><span>Pose model</span>
+      <select id="s_model">
+        <option value="lite">Lite – fastest, older phones</option>
+        <option value="full">Full – recommended</option>
+        <option value="heavy">Heavy – most accurate, needs a fast phone</option>
+      </select>
+    </label>
+    <div class="field strict-field">
+      <label for="s_strictness"><span>Judging strictness: <strong id="strictnessWord">Standard (50)</strong></span></label>
+      <input id="s_strictness" type="range" min="0" max="100" step="5" list="strictTicks">
+      <datalist id="strictTicks"><option value="0"></option><option value="50"></option><option value="100"></option></datalist>
+      <div class="strict-ends"><span>Not strict</span><span>Standard</span><span>Very strict</span></div>
+      <details class="strict-more">
+        <summary>What this changes</summary>
+        <p>One slider for every exercise. The middle is the standard judging for each exercise. Dragging left gives the athlete more benefit of the doubt; dragging right demands a clearer, fuller range. Every rule moves together:</p>
+        <ul>
+          <li><b>Burpees:</b> how close the chest must get to the ground, how high the jump, how straight the hips, how high the hands.</li>
+          <li><b>Air squats:</b> how far below the knees the hips must go, and how straight the legs at the top.</li>
+          <li><b>Push-ups:</b> how straight the arms at the start and top, how deep the bend, how straight the body.</li>
+          <li><b>Jumping jacks:</b> how wide the feet go, and how fully they come back together.</li>
+          <li><b>Sit-ups:</b> how flat at the bottom, and how upright at the top.</li>
+        </ul>
+        <p>Each attempt records the strictness it was judged at, and the exact limits used.</p>
+      </details>
+    </div>
+    <label class="field" for="s_tracking"><span>Body tracking</span>
+      <select id="s_tracking">
+        <option value="strict">Strict – only judge body points the camera sees clearly</option>
+        <option value="balanced">Balanced – fill in briefly hidden points (recommended)</option>
+        <option value="forgiving">Forgiving – keep tracking through longer or bigger gaps</option>
+      </select>
+    </label>
+    <p class="status">When one part of the body hides another, Balanced and Forgiving keep a hidden point where it was last seen for a moment, or place it from the matching point on the other side. Guessed points show as hollow circles. The Heavy pose model also helps when parts are hidden, if the phone is fast enough.</p>
+    <label class="check" for="s_speech"><input id="s_speech" type="checkbox"> Call out the count</label>
+    <label class="check" for="s_record"><input id="s_record" type="checkbox"> Record video of every attempt</label>
+    <label class="check" for="s_debug"><input id="s_debug" type="checkbox"> Show measurements on screen (for tuning)</label>
+
+    <h3>Race numbers</h3>
+    <label class="check" for="s_captureBib"><input id="s_captureBib" type="checkbox"> Capture each athlete's race number</label>
+    <p class="status">Off: no scanning or typing. Athletes are numbered 1, 2, 3 in order at this station.</p>
+    <label class="field" for="s_ocrEngine"><span>Number reader</span>
+      <select id="s_ocrEngine">
+        <option value="digits">Digit model – fastest (recommended)</option>
+        <option value="paddle">PaddleOCR – handles odd fonts, 8 MB download</option>
+        <option value="tesseract">Tesseract – general text reader, slowest, can misread bold fonts</option>
+      </select>
+    </label>
+    <p class="status">The scan screen shows how long each read takes, so you can compare them.</p>
+    <label class="field" for="s_bibMin"><span>Shortest number (digits)</span><input id="s_bibMin" type="number" min="1" max="8"></label>
+    <label class="field" for="s_bibMax"><span>Longest number (digits)</span><input id="s_bibMax" type="number" min="1" max="8"></label>
+    <label class="field" for="s_bibList"><span>Start list (optional). Paste race numbers and only these will be accepted by the scanner.</span>
+      <textarea id="s_bibList" rows="3" placeholder="1001, 1002, 1003…"></textarea></label>
+
+    <div class="row">
+      <button type="submit" class="btn btn-red">Save settings</button>
+      <button type="button" id="resetSettings" class="btn btn-ghost">Reset to defaults</button>
+    </div>
+    <p id="settingsSaved" class="status" hidden>Saved.</p>
+  </form>
+</section>
+
+<!-- VIDEO REPLAY -->
+<div id="player" class="modal player" hidden>
+  <div class="modal-card player-card" role="dialog" aria-modal="true" aria-labelledby="playerTitle">
+    <div class="player-head">
+      <h2 id="playerTitle">Bib –</h2>
+      <button type="button" id="playerClose" class="rules-x" aria-label="Close"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M24 24 L76 76 M76 24 L24 76" fill="none" stroke="currentColor" stroke-width="14" stroke-linecap="square"/></svg></button>
+    </div>
+    <video id="playerVideo" controls playsinline preload="metadata"></video>
+    <p id="playerInfo" class="status"></p>
+    <div class="row">
+      <button type="button" id="playerSave" class="btn btn-ghost">Save video</button>
+      <button type="button" id="playerDetail" class="btn btn-ghost">Every rep</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM DIALOG -->
+<div id="streamDlg" class="modal" hidden>
+  <form id="streamForm" class="modal-card" role="dialog" aria-modal="true" aria-labelledby="streamTitle">
+    <p id="streamTitle"><strong>Judge a phone's stream</strong></p>
+    <label class="field" for="streamUrl"><span>Stream address (from "Streaming - connection details")</span>
+      <input id="streamUrl" type="url" inputmode="url" autocomplete="off" spellcheck="false"></label>
+    <p class="status">For the computer running the streaming server: use its <b>localhost</b> address, e.g. http://localhost:8889/live/station1/whep. Start Larix on the phone first. Over the internet, each phone needs the <b>Tailscale</b> app on and connected (same account as this computer) as well as Larix.</p>
+    <div class="row">
+      <button type="submit" class="btn btn-red">Start judging</button>
+      <button type="button" id="streamCancel" class="btn btn-ghost">Cancel</button>
+    </div>
+  </form>
+</div>
+
+<div id="confirm" class="modal" hidden>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="confirmText">
+    <p id="confirmText"></p>
+    <div class="row">
+      <button type="button" id="confirmYes" class="btn btn-red">Yes</button>
+      <button type="button" id="confirmNo" class="btn btn-ghost">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- EXIT STATION (top right whenever the camera is on) -->
+<button type="button" id="muteBtn" class="mute-btn" aria-pressed="false" hidden></button>
+<button type="button" id="exitStation" class="exit-btn" hidden>
+  Exit <svg viewBox="0 0 100 100" aria-hidden="true"><path d="M24 24 L76 76 M76 24 L24 76" fill="none" stroke="currentColor" stroke-width="14" stroke-linecap="square"/></svg>
+</button>
+
+<!-- WHAT COUNTS (bottom-right button + panel) -->
+<button type="button" id="rulesBtn" class="rules-btn" aria-controls="rules" aria-expanded="false">
+  <span class="rules-q" aria-hidden="true">?</span> What counts?
+</button>
+<div id="rules" class="rules" hidden role="dialog" aria-modal="true" aria-labelledby="rulesTitle">
+  <div class="rules-card">
+    <button type="button" id="rulesClose" class="rules-x" aria-label="Close">
+      <svg viewBox="0 0 100 100" aria-hidden="true"><path d="M24 24 L76 76 M76 24 L24 76" fill="none" stroke="currentColor" stroke-width="14" stroke-linecap="square"/></svg>
+    </button>
+    <p class="eyebrow" id="rulesEyebrow">Spartan penalty burpee</p>
+    <h2 id="rulesTitle">What counts as one rep</h2>
+    <p class="rules-flow" id="rulesFlow"></p>
+    <p class="status" id="rulesCamera" hidden></p>
+    <ol class="std-list std-plain" id="rulesList" hidden></ol>
+    <ol class="std-list" id="rulesBurpee">
+      <li>
+      <svg class="std-fig" viewBox="0 0 100 100" aria-hidden="true">
+        <line class="ground" x1="4" y1="90" x2="96" y2="90"/>
+        <g class="body"><circle cx="16" cy="80" r="6"/><path d="M23 84 L58 86 L92 87"/><path d="M28 84 L30 72 M30 72 L40 70"/></g>
+        <g class="mark"><path d="M30 89.5 L52 89.5"/></g>
+      </svg>
+        <div><h3>Chest to the ground</h3><p>Chest touches the floor at the bottom of every rep.</p></div>
+      </li>
+      <li>
+      <svg class="std-fig" viewBox="0 0 100 100" aria-hidden="true">
+        <line class="ground" x1="4" y1="90" x2="96" y2="90"/>
+        <g class="body"><circle cx="50" cy="16" r="7"/><path d="M50 23 L50 52 M50 52 L43 74 M50 52 L57 74 M50 30 L40 14 M50 30 L60 14"/></g>
+        <g class="mark"><path d="M38 80 L38 87 M62 80 L62 87"/><path d="M35 78 L41 78 M59 78 L65 78"/></g>
+      </svg>
+        <div><h3>Jump, both feet off</h3><p>Both feet leave the ground at the top.</p></div>
+      </li>
+      <li>
+      <svg class="std-fig" viewBox="0 0 100 100" aria-hidden="true">
+        <line class="ground" x1="4" y1="90" x2="96" y2="90"/>
+        <g class="body"><circle cx="50" cy="12" r="7"/><path d="M50 19 L50 50 M50 50 L45 89 M50 50 L55 89 M50 26 L41 9 M50 26 L59 9"/></g>
+        <g class="mark"><path d="M66 20 L66 86"/><path d="M62 24 L66 20 L70 24 M62 82 L66 86 L70 82"/></g>
+      </svg>
+        <div><h3>Full hip extension</h3><p>Stand up fully: hips straight, not bent forward.</p></div>
+      </li>
+      <li>
+      <svg class="std-fig" viewBox="0 0 100 100" aria-hidden="true">
+        <line class="ground" x1="4" y1="90" x2="96" y2="90"/>
+        <g class="body"><circle cx="50" cy="30" r="7"/><path d="M50 37 L50 64 M50 64 L44 89 M50 64 L56 89 M50 42 L42 14 M50 42 L58 14"/></g>
+        <g class="mark"><circle cx="41" cy="11" r="4"/><circle cx="59" cy="11" r="4"/><path d="M30 28 L70 28" stroke-dasharray="4 4"/></g>
+      </svg>
+        <div><h3>Hands over the ears</h3><p>The tops of the hands reach ear height in the jump. Just below is fine.</p></div>
+      </li>
+    </ol>
+    <p class="rules-note">Miss any one and it's a no rep, shown with a red cross and the reason.</p>
+  </div>
+</div>
+
+</body>
+</html>

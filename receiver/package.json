@@ -1,0 +1,50 @@
+{
+  "name": "burpee-judge-receiver",
+  "productName": "Burpee Judge Receiver",
+  "version": "1.2.9",
+  "description": "Receives the phones' station streams on the judging computer, and judges them.",
+  "main": "main.js",
+  "author": "VDASO",
+  "license": "UNLICENSED",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win nsis"
+  },
+  "dependencies": {
+    "qrcode": "1.5.4"
+  },
+  "devDependencies": {
+    "electron": "37.2.6",
+    "electron-builder": "26.0.12"
+  },
+  "build": {
+    "appId": "com.vdaso.burpeereceiver",
+    "productName": "Burpee Judge Receiver",
+    "files": [
+      "main.js",
+      "network.js",
+      "config.js",
+      "preload.js",
+      "ui/**",
+      "site/**",
+      "package.json",
+      "review/**"
+    ],
+    "extraResources": [
+      {
+        "from": "bin",
+        "to": "bin"
+      }
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "shortcutName": "Burpee Judge Receiver"
+    }
+  }
+}

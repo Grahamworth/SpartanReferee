@@ -1,0 +1,8 @@
+{
+  "appId": "com.vdaso.spartans",
+  "appName": "Spartans",
+  "webDir": "www",
+  "backgroundColor": "#0b0b0b",
+  "android": { "allowMixedContent": true },
+  "server": { "androidScheme": "https" }
+}

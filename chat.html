@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
+<meta name="theme-color" content="#0b0b0b">
+<title>Spartans Chat</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;1,800;1,900&family=Barlow:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="hub.css">
+<script type="module" src="chat.js"></script>
+<link rel="stylesheet" href="looks.css">
+<script src="looks.js"></script>
+</head>
+<body>
+<div class="chat">
+  <header class="chat-top">
+    <a href="./">‹ Spartans home</a>
+    <h1 id="roomName">Chat</h1>
+    <p id="roomAbout">Loading the rooms…</p>
+  </header>
+  <nav class="rooms" id="rooms"></nav>
+  <div class="invites" id="invites" hidden></div>
+  <div class="group-bar" id="groupBar" hidden></div>
+  <section class="msgs" id="msgs" aria-live="polite"></section>
+  <p class="banned" id="banned" hidden>You've been banned from this chat after reports from 3 other Spartans. You can still read it, and use the other rooms.</p>
+  <p class="chat-note" id="who"></p>
+  <form class="compose" id="compose">
+    <textarea id="text" maxlength="500" placeholder="Message" aria-label="Message"></textarea>
+    <button class="btn btn-red" type="submit">Send</button>
+  </form>
+</div>
+<div class="toast-msg" id="toast"></div>
+</body>
+</html>
