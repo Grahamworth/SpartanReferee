@@ -1,7 +1,7 @@
 {
- "version": "1.2.9",
+ "version": "1.3.0",
  "url": "https://yellow-forest-09b984e03.6.azurestaticapps.net/downloads/burpee-judge-receiver-setup.exe",
- "size": 202946544,
- "sha512": "qCdCXk9x6MO29zAna4c7p1b3A6EJdt+jXgYybUSSA4XjOhx7tuhkLJL1JT25O+bejHEwkp/SNOuLHnGBoelosg==",
- "notes": "Uploaded videos are now judged slowly enough to catch every jump (a test clip went from 1 rep to the correct 7). Live cameras warn when too few frames are being analysed."
+ "size": 202952121,
+ "sha512": "vCaXP+LA0PRNf960v0zNfZeVEJmVLcrFosXKUG5zlluBJi5b8TIRdkKqTdpahH+OjkB1Xv2Ru/BzPnuai+TjZw==",
+ "notes": "Tailscale now switches on when the Receiver opens, and off at Quit if the Receiver switched it on. The Receiver also tells you when a newer Tailscale is available."
 }

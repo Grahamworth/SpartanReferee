@@ -47,8 +47,9 @@ function render(st) {
   else if (ts.state === 'NeedsLogin' || ts.state === 'NoState') { text = 'Installed, not signed in. Sign in opens your browser.'; btn = 'Sign in'; }
   else if (ts.state !== 'Running') { text = 'Switched off.'; btn = 'Switch on'; }
   else text = `Connected${ts.account ? ` as <b>${esc(ts.account)}</b>` : ''} · this laptop is <b>${esc(st.addr.tailscale || '')}</b>`;
+  if (!ts.busy && !btn && ts.update) { text += ` · <b>Tailscale ${esc(ts.update)} is available</b>`; btn = 'Update Tailscale'; }
   $('tsText').innerHTML = text;
-  b.hidden = !btn; b.textContent = btn; b.dataset.act = !ts.installed ? 'install' : 'up';
+  b.hidden = !btn; b.textContent = btn; b.dataset.act = !ts.installed ? 'install' : btn === 'Update Tailscale' ? 'site' : 'up';
   step('stepTs', ts.installed && ts.state === 'Running');
 
   // 2. firewall
@@ -125,7 +126,7 @@ $('stations').addEventListener('focusout', async (e) => {
   refresh();
 });
 $('stations').addEventListener('keydown', (e) => { if (e.target.dataset.yt && e.key === 'Backspace' && !e.target.value) e.target.dataset.cleared = '1'; if (e.key === 'Enter') e.target.blur(); });
-$('tsBtn').onclick = async () => { $('tsBtn').disabled = true; await (($('tsBtn').dataset.act === 'install') ? window.receiver.tailscaleInstall() : window.receiver.tailscaleUp()); $('tsBtn').disabled = false; refresh(); };
+$('tsBtn').onclick = async () => { $('tsBtn').disabled = true; const act = $('tsBtn').dataset.act; await (act === 'install' ? window.receiver.tailscaleInstall() : act === 'site' ? window.receiver.tailscaleSite() : window.receiver.tailscaleUp()); $('tsBtn').disabled = false; refresh(); };
 $('fixFirewall').onclick = async () => { $('fixFirewall').disabled = true; const ok = await window.receiver.fixFirewall(); $('fixFirewall').disabled = false; toast(ok ? 'Phones can connect now' : 'Not changed: say Yes when Windows asks'); refresh(); };
 $('removeOld').onclick = async () => { $('removeOld').disabled = true; const ok = await window.receiver.removeOldServer(); $('removeOld').disabled = false; toast(ok ? 'Old server removed: scan the Larix code again on each phone' : 'Not removed: say Yes when Windows asks'); refresh(); };
 $('openRec').onclick = () => window.receiver.openRecordings();

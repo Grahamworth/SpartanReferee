@@ -38,6 +38,7 @@ const ICON = path.join(__dirname, 'ui', 'icon.png');
 const RULE = 'Burpee Judge Receiver', RULE_REVIEW = 'Burpee Judge Receiver (review page)';
 const SITE = 'https://yellow-forest-09b984e03.6.azurestaticapps.net';
 const TS = path.join(process.env.ProgramFiles || 'C:\\Program Files', 'Tailscale', 'tailscale.exe');
+const TS_DOWNLOAD = 'https://tailscale.com/download/windows';
 
 let S = loadSettings(DATA);
 let mtx = null, mtxLog = [], stopping = false, win = null;
@@ -206,6 +207,7 @@ function tailscaleInstall() {
 function tailscaleUp() {
   // signs in (opens the browser at Tailscale's sign-in page) or switches it on; --unattended keeps it running when
   // nobody is logged in to Windows
+  try { fs.writeFileSync(TS_OURS, ''); } catch { /* it just stays on at Quit */ }
   return new Promise((res) => {
     const p = spawn(TS, ['up', '--unattended'], { windowsHide: true });
     let opened = false;
@@ -213,6 +215,34 @@ function tailscaleUp() {
     p.stdout.on('data', look); p.stderr.on('data', look);
     p.on('exit', () => res(true));
     setTimeout(() => res(true), 15000);
+  });
+}
+// Switched on when this app opens and off again at Quit, but only if this app is what switched it on: one that was
+// already connected may be in use for something else. The note is a file so it survives a crash.
+const TS_OURS = path.join(DATA, 'tailscale-switched-on');
+async function tailscaleOnStart() {
+  const ts = await tailscale();
+  if (ts.state === 'Stopped' || ts.state === 'NeedsLogin') tailscaleUp();
+}
+function tailscaleOffIfOurs() {
+  if (BIND || !FIRST_COPY || !fs.existsSync(TS_OURS)) return;
+  try { execFileSync(TS, ['down'], { windowsHide: true, stdio: 'ignore', timeout: 8000 }); } catch { /* already off */ }
+  try { fs.rmSync(TS_OURS, { force: true }); } catch { /* next Quit tries again */ }
+}
+// A newer Tailscale shows in the window, and once as a Windows notification; the update itself is Tailscale's installer.
+let tsLatest = '';
+function checkTailscaleUpdate() {
+  if (!fs.existsSync(TS)) return;
+  execFile(TS, ['version', '--upstream', '--json'], { windowsHide: true, timeout: 15000 }, (_err, out) => {
+    try {
+      const v = JSON.parse(out), latest = String(v.upstream || '');
+      const was = tsLatest;
+      tsLatest = latest && newer(latest, v.majorMinorPatch) ? latest : '';
+      if (tsLatest && tsLatest !== was && Notification.isSupported()) {
+        const n = new Notification({ title: `Tailscale ${tsLatest} is available`, body: 'Click to download the update.', icon: ICON });
+        n.on('click', () => shell.openExternal(TS_DOWNLOAD)); n.show();
+      }
+    } catch { /* offline: try again later */ }
   });
 }
 
@@ -235,7 +265,7 @@ async function state() {
   const review = reviewHost ? `http://${reviewHost}:${S.reviewPort}/` : '';
   return {
     server: serverOk, addr, stations, firewall: await firewallOk(), log: mtxLog.slice(-60),
-    tailscale: { ...ts, busy: tsBusy },
+    tailscale: { ...ts, busy: tsBusy, update: tsLatest },
     oldServer: await oldServer(),
     portBusy: mtxLog.slice(-40).some((l) => /address already in use|Only one usage of each socket/i.test(l)),
     phoneSetup: { url: `${SITE}/phone.html`, qr: await QRCode.toDataURL(`${SITE}/phone.html`, { margin: 1, width: 240 }) },
@@ -252,7 +282,7 @@ ipcMain.handle('tailscaleInstall', tailscaleInstall);
 ipcMain.handle('tailscaleUp', tailscaleUp);
 ipcMain.handle('openRecordings', () => shell.openPath(RECORDINGS));
 ipcMain.handle('copy', (_e, text) => clipboard.writeText(String(text)));
-ipcMain.handle('tailscaleSite', () => shell.openExternal('https://tailscale.com/download'));
+ipcMain.handle('tailscaleSite', () => shell.openExternal(TS_DOWNLOAD));
 ipcMain.handle('settings', (_e, v) => {
   S = { ...S, stations: Math.max(1, Math.min(12, +v.stations || S.stations)), record: !!v.record, keepDays: Math.max(1, Math.min(90, +v.keepDays || S.keepDays)) };
   saveSettings(DATA, S); restartServer(); return true;
@@ -526,6 +556,7 @@ if (FIRST_COPY) app.whenReady().then(() => {
   makeTray();
   // updates: a check soon after starting, then every 6 hours
   setTimeout(checkUpdate, 5000); setInterval(checkUpdate, 6 * 3600e3);
+  if (!BIND) { tailscaleOnStart(); setTimeout(checkTailscaleUpdate, 5000); setInterval(checkTailscaleUpdate, 6 * 3600e3); }
   // first start: let the phones and the iPad through the firewall straight away (Windows asks once)
   if (!BIND) setTimeout(async () => { if (!(await firewallOk())) fixFirewall(); }, 3000);
 });
@@ -623,6 +654,6 @@ function stopLeftovers() {
 }
 
 app.on('window-all-closed', () => app.quit());
-app.on('before-quit', () => { stopping = true; stopServerNow(); if (tray) { tray.destroy(); tray = null; } });
+app.on('before-quit', () => { stopping = true; stopServerNow(); tailscaleOffIfOurs(); if (tray) { tray.destroy(); tray = null; } });
 // one copy only: a second start brings the first to the front
 if (FIRST_COPY) app.on('second-instance', showWindow);
