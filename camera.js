@@ -80,14 +80,19 @@ $('ytKey').onchange = () => { S.ytKey = $('ytKey').value.trim(); save(S); };
 $('quality').onchange = () => { S.quality = $('quality').value; save(S); };
 
 // ---- scanning the station's QR code (the Larix one on the connection page works)
+// It has to stay in view for a second, so a code the camera only sweeps past isn't taken.
+const SCAN_HOLD_MS = 1000, SCAN_GAP_MS = 600; // a shaky hand can lose it for a look or two
+const scanPrompt = $('scanBox').querySelector('p'), scanAsk = scanPrompt.textContent;
 let scanStream = null;
 async function scan() {
   try { scanStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } }); }
   catch { toast('The camera is needed to scan: allow it, or paste the link instead'); return; }
+  scanPrompt.textContent = scanAsk;
   const v = $('scanVideo'); v.srcObject = scanStream; await v.play();
   $('scanBox').hidden = false;
   const detector = 'BarcodeDetector' in window ? new window.BarcodeDetector({ formats: ['qr_code'] }) : null;
   const cv = document.createElement('canvas'), cx = cv.getContext('2d', { willReadFrequently: true });
+  let held = null, heldSince = 0, heldSeen = 0;
   const look = async () => {
     if (!scanStream) return;
     let text = null;
@@ -99,7 +104,12 @@ async function scan() {
         if (r) text = r.data;
       }
     } catch { /* keep looking */ }
-    if (text && parseStationLink(text)) { stopScan(); if (setLink(text) && plugin) setTimeout(() => $('goForm').requestSubmit(), 300); return; }
+    const now = performance.now();
+    if (text && parseStationLink(text)) {
+      if (text !== held || now - heldSeen > SCAN_GAP_MS) { held = text; heldSince = now; scanPrompt.textContent = 'Hold still…'; }
+      heldSeen = now;
+      if (now - heldSince >= SCAN_HOLD_MS) { stopScan(); if (setLink(text) && plugin) setTimeout(() => $('goForm').requestSubmit(), 300); return; }
+    } else if (held && now - heldSeen > SCAN_GAP_MS) { held = null; scanPrompt.textContent = scanAsk; }
     setTimeout(look, 250);
   };
   look();
