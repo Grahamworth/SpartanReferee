@@ -3,7 +3,7 @@
 // sets up Tailscale and the firewall, shows each camera's QR code for the phones, which cameras are live and by
 // which route, opens the Burpee Judge on a camera, keeps the recordings, and serves the review page (live view,
 // incident marks, and replay of the recordings by time) to this computer and to an iPad.
-const { app, BrowserWindow, ipcMain, protocol, net, shell, clipboard, Tray, Menu, nativeImage, Notification } = require('electron');
+const { app, BrowserWindow, WebContentsView, ipcMain, protocol, net, shell, clipboard, Tray, Menu, nativeImage, Notification } = require('electron');
 const { spawn, execFile, execFileSync } = require('child_process');
 const http = require('http');
 const path = require('path');
@@ -319,6 +319,7 @@ ipcMain.handle('youtube', (_e, n, key) => {
 ipcMain.handle('judge', (_e, n) => openJudge(+n));
 ipcMain.handle('judgeSettings', () => openJudgeSettings());
 ipcMain.handle('review', (_e, n) => openReview(+n || 0));
+ipcMain.handle('tab', (_e, name) => showTab(name === 'review' ? 'review' : 'setup'));
 ipcMain.handle('checkUpdate', () => checkUpdate(true));
 ipcMain.handle('installUpdate', () => installUpdate());
 
@@ -334,19 +335,31 @@ function openJudgeSettings() {
   const w = new BrowserWindow({ width: 1100, height: 860, title: 'Burpee Judge – settings', backgroundColor: '#1f2328', autoHideMenuBar: true });
   w.loadURL(`http://127.0.0.1:${S.reviewPort}/judge/judge.html?settings=1`);
 }
-// one video review window: opening a camera brings it to the front with that camera big in the AI judge tab
-let reviewWin = null;
-function openReview(n = 0) {
-  if (reviewWin && !reviewWin.isDestroyed()) {
-    if (reviewWin.isMinimized()) reviewWin.restore(); reviewWin.show(); reviewWin.focus();
-    if (n) reviewWin.webContents.executeJavaScript(`window.focusCamera && window.focusCamera(${n})`).catch(() => {});
-    return;
-  }
-  reviewWin = new BrowserWindow({ width: 1400, height: 900, title: 'Video review', backgroundColor: '#1f2328', autoHideMenuBar: true, webPreferences: { backgroundThrottling: false } });
-  reviewWin.loadURL(`http://127.0.0.1:${S.reviewPort}/?device=Laptop${n ? `&focus=${n}` : ''}`);
-  hideToTray(reviewWin);   // closing it keeps its AI judges judging; the tray's Video review brings it back
-  reviewWin.on('closed', () => { reviewWin = null; });
+// Video review is a tab of the main window, under its tab bar. Going back to Setup only moves it aside, so its AI
+// judges carry on. Opening a camera shows that camera big in the AI judge tab.
+const TAB_BAR = 44;   // ui.css: #appTabs
+let reviewView = null, reviewOn = false;
+function placeReview() {
+  if (!win || !reviewView) return;
+  const [width, height] = win.getContentSize();
+  // on Setup it slides down with one pixel showing: fully hidden, its frame loop nearly stops and the judges miss reps
+  reviewView.setBounds({ x: 0, y: reviewOn ? TAB_BAR : height - 1, width, height: Math.max(0, height - TAB_BAR) });
 }
+function showTab(name, n = 0) {
+  if (!win) return;
+  if (name === 'review' && !reviewView) {
+    reviewView = new WebContentsView({ webPreferences: { backgroundThrottling: false } });
+    reviewView.setBackgroundColor('#1f2328');
+    win.contentView.addChildView(reviewView);
+    placeReview();
+    reviewView.webContents.loadURL(`http://127.0.0.1:${S.reviewPort}/?device=Laptop${n ? `&focus=${n}` : ''}`);
+  } else if (name === 'review' && n) reviewView.webContents.executeJavaScript(`window.focusCamera && window.focusCamera(${n})`).catch(() => {});
+  reviewOn = name === 'review';
+  placeReview();
+  if (reviewOn) reviewView.webContents.focus(); else win.webContents.focus();
+  win.webContents.send('tab', name);
+}
+function openReview(n = 0) { showWindow(); showTab('review', n); }
 
 // ---------------------------------------------------------------- the review page's server (this computer and the iPad)
 // Serves review/ and: the cameras and their history, incident marks, the recordings' time ranges, and clips cut from
@@ -573,6 +586,7 @@ if (FIRST_COPY) app.whenReady().then(() => {
   // the window's cross hides it to the tray (the streaming server, recordings and judges carry on); the tray's Quit
   // shuts everything down
   hideToTray(win);
+  win.on('resize', placeReview);
   // Windows shutting down or signing out: let everything close
   require('electron').powerMonitor.on('shutdown', () => { stopping = true; app.quit(); });
   win.on('closed', () => { win = null; app.quit(); });

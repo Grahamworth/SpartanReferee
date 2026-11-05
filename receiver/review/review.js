@@ -2,7 +2,7 @@
 // The review page, on the laptop and on an iPad.
 //  Live: every camera live with its AI judge (tracking shown or hidden per camera), the timeline to rewind through
 //        everything recorded, a marker for each athlete picked up, both cameras or one, Pick athlete.
-//  Upload video: a video judged as it plays, exactly like a live camera; everyone it tracks joins the AI judge list.
+//  Upload video: every frame analysed first, with the results beside it; everyone it tracks joins the AI judge list.
 //  AI judge: everyone tracked (picture, number, when and how long on screen, reps), filtered by number, camera,
 //        source and time: Watch them in the recording, or a detailed analysis (heavy pose model) to check the count.
 //  Log: camera connect/lost events.
@@ -35,6 +35,7 @@ function showTab(name) {
   if (name !== 'live') pauseAll();
   if (name === 'upload') loadUploads();
   if (name === 'judge') renderAthletes(true);
+  renderSides();
   if (name === 'live' && !clipStart && !live && st) { if (isToday()) goLive(); else openDay(); }
   placeDock();
 }
@@ -203,6 +204,7 @@ addEventListener('message', (e) => {
   if (e.origin !== location.origin || !e.data || !e.data.judge) return;
   const cfg = String(e.data.cfg || '');
   if (cfg === 'upload') {
+    if (e.data.judge === 'analysed') { $('upStatus').textContent = 'Analysis finished. Press play on the video to watch it, or Watch an athlete on the right.'; athRev = -1; loadAthletes(); return; }
     if (e.data.judge === 'close' || e.data.judge === 'saved') { $('upSettings').hidden = true; $('upSettingsFrame').src = 'about:blank'; }
     if (e.data.judge === 'saved' && upPending) { upPending.go = true; if (!upPending.saved) $('upStatus').textContent = 'Starting as soon as the video is on the laptop…'; upReady(); }
     else if (e.data.judge === 'saved') toast('Upload settings saved: used for the next video');
@@ -405,7 +407,7 @@ async function loadAthletes() {
   try {
     const [a, b] = dayBounds();
     const r = await fetch(`/api/athletes?from=${encodeURIComponent(new Date(a).toISOString())}&to=${encodeURIComponent(new Date(b).toISOString())}`).then((x) => x.json()).catch(() => null);
-    if (r) { athRev = r.rev; athList = r.list; renderAthletes(); renderMarkers(true); fillCamFilter(); numSearch(); }
+    if (r) { athRev = r.rev; athList = r.list; renderAthletes(); renderSides(); renderMarkers(true); fillCamFilter(); numSearch(); }
   } finally { athLoading = false; }
 }
 const athName = (a) => (a.bib && a.bib !== 'No number' ? `#${a.bib}` : `No number <small>(athlete ${a.label})</small>`);
@@ -447,7 +449,42 @@ function renderAthletes(force) {
     <div class="acts"><button class="btn" data-watch="${a.n}">▶ Watch</button><button class="btn red" data-detail="${a.n}">Detailed analysis</button><button class="btn del" data-del="${a.n}" title="Delete this entry">🗑</button></div>
   </div>`).join('');
 }
-$('athleteList').onclick = (e) => {
+// beside the cameras and the uploaded video: people who have finished or gone, with their own filters
+const hasNum = (a) => a.bib && a.bib !== 'No number';
+const sideMatch = (a, num, res) => (!num || (hasNum(a) && String(a.bib).toLowerCase().includes(num)))
+  && (res !== 'reps' || a.reps > 0) && (res !== 'noreps' || (!a.reps && a.noReps > 0)) && (res !== 'nonum' || !hasNum(a));
+const sideCard = (a) => `<div class="ath" data-n="${a.n}">
+    <div class="pic">${a.pic ? `<img src="${picUrl(a)}" alt="" loading="lazy">` : '<span>no picture</span>'}</div>
+    <div class="info"><b class="num">${athName(a)}</b><span>${a.src === 'upload' ? `${mss(a.firstT ?? 0)}–${mss(a.lastT ?? 0)} in the video` : whereText(a)}</span>${a.src === 'upload' ? '' : `<span>${whenText(a)}</span>`}<span class="reps">${repsText(a).replace(' · finished', '').replace(' · being judged', '')}</span></div>
+    <div class="acts"><button class="btn" data-watch="${a.n}">▶ Watch</button><button class="btn red" data-detail="${a.n}">Detailed analysis</button><button class="btn del" data-del="${a.n}" title="Delete this entry">🗑</button></div>
+  </div>`;
+function fillSide(el, count, list, total, empty) {
+  const sig = JSON.stringify(list.map((a) => [a.n, a.bib, a.reps, a.noReps, a.pic, a.lastAt])) + empty;
+  count.textContent = total ? `${list.length}${list.length < total ? ` of ${total}` : ''}` : '';
+  if (el.dataset.sig === sig) return; el.dataset.sig = sig;
+  el.innerHTML = list.map(sideCard).join('') || `<p class="empty">${esc(empty)}</p>`;
+}
+let upShown = '';   // the uploaded video whose results are beside it
+function renderSides() {
+  const cams = [...new Set([...(st ? st.cams.map((c) => c.n) : []), ...athList.filter((a) => a.src === 'live').map((a) => a.cam)])].sort((a, b) => a - b);
+  const camHtml = '<option value="">All cameras</option>' + cams.map((n) => `<option value="${n}">Camera ${n}</option>`).join('');
+  if ($('lsCam').dataset.html !== camHtml) { const v = $('lsCam').value; $('lsCam').innerHTML = camHtml; $('lsCam').dataset.html = camHtml; $('lsCam').value = v; }
+  const live = athList.filter((a) => a.src === 'live' && a.done);
+  const lNum = $('lsNum').value.trim().toLowerCase(), lCam = $('lsCam').value, lRes = $('lsRes').value;
+  fillSide($('liveList'), $('liveCount'), live.filter((a) => (!lCam || a.cam === +lCam) && sideMatch(a, lNum, lRes)).sort((a, b) => Date.parse(b.lastAt) - Date.parse(a.lastAt)), live.length,
+    live.length ? 'Nobody matches these filters.' : 'Athletes appear here, newest first, once they finish or leave the picture.');
+  // the latest judging of the video shown (Judge again makes a new one)
+  const ofVideo = athList.filter((a) => a.src === 'upload' && a.video === upShown);
+  const newest = ofVideo.reduce((x, a) => (!x || a.firstAt > x.firstAt ? a : x), null);
+  const ups = ofVideo.filter((a) => a.done && a.round === newest?.round);
+  const uNum = $('usNum').value.trim().toLowerCase(), uRes = $('usRes').value, order = $('usSort').value;
+  fillSide($('upResults'), $('upCount'), ups.filter((a) => sideMatch(a, uNum, uRes)).sort(order === 'reps' ? (a, b) => b.reps - a.reps : (a, b) => (a.firstT ?? 0) - (b.firstT ?? 0)), ups.length,
+    !upShown ? 'Choose a video to see its results here.' : ups.length ? 'Nobody matches these filters.' : 'Results appear here as the video is analysed.');
+}
+for (const id of ['lsNum', 'lsCam', 'lsRes', 'usNum', 'usRes', 'usSort']) $(id).addEventListener('input', renderSides);
+$('lsClear').onclick = () => { for (const id of ['lsNum', 'lsCam', 'lsRes']) $(id).value = ''; renderSides(); };
+$('usClear').onclick = () => { for (const id of ['usNum', 'usRes']) $(id).value = ''; $('usSort').value = 'video'; renderSides(); };
+$('liveList').onclick = $('upResults').onclick = $('athleteList').onclick = (e) => {
   const b = e.target.closest('button'); if (!b) return;
   const a = athList.find((x) => x.n === +(b.dataset.watch || b.dataset.detail || b.dataset.del)); if (!a) return;
   if (b.dataset.del) { if (confirm(`Delete ${a.bib && a.bib !== 'No number' ? '#' + a.bib : 'athlete ' + a.label} from the AI judge list?`)) fetch(`/api/athlete?n=${a.n}`, { method: 'DELETE' }).then(() => { athRev = -1; loadAthletes(); toast('Deleted'); }); return; }
@@ -653,11 +690,12 @@ async function loadUploads() {
   const whenUp = (n) => { const m = /^(\d{4}-\d\d-\d\d)T(\d\d)-(\d\d)/.exec(n); return m ? `${m[1]} ${m[2]}:${m[3]}` : ''; };
   $('upList').innerHTML = list.map((x) => `<tr><td>${esc(uploadName(x.name))}</td><td class="t">${esc(whenUp(x.name))}</td><td>${(x.size / 1e6).toFixed(0)} MB</td>
     <td>${athList.filter((a) => a.src === 'upload' && a.video === x.name).length || '–'}</td>
-    <td><button class="btn" data-judge="${esc(x.name)}">Judge again</button> <button class="btn" data-delup="${esc(x.name)}" title="Delete this video and its AI judge entries">🗑 Delete</button></td></tr>`).join('')
+    <td><button class="btn" data-show="${esc(x.name)}">Results</button> <button class="btn" data-judge="${esc(x.name)}">Judge again</button> <button class="btn" data-delup="${esc(x.name)}" title="Delete this video and its AI judge entries">🗑 Delete</button></td></tr>`).join('')
     || '<tr><td colspan="5" class="muted">No videos uploaded yet.</td></tr>';
 }
 $('upList').onclick = async (e) => {
   const b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.show) { upShown = b.dataset.show; renderSides(); return; }
   if (b.dataset.judge) return upConfig(uploadName(b.dataset.judge), b.dataset.judge);
   const name = b.dataset.delup;
   if (!confirm(`Delete ${uploadName(name)} from the laptop, with the athletes the AI judge found in it?`)) return;
@@ -667,9 +705,9 @@ $('upList').onclick = async (e) => {
 };
 function judgeUpload(saved, name) {
   if (upRunning && !confirm('A video is still being judged. Stop it and judge this one instead?')) return;
-  upRunning = saved;
+  upRunning = saved; upShown = saved; renderSides();
   $('upStage').innerHTML = `<iframe title="AI judge: uploaded video" allow="autoplay; fullscreen" src="/judge/judge.html?video=${encodeURIComponent('/uploads/' + encodeURIComponent(saved))}&name=${encodeURIComponent(name)}&go=1&cfg=upload"></iframe>`;
-  $('upStatus').textContent = `Judging ${name}: it plays slower than normal if it has to, so no jump is missed. Everyone it tracks appears in the AI judge list as it goes.`;
+  $('upStatus').textContent = `Analysing ${name}: every frame is checked before anything plays, so no jump is missed. Results appear on the right as athletes finish or leave.`;
 }
 let upPending = null;   // { name, saved, go } the video chosen, while its Config is open
 function upConfig(name, saved) {

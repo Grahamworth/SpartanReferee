@@ -16,6 +16,8 @@ contextBridge.exposeInMainWorld('receiver', {
   tailscaleUp: () => ipcRenderer.invoke('tailscaleUp'),
   youtube: (n, key) => ipcRenderer.invoke('youtube', n, key),
   review: (n) => ipcRenderer.invoke('review', n),
+  tab: (name) => ipcRenderer.invoke('tab', name),
+  onTab: (fn) => ipcRenderer.on('tab', (_e, name) => fn(name)),
   judgeSettings: () => ipcRenderer.invoke('judgeSettings'),
   checkUpdate: () => ipcRenderer.invoke('checkUpdate'),
   installUpdate: () => ipcRenderer.invoke('installUpdate'),

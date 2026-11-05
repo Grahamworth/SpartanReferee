@@ -38,6 +38,8 @@ const CFG = (new URLSearchParams(location.search).get('cfg') || '').replace(/[^a
 const applyTracking = () => document.documentElement.classList.toggle('hide-tracking', !!CFG && !!new URLSearchParams(location.search).get('go') && settings.showTracking === false);
 // judge.html?mode=practice: the Spartans Challenge, open to anyone (see the end of this file)
 const PRACTICE = new URLSearchParams(location.search).get('mode') === 'practice';
+// served by the Receiver app (its window, or /judge/ from its review server): the only place the fist test is offered
+const IN_RECEIVER = location.protocol === 'app:' || location.pathname.startsWith('/judge/');
 const CHALLENGE_EXERCISE = EXERCISES[new URLSearchParams(location.search).get('exercise')] ? new URLSearchParams(location.search).get('exercise') : 'burpees';
 const SETTINGS_KEY = CFG ? `burpeeJudge.settings.${CFG}` : PRACTICE ? 'burpeeJudge.settings.practice' : 'burpeeJudge.settings';
 const RESULTS_KEY = 'burpeeJudge.results';
@@ -61,15 +63,15 @@ function writeJSON(key, value) {
 }
 
 let settings = { ...DEFAULT_SETTINGS, ...(CFG ? readJSON('burpeeJudge.settings', {}) : {}), ...readJSON(SETTINGS_KEY, {}) };
-if (settings.repsChoice !== 'custom') settings.repsChoice = '30'; // 15 was an option once
+if (settings.repsChoice !== 'custom') { settings.repsChoice = '30'; settings.targetReps = 30; } // 15 was an option once
 if (settings.practice) settings.exercise = 'practice'; // practice was a checkbox once
 delete settings.practice;
 settings.strictness = strictnessValue(settings.strictness); // was lenient/standard/strict once
 for (const k of OLD_THRESHOLD_SETTINGS) delete settings[k];
 // Several athletes became the default; phones that saved 'one' before then switch once.
-// The official judge always tracks several athletes (the one-person hand-close test is gone too).
+// The official judge always tracks several athletes. The one-person hand-close test is only in the Receiver.
 settings.people = 'multi';
-if (exercise(settings.exercise).gestures) settings.exercise = 'burpees';
+if (exercise(settings.exercise).gestures && !IN_RECEIVER) settings.exercise = 'burpees';
 // Analysing a test video first, then playing it at normal speed, became the
 // default; phones that saved another choice before then switch once.
 if (settings.videoPaceV !== 1) { settings.videoPace = 'prepass'; settings.videoPaceV = 1; }
@@ -883,7 +885,7 @@ function newAttempt(bib, station) {
   return {
     id: `${Date.now().toString(36)}-${bib}`, bib, station, cfg: CFG || null,
     startedAt: new Date().toISOString(), goAt: null, finishedAt: null,
-    target: Number(settings.targetReps), reps: 0, noReps: 0, reasons: {},
+    target: IN_RECEIVER && currentExercise().gestures ? PRACTICE_REPS : Number(settings.targetReps), reps: 0, noReps: 0, reasons: {},
     events: [], status: 'running', durationMs: 0, video: false,
     mode: S.testMode && currentExercise().gestures ? 'burpees' : settings.exercise,
     bibSource: S.testMode ? 'test' : S.bibSource, bibConfidence: S.bibConf,
@@ -1243,7 +1245,7 @@ function onMulti(t) {
 let multiBibAt = 0, multiBibBusy = false, multiBibTurn = 0;
 const rotate180 = (img) => ({ ...img, data: Uint8ClampedArray.from(img.data).reverse() });
 async function multiBibTick() {
-  if (!settings.captureBib || !S.multi || S.prepassing || multiBibBusy || !S.frame) return;
+  if (!settings.captureBib || !S.multi || (S.prepassing && !S.upload) || multiBibBusy || !S.frame) return;
   const now = performance.now(); if (now - multiBibAt < 500) return; multiBibAt = now;
   // everyone being tracked, from the moment they appear (the number stays with them when they start counting)
   const everyone = S.multi.tracks || S.multi.athletes;
@@ -1279,8 +1281,9 @@ async function multiBibTick() {
 
 // the Receiver's video review marks each athlete on its timeline: picked up, their number, their reps when saved
 // (an uploaded video judged in the review's Upload tab reports the same way, with the seconds into the video)
-const reportsAthletes = () => document.documentElement.classList.contains('embedded') && (!S.testMode || !!S.upload) && !!CFG && !!S.attempt && !S.prepassing;
+const reportsAthletes = () => document.documentElement.classList.contains('embedded') && (!S.testMode || !!S.upload) && !!CFG && !!S.attempt && (!S.prepassing || !!S.upload);
 const athleteKey = () => ({ cam: +CFG.replace(/\D/g, '') || 0, src: S.upload ? 'upload' : 'live', video: S.upload?.saved || '', round: S.attempt.id, at: new Date().toISOString() });
+const reportAthleteDone = (k) => reportAthlete({ done: true, label: k.label, bib: k.bib, reps: k.judge.count, noReps: k.judge.noReps, id: `${S.attempt.id}-${k.label}` });
 function reportAthlete(o) {
   if (!reportsAthletes()) return;
   const body = { ...athleteKey(), t: S.upload ? +video.currentTime.toFixed(2) : null, ...o };
@@ -1292,6 +1295,8 @@ function reportAthlete(o) {
 const PROOF_POINTS = [0, 7, 8, 11, 12, 13, 14, 15, 16, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32];
 function recordProof(t) {
   if (!reportsAthletes()) return;
+  // finished or gone for good: their entry in the review's lists is ready
+  for (const k of S.multi.athletes) if ((k.gone || k.judge.done) && !k.reportedDone) { k.reportedDone = true; reportAthleteDone(k); }
   const now = S.upload ? Math.round(S.lastVideoTime * 1000) : S.frameAt, minVis = tracking().minVis;
   S.proofNow = now; S.proofT = t;
   for (const k of S.multi.tracks) {
@@ -1472,7 +1477,7 @@ function onPose(t) {
     $('chkBody').classList.toggle('ok', body);
     $('chkStand').classList.toggle('ok', inPlace);
     if (PRACTICE) $('posTitle').textContent = ex.gestures ? ex.ready.title : !body ? 'Get your whole body in view' : !inPlace ? ex.ready.title : 'Hold still';
-    if ((body && inPlace) || (ex.gestures && S.pose)) {
+    if ((body && inPlace) || (ex.gestures && (S.pose || IN_RECEIVER))) { // the fist test may only see a hand, no body
       S.readySince ??= t;
       if (t - S.readySince > 500) { if (PRACTICE) startCountdown(); else startAttempt(); }
     } else {
@@ -2193,6 +2198,11 @@ async function runTestVideo(file) {
       await seekTo(0);
       video.playbackRate = 1;
       showLoader(null);
+      if (S.upload) { // analysed: it waits for someone to press play
+        showSeek(true);
+        try { parent.postMessage({ judge: 'analysed', cfg: CFG }, location.origin); } catch { /* not in a frame */ }
+        return;
+      }
       await video.play();
       showSeek(true);
       return;
@@ -2312,6 +2322,7 @@ async function prepass(range) {
   const n = Math.floor((range ? Math.min(range.to, S.videoDur) : S.videoDur) * PREPASS_FPS);
   for (let i = i0; i < n && S.testMode; i++) {
     await seekTo(i / PREPASS_FPS);
+    S.lastVideoTime = video.currentTime;
     S.frame = frameSource();
     const { src, w, h } = S.frame;
     const t = clockNow();
@@ -2328,6 +2339,12 @@ async function prepass(range) {
       showLoader(`${range ? 'Analysing the athlete' : 'Analysing the video'}… ${Math.round((100 * (i - i0)) / Math.max(1, n - i0))}%`);
       await new Promise((r) => setTimeout(r));
     }
+  }
+  // an uploaded video: the end of the analysis is the end of the round for its entries in the review
+  if (S.upload && S.multi && S.testMode) {
+    for (const { track, ev } of S.multi.finish()) onMultiEvent(track, ev);
+    sendProof(true);
+    for (const k of S.multi.athletes) if (!k.reportedDone) { k.reportedDone = true; reportAthleteDone(k); }
   }
   S.prepassing = false;
   S.quiet = false;
@@ -2435,6 +2452,7 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('rule
 $('goResults').addEventListener('click', () => { renderResults(); show('results'); });
 $('goSettings').addEventListener('click', () => { fillSettingsForm(); show('settings'); });
 // judge.html?settings=1 (the Receiver's Judge settings): open on the settings
+if (IN_RECEIVER) $('s_exercise').insertAdjacentHTML('beforeend', '<option value="practice">Fist test: one hand, to check detection</option>');
 if (new URLSearchParams(location.search).get('settings')) { if (CFG) cameraSettings(); fillSettingsForm(); show('settings'); }
 
 // A camera's settings in the Receiver's video review: everything on one screen, the camera's name and the reps
@@ -2543,7 +2561,7 @@ async function analysePick(url, px, py, pt) {
   else if (q.get('video') && q.get('go')) {
     document.documentElement.classList.add('embedded');
     S.upload = { saved: decodeURIComponent(q.get('video').split('/').pop()), name: q.get('name') || 'video' };
-    S.forceMulti = true; S.nextPace = 'accurate'; // no faster than it can be judged: at a few frames a second, jumps fall between them
+    S.forceMulti = true; S.nextPace = 'prepass'; // every frame analysed first, so no jump falls between frames; it doesn't play by itself
     runTestVideo({ url: q.get('video'), name: S.upload.name });
   }
 }

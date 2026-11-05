@@ -110,6 +110,9 @@ function render(st) {
   if (!$('log').hidden) { const l = $('log'); const end = l.scrollTop + l.clientHeight >= l.scrollHeight - 5; l.textContent = st.log.join('\n'); if (end) l.scrollTop = l.scrollHeight; }
 }
 
+document.querySelectorAll('[data-apptab]').forEach((b) => { b.onclick = () => window.receiver.tab(b.dataset.apptab); });
+window.receiver.onTab((name) => document.querySelectorAll('[data-apptab]').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.apptab === name))));
+
 $('stations').addEventListener('click', (e) => {
   const b = e.target.closest('button, .addr, .livebox');
   if (b && b.dataset.expand) { window.receiver.review(+b.dataset.expand); return; }

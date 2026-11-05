@@ -93,6 +93,20 @@ body.picking #replayGrid .tile { cursor: crosshair; outline: 2px dashed var(--am
 
 /* Upload video */
 .uploadbar { margin-bottom: 12px; }
+.split { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 14px; align-items: start; }
+.splitmain { min-width: 0; }
+.side { position: sticky; top: 72px; display: flex; flex-direction: column; max-height: calc(100vh - 86px); min-width: 0; }
+.side h2 { margin-top: 0; }
+.side h2 small { font-size: 13px; font-weight: 600; text-transform: none; }
+.sidefilters { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 8px; }
+.sidefilters input, .sidefilters select { min-width: 0; width: 100%; padding: 7px; font-size: 14px; }
+.side .athletes { grid-template-columns: minmax(0, 1fr); overflow-y: auto; align-content: start; }
+.side .ath { grid-template-columns: 72px minmax(0, 1fr); }
+.side .ath .pic { width: 72px; height: 96px; }
+.side .ath .num { font-size: 18px; }
+.side .ath .info { font-size: 13px; }
+.side .empty { color: var(--muted); padding: 12px 2px; }
+@media (max-width: 1050px) { .split { grid-template-columns: minmax(0, 1fr); } .side { position: static; max-height: none; } }
 .uploadbar .upload { display: inline-flex; align-items: center; cursor: pointer; }
 .uploadbar select { max-width: 320px; font-size: 15px; padding: 9px; }
 #upStatus { flex: 1 1 300px; }

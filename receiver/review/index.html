@@ -31,6 +31,7 @@
 
 <!-- Live: every camera live (with its AI judge), rewind through everything recorded -->
 <section id="live" class="pane">
+<div class="split"><div class="splitmain">
   <div class="dvr">
     <button class="btn red" id="goLive">● Live</button>
     <div class="tlwrap"><input id="timeline" type="range" min="0" max="1000" value="1000" aria-label="Rewind through the recordings"><div id="tlMarks" class="tlmarks"></div></div>
@@ -76,20 +77,44 @@
       <button class="btn red" id="pickBtn">Pick athlete</button>
     </div>
   </div>
+</div>
+<aside class="side" aria-label="AI judge results">
+  <h2>AI judge <small id="liveCount" class="muted"></small></h2>
+  <div class="sidefilters">
+    <input id="lsNum" inputmode="numeric" placeholder="Find number" autocomplete="off" aria-label="Find number">
+    <select id="lsCam" aria-label="Camera"><option value="">All cameras</option></select>
+    <select id="lsRes" aria-label="Result"><option value="">Any result</option><option value="reps">With reps</option><option value="noreps">Only no reps</option><option value="nonum">No number read</option></select>
+    <button class="btn" id="lsClear">Clear</button>
+  </div>
+  <div id="liveList" class="athletes"></div>
+</aside>
+</div>
 </section>
 
-<!-- Upload video: judged as it plays, exactly like a live camera; everyone it tracks goes in the AI judge list -->
+<!-- Upload video: every frame analysed first, then it waits to be played; everyone it tracks goes in the AI judge list -->
 <section id="upload" class="pane offstage">
   <div class="row uploadbar">
     <label class="btn red upload">Choose a video<input id="upFile" type="file" accept="video/*" hidden></label>
     <button class="btn" id="upCfg">⚙ Config</button>
-    <span id="upStatus" class="muted">The AI judge is always on for uploads: it tracks everyone as the video plays and adds them to the AI judge list. A copy stays on the laptop for testing and training.</span>
+    <span id="upStatus" class="muted">The AI judge analyses the whole video first, and the results appear on the right. A copy stays on the laptop for testing and training.</span>
   </div>
   <div id="upSettings" class="settingsbox" hidden>
     <div class="row"><b>AI judge settings for uploaded videos</b><span class="muted small">Check them, then Save to start judging (Close: not now).</span></div>
     <iframe id="upSettingsFrame" title="Upload judge settings"></iframe>
   </div>
-  <div id="upStage" class="upstage"><div class="msg">Choose a video to judge it.</div></div>
+  <div class="split"><div class="splitmain">
+    <div id="upStage" class="upstage"><div class="msg">Choose a video to judge it.</div></div>
+  </div>
+  <aside class="side" aria-label="AI judge results for this video">
+    <h2>Results <small id="upCount" class="muted"></small></h2>
+    <div class="sidefilters">
+      <input id="usNum" inputmode="numeric" placeholder="Find number" autocomplete="off" aria-label="Find number">
+      <select id="usRes" aria-label="Result"><option value="">Any result</option><option value="reps">With reps</option><option value="noreps">Only no reps</option><option value="nonum">No number read</option></select>
+      <select id="usSort" aria-label="Order"><option value="video">Order in video</option><option value="reps">Most reps</option></select>
+      <button class="btn" id="usClear">Clear</button>
+    </div>
+    <div id="upResults" class="athletes"></div>
+  </aside></div>
   <h2>Uploaded videos</h2>
   <table class="list"><thead><tr><th>Video</th><th>Uploaded</th><th>Size</th><th>Athletes</th><th></th></tr></thead><tbody id="upList"></tbody></table>
 </section>
