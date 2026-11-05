@@ -1,7 +1,7 @@
 {
- "version": "1.3.4",
+ "version": "1.3.5",
  "url": "https://mango-glacier-03e711403.4.azurestaticapps.net/downloads/burpee-judge-receiver-setup.exe",
- "size": 202961233,
- "sha512": "9/yblEty15GL9rZUn4TR0/6p7xOpOODqwmqmrs+aZMUdptuHYFOWwBNAHMo/rJ4yk9jXU2xw+uSIUgDboNCXYA==",
- "notes": "Setup and Video review are now tabs in one window. Uploaded videos are analysed fully before playing, with results alongside. Live shows finished athletes newest first. The fist test is back."
+ "size": 202956117,
+ "sha512": "3yRBiUAZPP3elCXRGwQSQbMwbEWgxAxfuHDCd607mZYB8AH6jTwbGxFxeUsoiXsuh9a4WVCLh/0fnwZpuH5KsQ==",
+ "notes": "A cleaner look: compact camera cards on Setup, one row of Live controls, clearer athlete cards and a clean uploaded video."
 }

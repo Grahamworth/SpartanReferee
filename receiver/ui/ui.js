@@ -6,6 +6,7 @@ const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&l
 const tab = {};   // what each camera's card shows: 'live' (its picture), 'larix' or 'spartans' (QR codes)
 const lives = {}; // n → { video, pc, connecting } the small live pictures, kept across redraws
 let setupOpen = false;
+const opened = {}; let touched = false;   // which waiting cameras are showing their QR codes
 let last = null, settingsFilled = false, editing = false;
 
 function toast(s) { const t = $('toast'); t.textContent = s; t.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 2400); }
@@ -65,8 +66,9 @@ function render(st) {
     : (ts.state === 'Running' ? 'No phones on Tailscale yet.' : '');
   step('stepPhones', st.stations.some((s) => s.live));
 
-  // all done: one line instead of the four steps (Show setup opens them again)
-  const allDone = ts.installed && ts.state === 'Running' && (st.firewall || st.testMode) && st.stations.some((s) => s.live);
+  // the laptop's ready: one line instead of the steps (Show setup opens them again)
+  const allDone = ts.installed && ts.state === 'Running' && (st.firewall || st.testMode);
+  $('hideSetup').hidden = !allDone;
   $('setupDone').hidden = !allDone || setupOpen; $('setupSteps').hidden = allDone && !setupOpen;
   $('setupSummary').textContent = allDone ? `Tailscale connected${ts.account ? ' as ' + ts.account : ''} · phones can connect · review at ${st.review.url || '–'}` : '';
 
@@ -75,10 +77,16 @@ function render(st) {
   step('stepIpad', !!st.review.url);
 
   // redraw the cards only when something on them changes (a redraw would restart the live pictures)
-  const cardSig = JSON.stringify([st.stations.map((s) => [s.n, s.live, s.route, s.video, s.from, s.watchers, s.youtube, s.larixLink]), tab]);
+  const cardSig = JSON.stringify([st.stations.map((s) => [s.n, s.live, s.route, s.video, s.from, s.watchers, s.youtube, s.larixLink]), tab, opened, touched]);
   if (!editing && cardSig !== render.cardSig) {
     render.cardSig = cardSig;
     $('stations').innerHTML = st.stations.map((s) => {
+    // a waiting camera is one short card until someone asks for its code (nothing live yet: Camera 1 starts open)
+    const expanded = s.live || (opened[s.n] ?? (!touched && s.n === 1 && !st.stations.some((c) => c.live)));
+    if (!expanded) return `<article class="card compact">
+      <div class="top"><div class="name">Camera ${s.n}</div><div class="status">Waiting for a phone</div></div>
+      <div class="row"><button class="btn red" data-open="${s.n}">Show QR code</button><button class="btn" data-expand="${s.n}">Open in Video review</button></div>
+    </article>`;
     const t = tab[s.n] || (s.live ? 'live' : 'spartans');
     const show = t === 'live' && !s.live ? 'spartans' : t;
     const tabBtn = (key, label) => `<button data-n="${s.n}" data-t="${key}" class="${show === key ? 'on' : ''}">${label}</button>`;
@@ -93,7 +101,7 @@ function render(st) {
       <div class="addr" data-copy="${esc(s.larixLink)}" title="Click to copy, then send to the phone">Copy Larix link</div>` : ''}
       ${show === 'spartans' ? '<p class="hint">Spartans Broadcaster (Android): open it and tap <b>Scan station QR code</b>. The Spartans app works too (Home → Camera station).</p>' : ''}
       <label class="yt">YouTube stream key <input type="password" data-yt="${s.n}" placeholder="${s.youtube ? '•••••• (set: type to change, clear to remove)' : 'Optional: from YouTube Studio'}"></label>
-      <button class="btn red expand" data-expand="${s.n}">⤢ Open in Video review</button>
+      <div class="row">${s.live ? '' : `<button class="btn" data-close="${s.n}">Hide QR code</button>`}<button class="btn expand" data-expand="${s.n}">⤢ Open in Video review</button></div>
     </article>`;
   }).join('') + (st.stations.length && st.stations.length < 12
     ? `<button type="button" class="card add-cam" data-add="1"><span class="plus">+</span><b>Add camera</b><small>Camera ${st.stations.length + 1} of up to 12</small></button>`
@@ -117,9 +125,10 @@ $('stations').addEventListener('click', (e) => {
   const b = e.target.closest('button, .addr, .livebox');
   if (b && b.dataset.expand) { window.receiver.review(+b.dataset.expand); return; }
   if (!b) return;
+  if (b.dataset.open || b.dataset.close) { touched = true; opened[b.dataset.open || b.dataset.close] = !!b.dataset.open; render.cardSig = ''; render(last); return; }
   if (b.dataset.add) {
     b.disabled = true;
-    window.receiver.addCamera().then((n) => { $('settingsForm').stations.value = n; toast(`Camera ${n} added: scan its code with a phone`); refresh(); });
+    window.receiver.addCamera().then((n) => { touched = true; opened[n] = true; $('settingsForm').stations.value = n; toast(`Camera ${n} added: scan its code with a phone`); refresh(); });
   }
   else if (b.dataset.t) { tab[b.dataset.n] = b.dataset.t; render.cardSig = ''; render(last); }
   else if (b.dataset.judge) window.receiver.judge(+b.dataset.judge);
@@ -140,6 +149,7 @@ $('fixFirewall').onclick = async () => { $('fixFirewall').disabled = true; const
 $('removeOld').onclick = async () => { $('removeOld').disabled = true; const ok = await window.receiver.removeOldServer(); $('removeOld').disabled = false; toast(ok ? 'Old server removed: scan the Larix code again on each phone' : 'Not removed: say Yes when Windows asks'); refresh(); };
 $('openRec').onclick = () => window.receiver.openRecordings();
 $('showSetup').onclick = () => { setupOpen = true; if (last) render(last); };
+$('hideSetup').onclick = () => { setupOpen = false; if (last) render(last); };
 $('showLog').onclick = () => { $('log').hidden = !$('log').hidden; if (last) render(last); };
 $('settingsForm').onsubmit = async (e) => {
   e.preventDefault();

@@ -435,6 +435,11 @@ function filtered() {
     && (!cam || (a.src === 'live' && a.cam === +cam)) && (!src || a.src === src)
     && (!from || tod(a.lastAt) >= from) && (!to || tod(a.firstAt) <= to));
 }
+// an athlete's card: their count first, then who, where and what you can do
+const shortName = (a) => (hasNum(a) ? `#${esc(a.bib)}` : `Athlete ${a.label}`);
+const athBody = (a, lines) => `<div class="pic">${a.pic ? `<img src="${picUrl(a)}" alt="" loading="lazy">` : '<span>no picture</span>'}</div>
+    <div class="info"><span class="reps"><b>${Number(a.reps)}</b> rep${Number(a.reps) === 1 ? '' : 's'}${a.noReps ? `<small> · ${Number(a.noReps)} no rep${Number(a.noReps) === 1 ? '' : 's'}</small>` : ''}</span><b class="num">${shortName(a)}</b>${lines}</div>
+    <div class="acts"><button class="btn watch" data-watch="${a.n}">▶ Watch</button><button class="linkbtn" data-detail="${a.n}">Details</button><button class="btn del" data-del="${a.n}" title="Delete this entry" aria-label="Delete this entry">🗑</button></div>`;
 let listSig = '';
 function renderAthletes(force) {
   if ($('judge').hidden && !force) return;
@@ -444,9 +449,7 @@ function renderAthletes(force) {
   const numbered = list.filter((a) => a.bib && a.bib !== 'No number').length;
   $('athleteSummary').textContent = athList.length ? `${list.length} athlete${list.length === 1 ? '' : 's'}${list.length < athList.length ? ` (of ${athList.length})` : ''} · ${numbered} with a number read` : 'Nobody tracked on this day yet. Turn the AI judge on for a camera (Live tab) or upload a video.';
   $('athleteList').innerHTML = list.map((a) => `<div class="ath${a.done ? '' : ' going'}" data-n="${a.n}">
-    <div class="pic">${a.pic ? `<img src="${picUrl(a)}" alt="" loading="lazy">` : '<span>no picture</span>'}</div>
-    <div class="info"><b class="num">${athName(a)}</b><span>${whereText(a)}</span><span>${whenText(a)}</span><span class="reps">${repsText(a)}</span></div>
-    <div class="acts"><button class="btn" data-watch="${a.n}">▶ Watch</button><button class="btn red" data-detail="${a.n}">Detailed analysis</button><button class="btn del" data-del="${a.n}" title="Delete this entry">🗑</button></div>
+    ${athBody(a, `<span>${whereText(a)}</span><span>${whenText(a)}</span>${a.done ? '' : '<span class="going">Being judged</span>'}`)}
   </div>`).join('');
 }
 // beside the cameras and the uploaded video: people who have finished or gone, with their own filters
@@ -454,9 +457,7 @@ const hasNum = (a) => a.bib && a.bib !== 'No number';
 const sideMatch = (a, num, res) => (!num || (hasNum(a) && String(a.bib).toLowerCase().includes(num)))
   && (res !== 'reps' || a.reps > 0) && (res !== 'noreps' || (!a.reps && a.noReps > 0)) && (res !== 'nonum' || !hasNum(a));
 const sideCard = (a) => `<div class="ath" data-n="${a.n}">
-    <div class="pic">${a.pic ? `<img src="${picUrl(a)}" alt="" loading="lazy">` : '<span>no picture</span>'}</div>
-    <div class="info"><b class="num">${athName(a)}</b><span>${a.src === 'upload' ? `${mss(a.firstT ?? 0)}–${mss(a.lastT ?? 0)} in the video` : whereText(a)}</span>${a.src === 'upload' ? '' : `<span>${whenText(a)}</span>`}<span class="reps">${repsText(a).replace(' · finished', '').replace(' · being judged', '')}</span></div>
-    <div class="acts"><button class="btn" data-watch="${a.n}">▶ Watch</button><button class="btn red" data-detail="${a.n}">Detailed analysis</button><button class="btn del" data-del="${a.n}" title="Delete this entry">🗑</button></div>
+    ${athBody(a, a.src === 'upload' ? `<span>${mss(a.firstT ?? 0)}–${mss(a.lastT ?? 0)} in the video</span>` : `<span>Camera ${a.cam} · ${hms(new Date(a.lastAt))}</span>`)}
   </div>`;
 function fillSide(el, count, list, total, empty) {
   const sig = JSON.stringify(list.map((a) => [a.n, a.bib, a.reps, a.noReps, a.pic, a.lastAt])) + empty;

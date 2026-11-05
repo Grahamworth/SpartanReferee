@@ -539,6 +539,7 @@ html.practice-mode .done-screen .big-icon { width: min(20vh, 36vw); }
 /* the quiet judge in the Receiver: no per-athlete counts on screen (they are recorded and looked up in review) */
 html.embedded #multiList, html.embedded #rfNum, html.embedded #repFlash { display: none !important; }
 html.embedded #cntWarn { font-size: 0.95rem; }
+html.upload-clean #cntWarn, html.upload-clean #testInfo, html.upload-clean #exitStation, html.upload-clean #cntTimer { display: none !important; }
 html.embedded #home #homeError:not([hidden]) { display: block !important; }
 /* a camera judge with its tracking hidden: the plain video, the drawing layer kept but invisible */
 html.hide-tracking #stage #video { display: block; position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }

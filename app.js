@@ -1583,6 +1583,7 @@ function fmtTime(ms) {
 
 // Text burned into the frame, so the saved video stands on its own as evidence.
 function drawBurnIn(w, h) {
+  if (S.upload) return;
   const a = S.attempt;
   if (!a) return;
   const elapsed = a.goAt ? fmtTime(clockNow() - a.goAt) : 'starting';
@@ -2559,7 +2560,7 @@ async function analysePick(url, px, py, pt) {
   if (q.get('clip')) analysePick(q.get('clip'), +q.get('pickx'), +q.get('picky'), +q.get('pickt'));
   // an uploaded video in the review's Upload tab: judged as it plays, exactly like a live camera (judge.html?video=&go=1&cfg=upload)
   else if (q.get('video') && q.get('go')) {
-    document.documentElement.classList.add('embedded');
+    document.documentElement.classList.add('embedded', 'upload-clean');
     S.upload = { saved: decodeURIComponent(q.get('video').split('/').pop()), name: q.get('name') || 'video' };
     S.forceMulti = true; S.nextPace = 'prepass'; // every frame analysed first, so no jump falls between frames; it doesn't play by itself
     runTestVideo({ url: q.get('video'), name: S.upload.name });

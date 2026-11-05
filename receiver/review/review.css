@@ -49,7 +49,11 @@ label { color: var(--muted); display: inline-flex; align-items: center; gap: 8px
 #replayGrid > p { margin: 30px 0; }
 
 /* the timeline */
-.dvr { display: flex; align-items: center; gap: 12px; margin: 14px 0 10px; }
+.dvr { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 14px 0 10px; }
+.dvr .tlwrap { flex: 1 1 220px; min-width: 180px; }
+.dvr details.more summary { cursor: pointer; color: var(--muted); padding: 8px; list-style-position: inside; }
+.dvr details.more[open] { flex-basis: 100%; }
+.morebox { display: grid; gap: 10px; justify-items: start; padding: 8px 0 4px; }
 .dvr #goLive.on { background: #2f353d; border-color: #4a525c; color: var(--muted); }
 .tlwrap { flex: 1; position: relative; min-width: 0; }
 .tlwrap input[type=range] { width: 100%; accent-color: var(--red); height: 30px; padding: 0; }
@@ -103,7 +107,6 @@ body.picking #replayGrid .tile { cursor: crosshair; outline: 2px dashed var(--am
 .side .athletes { grid-template-columns: minmax(0, 1fr); overflow-y: auto; align-content: start; }
 .side .ath { grid-template-columns: 72px minmax(0, 1fr); }
 .side .ath .pic { width: 72px; height: 96px; }
-.side .ath .num { font-size: 18px; }
 .side .ath .info { font-size: 13px; }
 .side .empty { color: var(--muted); padding: 12px 2px; }
 @media (max-width: 1050px) { .split { grid-template-columns: minmax(0, 1fr); } .side { position: static; max-height: none; } }
@@ -127,12 +130,19 @@ body.picking #replayGrid .tile { cursor: crosshair; outline: 2px dashed var(--am
 .ath .pic span { color: var(--muted); font-size: 12px; text-align: center; }
 .ath .info { display: grid; gap: 2px; min-width: 0; font-size: 14px; }
 .ath .info span { color: var(--muted); overflow-wrap: anywhere; }
-.ath .num { font-size: 22px; line-height: 1.1; }
+.ath .num { font-size: 16px; line-height: 1.2; }
 .ath .num small { font-size: 13px; color: var(--muted); font-weight: 600; }
 .ath .reps { color: #fff !important; }
-.ath .reps b { font-size: 18px; }
+.ath .reps b { font-size: 30px; font-weight: 900; }
 .ath .acts { display: flex; gap: 8px; flex-wrap: wrap; align-self: end; }
+.ath .acts { flex-wrap: nowrap; align-items: center; grid-column: 2; }
 .ath .acts .btn { padding: 7px 10px; font-size: 13px; }
+.btn.watch { background: #fff; border-color: #fff; color: #000; }
+.linkbtn { background: none; border: 0; padding: 7px 4px; color: var(--muted); font: inherit; font-size: 13px; font-weight: 700; text-decoration: underline; cursor: pointer; }
+.linkbtn:hover { color: #fff; }
+.ath .info .reps { line-height: 1.1; }
+.ath .info .reps small { color: var(--muted); font-size: 13px; font-weight: 600; }
+.ath .info .going { color: var(--amber); font-weight: 700; }
 
 .list { width: 100%; border-collapse: collapse; }
 .list td, .list th { text-align: left; padding: 8px; border-bottom: 1px solid var(--line); vertical-align: middle; }
