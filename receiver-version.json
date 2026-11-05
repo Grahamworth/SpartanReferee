@@ -1,7 +1,7 @@
 {
- "version": "1.3.1",
+ "version": "1.3.2",
  "url": "https://yellow-forest-09b984e03.6.azurestaticapps.net/downloads/burpee-judge-receiver-setup.exe",
- "size": 202956771,
- "sha512": "KyPEav0w5BswWQriol1MHFcURLcuijyaXbHr4bT4qiyWUT20Ev83Vm9MNNRJTMaNEUlOm0yyDXBVZbWVNi4nVA==",
- "notes": "Add camera card on the main screen, which doesn't interrupt cameras already live. Sign in now always opens Tailscale and says what went wrong if it can't sign in."
+ "size": 202957141,
+ "sha512": "zlE2B5wfbx0kmWJIxaFtTVW/murD7BSOtxOri6aSfrYISDS2O/zcNqS+GoIPSLevUkKw4Fg146iQs8C9YtDl1Q==",
+ "notes": "The older-server warning now only appears when an old server is really running."
 }

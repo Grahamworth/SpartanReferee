@@ -36,7 +36,7 @@ function render(st) {
 
   // an older server from the script setup blocks this one
   const old = st.oldServer || {};
-  $('oldWarn').hidden = !(old.installed || (old.running && old.running.length));
+  $('oldWarn').hidden = !(old.running && old.running.length);
   $('portWarn').hidden = !$('oldWarn').hidden || !st.portBusy;
 
   // 1. Tailscale
