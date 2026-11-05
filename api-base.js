@@ -1,6 +1,6 @@
 // Where the backend is: the site's own /api, or (inside the Android / iPhone app, which runs from files on the
 // phone) the hosted site's. Plus who you are: a random id for this phone, and your Google sign-in once you've signed in.
-const HOSTED = 'https://yellow-forest-09b984e03.6.azurestaticapps.net';
+const HOSTED = 'https://mango-glacier-03e711403.4.azurestaticapps.net';
 export const API = location.protocol.startsWith('http') && (location.hostname.endsWith('azurestaticapps.net') || location.port === '8795') ? '/api' : HOSTED + '/api';
 const ls = { get: (k) => { try { return localStorage.getItem(k) || ''; } catch { return ''; } }, set: (k, v) => { try { if (v) localStorage.setItem(k, v); else localStorage.removeItem(k); } catch { /* private mode */ } } };
 

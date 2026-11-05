@@ -12,22 +12,22 @@
   "routes": [
     {
       "route": "/downloads/burpee-judge-receiver-setup.exe",
-      "redirect": "https://spartans627077.blob.core.windows.net/downloads/burpee-judge-receiver-setup.exe?se=2028-11-02T19%3A58Z&sp=r&spr=https&sv=2026-02-06&sr=b&sig=1Wcbg8gyYWL0zLzGYQDKJnv0bnCJxRHultVBa%2FUY%2BmY%3D",
+      "redirect": "https://spartans893191.blob.core.windows.net/downloads/burpee-judge-receiver-setup.exe?se=2028-11-02T19%3A58Z&sp=r&spr=https&sv=2026-02-06&sr=b&sig=Nbpms81vZIhqpnDZ9FCP%2BbaKOyJOLhXYG6x8ZVoTy3A%3D",
       "statusCode": 302
     },
     {
       "route": "/downloads/spartans.apk",
-      "redirect": "https://spartans627077.blob.core.windows.net/downloads/spartans.apk?se=2028-11-02T19%3A58Z&sp=r&spr=https&sv=2026-02-06&sr=b&sig=3PRX1oIgRGfOO2fHpnwEh9xJ7US1vBsncN8x5esz8OY%3D",
+      "redirect": "https://spartans893191.blob.core.windows.net/downloads/spartans.apk?se=2028-11-02T19%3A58Z&sp=r&spr=https&sv=2026-02-06&sr=b&sig=cbc9BXaoMkuEZ5CjzBK7OIU6ikuzTVs7SjvELGOgZCI%3D",
       "statusCode": 302
     },
     {
       "route": "/downloads/spartans-ios-project.zip",
-      "redirect": "https://spartans627077.blob.core.windows.net/downloads/spartans-ios-project.zip?se=2028-11-02T19%3A58Z&sp=r&spr=https&sv=2026-02-06&sr=b&sig=Qa17Vb%2Fq3RomuIHYZovWtBZCSdEXBROhKko4l55zuJI%3D",
+      "redirect": "https://spartans893191.blob.core.windows.net/downloads/spartans-ios-project.zip?se=2028-11-02T19%3A58Z&sp=r&spr=https&sv=2026-02-06&sr=b&sig=c81cJb5WPSVPTL1sSXz6h7ajb3L%2BnsteR9vJ7vVmxq8%3D",
       "statusCode": 302
     },
     {
       "route": "/downloads/spartans-broadcaster.apk",
-      "redirect": "https://spartans627077.blob.core.windows.net/downloads/spartans-broadcaster.apk?se=2028-11-02T19%3A58Z&sp=r&spr=https&sv=2026-02-06&sr=b&sig=FZ1aZUKferouk4Qxv%2BFeWcFXP6di%2ByGymOa3W8UnMa4%3D",
+      "redirect": "https://spartans893191.blob.core.windows.net/downloads/spartans-broadcaster.apk?se=2028-11-02T19%3A58Z&sp=r&spr=https&sv=2026-02-06&sr=b&sig=Lq3gnBocBxfqg0cYvTLZ%2BJb78%2FhkOV%2FJgmyJs3lEmF8%3D",
       "statusCode": 302
     }
   ]

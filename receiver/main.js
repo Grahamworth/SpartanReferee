@@ -36,7 +36,7 @@ const BIN = app.isPackaged ? path.join(process.resourcesPath, 'bin') : path.join
 const MTX = path.join(BIN, 'mediamtx.exe');
 const ICON = path.join(__dirname, 'ui', 'icon.png');
 const RULE = 'Burpee Judge Receiver', RULE_REVIEW = 'Burpee Judge Receiver (review page)';
-const SITE = 'https://yellow-forest-09b984e03.6.azurestaticapps.net';
+const SITE = 'https://mango-glacier-03e711403.4.azurestaticapps.net';
 const TS = path.join(process.env.ProgramFiles || 'C:\\Program Files', 'Tailscale', 'tailscale.exe');
 const TS_APP = path.join(path.dirname(TS), 'tailscale-ipn.exe');
 const TS_DOWNLOAD = 'https://tailscale.com/download/windows';

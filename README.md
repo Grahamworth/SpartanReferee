@@ -54,10 +54,10 @@ Then open http://localhost:8791.
 
 ### Hosted copy
 
-Live at https://yellow-forest-09b984e03.6.azurestaticapps.net. It's an Azure Static Web App on the Free tier: app `burpee-judge`, resource group `rg-burpee-judge`, subscription "DEXYS TEST". To publish changes, put `index.html`, `app.js`, `burpee.js`, `exercises.js`, `pose-filter.js`, `multi.js`, `finder.js`, `rtmo-s.onnx`, `staticwebapp.config.json`, `ocr-prep.js`, `readers.js`, `digit-model.js`, `digit-model.json` and `styles.css` in a folder and run:
+Live at https://mango-glacier-03e711403.4.azurestaticapps.net. It's an Azure Static Web App on the Free tier: app `burpee-judge`, resource group `rg-burpee-judge`, subscription "DEXYS TEST". To publish changes, put `index.html`, `app.js`, `burpee.js`, `exercises.js`, `pose-filter.js`, `multi.js`, `finder.js`, `rtmo-s.onnx`, `staticwebapp.config.json`, `ocr-prep.js`, `readers.js`, `digit-model.js`, `digit-model.json` and `styles.css` in a folder and run:
 
 ```bash
-swa deploy <folder> --env production --deployment-token "$(az staticwebapp secrets list -n burpee-judge -g rg-burpee-judge --subscription "DEXYS TEST" --query properties.apiKey -o tsv)"
+swa deploy <folder> --env production --deployment-token "$(az staticwebapp secrets list -n spartans -g rg-spartans-uksouth --subscription VDASO --subscription "DEXYS TEST" --query properties.apiKey -o tsv)"
 ```
 
 Each phone needs internet the **first** time it opens the app, to download the pose model and number reader (roughly 20–30 MB in total). Open every station phone once before the race while it still has signal.
@@ -206,7 +206,7 @@ Credits, also shown in the game: terrain © Copernicus (ESA/Airbus); map data ©
 | `chat.html`, `chat.js` | Chat rooms, like SkiTour's notice board (Spartans chat, Morzine 2026, Training, Kit, Lift shares), plus private groups |
 | `admin.html`, `admin.js` | Admin: who's banned from the chat and why, with unban |
 | `api-base.js` | Where the backend is: `/api`, or the hosted site's `/api` inside the installed app |
-| `api/` | The backend: Azure Functions (Node 20), managed by the Static Web App, storing everything in Azure Table Storage (`spartans627077`, table `spartans`). Tests: `cd api; npm test`. Run the site and API locally (in-memory, nothing saved): `node api/dev-server.js`, then open http://localhost:8795 |
+| `api/` | The backend: Azure Functions (Node 20), managed by the Static Web App, storing everything in Azure Table Storage (`spartans893191`, table `spartans`). Tests: `cd api; npm test`. Run the site and API locally (in-memory, nothing saved): `node api/dev-server.js`, then open http://localhost:8795 |
 | `manifest.webmanifest`, `sw.js`, `icons/` | Lets the site install as an app (iPhone: Safari → Share → Add to Home Screen) and open without signal |
 | `app/`, `scripts/build-app.sh` | The Android and iPhone apps (Capacitor) |
 | `scripts/make-icons.cjs` | Draws the app icon at every size |
