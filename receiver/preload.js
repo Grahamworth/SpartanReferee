@@ -11,6 +11,7 @@ contextBridge.exposeInMainWorld('receiver', {
   copy: (text) => ipcRenderer.invoke('copy', text),
   tailscaleSite: () => ipcRenderer.invoke('tailscaleSite'),
   settings: (v) => ipcRenderer.invoke('settings', v),
+  addCamera: () => ipcRenderer.invoke('addCamera'),
   tailscaleInstall: () => ipcRenderer.invoke('tailscaleInstall'),
   tailscaleUp: () => ipcRenderer.invoke('tailscaleUp'),
   youtube: (n, key) => ipcRenderer.invoke('youtube', n, key),

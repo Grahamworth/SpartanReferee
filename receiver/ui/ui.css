@@ -19,6 +19,10 @@ h3 { margin: 0 0 6px; font-size: 15px; }
 main { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 16px; padding: 18px 22px; }
 .card { background: var(--ink); border-top: 4px solid #333; padding: 14px; display: grid; gap: 10px; }
 .card.live { border-top-color: var(--green); }
+.card.add-cam { place-content: center; justify-items: center; gap: 6px; min-height: 240px; background: none; border: 2px dashed var(--line); color: var(--muted); font: inherit; cursor: pointer; }
+.card.add-cam:hover, .card.add-cam:focus-visible { border-color: var(--green); color: #fff; }
+.card.add-cam .plus { font-size: 52px; line-height: 1; font-weight: 300; }
+.card.add-cam b { font-size: 20px; font-weight: 800; text-transform: uppercase; }
 .card .top { display: flex; justify-content: space-between; align-items: center; }
 .card .name { font-size: 20px; font-weight: 800; text-transform: uppercase; }
 .status { font-weight: 700; color: var(--muted); }

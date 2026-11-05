@@ -95,7 +95,9 @@ function render(st) {
       <label class="yt">YouTube stream key <input type="password" data-yt="${s.n}" placeholder="${s.youtube ? '•••••• (set: type to change, clear to remove)' : 'Optional: from YouTube Studio'}"></label>
       <button class="btn red expand" data-expand="${s.n}">⤢ Open in Video review</button>
     </article>`;
-  }).join('');
+  }).join('') + (st.stations.length && st.stations.length < 12
+    ? `<button type="button" class="card add-cam" data-add="1"><span class="plus">+</span><b>Add camera</b><small>Camera ${st.stations.length + 1} of up to 12</small></button>`
+    : '');
   }
 
   placeLives(st);
@@ -112,7 +114,11 @@ $('stations').addEventListener('click', (e) => {
   const b = e.target.closest('button, .addr, .livebox');
   if (b && b.dataset.expand) { window.receiver.review(+b.dataset.expand); return; }
   if (!b) return;
-  if (b.dataset.t) { tab[b.dataset.n] = b.dataset.t; render.cardSig = ''; render(last); }
+  if (b.dataset.add) {
+    b.disabled = true;
+    window.receiver.addCamera().then((n) => { $('settingsForm').stations.value = n; toast(`Camera ${n} added: scan its code with a phone`); refresh(); });
+  }
+  else if (b.dataset.t) { tab[b.dataset.n] = b.dataset.t; render.cardSig = ''; render(last); }
   else if (b.dataset.judge) window.receiver.judge(+b.dataset.judge);
   else if (b.dataset.copy) { window.receiver.copy(b.dataset.copy); toast('Copied'); }
 });
@@ -126,7 +132,7 @@ $('stations').addEventListener('focusout', async (e) => {
   refresh();
 });
 $('stations').addEventListener('keydown', (e) => { if (e.target.dataset.yt && e.key === 'Backspace' && !e.target.value) e.target.dataset.cleared = '1'; if (e.key === 'Enter') e.target.blur(); });
-$('tsBtn').onclick = async () => { $('tsBtn').disabled = true; const act = $('tsBtn').dataset.act; await (act === 'install' ? window.receiver.tailscaleInstall() : act === 'site' ? window.receiver.tailscaleSite() : window.receiver.tailscaleUp()); $('tsBtn').disabled = false; refresh(); };
+$('tsBtn').onclick = async () => { $('tsBtn').disabled = true; const act = $('tsBtn').dataset.act; const r = await (act === 'install' ? window.receiver.tailscaleInstall() : act === 'site' ? window.receiver.tailscaleSite() : window.receiver.tailscaleUp()); if (r && r.error) toast(`Tailscale couldn't sign in: ${r.error}. Try its icon by the clock.`); $('tsBtn').disabled = false; refresh(); };
 $('fixFirewall').onclick = async () => { $('fixFirewall').disabled = true; const ok = await window.receiver.fixFirewall(); $('fixFirewall').disabled = false; toast(ok ? 'Phones can connect now' : 'Not changed: say Yes when Windows asks'); refresh(); };
 $('removeOld').onclick = async () => { $('removeOld').disabled = true; const ok = await window.receiver.removeOldServer(); $('removeOld').disabled = false; toast(ok ? 'Old server removed: scan the Larix code again on each phone' : 'Not removed: say Yes when Windows asks'); refresh(); };
 $('openRec').onclick = () => window.receiver.openRecordings();

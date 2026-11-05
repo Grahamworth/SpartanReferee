@@ -38,6 +38,7 @@ const ICON = path.join(__dirname, 'ui', 'icon.png');
 const RULE = 'Burpee Judge Receiver', RULE_REVIEW = 'Burpee Judge Receiver (review page)';
 const SITE = 'https://yellow-forest-09b984e03.6.azurestaticapps.net';
 const TS = path.join(process.env.ProgramFiles || 'C:\\Program Files', 'Tailscale', 'tailscale.exe');
+const TS_APP = path.join(path.dirname(TS), 'tailscale-ipn.exe');
 const TS_DOWNLOAD = 'https://tailscale.com/download/windows';
 
 let S = loadSettings(DATA);
@@ -204,25 +205,42 @@ function tailscaleInstall() {
       res(tailscaleUp());
     }));
 }
-function tailscaleUp() {
+// Runs one Tailscale command that may print a sign-in link, and opens the link in the browser.
+function tailscaleSignIn(args) {
+  return new Promise((res) => {
+    let said = '', opened = false;
+    const p = spawn(TS, args, { windowsHide: true });
+    const look = (b) => {
+      said += b;
+      const m = said.match(/https:\/\/login\.tailscale\.com\/\S+|To authenticate, visit:\s+(https:\/\/\S+)/);
+      if (m && !opened) { opened = true; shell.openExternal(m[1] || m[0]); res({ ok: true }); }
+    };
+    p.stdout.on('data', look); p.stderr.on('data', look);
+    p.on('error', (e) => res({ ok: false, error: e.message }));
+    p.on('exit', (code) => res(code === 0 ? { ok: true } : { ok: false, error: said.trim().split('\n')[0].slice(0, 200) || `it stopped with code ${code}` }));
+    setTimeout(() => res({ ok: false, error: 'it took too long to answer' }), 15000);
+  });
+}
+async function tailscaleUp() {
   // signs in (opens the browser at Tailscale's sign-in page) or switches it on; --unattended keeps it running when
   // nobody is logged in to Windows
+  if (tsBusy) return { ok: false };
   try { fs.writeFileSync(TS_OURS, ''); } catch { /* it just stays on at Quit */ }
-  return new Promise((res) => {
-    const p = spawn(TS, ['up', '--unattended'], { windowsHide: true });
-    let opened = false;
-    const look = (b) => { const m = String(b).match(/https:\/\/login\.tailscale\.com\/\S+/); if (m && !opened) { opened = true; shell.openExternal(m[0]); res(true); } };
-    p.stdout.on('data', look); p.stderr.on('data', look);
-    p.on('exit', () => res(true));
-    setTimeout(() => res(true), 15000);
-  });
+  tsBusy = 'Opening Tailscale…';
+  // its own app too, so there's always something to sign in with
+  if (fs.existsSync(TS_APP)) { const a = spawn(TS_APP, [], { detached: true, stdio: 'ignore' }); a.on('error', () => {}); a.unref(); }
+  let r = await tailscaleSignIn(['up', '--unattended']);
+  // 'up' refuses if this computer's Tailscale settings differ from its flags; 'login' doesn't mind
+  if (!r.ok) r = await tailscaleSignIn(['login']);
+  tsBusy = '';
+  return r;
 }
 // Switched on when this app opens and off again at Quit, but only if this app is what switched it on: one that was
 // already connected may be in use for something else. The note is a file so it survives a crash.
 const TS_OURS = path.join(DATA, 'tailscale-switched-on');
 async function tailscaleOnStart() {
   const ts = await tailscale();
-  if (ts.state === 'Stopped' || ts.state === 'NeedsLogin') tailscaleUp();
+  if (ts.state === 'Stopped' || ts.state === 'NeedsLogin' || ts.state === 'NoState') tailscaleUp();
 }
 function tailscaleOffIfOurs() {
   if (BIND || !FIRST_COPY || !fs.existsSync(TS_OURS)) return;
@@ -286,6 +304,11 @@ ipcMain.handle('tailscaleSite', () => shell.openExternal(TS_DOWNLOAD));
 ipcMain.handle('settings', (_e, v) => {
   S = { ...S, stations: Math.max(1, Math.min(12, +v.stations || S.stations)), record: !!v.record, keepDays: Math.max(1, Math.min(90, +v.keepDays || S.keepDays)) };
   saveSettings(DATA, S); restartServer(); return true;
+});
+// one more camera, with no server restart: the server takes any station's stream, so the live ones carry on
+ipcMain.handle('addCamera', async () => {
+  if (S.stations < 12) { S = { ...S, stations: S.stations + 1 }; saveSettings(DATA, S); serverOk = await watchCameras(); }
+  return S.stations;
 });
 ipcMain.handle('youtube', (_e, n, key) => {
   S.youtube = { ...(S.youtube || {}) };
