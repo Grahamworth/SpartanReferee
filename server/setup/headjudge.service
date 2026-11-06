@@ -1,0 +1,21 @@
+[Unit]
+Description=HeadJudge Receiver
+Requires=headjudge-boot.service
+After=headjudge-boot.service headjudge-display.service network-online.target
+
+[Service]
+User=headjudge
+Group=headjudge
+Environment=HOME=/var/lib/headjudge
+Environment=HJ_CONFIG=/etc/headjudge/config.json
+Environment=DISPLAY=:0
+Environment=TZ=Europe/London
+ExecStart=/usr/local/bin/node /opt/headjudge/index.js
+Restart=always
+RestartSec=3
+KillMode=control-group
+TimeoutStopSec=30
+NoNewPrivileges=false
+
+[Install]
+WantedBy=multi-user.target

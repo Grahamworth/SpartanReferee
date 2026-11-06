@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { createCloud, QUIET_MS } from '../receiver/cloud.js';
+import { createCloud, QUIET_MS } from '../server/cloud.js';
 
 const FILE = '2026-11-06_09-00-00-123456+0100.mp4';
 function setup({ on = true, key = 'rk_x', since = 0, failPut = false, status = 200 } = {}) {

@@ -1,0 +1,13 @@
+[Unit]
+Description=HeadJudge: settings and software for this start
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/bin/headjudge-boot
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target

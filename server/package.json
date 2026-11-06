@@ -1,0 +1,12 @@
+{
+  "name": "headjudge-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "HeadJudge's Receiver on a server: streams, recordings, one AI judge per camera, and the review page behind a login.",
+  "main": "index.js",
+  "type": "commonjs",
+  "engines": { "node": ">=22" },
+  "dependencies": {
+    "qrcode": "1.5.4"
+  }
+}

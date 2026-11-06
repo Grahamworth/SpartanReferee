@@ -1,5 +1,5 @@
 'use strict';
-// The review page, on the laptop and on an iPad.
+// The review page, in any browser: a computer, or an iPad at the judges' table.
 //  Live: every camera live with its AI judge (tracking shown or hidden per camera), the timeline to rewind through
 //        everything recorded, a marker for each athlete picked up, both cameras or one, Pick athlete.
 //  Upload video: every frame analysed first, with the results beside it; everyone it tracks joins All results.
@@ -17,11 +17,11 @@ const mss = (s) => `${Math.floor(s / 60)}:${pad(Math.floor(s % 60))}`;
 const span = (ms) => { const s = Math.max(0, Math.round(ms / 1000)); return s < 60 ? `${s} s` : `${Math.floor(s / 60)} min ${pad(s % 60)} s`; };
 const params = new URLSearchParams(location.search);
 const device = params.get('device') || (/iPad|Macintosh/.test(navigator.userAgent) && 'ontouchend' in document ? 'iPad' : /iPhone|Android/.test(navigator.userAgent) ? 'Phone' : 'Browser');
-let st = null, skew = 0;   // the laptop's state; laptop clock − this device's clock (ms)
+let st = null, skew = 0;   // the server's state; laptop clock − this device's clock (ms)
 
 function toast(s) { const t = $('toast'); t.textContent = s; t.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 2500); }
 const laptopNow = () => new Date(Date.now() + skew);
-$('who').textContent = `${device} · laptop time`;
+$('who').textContent = 'Your local time';
 
 // ---------------------------------------------------------------- tabs
 // The Upload tab is moved out of sight rather than hidden, so a video being judged carries on.
@@ -34,6 +34,7 @@ function showTab(name) {
   }
   if (name !== 'live') pauseAll();
   if (name === 'upload') loadUploads();
+  if (name === 'cameras') loadCameras();
   if (name === 'judge') renderAthletes(true);
   renderSides();
   if (name === 'live' && !clipStart && !live && st) { if (isToday()) goLive(); else openDay(); }
@@ -62,7 +63,7 @@ $('day').onchange = () => {
 };
 setInterval(loadDays, 60000);
 
-// ---------------------------------------------------------------- the laptop's state, every second
+// ---------------------------------------------------------------- the server's state, every second
 async function poll() {
   try {
     const t0 = Date.now();
@@ -70,30 +71,64 @@ async function poll() {
     const s = await r.json();
     skew = Date.parse(s.now) - (t0 + Date.now()) / 2;
     const first = !st;
-    st = s; $('offline').hidden = true;
+    st = s; $('offline').hidden = true; applyBrand(s.brand);
     if (first) { loadDays(); if (isToday()) goLive(); else openDay(); }
   } catch { $('offline').hidden = false; return; }
-  // (a mistake drawing the page isn't the laptop being out of reach)
+  // (a mistake drawing the page isn't the server being out of reach)
   for (const f of [renderJudges, renderViewPick, renderLog]) { try { f(); } catch (e) { console.error(e); } }
   if (st.athletesRev !== athRev) loadAthletes();
 }
-setInterval(poll, 1000); poll();
+setInterval(poll, 1000);
+pullJudgeSettings().finally(poll);
+// the company's name, logo and colours (this page stays dark whichever background they chose: it's mostly video)
+let branded = false;
+function applyBrand(b) {
+  if (branded || !b) return; branded = true;
+  document.title = `${b.name}: video review`;
+  const on = window.HeadJudgeBrand, css = document.documentElement.style;
+  if (on && b.theme?.primary) { css.setProperty('--red', on.readable(b.theme.primary, '#1f2328', 3)); css.setProperty('--brand', b.theme.primary); css.setProperty('--on-brand', on.on(b.theme.primary)); }
+  if (b.logo) { const img = $('brandLogo'); img.src = b.logo; img.alt = b.name; img.hidden = false; }
+}
+// ---------------------------------------------------------------- the Cameras tab: what each phone scans
+let camsDrawn = '';
+async function loadCameras() {
+  const r = await fetch('/api/cameras').then((x) => x.json()).catch(() => null);
+  if (!r) { $('camList').innerHTML = '<p class="muted">Can\'t reach the server.</p>'; return; }
+  const key = JSON.stringify(r.cameras.map((c) => [c.n, c.live, c.video]));
+  if (key === camsDrawn) return; camsDrawn = key;
+  $('camList').innerHTML = r.cameras.map((c) => `<article class="camcard${c.live ? ' live' : ''}">
+    <h3>Camera ${c.n} <small>${c.live ? `Live${c.video ? ' · ' + esc(c.video) : ''}` : 'Waiting for its phone'}</small></h3>
+    <img src="${c.phone}" alt="QR code for camera ${c.n}, to scan in HeadJudge Broadcaster" width="220" height="220">
+    <p class="small muted">Scan in <b>HeadJudge Broadcaster</b> (Android)</p>
+    <details><summary>iPhone (Larix)</summary><img src="${c.larix}" alt="QR code for camera ${c.n}, to scan in Larix" width="220" height="220"></details>
+  </article>`).join('');
+  $('addCam').disabled = r.cameras.length >= r.max;
+}
+$('addCam').onclick = async () => { await fetch('/api/cameras', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' }).catch(() => {}); camsDrawn = ''; loadCameras(); };
+setInterval(() => { if (!$('cameras').hidden) loadCameras(); }, 3000);
 setInterval(() => { $('clock').textContent = hms(laptopNow()); }, 200);
 
 // ---------------------------------------------------------------- AI judge on each live camera
-// Each live camera gets the Burpee Judge (served by the laptop, models built in) judging its stream. They always run:
+// Each live camera gets the Burpee Judge (served by the server, models built in) judging its stream. They always run:
 // on the Live tab while it's live they are the cameras; otherwise they carry on out of sight. A camera with its judge
 // off shows its plain live picture.
 const judges = {};   // n → { tile, frame, view }
 // Live AI judging and analysing an uploaded video don't run together: on this laptop each would slow the other enough to
 // miss reps. Streaming and recording carry on regardless, as they take next to nothing.
 let upAnalysing = false, upPaused = false;
-const analysingNow = () => upAnalysing && !upPaused;
+const analysingNow = () => false; // the live judges are on the server and an upload is analysed in this browser: neither slows the other
 const judgedLive = () => (st ? st.cams.filter((c) => c.live && judges[c.n]?.frame).map((c) => c.n) : []);
 const camList = (ns) => (ns.length === 1 ? `Camera ${ns[0]}` : `Cameras ${ns.slice(0, -1).join(', ')} and ${ns.at(-1)}`);
-const judgeUrl = (n) => '/judge/judge.html?stream=' + encodeURIComponent(`http://${location.hostname}:${st.webrtcPort}/live/station${n}/whep`) + `&go=1&cfg=cam${n}`;
+const whepUrl = (n) => `/whep/live/station${n}/whep`;
+// what's shown is this camera's picture with what its judge on the server sees drawn over it
+const judgeUrl = (n) => '/judge/judge.html?stream=' + encodeURIComponent(whepUrl(n)) + `&go=1&cfg=cam${n}&follow=${n}`;
+// judge settings live on the server; each browser's settings pages read and write its own copy
+const SYNC_KEY = (cfg) => `burpeeJudge.settings.${cfg}`;
+async function pullJudgeSettings() { const all = await fetch('/api/judge-settings').then((r) => r.json()).catch(() => ({})); for (const [k, v] of Object.entries(all)) { try { localStorage.setItem(k, v); } catch { /* private mode */ } } }
+function pushJudgeSettings(cfg) { let value = null; try { value = localStorage.getItem(SYNC_KEY(cfg)); } catch { /* private mode */ } if (value == null) return Promise.resolve(); return fetch('/api/judge-settings', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key: SYNC_KEY(cfg), value }) }).catch(() => {}); }
+const engineCall = (n, what, body = {}) => fetch(`/api/engine/${n}${what ? '/' + what : ''}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }).then((r) => r.json());
 const camName = (n) => { try { return (JSON.parse(localStorage.getItem('burpeeJudge.settings.cam' + n)) || {}).station || ''; } catch { return ''; } };
-const aiOff = (n) => { try { return localStorage.getItem('review.aiOn.' + n) !== '1'; } catch { return true; } };
+const aiOff = (n) => !st?.cams.find((c) => c.n === n)?.ai;
 function renderJudges() {
   if (!st) return;
   for (const c of st.cams) {
@@ -131,15 +166,17 @@ function renderJudges() {
     const nm = camName(c.n); j.tile.querySelector('.label').innerHTML = `Camera ${c.n}${nm ? `<small>${esc(nm)}</small>` : ''}${off ? '<small>AI judge off</small>' : held ? '<small>AI judge waiting</small>' : ''}`;
   }
 }
-function setAi(n, on) {
-  try { localStorage.setItem('review.aiOn.' + n, on ? '1' : ''); } catch { /* private mode */ }
+async function setAi(n, on) {
+  const r = await engineCall(n, '', { on }).catch(() => ({ error: 'Can\'t reach the server' }));
+  if (r.error) return toast(r.error);
+  const c = st?.cams.find((x) => x.n === n); if (c) c.ai = on;
   const j = judges[n]; if (!j) return;
-  if (!on && j.frame) { saveRound(j).finally(() => { j.frame?.remove(); j.frame = null; renderJudges(); }); return; }
+  if (!on && j.frame) { j.frame.remove(); j.frame = null; }
   renderJudges();
 }
 // a judge's round in progress is saved before it's stopped or restarted (its athletes' records are completed)
-async function saveRound(j) { try { await j.frame?.contentWindow?.__finishRound?.(); } catch { /* not ready */ } }
-async function restartJudges() { for (const [n, j] of Object.entries(judges)) if (j.frame) { await saveRound(j); j.frame.src = judgeUrl(+n); } }
+const saveRound = () => Promise.resolve(); // the server finishes a judge's round when it stops or restarts it
+async function restartJudges() { for (const [n, j] of Object.entries(judges)) if (j.frame) { await engineCall(+n, 'restart'); j.frame.src = judgeUrl(+n); } }
 $('judgeRestart').onclick = () => { restartJudges(); toast('Judges restarted'); };
 // one camera big; click it again for all of them
 function toggleBig(n) {
@@ -167,7 +204,7 @@ function plainView(n, j) {
       pc.ontrack = (e) => { v.video.srcObject = e.streams[0] || new MediaStream([e.track]); v.video.play().catch(() => {}); };
       await pc.setLocalDescription(await pc.createOffer());
       await new Promise((ok) => { if (pc.iceGatheringState === 'complete') ok(); pc.addEventListener('icegatheringstatechange', () => pc.iceGatheringState === 'complete' && ok()); setTimeout(ok, 1500); });
-      const res = await fetch(`http://${location.hostname}:${st.webrtcPort}/live/station${n}/whep`, { method: 'POST', headers: { 'Content-Type': 'application/sdp' }, body: pc.localDescription.sdp });
+      const res = await fetch(whepUrl(n), { method: 'POST', headers: { 'Content-Type': 'application/sdp' }, body: pc.localDescription.sdp });
       if (!res.ok) throw new Error(res.status);
       await pc.setRemoteDescription({ type: 'answer', sdp: await res.text() });
       await new Promise((ok) => setTimeout(ok, 4000));
@@ -201,7 +238,7 @@ let settingsFor = 0, startAfter = false;
 function openCamSettings(n, start) {
   settingsFor = n; startAfter = !!start;
   $('settingsTitle').textContent = start ? `Start the AI judge on camera ${n}${camName(n) ? ' · ' + camName(n) : ''}` : `Camera ${n}${camName(n) ? ' · ' + camName(n) : ''} settings`;
-  $('settingsNote').textContent = start ? 'Check its settings, then Save to start judging (Close: not now).' : 'Saved for this camera on this device. Save restarts its judge with them.';
+  $('settingsNote').textContent = start ? 'Check its settings, then Save to start judging (Close: not now).' : 'Saved for this camera. Save restarts its judge with them.';
   $('settingsFrame').src = `/judge/judge.html?settings=1&cfg=cam${n}`;
   if ($('live').hidden) showTab('live');
   $('judgeSettings').hidden = false; $('replayGrid').hidden = true; placeDock();
@@ -213,7 +250,7 @@ addEventListener('message', (e) => {
   if (cfg === 'upload') {
     if (e.data.judge === 'analysed') { $('upStatus').textContent = 'Analysis finished. Press play on the video to watch it, or Watch an athlete on the right.'; athRev = -1; loadAthletes(); return; }
     if (e.data.judge === 'close' || e.data.judge === 'saved') { $('upSettings').hidden = true; $('upSettingsFrame').src = 'about:blank'; }
-    if (e.data.judge === 'saved' && upPending) { upPending.go = true; if (!upPending.saved) $('upStatus').textContent = 'Starting as soon as the video is on the laptop…'; upReady(); }
+    if (e.data.judge === 'saved' && upPending) { upPending.go = true; if (!upPending.saved) $('upStatus').textContent = 'Starting as soon as the video is on the server…'; upReady(); }
     else if (e.data.judge === 'saved') toast('Upload settings saved: used for the next video');
     else if (upPending) { upPending = null; $('upStatus').textContent = 'Not started. Judge it from the list below when you\'re ready.'; }
     return;
@@ -221,9 +258,9 @@ addEventListener('message', (e) => {
   if (e.data.judge === 'exit') { const n = +cfg.replace(/\D/g, ''); if (n) setAi(n, false); return; }
   if (!$('rulesBox').hidden) { $('rulesBox').hidden = true; $('rulesFrame').src = 'about:blank'; return; }
   const n = settingsFor; closeCamSettings();
-  if (e.data.judge === 'saved' && startAfter) { startAfter = false; setAi(n, true); toast(`AI judge started on camera ${n}`); return; }
+  if (e.data.judge === 'saved' && startAfter) { startAfter = false; pushJudgeSettings('cam' + n); setAi(n, true); toast(`AI judge started on camera ${n}`); return; }
   startAfter = false;
-  if (e.data.judge === 'saved') { const j = judges[n]; if (j && j.frame) saveRound(j).then(() => { j.frame.src = judgeUrl(n); }); toast(`Camera ${n} settings saved`); }
+  if (e.data.judge === 'saved') { pushJudgeSettings('cam' + n).then(() => engineCall(n, 'restart')).then(() => { const j = judges[n]; if (j && j.frame) j.frame.src = judgeUrl(n); }); toast(`Camera ${n} settings saved`); }
 });
 // opened from a camera in the Receiver (?focus=1): that camera big, live
 window.focusCamera = (n) => { showTab('live'); const tryIt = () => { if (judges[n]) { if (!judges[n].tile.classList.contains('big')) toggleBig(n); } else setTimeout(tryIt, 300); }; if (n) tryIt(); };
@@ -315,7 +352,7 @@ const lead = () => Math.round(+$('win').value / 4);   // start a little before t
 
 let replayGen = 0;   // each replay; answers for an older one are ignored
 async function replay(start, dur, autoplay) {
-  if (!st) return toast('Can\'t reach the laptop yet');
+  if (!st) return toast('Can\'t reach the server yet');
   const gen = ++replayGen;
   if ($('live').hidden) showTab('live');
   if (dayStr(start) !== dayKey) { dayKey = dayStr(start); $('day').value = dayKey; athRev = -1; loadAthletes(); await loadTimeline(); }
@@ -345,7 +382,7 @@ async function replay(start, dur, autoplay) {
       v.addEventListener('loadeddata', () => { msg.textContent = ''; if (!master) { master = v; hookMaster(); if (autoplay) v.play().catch(() => {}); } }, { once: true });
       v.addEventListener('error', () => { msg.textContent = 'Could not play this recording'; });
       vids.push(v);
-    }).catch(() => { msg.textContent = 'Can\'t reach the laptop'; });
+    }).catch(() => { msg.textContent = 'Can\'t reach the server'; });
   }
   $('transport').hidden = false;
   setRate(1); updateAt(); applyView();
@@ -380,7 +417,7 @@ $('scrub').onchange = () => { scrubbing = false; };
 $('play').onclick = () => { if (!master) return; master.paused ? master.play() : master.pause(); };
 document.querySelectorAll('[data-step]').forEach((b) => b.onclick = () => { if (!master) return; master.pause(); seek(master.currentTime + +b.dataset.step); });
 document.querySelectorAll('[data-rate]').forEach((b) => b.onclick = () => setRate(+b.dataset.rate));
-// keyboard on the laptop: space play/pause, arrows step a frame, shift+arrows 5 s
+// keyboard on the server: space play/pause, arrows step a frame, shift+arrows 5 s
 document.addEventListener('keydown', (e) => {
   if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || $('live').hidden || !master) return;
   if (e.key === ' ') { e.preventDefault(); $('play').click(); }
@@ -504,7 +541,7 @@ $('fClear').onclick = () => { for (const id of ['fNum', 'fCam', 'fSrc', 'fFrom',
 
 // Watch: the recording (or uploaded video) from just before they started, with what the AI judge saw drawn on it: their
 // skeleton, their count beside them, each rep and no rep as it was given. A rep in the list below plays just that rep.
-// (Times in a proof: ms into an uploaded video, or the laptop's clock for a live camera.)
+// (Times in a proof: ms into an uploaded video, or the server's clock for a live camera.)
 const PROOF_POINTS = [0, 7, 8, 11, 12, 13, 14, 15, 16, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32];
 const PROOF_BONES = [[11, 12], [11, 13], [13, 15], [12, 14], [14, 16], [11, 23], [12, 24], [23, 24], [23, 25], [25, 27], [24, 26], [26, 28], [27, 29], [29, 31], [27, 31], [28, 30], [30, 32], [28, 32]].map((b) => b.map((i) => PROOF_POINTS.indexOf(i)));
 const PROOF_CLIP = 600;   // seconds of a live recording loaded at once
@@ -557,7 +594,7 @@ function proofGo(at, play) {
   pv.onloadedmetadata = () => { pv.currentTime = pos; if (play) pv.play().catch(() => {}); };
   pv.src = src;
 }
-pv.addEventListener('error', () => { if (proof && pv.getAttribute('src')) $('proofNote').textContent = proof.up ? 'That video is no longer on the laptop.' : `No recording of that time (recordings are kept for ${st ? st.keepDays : '?'} days).`; });
+pv.addEventListener('error', () => { if (proof && pv.getAttribute('src')) $('proofNote').textContent = proof.up ? 'That video is no longer on the server.' : `No recording of that time (recordings are kept for ${st ? st.keepDays : '?'} days).`; });
 pv.addEventListener('ended', () => { const p = proof; if (p && !p.up && p.base + p.dur * 1000 < p.last - 1000) proofGo(p.base + p.dur * 1000, true); });
 function setProofRate(r) { pv.defaultPlaybackRate = r; pv.playbackRate = r; document.querySelectorAll('[data-prate]').forEach((b) => b.classList.toggle('on', +b.dataset.prate === r)); }
 function proofClose() { if (counting && !counting.marks.length) fetch('/api/counts?id=' + encodeURIComponent(counting.id), { method: 'DELETE' }).catch(() => {}); stopCount(); if (proof) cancelAnimationFrame(proof.raf); proof = null; pv.pause(); pv.removeAttribute('src'); pv.load(); $('proof').hidden = true; $('athleteBox').hidden = false; }
@@ -710,7 +747,7 @@ $('numSearch').onblur = () => setTimeout(() => { $('numResults').hidden = true; 
 $('numSearch').onkeydown = (e) => { if (e.key === 'Enter') { const b = $('numResults').querySelector('button'); if (b) b.dispatchEvent(new MouseEvent('mousedown')); } if (e.key === 'Escape') $('numSearch').blur(); };
 
 // ---------------------------------------------------------------- Upload video: judged as it plays, like a live camera
-// The video goes to the laptop first (kept in its training folder), then the AI judge (always on) plays and judges
+// The video goes to the server first (kept in its training folder), then the AI judge (always on) plays and judges
 // it from there, reporting everyone it tracks to All results.
 let upRunning = '';
 // ---------------------------------------------------------------- counting reps by hand, to measure the AI judge
@@ -720,7 +757,7 @@ let counting = null, shownCompare = null;
 const cntId = () => Array.from(crypto.getRandomValues(new Uint8Array(6)), (x) => x.toString(16).padStart(2, '0')).join('');
 const cntFmt = (t) => mss(t / 1000);
 async function countsSaved() { return (await fetch('/api/counts').then((r) => r.json()).catch(() => ({ counts: [] }))).counts; }
-async function saveCount(c) { await fetch('/api/counts', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: c.id, video: c.video, name: c.name, marks: c.marks }) }).catch(() => toast('Your count couldn\'t be saved: is the laptop still on?')); }
+async function saveCount(c) { await fetch('/api/counts', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: c.id, video: c.video, name: c.name, marks: c.marks }) }).catch(() => toast('Your count couldn\'t be saved: is the server still on?')); }
 // the latest judging of a video: everyone it tracked, with their reps and no reps
 async function latestJudging(video) {
   const list = (await fetch('/api/athletes?from=2000&to=9').then((r) => r.json()).catch(() => ({ list: [] }))).list.filter((a) => a.src === 'upload' && a.video === video);
@@ -848,9 +885,9 @@ $('upList').onclick = async (e) => {
   if (b.dataset.show) { upShown = b.dataset.show; renderSides(); return; }
   if (b.dataset.judge) return blockedByLive() ? undefined : upConfig(uploadName(b.dataset.judge), b.dataset.judge);
   const name = b.dataset.delup;
-  if (!confirm(`Delete ${uploadName(name)} from the laptop, with the athletes the AI judge found in it?`)) return;
+  if (!confirm(`Delete ${uploadName(name)} from the server, with the athletes the AI judge found in it?`)) return;
   if (upRunning === name) { $('upStage').innerHTML = '<div class="msg">Choose a video to judge it.</div>'; upRunning = ''; upAnalysing = false; upPaused = false; renderJudges(); await new Promise((r) => setTimeout(r, 500)); }
-  const r = await fetch('/api/uploads?name=' + encodeURIComponent(name), { method: 'DELETE' }).then((x) => x.json()).catch(() => ({ error: 'can\'t reach the laptop' }));
+  const r = await fetch('/api/uploads?name=' + encodeURIComponent(name), { method: 'DELETE' }).then((x) => x.json()).catch(() => ({ error: 'can\'t reach the server' }));
   toast(r.ok ? 'Deleted' : `Couldn't delete it: ${r.error}`); athRev = -1; loadAthletes(); loadUploads();
 };
 // ---- one at a time: live AI judging or an upload's analysis
@@ -863,6 +900,7 @@ function busyNote(text, withStop) {
   $('busyNote').scrollIntoView({ block: 'nearest' });
 }
 function blockedByLive() {
+  return false; // kept for the day an upload is analysed on the server: then the two would share its graphics card
   const live = judgedLive(); if (!live.length) return false;
   busyNote(`${camList(live)} ${live.length === 1 ? 'is' : 'are'} being judged live. A video can't be analysed at the same time, as both would slow down and reps could be missed. Stop the AI judge on the Live tab first, or analyse this video later.`, false);
   return true;
@@ -881,7 +919,7 @@ async function stopAnalysis() {
   upAnalysing = false; upPaused = false;
   $('upStatus').textContent = 'Stopping the analysis…'; $('busyNote').hidden = true; busyTick();
   for (let i = 0; i < 40 && a && !a.done; i++) await new Promise((r) => setTimeout(r, 100));
-  await new Promise((r) => setTimeout(r, 800)); // what it found so far is on its way to the laptop
+  await new Promise((r) => setTimeout(r, 800)); // what it found so far is on its way to the server
   $('upStage').innerHTML = '<div class="msg">Analysis stopped. Use Judge again below to analyse the whole video.</div>'; upRunning = '';
   $('upStatus').textContent = 'Analysis stopped. What it found so far is on the right.';
   athRev = -1; loadAthletes(); loadUploads(); renderJudges();
@@ -910,7 +948,7 @@ $('busyPause').onclick = $('upPause').onclick = () => setUpPaused(!upPaused);
 $('busyStop').onclick = $('upStop').onclick = stopAnalysis;
 $('upFile').addEventListener('click', (e) => { if (blockedByLive()) e.preventDefault(); });
 function judgeUpload(saved, name) {
-  if (blockedByLive()) { $('upStatus').textContent = `${name} is on the laptop. Use Judge again in the list below when live judging has stopped.`; return; }
+  if (blockedByLive()) { $('upStatus').textContent = `${name} is on the server. Use Judge again in the list below when live judging has stopped.`; return; }
   if (upAnalysing && !confirm('A video is still being analysed. Stop it and analyse this one instead?')) return;
   upAnalysing = true; upPaused = false;
   // judges still waiting for a camera that dropped mustn't wake up partway through
@@ -932,15 +970,15 @@ $('upFile').onchange = () => {
   const mine = upPending;
   const x = new XMLHttpRequest();
   x.open('POST', '/api/upload?name=' + encodeURIComponent(file.name));
-  x.upload.onprogress = (e) => { if (e.lengthComputable) $('upStatus').textContent = `Sending ${file.name} to the laptop… ${Math.round((100 * e.loaded) / e.total)}%`; };
+  x.upload.onprogress = (e) => { if (e.lengthComputable) $('upStatus').textContent = `Sending ${file.name} to the server… ${Math.round((100 * e.loaded) / e.total)}%`; };
   x.onload = () => {
     let r = {}; try { r = JSON.parse(x.responseText); } catch { /* not JSON */ }
     if (x.status !== 200 || !r.saved) { $('upStatus').textContent = `The upload didn't work: ${r.error || x.status}`; if (upPending === mine) upPending = null; return; }
     loadUploads(); mine.saved = r.saved;
-    $('upStatus').textContent = mine.go ? `Starting ${file.name}…` : `${file.name} is on the laptop: check the settings, then Save to start judging.`;
+    $('upStatus').textContent = mine.go ? `Starting ${file.name}…` : `${file.name} is on the server: check the settings, then Save to start judging.`;
     upReady();
   };
-  x.onerror = () => { $('upStatus').textContent = 'The upload didn\'t work: can\'t reach the laptop'; };
+  x.onerror = () => { $('upStatus').textContent = 'The upload didn\'t work: can\'t reach the server'; };
   x.send(file);
 };
 $('upCfg').onclick = () => { $('upSettingsFrame').src = '/judge/judge.html?settings=1&cfg=upload'; $('upSettings').hidden = false; };

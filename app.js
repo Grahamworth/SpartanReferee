@@ -38,6 +38,10 @@ const CFG = (new URLSearchParams(location.search).get('cfg') || '').replace(/[^a
 const applyTracking = () => document.documentElement.classList.toggle('hide-tracking', !!CFG && !!new URLSearchParams(location.search).get('go') && settings.showTracking === false);
 // judge.html?mode=practice: the Spartans Challenge, open to anyone (see the end of this file)
 const PRACTICE = new URLSearchParams(location.search).get('mode') === 'practice';
+// On the server each camera's judge is its own browser (engine=<camera>), sending what it sees many times a second. What people
+// watch (follow=<camera>) is the same page playing the same camera: it runs no models and draws what the judge sent.
+const ENGINE = (new URLSearchParams(location.search).get('engine') || '').replace(/\D/g, '');
+const FOLLOW = (new URLSearchParams(location.search).get('follow') || '').replace(/\D/g, '');
 // served by the Receiver app (its window, or /judge/ from its review server): the only place the fist test is offered
 const IN_RECEIVER = location.protocol === 'app:' || location.pathname.startsWith('/judge/');
 const CHALLENGE_EXERCISE = EXERCISES[new URLSearchParams(location.search).get('exercise')] ? new URLSearchParams(location.search).get('exercise') : 'burpees';
@@ -71,6 +75,7 @@ for (const k of OLD_THRESHOLD_SETTINGS) delete settings[k];
 // Several athletes became the default; phones that saved 'one' before then switch once.
 // The official judge always tracks several athletes. The one-person hand-close test is only in the Receiver.
 settings.people = 'multi';
+if (ENGINE || FOLLOW) settings.record = false; // the server keeps the recordings
 if (exercise(settings.exercise).gestures && !IN_RECEIVER) settings.exercise = 'burpees';
 // Analysing a test video first, then playing it at normal speed, became the
 // default; phones that saved another choice before then switch once.
@@ -783,18 +788,45 @@ async function openStation(streamUrl = null) {
     S.testMode = false;
     S.athleteNo = 0;
     keepAwake();
-    loadLandmarker().catch(() => {});
-    loadFaces().catch(() => {});
-    if (currentExercise().gestures) loadGestures().catch((e) => showFlash(false, 'Hand model not loaded', e.message));
-    ensureReader().catch(() => {});
+    if (!FOLLOW) {
+      loadLandmarker().catch(() => {});
+      loadFaces().catch(() => {});
+      if (currentExercise().gestures) loadGestures().catch((e) => showFlash(false, 'Hand model not loaded', e.message));
+      ensureReader().catch(() => {});
+    }
     if (!history.state?.station && !document.documentElement.classList.contains('embedded')) history.pushState({ station: true }, '');
     goScan();
+    if (FOLLOW) followJudge(FOLLOW);
   } catch (e) {
     if (streamUrl) stopStream();
     showHomeError(streamUrl ? e.message : cameraErrorText(e));
   } finally {
     $('openStation').disabled = false;
   }
+}
+
+// The viewer's copy: the judge's latest picture of the scene takes the place of a replay's one frame. If the judge goes quiet,
+// nobody is drawn on the picture until it's back (their counts stay).
+function followJudge(n) {
+  S.replay = [{ t: 0, tracks: [], people: [] }];
+  S.replayEvents = [];
+  S.replayEvAt = 0;
+  S.followAt = 0;
+  const feed = new EventSource(`/api/engine/${n}/live`);
+  feed.onmessage = (m) => { try { const snap = JSON.parse(m.data); snap.t = 0; S.replay = [snap]; S.followAt = Date.now(); } catch { /* the next one */ } };
+  setInterval(() => { const last = S.replay?.[0]; if (last?.tracks?.length && Date.now() - S.followAt > 3000) S.replay = [{ t: 0, tracks: [], people: last.people }]; }, 1000);
+}
+// The judge's side: at most this many a second, skipping any while the last is still on its way. Only what's needed to draw.
+const SNAP_EVERY_MS = 100;
+let snapBusy = false, snapAt = 0;
+const small = (v) => Math.round(v * 1e4) / 1e4;
+function sendSnap(t) {
+  const at = performance.now();
+  if (snapBusy || at - snapAt < SNAP_EVERY_MS) return;
+  snapAt = at; snapBusy = true;
+  const snap = snapshot(t);
+  snap.tracks = snap.tracks.map((k) => ({ ...k, lm: k.lm.map((p) => ({ x: small(p.x), y: small(p.y), visibility: Math.round((p.visibility ?? 1) * 100) / 100 })) }));
+  fetch(`/api/engine/${ENGINE}/snap`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(snap) }).catch(() => {}).finally(() => { snapBusy = false; });
 }
 
 function cameraErrorText(e) {
@@ -1738,7 +1770,7 @@ function analyseFrame(src, w, h, t) {
     S.procTimes.push(performance.now());
     if (S.procTimes.length > 30) S.procTimes.shift();
     paceTestVideo();
-    if (S.multi) onMulti(t); else onPose(t);
+    if (S.multi) { onMulti(t); if (ENGINE) sendSnap(t); } else onPose(t);
 }
 
 function drawFrame(src, w, h, wantPose, practice) {
@@ -2787,7 +2819,7 @@ preloadModel();
 requestAnimationFrame(frame);
 
 // The round in progress, saved (counts, numbers, video): before the video review stops or restarts this judge.
-window.__finishRound = async () => {
+window.__finishRound = FOLLOW ? async () => {} : async () => {
   if (!S.attempt || S.attempt.status !== 'running') return;
   try { if (S.attempt.multi) await finishMulti('stopped'); else await finishAttempt('stopped'); } catch { /* nothing to save */ }
 };

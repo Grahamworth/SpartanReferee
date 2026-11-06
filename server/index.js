@@ -1,0 +1,192 @@
+'use strict';
+// HeadJudge's Receiver on a server: takes the phones' streams and records them, runs one AI judge per camera on the graphics card,
+// and serves the review page, behind a login, to the company's own browsers. Settings come from a file written when the server was
+// created (see config below); everything it keeps is in its data folder, and finished recordings go to cloud storage as well.
+const http = require('http');
+const fs = require('fs');
+const path = require('path');
+const { spawn } = require('child_process');
+const QRCode = require('qrcode');
+const { createReview, send, readBody, isJson } = require('./review-api');
+const { createEngines } = require('./engines');
+const { createCloud } = require('./cloud');
+const { createSleep } = require('./idle');
+const { mediamtxYaml } = require('./mediamtx');
+const { rtmp, spartansLink, larixLink } = require('./network');
+const auth = require('./auth');
+
+const CONFIG = process.env.HJ_CONFIG || '/etc/headjudge/config.json';
+const C = JSON.parse(fs.readFileSync(CONFIG, 'utf8'));
+for (const need of ['secret', 'host', 'password', 'dataDir']) if (!C[need]) throw new Error(`${need} is missing from ${CONFIG}`);
+const DATA = C.dataDir, RECORDINGS = path.join(DATA, 'recordings'), REVIEW = path.join(__dirname, 'review'), SITE_DIR = path.join(__dirname, 'site');
+fs.mkdirSync(RECORDINGS, { recursive: true });
+
+// what can change while it runs; the rest is fixed
+const SETTINGS = path.join(DATA, 'settings.json');
+const readFile = (f, fallback) => { try { return JSON.parse(fs.readFileSync(f, 'utf8')); } catch { return fallback; } };
+const saved = readFile(SETTINGS, {});
+const S = { stations: 2, rtmpPort: 1935, srtPort: 8890, webrtcPort: 8889, iceUdpPort: 8189, apiPort: 9997, playbackPort: 9996, viewPort: 8800, enginePort: 8801, record: true, keepDays: 14, bitrate: 3500, ...C, ...saved, password: C.password, youtube: saved.youtube || {} };
+const save = () => fs.writeFile(SETTINGS, JSON.stringify({ stations: S.stations, ai: engines.list(), youtube: S.youtube }), () => {});
+const JUDGE_SETTINGS = path.join(DATA, 'judge-settings.json');
+let judgeSettings = readFile(JUDGE_SETTINGS, {});
+
+// ---------------------------------------------------------------- the streaming server
+let mtx = null, stopping = false; const mtxLog = [];
+const log = (line) => { mtxLog.push(`${new Date().toISOString().slice(11, 19)} ${line}`); if (mtxLog.length > 300) mtxLog.shift(); if (process.env.HJ_VERBOSE) console.log(line); };
+function startStreaming() {
+  const yml = path.join(DATA, 'mediamtx.yml');
+  fs.writeFileSync(yml, mediamtxYaml(S, { recordDir: RECORDINGS, publicHost: C.publicIp || C.host, viewBind: '127.0.0.1' }));
+  mtx = spawn(C.mediamtx || 'mediamtx', [yml], { cwd: DATA, stdio: ['ignore', 'pipe', 'pipe'] });
+  const take = (b) => String(b).split(/\r?\n/).filter(Boolean).forEach((l) => log(l.replace(/^\d{4}\/\d\d\/\d\d \d\d:\d\d:\d\d /, '')));
+  mtx.stdout.on('data', take); mtx.stderr.on('data', take);
+  mtx.on('error', (e) => log(`The streaming server couldn't start: ${e.message}`));
+  mtx.on('exit', (code) => { log(`Streaming server stopped (${code}).`); mtx = null; if (!stopping) setTimeout(startStreaming, 2000); });
+}
+
+// ---------------------------------------------------------------- the judges
+const engines = (() => {
+  const e = createEngines({
+    chrome: C.chrome || 'google-chrome', dataDir: DATA, max: C.maxEngines || 3, extraFlags: C.chromeFlags || [], env: C.display ? { DISPLAY: C.display } : {}, log,
+    pageUrl: (n) => `http://127.0.0.1:${S.enginePort}/judge/judge.html?stream=${encodeURIComponent(`http://127.0.0.1:${S.webrtcPort}/live/station${n}/whep`)}&go=1&cfg=cam${n}&engine=${n}`,
+    settings: () => judgeSettings,
+  });
+  e.list = () => { const out = []; for (let n = 1; n <= S.stations; n++) if (e.wanted(n)) out.push(n); return out; };
+  e.restore(saved.ai || []);
+  return e;
+})();
+// each judge's latest picture of the scene, passed on to whoever's watching that camera
+const live = new Map();   // n → { last, at, viewers: Set<res>, frames: [timestamps] }
+const liveOf = (n) => { if (!live.has(n)) live.set(n, { last: '', at: 0, viewers: new Set(), fps: 0 }); return live.get(n); };
+const review = createReview({
+  DATA, S, REVIEW, SITE_DIR,
+  extraState: (cams) => ({
+    brand: C.brand || null, maxJudges: engines.max,
+    cams: cams.map((c) => { const l = live.get(c.n); return { ...c, ai: engines.wanted(c.n), judging: engines.running(c.n) && !!l && Date.now() - l.at < 4000, fps: l && Date.now() - l.at < 4000 ? l.fps : 0 }; }),
+  }),
+});
+
+// ---------------------------------------------------------------- recordings to cloud storage
+const cloud = createCloud({ dir: RECORDINGS, stateFile: path.join(DATA, 'cloud-sent.json'), api: () => C.api, settings: () => ({ cloudOn: !!(C.api && C.receiverKey), cloudKey: C.receiverKey, cloudSince: 0 }) });
+
+// ---------------------------------------------------------------- the page's own requests beyond the review API
+const ADDRESSES = () => ({ lan: [C.host], lanNames: ['internet'], tailscale: null });
+async function cameraList() {
+  const out = [];
+  for (const c of review.cams()) {
+    const link = spartansLink(ADDRESSES(), c.n, S), lx = larixLink(ADDRESSES(), c.n, S);
+    out.push({ n: c.n, live: c.live, video: c.video, phone: await QRCode.toDataURL(link, { margin: 1, width: 280 }), larix: await QRCode.toDataURL(lx, { margin: 1, width: 280, errorCorrectionLevel: 'L' }), rtmp: rtmp(C.host, c.n, S) });
+  }
+  return out;
+}
+// the viewer's WebRTC offer reaches the streaming server through here, so it needs the same login as everything else
+function proxyWhep(req, res, target) {
+  const up = http.request({ host: '127.0.0.1', port: S.webrtcPort, path: target, method: req.method, headers: { ...req.headers, host: `127.0.0.1:${S.webrtcPort}`, cookie: '' } }, (r) => {
+    const headers = { ...r.headers };
+    if (headers.location) headers.location = `/whep${headers.location}`;
+    res.writeHead(r.statusCode, headers); r.pipe(res);
+  });
+  up.on('error', () => { if (!res.headersSent) send(res, 502, { error: 'The streaming server isn\'t answering' }); else res.destroy(); });
+  req.pipe(up);
+}
+function followLive(req, res, n) {
+  res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-store', Connection: 'keep-alive', 'X-Accel-Buffering': 'no' });
+  res.write('retry: 2000\n\n');
+  const l = liveOf(n);
+  if (l.last && Date.now() - l.at < 3000) res.write(`data: ${l.last}\n\n`);
+  l.viewers.add(res);
+  req.on('close', () => l.viewers.delete(res));
+}
+setInterval(() => { for (const l of live.values()) for (const r of l.viewers) r.write(': still here\n\n'); }, 15000);
+
+async function extra(req, res, u, { local }) {
+  const p = u.pathname;
+  const eng = /^\/api\/engine\/(\d{1,2})(?:\/(snap|live|restart))?$/.exec(p);
+  if (eng) {
+    const n = +eng[1];
+    if (eng[2] === 'snap' && req.method === 'POST') {
+      if (!local) return send(res, 403, { error: 'Judges only' }), true;
+      const raw = await new Promise((ok) => { let b = ''; req.on('data', (c) => { b += c; if (b.length > 5e5) { req.destroy(); ok(''); } }); req.on('end', () => ok(b)); req.on('error', () => ok('')); });
+      const l = liveOf(n), now = Date.now();
+      if (raw) { l.fps = l.at ? (l.fps * 4 + 1000 / Math.max(1, now - l.at)) / 5 : 0; l.last = raw; l.at = now; for (const r of l.viewers) r.write(`data: ${raw}\n\n`); }
+      send(res, 200, { ok: true }); return true;
+    }
+    if (eng[2] === 'live' && req.method === 'GET') { followLive(req, res, n); return true; }
+    if (req.method !== 'POST' || !isJson(req)) return send(res, 415, { error: 'JSON only' }), true;
+    const b = await readBody(req);
+    if (eng[2] === 'restart') { await engines.restart(n); send(res, 200, { ok: true }); return true; }
+    if (!eng[2]) { const why = engines.set(n, !!b?.on); if (why) return send(res, 409, { error: why }), true; save(); send(res, 200, { ok: true }); return true; }
+  }
+  if (p === '/api/judge-settings' && req.method === 'GET') { send(res, 200, judgeSettings); return true; }
+  if (p === '/api/judge-settings' && req.method === 'PUT') {
+    if (!isJson(req)) return send(res, 415, { error: 'JSON only' }), true;
+    const b = await readBody(req);
+    if (!b || !/^burpeeJudge\.settings(\.[a-z0-9]{1,20})?$/i.test(String(b.key || '')) || typeof b.value !== 'string' || b.value.length > 20000) return send(res, 400, { error: 'Not a judge setting' }), true;
+    judgeSettings[b.key] = b.value;
+    fs.writeFile(JUDGE_SETTINGS, JSON.stringify(judgeSettings), () => {});
+    send(res, 200, { ok: true }); return true;
+  }
+  if (p === '/api/cameras' && req.method === 'GET') { send(res, 200, { cameras: await cameraList(), bitrate: S.bitrate, max: 12 }); return true; }
+  if (p === '/api/cameras' && req.method === 'POST') {
+    if (!isJson(req)) return send(res, 415, { error: 'JSON only' }), true;
+    if (S.stations < 12) { S.stations++; save(); await review.watchCameras(); }
+    send(res, 200, { stations: S.stations }); return true;
+  }
+  if (p === '/api/server' && req.method === 'GET') { send(res, 200, { log: mtxLog.slice(-60), cloud: { ...cloud.status }, idle: sleeper.status() }); return true; }
+  if (p.startsWith('/whep/')) { proxyWhep(req, res, u.pathname.slice(5) + u.search); return true; }
+  return false;
+}
+const NO_ACCESS = (site) => `<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sign in</title><body style="margin:0;display:grid;place-items:center;min-height:100vh;background:#12161c;color:#f4f6f8;font:16px/1.5 system-ui,sans-serif"><main style="max-width:420px;padding:24px"><h1 style="font-size:1.4rem;margin:0 0 8px">Open this from your HeadJudge account</h1><p style="color:#a3acb7;margin:0 0 16px">This page needs a sign-in link from your account. Links run out after a few minutes, so if you followed an old one, get a new one.</p>${site ? `<a style="color:#ffc400;font-weight:600" href="${site}">Go to my account</a>` : ''}</main>`;
+
+// what browsers get: everything needs the login, except the login itself and the health check
+const viewServer = http.createServer(async (req, res) => {
+  try {
+    const u = new URL(req.url, 'http://x');
+    if (u.pathname === '/healthz') return send(res, 200, { ok: true, streaming: review.serverOk() });
+    if (u.pathname === '/login') {
+      const s = auth.login(C.secret, u.searchParams.get('t'));
+      if (!s) { res.writeHead(401, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' }); return res.end(NO_ACCESS(C.site)); }
+      res.writeHead(302, { 'Set-Cookie': s.cookie, Location: '/', 'Cache-Control': 'no-store' }); return res.end();
+    }
+    if (!auth.session(C.secret, req)) {
+      if (u.pathname.startsWith('/api/') || u.pathname.startsWith('/whep/')) return send(res, 401, { error: 'Sign in again from your HeadJudge account' });
+      res.writeHead(401, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' }); return res.end(NO_ACCESS(C.site));
+    }
+    sleeper.seen();
+    if (await extra(req, res, u, { local: false })) return;
+    return review.handler(req, res);
+  } catch (e) { if (!res.headersSent) send(res, 500, { error: e.message }); else res.destroy(); }
+});
+// what the judges on this machine use: nothing else can reach it
+const engineServer = http.createServer(async (req, res) => {
+  try {
+    const u = new URL(req.url, 'http://x');
+    if (await extra(req, res, u, { local: true })) return;
+    return review.handler(req, res);
+  } catch (e) { if (!res.headersSent) send(res, 500, { error: e.message }); else res.destroy(); }
+});
+
+// ---------------------------------------------------------------- nobody using it: tell the site, which turns the server off
+const sleeper = createSleep({
+  idleMinutes: C.idleMinutes || 30, hardHours: C.hardHours || 16,
+  busy: () => review.cams().some((c) => c.live) || [...live.values()].some((l) => l.viewers.size > 0),
+  // recordings are finished and on their way before the site is told it can turn the server off
+  flush: async () => { await engines.stopAll(); await new Promise((r) => setTimeout(r, 100)); for (let i = 0; i < 40 && (cloud.status.waiting > 0 || cloud.status.state === 'sending'); i++) { await cloud.tick().catch(() => {}); await new Promise((r) => setTimeout(r, 15000)); } },
+  tell: (what) => callSite(what), log,
+});
+// the site is told we're alive, and asks us to stop by answering so
+function callSite(what) {
+  if (!C.api || !C.serverKey) return Promise.resolve(null);
+  return fetch(`${C.api}/servers/report`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Server-Key': C.serverKey }, body: JSON.stringify({ what, cams: review.cams().filter((c) => c.live).length, judges: engines.list().length }), signal: AbortSignal.timeout(15000) })
+    .then((r) => r.json()).catch(() => null);
+}
+
+// ---------------------------------------------------------------- running
+startStreaming();
+viewServer.listen(S.viewPort, C.bind || '127.0.0.1');
+engineServer.listen(S.enginePort, '127.0.0.1');
+setInterval(async () => { await review.watchCameras(); engines.tick(review.cams()); }, 1000);
+setInterval(() => { cloud.tick().catch(() => {}); }, 60000);
+sleeper.start();
+const quit = async () => { if (stopping) return; stopping = true; await engines.stopAll().catch(() => {}); try { mtx?.kill('SIGTERM'); } catch { /* gone */ } setTimeout(() => process.exit(0), 500); };
+process.on('SIGTERM', quit); process.on('SIGINT', quit);
+log('Server started');

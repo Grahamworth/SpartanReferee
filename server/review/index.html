@@ -7,16 +7,19 @@
 <meta name="theme-color" content="#0b0b0b">
 <title>Video review</title>
 <link rel="stylesheet" href="review.css">
+<script src="/judge/brand.js" defer></script>
 <script src="counts.js" defer></script>
 <script src="review.js" defer></script>
 </head>
 <body>
 <header>
+  <img id="brandLogo" class="brandlogo" hidden alt="">
   <h1>Video <span>review</span></h1>
   <nav class="tabs" role="tablist">
     <button data-tab="live" class="on">Live</button>
     <button data-tab="upload">Upload video</button>
     <button data-tab="judge">All results</button>
+    <button data-tab="cameras">Cameras</button>
     <button data-tab="log">Log</button>
   </nav>
   <label class="dayPick">Day <select id="day" aria-label="Show this day"></select></label>
@@ -27,9 +30,16 @@
   <div class="clock"><b id="clock">--:--:--</b><small id="who"></small></div>
 </header>
 
-<div id="offline" class="banner" hidden>Can't reach the judging laptop. Retrying…</div>
+<div id="offline" class="banner" hidden>Can't reach the server. Retrying…</div>
 <div id="busyNote" class="banner pick busynote" role="status" hidden><span id="busyText"></span><span class="spacer"></span><button class="btn" id="busyPause" type="button">⏸ Pause analysis</button><button class="btn" id="busyStop" type="button">■ Stop analysis</button><button class="btn" id="busyClose" type="button">OK</button></div>
 <div id="athletePop" class="athletepop" hidden></div>
+
+<!-- Cameras: what each phone scans -->
+<section id="cameras" class="pane" hidden>
+  <div class="row"><h2 style="margin:0">Cameras</h2><span class="spacer"></span><button class="btn" id="addCam" type="button">+ Add a camera</button></div>
+  <p class="muted">Open HeadJudge Broadcaster on the phone and scan a camera's code. Any Wi-Fi or mobile signal will do.</p>
+  <div id="camList" class="camlist"></div>
+</section>
 
 <!-- Live: every camera live (with its AI judge), rewind through everything recorded -->
 <section id="live" class="pane">
@@ -100,7 +110,7 @@
     <button class="btn" id="upCfg">⚙ Config</button>
     <button class="btn" id="upPause" type="button" hidden>⏸ Pause</button>
     <button class="btn" id="upStop" type="button" hidden>■ Stop</button>
-    <span id="upStatus" class="muted">The AI judge analyses the whole video first, and the results appear on the right. A copy stays on the laptop for testing and training.</span>
+    <span id="upStatus" class="muted">The AI judge analyses the whole video first, and the results appear on the right. A copy stays on the server for testing and training.</span>
   </div>
   <div id="upSettings" class="settingsbox" hidden>
     <div class="row"><b>AI judge settings for uploaded videos</b><span class="muted small">Check them, then Save to start judging (Close: not now).</span></div>

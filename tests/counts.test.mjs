@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
-const { compare, matchPeople } = createRequire(import.meta.url)('../receiver/review/counts.js');
+const { compare, matchPeople } = createRequire(import.meta.url)('../server/review/counts.js');
 
 const rep = (t, extra = {}) => ({ t, type: 'rep', ...extra });
 const no = (t, reasons = []) => ({ t, type: 'norep', reasons });
