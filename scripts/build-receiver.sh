@@ -49,7 +49,7 @@ ls -la "$SRC/downloads/burpee-judge-receiver-setup.exe"
 # receiver-version.json (deployed with the site): the Receivers compare it with their own version on start
 node -e "
 const fs = require('fs'), c = require('crypto'), f = process.argv[1], b = fs.readFileSync(f);
-fs.writeFileSync(process.argv[2], JSON.stringify({ version: process.argv[3], url: 'https://mango-glacier-03e711403.4.azurestaticapps.net/downloads/burpee-judge-receiver-setup.exe',
+fs.writeFileSync(process.argv[2], JSON.stringify({ version: process.argv[3], url: 'https://zealous-island-03d6db503.8.azurestaticapps.net/downloads/burpee-judge-receiver-setup.exe',
   size: b.length, sha512: c.createHash('sha512').update(b).digest('base64'), notes: process.env.RECEIVER_NOTES || '' }, null, 1));
 " "$SRC/downloads/burpee-judge-receiver-setup.exe" "$SRC/receiver-version.json" "$VER"
 cat "$SRC/receiver-version.json"

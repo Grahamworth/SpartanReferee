@@ -36,10 +36,10 @@ h = h.replace(/<title>[^<]*<\/title>/, '<title>HeadJudge Broadcaster</title>')
   .replace(/<a href=\"\.\/\" class=\"home-link\">[^<]*<\/a>/, '')                   // nothing to go back to
   .replace(/<h1 class=\"brand\">Camera <span>station<\/span><\/h1>/, '<h1 class=\"brand\">HeadJudge <span>Broadcaster</span></h1>')
   // the setup guide, big and first: everything a camera person needs (opens in the phone's browser)
-  .replace(/ <p class=\"muted\"><a href=\"streaming.html\">[\s\S]*?<\/p>/, '\n  <a class=\"btn btn-red btn-big setup-guide\" href=\"https://mango-glacier-03e711403.4.azurestaticapps.net/streaming.html#phone\">📖 Setup guide: start here</a>\n  <p class=\"muted\" style=\"margin-top:6px\">Tailscale, scanning the laptop\\'s code, where to put the camera, and what to do if it won\\'t connect.</p>')
+  .replace(/ <p class=\"muted\"><a href=\"streaming.html\">[\s\S]*?<\/p>/, '\n  <a class=\"btn btn-red btn-big setup-guide\" href=\"https://zealous-island-03d6db503.8.azurestaticapps.net/streaming.html#phone\">📖 Setup guide: start here</a>\n  <p class=\"muted\" style=\"margin-top:6px\">Tailscale, scanning the laptop\\'s code, where to put the camera, and what to do if it won\\'t connect.</p>')
   .replace('The camera station needs the Spartans app on an Android phone.', 'This needs the HeadJudge Broadcaster app on an Android phone.')
   .replace('</style>','  .setup-guide { display: flex; width: 100%; justify-content: center; text-align: center; margin: 14px 0 4px; clip-path: none; font-size: 1.5rem; padding: 18px; }\n</style>')
-  .replace(/href=\"downloads\/spartans.apk\"/, 'href=\"https://mango-glacier-03e711403.4.azurestaticapps.net/downloads/spartans-broadcaster.apk\"');
+  .replace(/href=\"downloads\/spartans.apk\"/, 'href=\"https://zealous-island-03d6db503.8.azurestaticapps.net/downloads/spartans-broadcaster.apk\"');
 fs.writeFileSync(process.argv[2], h);
 " "$SRC/camera.html" "$BUILD/www/index.html"
 

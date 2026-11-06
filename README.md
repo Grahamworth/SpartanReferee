@@ -54,7 +54,7 @@ Then open http://localhost:8791.
 
 ### Hosted copy
 
-Live at https://mango-glacier-03e711403.4.azurestaticapps.net. It's an Azure Static Web App on the Free tier: app `burpee-judge`, resource group `rg-burpee-judge`, subscription "DEXYS TEST". To publish changes, put `index.html`, `app.js`, `burpee.js`, `exercises.js`, `pose-filter.js`, `multi.js`, `finder.js`, `rtmo-s.onnx`, `staticwebapp.config.json`, `ocr-prep.js`, `readers.js`, `digit-model.js`, `digit-model.json` and `styles.css` in a folder and run:
+Live at https://zealous-island-03d6db503.8.azurestaticapps.net. It's an Azure Static Web App on the Free tier: app `burpee-judge`, resource group `rg-burpee-judge`, subscription "DEXYS TEST". To publish changes, put `index.html`, `app.js`, `burpee.js`, `exercises.js`, `pose-filter.js`, `multi.js`, `finder.js`, `rtmo-s.onnx`, `staticwebapp.config.json`, `ocr-prep.js`, `readers.js`, `digit-model.js`, `digit-model.json` and `styles.css` in a folder and run:
 
 ```bash
 swa deploy <folder> --env production --deployment-token "$(az staticwebapp secrets list -n spartans -g rg-spartans-uksouth --subscription VDASO --subscription "DEXYS TEST" --query properties.apiKey -o tsv)"

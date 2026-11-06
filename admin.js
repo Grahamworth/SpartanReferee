@@ -29,6 +29,29 @@ async function loadPeople() {
   return true;
 }
 
+async function loadCompanies() {
+  let r;
+  try { r = await call('admin/companies', { admin: key() }); }
+  catch (e) { $('companies').innerHTML = /admins only/i.test(e.message) ? '' : `<div class="empty">Couldn't load: ${esc(e.message)}</div>`; return; }
+  const order = { pending: 0, approved: 1, suspended: 2, declined: 3 };
+  const list = r.companies.sort((a, b) => order[a.status] - order[b.status] || b.at - a.at);
+  $('companies').innerHTML = list.length ? list.map((c, i) => `<article>
+      <h3>${c.logo ? `<img src="${esc(c.logo)}" alt="" style="height:28px;vertical-align:middle;margin-right:8px;background:#fff;padding:2px">` : ''}${esc(c.name)} <span style="color:#9a9a9a;font-weight:400">· ${esc(c.status)}</span></h3>
+      <time>Applied ${esc(new Date(c.at).toLocaleString())} · /${esc(c.id)}</time>
+      <p style="margin:6px 0">${esc(c.contact)} · <a href="mailto:${esc(c.email)}" style="color:#aaa">${esc(c.email)}</a>${c.website ? ` · <a href="${esc(c.website)}" target="_blank" rel="noopener" style="color:#aaa">${esc(c.website)}</a>` : ''}</p>
+      ${c.about ? `<p style="margin:6px 0;color:#bbb">${esc(c.about)}</p>` : ''}
+      <p style="margin:6px 0"><span title="Main colour" style="display:inline-block;width:18px;height:18px;vertical-align:middle;background:${esc(c.theme.primary)}"></span> <span title="Second colour" style="display:inline-block;width:18px;height:18px;vertical-align:middle;background:${esc(c.theme.accent)}"></span> <span class="muted">${esc(c.theme.mode)} background</span></p>
+      <div class="row" style="gap:8px">${c.status !== 'approved' ? `<button class="btn btn-red" data-c="${i}" data-do="approve">Approve</button>` : ''}${c.status === 'pending' ? `<button class="btn btn-ghost" data-c="${i}" data-do="decline">Decline</button>` : ''}${c.status === 'approved' ? `<button class="btn btn-ghost" data-c="${i}" data-do="suspend">Suspend</button>` : ''}</div>
+    </article>`).join('') : '<div class="empty">No companies yet.</div>';
+  $('companies').querySelectorAll('button[data-do]').forEach((b) => b.onclick = async () => {
+    const c = list[+b.dataset.c], act = b.dataset.do;
+    const note = act === 'approve' ? '' : prompt(`Why ${act} ${c.name}? They'll see this.`, '');
+    if (note === null) return;
+    try { await call(`admin/companies/${encodeURIComponent(c.id)}/${act}`, { method: 'POST', admin: key(), body: { note } }); toast(`${c.name}: done`); loadCompanies(); }
+    catch (e) { toast(e.message); }
+  });
+}
+
 async function loadBans() {
   let r;
   try { r = await call('admin/bans', { admin: key() }); }
@@ -46,7 +69,8 @@ async function loadBans() {
     try { await call(`admin/bans/${encodeURIComponent(b.room)}/${encodeURIComponent(b.who)}/lift`, { method: 'POST', admin: key(), body: {} }); toast('Unbanned'); loadBans(); } catch (e) { toast(e.message); }
   });
 }
-const load = async () => { if (await loadPeople()) loadBans(); };
+const load = async () => { if (await loadPeople()) { loadBans(); loadCompanies(); } };
+$('reloadCompanies').onclick = loadCompanies;
 $('keyForm').onsubmit = (e) => { e.preventDefault(); try { localStorage.setItem('sp_admin', $('key').value); } catch { /* private mode */ } load(); };
 $('reload').onclick = loadBans;
 $('find').oninput = () => { clearTimeout(load.t); load.t = setTimeout(loadPeople, 250); };

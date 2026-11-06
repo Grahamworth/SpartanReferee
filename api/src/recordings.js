@@ -28,6 +28,18 @@ function blobSigner(connection, container = 'recordings', now = Date.now) {
   };
 }
 
+/** brandWriter(connectionString)(name, bytes, type) -> the public address of a company's logo, in the one container anyone may read. */
+function brandWriter(connection, doFetch = fetch) {
+  const sign = blobSigner(connection, 'brand');
+  if (!sign) return null;
+  return async (name, buf, type) => {
+    const url = sign({ blob: name, perm: 'cw', minutes: 5 });
+    const r = await doFetch(url, { method: 'PUT', body: buf, headers: { 'x-ms-blob-type': 'BlockBlob', 'x-ms-blob-content-type': type, 'x-ms-blob-cache-control': 'public, max-age=31536000, immutable' } });
+    if (!r.ok) throw new Error(`Storage said ${r.status}`);
+    return url.split('?')[0];
+  };
+}
+
 const sha = (s) => crypto.createHash('sha256').update(String(s)).digest('hex');
 
 function createRecordings({ store, signer, now, reply, session, isAdmin }) {
@@ -97,4 +109,4 @@ function createRecordings({ store, signer, now, reply, session, isAdmin }) {
   };
 }
 
-module.exports = { blobSigner, createRecordings, KEEP_DAYS, MAX_OWNER };
+module.exports = { blobSigner, brandWriter, createRecordings, KEEP_DAYS, MAX_OWNER };

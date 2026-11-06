@@ -12,22 +12,22 @@
   "routes": [
     {
       "route": "/downloads/burpee-judge-receiver-setup.exe",
-      "redirect": "https://spartans893191.blob.core.windows.net/downloads/burpee-judge-receiver-setup.exe?se=2028-11-02T19%3A58Z&sp=r&spr=https&sv=2026-02-06&sr=b&sig=Nbpms81vZIhqpnDZ9FCP%2BbaKOyJOLhXYG6x8ZVoTy3A%3D",
+      "redirect": "https://headjudge.blob.core.windows.net/downloads/burpee-judge-receiver-setup.exe?se=2028-11-02T19%3A58Z&sp=r&spr=https&sv=2026-02-06&sr=b&sig=me3ZgAUaQgMwjWUQfx1Abs21VFX3MIAUvvUMdDnzmaE%3D",
       "statusCode": 302
     },
     {
       "route": "/downloads/spartans.apk",
-      "redirect": "https://spartans893191.blob.core.windows.net/downloads/spartans.apk?se=2028-11-02T19%3A58Z&sp=r&spr=https&sv=2026-02-06&sr=b&sig=cbc9BXaoMkuEZ5CjzBK7OIU6ikuzTVs7SjvELGOgZCI%3D",
+      "redirect": "https://headjudge.blob.core.windows.net/downloads/spartans.apk?se=2028-11-02T19%3A58Z&sp=r&spr=https&sv=2026-02-06&sr=b&sig=tcYRq7L51vxDrQ8TdyqpfJ6SJEzY%2B94FUj%2FMGqoKc5E%3D",
       "statusCode": 302
     },
     {
       "route": "/downloads/spartans-ios-project.zip",
-      "redirect": "https://spartans893191.blob.core.windows.net/downloads/spartans-ios-project.zip?se=2028-11-02T19%3A58Z&sp=r&spr=https&sv=2026-02-06&sr=b&sig=c81cJb5WPSVPTL1sSXz6h7ajb3L%2BnsteR9vJ7vVmxq8%3D",
+      "redirect": "https://headjudge.blob.core.windows.net/downloads/spartans-ios-project.zip?se=2028-11-02T19%3A58Z&sp=r&spr=https&sv=2026-02-06&sr=b&sig=T5dCY%2FbOAgp57UeT6y9SW%2F4NW1rNuPDV%2F4TGzrdto54%3D",
       "statusCode": 302
     },
     {
       "route": "/downloads/spartans-broadcaster.apk",
-      "redirect": "https://spartans893191.blob.core.windows.net/downloads/spartans-broadcaster.apk?se=2028-11-02T19%3A58Z&sp=r&spr=https&sv=2026-02-06&sr=b&sig=Lq3gnBocBxfqg0cYvTLZ%2BJb78%2FhkOV%2FJgmyJs3lEmF8%3D",
+      "redirect": "https://headjudge.blob.core.windows.net/downloads/spartans-broadcaster.apk?se=2028-11-02T19%3A58Z&sp=r&spr=https&sv=2026-02-06&sr=b&sig=%2BMYjjUuArfdWdP6heHlKT3vty4tgxI%2B9r%2FhfizXzWZU%3D",
       "statusCode": 302
     }
   ]

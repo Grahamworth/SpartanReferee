@@ -44,6 +44,7 @@
    10 seconds and 60 a day per device, never the same text twice running. */
 const crypto = require('node:crypto');
 const { createRecordings } = require('./recordings');
+const { createCompanies } = require('./companies');
 const { rudeName, rudeText } = require('./namecheck');
 
 const ROOMS = [
@@ -89,7 +90,7 @@ const NEWS_FEEDS = [
  * verifyGoogle(idToken) -> {sub, email, name, picture} (throws when invalid); secret signs our own session tokens.
  * adminEmails: Google accounts that are admins. While neither adminEmails nor adminKey is set, everyone is (the prototype).
  */
-function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], verifyGoogle = null, secret = '', googleClientId = '', fetchText = null, blobSigner = null }) {
+function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], verifyGoogle = null, secret = '', googleClientId = '', fetchText = null, blobSigner = null, putBrand = null }) {
   const reply = (status, body) => ({ status, body, headers: { 'Content-Type': 'application/json', ...CORS } });
   const admins = adminEmails.map((e) => String(e).trim().toLowerCase()).filter(Boolean);
   // session tokens: base64url(payload).HMAC
@@ -499,6 +500,7 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
   // ---------------------------------------------------------------- admin: bans
   async function admin(method, a, b, c, h, body) {
     if (!isAdmin(h)) return reply(403, { error: 'Admins only' });
+    if (a === 'companies') return adminCompanies(method, b, c, body);
     if (a === 'people') return adminPeople(method, b, c, body);
     if (a === 'judgecode' && !b) return judgeCode(method);
     if (a === 'bans' && !b && method === 'GET') {
@@ -514,6 +516,7 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
   }
 
   const recordings = createRecordings({ store, signer: blobSigner, now, reply, session, isAdmin });
+  const { companies, adminCompanies } = createCompanies({ store, now, reply, session, isAdmin, putBrand });
 
   async function handle({ method, path, headers = {}, body, query: extraQuery = {} }) {
     const h = Object.fromEntries(Object.entries(headers).map(([k, v]) => [k.toLowerCase(), v]));
@@ -544,6 +547,7 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
       if (parts[0] === 'profile' && parts.length <= 2) r = await profile(method, parts[1], body, h);
       if (parts[0] === 'news' && method === 'GET') r = await news();
       if (parts[0] === 'recordings' && parts.length <= 3) r = await recordings(method, parts[1], parts[2], body, h);
+      if (parts[0] === 'companies' && parts.length <= 3) r = await companies(method, parts[1], parts[2], body, h);
       if (parts[0] === 'scores' && parts.length === 2) r = await scores(method, parts[1], body, h, { ...query, ...extraQuery });
       return r || reply(404, { error: 'not found' });
     } catch (e) {
