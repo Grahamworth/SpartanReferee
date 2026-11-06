@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Builds Burpee Judge Receiver (the judging computer's Windows app).
+# Builds Spartans Receiver (the judging computer's Windows app; inside it's still "Burpee Judge Receiver", see receiver/main.js).
 #   bash scripts/build-receiver.sh          the installer: downloads/burpee-judge-receiver-setup.exe
 #   bash scripts/build-receiver.sh run      just start it (for testing; RECEIVER_BIND=127.0.0.1 keeps it to this computer)
 # Assembles in a short temporary folder (deep folders break Windows tools): the app, the Burpee Judge's web files,

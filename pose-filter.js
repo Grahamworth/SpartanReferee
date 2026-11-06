@@ -26,6 +26,10 @@ const OFFSET_MS = 3000; // how long a remembered left/right offset stays usable
 
 const copy = (p) => ({ x: p.x, y: p.y, z: p.z ?? 0 });
 
+// Outside the picture: the model still estimates these, just past the edge. Hidden behind someone isn't outside it.
+const EDGE = 0.005;
+export const offPicture = (p) => !!p && (p.x < EDGE || p.x > 1 - EDGE || p.y < EDGE || p.y > 1 - EDGE);
+
 export class PoseFilter {
   constructor(opts = {}) {
     this.o = { ...TRACKING.balanced, ...opts };
@@ -59,7 +63,7 @@ export class PoseFilter {
       }
     }
 
-    const lm = pose.lm.map((p) => ({ ...p }));
+    const lm = pose.lm.map((p) => ({ ...p, off: offPicture(p) }));
     const wlm = pose.wlm.map((p) => ({ ...p }));
     let filled = 0;
     for (let i = 0; i < n; i++) {

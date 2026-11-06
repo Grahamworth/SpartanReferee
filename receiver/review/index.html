@@ -15,7 +15,7 @@
   <nav class="tabs" role="tablist">
     <button data-tab="live" class="on">Live</button>
     <button data-tab="upload">Upload video</button>
-    <button data-tab="judge">AI judge</button>
+    <button data-tab="judge">All results</button>
     <button data-tab="log">Log</button>
   </nav>
   <label class="dayPick">Day <select id="day" aria-label="Show this day"></select></label>
@@ -79,11 +79,11 @@
   </div>
 </div>
 <aside class="side" aria-label="AI judge results">
-  <h2>AI judge <small id="liveCount" class="muted"></small></h2>
+  <h2>Results <small id="liveCount" class="muted"></small></h2>
   <div class="sidefilters">
     <input id="lsNum" inputmode="numeric" placeholder="Find number" autocomplete="off" aria-label="Find number">
     <select id="lsCam" aria-label="Camera"><option value="">All cameras</option></select>
-    <select id="lsRes" aria-label="Result"><option value="">Any result</option><option value="reps">With reps</option><option value="noreps">Only no reps</option><option value="nonum">No number read</option></select>
+    <select id="lsRes" aria-label="Result"><option value="">Any result</option><option value="reps">With reps</option><option value="noreps">Only no reps</option><option value="nonum">No number read</option><option value="check">Reps to check</option></select>
     <button class="btn" id="lsClear">Clear</button>
   </div>
   <div id="liveList" class="athletes"></div>
@@ -91,7 +91,7 @@
 </div>
 </section>
 
-<!-- Upload video: every frame analysed first, then it waits to be played; everyone it tracks goes in the AI judge list -->
+<!-- Upload video: every frame analysed first, then it waits to be played; everyone it tracks goes in All results -->
 <section id="upload" class="pane offstage">
   <div class="row uploadbar">
     <label class="btn red upload">Choose a video<input id="upFile" type="file" accept="video/*" hidden></label>
@@ -109,7 +109,7 @@
     <h2>Results <small id="upCount" class="muted"></small></h2>
     <div class="sidefilters">
       <input id="usNum" inputmode="numeric" placeholder="Find number" autocomplete="off" aria-label="Find number">
-      <select id="usRes" aria-label="Result"><option value="">Any result</option><option value="reps">With reps</option><option value="noreps">Only no reps</option><option value="nonum">No number read</option></select>
+      <select id="usRes" aria-label="Result"><option value="">Any result</option><option value="reps">With reps</option><option value="noreps">Only no reps</option><option value="nonum">No number read</option><option value="check">Reps to check</option></select>
       <select id="usSort" aria-label="Order"><option value="video">Order in video</option><option value="reps">Most reps</option></select>
       <button class="btn" id="usClear">Clear</button>
     </div>
@@ -119,7 +119,7 @@
   <table class="list"><thead><tr><th>Video</th><th>Uploaded</th><th>Size</th><th>Athletes</th><th></th></tr></thead><tbody id="upList"></tbody></table>
 </section>
 
-<!-- AI judge: everyone tracked, for review -->
+<!-- All results: everyone tracked, for review -->
 <section id="judge" class="pane" hidden>
   <div class="row filters">
     <label>Number <input id="fNum" inputmode="numeric" placeholder="any" autocomplete="off"></label>

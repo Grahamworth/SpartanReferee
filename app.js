@@ -49,7 +49,7 @@ const JUDGE_LIMITS = ['chestMaxRatio', 'jumpMinLift', 'hipMinAngle', 'handsToler
 const OLD_THRESHOLD_SETTINGS = [...JUDGE_LIMITS, 'pushupStraight']; // were in Settings once
 const APP_VERSION = '2026-10-30';
 const DEFAULT_SETTINGS = {
-  station: '', facing: 'user', orientation: 'auto', model: 'full',
+  station: '', facing: 'user', orientation: 'auto', model: 'full', acceptOffScreen: true,
   repsChoice: '30', customReps: '',
   speech: true, record: true, debug: false, exercise: 'burpees', tracking: 'balanced',
   bibMin: 1, bibMax: 6, bibList: '', ocrEngine: 'digits', captureBib: true, people: 'multi', videoPace: 'prepass', strictness: STRICTNESS_DEFAULT, targetReps: DEFAULTS.targetReps,
@@ -80,13 +80,13 @@ queueMicrotask(() => applyTracking());
 // front of them, lenient judging and tracking that holds on to people readily.
 const SPARTAN_DEFAULT = {
   exercise: 'burpees', people: 'multi', captureBib: true, strictness: 20,
-  tracking: 'forgiving', model: 'full', speech: true, record: true, debug: false,
+  tracking: 'forgiving', model: 'full', speech: true, record: true, debug: false, acceptOffScreen: true,
 };
 // The Spartans Challenge judges to the same Spartan setup, for one person with no number; the voice is their choice.
-if (PRACTICE) Object.assign(settings, SPARTAN_DEFAULT, { exercise: CHALLENGE_EXERCISE, people: 'one', captureBib: false, record: false, speech: settings.speech });
+if (PRACTICE) Object.assign(settings, SPARTAN_DEFAULT, { acceptOffScreen: false, exercise: CHALLENGE_EXERCISE, people: 'one', captureBib: false, record: false, speech: settings.speech });
 const currentExercise = () => exercise(settings.exercise);
 const tracking = () => TRACKING[settings.tracking] || TRACKING.balanced;
-const metricOpts = () => ({ ...DEFAULTS, minVisibility: tracking().minVis, aspect: S.frame?.w && S.frame?.h ? S.frame.w / S.frame.h : 1 });
+const metricOpts = () => ({ ...DEFAULTS, offScreen: !!settings.acceptOffScreen && settings.exercise === 'burpees', minVisibility: tracking().minVis, aspect: S.frame?.w && S.frame?.h ? S.frame.w / S.frame.h : 1 });
 const saveSettings = () => writeJSON(SETTINGS_KEY, settings);
 const judgeOptions = () => ({
   ...Object.fromEntries(JUDGE_LIMITS.map((k) => [k, DEFAULTS[k]])),
@@ -1119,12 +1119,12 @@ async function finishMulti(status) {
     ...g, events: k.events || [], id: `${g.id}-${k.label}`, athlete: k.label, group: g.id, videoId: g.id,
     bib: k.bib || (settings.captureBib ? 'No number' : String(k.label)), bibSource: k.bib ? 'scanner (head band)' : settings.captureBib ? 'not read' : 'none', bibConfidence: k.bibConf ?? null,
     firstAt: (k.events || [])[0]?.at || null, lastAt: (k.events || []).slice(-1)[0]?.at || null,
-    reps: k.judge.count, noReps: k.judge.noReps, reasons: { ...k.judge.reasonCounts },
+    reps: k.judge.count, noReps: k.judge.noReps, questionable: k.judge.questionable, reasons: { ...k.judge.reasonCounts },
     status: S.testMode ? 'test' : k.judge.count >= g.target ? 'complete' : status,
     filledPct: k.filter.frames ? Math.round((100 * k.filter.filledFrames) / k.filter.frames) : null,
   }));
   for (const r of [...rows].reverse()) saveResult(r);
-  for (const r of rows) reportAthlete({ done: true, label: r.athlete, bib: r.bib, reps: r.reps, noReps: r.noReps, id: r.id, firstAt: r.firstAt, lastAt: r.lastAt });
+  for (const r of rows) reportAthlete({ done: true, label: r.athlete, bib: r.bib, reps: r.reps, noReps: r.noReps, questionable: r.questionable, id: r.id, firstAt: r.firstAt, lastAt: r.lastAt });
 
   const test = S.testMode;
   const ok = rows.length > 0 && rows.every((r) => r.reps >= r.target);
@@ -1146,7 +1146,7 @@ async function finishMulti(status) {
     li.innerHTML = '<b></b><span></span><small></small>';
     li.querySelector('b').textContent = r.bib === 'No number' ? `Athlete ${r.athlete} · no number` : r.bibSource === 'none' ? `Athlete ${r.bib}` : `No. ${r.bib}`;
     li.querySelector('span').textContent = `${r.reps}/${r.target}`;
-    li.querySelector('small').textContent = `${r.noReps} no rep${r.noReps === 1 ? '' : 's'}`;
+    li.querySelector('small').textContent = `${r.noReps} no rep${r.noReps === 1 ? '' : 's'}${r.questionable ? ` · ${r.questionable} to check` : ''}`;
     list.append(li);
   }
   $('doneVideo').textContent = S.recorder ? 'Saving video…' : '';
@@ -1317,7 +1317,7 @@ async function multiBibTick() {
 // (an uploaded video judged in the review's Upload tab reports the same way, with the seconds into the video)
 const reportsAthletes = () => document.documentElement.classList.contains('embedded') && (!S.testMode || !!S.upload) && !!CFG && !!S.attempt && (!S.prepassing || !!S.upload);
 const athleteKey = () => ({ cam: +CFG.replace(/\D/g, '') || 0, src: S.upload ? 'upload' : 'live', video: S.upload?.saved || '', round: S.attempt.id, at: new Date().toISOString() });
-const reportAthleteDone = (k) => reportAthlete({ done: true, label: k.label, bib: k.bib, reps: k.judge.count, noReps: k.judge.noReps, id: `${S.attempt.id}-${k.label}` });
+const reportAthleteDone = (k) => reportAthlete({ done: true, label: k.label, bib: k.bib, reps: k.judge.count, noReps: k.judge.noReps, questionable: k.judge.questionable, id: `${S.attempt.id}-${k.label}` });
 function reportAthlete(o) {
   if (!reportsAthletes()) return;
   const body = { ...athleteKey(), t: S.upload ? +video.currentTime.toFixed(2) : null, ...o };
@@ -1349,7 +1349,7 @@ function recordProof(t) {
 function proofEvent(k, ev) {
   if (S.proofNow == null) return;
   const d = ev.detail || {}, back = (x) => (x == null ? null : Math.round(S.proofNow - (S.proofT - x)));
-  (k.proofEvents ??= []).push({ type: ev.type, count: ev.type === 'rep' ? (ev.count ?? k.judge.count) : k.judge.count, reasons: ev.reasons || [], from: back(d.downAt), t: back(d.endAt) ?? S.proofNow });
+  (k.proofEvents ??= []).push({ type: ev.type, count: ev.type === 'rep' ? (ev.count ?? k.judge.count) : k.judge.count, reasons: ev.reasons || [], assumed: ev.assumed || [], from: back(d.downAt), t: back(d.endAt) ?? S.proofNow });
 }
 function sendProof(all) {
   if (!reportsAthletes() || (!all && Date.now() - (S.proofSent || 0) < 2000)) return;
@@ -1375,7 +1375,7 @@ function athletePic(k) {
 }
 function reportSeen(k, extra) {
   const b = k.box, size = b ? (b.bottom - b.top) * (b.right - b.left) : 0, now = clockNow();
-  const o = { label: k.label, reps: k.judge.count, noReps: k.judge.noReps, ...extra };
+  const o = { label: k.label, reps: k.judge.count, noReps: k.judge.noReps, questionable: k.judge.questionable, ...extra };
   if (b) o.box = { x: b.x, y: (b.top + b.bottom) / 2 };
   if (b && (!k.picSize || (size > k.picSize * 1.25 && now - (k.picAt || 0) > 4000))) { const pic = athletePic(k); if (pic) { o.pic = pic; k.picSize = size; k.picAt = now; } }
   reportAthlete(o);
@@ -2092,7 +2092,7 @@ function confirmDialog(text, yesLabel = 'Yes') {
 
 // ---------------------------------------------------------------- settings form
 
-const FORM_FIELDS = ['exercise', 'people', 'videoPace', 'strictness', 'orientation', 'model', 'tracking', 'speech', 'record', 'debug', 'ocrEngine', 'captureBib', 'bibMin', 'bibMax', 'bibList'];
+const FORM_FIELDS = ['exercise', 'people', 'videoPace', 'strictness', 'orientation', 'model', 'tracking', 'acceptOffScreen', 'speech', 'record', 'debug', 'ocrEngine', 'captureBib', 'bibMin', 'bibMax', 'bibList'];
 
 function fillSettingsForm() {
   for (const k of FORM_FIELDS) {

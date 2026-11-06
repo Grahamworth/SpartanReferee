@@ -18,6 +18,8 @@ export const LM = {
   L_ANK: 27, R_ANK: 28, L_HEEL: 29, R_HEEL: 30, L_FOOT: 31, R_FOOT: 32,
 };
 
+import { offPicture } from './pose-filter.js';
+
 export const DEFAULTS = {
   targetReps: 30,
   downEnterTilt: 60,     // torso degrees from vertical to count as "on the ground"
@@ -62,7 +64,10 @@ export function computeMetrics(lm, wlm, opts = DEFAULTS) {
     handYL: null, handYR: null, earY: null, footY: null, toeY: null, heelY: null, noseY: null,
     wristsBelowHips: false, fullBody: false, hipY: null, torsoLen: null,
     kneeAngle: null, elbowAngle: null, elbowStraight: null, hipDrop: null, shY: null, headTopY: null, feetSpread: null,
+    handsOff: false, feetOff: false, kneesOff: false, armsOff: false,
   };
+  // opts.offScreen: points outside the picture aren't measured at all (the *Off values above say so).
+  const out = (i) => !!opts.offScreen && (lm[i].off ?? offPicture(lm[i]));
 
   // Torso from whichever shoulder and hip are seen (in a side view the far
   // ones are often hidden behind the body).
@@ -80,7 +85,9 @@ export function computeMetrics(lm, wlm, opts = DEFAULTS) {
   }
 
   // Chest to ground, from whichever arms are seen.
-  const arms = [[LM.L_SH, LM.L_EL, LM.L_WR], [LM.R_SH, LM.R_EL, LM.R_WR]].filter((ids) => vis(...ids));
+  const bothArms = [[LM.L_SH, LM.L_EL, LM.L_WR], [LM.R_SH, LM.R_EL, LM.R_WR]];
+  const arms = bothArms.filter((ids) => vis(...ids) && !ids.some(out));
+  m.armsOff = !arms.length && bothArms.some((ids) => ids.some(out));
   if (torsoVisible && arms.length) {
     const arm = (s, e, w) => len(v3(wlm[s], wlm[e])) + len(v3(wlm[e], wlm[w]));
     const armLen = arms.reduce((a, ids) => a + arm(...ids), 0) / arms.length;
@@ -107,15 +114,16 @@ export function computeMetrics(lm, wlm, opts = DEFAULTS) {
     const torso = v3(shW, hipW);
     const sides = [];
     for (const [h, k] of [[LM.L_HIP, LM.L_KNEE], [LM.R_HIP, LM.R_KNEE]]) {
-      if (!vis(h, k)) continue;
+      if (!vis(h, k) || out(k)) continue;
       const a = angle({ x: wlm[h].x + torso.x, y: wlm[h].y + torso.y, z: (wlm[h].z || 0) + torso.z }, wlm[h], wlm[k]);
       if (a != null) sides.push(a);
     }
     if (sides.length) m.hipAngle = Math.min(...sides);
+    m.kneesOff = !sides.length && (out(LM.L_KNEE) || out(LM.R_KNEE));
   }
 
   const handY = (ids) => {
-    const ys = ids.filter((i) => vis(i)).map((i) => lm[i].y);
+    const ys = ids.filter((i) => vis(i) && !out(i)).map((i) => lm[i].y);
     return ys.length ? Math.min(...ys) : null;
   };
   m.handYL = handY([LM.L_WR, LM.L_INDEX, LM.L_PINKY]);
@@ -129,6 +137,7 @@ export function computeMetrics(lm, wlm, opts = DEFAULTS) {
     if (guessed(lIds) && !guessed(rIds)) m.handYL = null;
     else if (guessed(rIds) && !guessed(lIds)) m.handYR = null;
   }
+  m.handsOff = m.handYL == null && m.handYR == null && [...lIds, ...rIds].some(out);
 
   // Head heights are never taken from the head itself (it turns, tilts and
   // hides). They are estimated from the shoulders and hips: carry on past the
@@ -147,9 +156,10 @@ export function computeMetrics(lm, wlm, opts = DEFAULTS) {
   if (feet.length) m.footY = Math.max(...feet.map((i) => lm[i].y));
   // For the jump, toes and heels separately: going up on the toes lifts the
   // heels but not the toes, so only the toes show a real jump.
-  const lowest = (ids) => { const s = ids.filter((i) => vis(i)); return s.length ? Math.max(...s.map((i) => lm[i].y)) : null; };
+  const lowest = (ids) => { const s = ids.filter((i) => vis(i) && !out(i)); return s.length ? Math.max(...s.map((i) => lm[i].y)) : null; };
   m.toeY = lowest([LM.L_FOOT, LM.R_FOOT]);
   m.heelY = lowest([LM.L_HEEL, LM.R_HEEL, LM.L_ANK, LM.R_ANK]);
+  m.feetOff = m.toeY == null && m.heelY == null && [LM.L_FOOT, LM.R_FOOT, LM.L_HEEL, LM.R_HEEL, LM.L_ANK, LM.R_ANK].some(out);
 
   // Whole body in view: a shoulder, a hip and a foot. The head isn't needed.
   // Works face on or side on.
@@ -213,6 +223,7 @@ export class BurpeeJudge {
 
   reset() {
     this.count = 0;
+    this.questionable = 0; // reps counted with something outside the picture
     this.noReps = 0;
     this.reasonCounts = {};
     this.phase = 'waiting'; // waiting (before first plank) | down | up
@@ -271,13 +282,16 @@ export class BurpeeJudge {
       if (m.chestRatio != null) {
         this.cycle.chestSeen++;
         this.cycle.chestMin = Math.min(this.cycle.chestMin, m.chestRatio);
-      }
+      } else if (m.armsOff) this.cycle.chestOff = true;
       this.live.chestMin = this.cycle.chestMin;
       if (this.uprightRun >= o.phaseFrames) {
         this.phase = 'up';
         this.cycle.upAt = t;
-        if (!this.cycle.chestSeen) event = this._noRep([REASONS.unseen]);
-        else if (this.cycle.chestMin > o.chestMaxRatio) event = this._noRep([REASONS.chest]);
+        const low = this.cycle.chestSeen && this.cycle.chestMin <= o.chestMaxRatio;
+        // Arms outside the picture at any point on the way down: the lowest moment may not have been seen, so it's taken as good.
+        if (!low && this.cycle.chestOff) this.cycle.chestAssumed = true;
+        else if (!this.cycle.chestSeen) event = this._noRep([REASONS.unseen]);
+        else if (!low) event = this._noRep([REASONS.chest]);
       }
       return event;
     }
@@ -293,6 +307,9 @@ export class BurpeeJudge {
       // How far the lower hand is above the allowed line, as a share of body height.
       const handMargin = handsSeen && scale ? (m.earY + tol - Math.max(hl, hr)) / scale : null;
       const hip = m.hipAngle != null && m.hipAngle >= o.hipMinAngle;
+      // Outside the picture, it can't be judged: taken as good, and the rep is marked so someone can check it. Hands and
+      // hips seen doing it wrong still fail, and a jump measured from the hips still has to rise.
+      const handsOff = !handsSeen && m.handsOff && m.earY != null, hipOff = m.hipAngle == null && m.kneesOff;
 
       // Jump from the toes when they're seen. With only heels or ankles seen,
       // they must rise by more than going up on the toes would lift them.
@@ -317,7 +334,8 @@ export class BurpeeJudge {
         by = 'body';
       }
       if (lift != null && scale) air = lift > o.jumpMinLift * scale;
-      c.frames.push({ t, footY: m.footY, toeY, heelY, air, hands, hip, by,
+      const airOff = !air && lift == null && m.feetOff && m.tilt != null && m.tilt < o.upExitTilt; // stood up, feet out of shot
+      c.frames.push({ t, footY: m.footY, toeY, heelY, air: air || airOff, airReal: air, hands: hands || handsOff, handsReal: hands, hip: hip || hipOff, hipReal: hip, by,
         lift: scale && lift != null ? lift / scale : null, hipAngle: m.hipAngle ?? null, handMargin });
       Object.assign(this.live, { lift: scale && lift != null ? lift / scale : null, liftBy: by, air, hands, hipOk: hip });
 
@@ -326,8 +344,9 @@ export class BurpeeJudge {
         if (r.jump && r.hands && r.hips) {
           c.resolved = true;
           this.count++;
+          if (r.assumed.length) this.questionable++;
           this.done = this.count >= o.targetReps;
-          return { type: 'rep', count: this.count, done: this.done, detail: this._detail(r) };
+          return { type: 'rep', count: this.count, done: this.done, ...(r.assumed.length ? { assumed: r.assumed } : {}), detail: this._detail(r) };
         }
       }
     }
@@ -358,7 +377,13 @@ export class BurpeeJudge {
     }
     if (run.length >= o.jumpMinFrames) airTimes.push(...run);
     const near = (key, win) => airTimes.some((ta) => f.some((fr) => fr[key] && Math.abs(fr.t - ta) <= win));
-    return { jump: airTimes.length > 0, hands: near('hands', o.handsWindowMs), hips: near('hip', o.hipWindowMs) };
+    // what only passed because it was outside the picture
+    const assumed = [];
+    if (airTimes.length && !f.some((fr) => fr.airReal)) assumed.push('feet');
+    if (near('hands', o.handsWindowMs) && !near('handsReal', o.handsWindowMs)) assumed.push('hands');
+    if (near('hip', o.hipWindowMs) && !near('hipReal', o.hipWindowMs)) assumed.push('hips');
+    if (this.cycle.chestAssumed) assumed.push('chest');
+    return { jump: airTimes.length > 0, hands: near('hands', o.handsWindowMs), hips: near('hip', o.hipWindowMs), assumed };
   }
 
   _upReasons() {
@@ -399,6 +424,7 @@ export class BurpeeJudge {
       jump: r ? r.jump : null,
       hands: r ? r.hands : null,
       hips: r ? r.hips : null,
+      assumed: r ? r.assumed : [],
     };
   }
 }

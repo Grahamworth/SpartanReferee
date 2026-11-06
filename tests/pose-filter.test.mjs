@@ -1,7 +1,7 @@
 // Run with: node --test tests/
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { PoseFilter, TRACKING } from '../pose-filter.js';
+import { PoseFilter, TRACKING, offPicture } from '../pose-filter.js';
 import { BurpeeJudge, computeMetrics, LM } from '../burpee.js';
 import { SquatJudge, EXERCISES } from '../exercises.js';
 
@@ -130,4 +130,13 @@ test('push-ups: side on, an arm straight in the picture counts as straight even 
   assert.ok(m.elbowAngle < 130, `3D ${m.elbowAngle}`);
   assert.ok(m.elbowStraight > 175, `straight ${m.elbowStraight}`);
   assert.equal(EXERCISES.pushups.ready.test(m, { lockElbow: 140 }), true);
+});
+
+test('a point outside the picture stays marked when it is filled in', () => {
+  assert.equal(offPicture({ x: 0.5, y: -0.1 }), true); assert.equal(offPicture({ x: 1.2, y: 0.5 }), true); assert.equal(offPicture({ x: 0.5, y: 0.5 }), false);
+  const pose = (y, visibility) => { const lm = Array.from({ length: 33 }, () => ({ x: 0.5, y: 0.5, z: 0, visibility: 0.9 })); lm[15] = { x: 0.5, y, z: 0, visibility }; return { lm, wlm: lm.map((p) => ({ ...p })) }; };
+  const f = new PoseFilter({ minVis: 0.5, holdMs: 900, mirror: false });
+  f.update(pose(0.2, 0.9), 0);
+  const out = f.update(pose(-0.1, 0.1), 100);
+  assert.equal(out.lm[15].filled, 'held'); assert.equal(out.lm[15].y, 0.2); assert.equal(out.lm[15].off, true);
 });

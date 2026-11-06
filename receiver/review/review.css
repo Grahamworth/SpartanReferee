@@ -75,7 +75,7 @@ body.picking #replayGrid .tile { cursor: crosshair; outline: 2px dashed var(--am
 
 /* the live cameras with their AI judges */
 .judgegrid { position: absolute; z-index: 1; }
-.judgegrid .jtile { position: relative; background: #000; aspect-ratio: 16 / 10; max-width: 100%; border-top: 4px solid #333; cursor: zoom-in; }
+.judgegrid .jtile { container-type: inline-size; position: relative; background: #000; aspect-ratio: 16 / 10; max-width: 100%; border-top: 4px solid #333; cursor: zoom-in; }
 .judgegrid .jtile.live { border-top-color: var(--green); }
 .judgegrid .jtile.big { grid-column: 1 / -1; aspect-ratio: auto; height: calc(100vh - 230px); min-height: 320px; cursor: zoom-out; }
 .judgegrid.focused .jtile:not(.big) { display: none; }
@@ -144,6 +144,7 @@ body.picking #replayGrid .tile { cursor: crosshair; outline: 2px dashed var(--am
 .ath .info .reps { line-height: 1.1; }
 .ath .info .reps small { color: var(--muted); font-size: 13px; font-weight: 600; }
 .ath .info .going { color: var(--amber); font-weight: 700; }
+.ath .info .reps small.tocheck { color: var(--amber); }
 
 .list { width: 100%; border-collapse: collapse; }
 .list td, .list th { text-align: left; padding: 8px; border-bottom: 1px solid var(--line); vertical-align: middle; }
@@ -153,12 +154,15 @@ body.picking #replayGrid .tile { cursor: crosshair; outline: 2px dashed var(--am
 #toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: #2b2b2b; padding: 10px 16px; opacity: 0; transition: opacity .3s; pointer-events: none; z-index: 9; font-weight: 600; }
 #toast.on { opacity: 1; }
 @media (max-width: 760px) { .grid, .athletes { grid-template-columns: 1fr; } header .tabs button { padding: 8px 10px; } .numSearch input { width: 150px; } .athletepop { top: 0; position: relative; } }
-/* the judge draws its own clock and EXIT along the top: our buttons sit along the bottom */
-.jtile .tools { top: auto; bottom: 8px; }
+/* running: the judge draws its clock along the top and its details along the bottom left, so our buttons sit bottom right */
+.jtile:has(iframe) .tools { top: auto; bottom: 8px; left: auto; right: 8px; transform: none; }
 .jtile:has(iframe) .livetag, .jtile:has(iframe) .label { display: none; }
-/* Start AI judge: big, along the top */
-.jtile .tools { top: 10px; bottom: auto; }
-.jtile .tools .btn.track.red { font-size: 19px; padding: 12px 24px; box-shadow: 0 2px 10px rgba(0,0,0,.5); }
+/* not running: the camera's name along the top, Start AI judge in the middle, what it's waiting for under it */
+.jtile:not(:has(iframe)) .tools { top: 50%; bottom: auto; left: 50%; transform: translate(-50%, -50%); width: max-content; max-width: calc(100% - 16px); align-items: stretch; }
+.jtile .tools .btn { white-space: nowrap; }
+.jtile .tools .btn.track.red { font-size: clamp(13px, 3.4cqw, 19px); padding: clamp(7px, 2cqw, 12px) clamp(10px, 4cqw, 24px); box-shadow: 0 2px 10px rgba(0,0,0,.5); }
+.jtile:not(:has(iframe)) .msg { place-items: end center; padding: 0 8px 12%; }
+.jtile .label { max-width: calc(100% - 70px); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .ath .acts .btn.del { margin-left: auto; background: none; border-color: transparent; color: var(--muted); }
 .ath .acts .btn.del:hover { color: #ff6b6b; }
 #upList .btn { padding: 6px 10px; font-size: 13px; }

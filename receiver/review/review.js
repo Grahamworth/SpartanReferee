@@ -2,8 +2,8 @@
 // The review page, on the laptop and on an iPad.
 //  Live: every camera live with its AI judge (tracking shown or hidden per camera), the timeline to rewind through
 //        everything recorded, a marker for each athlete picked up, both cameras or one, Pick athlete.
-//  Upload video: every frame analysed first, with the results beside it; everyone it tracks joins the AI judge list.
-//  AI judge: everyone tracked (picture, number, when and how long on screen, reps), filtered by number, camera,
+//  Upload video: every frame analysed first, with the results beside it; everyone it tracks joins All results.
+//  All results: everyone tracked (picture, number, when and how long on screen, reps), filtered by number, camera,
 //        source and time: Watch them in the recording, or a detailed analysis (heavy pose model) to check the count.
 //  Log: camera connect/lost events.
 // The day picker shows any day's history; the number search finds an athlete from any tab.
@@ -421,7 +421,7 @@ function whenText(a) {
 }
 const repsText = (a) => `<b>${Number(a.reps)}</b> reps${a.noReps ? ` · ${Number(a.noReps)} no reps` : ''} · ${a.done ? 'finished' : 'being judged'}`;
 
-// the AI judge tab: the list, filtered
+// the All results tab: the list, filtered
 function fillCamFilter() {
   const cams = [...new Set([...(st ? st.cams.map((c) => c.n) : []), ...athList.filter((a) => a.src === 'live').map((a) => a.cam)])].sort((a, b) => a - b);
   const html = '<option value="">All</option>' + cams.map((n) => `<option value="${n}">Camera ${n}</option>`).join('');
@@ -438,13 +438,13 @@ function filtered() {
 // an athlete's card: their count first, then who, where and what you can do
 const shortName = (a) => (hasNum(a) ? `#${esc(a.bib)}` : `Athlete ${a.label}`);
 const athBody = (a, lines) => `<div class="pic">${a.pic ? `<img src="${picUrl(a)}" alt="" loading="lazy">` : '<span>no picture</span>'}</div>
-    <div class="info"><span class="reps"><b>${Number(a.reps)}</b> rep${Number(a.reps) === 1 ? '' : 's'}${a.noReps ? `<small> · ${Number(a.noReps)} no rep${Number(a.noReps) === 1 ? '' : 's'}</small>` : ''}</span><b class="num">${shortName(a)}</b>${lines}</div>
+    <div class="info"><span class="reps"><b>${Number(a.reps)}</b> rep${Number(a.reps) === 1 ? '' : 's'}${a.noReps ? `<small> · ${Number(a.noReps)} no rep${Number(a.noReps) === 1 ? '' : 's'}</small>` : ''}${a.questionable ? `<small class="tocheck" title="Counted with part of the body outside the picture"> · ⚠ ${Number(a.questionable)} to check</small>` : ''}</span><b class="num">${shortName(a)}</b>${lines}</div>
     <div class="acts"><button class="btn watch" data-watch="${a.n}">▶ Watch</button><button class="linkbtn" data-detail="${a.n}">Details</button><button class="btn del" data-del="${a.n}" title="Delete this entry" aria-label="Delete this entry">🗑</button></div>`;
 let listSig = '';
 function renderAthletes(force) {
   if ($('judge').hidden && !force) return;
   const list = filtered();
-  const sig = JSON.stringify(list.map((a) => [a.n, a.bib, a.reps, a.noReps, a.done, a.pic, a.lastAt]));
+  const sig = JSON.stringify(list.map((a) => [a.n, a.bib, a.reps, a.noReps, a.questionable, a.done, a.pic, a.lastAt]));
   if (sig === listSig && !force) return; listSig = sig;
   const numbered = list.filter((a) => a.bib && a.bib !== 'No number').length;
   $('athleteSummary').textContent = athList.length ? `${list.length} athlete${list.length === 1 ? '' : 's'}${list.length < athList.length ? ` (of ${athList.length})` : ''} · ${numbered} with a number read` : 'Nobody tracked on this day yet. Turn the AI judge on for a camera (Live tab) or upload a video.';
@@ -455,12 +455,12 @@ function renderAthletes(force) {
 // beside the cameras and the uploaded video: people who have finished or gone, with their own filters
 const hasNum = (a) => a.bib && a.bib !== 'No number';
 const sideMatch = (a, num, res) => (!num || (hasNum(a) && String(a.bib).toLowerCase().includes(num)))
-  && (res !== 'reps' || a.reps > 0) && (res !== 'noreps' || (!a.reps && a.noReps > 0)) && (res !== 'nonum' || !hasNum(a));
+  && (res !== 'reps' || a.reps > 0) && (res !== 'noreps' || (!a.reps && a.noReps > 0)) && (res !== 'nonum' || !hasNum(a)) && (res !== 'check' || a.questionable > 0);
 const sideCard = (a) => `<div class="ath" data-n="${a.n}">
     ${athBody(a, a.src === 'upload' ? `<span>${mss(a.firstT ?? 0)}–${mss(a.lastT ?? 0)} in the video</span>` : `<span>Camera ${a.cam} · ${hms(new Date(a.lastAt))}</span>`)}
   </div>`;
 function fillSide(el, count, list, total, empty) {
-  const sig = JSON.stringify(list.map((a) => [a.n, a.bib, a.reps, a.noReps, a.pic, a.lastAt])) + empty;
+  const sig = JSON.stringify(list.map((a) => [a.n, a.bib, a.reps, a.noReps, a.questionable, a.pic, a.lastAt])) + empty;
   count.textContent = total ? `${list.length}${list.length < total ? ` of ${total}` : ''}` : '';
   if (el.dataset.sig === sig) return; el.dataset.sig = sig;
   el.innerHTML = list.map(sideCard).join('') || `<p class="empty">${esc(empty)}</p>`;
@@ -488,7 +488,7 @@ $('usClear').onclick = () => { for (const id of ['usNum', 'usRes']) $(id).value 
 $('liveList').onclick = $('upResults').onclick = $('athleteList').onclick = (e) => {
   const b = e.target.closest('button'); if (!b) return;
   const a = athList.find((x) => x.n === +(b.dataset.watch || b.dataset.detail || b.dataset.del)); if (!a) return;
-  if (b.dataset.del) { if (confirm(`Delete ${a.bib && a.bib !== 'No number' ? '#' + a.bib : 'athlete ' + a.label} from the AI judge list?`)) fetch(`/api/athlete?n=${a.n}`, { method: 'DELETE' }).then(() => { athRev = -1; loadAthletes(); toast('Deleted'); }); return; }
+  if (b.dataset.del) { if (confirm(`Delete ${a.bib && a.bib !== 'No number' ? '#' + a.bib : 'athlete ' + a.label} from the results?`)) fetch(`/api/athlete?n=${a.n}`, { method: 'DELETE' }).then(() => { athRev = -1; loadAthletes(); toast('Deleted'); }); return; }
   if (b.dataset.watch) watch(a); else detailed(a);
 };
 for (const id of ['fNum', 'fCam', 'fSrc', 'fFrom', 'fTo']) $(id).addEventListener('input', () => renderAthletes(true));
@@ -522,9 +522,9 @@ async function watch(a) {
   $('proofTitle').innerHTML = `${athName(a)} · ${up ? esc(upName(a.video)) : 'camera ' + a.cam}`;
   $('proofNote').textContent = frames.length ? 'What the AI judge saw: their skeleton and count as it judged them.' : 'No skeleton saved for this athlete: they were judged before this was added. Detailed analysis draws one.';
   $('proofLive').hidden = up; $('proofSync').hidden = up || !frames.length; showProofLag();
-  const nth = (e) => (e.type === 'rep' ? `✓ Rep ${e.count}` : '✗ No rep');
+  const nth = (e) => (e.type === 'rep' ? `${e.assumed?.length ? '⚠' : '✓'} Rep ${e.count}` : '✗ No rep');
   const stamp = (t) => (up ? mss(t / 1000) : hms(new Date(t)));
-  $('proofReps').innerHTML = evs.map((e, i) => `<button class="btn ${e.type === 'rep' ? 'good' : 'bad'}" data-ev="${i}" title="${esc(e.reasons.join(' · '))}">${nth(e)} <small>${stamp(e.t)}${e.reasons.length ? ' · ' + esc(e.reasons[0]) : ''}</small></button>`).join('') || '<span class="muted small">No reps or no reps saved for this athlete.</span>';
+  $('proofReps').innerHTML = evs.map((e, i) => `<button class="btn ${e.type === 'rep' ? 'good' : 'bad'}" data-ev="${i}" title="${esc(e.reasons.join(' · '))}">${nth(e)} <small>${stamp(e.t)}${e.reasons.length ? ' · ' + esc(e.reasons[0]) : ''}${e.assumed?.length ? ' · not in picture: ' + esc(e.assumed.join(', ')) : ''}</small></button>`).join('') || '<span class="muted small">No reps or no reps saved for this athlete.</span>';
   $('proof').hidden = false; $('athleteBox').hidden = true; $('analysis').hidden = true; $('rulesBox').hidden = true;
   setProofRate(1);
   proofGo(proof.first, true);
@@ -698,7 +698,7 @@ $('numSearch').onkeydown = (e) => { if (e.key === 'Enter') { const b = $('numRes
 
 // ---------------------------------------------------------------- Upload video: judged as it plays, like a live camera
 // The video goes to the laptop first (kept in its training folder), then the AI judge (always on) plays and judges
-// it from there, reporting everyone it tracks to the AI judge list.
+// it from there, reporting everyone it tracks to All results.
 let upRunning = '';
 function uploadName(saved) { return upName(saved); }
 async function loadUploads() {

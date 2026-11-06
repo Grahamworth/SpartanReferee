@@ -1,5 +1,6 @@
 'use strict';
-// Burpee Judge Receiver: the judging computer's one app. It runs the streaming server (MediaMTX, hidden inside),
+// Spartans Receiver: the judging computer's one app. (Inside, it's still "Burpee Judge Receiver": the install folder, saved
+// settings and recordings, and firewall rules all follow that name, so changing it would strand them.) It runs the streaming server (MediaMTX, hidden inside),
 // sets up Tailscale and the firewall, shows each camera's QR code for the phones, which cameras are live and by
 // which route, opens the Burpee Judge on a camera, keeps the recordings, and serves the review page (live view,
 // incident marks, and replay of the recordings by time) to this computer and to an iPad.
@@ -351,7 +352,7 @@ function openJudgeSettings() {
   w.loadURL(`http://127.0.0.1:${S.reviewPort}/judge/judge.html?settings=1`);
 }
 // Video review is a tab of the main window, under its tab bar. Going back to Setup only moves it aside, so its AI
-// judges carry on. Opening a camera shows that camera big in the AI judge tab.
+// judges carry on. Opening a camera shows that camera big on the Live tab.
 const TAB_BAR = 44;   // ui.css: #appTabs
 let reviewView = null, reviewOn = false;
 function placeReview() {
@@ -471,6 +472,7 @@ const reviewServer = http.createServer(async (req, res) => {
       if (b.bib) a.bib = String(b.bib).slice(0, 12);
       if (Number.isFinite(+b.reps) && b.reps != null) a.reps = Math.max(0, +b.reps | 0);
       if (Number.isFinite(+b.noReps) && b.noReps != null) a.noReps = Math.max(0, +b.noReps | 0);
+      if (Number.isFinite(+b.questionable) && b.questionable != null) a.questionable = Math.max(0, +b.questionable | 0);
       if (b.firstAt && !isNaN(Date.parse(b.firstAt)) && new Date(b.firstAt).toISOString() < a.firstAt) a.firstAt = new Date(b.firstAt).toISOString();
       if (b.lastAt && !isNaN(Date.parse(b.lastAt)) && new Date(b.lastAt).toISOString() > a.lastAt) a.lastAt = new Date(b.lastAt).toISOString();
       if (b.box && [b.box.x, b.box.y].every((v) => Number.isFinite(+v))) { a.box = { x: +(+b.box.x).toFixed(4), y: +(+b.box.y).toFixed(4) }; a.boxAt = at; if (Number.isFinite(+b.t)) a.boxT = +b.t; }
@@ -488,7 +490,7 @@ const reviewServer = http.createServer(async (req, res) => {
       const num = (v) => (v == null || !Number.isFinite(+v) ? null : Math.round(+v));
       const lines = [];
       for (const f of Array.isArray(b.frames) ? b.frames : []) if (Array.isArray(f) && f.length === 40 && f.every((v) => Number.isFinite(v))) lines.push(JSON.stringify({ f: f.map(Math.round) }));
-      for (const e of Array.isArray(b.events) ? b.events : []) if (e && (e.type === 'rep' || e.type === 'norep') && num(e.t) != null) lines.push(JSON.stringify({ e: { type: e.type, count: num(e.count) || 0, t: num(e.t), from: num(e.from), reasons: (Array.isArray(e.reasons) ? e.reasons : []).slice(0, 8).map((r) => String(r).slice(0, 120)) } }));
+      for (const e of Array.isArray(b.events) ? b.events : []) if (e && (e.type === 'rep' || e.type === 'norep') && num(e.t) != null) lines.push(JSON.stringify({ e: { type: e.type, assumed: (Array.isArray(e.assumed) ? e.assumed : []).filter((x) => ['feet', 'hands', 'hips', 'chest'].includes(x)), count: num(e.count) || 0, t: num(e.t), from: num(e.from), reasons: (Array.isArray(e.reasons) ? e.reasons : []).slice(0, 8).map((r) => String(r).slice(0, 120)) } }));
       if (lines.length) { fs.mkdirSync(TRACKS, { recursive: true }); fs.appendFile(path.join(TRACKS, a.n + '.jsonl'), lines.join('\n') + '\n', () => {}); }
       return send(res, 200, { ok: true, n: a.n });
     }
@@ -608,7 +610,7 @@ if (FIRST_COPY) app.whenReady().then(() => {
   startServer();
   reviewServer.listen(S.reviewPort, BIND || '0.0.0.0');
   win = new BrowserWindow({
-    width: 1200, height: 900, title: 'Burpee Judge Receiver', backgroundColor: '#1f2328', autoHideMenuBar: true,
+    width: 1200, height: 900, title: 'Spartans Receiver', backgroundColor: '#1f2328', autoHideMenuBar: true,
     icon: ICON,
     webPreferences: { preload: path.join(__dirname, 'preload.js') },
   });
@@ -647,7 +649,7 @@ async function checkUpdate(asked) {
     if (m.version && /^https:\/\//.test(m.url || '') && newer(m.version, app.getVersion())) {
       update = { state: 'available', version: String(m.version), notes: String(m.notes || '').slice(0, 400), url: m.url, sha512: m.sha512 || '', size: +m.size || 0 };
       if (was.version !== update.version && Notification.isSupported()) {
-        const n = new Notification({ title: `Burpee Judge Receiver ${update.version} is available`, body: 'Open the Receiver and press Update now.', icon: ICON });
+        const n = new Notification({ title: `Spartans Receiver ${update.version} is available`, body: 'Open the Receiver and press Update now.', icon: ICON });
         n.on('click', showWindow); n.show();
       }
     } else update = { state: 'none' };
@@ -687,15 +689,15 @@ function hideToTray(w) {
   w.on('close', (e) => {
     if (stopping) return;
     e.preventDefault(); w.hide();
-    if (!trayTipShown && tray) { trayTipShown = true; tray.displayBalloon({ iconType: 'info', title: 'Burpee Judge Receiver is still running', content: 'The streaming server, recordings and AI judges carry on. Right-click this icon and Quit to shut it down.' }); }
+    if (!trayTipShown && tray) { trayTipShown = true; tray.displayBalloon({ iconType: 'info', title: 'Spartans Receiver is still running', content: 'The streaming server, recordings and AI judges carry on. Right-click this icon and Quit to shut it down.' }); }
   });
 }
 function showWindow() { if (!win) return; if (win.isMinimized()) win.restore(); win.show(); win.focus(); }
 function makeTray() {
   tray = new Tray(nativeImage.createFromPath(ICON).resize({ width: 16, height: 16 }));
-  tray.setToolTip('Spartans – Burpee Judge Receiver (streaming server running)');
+  tray.setToolTip('Spartans Receiver (streaming server running)');
   tray.setContextMenu(Menu.buildFromTemplate([
-    { label: 'Open Burpee Judge Receiver', click: showWindow },
+    { label: 'Open Spartans Receiver', click: showWindow },
     { label: 'Video review', click: () => openReview() },
     { type: 'separator' },
     { label: 'Restart streaming server', click: () => { stopServerNow(); startServer(); } },

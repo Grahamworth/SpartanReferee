@@ -46,6 +46,82 @@ test('a full burpee counts as one rep', () => {
   assert.deepEqual(events, [{ type: 'rep', count: 1, done: false }]);
 });
 
+// One burpee with parts outside the picture, as computeMetrics reports them.
+function offBurpee({ hands = false, feet = false, knees = false, chest = false, handY = null } = {}) {
+  return burpee().map((f) => {
+    const g = { ...f, torsoLen: 0.27 };
+    if (hands) Object.assign(g, { handYL: handY, handYR: handY, handsOff: handY == null });
+    if (feet) Object.assign(g, { toeY: null, heelY: null, feetOff: true });
+    if (knees) Object.assign(g, { hipAngle: null, kneesOff: true });
+    if (chest && f.tilt >= DEFAULTS.upExitTilt) Object.assign(g, { chestRatio: null, armsOff: true });
+    return g;
+  });
+}
+const repsOf = (frames) => { const j = new BurpeeJudge(); const ev = frames.map((f, i) => j.update(f, i * (1000 / FPS))).filter(Boolean); return { j, ev }; };
+
+test('hands above the picture count as good, and the rep is marked', () => {
+  const { j, ev } = repsOf(offBurpee({ hands: true }));
+  assert.equal(j.count, 1); assert.equal(j.questionable, 1);
+  assert.deepEqual(ev.at(-1).assumed, ['hands']);
+  assert.deepEqual(ev.at(-1).detail.assumed, ['hands']);
+});
+
+test('knees outside the picture count as good, and the rep is marked', () => {
+  const { j, ev } = repsOf(offBurpee({ knees: true }));
+  assert.equal(j.count, 1); assert.ok(ev.at(-1).assumed.includes('hips'));
+});
+
+test('arms outside the picture at the bottom count as good, and the rep is marked', () => {
+  const { j, ev } = repsOf(offBurpee({ chest: true }));
+  assert.equal(j.count, 1); assert.deepEqual(ev.at(-1).assumed, ['chest']);
+});
+
+test('feet outside the picture count as good when the jump can\'t be measured, and the rep is marked', () => {
+  const { j, ev } = repsOf(offBurpee({ feet: true }));
+  assert.equal(j.count, 1); assert.ok(ev.at(-1).assumed.includes('feet'));
+});
+
+test('arms seen only partway down, then outside the picture, count as good, and the rep is marked', () => {
+  const { j, ev } = repsOf(burpee().map((f) => (f.chestRatio === 0.15 ? { ...f, chestRatio: null, armsOff: true } : f)));
+  assert.equal(j.count, 1); assert.deepEqual(ev.at(-1).assumed, ['chest']);
+});
+
+test('a rep with everything in the picture isn\'t marked', () => {
+  const { j, ev } = repsOf(burpee());
+  assert.equal(j.count, 1); assert.equal(j.questionable, 0); assert.equal(ev.at(-1).assumed, undefined); assert.deepEqual(ev.at(-1).detail.assumed, []);
+});
+
+test('with the chest seen too high and nothing outside the picture, it still fails', () => {
+  const { j } = repsOf(burpee({ chest: 0.9 }));
+  assert.equal(j.count, 0); assert.equal(j.reasonCounts[REASONS.chest], 1);
+});
+
+test('hands seen below the line still fail, off screen or not', () => {
+  const { j } = repsOf(offBurpee({ hands: true, handY: 0.6 }));
+  assert.equal(j.count, 0); assert.equal(j.questionable, 0);
+});
+
+test('hands hidden inside the picture still don\'t count', () => {
+  const { j } = repsOf(burpee().map((f) => ({ ...f, handYL: null, handYR: null })));
+  assert.equal(j.count, 0);
+});
+
+test('a chest never seen, and not outside the picture, is still unseen', () => {
+  const { j } = repsOf(burpee().map((f) => (f.tilt >= DEFAULTS.upExitTilt ? { ...f, chestRatio: null } : f)));
+  assert.equal(j.count, 0); assert.equal(j.questionable, 0);
+});
+
+test('computeMetrics only leaves out points outside the picture when asked', () => {
+  const lm = Array.from({ length: 33 }, () => ({ x: 0.5, y: 0.5, z: 0, visibility: 0.9 }));
+  const wlm = lm.map((p) => ({ ...p }));
+  lm[LM.L_SH] = { ...lm[LM.L_SH], y: 0.3 }; lm[LM.R_SH] = { ...lm[LM.R_SH], y: 0.3 };
+  wlm[LM.L_SH] = { ...wlm[LM.L_SH], y: -0.3 }; wlm[LM.R_SH] = { ...wlm[LM.R_SH], y: -0.3 };
+  for (const i of [LM.L_WR, LM.L_INDEX, LM.L_PINKY, LM.R_WR, LM.R_INDEX, LM.R_PINKY]) lm[i] = { ...lm[i], y: -0.1 };
+  const on = computeMetrics(lm, wlm, { ...DEFAULTS, offScreen: true }), off = computeMetrics(lm, wlm, DEFAULTS);
+  assert.equal(on.handYL, null); assert.equal(on.handsOff, true); assert.equal(on.armsOff, true);
+  assert.equal(off.handYL, -0.1); assert.equal(off.handsOff, false); assert.equal(off.armsOff, false);
+});
+
 test('shallow chest is a no rep, even with a good jump', () => {
   const { j, events } = run(burpee({ chest: 0.55 }));
   assert.equal(j.count, 0);
