@@ -99,7 +99,7 @@ function render(st) {
         : `<div class="qr"><img alt="Camera ${s.n} QR code" src="${show === 'spartans' ? s.spartans : s.larix}"></div>`}
       ${show === 'larix' ? `<p class="hint">Scan with the phone camera or Larix's own scanner, then tap <b>Import</b> in Larix and tick the connection in Settings → Connections. Sends to this laptop${s.youtube ? ' <b>and YouTube</b>' : ''}, with a backup recording on the phone.</p>
       <div class="addr" data-copy="${esc(s.larixLink)}" title="Click to copy, then send to the phone">Copy Larix link</div>` : ''}
-      ${show === 'spartans' ? '<p class="hint">Spartans Broadcaster (Android): open it and tap <b>Scan station QR code</b>. The Spartans app works too (Home → Camera station).</p>' : ''}
+      ${show === 'spartans' ? '<p class="hint">HeadJudge Broadcaster (Android): open it and tap <b>Scan station QR code</b>. The Spartans app works too (Home → Camera station).</p>' : ''}
       <label class="yt">YouTube stream key <input type="password" data-yt="${s.n}" placeholder="${s.youtube ? '•••••• (set: type to change, clear to remove)' : 'Optional: from YouTube Studio'}"></label>
       <div class="row">${s.live ? '' : `<button class="btn" data-close="${s.n}">Hide QR code</button>`}<button class="btn expand" data-expand="${s.n}">⤢ Open in Video review</button></div>
     </article>`;

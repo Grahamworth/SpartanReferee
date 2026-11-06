@@ -1,7 +1,7 @@
 {
- "version": "1.3.11",
+ "version": "1.3.12",
  "url": "https://mango-glacier-03e711403.4.azurestaticapps.net/downloads/burpee-judge-receiver-setup.exe",
- "size": 202960314,
- "sha512": "PcgkTttECTYhnFYUaoTY8Mc02WMgC2TKq84m5yKyRqyj53yajH8DFAGb35COVkSs9HMDhZdKYmDVNi7Kq/LXAw==",
- "notes": "Live AI judging and analysing an uploaded video now take turns, and an analysis can be paused or stopped."
+ "size": 202961067,
+ "sha512": "8ZRpwYEB28ATHvegBZgDaPQb5zqN8rTtqzn2RBVCge/If6jdwNFoNjDJHOrTxqDVAkZwAH3sNgF/D60lPWTySw==",
+ "notes": "Now called HeadJudge Receiver. Everything else works as before."
 }

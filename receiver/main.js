@@ -1,5 +1,5 @@
 'use strict';
-// Spartans Receiver: the judging computer's one app. (Inside, it's still "Burpee Judge Receiver": the install folder, saved
+// HeadJudge Receiver: the judging computer's one app. (Inside, it's still "Burpee Judge Receiver": the install folder, saved
 // settings and recordings, and firewall rules all follow that name, so changing it would strand them.) It runs the streaming server (MediaMTX, hidden inside),
 // sets up Tailscale and the firewall, shows each camera's QR code for the phones, which cameras are live and by
 // which route, opens the Burpee Judge on a camera, keeps the recordings, and serves the review page (live view,
@@ -344,14 +344,14 @@ ipcMain.handle('installUpdate', () => installUpdate());
 
 // ---------------------------------------------------------------- the Burpee Judge, built in (served as app://site/…)
 function openJudge(n) {
-  const w = new BrowserWindow({ width: 1280, height: 800, title: `Burpee Judge – camera ${n}`, backgroundColor: '#0b0b0b', autoHideMenuBar: true });
+  const w = new BrowserWindow({ width: 1280, height: 800, title: `HeadJudge – camera ${n}`, backgroundColor: '#0b0b0b', autoHideMenuBar: true });
   const stream = `http://127.0.0.1:${S.webrtcPort}/live/station${n}/whep`;
   w.loadURL(`http://127.0.0.1:${S.reviewPort}/judge/judge.html?stream=${encodeURIComponent(stream)}&go=1`);
 }
 // the judge's own home screen: exercise, strictness, pose model and the rest. Kept by this app, so every camera's
 // judge window uses them.
 function openJudgeSettings() {
-  const w = new BrowserWindow({ width: 1100, height: 860, title: 'Burpee Judge – settings', backgroundColor: '#1f2328', autoHideMenuBar: true });
+  const w = new BrowserWindow({ width: 1100, height: 860, title: 'HeadJudge – settings', backgroundColor: '#1f2328', autoHideMenuBar: true });
   w.loadURL(`http://127.0.0.1:${S.reviewPort}/judge/judge.html?settings=1`);
 }
 // Video review is a tab of the main window, under its tab bar. Going back to Setup only moves it aside, so its AI
@@ -628,7 +628,7 @@ if (FIRST_COPY) app.whenReady().then(() => {
   startServer();
   reviewServer.listen(S.reviewPort, BIND || '0.0.0.0');
   win = new BrowserWindow({
-    width: 1200, height: 900, title: 'Spartans Receiver', backgroundColor: '#1f2328', autoHideMenuBar: true,
+    width: 1200, height: 900, title: 'HeadJudge Receiver', backgroundColor: '#1f2328', autoHideMenuBar: true,
     icon: ICON,
     webPreferences: { preload: path.join(__dirname, 'preload.js') },
   });
@@ -667,7 +667,7 @@ async function checkUpdate(asked) {
     if (m.version && /^https:\/\//.test(m.url || '') && newer(m.version, app.getVersion())) {
       update = { state: 'available', version: String(m.version), notes: String(m.notes || '').slice(0, 400), url: m.url, sha512: m.sha512 || '', size: +m.size || 0 };
       if (was.version !== update.version && Notification.isSupported()) {
-        const n = new Notification({ title: `Spartans Receiver ${update.version} is available`, body: 'Open the Receiver and press Update now.', icon: ICON });
+        const n = new Notification({ title: `HeadJudge Receiver ${update.version} is available`, body: 'Open the Receiver and press Update now.', icon: ICON });
         n.on('click', showWindow); n.show();
       }
     } else update = { state: 'none' };
@@ -707,15 +707,15 @@ function hideToTray(w) {
   w.on('close', (e) => {
     if (stopping) return;
     e.preventDefault(); w.hide();
-    if (!trayTipShown && tray) { trayTipShown = true; tray.displayBalloon({ iconType: 'info', title: 'Spartans Receiver is still running', content: 'The streaming server, recordings and AI judges carry on. Right-click this icon and Quit to shut it down.' }); }
+    if (!trayTipShown && tray) { trayTipShown = true; tray.displayBalloon({ iconType: 'info', title: 'HeadJudge Receiver is still running', content: 'The streaming server, recordings and AI judges carry on. Right-click this icon and Quit to shut it down.' }); }
   });
 }
 function showWindow() { if (!win) return; if (win.isMinimized()) win.restore(); win.show(); win.focus(); }
 function makeTray() {
   tray = new Tray(nativeImage.createFromPath(ICON).resize({ width: 16, height: 16 }));
-  tray.setToolTip('Spartans Receiver (streaming server running)');
+  tray.setToolTip('HeadJudge Receiver (streaming server running)');
   tray.setContextMenu(Menu.buildFromTemplate([
-    { label: 'Open Spartans Receiver', click: showWindow },
+    { label: 'Open HeadJudge Receiver', click: showWindow },
     { label: 'Video review', click: () => openReview() },
     { type: 'separator' },
     { label: 'Restart streaming server', click: () => { stopServerNow(); startServer(); } },

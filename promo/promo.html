@@ -9,7 +9,7 @@
 <body>
 <canvas id="c" width="1920" height="1080"></canvas>
 <script>
-// A short promo for Spartans Broadcaster and Spartans Receiver, drawn frame by frame: renderAt(seconds) always gives
+// A short promo for HeadJudge Broadcaster and HeadJudge Receiver, drawn frame by frame: renderAt(seconds) always gives
 // the same picture, so render.mjs can export it without dropped frames. Everything is illustration, no real footage.
 const W = 1920, H = 1080, DURATION = 30;
 const ctx = document.getElementById('c').getContext('2d');
@@ -161,7 +161,7 @@ function broadcaster(t, d) {
     }
   });
   slash(1090, 212, 140, 12);
-  reveal(t, .15, () => { text('SPARTANS', 1090, 300, 96); text('BROADCASTER', 1090, 392, 96, RED); });
+  reveal(t, .15, () => { text('HEADJUDGE', 1090, 300, 96); text('BROADCASTER', 1090, 392, 96, RED); });
   reveal(t, .9, () => text('Scan the laptop’s code to connect', 1090, 490, 40, WHITE, { head: false }));
   reveal(t, 2.4, () => text('Film from any Android phone', 1090, 556, 40, WHITE, { head: false }));
   reveal(t, 3.1, () => text('Stream to the laptop, YouTube too', 1090, 622, 40, WHITE, { head: false }));
@@ -199,7 +199,7 @@ function receiver(t, d) {
     const tw = (w - 36) / 2, th = (h - 90) / 2;
     [[0, 0], [1, 0], [0, 1]].forEach(([c, r], i) => camTile(x + 12 + c * (tw + 12), y + 70 + r * (th + 8), tw, th - 4, t, `CAMERA ${i + 1}`, i * .7));
   }));
-  reveal(t, 1.5, () => { slash(lx - 10, 800, 120, 10); text('SPARTANS RECEIVER', lx - 10, 884, 74); });
+  reveal(t, 1.5, () => { slash(lx - 10, 800, 120, 10); text('HEADJUDGE RECEIVER', lx - 10, 884, 74); });
   reveal(t, 2.2, () => text('Every camera, live on one Windows laptop', lx - 10, 950, 40, WHITE, { head: false }));
 }
 function judge(t, d) {
@@ -254,7 +254,7 @@ function judge(t, d) {
     }
     text(s, rx + 60, y + 14, 36, missed ? '#ff8a84' : seen ? WHITE : MUTED, { head: false });
   });
-  text('Judged to the Spartan standard', rx, 840, 34, MUTED, { head: false });
+  text('Judged to the competition standard', rx, 840, 34, MUTED, { head: false });
 }
 function review(t, d) {
   const vx = 80, vy = 110, vw = 1120, vh = 630;
@@ -289,9 +289,9 @@ function review(t, d) {
 }
 function endCard(t, d) {
   slash(W / 2 - 170, 215, 340, 18);
-  reveal(t, .1, () => text('SPARTANS BROADCASTER', W / 2, 390, 130, WHITE, { align: 'center' }));
+  reveal(t, .1, () => text('HEADJUDGE BROADCASTER', W / 2, 390, 124, WHITE, { align: 'center' }));
   reveal(t, .4, () => text('+', W / 2, 500, 90, RED, { align: 'center' }));
-  reveal(t, .6, () => text('SPARTANS RECEIVER', W / 2, 630, 130, WHITE, { align: 'center' }));
+  reveal(t, .6, () => text('HEADJUDGE RECEIVER', W / 2, 630, 124, WHITE, { align: 'center' }));
   reveal(t, 1.2, () => text('Film on Android. Judge on Windows.', W / 2, 760, 52, MUTED, { align: 'center', head: false }));
 }
 

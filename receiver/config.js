@@ -24,7 +24,7 @@ function saveSettings(dir, s) {
  *  the recordings (the review page reaches them through the app). */
 function mediamtxYaml(s, { recordDir, bind = '' }) {
   const rec = recordDir.replace(/\\/g, '/');
-  return `# Written by Spartans Receiver: change settings in the app, not here.
+  return `# Written by HeadJudge Receiver: change settings in the app, not here.
 logLevel: info
 logDestinations: [stdout]
 api: true

@@ -72,7 +72,7 @@ Each phone needs internet the **first** time it opens the app, to download the p
 
 With **Capture each athlete's race number** turned off (Settings → Race numbers), step 2 is skipped and athletes are numbered 1, 2, 3 in order at the station.
 
-### Spartans Receiver (the judging computer's app)
+### HeadJudge Receiver (the judging computer's app)
 
 `receiver/` is a Windows app (Electron) that replaces the PowerShell kit: it runs MediaMTX hidden inside (`bin/mediamtx.exe`, settings written by `config.js` into the app's data folder), shows each station's QR codes, which stations are live and by which route, opens the Burpee Judge on a station (the site's judge files served inside the app as `app://site/judge.html?stream=…`, so there's no https/http problem and nothing to type), keeps a recording of every station (one .mp4 per hour, 14 days by default), and offers to open Windows Firewall for the phones (local network and Tailscale only). Build with `bash scripts/build-receiver.sh` (installer to `downloads/burpee-judge-receiver-setup.exe`; `run` to just start it, with `RECEIVER_BIND=127.0.0.1` to keep it to this computer while testing). The installer is too big for the Free Static Web Apps plan, so it lives in the storage account's `downloads` container and the site's `/downloads/burpee-judge-receiver-setup.exe` redirects there (staticwebapp.config.json, a read-only link valid two years). It isn't code-signed: Windows SmartScreen asks once ("More info" → "Run anyway").
 

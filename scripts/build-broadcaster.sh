@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Packages the camera station on its own as the Spartans Broadcaster app (Android): a phone that only films and
+# Packages the camera station on its own as the HeadJudge Broadcaster app (Android): a phone that only films and
 # streams, to the judging laptop and/or YouTube. Same camera page and native streaming screen as the Spartans app,
 # without the rest of the app, sign-in or the referee check, so it can go on any phone.
 #   bash scripts/build-broadcaster.sh
@@ -13,7 +13,7 @@ mkdir -p "$BUILD" "$SRC/downloads"
 cat > "$BUILD/capacitor.config.json" <<EOF
 {
   "appId": "$APP_ID",
-  "appName": "Spartans Broadcaster",
+  "appName": "HeadJudge Broadcaster",
   "webDir": "www",
   "backgroundColor": "#1f2328",
   "android": { "allowMixedContent": true },
@@ -30,15 +30,14 @@ cp -r "$SRC/icons" "$BUILD/www/"
 node -e "
 const fs = require('fs');
 let h = fs.readFileSync(process.argv[1], 'utf8');
-h = h.replace(/<title>[^<]*<\/title>/, '<title>Spartans Broadcaster</title>')
+h = h.replace(/<title>[^<]*<\/title>/, '<title>HeadJudge Broadcaster</title>')
   .replace(/<script type=\"module\" src=\"judge-gate.js\"><\/script>\s*/, '')      // no sign-in or referee check
   .replace(/<link rel=\"manifest\"[^>]*>\s*/, '')
   .replace(/<a href=\"\.\/\" class=\"home-link\">[^<]*<\/a>/, '')                   // nothing to go back to
-  .replace(/<h1 class=\"brand\">Camera <span>station<\/span><\/h1>/, '<h1 class=\"brand\">Spartans <span>Broadcaster</span></h1>')
+  .replace(/<h1 class=\"brand\">Camera <span>station<\/span><\/h1>/, '<h1 class=\"brand\">HeadJudge <span>Broadcaster</span></h1>')
   // the setup guide, big and first: everything a camera person needs (opens in the phone's browser)
   .replace(/ <p class=\"muted\"><a href=\"streaming.html\">[\s\S]*?<\/p>/, '\n  <a class=\"btn btn-red btn-big setup-guide\" href=\"https://mango-glacier-03e711403.4.azurestaticapps.net/streaming.html#phone\">📖 Setup guide: start here</a>\n  <p class=\"muted\" style=\"margin-top:6px\">Tailscale, scanning the laptop\\'s code, where to put the camera, and what to do if it won\\'t connect.</p>')
-  .replace(/station's <b>Spartans app<\/b> QR code/g, \"station's <b>Broadcaster</b> QR code\")
-  .replace('The camera station needs the Spartans app on an Android phone.', 'This needs the Spartans Broadcaster app on an Android phone.')
+  .replace('The camera station needs the Spartans app on an Android phone.', 'This needs the HeadJudge Broadcaster app on an Android phone.')
   .replace('</style>','  .setup-guide { display: flex; width: 100%; justify-content: center; text-align: center; margin: 14px 0 4px; clip-path: none; font-size: 1.5rem; padding: 18px; }\n</style>')
   .replace(/href=\"downloads\/spartans.apk\"/, 'href=\"https://mango-glacier-03e711403.4.azurestaticapps.net/downloads/spartans-broadcaster.apk\"');
 fs.writeFileSync(process.argv[2], h);
@@ -48,6 +47,7 @@ cd "$BUILD"
 [ -d node_modules/@capacitor/cli ] || npm install --no-audit --no-fund
 [ -d android ] || npx cap add android
 npx cap sync android
+sed -i -E 's#(<string name="(app_name|title_activity_main)">)[^<]*#\1HeadJudge Broadcaster#' android/app/src/main/res/values/strings.xml
 
 # the native camera screen (RootEncoder from JitPack), in this app's own package
 JAVA="android/app/src/main/java/${APP_ID//.//}"

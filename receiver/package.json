@@ -1,7 +1,7 @@
 {
   "name": "burpee-judge-receiver",
   "productName": "Burpee Judge Receiver",
-  "version": "1.3.11",
+  "version": "1.3.12",
   "description": "Receives the phones' station streams on the judging computer, and judges them.",
   "main": "main.js",
   "author": "VDASO",
@@ -45,8 +45,8 @@
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
-      "shortcutName": "Spartans Receiver",
-      "uninstallDisplayName": "Spartans Receiver"
+      "shortcutName": "HeadJudge Receiver",
+      "uninstallDisplayName": "HeadJudge Receiver"
     }
   }
 }
