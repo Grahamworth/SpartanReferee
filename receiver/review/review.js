@@ -439,7 +439,7 @@ function filtered() {
 const shortName = (a) => (hasNum(a) ? `#${esc(a.bib)}` : `Athlete ${a.label}`);
 const athBody = (a, lines) => `<div class="pic">${a.pic ? `<img src="${picUrl(a)}" alt="" loading="lazy">` : '<span>no picture</span>'}</div>
     <div class="info"><span class="reps"><b>${Number(a.reps)}</b> rep${Number(a.reps) === 1 ? '' : 's'}${a.noReps ? `<small> · ${Number(a.noReps)} no rep${Number(a.noReps) === 1 ? '' : 's'}</small>` : ''}${a.questionable ? `<small class="tocheck" title="Counted with part of the body outside the picture"> · ⚠ ${Number(a.questionable)} to check</small>` : ''}</span><b class="num">${shortName(a)}</b>${lines}</div>
-    <div class="acts"><button class="btn watch" data-watch="${a.n}">▶ Watch</button><button class="linkbtn" data-detail="${a.n}">Details</button><button class="btn del" data-del="${a.n}" title="Delete this entry" aria-label="Delete this entry">🗑</button></div>`;
+    <div class="acts"><button class="btn watch" data-watch="${a.n}">▶ Watch</button><button class="linkbtn" data-detail="${a.n}">Details</button>${a.src === 'upload' ? `<button class="linkbtn" data-count="${a.n}">Count reps</button>` : ''}<button class="btn del" data-del="${a.n}" title="Delete this entry" aria-label="Delete this entry">🗑</button></div>`;
 let listSig = '';
 function renderAthletes(force) {
   if ($('judge').hidden && !force) return;
@@ -487,7 +487,8 @@ $('lsClear').onclick = () => { for (const id of ['lsNum', 'lsCam', 'lsRes']) $(i
 $('usClear').onclick = () => { for (const id of ['usNum', 'usRes']) $(id).value = ''; $('usSort').value = 'video'; renderSides(); };
 $('liveList').onclick = $('upResults').onclick = $('athleteList').onclick = (e) => {
   const b = e.target.closest('button'); if (!b) return;
-  const a = athList.find((x) => x.n === +(b.dataset.watch || b.dataset.detail || b.dataset.del)); if (!a) return;
+  const a = athList.find((x) => x.n === +(b.dataset.watch || b.dataset.detail || b.dataset.del || b.dataset.count)); if (!a) return;
+  if (b.dataset.count) return startCount(a);
   if (b.dataset.del) { if (confirm(`Delete ${a.bib && a.bib !== 'No number' ? '#' + a.bib : 'athlete ' + a.label} from the results?`)) fetch(`/api/athlete?n=${a.n}`, { method: 'DELETE' }).then(() => { athRev = -1; loadAthletes(); toast('Deleted'); }); return; }
   if (b.dataset.watch) watch(a); else detailed(a);
 };
@@ -552,7 +553,7 @@ function proofGo(at, play) {
 pv.addEventListener('error', () => { if (proof && pv.getAttribute('src')) $('proofNote').textContent = proof.up ? 'That video is no longer on the laptop.' : `No recording of that time (recordings are kept for ${st ? st.keepDays : '?'} days).`; });
 pv.addEventListener('ended', () => { const p = proof; if (p && !p.up && p.base + p.dur * 1000 < p.last - 1000) proofGo(p.base + p.dur * 1000, true); });
 function setProofRate(r) { pv.defaultPlaybackRate = r; pv.playbackRate = r; document.querySelectorAll('[data-prate]').forEach((b) => b.classList.toggle('on', +b.dataset.prate === r)); }
-function proofClose() { if (proof) cancelAnimationFrame(proof.raf); proof = null; pv.pause(); pv.removeAttribute('src'); pv.load(); $('proof').hidden = true; $('athleteBox').hidden = false; }
+function proofClose() { if (counting && !counting.marks.length) fetch('/api/counts?id=' + encodeURIComponent(counting.id), { method: 'DELETE' }).catch(() => {}); stopCount(); if (proof) cancelAnimationFrame(proof.raf); proof = null; pv.pause(); pv.removeAttribute('src'); pv.load(); $('proof').hidden = true; $('athleteBox').hidden = false; }
 $('proofClose').onclick = proofClose;
 $('proofLive').onclick = () => { const a = proof?.a; proofClose(); if (a) watchInLive(a); };
 $('proofSpeeds').onclick = (e) => { const b = e.target.closest('[data-prate]'); if (b) setProofRate(+b.dataset.prate); };
@@ -575,9 +576,9 @@ function proofDraw() {
   const T = p.base + pv.currentTime * 1000 + (p.up ? 0 : proofLag);
   if (p.stopAt != null && T >= p.stopAt) { p.stopAt = null; pv.pause(); }
   const s = Math.min(W / vw, H / vh), w = vw * s, h = vh * s, ox = (W - w) / 2, oy = (H - h) / 2;
-  // the rep count so far, and a rep or no rep just given
+  // the rep count so far, and a rep or no rep just given (none of it while you're counting: it would sway you)
   let count = 0, noReps = 0, flash = null;
-  for (const e of p.evs) {
+  for (const e of counting ? [] : p.evs) {
     if (e.t > T) break;
     if (e.type === 'rep') count = e.count; else noReps++;
     if (T - e.t < (e.type === 'rep' ? 900 : 1800)) flash = e;
@@ -586,7 +587,7 @@ function proofDraw() {
   c.font = `700 ${fs}px Arial, sans-serif`; c.textBaseline = 'middle'; c.textAlign = 'left';
   const tag = (text, x, y, bg) => { const tw = c.measureText(text).width + fs * 0.8; x = Math.max(ox, Math.min(ox + w - tw, x - tw / 2)); y = Math.max(oy, y); c.fillStyle = bg; c.fillRect(x, y, tw, fs * 1.4); c.fillStyle = '#fff'; c.fillText(text, x + fs * 0.4, y + fs * 0.72); };
   const sum = `Reps ${count}${noReps ? ' · no reps ' + noReps : ''}`;
-  tag(sum, ox + (c.measureText(sum).width + fs * 0.8) / 2, oy, 'rgba(0,0,0,.65)');
+  if (!counting) tag(sum, ox + (c.measureText(sum).width + fs * 0.8) / 2, oy, 'rgba(0,0,0,.65)');
   if (!$('proofShow').checked || !p.frames.length) return;
   // their skeleton, between the two saved frames either side of now; nothing if they weren't seen around now
   let lo = 0, hi = p.frames.length - 1;
@@ -595,6 +596,11 @@ function proofDraw() {
   if (f0[0] > T || T - f0[0] > 500) return;
   const mix = f1 && f1[0] - f0[0] < 500 ? (T - f0[0]) / (f1[0] - f0[0]) : 0;
   const pt = (i) => { const x0 = f0[2 + i * 2], y0 = f0[3 + i * 2]; if (x0 < 0) return null; const x1 = mix ? f1[2 + i * 2] : x0, y1 = mix ? f1[3 + i * 2] : y0; const a = x1 < 0 ? 0 : mix; return { x: ox + ((x0 + (x1 - x0) * a) / 10000) * w, y: oy + ((y0 + (y1 - y0) * a) / 10000) * h, guess: !!(f0[1] & (1 << i)) }; };
+  if (counting) {
+    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+    PROOF_POINTS.forEach((_, i) => { const m = pt(i); if (m) { x0 = Math.min(x0, m.x); y0 = Math.min(y0, m.y); x1 = Math.max(x1, m.x); y1 = Math.max(y1, m.y); } });
+    if (x1 >= x0) { const pad = Math.max(x1 - x0, y1 - y0) * 0.15 + w * 0.01; c.fillStyle = 'rgba(0,0,0,.6)'; c.fillRect(ox, oy, w, h); c.clearRect(x0 - pad, y0 - pad, x1 - x0 + pad * 2, y1 - y0 + pad * 2); }
+  }
   const col = flash ? (flash.type === 'rep' ? '#16a34a' : '#dc2626') : '#38bdf8', lw = Math.max(3, w / 280);
   c.lineWidth = lw; c.lineCap = 'round'; c.strokeStyle = col;
   for (const dashed of [false, true]) {
@@ -607,7 +613,7 @@ function proofDraw() {
   PROOF_POINTS.forEach((_, i) => { const m = pt(i); if (!m) return; top = Math.min(top, m.y); xs += m.x; nx++; c.beginPath(); c.arc(m.x, m.y, lw * 0.9, 0, Math.PI * 2); c.fill(); });
   if (!nx) return;
   const who = p.a.bib && p.a.bib !== 'No number' ? '#' + p.a.bib : 'A' + p.a.label, bx = xs / nx, by = top - fs * 1.9;
-  tag(`${who}  ${count}`, bx, by, flash ? col : 'rgba(0,0,0,.75)');
+  tag(counting ? who : `${who}  ${count}`, bx, by, flash ? col : 'rgba(0,0,0,.75)');
   if (flash) tag(flash.type === 'rep' ? `✓ Rep ${flash.count}` : `✗ No rep${flash.reasons[0] ? ': ' + flash.reasons[0] : ''}`, bx, by - fs * 1.6, col);
 }
 // Detailed analysis: the AI judge, heavy model, frame by frame through the stretch they were on screen; their reps
@@ -700,8 +706,129 @@ $('numSearch').onkeydown = (e) => { if (e.key === 'Enter') { const b = $('numRes
 // The video goes to the laptop first (kept in its training folder), then the AI judge (always on) plays and judges
 // it from there, reporting everyone it tracks to All results.
 let upRunning = '';
+// ---------------------------------------------------------------- counting reps by hand, to measure the AI judge
+// One person at a time: the video at half speed with only their skeleton, a key press per rep. The AI's own count stays
+// hidden until you finish. Saved at every press, so nothing's lost. Comparing always uses the video's latest judging.
+let counting = null, shownCompare = null;
+const cntId = () => Array.from(crypto.getRandomValues(new Uint8Array(6)), (x) => x.toString(16).padStart(2, '0')).join('');
+const cntFmt = (t) => mss(t / 1000);
+async function countsSaved() { return (await fetch('/api/counts').then((r) => r.json()).catch(() => ({ counts: [] }))).counts; }
+async function saveCount(c) { await fetch('/api/counts', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: c.id, video: c.video, name: c.name, marks: c.marks }) }).catch(() => toast('Your count couldn\'t be saved: is the laptop still on?')); }
+// the latest judging of a video: everyone it tracked, with their reps and no reps
+async function latestJudging(video) {
+  const list = (await fetch('/api/athletes?from=2000&to=9').then((r) => r.json()).catch(() => ({ list: [] }))).list.filter((a) => a.src === 'upload' && a.video === video);
+  const newest = list.reduce((x, a) => (!x || a.firstAt > x.firstAt ? a : x), null);
+  const mine = list.filter((a) => a.round === newest?.round);
+  return Promise.all(mine.map(async (a) => ({ ...a, events: (await fetch(`/api/athlete-track?n=${a.n}`).then((r) => r.json()).catch(() => ({ events: [] }))).events })));
+}
+async function startCount(a, existing) {
+  const person = a || { n: 0, src: 'upload', video: existing?.video || upShown, label: 0, bib: '', firstT: 0, lastT: 0, firstAt: '', lastAt: '' };
+  if (!person.video) return toast('Choose a video first');
+  const name = existing?.name || (a ? (a.bib && a.bib !== 'No number' ? `#${a.bib}` : `Athlete ${a.label}`) : 'Someone the AI missed');
+  await watch(person);
+  counting = existing ? { ...existing, marks: [...existing.marks] } : { id: cntId(), video: person.video, name, marks: [] };
+  // the whole video, not just where the AI thought they were
+  proof.first = 0; proof.last = 86400e3;
+  $('proofTitle').textContent = `Counting ${name}`;
+  $('proofNote').textContent = a ? 'Their skeleton shows who to follow. The AI\'s count is hidden until you finish.' : 'Follow one person. The AI\'s count is hidden until you finish.';
+  $('proofReps').hidden = true; $('countResult').hidden = true; $('countBar').hidden = false; $('countMarks').hidden = false;
+  $('proof').classList.add('counting'); $('proof').classList.remove('comparing');
+  showCountMarks();
+  setProofRate(0.5); proofGo(0, true);
+  document.activeElement?.blur?.();
+}
+function stopCount() { $('proof').classList.remove('counting', 'comparing'); counting = null; $('countBar').hidden = true; $('countMarks').hidden = true; $('countResult').hidden = true; $('proofReps').hidden = false; }
+function showCountMarks() {
+  const c = counting; if (!c) return;
+  const reps = c.marks.filter((m) => m.type === 'rep').length, nos = c.marks.length - reps;
+  $('countTally').textContent = `${reps} rep${reps === 1 ? '' : 's'}${nos ? ` · ${nos} no rep${nos === 1 ? '' : 's'}` : ''}`;
+  $('countMarks').innerHTML = [...c.marks].sort((x, y) => x.t - y.t).map((m) => `<button class="btn ${m.type === 'rep' ? 'good' : 'bad'}" type="button" data-at="${m.t}">${m.type === 'rep' ? '✓' : '✗'} <small>${cntFmt(m.t)}</small></button>`).join('') || '<span class="muted small">Press Space each time they complete a good rep.</span>';
+}
+function markCount(type) {
+  const c = counting; if (!c) return;
+  c.marks.push({ t: Math.round(pv.currentTime * 1000), type });
+  showCountMarks(); saveCount(c);
+}
+document.addEventListener('keydown', (e) => {
+  if (!counting || $('countBar').hidden || $('judge').hidden || e.ctrlKey || e.metaKey || e.altKey || e.target.closest?.('input, select, textarea')) return;
+  const k = e.key.toLowerCase();
+  if (k === ' ') markCount('rep');
+  else if (k === 'n') markCount('norep');
+  else if (k === 'z') { counting.marks.pop(); showCountMarks(); saveCount(counting); }
+  else if (k === 'p') { if (pv.paused) pv.play().catch(() => {}); else pv.pause(); }
+  else if (k === 'arrowleft') pv.currentTime = Math.max(0, pv.currentTime - 2);
+  else if (k === 'arrowright') pv.currentTime = Math.min(pv.duration || 1e9, pv.currentTime + 2);
+  else return;
+  e.preventDefault();
+});
+$('countMarks').onclick = (e) => { const b = e.target.closest('[data-at]'); if (b) pv.currentTime = Math.max(0, +b.dataset.at / 1000 - 1); };
+$('countCancel').onclick = () => { proofClose(); showTab('upload'); };
+$('countMissed').onclick = () => (upShown ? startCount(null) : toast('Open a video\'s Results first, then count who it missed'));
+$('countDone').onclick = async () => {
+  const c = counting; if (!c) return;
+  await saveCount(c); pv.pause();
+  const all = (await countsSaved()).filter((x) => x.video === c.video);
+  const m = await compareCount(c, all);
+  if (m.athlete && m.athlete.n !== proof?.a.n) { await watch(m.athlete); proof.first = 0; proof.last = 86400e3; pv.pause(); }
+  showCompare(c, m);
+};
+async function compareCount(c, all) {
+  const r = RepCount.matchPeople(all.length ? all : [c], await latestJudging(c.video));
+  return r.find((x) => x.id === c.id);
+}
+function showCompare(c, m) {
+  const r = m.result; counting = null; shownCompare = { c, m };
+  $('countBar').hidden = true; $('countMarks').hidden = true; $('countResult').hidden = false;
+  $('proof').classList.add('comparing'); $('proof').classList.remove('counting'); $('proof').scrollIntoView();
+  $('proofTitle').textContent = `${c.name}: you and the AI`;
+  $('proofNote').textContent = m.athlete ? `Compared with ${shortName(m.athlete)}, the AI athlete who matches best.` : 'The AI didn\'t find a match for this person.';
+  const pc = r.score == null ? '–' : `${Math.round(r.score * 100)}%`;
+  const off = r.items.filter((x) => x.kind !== 'agree'), flagged = r.items.filter((x) => x.assumed?.length);
+  $('countResult').innerHTML = `<div class="countscore">The AI agreed on ${pc}<small class="muted"> (${r.agree} of ${r.agree + r.missed + r.extra})</small></div>
+    <table><tr><th></th><th>You</th><th>AI</th></tr><tr><th>Good reps</th><td class="big">${r.yourReps}</td><td class="big">${r.aiReps}</td></tr><tr><th>No reps</th><td class="big">${r.yourNoReps}</td><td class="big">${r.aiNoReps}</td></tr></table>
+    ${m.also.length ? `<p class="countwarn">⚠ Some of their reps landed on ${m.also.map((x) => esc(x.bib && x.bib !== 'No number' ? '#' + x.bib : 'Athlete ' + x.label)).join(', ')}: the tracking may have swapped between them.</p>` : ''}
+    ${flagged.length ? `<p class="countwarn">⚠ ${flagged.length} matched rep${flagged.length === 1 ? ' was' : 's were'} counted with part of the body outside the picture.</p>` : ''}
+    <h3>${off.length ? 'Where you disagree' : 'No disagreements'}</h3>
+    <div class="proofreps">${off.map((x) => `<button class="btn bad" type="button" data-see="${x.t}">${x.kind === 'missed' ? 'AI missed' : 'AI extra'} ${cntFmt(x.t)} <small>${esc(x.note || '')}</small></button>`).join('')}</div>
+    <div class="row" style="margin-top:10px"><button class="btn" type="button" id="countAgain">Change my count</button><button class="btn watch" type="button" id="countNext">Back to the video</button></div>`;
+  $('proofReps').hidden = false;
+  loadCountList();
+}
+$('countResult').onclick = async (e) => {
+  const b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.see) { pv.currentTime = Math.max(0, +b.dataset.see / 1000 - 2); pv.play().catch(() => {}); return; }
+  if (b.id === 'countNext') { proofClose(); showTab('upload'); return; }
+  if (b.id === 'countAgain') { const { c, m } = shownCompare; proofClose(); startCount(m.athlete, c); }
+};
+// the list under the video: everyone counted by hand, against the latest judging of their video
+async function loadCountList() {
+  const all = await countsSaved(), box = $('countList');
+  if (!all.length) { box.innerHTML = '<p class="muted small">Nobody counted yet.</p>'; return; }
+  const rows = [];
+  let agree = 0, total = 0;
+  for (const video of [...new Set(all.map((c) => c.video))]) {
+    const mine = all.filter((c) => c.video === video);
+    for (const m of RepCount.matchPeople(mine, await latestJudging(video))) {
+      const c = mine.find((x) => x.id === m.id), r = m.result; agree += r.agree; total += r.agree + r.missed + r.extra;
+      rows.push(`<div class="countrow"><div><b>${esc(c.name)}</b> · ${esc(upName(video))}<br><small class="muted">You ${r.yourReps} reps · AI ${r.aiReps} · ${r.missed} missed · ${r.extra} extra${m.also.length ? ' · <span class="countwarn">tracking may have swapped</span>' : ''}</small></div>
+        <b class="countscore">${r.score == null ? '–' : Math.round(r.score * 100) + '%'}</b><button class="btn" type="button" data-open="${esc(c.id)}">Compare</button><button class="btn del" type="button" data-rm="${esc(c.id)}" title="Delete this count" aria-label="Delete this count">🗑</button></div>`);
+    }
+  }
+  box.innerHTML = `<p class="countscore" style="margin:6px 0">Overall: ${total ? Math.round((100 * agree) / total) : 0}%<small class="muted"> agreed (${agree} of ${total} reps)</small></p>` + rows.join('');
+}
+$('countList').onclick = async (e) => {
+  const b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.rm) { if (confirm('Delete this count?')) { await fetch('/api/counts?id=' + encodeURIComponent(b.dataset.rm), { method: 'DELETE' }); loadCountList(); } return; }
+  if (!b.dataset.open) return;
+  const all = await countsSaved(), c = all.find((x) => x.id === b.dataset.open); if (!c) return;
+  const m = await compareCount(c, all.filter((x) => x.video === c.video));
+  await watch(m.athlete || { n: 0, src: 'upload', video: c.video, label: 0, bib: '', firstT: 0, lastT: 0, firstAt: '', lastAt: '' });
+  proof.first = 0; proof.last = 86400e3; showCompare(c, m);
+};
+
 function uploadName(saved) { return upName(saved); }
 async function loadUploads() {
+  loadCountList();
   const list = await fetch('/api/uploads').then((r) => r.json()).catch(() => []);
   const whenUp = (n) => { const m = /^(\d{4}-\d\d-\d\d)T(\d\d)-(\d\d)/.exec(n); return m ? `${m[1]} ${m[2]}:${m[3]}` : ''; };
   $('upList').innerHTML = list.map((x) => `<tr><td>${esc(uploadName(x.name))}</td><td class="t">${esc(whenUp(x.name))}</td><td>${(x.size / 1e6).toFixed(0)} MB</td>

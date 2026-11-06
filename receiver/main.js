@@ -77,6 +77,9 @@ async function serverPaths() {
 const EVENTS = path.join(DATA, 'events.json'), MARKS = path.join(DATA, 'marks.json'), ATHLETES = path.join(DATA, 'athletes.json'), PICS = path.join(DATA, 'athlete-pics'), TRACKS = path.join(DATA, 'athlete-tracks');
 const readJson = (f) => { try { return JSON.parse(fs.readFileSync(f, 'utf8')); } catch { return []; } };
 let events = readJson(EVENTS), marks = readJson(MARKS), cams = [], wasLive = {};
+const COUNTS = path.join(DATA, 'rep-counts.json');
+let repCounts = readJson(COUNTS), countSaveT = null;
+const saveCounts = () => { clearTimeout(countSaveT); countSaveT = setTimeout(() => fs.writeFile(COUNTS, JSON.stringify(repCounts), () => {}), 300); };
 const NUMBERS = path.join(DATA, 'numbers-seen.json');
 let numbersSeen = readJson(NUMBERS), numSaveT = null;
 const saveNumbers = () => { clearTimeout(numSaveT); numSaveT = setTimeout(() => fs.writeFile(NUMBERS, JSON.stringify(numbersSeen), () => {}), 1000); };
@@ -501,6 +504,20 @@ const reviewServer = http.createServer(async (req, res) => {
       out.frames.sort((x, y) => x[0] - y[0]); out.events.sort((x, y) => x.t - y.t);
       return send(res, 200, out);
     }
+    // reps counted by hand, to measure the AI judge against (the review's Count reps)
+    if (p === '/api/counts' && req.method === 'GET') return send(res, 200, { counts: repCounts });
+    if (p === '/api/counts' && req.method === 'POST') {
+      if (!isJson(req)) return send(res, 415, { error: 'JSON only' });
+      const b = await readBody(req); if (!b) return send(res, 413, { error: 'too big' });
+      const video = path.basename(String(b.video || ''));
+      if (!video || !fs.existsSync(path.join(DATA, 'training', video))) return send(res, 400, { error: 'That video isn\'t on the laptop' });
+      const marks = (Array.isArray(b.marks) ? b.marks : []).filter((m) => m && (m.type === 'rep' || m.type === 'norep') && Number.isFinite(+m.t) && +m.t >= 0).slice(0, 5000).map((m) => ({ t: Math.round(+m.t), type: m.type }));
+      const id = /^[\w-]{1,40}$/.test(String(b.id || '')) ? String(b.id) : crypto.randomBytes(5).toString('hex');
+      const c = { id, video, name: String(b.name || 'Athlete').slice(0, 60), marks, at: new Date().toISOString() };
+      repCounts = [...repCounts.filter((x) => x.id !== id), c]; saveCounts();
+      return send(res, 200, c);
+    }
+    if (p === '/api/counts' && req.method === 'DELETE') { repCounts = repCounts.filter((x) => x.id !== u.searchParams.get('id')); saveCounts(); return send(res, 200, { ok: true }); }
     // an AI judge entry deleted (its picture too)
     if (p === '/api/athlete' && req.method === 'DELETE') {
       const n = +u.searchParams.get('n') | 0, i = athletes.findIndex((a) => a.n === n);
@@ -551,6 +568,7 @@ const reviewServer = http.createServer(async (req, res) => {
       try { fs.unlinkSync(file); } catch (e) { return send(res, 409, { error: `It's in use: ${e.message}` }); }
       for (const a of athletes.filter((x) => x.src === 'upload' && x.video === name)) dropAthleteFiles(a.n);
       athletes = athletes.filter((x) => !(x.src === 'upload' && x.video === name)); saveAthletes();
+      repCounts = repCounts.filter((x) => x.video !== name); saveCounts();
       numbersSeen = numbersSeen.filter((x) => !(x.src === 'upload' && x.video === name)); saveNumbers();
       return send(res, 200, { ok: true });
     }

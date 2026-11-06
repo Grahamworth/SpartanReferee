@@ -1,7 +1,7 @@
 {
- "version": "1.3.8",
+ "version": "1.3.9",
  "url": "https://mango-glacier-03e711403.4.azurestaticapps.net/downloads/burpee-judge-receiver-setup.exe",
- "size": 202956613,
- "sha512": "F8NtkiB0554fn7IHMGv6NPLiK3a5mCFGmQD9FWYlTGv7CWT40BSZ2c2U4r7nZiKhRg0WWx76h/RKLL00OVB6wg==",
- "notes": "Now called Spartans Receiver. Reps with part of the body outside the picture count and are marked to check, with a setting to turn it off. Tidier camera tiles."
+ "size": 202961543,
+ "sha512": "4DtRXiojDii1Nww3KncmacH5kIYoBgs59xYfeiqGw4tPk9YPvlWuGGPVWH96L+C3QNXfLnQt0bKlZd6bWnEdCA==",
+ "notes": "New: count an athlete's reps by hand and see how the AI judge compares."
 }

@@ -139,7 +139,7 @@ body.picking #replayGrid .tile { cursor: crosshair; outline: 2px dashed var(--am
 .ath .acts { flex-wrap: nowrap; align-items: center; grid-column: 2; }
 .ath .acts .btn { padding: 7px 10px; font-size: 13px; }
 .btn.watch { background: #fff; border-color: #fff; color: #000; }
-.linkbtn { background: none; border: 0; padding: 7px 4px; color: var(--muted); font: inherit; font-size: 13px; font-weight: 700; text-decoration: underline; cursor: pointer; }
+.linkbtn { white-space: nowrap; background: none; border: 0; padding: 7px 4px; color: var(--muted); font: inherit; font-size: 13px; font-weight: 700; text-decoration: underline; cursor: pointer; }
 .linkbtn:hover { color: #fff; }
 .ath .info .reps { line-height: 1.1; }
 .ath .info .reps small { color: var(--muted); font-size: 13px; font-weight: 600; }
@@ -175,12 +175,27 @@ body.picking #replayGrid .tile { cursor: crosshair; outline: 2px dashed var(--am
 /* Watch: the AI judge's skeleton and count over the recording */
 .proofstage { position: relative; background: #000; }
 #proofVideo { display: block; width: 100%; height: 68vh; background: #000; }
+#proof.counting #proofVideo { height: calc(100vh - 430px); min-height: 240px; }
+#proof.comparing #proofVideo { height: 38vh; min-height: 220px; }
 #proofCanvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 .proofreps { display: flex; flex-wrap: wrap; gap: 6px; max-height: 18vh; overflow: auto; }
 .proofreps .btn { padding: 6px 10px; font-size: 13px; }
 .proofreps .btn small { color: var(--muted); font-weight: 400; }
 .proofreps .btn.good { border-color: var(--green); }
 .proofreps .btn.bad { border-color: #ef4444; }
+.countbar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 10px 0; }
+.countkeys { display: flex; flex-wrap: wrap; gap: 12px; color: var(--muted); font-size: 14px; }
+.countkeys kbd { background: #2f353d; border: 1px solid #4a525c; color: #fff; padding: 1px 7px; margin-right: 3px; font: 700 13px system-ui, sans-serif; }
+.counttally { font-size: 22px; }
+.countresult { padding: 10px 0; }
+.countresult table { border-collapse: collapse; margin: 6px 0 12px; }
+.countresult th, .countresult td { padding: 6px 18px 6px 0; text-align: left; }
+.countresult td.big { font-size: 26px; font-weight: 900; }
+.countscore { font-size: 22px; font-weight: 900; }
+.countrow { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 8px 0; border-top: 1px solid rgba(255, 255, 255, .12); }
+.countrow > div { flex: 1 1 240px; min-width: 0; }
+.countwarn { color: var(--amber); }
+#countList .btn { padding: 6px 10px; font-size: 13px; }
 .proofsync { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); }
 .proofsync[hidden] { display: none; }
 .proofsync .btn { padding: 2px 10px; }
