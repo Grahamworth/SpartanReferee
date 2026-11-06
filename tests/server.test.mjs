@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert';
 import { createRequire } from 'node:module';
+import fs from 'node:fs';
+import { execFileSync } from 'node:child_process';
 const require = createRequire(import.meta.url);
 const auth = require('../server/auth.js');
 const { createSleep } = require('../server/idle.js');
@@ -106,4 +108,20 @@ test('a phone is given the server by name, with no Tailscale route', () => {
   assert.strictEqual(u.searchParams.get('ts'), null);
   assert.strictEqual(u.searchParams.get('n'), '2');
   assert.strictEqual(u.searchParams.get('pass'), 'pw');
+});
+
+test('every file the server runs loads, with no mistakes in it', () => {
+  const dir = new URL('../server/', import.meta.url);
+  for (const f of fs.readdirSync(dir)) if (f.endsWith('.js')) execFileSync(process.execPath, ['--check', new URL(f, dir).pathname.replace(/^\/([A-Za-z]:)/, '$1')]);
+  execFileSync(process.execPath, ['--check', new URL('review/review.js', dir).pathname.replace(/^\/([A-Za-z]:)/, '$1')]);
+});
+
+test('a server judges two cameras unless told otherwise (as measured: three fall below the speed judging needs)', () => {
+  const { createEngines } = require('../server/engines.js');
+  const e = createEngines({ chrome: 'none', dataDir: '.', pageUrl: () => '', settings: () => ({}) });
+  assert.strictEqual(e.set(1, true), null);
+  assert.strictEqual(e.set(2, true), null);
+  assert.match(e.set(3, true), /up to 2 cameras/);
+  assert.strictEqual(e.set(2, true), null, 'asking again for one already on is fine');
+  assert.ok(e.wanted(1) && e.wanted(2) && !e.wanted(3));
 });

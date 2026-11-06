@@ -1,6 +1,6 @@
 'use strict';
 // One judge per camera, each in its own Chrome: one Chrome funnels every camera through a single queue on the graphics card, and
-XXA judge that dies is started
+// on a real server gave well under half the speed. A judge that dies is started
 // again. Settings reach it before its page runs, and a round in progress is finished before it's stopped.
 const { spawn } = require('child_process');
 const fs = require('fs');
