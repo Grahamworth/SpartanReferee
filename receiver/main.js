@@ -73,6 +73,9 @@ async function serverPaths() {
 const EVENTS = path.join(DATA, 'events.json'), MARKS = path.join(DATA, 'marks.json'), ATHLETES = path.join(DATA, 'athletes.json'), PICS = path.join(DATA, 'athlete-pics'), TRACKS = path.join(DATA, 'athlete-tracks');
 const readJson = (f) => { try { return JSON.parse(fs.readFileSync(f, 'utf8')); } catch { return []; } };
 let events = readJson(EVENTS), marks = readJson(MARKS), cams = [], wasLive = {};
+const NUMBERS = path.join(DATA, 'numbers-seen.json');
+let numbersSeen = readJson(NUMBERS), numSaveT = null;
+const saveNumbers = () => { clearTimeout(numSaveT); numSaveT = setTimeout(() => fs.writeFile(NUMBERS, JSON.stringify(numbersSeen), () => {}), 1000); };
 // Everyone the AI judges track (live cameras and uploaded videos): one record per athlete, kept up to date as they go:
 // their picture, number, first and last time seen (and seconds into an uploaded video), reps and no reps.
 let athletes = readJson(ATHLETES).filter((a) => a && a.n), athleteSeq = athletes.reduce((m, a) => Math.max(m, a.n), 0), athletesRev = 1, athSaveT = null;
@@ -85,7 +88,9 @@ const saveAthletes = () => {
 };
 // a live athlete's proof goes when the recording it's drawn on does
 const pruneTracks = () => { const before = new Date(Date.now() - S.keepDays * 864e5).toISOString(); for (const a of athletes) if (a.src === 'live' && a.lastAt < before) fs.unlink(path.join(TRACKS, a.n + '.jsonl'), () => {}); };
+const pruneNumbers = () => { const before = new Date(Date.now() - S.keepDays * 864e5).toISOString(); numbersSeen = numbersSeen.filter((x) => x.src === 'upload' || x.lastAt >= before); saveNumbers(); };
 setTimeout(pruneTracks, 60000); setInterval(pruneTracks, 6 * 3600e3);
+setTimeout(pruneNumbers, 60000); setInterval(pruneNumbers, 6 * 3600e3);
 function athleteFor(b, at) {
   const src = b.src === 'upload' ? 'upload' : 'live', cam = Math.max(0, Math.min(99, +b.cam || 0)), video = String(b.video || '').replace(/[^\w.-]+/g, '_').slice(0, 140);
   const round = String(b.round || '').slice(0, 60), label = Math.max(0, Math.min(9999, +b.label || 0));
@@ -492,9 +497,23 @@ const reviewServer = http.createServer(async (req, res) => {
       return send(res, 200, { ok: true });
     }
     // the athletes tracked between two times (the review's chosen day), newest first
+    if (p === '/api/number-seen' && req.method === 'POST') {
+      if (!isJson(req)) return send(res, 415, { error: 'JSON only' });
+      const b = await readBody(req); if (!b) return send(res, 413, { error: 'too big' });
+      const number = String(b.number || '').replace(/\D/g, '').slice(0, 12); if (!number) return send(res, 400, { error: 'no number' });
+      const at = !isNaN(Date.parse(b.at)) ? new Date(b.at).toISOString() : new Date().toISOString();
+      const src = b.src === 'upload' ? 'upload' : 'live', cam = Math.max(0, Math.min(99, +b.cam || 0)), video = String(b.video || '').replace(/[^\w.-]+/g, '_').slice(0, 140);
+      const t = b.t != null && Number.isFinite(+b.t) ? +b.t : null;
+      // still in view: the same sighting (20 seconds' grace, in the video's own time for an upload)
+      const same = numbersSeen.findLast((x) => x.number === number && x.src === src && x.cam === cam && x.video === video);
+      const near = same && (src === 'upload' ? t != null && same.lastT != null && t >= same.lastT && t - same.lastT <= 20 : Date.parse(at) - Date.parse(same.lastAt) <= 20000);
+      if (near) { same.lastAt = at; same.lastT = t; }
+      else { numbersSeen.push({ id: crypto.randomBytes(5).toString('hex'), number, src, cam, video, firstAt: at, lastAt: at, firstT: t, lastT: t }); if (numbersSeen.length > 5000) numbersSeen = numbersSeen.slice(-5000); athletesRev++; }
+      saveNumbers(); return send(res, 200, { ok: true });
+    }
     if (p === '/api/athletes') {
       const from = u.searchParams.get('from') || '', to = u.searchParams.get('to') || '9';
-      return send(res, 200, { rev: athletesRev, list: athletes.filter((a) => a.lastAt >= from && a.firstAt <= to).slice(-2000).reverse() });
+      return send(res, 200, { rev: athletesRev, list: athletes.filter((a) => a.lastAt >= from && a.firstAt <= to).slice(-2000).reverse(), numbers: numbersSeen.filter((x) => x.lastAt >= from && x.firstAt <= to) });
     }
     if (p === '/api/athlete-pic') {
       const file = path.join(PICS, (+u.searchParams.get('n') | 0) + '.jpg');
@@ -520,6 +539,7 @@ const reviewServer = http.createServer(async (req, res) => {
       try { fs.unlinkSync(file); } catch (e) { return send(res, 409, { error: `It's in use: ${e.message}` }); }
       for (const a of athletes.filter((x) => x.src === 'upload' && x.video === name)) dropAthleteFiles(a.n);
       athletes = athletes.filter((x) => !(x.src === 'upload' && x.video === name)); saveAthletes();
+      numbersSeen = numbersSeen.filter((x) => !(x.src === 'upload' && x.video === name)); saveNumbers();
       return send(res, 200, { ok: true });
     }
     if (p === '/api/uploads') {

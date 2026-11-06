@@ -95,6 +95,17 @@ test('skips a lone digit with unread digits beside it', () => {
   assert.ok(runs.every((r) => r.digits >= 4), `partial run read: ${runs.map((r) => r.digits)}`);
 });
 
+test('with the gap check off, a number is kept whatever is beside it', () => {
+  // A whole picture: a digit-sized shape beside the number (a person, a tree) shouldn't lose it.
+  const g = scene({ n: 3 });
+  for (let y = 90; y < 130; y++) for (let x = 412; x < 438; x++) {
+    if (x < 420 || x >= 430 || y < 98 || y >= 122) g[y * W + x] = 20;
+  }
+  const dark = (o) => prepareDigits(g, W, H, { minDigits: 3, maxDigits: 3, ...o }).filter((r) => r.dark);
+  assert.equal(dark({}).length, 0, 'the check should skip the dark number by default');
+  assert.equal(dark({ checkGaps: false })[0]?.digits, 3);
+});
+
 test('finds nothing in an empty frame', () => {
   assert.equal(prepareDigits(new Uint8Array(W * H).fill(128), W, H).length, 0);
 });

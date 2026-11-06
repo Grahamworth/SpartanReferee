@@ -17,6 +17,7 @@ export const PREP_DEFAULTS = {
   maxTiltDeg: 25,
   outHeight: 56,      // digit height in the redrawn image
   maxRuns: 2,
+  checkGaps: true,    // skip a run with a digit-sized blob beside it. Off for a whole picture, where anything can be beside it
 };
 
 function integral(gray, W, H) {
@@ -235,7 +236,7 @@ export function prepareDigits(gray, W, H, opts = {}) {
   for (const { dark, labels, comps } of passes) {
     const digits = comps.slice(1).filter((c) => digitLike(c, W, H, o));
     for (const run of findRuns(digits, o).slice(0, o.maxRuns)) {
-      if (!hasGap(run, everything)) found.push({ run, labels, dark });
+      if (!o.checkGaps || !hasGap(run, everything)) found.push({ run, labels, dark });
     }
   }
   return found

@@ -85,7 +85,7 @@ function render(st) {
     const expanded = s.live || (opened[s.n] ?? (!touched && s.n === 1 && !st.stations.some((c) => c.live)));
     if (!expanded) return `<article class="card compact">
       <div class="top"><div class="name">Camera ${s.n}</div><div class="status">Waiting for a phone</div></div>
-      <div class="row"><button class="btn red" data-open="${s.n}">Show QR code</button><button class="btn" data-expand="${s.n}">Open in Video review</button></div>
+      <div class="row"><button class="btn" data-open="${s.n}">Show QR code</button><button class="btn" data-expand="${s.n}">Open in Video review</button></div>
     </article>`;
     const t = tab[s.n] || (s.live ? 'live' : 'spartans');
     const show = t === 'live' && !s.live ? 'spartans' : t;

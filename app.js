@@ -1232,6 +1232,7 @@ function onMulti(t) {
   recordProof(t);
   for (const { track, ev } of moved) onMultiEvent(track, ev);
   sendProof();
+  shownNumberTick(); // first: the head band reader below takes the number reader whenever it's free
   multiBibTick();
   renderMulti();
 }
@@ -1244,6 +1245,39 @@ function onMulti(t) {
 // way twice is theirs. One that's never read is saved as "No number" (it can be typed in afterwards).
 let multiBibAt = 0, multiBibBusy = false, multiBibTurn = 0;
 const rotate180 = (img) => ({ ...img, data: Uint8ClampedArray.from(img.data).reverse() });
+// A number shown to the camera, usually just before that athlete starts: the whole picture is read about once a second,
+// and a number read twice within 6 seconds is reported with the time, so the judges can search it and go to that moment.
+// It isn't given to any athlete: nobody knows yet who's holding it.
+let shownAt = 0;
+const shownReads = new Map();
+async function shownNumberTick() {
+  if (!settings.captureBib || !reportsAthletes() || multiBibBusy || !S.frame) return;
+  const now = performance.now(); if (now - shownAt < 1000) return; shownAt = now;
+  multiBibBusy = true;
+  const at = new Date().toISOString(), t = S.upload ? +video.currentTime.toFixed(2) : null;
+  try {
+    const reader = await ensureReader();
+    const { w, h } = S.frame;
+    const g = grabGray({ x: 0, y: 0, w, h }, h); // not scaled down further: a card further off is small
+    const runs = prepareDigits(g.gray, g.W, g.H, { minDigits: Number(settings.bibMin), maxDigits: Number(settings.bibMax), maxRuns: 6, checkGaps: false }); // a busy picture has other shapes
+    for (const img of runs) {
+      let best = null;
+      for (const view of [img, rotate180(img)]) {
+        const c = filterBibs(await reader.read(view), ENGINES[reader.engine].minConf);
+        if (c.length) { best = c[0]; break; }
+      }
+      if (!best) continue;
+      const last = shownReads.get(best.text);
+      shownReads.set(best.text, now);
+      if (last && now - last < 6000) {
+        const k = athleteKey();
+        fetch('/api/number-seen', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ cam: k.cam, src: k.src, video: k.video, at, t, number: best.text, conf: Math.round(best.conf) }) }).catch(() => {});
+      }
+      break;
+    }
+  } catch { /* no number reader */ } finally { multiBibBusy = false; }
+}
+
 async function multiBibTick() {
   if (!settings.captureBib || !S.multi || (S.prepassing && !S.upload) || multiBibBusy || !S.frame) return;
   const now = performance.now(); if (now - multiBibAt < 500) return; multiBibAt = now;

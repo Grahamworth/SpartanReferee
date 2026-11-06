@@ -401,13 +401,13 @@ function pickAt(e, cam, v) {
 }
 
 // ---------------------------------------------------------------- everyone the AI judges tracked (the chosen day)
-let athRev = -1, athList = [], athLoading = false;
+let athRev = -1, athList = [], athLoading = false, numbersSeen = [];
 async function loadAthletes() {
   if (athLoading) return; athLoading = true;
   try {
     const [a, b] = dayBounds();
     const r = await fetch(`/api/athletes?from=${encodeURIComponent(new Date(a).toISOString())}&to=${encodeURIComponent(new Date(b).toISOString())}`).then((x) => x.json()).catch(() => null);
-    if (r) { athRev = r.rev; athList = r.list; renderAthletes(); renderSides(); renderMarkers(true); fillCamFilter(); numSearch(); }
+    if (r) { athRev = r.rev; athList = r.list; numbersSeen = r.numbers || []; renderAthletes(); renderSides(); renderMarkers(true); fillCamFilter(); numSearch(); }
   } finally { athLoading = false; }
 }
 const athName = (a) => (a.bib && a.bib !== 'No number' ? `#${a.bib}` : `No number <small>(athlete ${a.label})</small>`);
@@ -660,21 +660,36 @@ let markSig = '';
 function renderMarkers(force) {
   if (!st || !tlFrom) return;
   const end = tlEnd(), list = athList.filter((a) => a.src === 'live' && Date.parse(a.firstAt) >= tlFrom && Date.parse(a.firstAt) <= end);
-  const sig = JSON.stringify([list.map((a) => [a.n, a.bib]), tlFrom, Math.round(end / 30000)]);
+  const shown = numbersSeen.filter((x) => x.src === 'live' && Date.parse(x.firstAt) >= tlFrom && Date.parse(x.firstAt) <= end);
+  const sig = JSON.stringify([list.map((a) => [a.n, a.bib]), shown.map((x) => x.id), tlFrom, Math.round(end / 30000)]);
   if (sig === markSig && !force) return; markSig = sig;
   $('tlMarks').innerHTML = list.map((a) => `<button data-n="${a.n}" style="left:${(100 * (Date.parse(a.firstAt) - tlFrom) / Math.max(1, end - tlFrom)).toFixed(2)}%;background:${CAM_COLOURS[(a.cam - 1 + CAM_COLOURS.length) % CAM_COLOURS.length]}" title="Camera ${a.cam} · ${a.bib && a.bib !== 'No number' ? 'No. ' + esc(a.bib) : 'athlete ' + a.label + ' (no number yet)'} · ${hms(new Date(a.firstAt))} · ${Number(a.reps)} reps">${a.bib && a.bib !== 'No number' ? '#' + esc(a.bib) : 'A' + a.label}</button>`).join('');
-  $('tlMarks').querySelectorAll('button').forEach((b) => b.onclick = () => showAthlete(athList.find((a) => a.n === +b.dataset.n)));
+  $('tlMarks').insertAdjacentHTML('beforeend', shown.map((x) => `<button class="seen" data-seen="${esc(x.id)}" style="left:${(100 * (Date.parse(x.firstAt) - tlFrom) / Math.max(1, end - tlFrom)).toFixed(2)}%" title="#${esc(x.number)} shown to camera ${x.cam} at ${hms(new Date(x.firstAt))}">#${esc(x.number)}</button>`).join(''));
+  $('tlMarks').querySelectorAll('button').forEach((b) => b.onclick = () => (b.dataset.seen ? goToNumber(numbersSeen.find((x) => x.id === b.dataset.seen)) : showAthlete(athList.find((a) => a.n === +b.dataset.n))));
 }
 
 // ---------------------------------------------------------------- find an athlete by number, from any tab
+// a few seconds before a number was shown: the recording of that camera, or the uploaded video if it's the one open
+function goToNumber(x) {
+  if (!x) return;
+  if (x.src === 'live') { viewCam = x.cam; showTab('live'); replay(new Date(Date.parse(x.firstAt) - 3000), 40, true); return; }
+  const v = upRunning === x.video && document.querySelector('#upStage iframe')?.contentDocument?.querySelector('video');
+  if (!v) { showTab('upload'); upShown = x.video; renderSides(); toast('That video isn\'t open: use Judge again in the list below, then search again.'); return; }
+  showTab('upload'); v.currentTime = Math.max(0, (x.firstT ?? 0) - 3);
+}
 function numSearch() {
   const q = $('numSearch').value.trim().toLowerCase(), box = $('numResults');
   if (!q) { box.hidden = true; return; }
   const found = athList.filter((a) => a.bib && a.bib !== 'No number' && String(a.bib).toLowerCase().includes(q)).slice(0, 12);
+  // when that number was shown to a camera, newest first, with who started next to narrow down who to watch
+  const seen = numbersSeen.filter((x) => x.number.includes(q)).sort((a, b) => b.firstAt.localeCompare(a.firstAt)).slice(0, 12);
+  const nextUp = (x) => athList.filter((a) => a.src === x.src && a.cam === x.cam && a.video === x.video && a.firstAt >= x.firstAt).sort((a, b) => a.firstAt.localeCompare(b.firstAt))[0];
+  const seenHtml = seen.map((x) => { const a = nextUp(x), start = a && (x.src !== 'live' || Date.parse(a.firstAt) - Date.parse(x.firstAt) < 120000) ? a : null; return `<button data-seen="${esc(x.id)}"><span><b>#${esc(x.number)} shown</b> ${x.src === 'upload' ? `at ${mss(x.firstT ?? 0)} in ${esc(upName(x.video))}` : `at ${hms(new Date(x.firstAt))} · Camera ${x.cam}`}<br><small>${start ? `Next to start: ${shortName(start)}` : 'Go to this moment'}</small></span></button>`; }).join('');
   box.hidden = false;
-  box.innerHTML = found.length ? found.map((a) => `<button data-n="${a.n}">${a.pic ? `<img src="${picUrl(a)}" alt="">` : ''}<span><b>#${esc(a.bib)}</b> ${whereText(a)}<br><small>${whenText(a)} · ${Number(a.reps)} reps</small></span></button>`).join('')
-    : `<p class="muted">No athlete with that number ${isToday() ? 'today' : 'on this day'}. Try another day, or find them in the recording and use Pick athlete.</p>`;
-  box.querySelectorAll('button').forEach((b) => b.onmousedown = (e) => { e.preventDefault(); showAthlete(athList.find((a) => a.n === +b.dataset.n)); box.hidden = true; });
+  if (seenHtml || found.length) box.innerHTML = seenHtml + (found.length ? found.map((a) => `<button data-n="${a.n}">${a.pic ? `<img src="${picUrl(a)}" alt="">` : ''}<span><b>#${esc(a.bib)}</b> ${whereText(a)}<br><small>${whenText(a)} · ${Number(a.reps)} reps</small></span></button>`).join('')
+    : '');
+  else box.innerHTML = `<p class="muted">That number wasn't seen ${isToday() ? 'today' : 'on this day'}. Try another day, or find them in the recording and use Pick athlete.</p>`;
+  box.querySelectorAll('button').forEach((b) => b.onmousedown = (e) => { e.preventDefault(); box.hidden = true; if (b.dataset.seen) goToNumber(numbersSeen.find((x) => x.id === b.dataset.seen)); else showAthlete(athList.find((a) => a.n === +b.dataset.n)); });
 }
 $('numSearch').oninput = numSearch;
 $('numSearch').onfocus = numSearch;

@@ -1,7 +1,7 @@
 {
- "version": "1.3.5",
+ "version": "1.3.6",
  "url": "https://mango-glacier-03e711403.4.azurestaticapps.net/downloads/burpee-judge-receiver-setup.exe",
- "size": 202956117,
- "sha512": "3yRBiUAZPP3elCXRGwQSQbMwbEWgxAxfuHDCd607mZYB8AH6jTwbGxFxeUsoiXsuh9a4WVCLh/0fnwZpuH5KsQ==",
- "notes": "A cleaner look: compact camera cards on Setup, one row of Live controls, clearer athlete cards and a clean uploaded video."
+ "size": 202956241,
+ "sha512": "NVQXok23jNRNtrHeDYl40mV9RD8OxSi/UONYKEi+zYxtaC9irbpWqOb569XgZFyiDfNzWhTAikh6pqYmeZbjmw==",
+ "notes": "Numbers shown to a camera are now logged with the time, and you can search them to jump to that moment."
 }

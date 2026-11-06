@@ -58,6 +58,7 @@ label { color: var(--muted); display: inline-flex; align-items: center; gap: 8px
 .tlwrap { flex: 1; position: relative; min-width: 0; }
 .tlwrap input[type=range] { width: 100%; accent-color: var(--red); height: 30px; padding: 0; }
 .tlmarks { position: absolute; left: 0; right: 0; top: -14px; height: 14px; }
+.tlmarks button.seen { background: var(--amber); color: #000; }
 .tlmarks button { position: absolute; transform: translateX(-50%); padding: 0 5px; height: 16px; font: 700 11px system-ui; line-height: 16px; border: 0; color: #fff; cursor: pointer; white-space: nowrap; border-radius: 3px; }
 .tlmarks button::after { content: ""; position: absolute; left: 50%; bottom: -6px; width: 2px; height: 6px; background: inherit; transform: translateX(-50%); }
 .at { font: 700 20px Consolas, ui-monospace, monospace; min-width: 110px; }
