@@ -48,7 +48,9 @@
     for (const t of tries) { if (out.has(t.c.id) || used.has(t.a.n) || !t.r.agree) continue; out.set(t.c.id, t); used.add(t.a.n); }
     return counts.map((c) => {
       const best = out.get(c.id);
-      const also = tries.filter((t) => t.c === c && t.a !== best?.a && t.r.agree >= 2).map((t) => ({ label: t.a.label, bib: t.a.bib, agree: t.r.agree }));
+      // only reps their match didn't have: two people on the same rhythm line up by chance all the time
+      const lost = best ? best.r.items.filter((x) => x.kind === 'missed').map((x) => ({ t: x.t, type: 'rep' })) : [];
+      const also = athletes.filter((a) => a !== best?.a).map((a) => ({ label: a.label, bib: a.bib, agree: compare(lost, a.events, win).agree })).filter((x) => x.agree >= 2);
       return { id: c.id, athlete: best ? best.a : null, result: best ? best.r : compare(c.marks, [], win), also };
     });
   }

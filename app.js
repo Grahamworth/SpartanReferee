@@ -2331,11 +2331,24 @@ async function jumpTo(time) {
   updateSeek();
 }
 
+// 'seeked' can come before the new picture is ready, so the same video could be judged differently each time: wait for
+// the new frame itself too. A video with fewer frames than we step through has no new frame to wait for, hence the short limit.
+const NEW_FRAME_WAIT_MS = 500;
+// Stepping lands exactly on the line between two of the video's frames, where rounding can pick either: aim just inside.
+const SEEK_INSIDE_FRAME_S = 0.005;
+let lastFrameTime = -1;
 function seekTo(time) {
   return new Promise((r) => {
-    const done = () => { clearTimeout(timer); r(); };
-    const timer = setTimeout(() => { video.removeEventListener('seeked', done); r(); }, 3000);
-    video.addEventListener('seeked', done, { once: true });
+    let seeked = false, framed = !video.requestVideoFrameCallback, settle = null;
+    const check = () => { if (seeked && framed) { clearTimeout(timer); clearTimeout(settle); r(); } };
+    const timer = setTimeout(() => { video.removeEventListener('seeked', onSeeked); r(); }, 3000);
+    const onSeeked = () => { seeked = true; if (!framed) settle = setTimeout(() => { framed = true; check(); }, NEW_FRAME_WAIT_MS); check(); };
+    const onFrame = (_, m) => {
+      if (m.mediaTime === lastFrameTime) { video.requestVideoFrameCallback(onFrame); return; }
+      lastFrameTime = m.mediaTime; framed = true; check();
+    };
+    if (!framed) video.requestVideoFrameCallback(onFrame);
+    video.addEventListener('seeked', onSeeked, { once: true });
     video.currentTime = time;
   });
 }
@@ -2356,7 +2369,7 @@ async function prepass(range) {
   const i0 = range ? Math.max(0, Math.floor(range.from * PREPASS_FPS)) : 0;
   const n = Math.floor((range ? Math.min(range.to, S.videoDur) : S.videoDur) * PREPASS_FPS);
   for (let i = i0; i < n && S.testMode; i++) {
-    await seekTo(i / PREPASS_FPS);
+    await seekTo(i / PREPASS_FPS + SEEK_INSIDE_FRAME_S);
     S.lastVideoTime = video.currentTime;
     S.frame = frameSource();
     const { src, w, h } = S.frame;

@@ -1,7 +1,7 @@
 {
- "version": "1.3.9",
+ "version": "1.3.10",
  "url": "https://mango-glacier-03e711403.4.azurestaticapps.net/downloads/burpee-judge-receiver-setup.exe",
- "size": 202961543,
- "sha512": "4DtRXiojDii1Nww3KncmacH5kIYoBgs59xYfeiqGw4tPk9YPvlWuGGPVWH96L+C3QNXfLnQt0bKlZd6bWnEdCA==",
- "notes": "New: count an athlete's reps by hand and see how the AI judge compares."
+ "size": 202965290,
+ "sha512": "HK/+EsEJtP9qoSAiev2qVWRaBxpig4Qjf24/ywz9jBicMnhDVMpqdbqAtymQEwqgE33Ouc5hcoUseEkxxC4/VQ==",
+ "notes": "Uploaded videos now give the same result every time they're judged. Also: count an athlete's reps by hand and compare with the AI judge."
 }

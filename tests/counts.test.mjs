@@ -68,6 +68,13 @@ test('someone the AI never found shows as everything missed', () => {
   assert.equal(r[0].athlete, null); assert.equal(r[0].result.missed, 2); assert.equal(r[0].result.aiReps, 0);
 });
 
+test('someone else on the same rhythm is no sign of tracking swapping', () => {
+  const marks = [rep(5000), rep(10000), rep(15000), rep(20000)];
+  const athletes = [{ n: 1, label: 1, events: marks }, { n: 2, label: 2, events: [rep(5500), rep(10500), rep(15500)] }];
+  const [r] = matchPeople([{ id: 'a', marks }], athletes);
+  assert.equal(r.athlete.label, 1); assert.deepEqual(r.also, []);
+});
+
 test('reps landing on another athlete point to tracking swapping between them', () => {
   const marks = [rep(5000), rep(10000), rep(15000), rep(20000), rep(25000)];
   const athletes = [{ n: 1, label: 1, events: marks.slice(0, 3) }, { n: 2, label: 2, events: marks.slice(3) }];
