@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>HeadJudge customers</title>
+<meta name="theme-color" content="#12161c">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;1,800&family=Barlow:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="headjudge.css">
+<script src="brand.js"></script>
+<script src="booking.js"></script>
+<script type="module" src="customers.js"></script>
+</head>
+<body>
+<header class="top">
+  <a class="mark" href="judging.html">Head<span>Judge</span> admin</a>
+  <span id="who" class="muted"></span>
+</header>
+<main class="page admin">
+  <section id="signIn" class="card narrow" hidden>
+    <h2>Sign in</h2>
+    <div id="googleBtn"></div>
+    <p class="error" id="signInError" role="alert" hidden></p>
+  </section>
+  <section id="refused" class="card narrow" hidden>
+    <h2>Admins only</h2>
+    <p class="muted">This account isn't an admin.</p>
+  </section>
+
+  <div id="content" hidden>
+    <section class="adminTop">
+      <dl class="totals" aria-label="This month">
+        <div><dt id="monthName">This month</dt><dd id="tCharge">£0.00</dd><small>charged</small></div>
+        <div><dt>Azure's cost</dt><dd id="tAzure">£0.00</dd><small>running time</small></div>
+        <div><dt>Your profit</dt><dd id="tProfit">£0.00</dd><small id="tHours">0 camera hours</small></div>
+        <div><dt>Running now</dt><dd id="tRunning">0</dd><small id="tRunningOf"></small></div>
+      </dl>
+
+      <form id="pricing" class="card pricing">
+        <h2>Pricing</h2>
+        <label for="markup">Added to Azure's cost</label>
+        <div class="suffixed"><input id="markup" type="number" inputmode="decimal" min="0" max="1000" step="1" required><span>%</span></div>
+        <div class="sums" aria-live="polite">
+          <div><span id="azureLine"></span></div>
+          <div class="big"><span>Customers pay</span><b id="payLine"></b></div>
+          <div><span>You make, per camera hour</span><b id="marginLine"></b></div>
+          <div><span>2 cameras for 8 hours</span><b id="exampleLine"></b></div>
+        </div>
+        <p class="note warnNote" id="oddNote" hidden></p>
+        <p class="note">New bookings use this price. Bookings already made keep theirs.</p>
+        <p class="error" id="pricingError" role="alert" hidden></p>
+        <button class="primary" id="savePricing" type="submit" disabled>Save price</button>
+      </form>
+    </section>
+
+    <section>
+      <div class="listHead">
+        <h2>Customers</h2>
+        <div class="filters" role="group" aria-label="Show">
+          <input id="find" type="search" placeholder="Find a customer" aria-label="Find a customer">
+          <select id="statusFilter" aria-label="Status">
+            <option value="">All</option><option value="pending">Waiting for you</option><option value="approved">Approved</option><option value="suspended">Suspended</option><option value="declined">Declined</option>
+          </select>
+        </div>
+      </div>
+      <div id="list" class="customerList"></div>
+      <p class="note">Azure's cost here is running time. Each customer who has started a server also keeps a disk and an internet address, about £10 a month in all, whether it's running or not.</p>
+    </section>
+  </div>
+</main>
+<div class="toast" id="toast" role="status"></div>
+</body>
+</html>

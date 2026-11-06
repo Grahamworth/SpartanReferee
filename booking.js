@@ -5,8 +5,8 @@
   const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
   /** { servers, cost, how }: how many servers those cameras need, and what they cost for that long */
   function quote(cameras, hours, price) {
-    const servers = serversFor(cameras, price.camerasPerServer), cost = Math.round(servers * hours * price.hour * 100) / 100;
-    return { servers, cost, how: `${plural(servers, 'server')} × ${plural(hours, 'hour')} × ${money(price.hour)} an hour` };
+    const servers = serversFor(cameras, price.camerasPerServer), cost = Math.round(cameras * hours * price.cameraHour * 100) / 100;
+    return { servers, cost, how: `${plural(cameras, 'camera')} × ${plural(hours, 'hour')} × ${money(price.cameraHour)}` };
   }
   /** "in 3 hours 12 minutes" */
   function timeLeft(ms) {

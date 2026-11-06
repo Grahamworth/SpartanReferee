@@ -11,7 +11,7 @@ const api = createApi({
   blobSigner: process.env.STORAGE_CONNECTION ? blobSigner(process.env.STORAGE_CONNECTION) : null,
   // logos stay in the page's own data link here: nothing is saved
   putBrand: async (_name, buf, type) => `data:${type};base64,${buf.toString('base64')}`,
-  maxRunningServers: +process.env.MAX_RUNNING_SERVERS || 1,
+  maxRunningServers: +process.env.MAX_RUNNING_SERVERS || 1, serverHourPrice: 0.66,
   store: memoryStore(), secret: 'dev-secret-dev-secret-dev-secret-dev', googleClientId: 'dev', adminEmails: (process.env.ADMIN_EMAILS || '').split(','),
   verifyGoogle: async (t) => { const m = /^dev:(.+@.+)$/.exec(t); if (!m) throw new Error('bad'); return { sub: m[1], email: m[1], name: m[1].split('@')[0] }; },
   fetchText: async (url) => (await fetch(url)).text(),

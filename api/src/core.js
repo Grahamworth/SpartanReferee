@@ -502,6 +502,8 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
   async function admin(method, a, b, c, h, body) {
     if (!isAdmin(h)) return reply(403, { error: 'Admins only' });
     if (a === 'companies') return adminCompanies(method, b, c, body);
+    if (a === 'pricing' && !b) return adminPricing(method, body);
+    if (a === 'customers') return adminCustomers(method, b, c);
     if (a === 'people') return adminPeople(method, b, c, body);
     if (a === 'judgecode' && !b) return judgeCode(method);
     if (a === 'bans' && !b && method === 'GET') {
@@ -517,8 +519,8 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
   }
 
   const recordings = createRecordings({ store, signer: blobSigner, now, reply, session, isAdmin });
-  const { companies, adminCompanies } = createCompanies({ store, now, reply, session, isAdmin, putBrand });
-  const servers = createServers({ store, now, reply, session, maxRunning: maxRunningServers, hourPrice: serverHourPrice });
+  const { servers, adminPricing, adminCustomers, stopCompany } = createServers({ store, now, reply, session, maxRunning: maxRunningServers, hourPrice: serverHourPrice });
+  const { companies, adminCompanies } = createCompanies({ store, now, reply, session, isAdmin, putBrand, onBlocked: stopCompany });
 
   async function handle({ method, path, headers = {}, body, query: extraQuery = {} }) {
     const h = Object.fromEntries(Object.entries(headers).map(([k, v]) => [k.toLowerCase(), v]));

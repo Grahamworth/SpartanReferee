@@ -23,13 +23,13 @@ function drawQuote() {
   $('start').disabled = busy || !last.canStart || !ok;
   if (!ok) { $('quoteHow').textContent = cams > p.maxCameras ? `We can run ${p.maxCameras} cameras at once at the moment` : 'How many cameras do you need?'; $('quoteCost').textContent = ''; return; }
   const q = quote(cams, +$('hours').value, p);
-  $('quoteHow').textContent = q.how; $('quoteCost').textContent = money(q.cost);
+  $('quoteHow').textContent = `${q.how} · ${plural(q.servers, 'server')} (${p.camerasPerServer} cameras each)`; $('quoteCost').textContent = money(q.cost);
   $('start').textContent = q.servers === 1 ? 'Start server' : `Start ${q.servers} servers`;
 }
 function drawExtendQuote() {
   if (!last?.serverCount) return;
-  const hrs = +$('extendHours').value, cost = Math.round(last.serverCount * hrs * last.price.hour * 100) / 100;
-  $('extendHow').textContent = `${plural(last.serverCount, 'server')} × ${plural(hrs, 'hour')}`;
+  const hrs = +$('extendHours').value, cost = Math.round(last.cameras * hrs * last.bookedCameraHour * 100) / 100;
+  $('extendHow').textContent = `${plural(last.cameras, 'camera')} × ${plural(hrs, 'hour')}`;
   $('extendCost').textContent = `+${money(cost)}`;
 }
 function drawList(s) {
@@ -68,7 +68,7 @@ function draw(s) {
   $('extendBtn').disabled = busy; $('stop').disabled = busy;
   show($('factBooked'), s.wanted === 'on');
   if (s.wanted === 'on') $('booked').textContent = `${plural(s.bookedHours, 'hour')} · ${money(s.bookedCost)}`;
-  $('hours2').textContent = plural(s.hoursThisMonth, 'hour');
+  $('hours2').textContent = `${plural(s.used.cameraHours, 'camera hour')} · ${money(s.used.charge)}`;
 }
 async function refresh() { try { draw((await call('servers/mine')).server); } catch { /* the next try */ } }
 async function act(path, body = {}) {
@@ -88,7 +88,7 @@ $('cameras').addEventListener('input', drawQuote);
 $('hours').addEventListener('change', drawQuote);
 $('extendHours').addEventListener('change', drawExtendQuote);
 $('extend').addEventListener('submit', (e) => { e.preventDefault(); act('extend', { hours: +$('extendHours').value }); });
-$('stop').onclick = () => { if (confirm('Stop now? Any cameras still streaming will stop being recorded. Time you\'ve booked isn\'t kept for later.')) act('stop'); };
+$('stop').onclick = () => { if (confirm('Stop now? Any cameras still streaming will stop being recorded. You pay only for the time used.')) act('stop'); };
 
 function enterBrand(c) {
   applyTheme(c.theme);

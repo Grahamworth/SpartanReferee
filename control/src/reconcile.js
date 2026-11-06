@@ -70,7 +70,15 @@ async function reconcile({ store, arm, health, seedFor, now = Date.now, log = ()
       const d = decide({ want, st, power, healthy, now: t });
       const next = { ...st, id: want.id, host: server.host, state: d.state, power, checkedAt: t, minutes: { ...(st.minutes || {}) } };
       // hours used, counted by the minute the machine is actually on
-      if (running && st.checkedAt) { const k = monthOf(t); next.minutes[k] = (next.minutes[k] || 0) + Math.min(10, (t - st.checkedAt) / 60e3); }
+      if (running && st.checkedAt) {
+        const k = monthOf(t), mins = Math.min(10, (t - st.checkedAt) / 60e3);
+        const add = (name, v) => { next[name] = { ...(st[name] || {}) }; next[name][k] = (next[name][k] || 0) + v; };
+        next.minutes[k] = (next.minutes[k] || 0) + mins;
+        // charged at the price its booking started at, for the cameras booked on this server
+        add('cameraMinutes', mins * (want.bookedCameras || 0));
+        add('charge', (mins / 60) * (want.bookedCameras || 0) * (want.cameraHour || 0));
+        add('azure', (mins / 60) * (want.azureHour || 0));
+      }
       if (d.error) { next.error = d.error; next.errorAt = next.errorAt && st.error === d.error ? next.errorAt : t; } else if (d.action === 'create' || d.action === 'start' || d.state === 'on') { next.error = ''; next.errorAt = 0; }
       if (d.action === 'create' || d.action === 'start') {
         next.startedAt = t;

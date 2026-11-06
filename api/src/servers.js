@@ -13,7 +13,16 @@
    POST /api/servers/mine/extend {hours}          -> { server }
    POST /api/servers/mine/stop                    -> { server }
    POST /api/servers/mine/open {n}                -> { url } a short-lived sign-in link to that server's own page
-   POST /api/servers/report                       (a server, with its key) -> { stop, until } */
+   POST /api/servers/report                       (a server, with its key) -> { stop, until }
+
+   Admins:
+   GET  /api/admin/pricing                        -> what Azure charges, the percentage on top, and what customers pay
+   PUT  /api/admin/pricing {markupPercent}
+   GET  /api/admin/customers                      -> every company, its booking, and this month's use, cost and charge
+   POST /api/admin/customers/<id>/stop            stop a company's servers
+
+   Customers pay per camera, per hour the servers actually run: Azure's price for a server, shared between its 2 cameras, plus the percentage.
+   A booking keeps the price it started at. The control app adds up the time, cost and charge, by the minute. */
 const crypto = require('node:crypto');
 const { recordingsPartition } = require('./recordings');
 
@@ -27,7 +36,25 @@ const slotId = (company, n) => (n === 1 ? company : `${company}~${n}`);
 const serversFor = (cameras) => Math.ceil(cameras / CAMERAS_PER_SERVER);
 const pounds = (v) => Math.round(v * 100) / 100;
 
+const pence = (v) => Math.ceil(Math.round(v * 1e6) / 1e4) / 100;
+const MAX_MARKUP = 1000;
+
 function createServers({ store, now, reply, session, maxRunning = 1, hourPrice = 0.66, region = 'italynorth' }) {
+  async function pricing() {
+    const markupPercent = (await store.get('settings', 'pricing'))?.markupPercent || 0;
+    const azureCameraHour = hourPrice / CAMERAS_PER_SERVER;
+    return { markupPercent, azureServerHour: hourPrice, azureCameraHour, camerasPerServer: CAMERAS_PER_SERVER, cameraHour: pence(azureCameraHour * (1 + markupPercent / 100)) };
+  }
+  /** what a company has run up this month, across all its servers */
+  async function usage(company) {
+    const k = monthOf(now()), out = { serverHours: 0, cameraHours: 0, charge: 0, azure: 0 };
+    for (const st of await store.list('serverstate')) {
+      if (!ofCompany(st.id, company)) continue;
+      out.serverHours += (st.minutes?.[k] || 0) / 60; out.cameraHours += (st.cameraMinutes?.[k] || 0) / 60;
+      out.charge += st.charge?.[k] || 0; out.azure += st.azure?.[k] || 0;
+    }
+    return { serverHours: Math.round(out.serverHours * 10) / 10, cameraHours: Math.round(out.cameraHours * 10) / 10, charge: pounds(out.charge), azure: pounds(out.azure), profit: pounds(out.charge - out.azure) };
+  }
   async function companyOf(h) {
     const me = session(h); if (!me) return { error: reply(401, { error: 'Sign in first' }) };
     const of = await store.get('companyof', me.uid), c = of && await store.get('company', of.id);
@@ -38,20 +65,19 @@ function createServers({ store, now, reply, session, maxRunning = 1, hourPrice =
   // the whole booking and each server in it, in one view
   async function view(c) {
     const plan = await store.get('serverplan', c.id), count = plan?.servers || 1, slots = [];
-    const month = monthOf(now()); let minutes = 0;
     for (let n = 1; n <= count; n++) {
       const id = slotId(c.id, n), want = await store.get('serverwant', id), st = await store.get('serverstate', id);
-      minutes += st?.minutes?.[month] || 0;
       slots.push({ n, state: st?.state || 'off', wanted: want?.desired === 'on' && active(plan) ? 'on' : 'off', error: st?.error || '', cameras: want?.cameras || 0, judges: want?.judges || 0 });
     }
     const wanted = slots.some((s) => s.wanted === 'on') ? 'on' : 'off';
+    const price = await pricing(), u = await usage(c.id);
     const state = slots.some((s) => s.state === 'stopping') ? 'stopping' : slots.some((s) => s.state === 'starting') ? 'starting' : slots.every((s) => s.state === 'on') ? 'on' : slots.some((s) => s.state === 'on') ? 'starting' : 'off';
     return {
       state, wanted, servers: slots, error: slots.map((s) => s.error).find(Boolean) || '',
       cameras: plan?.cameras || 0, serverCount: count, until: wanted === 'on' ? plan.until : 0, bookedHours: plan?.hours || 0,
-      bookedCost: plan ? pounds(plan.hours * plan.servers * hourPrice) : 0,
-      hoursThisMonth: Math.round(minutes / 6) / 10, canStart: c.status === 'approved',
-      price: { hour: hourPrice, camerasPerServer: CAMERAS_PER_SERVER, maxHours: MAX_HOURS, maxExtendHours: MAX_EXTEND_HOURS, maxCameras: maxRunning * CAMERAS_PER_SERVER },
+      bookedCost: plan ? pounds(plan.hours * plan.cameras * plan.cameraHour) : 0, bookedCameraHour: plan?.cameraHour || 0,
+      used: { cameraHours: u.cameraHours, charge: u.charge }, canStart: c.status === 'approved',
+      price: { cameraHour: price.cameraHour, camerasPerServer: CAMERAS_PER_SERVER, maxHours: MAX_HOURS, maxExtendHours: MAX_EXTEND_HOURS, maxCameras: maxRunning * CAMERAS_PER_SERVER },
     };
   }
   async function ensureServer(c, n) {
@@ -75,14 +101,46 @@ function createServers({ store, now, reply, session, maxRunning = 1, hourPrice =
     for (const st of await store.list('serverstate')) if (!ofCompany(st.id, company) && st.state && st.state !== 'off') busy.add(st.id);
     return busy.size;
   }
-  async function forEachWant(company, count, change) {
-    for (let n = 1; n <= count; n++) {
-      const id = slotId(company, n);
-      await store.put('serverwant', id, { id, company, ...(await store.get('serverwant', id)), ...change });
+  async function forEachWant(company, count, change, only = 0, bookedCameras = undefined) {
+    for (let n = only || 1; n <= (only || count); n++) {
+      const id = slotId(company, n), was = await store.get('serverwant', id);
+      await store.put('serverwant', id, { id, company, ...was, ...change, ...(bookedCameras === undefined ? {} : { bookedCameras }) });
     }
   }
+  async function stopCompany(id) {
+    const plan = await store.get('serverplan', id);
+    if (plan) await forEachWant(id, plan.servers, { desired: 'off', stopRequestedAt: now() });
+  }
 
-  return async function servers(method, a, b, body, h) {
+  async function adminPricing(method, body) {
+    if (method === 'PUT') {
+      const raw = body?.markupPercent, m = raw === null || raw === undefined || raw === '' ? NaN : Number(raw);
+      if (!Number.isFinite(m) || m < 0 || m > MAX_MARKUP) return reply(400, { error: `The percentage needs to be between 0 and ${MAX_MARKUP}` });
+      await store.put('settings', 'pricing', { markupPercent: Math.round(m * 100) / 100, at: now() });
+    } else if (method !== 'GET') return null;
+    return reply(200, await pricing());
+  }
+  async function adminCustomers(method, id, action) {
+    if (!id && method === 'GET') {
+      const out = [], totals = { charge: 0, azure: 0, profit: 0, cameraHours: 0 };
+      for (const c of (await store.list('company')).sort((x, y) => y.at - x.at)) {
+        const v = await view(c), u = await usage(c.id);
+        out.push({ id: c.id, name: c.name, status: c.status, note: c.note || '', contact: c.contact, email: c.email, website: c.website, about: c.about, logo: c.logo || '', theme: c.theme, at: c.at,
+          server: { state: v.state, wanted: v.wanted, until: v.until, cameras: v.cameras, serverCount: v.serverCount, camerasLive: v.servers.reduce((n, s) => n + s.cameras, 0), bookedCameraHour: v.bookedCameraHour, error: v.error }, usage: u });
+        for (const k of Object.keys(totals)) totals[k] += u[k];
+      }
+      for (const k of Object.keys(totals)) totals[k] = Math.round(totals[k] * 100) / 100;
+      return reply(200, { customers: out, totals, month: monthOf(now()), running: out.filter((c) => c.server.wanted === 'on').length, maxRunning, pricing: await pricing() });
+    }
+    if (id && action === 'stop' && method === 'POST') {
+      if (!(await store.get('company', id))) return reply(404, { error: 'No such company' });
+      await stopCompany(id);
+      return reply(200, { stopped: true });
+    }
+    return null;
+  }
+
+  async function servers(method, a, b, body, h) {
     if (a === 'report' && method === 'POST') {
       const k = await store.get('serverkey', sha(h['x-server-key'] || ''));
       if (!k) return reply(401, { error: 'That key isn\'t recognised' });
@@ -109,8 +167,11 @@ function createServers({ store, now, reply, session, maxRunning = 1, hourPrice =
       if (await othersRunning(c.id) + needed > maxRunning) return reply(409, { error: needed > maxRunning ? `We can run ${maxRunning} server${maxRunning === 1 ? '' : 's'} at once at the moment, which is ${maxRunning * CAMERAS_PER_SERVER} cameras` : 'All our servers are in use right now: try again a little later' });
       for (let n = 1; n <= needed; n++) await ensureServer(c, n);
       const until = now() + hours * HOUR;
-      await store.put('serverplan', c.id, { id: c.id, cameras, servers: needed, hours, until, requestedAt: now(), requestedBy: me.email || '' });
-      await forEachWant(c.id, needed, { desired: 'on', requestedAt: now(), requestedBy: me.email || '', finished: false, stopRequestedAt: 0, until, lastReport: 0 });
+      const { cameraHour, azureServerHour } = await pricing();
+      await store.put('serverplan', c.id, { id: c.id, cameras, servers: needed, hours, until, cameraHour, requestedAt: now(), requestedBy: me.email || '' });
+      await forEachWant(c.id, needed, { desired: 'on', requestedAt: now(), requestedBy: me.email || '', finished: false, stopRequestedAt: 0, until, lastReport: 0, cameraHour, azureHour: azureServerHour });
+      // each server's own share of the cameras, as that's what its time is charged at
+      for (let n = 1, left = cameras; n <= needed; n++, left -= CAMERAS_PER_SERVER) await forEachWant(c.id, n, {}, n, Math.min(left, CAMERAS_PER_SERVER));
       return reply(200, { server: await view(c) });
     }
     if (b === 'extend') {
@@ -136,7 +197,8 @@ function createServers({ store, now, reply, session, maxRunning = 1, hourPrice =
       return reply(200, { url: `https://${s.host}/login?t=${encodeURIComponent(t)}` });
     }
     return null;
-  };
+  }
+  return { servers, adminPricing, adminCustomers, stopCompany };
 }
 
 module.exports = { createServers, signFor, serversFor };

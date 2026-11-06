@@ -44,7 +44,7 @@ test('the page gets what it needs to work out a price before anything starts', a
   const { call, company } = await setup({ max: 4 });
   const h = await company('sam', 'peak');
   const { price } = (await call('GET', 'servers/mine', h)).body.server;
-  assert.deepStrictEqual(price, { hour: 0.66, camerasPerServer: 2, maxHours: 24, maxExtendHours: 12, maxCameras: 8 });
+  assert.deepStrictEqual(price, { cameraHour: 0.33, camerasPerServer: 2, maxHours: 24, maxExtendHours: 12, maxCameras: 8 });
 });
 
 test('two cameras per server: cameras and hours decide how many servers, what it costs and when they stop', async () => {
@@ -53,7 +53,7 @@ test('two cameras per server: cameras and hours decide how many servers, what it
   const r = await start(call, h, 3, 4);
   const s = r.body.server;
   assert.strictEqual(s.serverCount, 2);
-  assert.strictEqual(s.bookedCost, 5.28, '2 servers x 4 hours x 0.66');
+  assert.strictEqual(s.bookedCost, 3.96, '3 cameras x 4 hours x 0.33');
   assert.strictEqual(s.until, now() + 4 * HOUR);
   assert.strictEqual(s.wanted, 'on');
   assert.strictEqual(s.servers.length, 2);

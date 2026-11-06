@@ -102,6 +102,20 @@ test('hours are counted while it runs, and only then', async () => {
   assert.strictEqual(Math.round((await store.get('serverstate', 'peak')).minutes[k]), 2);
 });
 
+test('time, Azure\'s cost and the charge add up by the minute, at the booking\'s own price', async () => {
+  const power = { v: 'running' };
+  const { store, arm } = fake([SERVER, ['serverwant', 'peak', { id: 'peak', desired: 'on', lastReport: NOW + 9e6, until: NOW + 9e6, bookedCameras: 2, cameraHour: 0.43, azureHour: 0.66 }], ['serverstate', 'peak', { id: 'peak', state: 'on', startedAt: NOW - 60e3, checkedAt: NOW - 30 * 60e3 + 0, minutes: {} }]], power);
+  const pass = (t) => reconcile({ store, arm, health: async () => true, seedFor: async () => ({}), now: () => t });
+  await pass(NOW - 20 * 60e3); await pass(NOW - 10 * 60e3); await pass(NOW);
+  const st = await store.get('serverstate', 'peak'), k = new Date(NOW).toISOString().slice(0, 7);
+  assert.strictEqual(Math.round(st.cameraMinutes[k]), 60, '30 minutes x 2 cameras');
+  assert.strictEqual(Math.round(st.charge[k] * 100) / 100, 0.43, '1 camera hour');
+  assert.strictEqual(Math.round(st.azure[k] * 100) / 100, 0.33, 'half a server hour');
+  await store.put('serverwant', 'peak', { ...(await store.get('serverwant', 'peak')), cameraHour: 1 });
+  await pass(NOW + 10 * 60e3);
+  assert.ok((await store.get('serverstate', 'peak')).charge[k] > 0.43, 'carries on adding');
+});
+
 test('the safety net marks it not wanted, so it doesn\'t come straight back on', async () => {
   const power = { v: 'running' };
   const { store, arm, calls } = fake([SERVER, ['serverwant', 'peak', { id: 'peak', desired: 'on', lastReport: NOW - REPORT_LIMIT_MS - 1 }], ['serverstate', 'peak', { id: 'peak', state: 'on', startedAt: NOW - 3600e3, checkedAt: NOW - 60e3 }]], power);

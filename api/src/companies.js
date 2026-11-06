@@ -53,7 +53,7 @@ function readWebsite(w) {
 const brandView = (c) => ({ id: c.id, name: c.name, logo: c.logo || '', theme: c.theme });
 const ownerView = (c) => ({ ...brandView(c), website: c.website, about: c.about, contact: c.contact, email: c.email, status: c.status, note: c.note || '', at: c.at });
 
-function createCompanies({ store, now, reply, session, isAdmin, putBrand }) {
+function createCompanies({ store, now, reply, session, isAdmin, putBrand, onBlocked = async () => {} }) {
   const idFree = async (id) => ID.test(id) && !RESERVED.has(id) && !(await store.get('company', id));
   // a logo's address changes with its content, so a new one shows straight away despite caching
   async function saveLogo(id, data) {
@@ -116,6 +116,8 @@ function createCompanies({ store, now, reply, session, isAdmin, putBrand }) {
       const c = await store.get('company', id); if (!c) return reply(404, { error: 'No such company' });
       c.status = status; c.note = text(body?.note, 300); c.decidedAt = now();
       await store.put('company', id, c);
+      // no longer allowed: anything it has running stops too
+      if (status !== 'approved') await onBlocked(id);
       return reply(200, { company: ownerView(c) });
     }
     return null;
