@@ -85,6 +85,12 @@ setInterval(() => { $('clock').textContent = hms(laptopNow()); }, 200);
 // on the Live tab while it's live they are the cameras; otherwise they carry on out of sight. A camera with its judge
 // off shows its plain live picture.
 const judges = {};   // n → { tile, frame, view }
+// Live AI judging and analysing an uploaded video don't run together: on this laptop each would slow the other enough to
+// miss reps. Streaming and recording carry on regardless, as they take next to nothing.
+let upAnalysing = false, upPaused = false;
+const analysingNow = () => upAnalysing && !upPaused;
+const judgedLive = () => (st ? st.cams.filter((c) => c.live && judges[c.n]?.frame).map((c) => c.n) : []);
+const camList = (ns) => (ns.length === 1 ? `Camera ${ns[0]}` : `Cameras ${ns.slice(0, -1).join(', ')} and ${ns.at(-1)}`);
 const judgeUrl = (n) => '/judge/judge.html?stream=' + encodeURIComponent(`http://${location.hostname}:${st.webrtcPort}/live/station${n}/whep`) + `&go=1&cfg=cam${n}`;
 const camName = (n) => { try { return (JSON.parse(localStorage.getItem('burpeeJudge.settings.cam' + n)) || {}).station || ''; } catch { return ''; } };
 const aiOff = (n) => { try { return localStorage.getItem('review.aiOn.' + n) !== '1'; } catch { return true; } };
@@ -99,14 +105,14 @@ function renderJudges() {
         <div class="tools"><button class="btn track"></button><button class="btn cfg" title="This camera's AI judge settings">⚙ Config</button></div>`;
       tile.onclick = (e) => { if (!e.target.closest('button')) toggleBig(c.n); };
       tile.querySelector('.cfg').onclick = (e) => { e.stopPropagation(); openCamSettings(c.n); };
-      tile.querySelector('.track').onclick = (e) => { e.stopPropagation(); if (aiOff(c.n)) openCamSettings(c.n, true); else setAi(c.n, false); };
+      tile.querySelector('.track').onclick = (e) => { e.stopPropagation(); if (!aiOff(c.n)) return setAi(c.n, false); if (analysingNow()) return busyNote(`Camera ${c.n}'s AI judge can't start while a video is being analysed. Pause or stop the analysis first.`, true); openCamSettings(c.n, true); };
       $('judgeGrid').appendChild(tile);
       j = judges[c.n] = { tile, frame: null, view: null };
       applyView();
     }
     j.tile.classList.toggle('live', c.live);
     // a camera's judge starts once it's live, then stays (it reconnects by itself if the camera drops)
-    if (c.live && !j.frame && !aiOff(c.n)) {
+    if (c.live && !j.frame && !aiOff(c.n) && !analysingNow()) {
       j.view?.pc?.close(); j.view?.video.remove(); j.view = null;
       j.frame = document.createElement('iframe');
       j.frame.title = `AI judge camera ${c.n}`;
@@ -119,9 +125,10 @@ function renderJudges() {
     }
     const off = aiOff(c.n), t = j.tile.querySelector('.track');
     t.textContent = off ? '▶ Start AI judge' : '■ Stop AI judge'; t.classList.toggle('red', off);
-    if (off && c.live) plainView(c.n, j); else if (j.view && !c.live) { j.view.pc?.close(); j.view.video.remove(); j.view = null; }
+    const held = !off && !j.frame && analysingNow();
+    if ((off || held) && c.live) plainView(c.n, j); else if (j.view && !c.live) { j.view.pc?.close(); j.view.video.remove(); j.view = null; }
     if (!c.live && !j.frame && !j.tile.querySelector('.msg')) j.tile.insertAdjacentHTML('afterbegin', `<div class="msg">Waiting for camera ${c.n}</div>`);
-    const nm = camName(c.n); j.tile.querySelector('.label').innerHTML = `Camera ${c.n}${nm ? `<small>${esc(nm)}</small>` : ''}${off ? '<small>AI judge off</small>' : ''}`;
+    const nm = camName(c.n); j.tile.querySelector('.label').innerHTML = `Camera ${c.n}${nm ? `<small>${esc(nm)}</small>` : ''}${off ? '<small>AI judge off</small>' : held ? '<small>AI judge waiting</small>' : ''}`;
   }
 }
 function setAi(n, on) {
@@ -839,15 +846,75 @@ async function loadUploads() {
 $('upList').onclick = async (e) => {
   const b = e.target.closest('button'); if (!b) return;
   if (b.dataset.show) { upShown = b.dataset.show; renderSides(); return; }
-  if (b.dataset.judge) return upConfig(uploadName(b.dataset.judge), b.dataset.judge);
+  if (b.dataset.judge) return blockedByLive() ? undefined : upConfig(uploadName(b.dataset.judge), b.dataset.judge);
   const name = b.dataset.delup;
   if (!confirm(`Delete ${uploadName(name)} from the laptop, with the athletes the AI judge found in it?`)) return;
-  if (upRunning === name) { $('upStage').innerHTML = '<div class="msg">Choose a video to judge it.</div>'; upRunning = ''; await new Promise((r) => setTimeout(r, 500)); }
+  if (upRunning === name) { $('upStage').innerHTML = '<div class="msg">Choose a video to judge it.</div>'; upRunning = ''; upAnalysing = false; upPaused = false; renderJudges(); await new Promise((r) => setTimeout(r, 500)); }
   const r = await fetch('/api/uploads?name=' + encodeURIComponent(name), { method: 'DELETE' }).then((x) => x.json()).catch(() => ({ error: 'can\'t reach the laptop' }));
   toast(r.ok ? 'Deleted' : `Couldn't delete it: ${r.error}`); athRev = -1; loadAthletes(); loadUploads();
 };
+// ---- one at a time: live AI judging or an upload's analysis
+let busyShown = 0;
+// a message until it's read; held (no message of its own) is worked out in busyTick
+function busyNote(text, withStop) {
+  busyShown = Date.now();
+  $('busyText').textContent = text; $('busyNote').hidden = false; $('busyClose').hidden = false;
+  $('busyPause').hidden = !withStop; $('busyStop').hidden = !withStop;
+  $('busyNote').scrollIntoView({ block: 'nearest' });
+}
+function blockedByLive() {
+  const live = judgedLive(); if (!live.length) return false;
+  busyNote(`${camList(live)} ${live.length === 1 ? 'is' : 'are'} being judged live. A video can't be analysed at the same time, as both would slow down and reps could be missed. Stop the AI judge on the Live tab first, or analyse this video later.`, false);
+  return true;
+}
+const upRun = () => { try { return document.querySelector('#upStage iframe')?.contentWindow?.__analysis || null; } catch { return null; } };
+function setUpPaused(on) {
+  const a = upRun(); if (!a || !upAnalysing) return;
+  if (!on && blockedByLive()) return;
+  a.paused = on; upPaused = on;
+  $('upStatus').textContent = on ? `Analysis paused at ${a.pct}%. Live AI judges can run while it's paused.` : 'Analysing again…';
+  $('busyNote').hidden = true; renderJudges(); busyTick();
+}
+async function stopAnalysis() {
+  const a = upRun();
+  if (a) a.stop = true;
+  upAnalysing = false; upPaused = false;
+  $('upStatus').textContent = 'Stopping the analysis…'; $('busyNote').hidden = true; busyTick();
+  for (let i = 0; i < 40 && a && !a.done; i++) await new Promise((r) => setTimeout(r, 100));
+  await new Promise((r) => setTimeout(r, 800)); // what it found so far is on its way to the laptop
+  $('upStage').innerHTML = '<div class="msg">Analysis stopped. Use Judge again below to analyse the whole video.</div>'; upRunning = '';
+  $('upStatus').textContent = 'Analysis stopped. What it found so far is on the right.';
+  athRev = -1; loadAthletes(); loadUploads(); renderJudges();
+}
+// keeps the buttons and the "AI judge waiting" message up to date, and notices when the analysis has finished
+function busyTick() {
+  const a = upAnalysing ? upRun() : null;
+  if (a?.done) {
+    upAnalysing = false; upPaused = false;
+    if (/^Analysing/.test($('upStatus').textContent)) $('upStatus').textContent = 'Analysis finished. The results are on the right.';
+    athRev = -1; loadAthletes(); loadUploads(); renderJudges();
+  }
+  $('upPause').hidden = $('upStop').hidden = !upAnalysing;
+  $('upPause').disabled = !upAnalysing || !upRun();
+  $('upPause').textContent = upPaused ? '▶ Resume' : '⏸ Pause';
+  if (a && !a.done && upPaused) $('upStatus').textContent = `Analysis paused at ${a.pct}%. Live AI judges can run while it's paused.`;
+  const held = analysingNow() && st ? st.cams.filter((c) => c.live && !judges[c.n]?.frame && !aiOff(c.n)).map((c) => c.n) : [];
+  if (held.length) {
+    $('busyText').textContent = `${camList(held)} ${held.length === 1 ? 'is' : 'are'} live and recording, but not being judged: AI judges can't run while a video is being analysed. They start when it finishes, or if you pause or stop it.`;
+    $('busyNote').hidden = false; $('busyPause').hidden = !upRun(); $('busyStop').hidden = false; $('busyClose').hidden = true; busyShown = -1;
+  } else if (busyShown === -1) { busyShown = 0; $('busyNote').hidden = true; }
+}
+setInterval(busyTick, 500);
+$('busyClose').onclick = () => { busyShown = 0; $('busyNote').hidden = true; };
+$('busyPause').onclick = $('upPause').onclick = () => setUpPaused(!upPaused);
+$('busyStop').onclick = $('upStop').onclick = stopAnalysis;
+$('upFile').addEventListener('click', (e) => { if (blockedByLive()) e.preventDefault(); });
 function judgeUpload(saved, name) {
-  if (upRunning && !confirm('A video is still being judged. Stop it and judge this one instead?')) return;
+  if (blockedByLive()) { $('upStatus').textContent = `${name} is on the laptop. Use Judge again in the list below when live judging has stopped.`; return; }
+  if (upAnalysing && !confirm('A video is still being analysed. Stop it and analyse this one instead?')) return;
+  upAnalysing = true; upPaused = false;
+  // judges still waiting for a camera that dropped mustn't wake up partway through
+  for (const j of Object.values(judges)) if (j.frame) { const fr = j; saveRound(fr).finally(() => { fr.frame?.remove(); fr.frame = null; }); }
   upRunning = saved; upShown = saved; renderSides();
   $('upStage').innerHTML = `<iframe title="AI judge: uploaded video" allow="autoplay; fullscreen" src="/judge/judge.html?video=${encodeURIComponent('/uploads/' + encodeURIComponent(saved))}&name=${encodeURIComponent(name)}&go=1&cfg=upload"></iframe>`;
   $('upStatus').textContent = `Analysing ${name}: every frame is checked before anything plays, so no jump is missed. Results appear on the right as athletes finish or leave.`;

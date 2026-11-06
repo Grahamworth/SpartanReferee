@@ -2368,7 +2368,12 @@ async function prepass(range) {
   S.videoDur = await videoDuration();
   const i0 = range ? Math.max(0, Math.floor(range.from * PREPASS_FPS)) : 0;
   const n = Math.floor((range ? Math.min(range.to, S.videoDur) : S.videoDur) * PREPASS_FPS);
+  // the Receiver's Pause and Stop (Stop keeps what's been found so far)
+  const run = window.__analysis = { paused: false, stop: false, done: false, pct: 0 };
   for (let i = i0; i < n && S.testMode; i++) {
+    while (run.paused && !run.stop && S.testMode) { showLoader(`Paused at ${run.pct}%`); await new Promise((r) => setTimeout(r, 200)); }
+    if (run.stop) break;
+    run.pct = Math.round((100 * (i - i0)) / Math.max(1, n - i0));
     await seekTo(i / PREPASS_FPS + SEEK_INSIDE_FRAME_S);
     S.lastVideoTime = video.currentTime;
     S.frame = frameSource();
@@ -2397,6 +2402,7 @@ async function prepass(range) {
   S.prepassing = false;
   S.quiet = false;
   S.replayEvAt = -Infinity;
+  run.done = true;
 }
 
 // The snapshot for judging-clock time tc (the last one at or before it).

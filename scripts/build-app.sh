@@ -37,6 +37,7 @@ grep -q RootEncoder "$GR" || sed -i 's#implementation project(.:capacitor-androi
 # Android: the camera (judging), the voice and the app icon
 MAN=android/app/src/main/AndroidManifest.xml
 grep -q TTS_SERVICE "$MAN" || sed -i 's#<uses-permission android:name="android.permission.INTERNET" />#<queries><intent><action android:name="android.intent.action.TTS_SERVICE" /></intent></queries>\n    &#' "$MAN"
+grep -q ACCESS_NETWORK_STATE "$MAN" || sed -i 's#<uses-permission android:name="android.permission.INTERNET" />#<queries><package android:name="com.tailscale.ipn" /></queries>\n    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />\n    &#' "$MAN"
 grep -q 'android.permission.CAMERA' "$MAN" || sed -i 's#<uses-permission android:name="android.permission.INTERNET" />#<uses-permission android:name="android.permission.INTERNET" />\n    <uses-permission android:name="android.permission.CAMERA" />\n    <uses-permission android:name="android.permission.RECORD_AUDIO" />\n    <uses-feature android:name="android.hardware.camera" android:required="false" />#' "$MAN"
 grep -q StationActivity "$MAN" || sed -i 's#<provider#<activity android:name=".StationActivity" android:exported="false" android:screenOrientation="sensorLandscape" android:configChanges="orientation|screenSize|keyboardHidden" android:theme="@style/AppTheme.NoActionBar" />\n\n        <provider#' "$MAN"
 for d in mdpi:48 hdpi:72 xhdpi:96 xxhdpi:144 xxxhdpi:192; do

@@ -1,7 +1,7 @@
 {
- "version": "1.3.10",
+ "version": "1.3.11",
  "url": "https://mango-glacier-03e711403.4.azurestaticapps.net/downloads/burpee-judge-receiver-setup.exe",
- "size": 202965290,
- "sha512": "HK/+EsEJtP9qoSAiev2qVWRaBxpig4Qjf24/ywz9jBicMnhDVMpqdbqAtymQEwqgE33Ouc5hcoUseEkxxC4/VQ==",
- "notes": "Uploaded videos now give the same result every time they're judged. Also: count an athlete's reps by hand and compare with the AI judge."
+ "size": 202960314,
+ "sha512": "PcgkTttECTYhnFYUaoTY8Mc02WMgC2TKq84m5yKyRqyj53yajH8DFAGb35COVkSs9HMDhZdKYmDVNi7Kq/LXAw==",
+ "notes": "Live AI judging and analysing an uploaded video now take turns, and an analysis can be paused or stopped."
 }

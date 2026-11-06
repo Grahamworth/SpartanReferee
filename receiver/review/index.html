@@ -28,6 +28,7 @@
 </header>
 
 <div id="offline" class="banner" hidden>Can't reach the judging laptop. Retrying…</div>
+<div id="busyNote" class="banner pick busynote" role="status" hidden><span id="busyText"></span><span class="spacer"></span><button class="btn" id="busyPause" type="button">⏸ Pause analysis</button><button class="btn" id="busyStop" type="button">■ Stop analysis</button><button class="btn" id="busyClose" type="button">OK</button></div>
 <div id="athletePop" class="athletepop" hidden></div>
 
 <!-- Live: every camera live (with its AI judge), rewind through everything recorded -->
@@ -97,6 +98,8 @@
   <div class="row uploadbar">
     <label class="btn red upload">Choose a video<input id="upFile" type="file" accept="video/*" hidden></label>
     <button class="btn" id="upCfg">⚙ Config</button>
+    <button class="btn" id="upPause" type="button" hidden>⏸ Pause</button>
+    <button class="btn" id="upStop" type="button" hidden>■ Stop</button>
     <span id="upStatus" class="muted">The AI judge analyses the whole video first, and the results appear on the right. A copy stays on the laptop for testing and training.</span>
   </div>
   <div id="upSettings" class="settingsbox" hidden>

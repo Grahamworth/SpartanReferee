@@ -2,10 +2,18 @@ package com.vdaso.spartans;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.net.ConnectivityManager;
+import android.net.LinkAddress;
+import android.net.LinkProperties;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -19,6 +27,12 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.NetworkInterface;
+import java.net.Socket;
+import java.util.Collections;
 
 import com.pedro.common.ConnectChecker;
 import com.pedro.encoder.input.sources.video.Camera2Source;
@@ -36,6 +50,8 @@ import com.pedro.library.util.streamclient.StreamBaseClient;
 public class StationActivity extends Activity implements SurfaceHolder.Callback {
     private static final int JUDGE = 0, YOUTUBE = 1;
     private static final int GREY = 0xff9a9a9a, AMBER = 0xffffb020, GREEN = 0xff33d17a, RED = 0xffff4d4d;
+    private static final String TAILSCALE_APP = "com.tailscale.ipn";
+    private static final int ANSWER_MS = 2000;
 
     private MultiStream stream;
     private SurfaceView view;
@@ -49,6 +65,8 @@ public class StationActivity extends Activity implements SurfaceHolder.Callback 
     private boolean wantLive = false;
     private long startedAt;
     private final Handler ui = new Handler(Looper.getMainLooper());
+    private boolean checking = false, goAfterCheck = false, recheck = false, recheckThenGo = false;
+    private AlertDialog asking;
 
     @Override
     protected void onCreate(Bundle saved) {
@@ -101,6 +119,115 @@ public class StationActivity extends Activity implements SurfaceHolder.Callback 
             setState(i, url[i] == null ? "Not set" : "Ready", GREY);
         }
         if (view.getHolder().getSurface().isValid() && !stream.isOnPreview()) stream.startPreview(view, false);
+        checkRoutes(false, 1); // now, not at GO LIVE, so it's sorted before the camera is set up on its stand
+    }
+
+    // ---- Tailscale: asked for only when it's what's in the way. On the same Wi-Fi the phone doesn't need it.
+
+    /** Does the judging computer answer on any route? If not and Tailscale is off, ask for it to be turned on. */
+    private void checkRoutes(final boolean thenGoLive, final int tries) {
+        if (checking) { goAfterCheck |= thenGoLive; return; }
+        if (!hasTailscaleRoute()) { if (thenGoLive) startLive(); return; }
+        checking = true;
+        goAfterCheck = thenGoLive;
+        setState(JUDGE, "Checking the connection…", AMBER);
+        new Thread(() -> {
+            boolean answered = false;
+            for (int t = 0; t < tries && !answered; t++) {
+                if (t > 0) SystemClock.sleep(1500); // Tailscale takes a moment to connect once it's turned on
+                answered = anyRouteAnswers();
+            }
+            final boolean reached = answered, off = !answered && !tailscaleOn();
+            ui.post(() -> {
+                checking = false;
+                if (isFinishing() || isDestroyed()) return;
+                boolean goNow = goAfterCheck;
+                goAfterCheck = false;
+                if (off) { askForTailscale(goNow); return; }
+                if (reached) setState(JUDGE, "Ready", GREY);
+                else setState(JUDGE, "No answer yet: is the Receiver open on the judging computer?", AMBER);
+                if (goNow) startLive();
+            });
+        }).start();
+    }
+
+    private void askForTailscale(final boolean thenGoLive) {
+        final Intent open = getPackageManager().getLaunchIntentForPackage(TAILSCALE_APP);
+        setState(JUDGE, open == null ? "Tailscale isn't installed" : "Tailscale is off", AMBER);
+        if (asking != null && asking.isShowing()) asking.dismiss();
+        asking = new AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Dialog_Alert)
+                .setTitle(open == null ? "Install Tailscale" : "Turn on Tailscale")
+                .setMessage(open == null
+                        ? "This phone can't reach the judging computer directly, and Tailscale isn't installed.\n\nInstall it and sign in with the same account as the judging computer, then come back here."
+                        : "This phone can't reach the judging computer because Tailscale is off.\n\nOpen Tailscale, turn it on, then come back here.")
+                .setPositiveButton(open == null ? "Install Tailscale" : "Open Tailscale", (d, w) -> {
+                    recheck = true;
+                    recheckThenGo = thenGoLive;
+                    startActivity(open != null ? open : storePage());
+                })
+                .setNeutralButton("Try anyway", (d, w) -> {
+                    setState(JUDGE, "Ready", GREY);
+                    if (thenGoLive) startLive();
+                })
+                .setNegativeButton("Not now", null)
+                .show();
+    }
+
+    private Intent storePage() {
+        Intent store = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + TAILSCALE_APP));
+        if (store.resolveActivity(getPackageManager()) != null) return store;
+        return new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + TAILSCALE_APP));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (recheck) { recheck = false; checkRoutes(recheckThenGo, 4); }
+    }
+
+    private boolean hasTailscaleRoute() {
+        for (String r : judgeRoutes) if (isTailscaleUrl(r)) return true;
+        return false;
+    }
+
+    private static boolean isTailscaleUrl(String u) { return u.matches("^rtmps?://100\\.(6[4-9]|[7-9]\\d|1[01]\\d|12[0-7])\\..*"); }
+
+    private boolean anyRouteAnswers() {
+        for (String r : judgeRoutes) {
+            Uri u = Uri.parse(r);
+            int port = u.getPort() > 0 ? u.getPort() : 1935;
+            try (Socket s = new Socket()) {
+                s.connect(new InetSocketAddress(u.getHost(), port), ANSWER_MS);
+                return true;
+            } catch (Exception e) { /* not this route */ }
+        }
+        return false;
+    }
+
+    /** Tailscale gives the phone an address in 100.64.0.0/10 on its VPN connection while it's on. */
+    private boolean tailscaleOn() {
+        try {
+            ConnectivityManager cm = getSystemService(ConnectivityManager.class);
+            for (Network n : cm.getAllNetworks()) {
+                NetworkCapabilities c = cm.getNetworkCapabilities(n);
+                LinkProperties l = cm.getLinkProperties(n);
+                if (c == null || l == null || !c.hasTransport(NetworkCapabilities.TRANSPORT_VPN)) continue;
+                for (LinkAddress a : l.getLinkAddresses()) if (isTailscaleAddress(a.getAddress())) return true;
+            }
+        } catch (Exception e) { /* look the other way */ }
+        try {
+            for (NetworkInterface i : Collections.list(NetworkInterface.getNetworkInterfaces())) {
+                // only a VPN's: some mobile networks hand phones ordinary addresses in this same range
+                if (!i.isUp() || !i.getName().startsWith("tun")) continue;
+                for (InetAddress a : Collections.list(i.getInetAddresses())) if (isTailscaleAddress(a)) return true;
+            }
+        } catch (Exception e) { /* can't tell */ }
+        return false;
+    }
+
+    private static boolean isTailscaleAddress(InetAddress a) {
+        byte[] b = a.getAddress();
+        return b.length == 4 && (b[0] & 255) == 100 && (b[1] & 255) >= 64 && (b[1] & 255) <= 127;
     }
 
     private ConnectChecker checker(final int i) {
@@ -111,7 +238,7 @@ public class StationActivity extends Activity implements SurfaceHolder.Callback 
                 if (!wantLive || stream == null) return;
                 StreamBaseClient c = stream.getStreamClient(MultiType.RTMP, i);
                 String why = i == YOUTUBE && reason != null && reason.toLowerCase().contains("configure stream")
-                        ? "(YouTube refused: check the stream key, and that live streaming is on for the channel)" : plain(reason);
+                        ? "(YouTube refused: check the stream key, and that live streaming is on for the channel)" : plain(i, reason);
                 String next = null;
                 if (i == YOUTUBE) next = youtubeBackup;
                 else if (judgeRoutes.length > 1) { judgeRoute = (judgeRoute + 1) % judgeRoutes.length; next = judgeRoutes[judgeRoute]; }
@@ -130,16 +257,21 @@ public class StationActivity extends Activity implements SurfaceHolder.Callback 
         if (stream == null) return;
         if (!wantLive) {
             if (url[JUDGE] == null && url[YOUTUBE] == null) return;
-            wantLive = true;
-            startedAt = SystemClock.elapsedRealtime();
-            judgeRoute = 0;
-            if (judgeRoutes.length > 0) url[JUDGE] = judgeRoutes[0];
-            for (int i = 0; i < 2; i++) if (url[i] != null) stream.startStream(MultiType.RTMP, i, url[i]);
-            go.setText("STOP");
-            tick();
+            checkRoutes(true, 1);
         } else {
             stopAll();
         }
+    }
+
+    private void startLive() {
+        if (stream == null || wantLive) return;
+        wantLive = true;
+        startedAt = SystemClock.elapsedRealtime();
+        judgeRoute = 0;
+        if (judgeRoutes.length > 0) url[JUDGE] = judgeRoutes[0];
+        for (int i = 0; i < 2; i++) if (url[i] != null) stream.startStream(MultiType.RTMP, i, url[i]);
+        go.setText("STOP");
+        tick();
     }
 
     private void stopAll() {
@@ -167,6 +299,7 @@ public class StationActivity extends Activity implements SurfaceHolder.Callback 
     @Override
     protected void onDestroy() {
         ui.removeCallbacksAndMessages(null);
+        if (asking != null && asking.isShowing()) asking.dismiss();
         if (stream != null) {
             stopAll();
             if (stream.isOnPreview()) stream.stopPreview();
@@ -261,16 +394,20 @@ public class StationActivity extends Activity implements SurfaceHolder.Callback 
     /** " (direct)" / " (Tailscale)": which route the judging computer is on */
     private String route(int i) {
         if (i != JUDGE || judgeRoutes.length == 0) return "";
-        String u = judgeRoutes[judgeRoute];
-        return u.matches("^rtmps?://100\\.(6[4-9]|[7-9]\\d|1[01]\\d|12[0-7])\\..*") ? " (Tailscale)" : " (direct)";
+        return isTailscaleUrl(judgeRoutes[judgeRoute]) ? " (Tailscale)" : " (direct)";
     }
 
-    private static String plain(String reason) {
+    private String plain(int i, String reason) {
         if (reason == null) return "";
         String r = reason.toLowerCase();
-        if (r.contains("timeout") || r.contains("timed out")) return "(no answer: is Tailscale on?)";
+        boolean tailscaleOff = i == JUDGE && hasTailscaleRoute() && !tailscaleOn();
+        // the Tailscale route failing with Tailscale off: that's why, whatever words the failure came in
+        if (tailscaleOff && isTailscaleUrl(judgeRoutes[judgeRoute])) return "(Tailscale is off on this phone: turn it on)";
+        if (r.contains("timeout") || r.contains("timed out") || r.contains("unreachable") || r.contains("unknown host")) {
+            if (tailscaleOff) return "(Tailscale is off on this phone: turn it on)";
+            return i == JUDGE ? "(no answer: is the Receiver open, on the same Tailscale account?)" : "(no answer: check this phone's internet)";
+        }
         if (r.contains("refused")) return "(refused: is the server running?)";
-        if (r.contains("unreachable") || r.contains("unknown host")) return "(no internet / Tailscale off?)";
         return "(" + (reason.length() > 60 ? reason.substring(0, 60) + "…" : reason) + ")";
     }
 
