@@ -81,6 +81,13 @@
     <button class="btn" type="button" id="openRec">Open recordings</button>
     <button class="btn" type="button" id="showLog">Server log</button>
   </form>
+  <div class="cloudbox">
+    <label class="cloudon"><input type="checkbox" id="cloudOn"> <b>Cloud backup</b></label>
+    <input id="cloudKey" type="password" placeholder="Paste a Receiver key from the Spartans site" autocomplete="off" aria-label="Receiver key">
+    <button class="btn" type="button" id="cloudSave">Save</button>
+    <span id="cloudStatus" class="muted"></span>
+    <p class="hint">Sends finished recordings to your cloud storage, kept for 30 days. It uses about as much internet upload again as the cameras do. Only recordings made after you switch it on go up, and the copies on this laptop stay.</p>
+  </div>
   <pre id="log" hidden></pre>
 </section>
 <div id="toast"></div>

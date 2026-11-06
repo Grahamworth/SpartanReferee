@@ -4,9 +4,11 @@
 const http = require('node:http'), fs = require('node:fs'), path = require('node:path');
 const { createApi } = require('./src/core');
 const { memoryStore } = require('./src/store');
+const { blobSigner } = require('./src/recordings');
 
 const root = path.join(__dirname, '..'), port = +process.argv[2] || 8795;
 const api = createApi({
+  blobSigner: process.env.STORAGE_CONNECTION ? blobSigner(process.env.STORAGE_CONNECTION) : null,
   store: memoryStore(), secret: 'dev-secret-dev-secret-dev-secret-dev', googleClientId: 'dev', adminEmails: (process.env.ADMIN_EMAILS || '').split(','),
   verifyGoogle: async (t) => { const m = /^dev:(.+@.+)$/.exec(t); if (!m) throw new Error('bad'); return { sub: m[1], email: m[1], name: m[1].split('@')[0] }; },
   fetchText: async (url) => (await fetch(url)).text(),

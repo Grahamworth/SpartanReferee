@@ -4,6 +4,7 @@
 const { app } = require('@azure/functions');
 const { createApi, CORS } = require('./core');
 const { tableStore } = require('./store');
+const { blobSigner } = require('./recordings');
 
 // Settings: GOOGLE_CLIENT_ID (the web client for Google sign-in), SESSION_SECRET (signs session tokens), ADMIN_EMAILS (comma separated)
 let api;
@@ -13,7 +14,7 @@ function googleVerifier(clientId) {
   return async (idToken) => { const t = await client.verifyIdToken({ idToken, audience: clientId }); return t.getPayload(); };
 }
 const getApi = () => (api = api || createApi({
-  store: tableStore(process.env.STORAGE_CONNECTION), adminKey: process.env.ADMIN_KEY || '',
+  store: tableStore(process.env.STORAGE_CONNECTION), blobSigner: blobSigner(process.env.STORAGE_CONNECTION), adminKey: process.env.ADMIN_KEY || '',
   adminEmails: (process.env.ADMIN_EMAILS || '').split(','), googleClientId: process.env.GOOGLE_CLIENT_ID || '',
   verifyGoogle: process.env.GOOGLE_CLIENT_ID ? googleVerifier(process.env.GOOGLE_CLIENT_ID) : null, secret: process.env.SESSION_SECRET || '',
   fetchText: async (url) => { const r = await fetch(url, { headers: { 'User-Agent': 'Spartans app (news reader)' } }); if (!r.ok) throw new Error(String(r.status)); return r.text(); },

@@ -5,7 +5,7 @@ const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const tab = {};   // what each camera's card shows: 'live' (its picture), 'larix' or 'spartans' (QR codes)
 const lives = {}; // n → { video, pc, connecting } the small live pictures, kept across redraws
-let setupOpen = false;
+let setupOpen = false, cloudFilled = false;
 const opened = {}; let touched = false;   // which waiting cameras are showing their QR codes
 let last = null, settingsFilled = false, editing = false;
 
@@ -115,6 +115,12 @@ function render(st) {
     f.stations.value = st.settings.stations; f.record.checked = st.settings.record; f.keepDays.value = st.settings.keepDays;
     settingsFilled = true;
   }
+  // cloud backup
+  const c = st.cloud;
+  if (!cloudFilled) { $('cloudOn').checked = c.on; cloudFilled = true; }
+  $('cloudKey').placeholder = c.hasKey ? 'Key saved: paste a new one to change it' : 'Paste a Receiver key from the Spartans site';
+  $('cloudStatus').className = c.state === 'error' ? 'bad' : 'muted';
+  $('cloudStatus').textContent = !c.on ? (c.hasKey ? 'Off' : 'Off: needs a key') : c.state === 'error' ? `Not sending: ${c.error}. It tries again every few minutes.` : c.state === 'sending' ? `Sending… ${c.waiting} waiting · ${c.sentCount} sent` : `On · ${c.sentCount} sent${c.waiting ? ` · ${c.waiting} waiting` : ''}`;
   if (!$('log').hidden) { const l = $('log'); const end = l.scrollTop + l.clientHeight >= l.scrollHeight - 5; l.textContent = st.log.join('\n'); if (end) l.scrollTop = l.scrollHeight; }
 }
 
@@ -147,6 +153,11 @@ $('stations').addEventListener('keydown', (e) => { if (e.target.dataset.yt && e.
 $('tsBtn').onclick = async () => { $('tsBtn').disabled = true; const act = $('tsBtn').dataset.act; const r = await (act === 'install' ? window.receiver.tailscaleInstall() : act === 'site' ? window.receiver.tailscaleSite() : window.receiver.tailscaleUp()); if (r && r.error) toast(`Tailscale couldn't sign in: ${r.error}. Try its icon by the clock.`); $('tsBtn').disabled = false; refresh(); };
 $('fixFirewall').onclick = async () => { $('fixFirewall').disabled = true; const ok = await window.receiver.fixFirewall(); $('fixFirewall').disabled = false; toast(ok ? 'Phones can connect now' : 'Not changed: say Yes when Windows asks'); refresh(); };
 $('removeOld').onclick = async () => { $('removeOld').disabled = true; const ok = await window.receiver.removeOldServer(); $('removeOld').disabled = false; toast(ok ? 'Old server removed: scan the Larix code again on each phone' : 'Not removed: say Yes when Windows asks'); refresh(); };
+$('cloudSave').onclick = async () => {
+  const key = $('cloudKey').value.trim();
+  await window.receiver.cloud({ on: $('cloudOn').checked, ...(key ? { key } : {}) });
+  $('cloudKey').value = ''; toast($('cloudOn').checked ? 'Cloud backup saved' : 'Cloud backup off'); refresh();
+};
 $('openRec').onclick = () => window.receiver.openRecordings();
 $('showSetup').onclick = () => { setupOpen = true; if (last) render(last); };
 $('hideSetup').onclick = () => { setupOpen = false; if (last) render(last); };

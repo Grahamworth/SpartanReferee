@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b0b0b">
+<title>Spartans Cloud Recordings</title>
+<link rel="icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;1,800;1,900&family=Barlow:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="hub.css">
+<link rel="stylesheet" href="hub-pages.css">
+<style>
+  .rec-player { width: 100%; max-height: 70vh; background: #000; display: block; margin: 8px 0 14px; }
+  .rec-filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+  .rec-filters select { min-width: 150px; }
+  .rec-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 10px 0; border-top: 1px solid rgba(255, 255, 255, .12); }
+  .rec-row > div { flex: 1 1 200px; min-width: 0; }
+  .rec-key { word-break: break-all; font-family: monospace; background: #000; padding: 10px; display: block; margin: 8px 0; }
+</style>
+<script type="module" src="recordings.js"></script>
+<link rel="stylesheet" href="looks.css">
+<script src="looks.js"></script>
+</head>
+<body>
+<main class="hub">
+  <a href="./" class="home-link">‹ Spartans home</a>
+  <h1 class="brand">Cloud <span>recordings</span></h1>
+  <p id="signInBox" class="empty" hidden>Sign in to see your recordings. <a href="profile.html?signin=1">Sign in</a></p>
+  <p id="error" class="empty" hidden></p>
+
+  <div id="main" hidden>
+    <p id="usage" class="foot" style="margin-top:6px"></p>
+    <div class="rec-filters">
+      <select id="day" aria-label="Day"></select>
+      <select id="cam" aria-label="Camera"></select>
+    </div>
+    <video id="player" class="rec-player" controls playsinline hidden></video>
+    <div id="list"></div>
+
+    <h2>Linked Receivers</h2>
+    <p class="foot" style="margin-top:0">A key lets one Receiver send its recordings here. It can't see or change anything else.</p>
+    <div id="links"></div>
+    <form id="linkForm" class="form" style="margin-top:10px"><div class="row" style="align-items:center">
+      <input id="linkName" maxlength="40" placeholder="Name, e.g. Race laptop" aria-label="Receiver name">
+      <button class="btn btn-red" type="submit">Link a Receiver</button>
+    </div></form>
+    <div id="newKey" class="empty" hidden>
+      <p style="margin:0"><b>Copy this key now: it won't be shown again.</b> In the Receiver, paste it under <b>Cloud backup</b> on the Setup tab.</p>
+      <code id="keyText" class="rec-key"></code>
+      <button id="copyKey" class="btn btn-ghost" type="button">Copy key</button>
+    </div>
+  </div>
+</main>
+</body>
+</html>

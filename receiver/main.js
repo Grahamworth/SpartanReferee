@@ -13,6 +13,7 @@ const { pathToFileURL } = require('url');
 const QRCode = require('qrcode');
 const { loadSettings, saveSettings, mediamtxYaml } = require('./config');
 const { addresses, routes, rtmp, spartansLink, larixLink, isTailscale } = require('./network');
+const { createCloud } = require('./cloud');
 
 // Testing on the building laptop: RECEIVER_BIND=127.0.0.1 keeps the servers to this computer (no firewall prompt).
 const BIND = process.env.RECEIVER_BIND || '';
@@ -40,8 +41,10 @@ const SITE = 'https://mango-glacier-03e711403.4.azurestaticapps.net';
 const TS = path.join(process.env.ProgramFiles || 'C:\\Program Files', 'Tailscale', 'tailscale.exe');
 const TS_APP = path.join(path.dirname(TS), 'tailscale-ipn.exe');
 const TS_DOWNLOAD = 'https://tailscale.com/download/windows';
+const CLOUD_API = process.env.RECEIVER_CLOUD_API || `${SITE}/api`;
 
 let S = loadSettings(DATA);
+const cloud = createCloud({ dir: RECORDINGS, stateFile: path.join(DATA, 'cloud-sent.json'), api: () => CLOUD_API, settings: () => S });
 let mtx = null, mtxLog = [], stopping = false, win = null;
 
 // ---------------------------------------------------------------- the streaming server
@@ -293,7 +296,7 @@ async function state() {
     portBusy: mtxLog.slice(-40).some((l) => /address already in use|Only one usage of each socket/i.test(l)),
     phoneSetup: { url: `${SITE}/phone.html`, qr: await QRCode.toDataURL(`${SITE}/phone.html`, { margin: 1, width: 240 }) },
     review: { url: review, qr: review ? await QRCode.toDataURL(review, { margin: 1, width: 240 }) : '' },
-    settings: { stations: S.stations, record: S.record, keepDays: S.keepDays }, webrtcPort: S.webrtcPort, recordings: RECORDINGS, testMode: !!BIND,
+    settings: { stations: S.stations, record: S.record, keepDays: S.keepDays }, cloud: { on: !!S.cloudOn, hasKey: !!S.cloudKey, ...cloud.status }, webrtcPort: S.webrtcPort, recordings: RECORDINGS, testMode: !!BIND,
     version: app.getVersion(), update: { state: update.state, version: update.version, notes: update.notes, got: update.got, size: update.size, error: update.error },
   };
 }
@@ -311,6 +314,13 @@ ipcMain.handle('settings', (_e, v) => {
   saveSettings(DATA, S); restartServer(); return true;
 });
 // one more camera, with no server restart: the server takes any station's stream, so the live ones carry on
+// cloud backup: only recordings made from now on go up, and the key is never sent back to the window
+ipcMain.handle('cloud', async (_e, v) => {
+  const key = typeof v.key === 'string' ? v.key.trim().slice(0, 100) : S.cloudKey;
+  const on = !!v.on && !!key;
+  S = { ...S, cloudKey: key, cloudOn: on, cloudSince: on && !S.cloudOn ? Date.now() : S.cloudSince };
+  saveSettings(DATA, S); cloud.tick().catch(() => {}); return true;
+});
 ipcMain.handle('addCamera', async () => {
   if (S.stations < 12) { S = { ...S, stations: S.stations + 1 }; saveSettings(DATA, S); serverOk = await watchCameras(); }
   return S.stations;
@@ -613,6 +623,7 @@ if (FIRST_COPY) app.whenReady().then(() => {
   makeTray();
   // updates: a check soon after starting, then every 6 hours
   setTimeout(checkUpdate, 5000); setInterval(checkUpdate, 6 * 3600e3);
+  setInterval(() => cloud.tick().catch(() => {}), 60000);
   if (!BIND) { tailscaleOnStart(); setTimeout(checkTailscaleUpdate, 5000); setInterval(checkTailscaleUpdate, 6 * 3600e3); }
   // first start: let the phones and the iPad through the firewall straight away (Windows asks once)
   if (!BIND) setTimeout(async () => { if (!(await firewallOk())) fixFirewall(); }, 3000);
