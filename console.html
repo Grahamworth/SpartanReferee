@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;1,800&family=Barlow:wght@400;600;700&display=swap">
 <link rel="stylesheet" href="headjudge.css">
 <script src="brand.js"></script>
+<script src="booking.js"></script>
 <script type="module" src="console.js"></script>
 </head>
 <body>
@@ -34,20 +35,37 @@
     <div class="stateLine"><span class="light" id="light" aria-hidden="true"></span><h1 id="stateText">Your server is off</h1></div>
     <p class="muted" id="stateMore" aria-live="polite"></p>
     <p class="error" id="error" role="alert" hidden></p>
-    <div class="actions">
-      <button class="primary" id="start" type="button" hidden>Start server</button>
-      <button class="primary" id="open" type="button" hidden>Open video review</button>
-      <button class="ghost" id="stop" type="button" hidden>Stop server</button>
+
+    <form id="book" class="booking" hidden>
+      <div class="bookFields">
+        <div><label for="cameras">Cameras</label><input id="cameras" type="number" inputmode="numeric" min="1" step="1" value="2"></div>
+        <div><label for="hours">How long</label><select id="hours"></select></div>
+      </div>
+      <div class="quote" aria-live="polite"><span id="quoteHow"></span><b id="quoteCost"></b></div>
+      <button class="primary" id="start" type="submit">Start</button>
+      <p class="note">Your servers run for this time, used or not, then save their recordings and shut down. You can extend them while they're running. Starting takes about 5 minutes, so allow for that.</p>
+    </form>
+
+    <div id="running" hidden>
+      <div class="serverList" id="serverList"></div>
+      <form id="extend" class="extend">
+        <div><label for="extendHours">Need longer?</label><select id="extendHours"></select></div>
+        <div class="quote" aria-live="polite"><span id="extendHow"></span><b id="extendCost"></b></div>
+        <button class="ghost" id="extendBtn" type="submit">Extend</button>
+      </form>
+      <div class="actions"><button class="ghost" id="stop" type="button">Stop now</button></div>
     </div>
+
     <dl class="facts">
-      <div><dt>Cameras live</dt><dd id="cams">0</dd></div>
-      <div><dt>AI judges running</dt><dd id="judges">0</dd></div>
-      <div><dt>Used this month</dt><dd id="hours">0 hours</dd></div>
+      <div id="factBooked" hidden><dt>This booking</dt><dd id="booked"></dd></div>
+      <div><dt>Used this month</dt><dd id="hours2">0 hours</dd></div>
     </dl>
+    <p class="note">Costs are estimates. We'll confirm how you pay before we charge anything.</p>
   </section>
 
   <section id="more" class="moreLinks" hidden>
     <a href="recordings.html">Your recordings</a>
+    <a href="streaming.html">Setting up the cameras</a>
     <a href="register.html">Company details, logo and colours</a>
   </section>
 </main>

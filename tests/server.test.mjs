@@ -102,6 +102,16 @@ test('only this machine can watch a stream directly; phones need the password', 
   assert.match(y, /- user: larix\n\s+pass: pw/);
 });
 
+test('a booked server has no idle or hard limit of its own: it runs until the site says stop, and picks up its new end time', async () => {
+  let t = NOW; const told = [];
+  const s = createSleep({ idleMinutes: 0, hardHours: 0, busy: () => false, flush: async () => {}, tell: async (w) => { told.push(w); return { stop: t > NOW + 40 * 3600e3, until: NOW + 40 * 3600e3 }; }, now: () => t });
+  t += 30 * 3600e3; await s.tick();
+  assert.ok(!told.includes('finished'));
+  assert.strictEqual(s.until(), NOW + 40 * 3600e3);
+  t += 11 * 3600e3; await s.tick();
+  assert.ok(told.includes('finished'));
+});
+
 test('a phone is given the server by name, with no Tailscale route', () => {
   const u = new URL(spartansLink({ lan: ['hj-peak.italynorth.cloudapp.azure.com'], lanNames: ['internet'], tailscale: null }, 2, { rtmpPort: 1935, password: 'pw' }));
   assert.strictEqual(u.searchParams.get('lan'), 'hj-peak.italynorth.cloudapp.azure.com');

@@ -14,7 +14,7 @@ function googleVerifier(clientId) {
   return async (idToken) => { const t = await client.verifyIdToken({ idToken, audience: clientId }); return t.getPayload(); };
 }
 const getApi = () => (api = api || createApi({
-  store: tableStore(process.env.STORAGE_CONNECTION), blobSigner: blobSigner(process.env.STORAGE_CONNECTION), putBrand: brandWriter(process.env.STORAGE_CONNECTION), adminKey: process.env.ADMIN_KEY || '',
+  store: tableStore(process.env.STORAGE_CONNECTION), blobSigner: blobSigner(process.env.STORAGE_CONNECTION), putBrand: brandWriter(process.env.STORAGE_CONNECTION), maxRunningServers: +process.env.MAX_RUNNING_SERVERS || 1, serverHourPrice: +process.env.SERVER_HOUR_PRICE || 0.66, adminKey: process.env.ADMIN_KEY || '',
   adminEmails: (process.env.ADMIN_EMAILS || '').split(','), googleClientId: process.env.GOOGLE_CLIENT_ID || '',
   verifyGoogle: process.env.GOOGLE_CLIENT_ID ? googleVerifier(process.env.GOOGLE_CLIENT_ID) : null, secret: process.env.SESSION_SECRET || '',
   fetchText: async (url) => { const r = await fetch(url, { headers: { 'User-Agent': 'Spartans app (news reader)' } }); if (!r.ok) throw new Error(String(r.status)); return r.text(); },

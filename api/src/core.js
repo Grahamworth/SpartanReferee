@@ -91,7 +91,7 @@ const NEWS_FEEDS = [
  * verifyGoogle(idToken) -> {sub, email, name, picture} (throws when invalid); secret signs our own session tokens.
  * adminEmails: Google accounts that are admins. While neither adminEmails nor adminKey is set, everyone is (the prototype).
  */
-function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], verifyGoogle = null, secret = '', googleClientId = '', fetchText = null, blobSigner = null, putBrand = null, maxRunningServers = 1 }) {
+function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], verifyGoogle = null, secret = '', googleClientId = '', fetchText = null, blobSigner = null, putBrand = null, maxRunningServers = 1, serverHourPrice = 0.66 }) {
   const reply = (status, body) => ({ status, body, headers: { 'Content-Type': 'application/json', ...CORS } });
   const admins = adminEmails.map((e) => String(e).trim().toLowerCase()).filter(Boolean);
   // session tokens: base64url(payload).HMAC
@@ -518,7 +518,7 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
 
   const recordings = createRecordings({ store, signer: blobSigner, now, reply, session, isAdmin });
   const { companies, adminCompanies } = createCompanies({ store, now, reply, session, isAdmin, putBrand });
-  const servers = createServers({ store, now, reply, session, maxRunning: maxRunningServers });
+  const servers = createServers({ store, now, reply, session, maxRunning: maxRunningServers, hourPrice: serverHourPrice });
 
   async function handle({ method, path, headers = {}, body, query: extraQuery = {} }) {
     const h = Object.fromEntries(Object.entries(headers).map(([k, v]) => [k.toLowerCase(), v]));

@@ -71,7 +71,7 @@ async function poll() {
     const s = await r.json();
     skew = Date.parse(s.now) - (t0 + Date.now()) / 2;
     const first = !st;
-    st = s; $('offline').hidden = true; applyBrand(s.brand);
+    st = s; $('offline').hidden = true; applyBrand(s.brand); showTimeLeft(s.until);
     if (first) { loadDays(); if (isToday()) goLive(); else openDay(); }
   } catch { $('offline').hidden = false; return; }
   // (a mistake drawing the page isn't the server being out of reach)
@@ -80,6 +80,12 @@ async function poll() {
 }
 setInterval(poll, 1000);
 pullJudgeSettings().finally(poll);
+// the booked time running out: anyone watching should know before the picture goes
+function showTimeLeft(until) {
+  const left = until ? until - laptopNow().getTime() : Infinity, on = left < 20 * 60e3;
+  $('timeLeft').hidden = !on;
+  if (on) $('timeLeftText').textContent = left > 60e3 ? `This server shuts down in ${Math.ceil(left / 60e3)} minutes. Extend it from your account to keep going.` : 'This server is shutting down now. Recordings are being saved.';
+}
 // the company's name, logo and colours (this page stays dark whichever background they chose: it's mostly video)
 let branded = false;
 function applyBrand(b) {
@@ -102,7 +108,7 @@ async function loadCameras() {
     <p class="small muted">Scan in <b>HeadJudge Broadcaster</b> (Android)</p>
     <details><summary>iPhone (Larix)</summary><img src="${c.larix}" alt="QR code for camera ${c.n}, to scan in Larix" width="220" height="220"></details>
   </article>`).join('');
-  $('addCam').disabled = r.cameras.length >= r.max;
+  $('addCam').hidden = r.cameras.length >= r.max;
 }
 $('addCam').onclick = async () => { await fetch('/api/cameras', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' }).catch(() => {}); camsDrawn = ''; loadCameras(); };
 setInterval(() => { if (!$('cameras').hidden) loadCameras(); }, 3000);

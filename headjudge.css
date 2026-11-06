@@ -120,3 +120,24 @@ textarea { resize: vertical; }
 .facts dt { color: var(--muted); font-size: .9rem; }
 .facts dd { margin: 0; font: 700 1.7rem var(--display); }
 .moreLinks { display: flex; flex-wrap: wrap; gap: 8px 22px; font-weight: 600; }
+
+/* booking a server */
+.booking, #running { margin-top: 14px; }
+.bookFields { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0 16px; }
+select { width: 100%; font: inherit; color: var(--text); background: var(--bg); border: 1px solid var(--line); padding: 10px 12px; border-radius: 0; }
+.quote { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin: 14px 0; padding: 12px 14px; background: var(--bg); border-left: 4px solid var(--primary); }
+.quote span { color: var(--muted); }
+.quote b { font: 700 1.9rem var(--display); }
+.booking .primary { margin-top: 0; }
+#stateMore.warn { color: var(--primary-text); font-weight: 700; }
+.serverList { display: grid; gap: 10px; }
+.serverRow { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 12px 14px; background: var(--bg); }
+.serverRow b, .serverRow small { display: block; }
+.serverRow small { color: var(--muted); }
+.serverRow .primary { width: auto; margin: 0; padding: 10px 16px; font-size: 1.1rem; flex: 0 1 auto; }
+.extend { display: grid; grid-template-columns: minmax(130px, 1fr) minmax(0, 2fr) auto; gap: 12px; align-items: end; margin-top: 14px; }
+.extend .quote { margin: 0; padding: 7px 12px; }
+.extend .quote b { font-size: 1.4rem; }
+.extend label { margin-top: 0; }
+.extend .ghost { padding: 9px 16px; font-size: 1.15rem; }
+@media (max-width: 560px) { .extend { grid-template-columns: minmax(0, 1fr); } .serverRow .primary { width: 100%; } }

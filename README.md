@@ -37,7 +37,9 @@ A login link from the site is good for 5 minutes and becomes a 14-hour cookie, s
 
 ## What keeps the bill down
 
-A server turns itself off 30 minutes after the last camera and last person have gone, and after 16 hours regardless. The control app is the backstop: it turns off a server that's stopped reporting (15 minutes), one on for 18 hours, one that didn't come up (25 minutes), and any machine it doesn't recognise.
+A company books cameras and hours on `console.html`. Each server takes 2 cameras (a T4 judges two at about 8 frames a second; three fall to about 6), which sets the number of servers and the cost shown. Servers run for the booked time, used or not, then save their recordings and shut down; the booking can be extended. The control app is the backstop: it turns off a server past its booking, one that's stopped reporting (15 minutes), one that didn't come up (25 minutes), and any machine it doesn't recognise.
+
+The price per server-hour shown to customers is the site setting `SERVER_HOUR_PRICE`; how many servers can run at once is `MAX_RUNNING_SERVERS`, which must fit the subscription's graphics-card limit (8 vCPUs is one server).
 A turned-off server keeps its disk and costs only that. Don't create Azure capacity reservations: they bill the full server rate whether it's used or not.
 
 ## Publishing

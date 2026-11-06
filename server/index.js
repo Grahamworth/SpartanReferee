@@ -9,7 +9,7 @@ const { spawn } = require('child_process');
 const QRCode = require('qrcode');
 const { createReview, send, readBody, isJson } = require('./review-api');
 const { createEngines } = require('./engines');
-const { createCloud } = require('./cloud');
+const { createCloud, QUIET_MS } = require('./cloud');
 const { createSleep } = require('./idle');
 const { mediamtxYaml } = require('./mediamtx');
 const { rtmp, spartansLink, larixLink } = require('./network');
@@ -25,7 +25,9 @@ fs.mkdirSync(RECORDINGS, { recursive: true });
 const SETTINGS = path.join(DATA, 'settings.json');
 const readFile = (f, fallback) => { try { return JSON.parse(fs.readFileSync(f, 'utf8')); } catch { return fallback; } };
 const saved = readFile(SETTINGS, {});
+const MAX_CAMERAS = C.maxCameras || 2;
 const S = { stations: 2, rtmpPort: 1935, srtPort: 8890, webrtcPort: 8889, iceUdpPort: 8189, apiPort: 9997, playbackPort: 9996, viewPort: 8800, enginePort: 8801, record: true, keepDays: 14, bitrate: 3500, ...C, ...saved, password: C.password, youtube: saved.youtube || {} };
+S.stations = Math.min(S.stations, MAX_CAMERAS);
 const save = () => fs.writeFile(SETTINGS, JSON.stringify({ stations: S.stations, ai: engines.list(), youtube: S.youtube }), () => {});
 const JUDGE_SETTINGS = path.join(DATA, 'judge-settings.json');
 let judgeSettings = readFile(JUDGE_SETTINGS, {});
@@ -60,7 +62,7 @@ const liveOf = (n) => { if (!live.has(n)) live.set(n, { last: '', at: 0, viewers
 const review = createReview({
   DATA, S, REVIEW, SITE_DIR,
   extraState: (cams) => ({
-    brand, maxJudges: engines.max,
+    brand, maxJudges: engines.max, until: sleeper.until(),
     cams: cams.map((c) => { const l = live.get(c.n); return { ...c, ai: engines.wanted(c.n), judging: engines.running(c.n) && !!l && Date.now() - l.at < 4000, fps: l && Date.now() - l.at < 4000 ? l.fps : 0 }; }),
   }),
 });
@@ -134,10 +136,10 @@ async function extra(req, res, u, { local }) {
     fs.writeFile(JUDGE_SETTINGS, JSON.stringify(judgeSettings), () => {});
     send(res, 200, { ok: true }); return true;
   }
-  if (p === '/api/cameras' && req.method === 'GET') { send(res, 200, { cameras: await cameraList(), bitrate: S.bitrate, max: 12 }); return true; }
+  if (p === '/api/cameras' && req.method === 'GET') { send(res, 200, { cameras: await cameraList(), bitrate: S.bitrate, max: MAX_CAMERAS }); return true; }
   if (p === '/api/cameras' && req.method === 'POST') {
     if (!isJson(req)) return send(res, 415, { error: 'JSON only' }), true;
-    if (S.stations < 12) { S.stations++; save(); await review.watchCameras(); }
+    if (S.stations < MAX_CAMERAS) { S.stations++; save(); await review.watchCameras(); }
     send(res, 200, { stations: S.stations }); return true;
   }
   if (p === '/api/server' && req.method === 'GET') { send(res, 200, { log: mtxLog.slice(-60), cloud: { ...cloud.status }, idle: sleeper.status() }); return true; }
@@ -176,10 +178,15 @@ const engineServer = http.createServer(async (req, res) => {
 
 // ---------------------------------------------------------------- nobody using it: tell the site, which turns the server off
 const sleeper = createSleep({
-  idleMinutes: C.idleMinutes || 30, hardHours: C.hardHours || 16,
+  idleMinutes: C.idleMinutes || 0, hardHours: C.hardHours || 0,
   busy: () => review.cams().some((c) => c.live) || [...live.values()].some((l) => l.viewers.size > 0),
-  // recordings are finished and on their way before the site is told it can turn the server off
-  flush: async () => { await engines.stopAll(); await new Promise((r) => setTimeout(r, 100)); for (let i = 0; i < 40 && (cloud.status.waiting > 0 || cloud.status.state === 'sending'); i++) { await cloud.tick().catch(() => {}); await new Promise((r) => setTimeout(r, 15000)); } },
+  // judges finish their rounds; the streaming server stops, which closes the recordings; they go up; only then may the site turn the server off
+  flush: async () => {
+    await engines.stopAll();
+    stopping = true; try { mtx?.kill('SIGTERM'); } catch { /* gone */ }
+    await new Promise((r) => setTimeout(r, QUIET_MS + 10000)); // a recording counts as finished once it's stopped changing
+    for (let i = 0; i < 40; i++) { await cloud.tick().catch(() => {}); if (!cloud.status.waiting && cloud.status.state !== 'sending') break; await new Promise((r) => setTimeout(r, 15000)); }
+  },
   tell: (what) => callSite(what), log,
 });
 // the site is told we're alive, and asks us to stop by answering so

@@ -1,11 +1,12 @@
 'use strict';
 // Every minute: make each company's server what the site says is wanted, and turn off anything that shouldn't be costing money. This
 // is the safety net, so it holds however badly a server is behaving: one that's stopped reporting, has been on too long, or has been
-// told to stop and hasn't finished is turned off regardless. A turned-off server keeps its disk (and recordings), and costs only that.
+// told to stop and hasn't finished is turned off regardless. A server runs for the time booked, whether or not anyone's using it, then stops.
+// A turned-off server keeps its disk (and recordings), and costs only that.
 const REPORT_LIMIT_MS = 15 * 60e3;     // silent this long while on: something's wrong
 const START_LIMIT_MS = 25 * 60e3;      // not answering this long after starting: give up
 const STOP_GRACE_MS = 15 * 60e3;       // told to stop: this long to finish sending its recordings
-const HARD_LIMIT_MS = 18 * 3600e3;     // never on longer than this in one go (the server's own limit is shorter)
+const NO_BOOKING_LIMIT_MS = 18 * 3600e3; // on with no booked end (which shouldn't happen): this long at most
 
 const monthOf = (t) => new Date(t).toISOString().slice(0, 7);
 
@@ -14,17 +15,18 @@ const monthOf = (t) => new Date(t).toISOString().slice(0, 7);
  * -> { action: null | 'create' | 'start' | 'deallocate', state, error, offWhy }
  */
 function decide({ want, st, power, healthy, now }) {
-  const desired = want?.desired === 'on' ? 'on' : 'off';
+  const expired = !!want?.until && now >= want.until;
+  const desired = want?.desired === 'on' && !expired ? 'on' : 'off';
   const on = power === 'running' || power === 'starting';
   const startedAt = st?.startedAt || 0;
   if (on) {
     // limits that apply whatever is wanted
-    if (startedAt && now - startedAt > HARD_LIMIT_MS) return { action: 'deallocate', state: 'stopping', offWhy: 'hard-limit', wantOff: true };
+    if (!want?.until && startedAt && now - startedAt > NO_BOOKING_LIMIT_MS) return { action: 'deallocate', state: 'stopping', offWhy: 'hard-limit', wantOff: true };
     if (st?.state === 'on' && want?.lastReport && now - want.lastReport > REPORT_LIMIT_MS) return { action: 'deallocate', state: 'stopping', offWhy: 'silent', wantOff: true };
     if (st?.state === 'on' && !want?.lastReport && startedAt && now - startedAt > REPORT_LIMIT_MS) return { action: 'deallocate', state: 'stopping', offWhy: 'silent', wantOff: true };
     if (st?.state !== 'on' && desired === 'on' && startedAt && now - startedAt > START_LIMIT_MS && !healthy) return { action: 'deallocate', state: 'stopping', offWhy: 'no-start', error: 'Your server didn\'t start properly. Please try again, and tell us if it happens twice.', wantOff: true };
     if (desired === 'off') {
-      const askedAt = want?.stopRequestedAt || 0;
+      const askedAt = want?.stopRequestedAt || (expired ? want.until : 0);
       if (want?.finished || !healthy || !st?.state || (askedAt && now - askedAt > STOP_GRACE_MS) || (!askedAt && now - (want?.lastReport || 0) > STOP_GRACE_MS)) return { action: 'deallocate', state: 'stopping', offWhy: want?.finished ? 'finished' : 'grace' };
       return { action: null, state: 'stopping' }; // it's finishing: the next time it reports it's told to stop
     }
@@ -90,4 +92,4 @@ async function reconcile({ store, arm, health, seedFor, now = Date.now, log = ()
   return out;
 }
 
-module.exports = { decide, reconcile, REPORT_LIMIT_MS, START_LIMIT_MS, STOP_GRACE_MS, HARD_LIMIT_MS };
+module.exports = { decide, reconcile, REPORT_LIMIT_MS, START_LIMIT_MS, STOP_GRACE_MS, NO_BOOKING_LIMIT_MS };

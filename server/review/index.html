@@ -30,6 +30,7 @@
   <div class="clock"><b id="clock">--:--:--</b><small id="who"></small></div>
 </header>
 
+<div id="timeLeft" class="banner" role="status" hidden><span id="timeLeftText"></span></div>
 <div id="offline" class="banner" hidden>Can't reach the server. Retrying…</div>
 <div id="busyNote" class="banner pick busynote" role="status" hidden><span id="busyText"></span><span class="spacer"></span><button class="btn" id="busyPause" type="button">⏸ Pause analysis</button><button class="btn" id="busyStop" type="button">■ Stop analysis</button><button class="btn" id="busyClose" type="button">OK</button></div>
 <div id="athletePop" class="athletepop" hidden></div>
@@ -37,7 +38,7 @@
 <!-- Cameras: what each phone scans -->
 <section id="cameras" class="pane" hidden>
   <div class="row"><h2 style="margin:0">Cameras</h2><span class="spacer"></span><button class="btn" id="addCam" type="button">+ Add a camera</button></div>
-  <p class="muted">Open HeadJudge Broadcaster on the phone and scan a camera's code. Any Wi-Fi or mobile signal will do.</p>
+  <p class="muted">This server takes two cameras. Open HeadJudge Broadcaster on the phone and scan a camera's code. Any Wi-Fi or mobile signal will do.</p>
   <div id="camList" class="camlist"></div>
 </section>
 

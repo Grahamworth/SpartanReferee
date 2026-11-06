@@ -1,7 +1,7 @@
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert');
-const { decide, reconcile, HARD_LIMIT_MS, REPORT_LIMIT_MS, STOP_GRACE_MS, START_LIMIT_MS } = require('../src/reconcile');
+const { decide, reconcile, NO_BOOKING_LIMIT_MS, REPORT_LIMIT_MS, STOP_GRACE_MS, START_LIMIT_MS } = require('../src/reconcile');
 const { createArm } = require('../src/arm');
 
 const NOW = 1_800_000_000_000;
@@ -30,11 +30,24 @@ test('Stop: it gets the chance to finish sending recordings, then is turned off'
 });
 
 test('the safety net: on too long, silent too long, or never came up: turned off whatever is wanted', () => {
-  assert.strictEqual(d({ want: { desired: 'on', lastReport: NOW }, st: { state: 'on', startedAt: NOW - HARD_LIMIT_MS - 1 }, power: 'running' }).offWhy, 'hard-limit');
+  assert.strictEqual(d({ want: { desired: 'on', lastReport: NOW }, st: { state: 'on', startedAt: NOW - NO_BOOKING_LIMIT_MS - 1 }, power: 'running' }).offWhy, 'hard-limit');
   assert.strictEqual(d({ want: { desired: 'on', lastReport: NOW - REPORT_LIMIT_MS - 1 }, st: { state: 'on', startedAt: NOW - 3600e3 }, power: 'running' }).offWhy, 'silent');
   assert.strictEqual(d({ want: { desired: 'on' }, st: { state: 'on', startedAt: NOW - REPORT_LIMIT_MS - 1 }, power: 'running' }).offWhy, 'silent');
   const never = d({ want: { desired: 'on' }, st: { state: 'starting', startedAt: NOW - START_LIMIT_MS - 1 }, power: 'running', healthy: false });
   assert.strictEqual(never.offWhy, 'no-start'); assert.ok(never.error);
+});
+
+test('a booked server runs its whole time, however long and however quiet; then gets the chance to finish, then stops', () => {
+  const on = { state: 'on', startedAt: NOW - 30 * 3600e3 };
+  const booked = { desired: 'on', lastReport: NOW, until: NOW + 1000 };
+  assert.strictEqual(d({ want: booked, st: on, power: 'running' }).action, null, 'longer than any fixed limit, still within its booking');
+  const ended = { desired: 'on', lastReport: NOW, until: NOW - 60e3 };
+  const r = d({ want: ended, st: on, power: 'running' });
+  assert.deepStrictEqual([r.action, r.state], [null, 'stopping'], 'time to send its recordings');
+  assert.strictEqual(d({ want: { ...ended, finished: true }, st: on, power: 'running' }).action, 'deallocate');
+  assert.strictEqual(d({ want: { ...ended, until: NOW - STOP_GRACE_MS - 1 }, st: on, power: 'running' }).action, 'deallocate', 'out of time to finish');
+  assert.strictEqual(d({ want: ended, st: { state: 'off' }, power: 'deallocated' }).action, null, 'an ended booking doesn\'t start it again');
+  assert.strictEqual(d({ want: { desired: 'on', until: NOW + 1000, requestedAt: NOW }, st: { state: 'off' }, power: 'deallocated' }).action, 'start');
 });
 
 test('anything running that nobody asked for is turned off', () => {

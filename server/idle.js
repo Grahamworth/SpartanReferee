@@ -1,11 +1,11 @@
 'use strict';
-// Servers cost money by the hour, so one nobody is using asks to be turned off. It goes quiet when no camera is live, no browser has
-// asked for anything and nobody's watching; a hard limit stops one that's been left streaming to nothing for good. The site is told it
-// can turn the server off only once the recordings have gone, and the site has a timer of its own in case this machine can't say so.
+// Winding down: a server runs for the time its company booked, and the site says when that's over (or when Stop was pressed). It's told
+// it can turn the server off only once the recordings have gone, and the control app has a timer of its own in case this machine can't say so.
+// Idle and hard limits are here for a server run by hand; a booked server has them at 0, meaning off.
 function createSleep({ idleMinutes, hardHours, busy, flush, tell, log = () => {}, now = Date.now, everyMs = 60000 }) {
   const startedAt = now();
-  let lastSeen = now(), leaving = false, timer = null;
-  const status = () => ({ idleMinutes, hardHours, quietMinutes: Math.floor((now() - lastSeen) / 60000), leaving, offAt: new Date(startedAt + hardHours * 3600e3).toISOString() });
+  let lastSeen = now(), leaving = false, timer = null, until = 0;
+  const status = () => ({ idleMinutes, hardHours, quietMinutes: Math.floor((now() - lastSeen) / 60000), leaving, until });
   async function leave(why) {
     if (leaving) return;
     leaving = true;
@@ -16,10 +16,11 @@ function createSleep({ idleMinutes, hardHours, busy, flush, tell, log = () => {}
   async function tick() {
     if (leaving) return;
     if (busy()) lastSeen = now();
-    if (now() - startedAt >= hardHours * 3600e3) return leave(`it has been on for ${hardHours} hours`);
-    if (now() - lastSeen >= idleMinutes * 60000) return leave(`nothing has happened for ${idleMinutes} minutes`);
+    if (hardHours && now() - startedAt >= hardHours * 3600e3) return leave(`it has been on for ${hardHours} hours`);
+    if (idleMinutes && now() - lastSeen >= idleMinutes * 60000) return leave(`nothing has happened for ${idleMinutes} minutes`);
     const r = await tell('alive');
-    // the customer pressed Stop on the site
+    if (r?.until !== undefined) until = r.until;
+    // the booked time is over, or the customer pressed Stop
     if (r && r.stop) return leave('asked to stop');
     return undefined;
   }
@@ -27,7 +28,7 @@ function createSleep({ idleMinutes, hardHours, busy, flush, tell, log = () => {}
     start() { timer = setInterval(() => tick().catch(() => {}), everyMs); if (timer.unref) timer.unref(); },
     stop() { clearInterval(timer); },
     seen() { lastSeen = now(); },
-    status, tick, leave,
+    status, tick, leave, until: () => until,
   };
 }
 module.exports = { createSleep };
