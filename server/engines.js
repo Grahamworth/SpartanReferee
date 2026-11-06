@@ -1,6 +1,6 @@
 'use strict';
 // One judge per camera, each in its own Chrome: one Chrome funnels every camera through a single queue on the graphics card, and
-// on the test server gave 3.5 frames a second per camera at three cameras where separate ones gave 8. A judge that dies is started
+XXA judge that dies is started
 // again. Settings reach it before its page runs, and a round in progress is finished before it's stopped.
 const { spawn } = require('child_process');
 const fs = require('fs');
@@ -23,7 +23,7 @@ async function connect(url) {
 }
 
 /** chrome: the program; pageUrl(n): the judge's address; settings(): every saved judge setting; max: how many this server can run well */
-function createEngines({ chrome, dataDir, pageUrl, settings, max = 3, extraFlags = [], env = {}, log = () => {} }) {
+function createEngines({ chrome, dataDir, pageUrl, settings, max = 2, extraFlags = [], env = {}, log = () => {} }) {
   const running = new Map();   // n → { proc, cdp, startedAt, stopping }
   const want = new Set();
 

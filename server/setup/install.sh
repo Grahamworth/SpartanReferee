@@ -3,7 +3,7 @@
 # that start HeadJudge. Everything comes from its maker's own download, with checksums checked where they publish them. Reboots at the end.
 set -euo pipefail
 export DEBIAN_FRONTEND=noninteractive
-MTX_VERSION="${MTX_VERSION:-v1.15.1}"; NODE_VERSION="${NODE_VERSION:-v22.14.0}"
+MTX_VERSION="${MTX_VERSION:-v1.21.3}"; NODE_VERSION="${NODE_VERSION:-v22.14.0}"
 HERE="$(cd "$(dirname "$0")" && pwd)"
 
 apt-get -y -qq update

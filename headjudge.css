@@ -97,3 +97,26 @@ textarea { resize: vertical; }
 .toast { position: fixed; left: 50%; bottom: 20px; transform: translate(-50%, 20px); background: var(--text); color: var(--bg); padding: 10px 18px; font-weight: 700; opacity: 0; transition: .2s; pointer-events: none; max-width: calc(100vw - 32px); }
 .toast.on { opacity: 1; transform: translate(-50%, 0); }
 @media (prefers-reduced-motion: reduce) { .toast { transition: none; } }
+
+/* a company's own page */
+.brandline { display: inline-flex; align-items: center; gap: 12px; min-width: 0; }
+.toplogo { height: 40px; max-width: 170px; object-fit: contain; }
+.console { max-width: 720px; }
+.serverCard { padding: clamp(20px, 4vw, 32px); }
+.stateLine { display: flex; align-items: center; gap: 12px; }
+.stateLine h1 { font-size: clamp(1.9rem, 6vw, 2.6rem); line-height: 1.05; font-style: italic; }
+.light { flex: none; width: 16px; height: 16px; border-radius: 50%; background: var(--muted); }
+.light[data-state="on"] { background: var(--accent); }
+.light[data-state="starting"], .light[data-state="stopping"] { background: var(--primary); animation: pulse 1.4s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: .35; } }
+@media (prefers-reduced-motion: reduce) { .light { animation: none !important; } }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+.actions .primary { width: auto; flex: 1 1 220px; margin: 0; }
+.ghost { padding: 14px 18px; font: italic 800 1.35rem var(--display); text-transform: uppercase; background: none; color: var(--text); border: 2px solid var(--line); cursor: pointer; flex: 0 1 auto; }
+.ghost:hover { border-color: var(--text); }
+.ghost:disabled { opacity: .55; cursor: default; }
+.linkbtn { display: block; text-align: center; text-decoration: none; box-sizing: border-box; }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 22px 0 0; padding-top: 16px; border-top: 1px solid var(--line); }
+.facts dt { color: var(--muted); font-size: .9rem; }
+.facts dd { margin: 0; font: 700 1.7rem var(--display); }
+.moreLinks { display: flex; flex-wrap: wrap; gap: 8px 22px; font-weight: 600; }

@@ -817,7 +817,7 @@ function followJudge(n) {
   setInterval(() => { const last = S.replay?.[0]; if (last?.tracks?.length && Date.now() - S.followAt > 3000) S.replay = [{ t: 0, tracks: [], people: last.people }]; }, 1000);
 }
 // The judge's side: at most this many a second, skipping any while the last is still on its way. Only what's needed to draw.
-const SNAP_EVERY_MS = 100;
+const SNAP_EVERY_MS = 60;
 let snapBusy = false, snapAt = 0;
 const small = (v) => Math.round(v * 1e4) / 1e4;
 function sendSnap(t) {
@@ -825,6 +825,7 @@ function sendSnap(t) {
   if (snapBusy || at - snapAt < SNAP_EVERY_MS) return;
   snapAt = at; snapBusy = true;
   const snap = snapshot(t);
+  snap.fps = Math.round((procFps() ?? 0) * 10) / 10;
   snap.tracks = snap.tracks.map((k) => ({ ...k, lm: k.lm.map((p) => ({ x: small(p.x), y: small(p.y), visibility: Math.round((p.visibility ?? 1) * 100) / 100 })) }));
   fetch(`/api/engine/${ENGINE}/snap`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(snap) }).catch(() => {}).finally(() => { snapBusy = false; });
 }
@@ -1701,7 +1702,8 @@ function frame() {
     analyseFrame(src, w, h, clockNow());
   }
   if (S.replay) replayTo(clockNow());
-  drawFrame(src, w, h, wantPose, practice);
+  // a judge on the server has nobody watching it, and the graphics card has better things to do than draw for them
+  if (!ENGINE) drawFrame(src, w, h, wantPose, practice);
 }
 
 // Pose search and judging for one frame at judging-clock time t.

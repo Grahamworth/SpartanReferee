@@ -46,7 +46,7 @@ function startStreaming() {
 // ---------------------------------------------------------------- the judges
 const engines = (() => {
   const e = createEngines({
-    chrome: C.chrome || 'google-chrome', dataDir: DATA, max: C.maxEngines || 3, extraFlags: C.chromeFlags || [], env: C.display ? { DISPLAY: C.display } : {}, log,
+    chrome: C.chrome || 'google-chrome', dataDir: DATA, max: C.maxEngines || 2, extraFlags: C.chromeFlags || [], env: C.display ? { DISPLAY: C.display } : {}, log,
     pageUrl: (n) => `http://127.0.0.1:${S.enginePort}/judge/judge.html?stream=${encodeURIComponent(`http://127.0.0.1:${S.webrtcPort}/live/station${n}/whep`)}&go=1&cfg=cam${n}&engine=${n}`,
     settings: () => judgeSettings,
   });
@@ -60,10 +60,18 @@ const liveOf = (n) => { if (!live.has(n)) live.set(n, { last: '', at: 0, viewers
 const review = createReview({
   DATA, S, REVIEW, SITE_DIR,
   extraState: (cams) => ({
-    brand: C.brand || null, maxJudges: engines.max,
+    brand, maxJudges: engines.max,
     cams: cams.map((c) => { const l = live.get(c.n); return { ...c, ai: engines.wanted(c.n), judging: engines.running(c.n) && !!l && Date.now() - l.at < 4000, fps: l && Date.now() - l.at < 4000 ? l.fps : 0 }; }),
   }),
 });
+
+// ---------------------------------------------------------------- the company's brand, in case they've changed it
+let brand = C.brand || null;
+async function refreshBrand() {
+  if (!C.api || !C.companyId) return;
+  try { const r = await fetch(`${C.api}/companies/${encodeURIComponent(C.companyId)}`, { signal: AbortSignal.timeout(10000) }); if (r.ok) brand = await r.json(); } catch { /* what we have will do */ }
+}
+refreshBrand(); setInterval(refreshBrand, 5 * 60e3);
 
 // ---------------------------------------------------------------- recordings to cloud storage
 const cloud = createCloud({ dir: RECORDINGS, stateFile: path.join(DATA, 'cloud-sent.json'), api: () => C.api, settings: () => ({ cloudOn: !!(C.api && C.receiverKey), cloudKey: C.receiverKey, cloudSince: 0 }) });
@@ -103,11 +111,12 @@ async function extra(req, res, u, { local }) {
   const eng = /^\/api\/engine\/(\d{1,2})(?:\/(snap|live|restart))?$/.exec(p);
   if (eng) {
     const n = +eng[1];
+    if (n < 1 || n > S.stations) return send(res, 404, { error: 'No such camera' }), true;
     if (eng[2] === 'snap' && req.method === 'POST') {
       if (!local) return send(res, 403, { error: 'Judges only' }), true;
       const raw = await new Promise((ok) => { let b = ''; req.on('data', (c) => { b += c; if (b.length > 5e5) { req.destroy(); ok(''); } }); req.on('end', () => ok(b)); req.on('error', () => ok('')); });
       const l = liveOf(n), now = Date.now();
-      if (raw) { l.fps = l.at ? (l.fps * 4 + 1000 / Math.max(1, now - l.at)) / 5 : 0; l.last = raw; l.at = now; for (const r of l.viewers) r.write(`data: ${raw}\n\n`); }
+      if (raw) { l.fps = +(/"fps":([\d.]+)/.exec(raw) || [])[1] || 0; l.last = raw; l.at = now; for (const r of l.viewers) r.write(`data: ${raw}\n\n`); }
       send(res, 200, { ok: true }); return true;
     }
     if (eng[2] === 'live' && req.method === 'GET') { followLive(req, res, n); return true; }
@@ -179,6 +188,20 @@ function callSite(what) {
   return fetch(`${C.api}/servers/report`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Server-Key': C.serverKey }, body: JSON.stringify({ what, cams: review.cams().filter((c) => c.live).length, judges: engines.list().length }), signal: AbortSignal.timeout(15000) })
     .then((r) => r.json()).catch(() => null);
 }
+
+// ---------------------------------------------------------------- room on the disk
+// a full disk would stop the recordings, so the oldest go first: those already safe in cloud storage, then (with a warning) any others
+const KEEP_FREE = (C.keepFreeGb || 12) * 1e9;
+function makeRoom() {
+  let free; try { const d = fs.statfsSync(DATA); free = d.bavail * d.bsize; } catch { return; }
+  if (free >= KEEP_FREE) return;
+  const sent = readFile(path.join(DATA, 'cloud-sent.json'), {}), files = [];
+  const walk = (dir) => { for (const e of fs.readdirSync(dir, { withFileTypes: true })) { const p = path.join(dir, e.name); if (e.isDirectory()) walk(p); else if (e.name.endsWith('.mp4')) files.push({ p, rel: path.relative(RECORDINGS, p).replace(/\\/g, '/'), at: fs.statSync(p).mtimeMs }); } };
+  try { walk(RECORDINGS); } catch { return; }
+  const finished = files.filter((f) => Date.now() - f.at > 120e3).sort((a, b) => (!!sent[b.rel] - !!sent[a.rel]) || a.at - b.at);
+  for (const f of finished.slice(0, 10)) { if (!sent[f.rel]) log(`Disk nearly full: deleting ${f.rel}, which hasn't reached cloud storage`); try { fs.unlinkSync(f.p); } catch { /* in use */ } }
+}
+setInterval(makeRoom, 60000);
 
 // ---------------------------------------------------------------- running
 startStreaming();

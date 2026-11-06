@@ -25,5 +25,5 @@ cp -r "$SRC/vendor/mediapipe" "$SRC/vendor/ort" "$BUILD/site/vendor/"
 if find "$BUILD" -iname '*.mp4' -o -iname '*.mov' -o -iname '*.webm' -o -iname 'pub*.html' | grep -q .; then echo "A video or test page got into the server's files: stopping"; exit 1; fi
 
 mkdir -p "$SRC/downloads"
-tar -czf "$OUT" -C "$BUILD" .
+tar --owner=0 --group=0 -czf "$OUT" -C "$BUILD" .
 ls -la "$OUT"

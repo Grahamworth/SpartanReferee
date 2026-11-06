@@ -56,272 +56,67 @@
 </style>
 <link rel="stylesheet" href="looks.css">
 <script src="looks.js"></script>
+<style>
+  .guide h2 { margin-top: 26px; } .guide h3 { margin: 16px 0 4px; } .guide li { margin: 6px 0; } .guide video { width: 100%; display: block; margin: 12px 0; background: #000; } .guide a:not(.btn) { color: var(--white, #fff); }
+</style>
 </head>
 <body>
-<main class="hub">
+<main class="hub guide">
   <a href="./" class="home-link">‹ Spartans home</a>
-  <h1 class="brand">Set up <span>streaming</span></h1>
-  <p class="muted">Two phones film the burpee zone. Each sends its picture to the judging laptop over <b>Tailscale</b> and to <b>YouTube</b>, each on its own connection. The laptop records both, runs the AI judge, and serves live view and replay to the laptop and an iPad. Allow about 20 minutes the first time and 5 minutes on the day.</p>
+  <h1 class="brand">Set up <span>the cameras</span></h1>
+  <p class="muted">Phones film the burpee zone and send their pictures to your HeadJudge server over any Wi-Fi or mobile signal. The server records them, runs an AI judge on each camera, and shows everything in a browser for the referees. There's nothing to install on the judging computer.</p>
+  <div class="videobox"><video controls playsinline preload="metadata" src="broadcaster-receiver-promo.mp4#t=1.5" aria-label="HeadJudge Broadcaster and the online Receiver, as an animated demo"></video></div>
 
-  <section id="promo" class="promo">
-    <h2>See it in 30 seconds</h2>
-    <video controls playsinline preload="metadata" src="https://zealous-island-03d6db503.8.azurestaticapps.net/broadcaster-receiver-promo.mp4#t=1.5" aria-label="HeadJudge Broadcaster and HeadJudge Receiver promo video. It has no sound."></video>
-    <p class="muted">HeadJudge Broadcaster and HeadJudge Receiver, as an animated demo.</p>
-  </section>
+  <h2>What you need</h2>
+  <ul>
+    <li><b>A HeadJudge account</b> for your company. <a href="register.html">Register here</a>: we check each one, then you can start a server.</li>
+    <li><b>A phone per camera</b> on a tripod or stand, with a power bank and mobile data or Wi-Fi. Android uses HeadJudge Broadcaster; iPhones use Larix.</li>
+    <li><b>Any computer or iPad</b> for the referees, with a browser.</li>
+    <li><b>A good upload.</b> Each camera sends about 3.5 Mbit/s, and the venue's connection has to carry them all: try it there before the event.</li>
+  </ul>
 
-  <nav class="toc" aria-label="Sections">
-    <a href="#need">What you need</a>
-    <a href="#laptop">1. Laptop</a>
-    <a href="#phone">2. Each phone</a>
-    <a href="#ipad">3. iPad (optional)</a>
-    <a href="#place">Camera positions</a>
-    <a href="#test">4. Test</a>
-    <a href="#review">Review and protests</a>
-    <a href="#fail">If something fails</a>
-    <a href="#fix">Troubleshooting</a>
-  </nav>
+  <h2>1. Start your server</h2>
+  <ol>
+    <li>Go to <a href="console.html">your server</a> and press <b>Start server</b>. It takes about 5 minutes.</li>
+    <li>Press <b>Open video review</b>. Share nothing from the address bar: anyone else who needs it signs in to your company's account.</li>
+  </ol>
+  <p class="muted">The server turns itself off 30 minutes after the last camera and the last person have gone, and after 16 hours whatever is happening.</p>
 
-  <section class="part" id="need">
-    <h2>What you need</h2>
-    <ul class="steps">
-      <li><b>A Windows laptop</b> (the judging computer), plugged in.</li>
-      <li><b>Two phones</b>, Android or iPhone, each on a tripod or stand, with a power bank. Both need mobile data or Wi-Fi.</li>
-      <li><b>An iPad</b> for the referees (optional).</li>
-      <li><b>One free Tailscale account</b> (a Google or Microsoft sign-in is fine). The laptop, phones and iPad all sign in to it.</li>
-      <li><b>A YouTube channel</b> with live streaming switched on, and one stream key per camera (optional). A new channel can take 24 hours to be allowed to stream.</li>
-    </ul>
-    <div class="flow">
-      <div><b>Phone 1 and Phone 2</b> → Tailscale → <b>laptop</b> (record, AI judge, review) → laptop screen and <b>iPad</b></div>
-      <div><b>Phone 1 and Phone 2</b> → <b>YouTube</b> (direct from each phone, so it keeps going if the laptop has a problem)</div>
-    </div>
-  </section>
+  <h2>2. Each phone</h2>
+  <p>In the video review, open the <b>Cameras</b> tab. Each camera has its own codes.</p>
+  <h3>Android: HeadJudge Broadcaster</h3>
+  <ol>
+    <li><a href="https://zealous-island-03d6db503.8.azurestaticapps.net/downloads/spartans-broadcaster.apk">Install HeadJudge Broadcaster</a>. The phone warns you, as it isn't from the Play Store: tap Settings, turn on Allow from this source, go back and tap Install.</li>
+    <li>Open it, tap <b>Scan station QR code</b>, and scan that camera's code.</li>
+    <li>Optional: tick <b>Also stream live to YouTube</b> and paste that camera's stream key.</li>
+    <li>Leave Quality on 720p unless the signal is weak, then tap <b>Open the camera</b> and <b>GO LIVE</b>.</li>
+  </ol>
+  <h3>iPhone: Larix</h3>
+  <ol>
+    <li>Install Larix Broadcaster from the App Store and open it once, allowing the camera and microphone.</li>
+    <li>In the Cameras tab, open <b>iPhone (Larix)</b> and scan that camera's code with the phone's camera. Open the link in Larix and tap <b>Import</b>.</li>
+    <li>In Larix, go to Settings, then Connections, tick the camera, and press the red button.</li>
+  </ol>
 
-  <section class="part" id="laptop">
-    <h2>1. The laptop</h2>
-    <p class="when">Once. About 5 minutes. The Receiver app does most of it.</p>
-    <ol class="steps">
-      <li><b>Download and run the HeadJudge Receiver</b> (about 140 MB).
-        <div class="row"><a class="btn btn-red" href="https://zealous-island-03d6db503.8.azurestaticapps.net/downloads/burpee-judge-receiver-setup.exe">Download for Windows</a></div>
-        <div class="warn"><b>Windows will say "Windows protected your PC"</b>, because the installer isn't signed with a paid certificate yet. Click <b>More info</b>, then <b>Run anyway</b>. If your browser asks whether to keep the file, choose <b>Keep</b>.</div>
-      </li>
-      <li><b>Open the Receiver.</b> Windows asks once to let phones connect: say <b>Yes</b>.</li>
-      <li><b>Step 1 in the app: click "Install Tailscale"</b>, say Yes when Windows asks, then sign in in the browser window that opens. The step goes green and shows the account name: use that same account on every phone and the iPad.</li>
-      <li><b>Set Cameras to 2</b> at the bottom if it shows a different number.</li>
-      <li><b>Optional, YouTube:</b> paste each camera's stream key into its card (YouTube Studio → Create → Go live → Stream). Use a different key for each camera.</li>
-    </ol>
-    <div class="tip">The Receiver starts with Windows, keeps recording every camera (14 days by default), and logs when each camera connects or drops.</div>
-  </section>
+  <h2>3. Start judging</h2>
+  <ol>
+    <li>On the <b>Live</b> tab, each phone shows within a few seconds of going live.</li>
+    <li>Press <b>Start AI judge</b> on each camera, check its settings and press Save. The judge runs on the server, so it carries on when you close the page. A server judges up to 2 cameras at once, and can stream and record more.</li>
+    <li>Do a few test burpees in front of each camera and check they're counted.</li>
+  </ol>
 
-  <section class="part" id="phone">
-    <h2>2. Each phone</h2>
-    <p class="when">Once per phone. About 5 minutes. Choose how the phone sends its video:</p>
-    <div class="ptabs" role="tablist" aria-label="Phone app">
-      <button type="button" role="tab" id="tab-spartans" aria-controls="way-spartans" data-way="spartans" aria-selected="true">HeadJudge Broadcaster</button>
-      <button type="button" role="tab" id="tab-larix" aria-controls="way-larix" data-way="larix" aria-selected="false">Larix (iPhone)</button>
-    </div>
+  <h2>Review and protests</h2>
+  <p>Rewind any camera with the timeline, find an athlete by number, or watch how their reps were judged from <b>All results</b>. Recordings stay on the server for 14 days and in your <a href="recordings.html">cloud recordings</a> for 30.</p>
 
-    <div class="way" id="way-larix" role="tabpanel" aria-labelledby="tab-larix" hidden>
-      <p class="muted">Android or iPhone. Free. Adds a small "TEST STREAM" watermark. Keeps a backup recording on the phone.</p>
-      <ol class="steps">
-        <li><b>Scan the "Set up each phone" code</b> in the Receiver (step 3) with the phone's camera. It opens a page with the right store links for that phone.</li>
-        <li><b>Install Tailscale</b>, sign in with the <b>same account</b> as the laptop, allow the VPN, and check it says <b>Connected</b>. The phone then shows in the Receiver under step 3.
-          <div class="warn">Turn off any other VPN on the phone. Leave Tailscale on.</div>
-        </li>
-        <li><b>Install Larix Broadcaster</b> (free) and open it once, allowing the camera and microphone.</li>
-        <li><b>Scan that camera's Larix code</b> in the Receiver (Camera 1 for the first phone, Camera 2 for the second) with the phone's camera, and open the link in Larix.</li>
-        <li><b>Tap Import</b> when Larix asks. The connections are only added once you do. Larix is then set up: to the laptop over Tailscale, to YouTube if you added a key, 720p with 1-second keyframes, and a backup recording on the phone.
-          <div class="warn"><b>Android:</b> if the camera won't open the link, use <b>Google Lens</b>, or click <b>Copy Larix link</b> in the Receiver and send it to the phone.</div>
-        </li>
-        <li><b>Switch the connection on:</b> Larix → Settings → Connections, tick <b>Camera 1 to laptop</b> (or Camera 2), and <b>Camera … to YouTube</b> if you use it. Untick any older connections, so the phone only sends where it should.</li>
-      </ol>
-      <div class="tip">If you add or change a YouTube key later, scan the Larix code again, tap Import and check the connections are ticked.</div>
-    </div>
-
-    <div class="way" id="way-spartans" role="tabpanel" aria-labelledby="tab-spartans">
-      <p class="muted">Android only. A small app that only films and streams: no watermark, no sign-in. Tries the same Wi-Fi first and Tailscale if that doesn't work. iPhones need Larix.</p>
-      <ol class="steps">
-        <li><b>Install Tailscale</b> from the Play Store, sign in with the <b>same account</b> as the laptop, allow the VPN, and check it says <b>Connected</b>.
-          <div class="warn">Turn off any other VPN on the phone. Leave Tailscale on.</div>
-        </li>
-        <li><b>Install HeadJudge Broadcaster.</b>
-          <div class="row"><a class="btn btn-red" href="https://zealous-island-03d6db503.8.azurestaticapps.net/downloads/spartans-broadcaster.apk">Get HeadJudge Broadcaster</a></div>
-          <div class="warn"><b>The phone will warn you</b>, because the app isn't from the Play Store. Tap <b>Settings</b>, turn on <b>Allow from this source</b>, go back and tap <b>Install</b>. If Play Protect asks, tap <b>Install anyway</b>.</div>
-        </li>
-        <li><b>Open it and tap Scan station QR code</b>, then scan that camera's <b>Spartans app</b> code in the Receiver (switch the camera's card to the Spartans app tab).</li>
-        <li><b>Optional:</b> tick <b>Also stream live to YouTube</b> and paste that camera's stream key.</li>
-        <li><b>Leave Quality on 720p</b> unless the signal is weak, then tap <b>Open the camera → GO LIVE</b>.</li>
-      </ol>
-      <div class="tip">The full Spartans app has the same camera station (Home → Camera station), but needs a referee sign-in. The Broadcaster is for phones that only film.</div>
-    </div>
-  </section>
-
-  <section class="part" id="ipad">
-    <h2>3. The iPad (optional)</h2>
-    <p class="when">Only if the referees want to watch and replay on an iPad as well as the laptop.</p>
-    <ol class="steps">
-      <li><b>Install Tailscale</b> on the iPad and sign in with the same account.</li>
-      <li><b>Scan the "Watch and review" code</b> in the Receiver (step 4) with the iPad's camera. It opens the review page in Safari.</li>
-      <li><b>Share → Add to Home Screen</b> so it opens like an app.</li>
-    </ol>
-    <p class="muted">The laptop opens the same page from <b>Video review</b> in the Receiver. Several devices can watch at once without affecting each other.</p>
-  </section>
-
-  <section class="part" id="place">
-    <h2>Where to put the cameras</h2>
-    <p class="muted">The AI judge can follow several athletes in one picture. It needs to see each one's whole body, head to feet, including when they're lying flat, and without one athlete hiding another.</p>
-    <figure class="diagram">
-      <svg viewBox="0 0 640 430" role="img" aria-labelledby="planT planD">
-        <title id="planT">Camera positions seen from above</title>
-        <desc id="planD">Four athletes in a row across the burpee zone. Camera 1 stands at the front left corner and camera 2 at the front right, each 5 to 8 metres away, angled about 30 to 45 degrees to the row, so each sees all four athletes. Positions straight along the row, behind the athletes and right up close are marked as bad.</desc>
-        <!-- view cones (drawn first, under everything) -->
-        <path d="M110 370 L208 92 L470 168 Z" fill="var(--good)" fill-opacity=".12" stroke="var(--good)" stroke-opacity=".5" stroke-dasharray="5 5"/>
-        <path d="M530 370 L432 92 L170 168 Z" fill="var(--good)" fill-opacity=".12" stroke="var(--good)" stroke-opacity=".5" stroke-dasharray="5 5"/>
-        <!-- the burpee zone -->
-        <rect x="150" y="90" width="340" height="110" rx="6" fill="var(--zone)" stroke="var(--line)"/>
-        <text x="320" y="80" text-anchor="middle" class="lab">BURPEE ZONE · athletes side by side, about 1.5 m apart</text>
-        <!-- four athletes lying (burpee down) and mats -->
-        <g class="ath">
-          <rect x="172" y="108" width="56" height="78" rx="4"/><rect x="252" y="108" width="56" height="78" rx="4"/>
-          <rect x="332" y="108" width="56" height="78" rx="4"/><rect x="412" y="108" width="56" height="78" rx="4"/>
-        </g>
-        <g class="body">
-          <circle cx="200" cy="122" r="8"/><rect x="194" y="132" width="12" height="44" rx="5"/>
-          <circle cx="280" cy="122" r="8"/><rect x="274" y="132" width="12" height="44" rx="5"/>
-          <circle cx="360" cy="122" r="8"/><rect x="354" y="132" width="12" height="44" rx="5"/>
-          <circle cx="440" cy="122" r="8"/><rect x="434" y="132" width="12" height="44" rx="5"/>
-        </g>
-        <text x="320" y="222" text-anchor="middle" class="lab small">facing the cameras' side</text>
-        <!-- angle guide -->
-        <path d="M110 370 L320 370" stroke="var(--muted)" stroke-dasharray="3 4"/>
-        <path d="M170 370 A60 60 0 0 0 158 333" fill="none" stroke="var(--muted)"/>
-        <text x="176" y="356" class="lab small">30–45°</text>
-        <!-- distance -->
-        <path d="M96 352 L176 150" stroke="var(--muted)" stroke-width="1"/>
-        <text x="96" y="250" class="lab small" transform="rotate(-68 96 250)">5–8 m</text>
-        <!-- good cameras -->
-        <g class="cam good"><circle cx="110" cy="378" r="20"/><text x="110" y="384" text-anchor="middle">1</text></g>
-        <g class="cam good"><circle cx="530" cy="378" r="20"/><text x="530" y="384" text-anchor="middle">2</text></g>
-        <text x="110" y="416" text-anchor="middle" class="lab">Camera 1</text>
-        <text x="530" y="416" text-anchor="middle" class="lab">Camera 2</text>
-        <!-- bad positions -->
-        <g class="bad"><path d="M40 133 l22 22 m0 -22 l-22 22"/><path d="M590 133 l22 22 m0 -22 l-22 22"/><path d="M309 24 l22 22 m0 -22 l-22 22"/><path d="M309 252 l22 22 m0 -22 l-22 22"/></g>
-        <text x="62" y="176" text-anchor="middle" class="lab bad-t">End-on:</text>
-        <text x="62" y="191" text-anchor="middle" class="lab bad-t small">athletes hide</text>
-        <text x="51" y="205" text-anchor="middle" class="lab bad-t small">each other</text>
-        <text x="590" y="178" text-anchor="middle" class="lab bad-t">End-on</text>
-        <text x="320" y="20" text-anchor="middle" class="lab bad-t small">Behind: no view of chest to ground</text>
-        <text x="320" y="292" text-anchor="middle" class="lab bad-t small">Too close: athletes cut off at the edges</text>
-      </svg>
-      <figcaption>Seen from above. Green: good camera spots and what each sees. Red crosses: places that don't work.</figcaption>
-    </figure>
-
-    <figure class="diagram">
-      <svg viewBox="0 0 640 220" role="img" aria-labelledby="sideT sideD">
-        <title id="sideT">Camera height seen from the side</title>
-        <desc id="sideD">The phone sits on a tripod about 1.8 to 2.2 metres high, tilted down slightly, 5 to 8 metres from the athletes, so it sees over the near athlete to the far ones, including when they lie flat.</desc>
-        <line x1="20" y1="190" x2="620" y2="190" stroke="var(--line)" stroke-width="2"/>
-        <!-- tripod -->
-        <g class="tripod"><line x1="80" y1="190" x2="96" y2="80"/><line x1="112" y1="190" x2="96" y2="80"/><line x1="96" y1="190" x2="96" y2="80"/></g>
-        <rect x="86" y="66" width="22" height="14" rx="3" class="phone"/>
-        <!-- view lines -->
-        <path d="M108 73 L620 100 L620 190 L340 190 Z" fill="var(--good)" fill-opacity=".12"/>
-        <line x1="108" y1="73" x2="340" y2="190" stroke="var(--good)" stroke-dasharray="5 5"/>
-        <line x1="108" y1="73" x2="620" y2="100" stroke="var(--good)" stroke-dasharray="5 5"/>
-        <!-- athletes: standing and lying -->
-        <g class="body">
-          <circle cx="420" cy="122" r="8"/><rect x="414" y="132" width="12" height="56" rx="5"/>
-          <circle cx="508" cy="180" r="7"/><rect x="518" y="175" width="62" height="11" rx="5"/>
-        </g>
-        <!-- height marker -->
-        <path d="M50 190 L50 73" stroke="var(--muted)"/><path d="M44 73 L56 73 M44 190 L56 190" stroke="var(--muted)"/>
-        <text x="40" y="136" text-anchor="end" class="lab small" transform="rotate(-90 40 136)">1.8–2.2 m</text>
-        <path d="M108 206 L420 206" stroke="var(--muted)"/><text x="264" y="218" text-anchor="middle" class="lab small">5–8 m</text>
-        <text x="140" y="56" class="lab">Phone up high, tilted down a little</text>
-        <text x="520" y="140" text-anchor="middle" class="lab small">sees over the near athlete</text>
-      </svg>
-      <figcaption>From the side. Up high, the camera sees over the nearest athlete to the ones behind, even when they're lying flat.</figcaption>
-    </figure>
-
-    <ul class="steps">
-      <li><b>Line the athletes up side by side</b>, facing the cameras' side of the zone, about 1.5 m apart.</li>
-      <li><b>Put each camera at a front corner</b>, angled 30–45° to the row, 5–8 m away. Never straight along the row: from the end, athletes hide each other.</li>
-      <li><b>Raise the phones to 1.8–2.2 m</b> on a tall tripod or stand, tilted down a little, so they see over the near athlete when everyone is lying flat.</li>
-      <li><b>Fit everyone in, nice and big.</b> Every athlete's whole body in the picture, head to feet, with a little space around. A standing athlete should be at least a third of the picture's height: much smaller and the AI can lose them when they're lying down.</li>
-      <li><b>Keep the space between the cameras and the athletes clear.</b> Judges and spectators stand behind or beside the cameras, not in front.</li>
-      <li><b>Avoid the sun behind the athletes.</b> Backlit athletes become dark shapes. Put the sun behind or beside the cameras.</li>
-      <li><b>Two cameras, two angles.</b> If one athlete hides another from camera 1, camera 2 usually still sees them. Each camera is judged and recorded on its own, so use both views in Review.</li>
-    </ul>
-    <div class="tip">Check it on the day: open <b>AI judge camera 1</b> and have everyone do one burpee together. Each athlete should get their own label and count. If one keeps disappearing when they lie down, raise the camera or move it a little further away.</div>
-  </section>
-
-  <section class="part" id="test">
-    <h2>4. Test it</h2>
-    <ol class="steps">
-      <li><b>Put each phone on its stand</b> in landscape, placed as in <a href="#place">Where to put the cameras</a>.</li>
-      <li><b>Start both phones:</b> press Larix's red button, or in the Spartans app tap <b>Open the camera → GO LIVE</b>.</li>
-      <li><b>In the Receiver,</b> both cameras show <b>LIVE · Tailscale</b>. If you added keys, check YouTube Studio shows both streams.</li>
-      <li><b>Open Video review</b> on the laptop (and the iPad if you set one up): both cameras play live.</li>
-      <li><b>Tap Mark incident</b>, wait 20 seconds, then on the Replay tab tap <b>Last 30 s</b>: both cameras replay together.</li>
-      <li><b>Click "AI judge camera 1"</b> (and 2), do a few burpees and check they're counted.</li>
-    </ol>
-  </section>
-
-  <section class="part" id="review">
-    <h2>Review and protests</h2>
-    <ul class="steps">
-      <li><b>Mark incident</b> (Live tab) saves the laptop's time with an optional note, such as the bib number. Everyone's marks appear on every device.</li>
-      <li><b>Replay</b>: tap a mark's Replay in the Log, use <b>Last 15 s / 30 s / 2 min</b>, or type any time. Both cameras play in step. Step frame by frame, slow to ¼ speed, and save a clip of either camera.</li>
-      <li><b>Replay never interrupts</b> live recording, the AI judge or YouTube: it's read from the recorded files.</li>
-      <li><b>Times are the laptop's clock.</b> The stamped time can be about half a second behind the real moment (the delay from camera to laptop), and the same for both cameras.</li>
-      <li><b>The Log</b> lists every mark and every camera connect or drop. Download it as a spreadsheet for the protest record.</li>
-      <li><b>Full recordings</b>: Receiver → <b>Open recordings</b>, one file per camera per 10 minutes.</li>
-    </ul>
-  </section>
-
-  <section class="part" id="fail">
-    <h2>If something fails</h2>
-    <dl class="fix">
-      <dt>One camera stops</dt>
-      <dd>The other keeps streaming, recording and judging. The review page shows <b>NO SIGNAL</b> on that camera and the Log records the time. Larix reconnects by itself when it can.</dd>
-      <dt>A phone's Wi-Fi drops</dt>
-      <dd>The phone moves to 4G and Tailscale follows it, so Larix reconnects within a few seconds. Leave mobile data on.</dd>
-      <dt>The laptop has a problem</dt>
-      <dd>YouTube keeps going (it's direct from each phone), and phones using Larix keep their own backup recording (Photos or the gallery).</dd>
-    </dl>
-  </section>
-
-  <section class="part" id="fix">
-    <h2>Troubleshooting</h2>
-    <dl class="fix">
-      <dt>Larix says "Can't connect to server", or the Spartans app can't connect</dt>
-      <dd>Almost always Tailscale: check it's on, signed in to the same account and Connected on the phone, and that the phone appears as online under step 3 in the Receiver. Turn off any other VPN.</dd>
-      <dt>Larix says "authentication failed" (NetStream.Publish.Unauthorized)</dt>
-      <dd>The phone reached the laptop but the laptop rejected it. Update the Receiver to the latest version (download it again above), then on the phone delete the old <b>Camera … to laptop</b> connection in Larix → Settings → Connections, scan the camera's Larix code again, tap <b>Import</b> and tick the new connection. Over Tailscale no password is needed. If the Receiver shows <b>An older streaming server is running</b>, click <b>Remove old server</b> first.</dd>
-      <dt>It works at home but not at the event</dt>
-      <dd>Some event Wi-Fi blocks VPNs like Tailscale. Switch the phones to 4G/5G, or turn on the laptop's mobile hotspot (Windows Settings → Network → Mobile hotspot) and join the phones to it.</dd>
-      <dt>The picture is jerky or blurry</dt>
-      <dd>Weak signal. Lower the bitrate in Larix → Settings → Video (or set Quality to 480p in the Spartans app), or move to a stronger signal. Streaming to YouTube as well doubles what each phone sends (about 7 Mbps), so on poor 4G leave YouTube off one camera.</dd>
-      <dt>The iPad page doesn't open</dt>
-      <dd>Check Tailscale is Connected on the iPad, and step 2 in the Receiver is green.</dd>
-      <dt>YouTube doesn't go live</dt>
-      <dd>Check the key, that each camera has its own key, and, with Larix, that you scanned the code again and tapped Import after adding it. A new channel can take up to 24 hours to be allowed to stream.</dd>
-      <dt>Still stuck</dt>
-      <dd>In the Receiver, open <b>Server log</b> and send a screenshot of it, with a photo of the phone's screen, to whoever set the event up.</dd>
-    </dl>
-  </section>
+  <h2>If something fails</h2>
+  <ul>
+    <li><b>A phone won't connect:</b> check it has signal, and scan its code again. Codes change only if the server is replaced.</li>
+    <li><b>The picture stutters on the phone or drops:</b> the signal is too weak for 720p. Pick a lower quality.</li>
+    <li><b>A camera shows but no picture in the browser:</b> the venue's network may block video. Try the browser on a phone's mobile data to check.</li>
+    <li><b>The server didn't start:</b> your page says why. Azure sometimes has no graphics-card servers free for a few minutes: press Start again.</li>
+    <li><b>The internet at the venue fails:</b> nothing reaches the server until it's back. Each phone keeps filming its own backup only in Larix, so keep one running on an iPhone if you can.</li>
+  </ul>
+  <p class="foot">Trouble with the Broadcaster on a phone? <a href="phone.html">The phone's own steps</a></p>
 </main>
-<script>
-  // Larix or the Spartans app: one way shown at a time, remembered on this device
-  (function () {
-    var tabs = document.querySelectorAll(".ptabs [role=tab]");
-    function show(way) {
-      tabs.forEach(function (t) { var on = t.dataset.way === way; t.setAttribute("aria-selected", String(on)); document.getElementById("way-" + t.dataset.way).hidden = !on; });
-      try { localStorage.setItem("spartans.phoneWay", way); } catch (e) {}
-    }
-    tabs.forEach(function (t) { t.addEventListener("click", function () { show(t.dataset.way); }); });
-    var saved = null; try { saved = localStorage.getItem("spartans.phoneWay"); } catch (e) {}
-    show(saved === "larix" ? "larix" : "spartans");
-  })();
-</script>
 </body>
 </html>

@@ -45,6 +45,7 @@
 const crypto = require('node:crypto');
 const { createRecordings } = require('./recordings');
 const { createCompanies } = require('./companies');
+const { createServers } = require('./servers');
 const { rudeName, rudeText } = require('./namecheck');
 
 const ROOMS = [
@@ -76,7 +77,7 @@ const DEFAULT_CONTENT = {
 const ABUSE = /\b(kys|kill (your|ur) ?self|go die|hope you die|neck yourself|idiot|idiots|moron|morons|imbecile|dumbass|dumb ass|loser|losers|scumbag|piece of (shit|crap)|shut up|stfu|gtfo|fat (cow|pig)|ugly (cow|pig|bitch)|retarded|cripple|freak|worthless|pathetic|i('| wi)ll (kill|hurt|find) you|slag|whore|tramp|nonce|paedo|pedo)\b/i;
 const MAX_LEN = 500, SHOW = 80, KEEP = 400, GAP_MS = 10 * 1000, PER_DAY = 60, REPORTERS_TO_BAN = 3, GROUP_MAX = 60;
 const LINKY = /(https?:\/\/|www\.|\b[a-z0-9-]+\.(com|net|org|io|co|uk|de|fr|it|ch|at|ru|xyz|info|biz|link|ly|me|app)\b|@[a-z0-9-]+\.[a-z]{2,}|(\+?\d[\s-]?){9,})/i;
-const CORS = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Authorization, Content-Type, X-Device, X-Admin-Key', 'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS' };
+const CORS = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Authorization, Content-Type, X-Device, X-Admin-Key, X-Server-Key', 'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS' };
 const clean = (s, max) => String(s || '').replace(/[\u0000-\u0009\u000b-\u001f<>]/g, '').replace(/\n{3,}/g, '\n\n').trim().slice(0, max);
 
 const NEWS_FEEDS = [
@@ -90,7 +91,7 @@ const NEWS_FEEDS = [
  * verifyGoogle(idToken) -> {sub, email, name, picture} (throws when invalid); secret signs our own session tokens.
  * adminEmails: Google accounts that are admins. While neither adminEmails nor adminKey is set, everyone is (the prototype).
  */
-function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], verifyGoogle = null, secret = '', googleClientId = '', fetchText = null, blobSigner = null, putBrand = null }) {
+function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], verifyGoogle = null, secret = '', googleClientId = '', fetchText = null, blobSigner = null, putBrand = null, maxRunningServers = 1 }) {
   const reply = (status, body) => ({ status, body, headers: { 'Content-Type': 'application/json', ...CORS } });
   const admins = adminEmails.map((e) => String(e).trim().toLowerCase()).filter(Boolean);
   // session tokens: base64url(payload).HMAC
@@ -517,6 +518,7 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
 
   const recordings = createRecordings({ store, signer: blobSigner, now, reply, session, isAdmin });
   const { companies, adminCompanies } = createCompanies({ store, now, reply, session, isAdmin, putBrand });
+  const servers = createServers({ store, now, reply, session, maxRunning: maxRunningServers });
 
   async function handle({ method, path, headers = {}, body, query: extraQuery = {} }) {
     const h = Object.fromEntries(Object.entries(headers).map(([k, v]) => [k.toLowerCase(), v]));
@@ -547,6 +549,7 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
       if (parts[0] === 'profile' && parts.length <= 2) r = await profile(method, parts[1], body, h);
       if (parts[0] === 'news' && method === 'GET') r = await news();
       if (parts[0] === 'recordings' && parts.length <= 3) r = await recordings(method, parts[1], parts[2], body, h);
+      if (parts[0] === 'servers' && parts.length <= 3) r = await servers(method, parts[1], parts[2], body, h);
       if (parts[0] === 'companies' && parts.length <= 3) r = await companies(method, parts[1], parts[2], body, h);
       if (parts[0] === 'scores' && parts.length === 2) r = await scores(method, parts[1], body, h, { ...query, ...extraQuery });
       return r || reply(404, { error: 'not found' });

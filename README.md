@@ -1,12 +1,74 @@
-# Spartans (with Burpee Judge)
+# HeadJudge and Spartans
 
-The site and app have four parts:
-- **Home page** (`index.html`): the next race, news and past winners.
-- **Chat** (`chat.html`).
-- **Course Run** (`course.html`): the race course as a 3D game.
-- **Burpee Judge** (`judge.html`): the athlete tracking and penalty tool. It is meant for admins only, but this prototype leaves it open to everyone.
+Two things share this repository and one Azure home:
 
-The Burpee Judge is described first; the home page, chat and apps are under *Spartans home page, chat and apps* further down.
+- **HeadJudge**: online judging for fitness events. Companies register with their own logo and colours, start a server, film with phones, and judge in any browser.
+- **Spartans**: the app and site for Spartan racers (news, chat, scoreboards, Course Run, the burpee challenge).
+
+Everything runs in Azure subscription **HeadJudge** (DEXYS directory, always pass `--subscription 65c0ccca-69f7-43eb-9246-3bd6a6a06b24`).
+
+## How HeadJudge fits together
+
+```
+Phones (Broadcaster, Larix)  --RTMP with password-->  the company's server (a graphics-card VM)
+                                                       - streaming and recording (MediaMTX)
+                                                       - one AI judge per camera (its own Chrome, on the card)
+                                                       - review page and API, behind a login (HTTPS by Caddy)
+Browser (laptop, iPad)  <--picture over WebRTC, what the judge sees over HTTPS--  the server
+
+The site (Static Web App)  says what's wanted  -->  table  <--  makes it so, every minute  --  control app (Function App)
+                                                                                                 only thing with rights over servers
+```
+
+| Folder | What it is |
+| --- | --- |
+| `*.html`, `*.js`, `*.css` at the top | The site and the judge page. `register.*`: company sign-up. `console.*`: a company's start and stop page. |
+| `api/` | The site's backend. `companies.js`: registration and brand. `servers.js`: what each company wants its server to do. |
+| `server/` | What runs on a company's server. `review/` is the review page. `setup/` prepares a new machine. |
+| `control/` | The always-on app that starts and stops servers, and turns off anything that shouldn't be running. |
+| `app/`, `scripts/build-app.sh`, `scripts/build-broadcaster.sh` | The Android apps. |
+| `promo/` | The animated demo video. |
+
+## Who can do what
+
+A company applies at `register.html` and an admin approves it in `admin.html`. Only then can it start a server, so nobody can run up a bill by signing up.
+What people watch is the camera's picture with what its judge on the server sees drawn over it, so judges carry on when the page is closed.
+A login link from the site is good for 5 minutes and becomes a 14-hour cookie, signed with a secret only that server and the site hold.
+
+## What keeps the bill down
+
+A server turns itself off 30 minutes after the last camera and last person have gone, and after 16 hours regardless. The control app is the backstop: it turns off a server that's stopped reporting (15 minutes), one on for 18 hours, one that didn't come up (25 minutes), and any machine it doesn't recognise.
+A turned-off server keeps its disk and costs only that. Don't create Azure capacity reservations: they bill the full server rate whether it's used or not.
+
+## Publishing
+
+Tests: `node --test tests/*.mjs`, `cd api && node --test test/*.test.js`, `cd control && node --test test/*.test.js`. The site and API run locally with `node api/dev-server.js 8795`.
+
+```bash
+SUB=65c0ccca-69f7-43eb-9246-3bd6a6a06b24; RG=rg-headjudge-uksouth
+TOKEN=$(az staticwebapp secrets list --name headjudge -g $RG --subscription $SUB --query properties.apiKey -o tsv)
+swa deploy <site folder> --api-location "$(pwd)/api" --api-language node --api-version 20 --env production --deployment-token "$TOKEN"
+```
+
+- Server software: `bash scripts/build-server.sh`, then upload `downloads/headjudge-server.tar.gz` to the `downloads` container. Servers fetch it each time they start.
+- Control app: `bash scripts/deploy-control.sh`.
+- Shared server pieces (network, firewall, image store): `bash scripts/setup-servers.sh`.
+- Phone apps: `bash scripts/build-broadcaster.sh`, `bash scripts/build-app.sh`, then upload to the `downloads` container.
+
+Personal test videos (`clips/`, `test.mp4`) stay on this PC: they're never deployed or uploaded. Cloud tests use public footage.
+
+## The judge page
+
+`judge.html` and `app.js` judge from a camera, a stream or a video file. On a server it runs in two modes:
+
+- `?engine=<camera>`: the judge itself, running the models and sending what it sees.
+- `?follow=<camera>`: what people watch, playing the same camera and drawing what the judge sent.
+
+Each phone needs internet the **first** time it opens the Spartans app, to download the pose model and number reader (roughly 20 to 30 MB in total).
+
+Judging an uploaded video runs in the viewer's browser, then saves its results to the server. Recordings stay on the server for 14 days and in cloud storage for 30.
+
+---
 
 ## Burpee Judge
 
@@ -52,16 +114,6 @@ python -m http.server 8791
 
 Then open http://localhost:8791.
 
-### Hosted copy
-
-Live at https://zealous-island-03d6db503.8.azurestaticapps.net. It's an Azure Static Web App on the Free tier: app `burpee-judge`, resource group `rg-burpee-judge`, subscription "DEXYS TEST". To publish changes, put `index.html`, `app.js`, `burpee.js`, `exercises.js`, `pose-filter.js`, `multi.js`, `finder.js`, `rtmo-s.onnx`, `staticwebapp.config.json`, `ocr-prep.js`, `readers.js`, `digit-model.js`, `digit-model.json` and `styles.css` in a folder and run:
-
-```bash
-swa deploy <folder> --env production --deployment-token "$(az staticwebapp secrets list -n spartans -g rg-spartans-uksouth --subscription VDASO --subscription "DEXYS TEST" --query properties.apiKey -o tsv)"
-```
-
-Each phone needs internet the **first** time it opens the app, to download the pose model and number reader (roughly 20–30 MB in total). Open every station phone once before the race while it still has signal.
-
 ## Station flow
 
 1. **Open station.** Choose how many burpees each athlete must do (30, or a custom number, which must be filled in), and front camera (the athlete can see the count) or back camera. For a phone standing on its side, pick a landscape option under **Camera orientation** in Settings.
@@ -71,12 +123,6 @@ Each phone needs internet the **first** time it opens the app, to download the p
 5. **Complete** when the target is reached: a big green tick, then the screen resets to the number scan for the next athlete after 6 s. An attempt the marshal ends early shows a red cross and "Not complete".
 
 With **Capture each athlete's race number** turned off (Settings → Race numbers), step 2 is skipped and athletes are numbered 1, 2, 3 in order at the station.
-
-### HeadJudge Receiver (the judging computer's app)
-
-`receiver/` is a Windows app (Electron) that replaces the PowerShell kit: it runs MediaMTX hidden inside (`bin/mediamtx.exe`, settings written by `config.js` into the app's data folder), shows each station's QR codes, which stations are live and by which route, opens the Burpee Judge on a station (the site's judge files served inside the app as `app://site/judge.html?stream=…`, so there's no https/http problem and nothing to type), keeps a recording of every station (one .mp4 per hour, 14 days by default), and offers to open Windows Firewall for the phones (local network and Tailscale only). Build with `bash scripts/build-receiver.sh` (installer to `downloads/burpee-judge-receiver-setup.exe`; `run` to just start it, with `RECEIVER_BIND=127.0.0.1` to keep it to this computer while testing). The installer is too big for the Free Static Web Apps plan, so it lives in the storage account's `downloads` container and the site's `/downloads/burpee-judge-receiver-setup.exe` redirects there (staticwebapp.config.json, a read-only link valid two years). It isn't code-signed: Windows SmartScreen asks once ("More info" → "Run anyway").
-
-Routes, in order: **direct** (the computer's Wi-Fi / Ethernet addresses: same network or its hotspot), then **Tailscale** (100.x). The **Spartans app** QR (`spartans://station?n=…&lan=…&ts=…&user=…&pass=…`) carries every route; the app's camera station tries them in turn (4 s per route) and shows which one is live. The **Larix** QR adds one Larix connection per route ("same Wi-Fi", "Tailscale"); the user ticks the one to use. Over the internet without Tailscale (phone and computer meeting through the Spartans server) is the next step, not built yet.
 
 ### Camera station (Spartans app, Android)
 

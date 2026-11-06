@@ -30,3 +30,6 @@ local.settings.json
 .vscode/
 Thumbs.db
 .DS_Store
+
+# copied in when the control app is published
+control/src/store.js

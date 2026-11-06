@@ -34,106 +34,27 @@
 </style>
 <link rel="stylesheet" href="looks.css">
 <script src="looks.js"></script>
+<style>
+  .guide h2 { margin-top: 26px; } .guide h3 { margin: 16px 0 4px; } .guide li { margin: 6px 0; } .guide video { width: 100%; display: block; margin: 12px 0; background: #000; } .guide a:not(.btn) { color: var(--white, #fff); }
+</style>
 </head>
 <body>
-<main class="hub">
+<main class="hub guide">
   <a href="./" class="home-link">‹ Spartans home</a>
   <h1 class="brand">Camera <span>phone</span></h1>
-  <p class="muted">A few steps to make this phone a camera for the judging laptop. You can tick each one off as you go.</p>
-  <p class="which" id="which"></p>
-
-  <ol class="steps">
-    <li data-k="ts">
-      <h2>Install Tailscale</h2>
-      <p>It links this phone privately to the judging laptop over any Wi-Fi or 4G. Open it, <b>sign in with the same account as the laptop</b> (the laptop's Receiver app shows which), allow the VPN, and check it says <b>Connected</b>.</p>
-      <div class="row">
-        <a class="btn btn-red" data-store="ts" href="https://tailscale.com/download" target="_blank" rel="noopener">Get Tailscale</a>
-      </div>
-      <label class="tick"><input type="checkbox"> Done: Tailscale says Connected</label>
-    </li>
+  <p class="muted">A few steps to make this phone a camera for your HeadJudge server. It works over any Wi-Fi or mobile signal.</p>
+  <h2>Android</h2>
+  <ol>
+    <li><a class="btn btn-red" href="https://zealous-island-03d6db503.8.azurestaticapps.net/downloads/spartans-broadcaster.apk">Get HeadJudge Broadcaster</a><br>The phone warns you, as it isn't from the Play Store: tap Settings, turn on Allow from this source, go back and tap Install.</li>
+    <li>Open it and tap <b>Scan station QR code</b>. On the judging computer, open the video review's <b>Cameras</b> tab and scan this camera's code.</li>
+    <li>Put the phone on its stand in landscape, tap <b>Open the camera</b> and <b>GO LIVE</b>. The camera shows as live within a few seconds.</li>
   </ol>
-
-  <div class="ptabs" role="tablist" aria-label="Camera app">
-    <button type="button" role="tab" id="tab-spartans" aria-controls="way-spartans" data-way="spartans" aria-selected="true">HeadJudge Broadcaster</button>
-    <button type="button" role="tab" id="tab-larix" aria-controls="way-larix" data-way="larix" aria-selected="false">Larix (iPhone)</button>
-  </div>
-
-  <ol class="steps cont" id="way-larix" role="tabpanel" aria-labelledby="tab-larix" hidden>
-    <li data-k="larix">
-      <h2>Install Larix Broadcaster</h2>
-      <p>The free camera app that sends the video (Android or iPhone). Open it once and allow the camera and microphone.</p>
-      <div class="row">
-        <a class="btn btn-red" data-store="larix" href="https://softvelum.com/larix/" target="_blank" rel="noopener">Get Larix</a>
-      </div>
-      <label class="tick"><input type="checkbox"> Done: Larix installed and opened</label>
-    </li>
-    <li data-k="scan">
-      <h2>Scan this phone's camera code</h2>
-      <p>On the laptop, each camera has a <b>Larix</b> QR code. Scan it with this phone's camera (or Larix's own scanner) and open the link in Larix.</p>
-      <p><b>Then tap Import.</b> The connections are only added once you do. Larix then sends to the laptop and YouTube, with a backup recording on the phone.</p>
-      <p><b>Android:</b> if the camera won't open the link, use Google Lens, or copy the Larix link on the laptop and send it to this phone.</p>
-      <p><b>Then switch it on:</b> Larix → Settings → Connections, tick <b>Camera … to laptop</b> (and <b>to YouTube</b> if there is one). Untick any older connections.</p>
-      <label class="tick"><input type="checkbox"> Done: imported and ticked in Larix</label>
-    </li>
-    <li data-k="live">
-      <h2>Go live</h2>
-      <p>Put the phone on its stand in landscape and press Larix's <b>red button</b>. The laptop shows this camera LIVE within a few seconds.</p>
-      <label class="tick"><input type="checkbox"> Done: the laptop shows this camera LIVE</label>
-    </li>
+  <h2>iPhone</h2>
+  <ol>
+    <li>Install Larix Broadcaster from the App Store and open it once, allowing the camera and microphone.</li>
+    <li>On the judging computer, open the <b>Cameras</b> tab, then <b>iPhone (Larix)</b>, and scan the code with this phone's camera. Open the link in Larix and tap <b>Import</b>.</li>
+    <li>In Larix, go to Settings, then Connections, tick the camera, put the phone on its stand in landscape, and press the red button.</li>
   </ol>
-
-  <ol class="steps cont" id="way-spartans" role="tabpanel" aria-labelledby="tab-spartans">
-    <li data-k="app">
-      <h2>Install HeadJudge Broadcaster</h2>
-      <p>A small Android app that only films and streams: no watermark, no sign-in. The phone will warn you because it isn't from the Play Store: tap <b>Settings</b>, turn on <b>Allow from this source</b>, go back and tap <b>Install</b>. If Play Protect asks, tap <b>Install anyway</b>.</p>
-      <div class="row"><a class="btn btn-red" href="https://zealous-island-03d6db503.8.azurestaticapps.net/downloads/spartans-broadcaster.apk">Get HeadJudge Broadcaster</a></div>
-      <p id="iosNote" hidden><b>This is an iPhone:</b> use the Larix tab instead.</p>
-      <label class="tick"><input type="checkbox"> Done: Broadcaster installed</label>
-    </li>
-    <li data-k="station">
-      <h2>Scan this phone's camera code</h2>
-      <p>Open HeadJudge Broadcaster and tap <b>Scan station QR code</b>. On the laptop, switch the camera's card to the <b>Spartans app</b> tab and scan its code. Optional: tick <b>Also stream live to YouTube</b> and paste that camera's key.</p>
-      <label class="tick"><input type="checkbox"> Done: station scanned</label>
-    </li>
-    <li data-k="golive">
-      <h2>Go live</h2>
-      <p>Put the phone on its stand in landscape, tap <b>Open the camera</b>, then <b>GO LIVE</b>. The laptop shows this camera LIVE within a few seconds.</p>
-      <label class="tick"><input type="checkbox"> Done: the laptop shows this camera LIVE</label>
-    </li>
-  </ol>
-
-  <section class="tips">
-    <h2>Keep it running</h2>
-    <ol>
-      <li>Leave Tailscale on, and turn off any other VPN.</li>
-      <li>Keep the camera app open with the screen on. Plug the phone into a power bank.</li>
-      <li>If Wi-Fi drops, the phone switches to 4G by itself and the camera app reconnects. The other camera keeps going.</li>
-    </ol>
-  </section>
-  <p class="muted"><a href="streaming.html">Full setup guide</a></p>
 </main>
-<script>
-  // the right store for this phone; ticks remembered on this phone
-  const ua = navigator.userAgent, ios = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && 'ontouchend' in document), android = /Android/.test(ua);
-  const stores = {
-    ts: ios ? 'https://apps.apple.com/app/id1470499037' : android ? 'https://play.google.com/store/apps/details?id=com.tailscale.ipn' : 'https://tailscale.com/download',
-    larix: ios ? 'https://apps.apple.com/app/id1042474385' : android ? 'https://play.google.com/store/apps/details?id=com.wmspanel.larix_broadcaster' : 'https://softvelum.com/larix/',
-  };
-  document.querySelectorAll('[data-store]').forEach((a) => { a.href = stores[a.dataset.store]; a.textContent += ios ? ' (App Store)' : android ? ' (Play Store)' : ''; });
-  document.getElementById('which').textContent = ios ? 'This looks like an iPhone or iPad.' : android ? 'This looks like an Android phone.' : 'Open this page on the phone you\'ll film with.';
-  // Larix or the Spartans app; iPhones can only use Larix
-  const tabs = document.querySelectorAll('.ptabs [role=tab]');
-  const show = (way) => { tabs.forEach((t) => { const on = t.dataset.way === way; t.setAttribute('aria-selected', String(on)); document.getElementById('way-' + t.dataset.way).hidden = !on; }); try { localStorage.setItem('spartans.phoneWay', way); } catch {} };
-  tabs.forEach((t) => t.addEventListener('click', () => show(t.dataset.way)));
-  let saved = null; try { saved = localStorage.getItem('spartans.phoneWay'); } catch {}
-  show(ios || saved === 'larix' ? 'larix' : 'spartans');   // the Broadcaster first; iPhones need Larix
-  document.getElementById('iosNote').hidden = !ios;
-  document.querySelectorAll('.steps li').forEach((li) => {
-    const box = li.querySelector('input'), key = 'phoneSetup.' + li.dataset.k;
-    try { box.checked = localStorage.getItem(key) === '1'; } catch {}
-    li.classList.toggle('done', box.checked);
-    box.onchange = () => { li.classList.toggle('done', box.checked); try { localStorage.setItem(key, box.checked ? '1' : ''); } catch {} };
-  });
-</script>
 </body>
 </html>

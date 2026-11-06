@@ -11,11 +11,6 @@
   },
   "routes": [
     {
-      "route": "/downloads/burpee-judge-receiver-setup.exe",
-      "redirect": "https://headjudge.blob.core.windows.net/downloads/burpee-judge-receiver-setup.exe?se=2028-11-02T19%3A58Z&sp=r&spr=https&sv=2026-02-06&sr=b&sig=me3ZgAUaQgMwjWUQfx1Abs21VFX3MIAUvvUMdDnzmaE%3D",
-      "statusCode": 302
-    },
-    {
       "route": "/downloads/spartans.apk",
       "redirect": "https://headjudge.blob.core.windows.net/downloads/spartans.apk?se=2028-11-02T19%3A58Z&sp=r&spr=https&sv=2026-02-06&sr=b&sig=tcYRq7L51vxDrQ8TdyqpfJ6SJEzY%2B94FUj%2FMGqoKc5E%3D",
       "statusCode": 302

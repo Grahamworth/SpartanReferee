@@ -41,9 +41,11 @@ function brandWriter(connection, doFetch = fetch) {
 }
 
 const sha = (s) => crypto.createHash('sha256').update(String(s)).digest('hex');
+/** where an account's cloud recordings are listed */
+const recordingsPartition = (uid) => `rec:${sha(uid).slice(0, 32)}`;
 
 function createRecordings({ store, signer, now, reply, session, isAdmin }) {
-  const owned = (uid) => `rec:${sha(uid).slice(0, 32)}`;
+  const owned = recordingsPartition;
   async function byKey(h) {
     const key = String(h['x-receiver-key'] || '');
     return key ? store.get('reckey', sha(key)) : null;
@@ -109,4 +111,4 @@ function createRecordings({ store, signer, now, reply, session, isAdmin }) {
   };
 }
 
-module.exports = { blobSigner, brandWriter, createRecordings, KEEP_DAYS, MAX_OWNER };
+module.exports = { blobSigner, brandWriter, createRecordings, recordingsPartition, KEEP_DAYS, MAX_OWNER };

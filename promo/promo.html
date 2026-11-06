@@ -136,7 +136,7 @@ function title(t, d) {
   ctx.globalAlpha *= p;
   text('EVERY CAMERA.', W / 2, 410, 150, WHITE, { align: 'center' });
   reveal(t, .6, () => text('EVERY BURPEE.', W / 2, 570, 150, WHITE, { align: 'center' }));
-  reveal(t, 1.15, () => text('ONE LAPTOP.', W / 2, 730, 150, RED, { align: 'center' }));
+  reveal(t, 1.15, () => text('ONE SCREEN.', W / 2, 730, 150, RED, { align: 'center' }));
 }
 function broadcaster(t, d) {
   const px = 110, py = 230, pw = 900, ph = 500;
@@ -152,7 +152,7 @@ function broadcaster(t, d) {
         ctx.beginPath(); ctx.moveTo(cx - m + ox + dx * a, cy - m + oy); ctx.lineTo(cx - m + ox, cy - m + oy); ctx.lineTo(cx - m + ox, cy - m + oy + dy * a); ctx.stroke();
       }
       if (t <= 1.7) { const ly = cy + s * ((t * .9) % 1); ctx.fillStyle = RED; ctx.fillRect(cx - 20, ly, s + 40, 5); }
-      text(t > 1.7 ? 'CONNECTED' : 'SCAN THE LAPTOP’S CODE', x + w / 2, y + 60, 42, t > 1.7 ? GREEN : WHITE, { align: 'center' });
+      text(t > 1.7 ? 'CONNECTED' : 'SCAN THE CAMERA’S CODE', x + w / 2, y + 60, 42, t > 1.7 ? GREEN : WHITE, { align: 'center' });
     } else {
       field(x, y, w, h);
       athlete(x + w * .46, y + h * .86, 300, poseAt(((t - 2.4) * 1) % REP_LEN), { tracked: false });
@@ -162,9 +162,9 @@ function broadcaster(t, d) {
   });
   slash(1090, 212, 140, 12);
   reveal(t, .15, () => { text('HEADJUDGE', 1090, 300, 96); text('BROADCASTER', 1090, 392, 96, RED); });
-  reveal(t, .9, () => text('Scan the laptop’s code to connect', 1090, 490, 40, WHITE, { head: false }));
+  reveal(t, .9, () => text('Scan the camera’s code to connect', 1090, 490, 40, WHITE, { head: false }));
   reveal(t, 2.4, () => text('Film from any Android phone', 1090, 556, 40, WHITE, { head: false }));
-  reveal(t, 3.1, () => text('Stream to the laptop, YouTube too', 1090, 622, 40, WHITE, { head: false }));
+  reveal(t, 3.1, () => text('Stream to your server, YouTube too', 1090, 622, 40, WHITE, { head: false }));
   reveal(t, 3.8, () => text('No watermark', 1090, 688, 40, WHITE, { head: false }));
 }
 function camTile(x, y, w, h, t, label, off, tracked = true) {
@@ -200,7 +200,7 @@ function receiver(t, d) {
     [[0, 0], [1, 0], [0, 1]].forEach(([c, r], i) => camTile(x + 12 + c * (tw + 12), y + 70 + r * (th + 8), tw, th - 4, t, `CAMERA ${i + 1}`, i * .7));
   }));
   reveal(t, 1.5, () => { slash(lx - 10, 800, 120, 10); text('HEADJUDGE RECEIVER', lx - 10, 884, 74); });
-  reveal(t, 2.2, () => text('Every camera, live on one Windows laptop', lx - 10, 950, 40, WHITE, { head: false }));
+  reveal(t, 2.2, () => text('Every camera, live in your browser', lx - 10, 950, 40, WHITE, { head: false }));
 }
 function judge(t, d) {
   const vx = 80, vy = 110, vw = 1200, vh = 760;
@@ -292,7 +292,7 @@ function endCard(t, d) {
   reveal(t, .1, () => text('HEADJUDGE BROADCASTER', W / 2, 390, 124, WHITE, { align: 'center' }));
   reveal(t, .4, () => text('+', W / 2, 500, 90, RED, { align: 'center' }));
   reveal(t, .6, () => text('HEADJUDGE RECEIVER', W / 2, 630, 124, WHITE, { align: 'center' }));
-  reveal(t, 1.2, () => text('Film on Android. Judge on Windows.', W / 2, 760, 52, MUTED, { align: 'center', head: false }));
+  reveal(t, 1.2, () => text('Film on Android. Judge in your browser.', W / 2, 760, 52, MUTED, { align: 'center', head: false }));
 }
 
 // start, end, draw

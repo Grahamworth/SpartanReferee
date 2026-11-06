@@ -17,7 +17,7 @@ URL=$(jq -r '.bundleUrl // empty' "$SEED")
 if [ -n "$URL" ]; then
   if curl -fsSL -m 600 -o /tmp/headjudge.tar.gz "$URL"; then
     rm -rf /opt/headjudge.new; mkdir -p /opt/headjudge.new
-    tar xzf /tmp/headjudge.tar.gz -C /opt/headjudge.new
+    tar xzf /tmp/headjudge.tar.gz --no-same-owner -C /opt/headjudge.new
     rm -rf /opt/headjudge.old; [ -d /opt/headjudge ] && mv /opt/headjudge /opt/headjudge.old; mv /opt/headjudge.new /opt/headjudge
     rm -f /tmp/headjudge.tar.gz
   else echo "Couldn't fetch the software: using what's here"; fi

@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Your HeadJudge server</title>
+<meta name="theme-color" content="#12161c">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;1,800&family=Barlow:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="headjudge.css">
+<script src="brand.js"></script>
+<script type="module" src="console.js"></script>
+</head>
+<body>
+<header class="top">
+  <span class="brandline"><img id="logo" class="toplogo" alt="" hidden><span id="company" class="mark">Head<span>Judge</span></span></span>
+  <span id="who" class="muted"></span>
+</header>
+<main class="page console">
+  <section id="signIn" class="card narrow" hidden>
+    <h2>Sign in to your company</h2>
+    <div id="googleBtn"></div>
+    <p class="error" id="signInError" role="alert" hidden></p>
+  </section>
+
+  <section id="none" class="card narrow" hidden>
+    <h2>No company on this account</h2>
+    <p class="muted">Register your company first, or sign in with the account that did.</p>
+    <a class="primary linkbtn" href="register.html">Register my company</a>
+  </section>
+
+  <section id="server" class="card serverCard" hidden>
+    <div class="stateLine"><span class="light" id="light" aria-hidden="true"></span><h1 id="stateText">Your server is off</h1></div>
+    <p class="muted" id="stateMore" aria-live="polite"></p>
+    <p class="error" id="error" role="alert" hidden></p>
+    <div class="actions">
+      <button class="primary" id="start" type="button" hidden>Start server</button>
+      <button class="primary" id="open" type="button" hidden>Open video review</button>
+      <button class="ghost" id="stop" type="button" hidden>Stop server</button>
+    </div>
+    <dl class="facts">
+      <div><dt>Cameras live</dt><dd id="cams">0</dd></div>
+      <div><dt>AI judges running</dt><dd id="judges">0</dd></div>
+      <div><dt>Used this month</dt><dd id="hours">0 hours</dd></div>
+    </dl>
+  </section>
+
+  <section id="more" class="moreLinks" hidden>
+    <a href="recordings.html">Your recordings</a>
+    <a href="register.html">Company details, logo and colours</a>
+  </section>
+</main>
+</body>
+</html>

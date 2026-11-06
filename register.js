@@ -77,6 +77,7 @@ function drawStatus() {
   box.replaceChildren();
   const h = document.createElement('h2'); h.textContent = head; box.append(h);
   for (const line of [company.note, more]) if (line) { const p = document.createElement('p'); p.textContent = line; box.append(p); }
+  if (company.status === 'approved') { const l = document.createElement('a'); l.href = 'console.html'; l.className = 'primary linkbtn'; l.textContent = 'Go to my server'; box.append(l); }
 }
 function fill(c) {
   $('name').value = c.name; $('id').value = c.id; $('contact').value = c.contact; $('website').value = c.website || ''; $('about').value = c.about || '';
