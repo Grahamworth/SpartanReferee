@@ -29,8 +29,11 @@ export function signInAddress(cfg, { create, state, challenge }) {
 }
 /** What came back from Microsoft's page: null when it isn't a link for this sign-in. */
 export function readReturn(link, pending) {
-  if (!pending || !String(link).startsWith(pending.redirectUri + '?')) return null;
-  const q = new URLSearchParams(String(link).slice(pending.redirectUri.length + 1));
+  if (!pending || !String(link).startsWith(pending.redirectUri)) return null;
+  // Microsoft adds a slash to the address it was given: com.vdaso.spartans.broadcast://auth/?code=...
+  const query = /^\/?\?(.*)$/s.exec(String(link).slice(pending.redirectUri.length));
+  if (!query) return null;
+  const q = new URLSearchParams(query[1]);
   if (q.get('state') !== pending.state) return { message: 'That sign-in didn’t match. Please try again.' };
   if (q.get('code')) return { code: q.get('code') };
   const err = q.get('error') || '', stated = /AADSTS\d+/.exec(q.get('error_description') || '');

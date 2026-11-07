@@ -38,6 +38,11 @@ test('the sign-in address asks for a code with PKCE, and opens on sign-up or ask
 test('a good return gives the code', () => {
   assert.deepStrictEqual(readReturn(`${REDIRECT}?code=abc&state=the-state`, pending), { code: 'abc' });
 });
+test('Microsoft adds a slash to the address when it sends you back, and that still signs you in', () => {
+  assert.deepStrictEqual(readReturn(`${REDIRECT}/?code=abc&state=the-state`, pending), { code: 'abc' });
+  assert.match(readReturn(`${REDIRECT}/?error=login_required&error_description=AADSTS50058%3a+no+user&state=the-state`, pending).message, /AADSTS50058/);
+  assert.strictEqual(readReturn(`${REDIRECT}/other?code=abc&state=the-state`, pending), null);
+});
 test('a return with the wrong state is refused, so a stranger\'s link can\'t sign you in as them', () => {
   assert.match(readReturn(`${REDIRECT}?code=abc&state=other`, pending).message, /match/);
 });
