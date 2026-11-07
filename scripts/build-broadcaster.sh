@@ -58,8 +58,11 @@ sed -i -E 's#(<string name="(app_name|title_activity_main)">)[^<]*#\1HeadJudge B
 # the native camera screen (RootEncoder from JitPack), in this app's own package
 JAVA="android/app/src/main/java/${APP_ID//.//}"
 mkdir -p "$JAVA"
-for f in "$SRC"/app/native/android/*.java; do sed "s/^package com\.vdaso\.spartans;/package $APP_ID;/" "$f" > "$JAVA/$(basename "$f")"; done
+for f in "$SRC"/app/native/android/*.java "$SRC"/app/native/broadcaster/*.java; do sed "s/^package com\.vdaso\.spartans;/package $APP_ID;/" "$f" > "$JAVA/$(basename "$f")"; done
+# the phone's fingerprint or passcode opens the app: only this app has it, so it's added to the shared MainActivity here
+sed -i 's#registerPlugin(StationPlugin.class);#&\n        registerPlugin(PhoneLockPlugin.class);#' "$JAVA/MainActivity.java"
 GR=android/app/build.gradle
+grep -q androidx.biometric "$GR" || sed -i 's#implementation project(.:capacitor-android.)#&\n    implementation "androidx.biometric:biometric:1.1.0"#' "$GR"
 grep -q jitpack "$GR" || sed -i "s#dirs '../capacitor-cordova-android-plugins/src/main/libs', 'libs'#&\n    }\n    maven { url 'https://jitpack.io'#" "$GR"
 grep -q RootEncoder "$GR" || sed -i 's#implementation project(.:capacitor-android.)#&\n    implementation "com.github.pedroSG94.RootEncoder:library:2.8.1"#' "$GR"
 MAN=android/app/src/main/AndroidManifest.xml

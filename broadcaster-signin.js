@@ -2,9 +2,13 @@
 // Entra External ID (see api/src/email-signin.js): Microsoft's own page takes the email and password, sends the code
 // that proves the address at sign-up, and sends a code at each sign-in. It opens in the phone's browser, and comes
 // back to the app through its own link with a one-time code, which the API swaps for a 30-day session.
+// After that the phone's own lock opens the app, as a banking app does: fingerprint, face or passcode (PhoneLockPlugin).
+// Each unlock renews the session, up to 90 days from the last email sign-in (authRenew in api/src/core.js). A phone with
+// no screen lock skips this, and signs in by email when its 30 days are up.
 import { call, signOut } from './api-base.js';
 
 const TOKEN = 'sp_token', EMAIL = 'hj_email', PENDING = 'hj_signin', CAMERA_SETTINGS = 'sp_station';
+const DAY = 24 * 3600 * 1000, FULL_SESSION = 30 * DAY, ASK_AGAIN_AFTER = 5 * 60 * 1000;
 const store = {
   get: (k) => { try { return localStorage.getItem(k) || ''; } catch { return ''; } },
   set: (k, v) => { try { if (v) localStorage.setItem(k, v); else localStorage.removeItem(k); } catch { /* private mode */ } },
@@ -15,6 +19,12 @@ const base64url = (bytes) => btoa(String.fromCharCode(...bytes)).replace(/\+/g, 
 export function sessionOpen(token, now = Date.now()) {
   try { return JSON.parse(atob(String(token).split('.')[0].replace(/-/g, '+').replace(/_/g, '/'))).exp > now; } catch { return false; }
 }
+/** Worth asking for a longer session? At most about once a day, so it's not a call at every unlock. */
+export function needsRenewal(token, now = Date.now()) {
+  try { return JSON.parse(atob(String(token).split('.')[0].replace(/-/g, '+').replace(/_/g, '/'))).exp - now < FULL_SESSION - DAY; } catch { return false; }
+}
+/** Should the phone's lock ask again? `awayAt` is when the app went into the background: 0 if it hasn't. */
+export const lockDue = (awayAt, now = Date.now()) => awayAt > 0 && now - awayAt >= ASK_AGAIN_AFTER;
 export const randomText = (bytes = 32) => base64url(crypto.getRandomValues(new Uint8Array(bytes)));
 export async function challengeFor(verifier) {
   return base64url(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(verifier))));
@@ -42,7 +52,8 @@ export function readReturn(link, pending) {
 }
 
 function start() {
-  const { App, Browser } = (window.Capacitor && window.Capacitor.Plugins) || {};
+  const { App, Browser, PhoneLock } = (window.Capacitor && window.Capacitor.Plugins) || {};
+  let hasLock = false, unlocked = false, unlocking = false, awayAt = 0;
   const gate = document.createElement('section');
   gate.id = 'signGate';
   gate.innerHTML = `<style>
@@ -52,12 +63,20 @@ function start() {
     #signGate .btn { display: flex; width: 100%; justify-content: center; margin-top: 12px; }
     #signMsg { min-height: 1.5em; margin-top: 16px; color: #fff; }
     #signedIn { margin-top: 18px; overflow-wrap: anywhere; }
-    #signOut { background: none; border: 0; padding: 0; color: inherit; font: inherit; text-decoration: underline; cursor: pointer; }
+    #signOut, #lockEmail { background: none; border: 0; padding: 0; color: inherit; font: inherit; text-decoration: underline; cursor: pointer; }
+    #lockEmail { display: block; margin-top: 18px; }
   </style><div>
     <h1 class="brand">HeadJudge <span>Broadcaster</span></h1>
-    <p class="muted">Use your email address to create an account or sign in. After your password, we’ll email you a code to confirm it’s you.</p>
-    <button class="btn btn-red btn-big" type="button" id="signCreate">Create account</button>
-    <button class="btn btn-ghost" type="button" id="signIn">Sign in</button>
+    <div id="signChoices" hidden>
+      <p class="muted">Use your email address to create an account or sign in. After your password, we’ll email you a code to confirm it’s you.</p>
+      <button class="btn btn-red btn-big" type="button" id="signCreate">Create account</button>
+      <button class="btn btn-ghost" type="button" id="signIn">Sign in</button>
+    </div>
+    <div id="lockChoices" hidden>
+      <p class="muted">Use your fingerprint or phone passcode to open the app.</p>
+      <button class="btn btn-red btn-big" type="button" id="lockOpen">Unlock</button>
+      <button type="button" id="lockEmail">Sign out and use my email instead</button>
+    </div>
     <p id="signMsg" role="status"></p>
   </div>`;
   document.body.appendChild(gate);
@@ -69,12 +88,32 @@ function start() {
 
   const say = (s) => { $('signMsg').textContent = s; };
   const busy = (on) => { $('signCreate').disabled = on; $('signIn').disabled = on; };
+  const isLocked = () => hasLock && !unlocked && sessionOpen(store.get(TOKEN));
   function show() {
-    const inside = sessionOpen(store.get(TOKEN));
-    if (!inside) signOut();
+    const open = sessionOpen(store.get(TOKEN));
+    if (!open) { signOut(); unlocked = false; }
+    const inside = open && !isLocked();
     gate.hidden = inside; bar.hidden = !inside;
+    $('signChoices').hidden = open; $('lockChoices').hidden = !open || inside;
     document.documentElement.classList.toggle('hj-in', inside);
     $('signedEmail').textContent = store.get(EMAIL);
+  }
+
+  async function renew() {
+    if (!needsRenewal(store.get(TOKEN))) return;
+    try { const r = await call('auth/renew', { method: 'POST' }); if (sessionOpen(r.token)) store.set(TOKEN, r.token); }
+    catch { /* no signal: the session still has its time left, and the next unlock asks again */ }
+  }
+
+  async function unlock() {
+    if (unlocking) return;
+    unlocking = true; say('');
+    try {
+      const r = await PhoneLock.unlock();
+      if (r.unlocked) { unlocked = true; show(); renew(); }
+      else say(r.cancelled || !r.message ? 'Tap Unlock to try again.' : r.message);
+    } catch { say('Your phone’s lock didn’t open. Tap Unlock to try again.'); }
+    finally { unlocking = false; }
   }
 
   async function go(create) {
@@ -101,6 +140,7 @@ function start() {
     try {
       const r = await call('auth/email', { method: 'POST', body: { code: back.code, verifier: pending.verifier } });
       store.set(TOKEN, r.token); store.set(EMAIL, r.user.email);
+      unlocked = true; awayAt = 0; // they've just proved it's them by email, so the phone's lock needn't ask as well
       say(''); show();
     } catch (e) { say(e.message || 'Sign-in didn’t work. Please try again.'); }
     finally { busy(false); }
@@ -108,17 +148,26 @@ function start() {
 
   $('signCreate').onclick = () => go(true);
   $('signIn').onclick = () => go(false);
-  $('signOut').onclick = () => {
+  $('lockOpen').onclick = unlock;
+  // Someone else may be holding the phone, so going back to email forgets the camera settings, as signing out does.
+  $('signOut').onclick = $('lockEmail').onclick = () => {
     if (!confirm('Sign out? This phone will forget its camera settings.')) return;
     signOut(); store.set(EMAIL, ''); store.set(CAMERA_SETTINGS, '');
     location.reload();
   };
+  const lockKnown = PhoneLock ? PhoneLock.available().then((r) => { hasLock = !!(r && r.available); }).catch(() => {}) : Promise.resolve();
+  const check = () => { show(); if (isLocked()) unlock(); };
   if (App) {
     App.addListener('appUrlOpen', (e) => finish(e.url));
-    App.addListener('resume', show); // a session can run out while the app sits in the background
+    App.addListener('pause', () => { awayAt = Date.now(); });
+    App.addListener('resume', () => lockKnown.then(() => { // a session can also run out while the app sits in the background
+      if (lockDue(awayAt)) unlocked = false;
+      awayAt = 0;
+      check();
+    }));
     App.getLaunchUrl().then((r) => { if (r && r.url) finish(r.url); }).catch(() => {});
   }
-  show();
+  lockKnown.then(check);
 }
 
 if (typeof document !== 'undefined') start();

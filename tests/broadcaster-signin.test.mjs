@@ -4,7 +4,7 @@ import assert from 'node:assert';
 import fs from 'node:fs';
 
 globalThis.location ??= { protocol: 'file:', hostname: '', port: '' }; // api-base.js looks at where it's running
-const { sessionOpen, randomText, challengeFor, signInAddress, readReturn } = await import('../broadcaster-signin.js');
+const { sessionOpen, needsRenewal, lockDue, randomText, challengeFor, signInAddress, readReturn } = await import('../broadcaster-signin.js');
 
 const session = (exp) => `${Buffer.from(JSON.stringify({ uid: 'e_x', exp })).toString('base64url')}.signature`;
 const REDIRECT = 'com.vdaso.spartans.broadcast://auth';
@@ -16,6 +16,18 @@ test('a session counts until it runs out', () => {
 });
 test('anything that isn\'t a session doesn\'t count', () => {
   for (const t of ['', 'nonsense', 'a.b', null, undefined]) assert.strictEqual(sessionOpen(t), false);
+});
+test('a session is renewed once it has been used for about a day, not at every unlock', () => {
+  const DAY = 24 * 3600 * 1000, NOW = 1000 * DAY;
+  assert.strictEqual(needsRenewal(session(NOW + 30 * DAY), NOW), false);
+  assert.strictEqual(needsRenewal(session(NOW + 29 * DAY - 1), NOW), true);
+  assert.strictEqual(needsRenewal('nonsense', NOW), false);
+});
+test('the phone\'s lock asks again after five minutes away, and not when the app was never away', () => {
+  const MIN = 60 * 1000, NOW = 1000 * MIN;
+  assert.strictEqual(lockDue(0, NOW), false);
+  assert.strictEqual(lockDue(NOW - 5 * MIN + 1, NOW), false);
+  assert.strictEqual(lockDue(NOW - 5 * MIN, NOW), true);
 });
 test('the challenge is the standard PKCE one (RFC 7636\'s worked example)', async () => {
   assert.strictEqual(await challengeFor('dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk'), 'E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM');
@@ -62,4 +74,12 @@ test('the app is built with the sign-in screen, its link and the plugins it need
   assert.match(s, /@capacitor\/browser/);
   assert.match(s, /@capacitor\/app/);
   assert.match(s, /html:not\(\.hj-in\) main/, 'the page stays hidden until signed in');
+  assert.match(s, /registerPlugin\(PhoneLockPlugin\.class\)/, 'the phone\'s lock opens the app');
+  assert.match(s, /androidx\.biometric/);
+});
+test('the phone\'s lock is only in the Broadcaster, not the Spartans app', () => {
+  const main = fs.readFileSync(new URL('../app/native/android/MainActivity.java', import.meta.url), 'utf8');
+  assert.doesNotMatch(main, /PhoneLock/);
+  const plugin = fs.readFileSync(new URL('../app/native/broadcaster/PhoneLockPlugin.java', import.meta.url), 'utf8');
+  assert.match(plugin, /BIOMETRIC_WEAK \| BiometricManager\.Authenticators\.DEVICE_CREDENTIAL/, 'fingerprint or face, and the passcode');
 });
