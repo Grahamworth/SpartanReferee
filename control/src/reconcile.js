@@ -79,11 +79,12 @@ async function reconcile({ store, arm, health, seedFor, now = Date.now, log = ()
         add('charge', (mins / 60) * (want.bookedCameras || 0) * (want.cameraHour || 0));
         add('azure', (mins / 60) * (want.azureHour || 0));
       }
-      if (d.error) { next.error = d.error; next.errorAt = next.errorAt && st.error === d.error ? next.errorAt : t; } else if (d.action === 'create' || d.action === 'start' || d.state === 'on') { next.error = ''; next.errorAt = 0; }
+      if (d.error) { next.error = d.error; next.errorAt = next.errorAt && st.error === d.error ? next.errorAt : t; } else if (d.action === 'create' || d.action === 'start' || d.state === 'on') { next.error = ''; next.errorAt = 0; next.errorDetail = ''; }
       if (d.action === 'create' || d.action === 'start') {
         next.startedAt = t;
         try { if (d.action === 'create') await arm.create(server, await seedFor(server, want)); else await arm.start(server.vm); }
-        catch (e) { log(`${want.id}: ${d.action} failed: ${e.message}`); next.state = 'off'; next.error = FRIENDLY(e); next.errorAt = t; }
+        // errorDetail is Azure's own words, kept for working out what went wrong: the site only ever shows `error`
+        catch (e) { log(`${want.id}: ${d.action} failed: ${e.message}`); next.state = 'off'; next.error = FRIENDLY(e); next.errorAt = t; next.errorDetail = String(e?.message || e).slice(0, 1000); }
       }
       if (d.action === 'deallocate') {
         log(`${want.id}: turning off (${d.offWhy})`);

@@ -18,8 +18,10 @@ NSG=$(az network nsg show -g $SERVERS -n hj-nsg --subscription $SUB --query id -
 
 # the settings go up through a file so that none of them ever appears on a command line or in a log
 BODY=$(mktemp)
-CONN="$CONN" BUNDLE="$BUNDLE" IMG="$IMG" SUBNET="$SUBNET" NSG="$NSG" SUB="$SUB" SERVERS="$SERVERS" SITE="$SITE" KEY="$(cat "$SRC/server/setup/fixed-login-key.pub")" node -e "
+# (the first two stop Git Bash on Windows rewriting these Azure addresses as if they were file paths)
+MSYS_NO_PATHCONV=1 MSYS2_ENV_CONV_EXCL='*' CONN="$CONN" BUNDLE="$BUNDLE" IMG="$IMG" SUBNET="$SUBNET" NSG="$NSG" SUB="$SUB" SERVERS="$SERVERS" SITE="$SITE" KEY="$(cat "$SRC/server/setup/fixed-login-key.pub")" node -e "
 const e = process.env;
+for (const k of ['IMG', 'SUBNET', 'NSG']) if (!e[k].startsWith('/subscriptions/')) throw new Error(k + ' is not an Azure address: ' + e[k]);
 console.log(JSON.stringify({ properties: {
   FUNCTIONS_EXTENSION_VERSION: '~4', FUNCTIONS_WORKER_RUNTIME: 'node', WEBSITE_NODE_DEFAULT_VERSION: '~24',
   AzureWebJobsStorage: e.CONN, WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: e.CONN, WEBSITE_CONTENTSHARE: 'headjudge-control',
@@ -42,4 +44,7 @@ for i in 1 2 3 4 5 6; do
   CODE=$(curl -s -o /dev/null -w '%{http_code}' -m 300 -X POST "https://$APP.scm.azurewebsites.net/api/zipdeploy" -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/zip" --data-binary "@$ZIP")
   echo "publish: $CODE"; [ "$CODE" = "200" ] && break; sleep 20
 done
+# On this plan Azure only wakes the app for its timer if it's been told about the timer. Without this, a publish can leave the
+# timer silent, and then nothing turns off a server whose time is up.
+az rest --method post --url "$ARM/syncfunctiontriggers?api-version=2023-12-01" -o none
 az rest --method get --url "$ARM/functions?api-version=2023-12-01" --query "value[].name" -o tsv

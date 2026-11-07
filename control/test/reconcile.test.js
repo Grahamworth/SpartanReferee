@@ -169,3 +169,34 @@ test('Azure: the requests are built as Azure expects, and a power state is read 
   const none = createArm({ subscription: 'S', group: 'G', token: async () => 'T', doFetch: async () => ({ ok: false, status: 404, text: async () => '' }) });
   assert.strictEqual(await none.power('nope'), 'none');
 });
+
+test('Azure: "not yet" is waited out, as a new address takes a few seconds to be ready for its network card', async () => {
+  const waits = [], tries = {};
+  const doFetch = async (url) => {
+    const name = url.split('?')[0].split('/').pop(); tries[name] = (tries[name] || 0) + 1;
+    if (name === 'hj-a-nic' && tries[name] < 3) return { ok: false, status: 429, headers: new Map([['retry-after', '2']]), text: async () => '{"error":{"code":"RetryableError","details":[{"code":"ReferencedResourceNotProvisioned"}]}}' };
+    return { ok: true, status: 200, text: async () => JSON.stringify({ id: `/id/${name}` }) };
+  };
+  const arm = createArm({ subscription: 'S', group: 'G', region: 'r', image: '/i', subnet: '/s', nsg: '/n', sshKey: 'k', token: async () => 'T', doFetch, wait: async (ms) => { waits.push(ms); } });
+  await arm.create({ id: 'a', vm: 'hj-a', label: 'hj-a' }, {});
+  assert.strictEqual(tries['hj-a-nic'], 3);
+  assert.strictEqual(tries['hj-a'], 1, 'and the server itself is then made');
+  assert.deepStrictEqual(waits, [2000, 2000]);
+});
+
+test('Azure: it stops waiting in the end, and says what Azure said', async () => {
+  let calls = 0;
+  const arm = createArm({ subscription: 'S', group: 'G', token: async () => 'T', wait: async () => {}, doFetch: async () => { calls += 1; return { ok: false, status: 429, text: async () => 'busy' }; } });
+  await assert.rejects(arm.deallocate('hj-a'), /429 busy/);
+  assert.strictEqual(calls, 8);
+});
+
+test('a server that won\'t start: the customer gets plain words, and Azure\'s own words are kept for us', async () => {
+  const rows = new Map([['serverwant/a', { id: 'a', desired: 'on', until: NOW + 3600e3, requestedAt: NOW }], ['server/a', { id: 'a', vm: 'hj-a', host: 'h' }]]);
+  const store = { list: async (p) => [...rows].filter(([k]) => k.startsWith(`${p}/`)).map(([, v]) => v), get: async (p, k) => rows.get(`${p}/${k}`) || null, put: async (p, k, v) => { rows.set(`${p}/${k}`, v); } };
+  const arm = { power: async () => 'none', create: async () => { throw new Error('PUT hj-a-nic: 400 some detail from Azure'); } };
+  await reconcile({ store, arm, health: async () => false, seedFor: async () => ({}), now: () => NOW });
+  const st = rows.get('serverstate/a');
+  assert.doesNotMatch(st.error, /Azure|400/);
+  assert.match(st.errorDetail, /400 some detail from Azure/);
+});

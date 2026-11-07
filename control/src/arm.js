@@ -2,6 +2,7 @@
 // The few things the control app asks of Azure, with its own identity (no passwords). It only has rights over the servers' resource group.
 const API = 'https://management.azure.com';
 const COMPUTE = '2024-07-01', NETWORK = '2024-05-01';
+const RETRY_TRIES = 8, RETRY_SECONDS = 5, MAX_RETRY_SECONDS = 30;
 
 async function identityToken() {
   const url = `${process.env.IDENTITY_ENDPOINT}?api-version=2019-08-01&resource=${encodeURIComponent(`${API}/`)}`;
@@ -11,14 +12,18 @@ async function identityToken() {
 }
 
 /** subscription, group, region: where the servers live; image: the prepared server image; subnet, nsg: shared by all servers; sshKey: fixed, nobody holds its private half */
-function createArm({ subscription, group, region, image, subnet, nsg, sshKey, size = 'Standard_NC8as_T4_v3', diskGb = 128, token = identityToken, doFetch = fetch }) {
+function createArm({ subscription, group, region, image, subnet, nsg, sshKey, size = 'Standard_NC8as_T4_v3', diskGb = 128, token = identityToken, doFetch = fetch, wait = (ms) => new Promise((r) => setTimeout(r, ms)) }) {
   const base = `${API}/subscriptions/${subscription}/resourceGroups/${group}/providers`;
   async function call(method, path, body) {
-    const r = await doFetch(`${base}${path}`, { method, headers: { Authorization: `Bearer ${await token()}`, 'Content-Type': 'application/json' }, body: body ? JSON.stringify(body) : undefined });
-    if (r.status === 404) return null;
-    const text = await r.text();
-    if (!r.ok) throw new Error(`${method} ${path.split('?')[0].split('/').pop()}: ${r.status} ${text.slice(0, 300)}`);
-    return text ? JSON.parse(text) : {};
+    for (let attempt = 1; ; attempt += 1) {
+      const r = await doFetch(`${base}${path}`, { method, headers: { Authorization: `Bearer ${await token()}`, 'Content-Type': 'application/json' }, body: body ? JSON.stringify(body) : undefined });
+      if (r.status === 404) return null;
+      const text = await r.text();
+      // "Not yet": a new server's network card can't be made until its address is ready, which takes a few seconds.
+      if (r.status === 429 && attempt < RETRY_TRIES) { await wait(Math.min(Number(r.headers?.get?.('retry-after')) || RETRY_SECONDS, MAX_RETRY_SECONDS) * 1000); continue; }
+      if (!r.ok) throw new Error(`${method} ${path.split('?')[0].split('/').pop()}: ${r.status} ${text.slice(0, 1000)}`);
+      return text ? JSON.parse(text) : {};
+    }
   }
   return {
     async power(vm) {
