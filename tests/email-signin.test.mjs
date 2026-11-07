@@ -55,6 +55,11 @@ test('companies can use email on the registration page and console, but the admi
   assert.doesNotMatch(read('customers.html'), /emailBtns/);
   assert.doesNotMatch(read('customers.js'), /emailButtons/);
 });
+test('the site sends its session in a header Azure leaves alone, as Azure replaces Authorization', () => {
+  const base = read('api-base.js');
+  assert.ok(base.includes("headers['X-Session'] = token"));
+  assert.ok(!base.includes('headers.Authorization'));
+});
 test('the return page only ever goes back to our own pages', () => {
   assert.match(read('email-signin-web.js'), /new Set\(\['register\.html', 'console\.html'\]\)/);
 });

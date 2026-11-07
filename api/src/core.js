@@ -78,7 +78,7 @@ const DEFAULT_CONTENT = {
 const ABUSE = /\b(kys|kill (your|ur) ?self|go die|hope you die|neck yourself|idiot|idiots|moron|morons|imbecile|dumbass|dumb ass|loser|losers|scumbag|piece of (shit|crap)|shut up|stfu|gtfo|fat (cow|pig)|ugly (cow|pig|bitch)|retarded|cripple|freak|worthless|pathetic|i('| wi)ll (kill|hurt|find) you|slag|whore|tramp|nonce|paedo|pedo)\b/i;
 const MAX_LEN = 500, SHOW = 80, KEEP = 400, GAP_MS = 10 * 1000, PER_DAY = 60, REPORTERS_TO_BAN = 3, GROUP_MAX = 60;
 const LINKY = /(https?:\/\/|www\.|\b[a-z0-9-]+\.(com|net|org|io|co|uk|de|fr|it|ch|at|ru|xyz|info|biz|link|ly|me|app)\b|@[a-z0-9-]+\.[a-z]{2,}|(\+?\d[\s-]?){9,})/i;
-const CORS = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Authorization, Content-Type, X-Device, X-Admin-Key, X-Server-Key', 'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS' };
+const CORS = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Authorization, Content-Type, X-Session, X-Device, X-Admin-Key, X-Server-Key', 'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS' };
 const clean = (s, max) => String(s || '').replace(/[\u0000-\u0009\u000b-\u001f<>]/g, '').replace(/\n{3,}/g, '\n\n').trim().slice(0, max);
 
 const NEWS_FEEDS = [
@@ -98,7 +98,8 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
   // session tokens: base64url(payload).HMAC
   const sign = (payload) => { const p = Buffer.from(JSON.stringify(payload)).toString('base64url'); return p + '.' + crypto.createHmac('sha256', secret).update(p).digest('base64url'); };
   const session = (h) => {
-    const m = /^Bearer (.+)\.(.+)$/.exec(String(h.authorization || '')); if (!m || !secret) return null;
+    // X-Session is what the site sends, as Azure Static Web Apps replaces any Authorization header on its way here
+    const m = /^(?:Bearer )?(.+)\.(.+)$/.exec(String(h['x-session'] || h.authorization || '')); if (!m || !secret) return null;
     const good = crypto.createHmac('sha256', secret).update(m[1]).digest('base64url');
     if (good.length !== m[2].length || !crypto.timingSafeEqual(Buffer.from(good), Buffer.from(m[2]))) return null;
     try { const p = JSON.parse(Buffer.from(m[1], 'base64url').toString()); return p.exp > now() ? p : null; } catch { return null; }
@@ -547,6 +548,7 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
       if (!['GET', 'POST', 'PUT', 'DELETE'].includes(m)) return { status: 405, body: { error: 'Not allowed' }, headers: CORS };
       method = m;
       h['x-device'] = String(body.d || '');
+      delete h['x-session'];
       if (body.t) h.authorization = 'Bearer ' + body.t; else delete h.authorization;
       if (body.k) h['x-admin-key'] = String(body.k); else delete h['x-admin-key'];
       body = body.b === undefined ? null : body.b;

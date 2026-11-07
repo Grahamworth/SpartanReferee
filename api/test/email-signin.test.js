@@ -58,6 +58,15 @@ test('the website swaps its code using its own return address, and no other addr
   await assert.rejects(signIn(answering(200, { id_token: idToken({}) }, sent)).redeem('c', VERIFIER, 'https://evil.example/return'), /return addresses/);
   assert.strictEqual(sent.length, 1, 'and Microsoft is not even asked');
 });
+test('the session counts in the X-Session header, ahead of whatever Azure puts in Authorization', async () => {
+  const { api, post } = site(pretend({ sub: 'person-1', email: 'sam@example.com', name: 'Sam' }));
+  const { token } = (await post({ code: 'good', verifier: VERIFIER })).body;
+  const me = (headers) => api.handle({ method: 'GET', path: 'me', headers: { 'x-device': 'a-device-id-long-enough', ...headers } });
+  assert.strictEqual((await me({ 'x-session': token, authorization: 'Bearer azure.own.token' })).body.user.email, 'sam@example.com');
+  assert.strictEqual((await me({ authorization: 'Bearer azure.own.token' })).body.user, null);
+  assert.strictEqual((await me({ 'x-session': 'forged.token' })).body.user, null);
+  assert.strictEqual((await me({ 'x-session': token + 'x' })).body.user, null);
+});
 test('a good code gives a session, and the account is recorded', async () => {
   const { api, store, post } = site(pretend({ sub: 'person-1', email: 'sam@example.com', name: 'Sam' }));
   const r = await post({ code: 'good', verifier: VERIFIER });

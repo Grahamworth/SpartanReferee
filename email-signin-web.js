@@ -11,10 +11,10 @@ const safeBack = (page) => (BACK_TO.has(page) ? page : './');
 export async function emailButtons(el, back, onError) {
   const { emailSignIn: cfg } = await call('config').catch(() => ({}));
   if (!cfg || !cfg.webRedirectUri) return;
-  el.innerHTML = `<p class="orLine"><span>or</span></p>
-    <button class="primary emailBtn" type="button" data-create="">Sign in with email</button>
+  el.innerHTML = `<button class="primary emailBtn" type="button" data-create="">Sign in with email</button>
     <button class="link emailCreate" type="button" data-create="1">Create an account with email</button>
-    <p class="note">After your password, we’ll email you a code to confirm it’s you.</p>`;
+    <p class="note">After your password, we’ll email you a code to confirm it’s you.</p>
+    <p class="orLine"><span>or</span></p>`;
   for (const button of el.querySelectorAll('button')) {
     button.onclick = async () => {
       try {

@@ -19,7 +19,7 @@ export async function call(path, { method = 'GET', body, admin } = {}) {
     r = await fetch(`${API}/${path}`, { method: 'POST', body: JSON.stringify({ _env: 1, m: method, d: deviceId(), t: token, k: key, b: body }) });
   } else {
     const headers = { 'X-Device': deviceId() };
-    if (token) headers.Authorization = 'Bearer ' + token;
+    if (token) headers['X-Session'] = token; // not Authorization: Azure Static Web Apps replaces that on the way to the API
     if (body !== undefined) headers['Content-Type'] = 'application/json';
     if (key) headers['X-Admin-Key'] = key;
     r = await fetch(`${API}/${path}`, { method, headers, body: body === undefined ? undefined : JSON.stringify(body) });
