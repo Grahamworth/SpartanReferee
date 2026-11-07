@@ -84,4 +84,4 @@ function createEngines({ chrome, dataDir, pageUrl, settings, max = 2, extraFlags
   };
 }
 
-module.exports = { createEngines };
+module.exports = { createEngines, FLAGS, connect };

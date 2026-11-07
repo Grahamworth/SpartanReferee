@@ -9,7 +9,8 @@ const { Readable } = require('stream');
 const QUIET_MS = 90e3;        // a file unchanged this long is finished (the server closes one every 10 minutes)
 const RETRY_MS = 5 * 60e3;
 
-function createCloud({ dir, stateFile, api, settings, doFetch = fetch, now = Date.now }) {
+const uploadedName = (file) => file.replace(/^\d{4}-\d\d-\d\dT[\d-]+Z?_/, '');
+function createCloud({ dir, uploadsDir, stateFile, api, settings, doFetch = fetch, now = Date.now }) {
   let sent = {}; try { sent = JSON.parse(fs.readFileSync(stateFile, 'utf8')); } catch { /* none yet */ }
   const status = { state: 'off', waiting: 0, sentCount: Object.keys(sent).length, current: '', lastAt: 0, error: '' };
   let busy = false, waitUntil = 0;
@@ -29,6 +30,16 @@ function createCloud({ dir, stateFile, api, settings, doFetch = fetch, now = Dat
       }
     };
     walk(dir);
+    // uploaded videos go up as well, as camera 0
+    if (uploadsDir) {
+      let list = []; try { list = fs.readdirSync(uploadsDir, { withFileTypes: true }); } catch { /* none yet */ }
+      for (const e of list) {
+        const rel = `uploads/${e.name}`, p = path.join(uploadsDir, e.name);
+        if (!e.isFile() || sent[rel] || !/\.(mp4|mov|m4v|webm|mkv)$/i.test(e.name)) continue;
+        let st; try { st = fs.statSync(p); } catch { continue; }
+        if (st.size > 0 && st.mtimeMs >= since && now() - st.mtimeMs >= QUIET_MS) out.push({ p, rel, cam: 0, file: e.name, name: uploadedName(e.name), size: st.size, mtime: st.mtimeMs });
+      }
+    }
     return out.sort((a, b) => a.mtime - b.mtime);
   }
   // recordPath: %Y-%m-%d_%H-%M-%S-%f%z: laptop time with its offset, or Z at UTC
@@ -47,7 +58,7 @@ function createCloud({ dir, stateFile, api, settings, doFetch = fetch, now = Dat
     const u = await post('upload', key, { cam: f.cam, file: f.file, size: f.size });
     const put = await doFetch(u.url, { method: 'PUT', duplex: 'half', body: Readable.toWeb(fs.createReadStream(f.p)), headers: { 'x-ms-blob-type': 'BlockBlob', 'x-ms-blob-content-type': 'video/mp4', 'Content-Length': String(f.size) } });
     if (!put.ok) throw new Error(`Storage said ${put.status}`);
-    await post('done', key, { blob: u.blob, size: f.size, startedAt: startedAt(f.file, f.mtime) });
+    await post('done', key, { blob: u.blob, size: f.size, name: f.name, startedAt: startedAt(f.file, f.mtime) });
     sent[f.rel] = now();
     fs.writeFileSync(stateFile, JSON.stringify(sent));
   }
@@ -72,7 +83,23 @@ function createCloud({ dir, stateFile, api, settings, doFetch = fetch, now = Dat
       waitUntil = now() + RETRY_MS; // the recording's still here: it goes when the internet's back
     } finally { busy = false; status.current = ''; }
   }
-  return { tick, status };
+  async function keyed(where) {
+    const { cloudOn, cloudKey } = settings();
+    if (!cloudOn || !cloudKey) throw new Error('This server isn\'t linked to cloud storage');
+    const r = await doFetch(`${api()}/recordings/by-key${where}`, { headers: { 'X-Receiver-Key': cloudKey } });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(j.error || `The site said ${r.status}`);
+    return j;
+  }
+  return {
+    tick, status,
+    /** this company's recordings in cloud storage, newest first */
+    previous: async () => (await keyed('')).recordings,
+    /** one of them, with a link to fetch it from */
+    previousLink: (id) => keyed(`/${encodeURIComponent(id)}`),
+    /** a file that came from cloud storage needn't go back up */
+    markSent(rel) { sent[rel] = now(); try { fs.writeFileSync(stateFile, JSON.stringify(sent)); } catch { /* it would only go up again */ } },
+  };
 }
 
 module.exports = { createCloud, QUIET_MS };

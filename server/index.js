@@ -13,6 +13,9 @@ const { createCloud, QUIET_MS } = require('./cloud');
 const { createSleep } = require('./idle');
 const { mediamtxYaml } = require('./mediamtx');
 const { rtmp, spartansLink, larixLink } = require('./network');
+const { createUploadJobs } = require('./upload-jobs');
+const { pipeline } = require('stream/promises');
+const { Readable } = require('stream');
 const auth = require('./auth');
 
 const CONFIG = process.env.HJ_CONFIG || '/etc/headjudge/config.json';
@@ -56,6 +59,13 @@ const engines = (() => {
   e.restore(saved.ai || []);
   return e;
 })();
+// uploaded videos, analysed here in the background. Live judges come first: if they're using all this server can give, it waits.
+const uploadJobs = createUploadJobs({
+  chrome: C.chrome || 'google-chrome', dataDir: DATA, extraFlags: C.chromeFlags || [], env: C.display ? { DISPLAY: C.display } : {}, log,
+  pageUrl: (video, name) => `http://127.0.0.1:${S.enginePort}/judge/judge.html?video=${encodeURIComponent('/uploads/' + encodeURIComponent(video))}&name=${encodeURIComponent(name)}&go=1&cfg=upload&bg=1`,
+  settings: () => judgeSettings,
+  busy: () => engines.list().filter((n) => engines.running(n)).length >= engines.max,
+});
 // each judge's latest picture of the scene, passed on to whoever's watching that camera
 const live = new Map();   // n → { last, at, viewers: Set<res>, frames: [timestamps] }
 const liveOf = (n) => { if (!live.has(n)) live.set(n, { last: '', at: 0, viewers: new Set(), fps: 0 }); return live.get(n); };
@@ -76,7 +86,7 @@ async function refreshBrand() {
 refreshBrand(); setInterval(refreshBrand, 5 * 60e3);
 
 // ---------------------------------------------------------------- recordings to cloud storage
-const cloud = createCloud({ dir: RECORDINGS, stateFile: path.join(DATA, 'cloud-sent.json'), api: () => C.api, settings: () => ({ cloudOn: !!(C.api && C.receiverKey), cloudKey: C.receiverKey, cloudSince: 0 }) });
+const cloud = createCloud({ dir: RECORDINGS, uploadsDir: path.join(DATA, 'training'), stateFile: path.join(DATA, 'cloud-sent.json'), api: () => C.api, settings: () => ({ cloudOn: !!(C.api && C.receiverKey), cloudKey: C.receiverKey, cloudSince: 0 }) });
 
 // ---------------------------------------------------------------- the page's own requests beyond the review API
 const ADDRESSES = () => ({ lan: [C.host], lanNames: ['internet'], tailscale: null });
@@ -84,7 +94,7 @@ async function cameraList() {
   const out = [];
   for (const c of review.cams()) {
     const link = spartansLink(ADDRESSES(), c.n, S), lx = larixLink(ADDRESSES(), c.n, S);
-    out.push({ n: c.n, live: c.live, video: c.video, phone: await QRCode.toDataURL(link, { margin: 1, width: 280 }), larix: await QRCode.toDataURL(lx, { margin: 1, width: 280, errorCorrectionLevel: 'L' }), rtmp: rtmp(C.host, c.n, S) });
+    out.push({ n: c.n, live: c.live, video: c.video, larixUrl: rtmp(C.host, c.n, S), phone: await QRCode.toDataURL(link, { margin: 1, width: 280 }), larix: await QRCode.toDataURL(lx, { margin: 1, width: 280, errorCorrectionLevel: 'L' }), rtmp: rtmp(C.host, c.n, S) });
   }
   return out;
 }
@@ -108,6 +118,22 @@ function followLive(req, res, n) {
 }
 setInterval(() => { for (const l of live.values()) for (const r of l.viewers) r.write(': still here\n\n'); }, 15000);
 
+// a recording from cloud storage, fetched here to be analysed. It's already in the cloud, so it doesn't go back up.
+async function fetchPrevious(id) {
+  const r = await cloud.previousLink(id);
+  const from = new Date(r.startedAt).toISOString().slice(0, 16).replace(/[:T]/g, '-');
+  const label = r.cam ? `Camera_${r.cam}_${from}` : String(r.name || r.file).replace(/\.[^.]*$/, '');
+  const video = `${new Date().toISOString().replace(/[:.]/g, '-')}_${label.replace(/[^\w.-]+/g, '_').slice(-80)}${path.extname(r.file) || '.mp4'}`;
+  const dir = path.join(DATA, 'training'), file = path.join(dir, video);
+  fs.mkdirSync(dir, { recursive: true });
+  cloud.markSent(`uploads/${video}`);
+  const got = await fetch(r.url);
+  if (!got.ok || !got.body) throw new Error(`Storage said ${got.status}`);
+  try { await pipeline(Readable.fromWeb(got.body), fs.createWriteStream(file)); }
+  catch (e) { fs.rm(file, { force: true }, () => {}); throw e; }
+  return { video, name: label.replace(/_/g, ' ') };
+}
+
 async function extra(req, res, u, { local }) {
   const p = u.pathname;
   const eng = /^\/api\/engine\/(\d{1,2})(?:\/(snap|live|restart))?$/.exec(p);
@@ -126,6 +152,24 @@ async function extra(req, res, u, { local }) {
     const b = await readBody(req);
     if (eng[2] === 'restart') { await engines.restart(n); send(res, 200, { ok: true }); return true; }
     if (!eng[2]) { const why = engines.set(n, !!b?.on); if (why) return send(res, 409, { error: why }), true; save(); send(res, 200, { ok: true }); return true; }
+  }
+  if (p === '/api/upload-jobs' && req.method === 'GET') { send(res, 200, uploadJobs.list()); return true; }
+  if (p === '/api/previous-recordings' && req.method === 'GET') {
+    try { send(res, 200, { recordings: await cloud.previous() }); } catch (e) { send(res, 502, { error: e.message }); }
+    return true;
+  }
+  if ((p === '/api/upload-jobs' || p === '/api/upload-jobs/stop') && req.method === 'POST') {
+    if (!isJson(req)) return send(res, 415, { error: 'JSON only' }), true;
+    const b = await readBody(req);
+    if (b?.previous && !p.endsWith('/stop')) {
+      try { const got = await fetchPrevious(String(b.previous)); send(res, 200, uploadJobs.add(got.video, got.name)); }
+      catch (e) { send(res, 502, { error: e.message || 'That recording couldn\'t be fetched' }); }
+      return true;
+    }
+    const video = path.basename(String(b?.video || ''));
+    if (p.endsWith('/stop')) { send(res, 200, { stopped: uploadJobs.stop(video, 'Stopped. What it found so far is on the right.') }); return true; }
+    if (!video || !fs.existsSync(path.join(DATA, 'training', video))) return send(res, 404, { error: 'That video isn\'t on the server' }), true;
+    send(res, 200, uploadJobs.add(video, String(b.name || video).slice(0, 120))); return true;
   }
   if (p === '/api/judge-settings' && req.method === 'GET') { send(res, 200, judgeSettings); return true; }
   if (p === '/api/judge-settings' && req.method === 'PUT') {
@@ -182,6 +226,7 @@ const sleeper = createSleep({
   busy: () => review.cams().some((c) => c.live) || [...live.values()].some((l) => l.viewers.size > 0),
   // judges finish their rounds; the streaming server stops, which closes the recordings; they go up; only then may the site turn the server off
   flush: async () => {
+    await uploadJobs.stopAll('The booking ended before it finished. What it found so far is on the right.');
     await engines.stopAll();
     stopping = true; try { mtx?.kill('SIGTERM'); } catch { /* gone */ }
     await new Promise((r) => setTimeout(r, QUIET_MS + 10000)); // a recording counts as finished once it's stopped changing
@@ -217,6 +262,6 @@ engineServer.listen(S.enginePort, '127.0.0.1');
 setInterval(async () => { await review.watchCameras(); engines.tick(review.cams()); }, 1000);
 setInterval(() => { cloud.tick().catch(() => {}); }, 60000);
 sleeper.start();
-const quit = async () => { if (stopping) return; stopping = true; await engines.stopAll().catch(() => {}); try { mtx?.kill('SIGTERM'); } catch { /* gone */ } setTimeout(() => process.exit(0), 500); };
+const quit = async () => { if (stopping) return; stopping = true; await uploadJobs.stopAll().catch(() => {}); await engines.stopAll().catch(() => {}); try { mtx?.kill('SIGTERM'); } catch { /* gone */ } setTimeout(() => process.exit(0), 500); };
 process.on('SIGTERM', quit); process.on('SIGINT', quit);
 log('Server started');

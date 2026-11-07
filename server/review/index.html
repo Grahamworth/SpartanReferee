@@ -71,8 +71,8 @@
     </details>
   </div>
   <div id="pickHint" class="banner pick" hidden>Click the athlete you want analysed, on either camera. <button class="btn" id="pickCancel">Cancel</button></div>
-  <div id="judgeSettings" class="settingsbox" hidden>
-    <div class="row"><b id="settingsTitle">Camera settings</b><span class="muted small" id="settingsNote">Saved for this camera on this device. Save restarts its judge with them.</span></div>
+  <div id="judgeSettings" class="settingsbox popout" role="dialog" aria-modal="true" aria-labelledby="settingsTitle" hidden>
+    <div class="row"><b id="settingsTitle">Camera settings</b><span class="muted small" id="settingsNote">Saved for this camera on this device. Save restarts its judge with them.</span><label class="check small" id="settingsAllRow"><input type="checkbox" id="settingsAll"> Use these settings on all cameras</label></div>
     <iframe id="settingsFrame" title="Judge settings"></iframe>
   </div>
   <div id="liveSpot"></div>
@@ -107,18 +107,20 @@
 <!-- Upload video: every frame analysed first, then it waits to be played; everyone it tracks goes in All results -->
 <section id="upload" class="pane offstage">
   <div class="row uploadbar">
-    <label class="btn red upload">Choose a video<input id="upFile" type="file" accept="video/*" hidden></label>
-    <button class="btn" id="upCfg">⚙ Config</button>
-    <button class="btn" id="upPause" type="button" hidden>⏸ Pause</button>
+    <button class="btn red" id="upChoose" type="button">Upload from computer</button><button class="btn" id="upPrev" type="button">Select a previous recording</button><input id="upFile" type="file" accept="video/*" hidden>
     <button class="btn" id="upStop" type="button" hidden>■ Stop</button>
-    <span id="upStatus" class="muted">The AI judge analyses the whole video first, and the results appear on the right. A copy stays on the server for testing and training.</span>
+    <span id="upStatus" class="muted">Videos are analysed on the server, in the background. You can close this page: the results are here when it's done.</span>
   </div>
-  <div id="upSettings" class="settingsbox" hidden>
-    <div class="row"><b>AI judge settings for uploaded videos</b><span class="muted small">Check them, then Save to start judging (Close: not now).</span></div>
+  <div id="prevBox" class="settingsbox popout prevbox" role="dialog" aria-modal="true" aria-labelledby="prevTitle" hidden>
+    <div class="row"><b id="prevTitle">Select a previous recording</b><span class="muted small">Kept for 7 days.</span><span class="spacer"></span><button class="btn" id="prevClose" type="button">Close</button></div>
+    <div id="prevList" class="prevlist"></div>
+  </div>
+  <div id="upSettings" class="settingsbox popout" role="dialog" aria-modal="true" aria-label="AI judge settings for uploaded videos" hidden>
+    <div class="row"><b>AI judge settings for uploaded videos</b><span class="muted small" id="upSettingsNote">Check them, then Save (Close: not now).</span></div>
     <iframe id="upSettingsFrame" title="Upload judge settings"></iframe>
   </div>
   <div class="split"><div class="splitmain">
-    <div id="upStage" class="upstage"><div class="msg">Choose a video to judge it.</div></div>
+    <div id="upStage" class="upstage"><div class="msg">Upload a video to judge it.</div></div>
   </div>
   <aside class="side" aria-label="AI judge results for this video">
     <h2>Results <small id="upCount" class="muted"></small></h2>

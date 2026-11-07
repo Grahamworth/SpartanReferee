@@ -121,8 +121,7 @@ setInterval(() => { $('clock').textContent = hms(laptopNow()); }, 200);
 const judges = {};   // n → { tile, frame, view }
 // Live AI judging and analysing an uploaded video don't run together: on this laptop each would slow the other enough to
 // miss reps. Streaming and recording carry on regardless, as they take next to nothing.
-let upAnalysing = false, upPaused = false;
-const analysingNow = () => false; // the live judges are on the server and an upload is analysed in this browser: neither slows the other
+const analysingNow = () => false; // both are on the server, which holds an upload's analysis back while live judges need the card
 const judgedLive = () => (st ? st.cams.filter((c) => c.live && judges[c.n]?.frame).map((c) => c.n) : []);
 const camList = (ns) => (ns.length === 1 ? `Camera ${ns[0]}` : `Cameras ${ns.slice(0, -1).join(', ')} and ${ns.at(-1)}`);
 const whepUrl = (n) => `/whep/live/station${n}/whep`;
@@ -133,6 +132,25 @@ const SYNC_KEY = (cfg) => `burpeeJudge.settings.${cfg}`;
 async function pullJudgeSettings() { const all = await fetch('/api/judge-settings').then((r) => r.json()).catch(() => ({})); for (const [k, v] of Object.entries(all)) { try { localStorage.setItem(k, v); } catch { /* private mode */ } } }
 function pushJudgeSettings(cfg) { let value = null; try { value = localStorage.getItem(SYNC_KEY(cfg)); } catch { /* private mode */ } if (value == null) return Promise.resolve(); return fetch('/api/judge-settings', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key: SYNC_KEY(cfg), value }) }).catch(() => {}); }
 const engineCall = (n, what, body = {}) => fetch(`/api/engine/${n}${what ? '/' + what : ''}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }).then((r) => r.json());
+let camInfo = {};
+async function loadCamInfo() {
+  const r = await fetch('/api/cameras').then((x) => x.json()).catch(() => null);
+  if (!r) return;
+  camInfo = Object.fromEntries(r.cameras.map((c) => [c.n, c]));
+  renderJudges();
+}
+setInterval(() => { if (st?.cams.some((c) => !c.live && !camInfo[c.n])) loadCamInfo(); }, 3000);
+const waitingCard = (c) => `<div class="waitCard"><h4>Camera ${c.n}: waiting for its phone</h4>
+  <div class="waitQrs"><figure><img src="${c.phone}" alt="QR code for camera ${c.n}, to scan in HeadJudge Broadcaster"><figcaption>Android: scan in HeadJudge Broadcaster</figcaption></figure>
+  <figure><img src="${c.larix}" alt="QR code for camera ${c.n}, to scan in Larix"><figcaption>iPhone: scan in Larix</figcaption></figure></div>
+  <div class="larixBy">Setting up Larix by hand, use this as its connection URL:<code>${esc(c.larixUrl)}</code></div></div>`;
+function drawWaiting(c, j) {
+  let msg = j.tile.querySelector('.msg');
+  if (c.live) { msg?.remove(); return; }
+  if (!msg) { j.tile.insertAdjacentHTML('afterbegin', `<div class="msg">Waiting for camera ${c.n}</div>`); msg = j.tile.querySelector('.msg'); }
+  const info = camInfo[c.n];
+  if (info && msg.dataset.drawn !== '1') { msg.dataset.drawn = '1'; msg.classList.add('waiting'); msg.innerHTML = waitingCard(info); }
+}
 const camName = (n) => { try { return (JSON.parse(localStorage.getItem('burpeeJudge.settings.cam' + n)) || {}).station || ''; } catch { return ''; } };
 const aiOff = (n) => !st?.cams.find((c) => c.n === n)?.ai;
 function renderJudges() {
@@ -144,7 +162,7 @@ function renderJudges() {
       tile.className = 'jtile'; tile.dataset.cam = c.n;
       tile.innerHTML = `<div class="msg">Waiting for camera ${c.n}</div><div class="label">Camera ${c.n}</div><span class="livetag">LIVE</span>
         <div class="tools"><button class="btn track"></button><button class="btn cfg" title="This camera's AI judge settings">⚙ Config</button></div>`;
-      tile.onclick = (e) => { if (!e.target.closest('button')) toggleBig(c.n); };
+      tile.onclick = (e) => { if (!e.target.closest('button, .waitCard')) toggleBig(c.n); };
       tile.querySelector('.cfg').onclick = (e) => { e.stopPropagation(); openCamSettings(c.n); };
       tile.querySelector('.track').onclick = (e) => { e.stopPropagation(); if (!aiOff(c.n)) return setAi(c.n, false); if (analysingNow()) return busyNote(`Camera ${c.n}'s AI judge can't start while a video is being analysed. Pause or stop the analysis first.`, true); openCamSettings(c.n, true); };
       $('judgeGrid').appendChild(tile);
@@ -168,7 +186,7 @@ function renderJudges() {
     t.textContent = off ? '▶ Start AI judge' : '■ Stop AI judge'; t.classList.toggle('red', off);
     const held = !off && !j.frame && analysingNow();
     if ((off || held) && c.live) plainView(c.n, j); else if (j.view && !c.live) { j.view.pc?.close(); j.view.video.remove(); j.view = null; }
-    if (!c.live && !j.frame && !j.tile.querySelector('.msg')) j.tile.insertAdjacentHTML('afterbegin', `<div class="msg">Waiting for camera ${c.n}</div>`);
+    drawWaiting(c, j);
     const nm = camName(c.n); j.tile.querySelector('.label').innerHTML = `Camera ${c.n}${nm ? `<small>${esc(nm)}</small>` : ''}${off ? '<small>AI judge off</small>' : held ? '<small>AI judge waiting</small>' : ''}`;
   }
 }
@@ -223,7 +241,7 @@ function plainView(n, j) {
 function placeDock() {
   fitLive();
   const dock = $('judgeGrid'), spot = $('liveSpot');
-  const show = !$('live').hidden && live && $('judgeSettings').hidden;
+  const show = !$('live').hidden && live;
   dock.classList.toggle('offstage', !show);
   if (!show) { spot.style.height = '0px'; return; }
   const r = spot.getBoundingClientRect();
@@ -246,24 +264,52 @@ function openCamSettings(n, start) {
   $('settingsTitle').textContent = start ? `Start the AI judge on camera ${n}${camName(n) ? ' · ' + camName(n) : ''}` : `Camera ${n}${camName(n) ? ' · ' + camName(n) : ''} settings`;
   $('settingsNote').textContent = start ? 'Check its settings, then Save to start judging (Close: not now).' : 'Saved for this camera. Save restarts its judge with them.';
   $('settingsFrame').src = `/judge/judge.html?settings=1&cfg=cam${n}`;
-  if ($('live').hidden) showTab('live');
-  $('judgeSettings').hidden = false; $('replayGrid').hidden = true; placeDock();
+  $('settingsAllRow').hidden = !st || st.cams.length < 2;
+  try { $('settingsAll').checked = localStorage.getItem('hj_settingsTogether') === '1'; } catch { /* private mode */ }
+  $('judgeSettings').hidden = false;
 }
-function closeCamSettings() { $('judgeSettings').hidden = true; $('replayGrid').hidden = false; $('settingsFrame').src = 'about:blank'; placeDock(); }
+function closeCamSettings() { $('judgeSettings').hidden = true; $('settingsFrame').src = 'about:blank'; }
+// One camera's rules, shared with the others. Each keeps its own name, and any already judging restarts with them.
+async function shareSettings(from) {
+  let source = null; try { source = JSON.parse(localStorage.getItem(SYNC_KEY('cam' + from))); } catch { /* none saved */ }
+  if (!source) return;
+  for (const c of st.cams) {
+    if (c.n === from) continue;
+    let own = {}; try { own = JSON.parse(localStorage.getItem(SYNC_KEY('cam' + c.n))) || {}; } catch { /* none yet */ }
+    try { localStorage.setItem(SYNC_KEY('cam' + c.n), JSON.stringify({ ...source, station: own.station || '' })); } catch { /* private mode */ }
+    await pushJudgeSettings('cam' + c.n);
+    const j = judges[c.n];
+    if (j?.frame) { await engineCall(c.n, 'restart'); j.frame.src = judgeUrl(c.n); }
+  }
+}
 addEventListener('message', (e) => {
   if (e.origin !== location.origin || !e.data || !e.data.judge) return;
   const cfg = String(e.data.cfg || '');
   if (cfg === 'upload') {
     if (e.data.judge === 'analysed') { $('upStatus').textContent = 'Analysis finished. Press play on the video to watch it, or Watch an athlete on the right.'; athRev = -1; loadAthletes(); return; }
     if (e.data.judge === 'close' || e.data.judge === 'saved') { $('upSettings').hidden = true; $('upSettingsFrame').src = 'about:blank'; }
-    if (e.data.judge === 'saved' && upPending) { upPending.go = true; if (!upPending.saved) $('upStatus').textContent = 'Starting as soon as the video is on the server…'; upReady(); }
+    const pushed = e.data.judge === 'saved' ? pushJudgeSettings('upload') : Promise.resolve();
+    if (upChosen) {
+      const r = upChosen; upChosen = null;
+      if (e.data.judge === 'saved') pushed.then(() => judgePrevious(r));
+      return;
+    }
+    if (upPicking) {
+      upPicking = false;
+      if (e.data.judge === 'saved') { upConfigured = Date.now(); $('upStatus').textContent = 'Settings saved. Now choose your video.'; $('upFile').click(); }
+      return;
+    }
+    if (e.data.judge === 'saved' && upPending) { upPending.go = true; if (!upPending.saved) $('upStatus').textContent = 'Starting as soon as the video is on the server…'; pushed.then(upReady); }
     else if (e.data.judge === 'saved') toast('Upload settings saved: used for the next video');
     else if (upPending) { upPending = null; $('upStatus').textContent = 'Not started. Judge it from the list below when you\'re ready.'; }
     return;
   }
   if (e.data.judge === 'exit') { const n = +cfg.replace(/\D/g, ''); if (n) setAi(n, false); return; }
   if (!$('rulesBox').hidden) { $('rulesBox').hidden = true; $('rulesFrame').src = 'about:blank'; return; }
-  const n = settingsFor; closeCamSettings();
+  const n = settingsFor, together = $('settingsAll').checked;
+  try { localStorage.setItem('hj_settingsTogether', together ? '1' : '0'); } catch { /* private mode */ }
+  closeCamSettings();
+  if (e.data.judge === 'saved' && together) shareSettings(n);
   if (e.data.judge === 'saved' && startAfter) { startAfter = false; pushJudgeSettings('cam' + n); setAi(n, true); toast(`AI judge started on camera ${n}`); return; }
   startAfter = false;
   if (e.data.judge === 'saved') { pushJudgeSettings('cam' + n).then(() => engineCall(n, 'restart')).then(() => { const j = judges[n]; if (j && j.frame) j.frame.src = judgeUrl(n); }); toast(`Camera ${n} settings saved`); }
@@ -729,9 +775,10 @@ function renderMarkers(force) {
 function goToNumber(x) {
   if (!x) return;
   if (x.src === 'live') { viewCam = x.cam; showTab('live'); replay(new Date(Date.parse(x.firstAt) - 3000), 40, true); return; }
-  const v = upRunning === x.video && document.querySelector('#upStage iframe')?.contentDocument?.querySelector('video');
-  if (!v) { showTab('upload'); upShown = x.video; renderSides(); toast('That video isn\'t open: use Judge again in the list below, then search again.'); return; }
-  showTab('upload'); v.currentTime = Math.max(0, (x.firstT ?? 0) - 3);
+  showTab('upload');
+  if (upShown !== x.video) showUpload(x.video);
+  const v = document.querySelector('#upStage video');
+  if (v) v.currentTime = Math.max(0, (x.firstT ?? 0) - 3);
 }
 function numSearch() {
   const q = $('numSearch').value.trim().toLowerCase(), box = $('numResults');
@@ -755,7 +802,6 @@ $('numSearch').onkeydown = (e) => { if (e.key === 'Enter') { const b = $('numRes
 // ---------------------------------------------------------------- Upload video: judged as it plays, like a live camera
 // The video goes to the server first (kept in its training folder), then the AI judge (always on) plays and judges
 // it from there, reporting everyone it tracks to All results.
-let upRunning = '';
 // ---------------------------------------------------------------- counting reps by hand, to measure the AI judge
 // One person at a time: the video at half speed with only their skeleton, a key press per rep. The AI's own count stays
 // hidden until you finish. Saved at every press, so nothing's lost. Comparing always uses the video's latest judging.
@@ -882,17 +928,18 @@ async function loadUploads() {
   const list = await fetch('/api/uploads').then((r) => r.json()).catch(() => []);
   const whenUp = (n) => { const m = /^(\d{4}-\d\d-\d\d)T(\d\d)-(\d\d)/.exec(n); return m ? `${m[1]} ${m[2]}:${m[3]}` : ''; };
   $('upList').innerHTML = list.map((x) => `<tr><td>${esc(uploadName(x.name))}</td><td class="t">${esc(whenUp(x.name))}</td><td>${(x.size / 1e6).toFixed(0)} MB</td>
-    <td>${athList.filter((a) => a.src === 'upload' && a.video === x.name).length || '–'}</td>
+    <td>${athList.filter((a) => a.src === 'upload' && a.video === x.name).length || (JOB_ACTIVE.has(jobOf(x.name)?.state) ? 'Analysing' : '–')}</td>
     <td><button class="btn" data-show="${esc(x.name)}">Results</button> <button class="btn" data-judge="${esc(x.name)}">Judge again</button> <button class="btn" data-delup="${esc(x.name)}" title="Delete this video and its AI judge entries">🗑 Delete</button></td></tr>`).join('')
     || '<tr><td colspan="5" class="muted">No videos uploaded yet.</td></tr>';
 }
 $('upList').onclick = async (e) => {
   const b = e.target.closest('button'); if (!b) return;
-  if (b.dataset.show) { upShown = b.dataset.show; renderSides(); return; }
+  if (b.dataset.show) { showUpload(b.dataset.show); return; }
   if (b.dataset.judge) return blockedByLive() ? undefined : upConfig(uploadName(b.dataset.judge), b.dataset.judge);
   const name = b.dataset.delup;
   if (!confirm(`Delete ${uploadName(name)} from the server, with the athletes the AI judge found in it?`)) return;
-  if (upRunning === name) { $('upStage').innerHTML = '<div class="msg">Choose a video to judge it.</div>'; upRunning = ''; upAnalysing = false; upPaused = false; renderJudges(); await new Promise((r) => setTimeout(r, 500)); }
+  if (JOB_ACTIVE.has(jobOf(name)?.state)) await jobStop(name);
+  if (upShown === name) { upShown = ''; $('upStage').innerHTML = '<div class="msg">Upload a video to judge it.</div>'; renderSides(); }
   const r = await fetch('/api/uploads?name=' + encodeURIComponent(name), { method: 'DELETE' }).then((x) => x.json()).catch(() => ({ error: 'can\'t reach the server' }));
   toast(r.ok ? 'Deleted' : `Couldn't delete it: ${r.error}`); athRev = -1; loadAthletes(); loadUploads();
 };
@@ -911,59 +958,89 @@ function blockedByLive() {
   busyNote(`${camList(live)} ${live.length === 1 ? 'is' : 'are'} being judged live. A video can't be analysed at the same time, as both would slow down and reps could be missed. Stop the AI judge on the Live tab first, or analyse this video later.`, false);
   return true;
 }
-const upRun = () => { try { return document.querySelector('#upStage iframe')?.contentWindow?.__analysis || null; } catch { return null; } };
-function setUpPaused(on) {
-  const a = upRun(); if (!a || !upAnalysing) return;
-  if (!on && blockedByLive()) return;
-  a.paused = on; upPaused = on;
-  $('upStatus').textContent = on ? `Analysis paused at ${a.pct}%. Live AI judges can run while it's paused.` : 'Analysing again…';
-  $('busyNote').hidden = true; renderJudges(); busyTick();
+// Uploaded videos are analysed on the server, in the background: this only starts them, says how far they've got and shows the results.
+const JOB_ACTIVE = new Set(['queued', 'running', 'waiting']);
+let jobs = [], jobStates = {}, jobTicks = 0;
+const jobOf = (video) => jobs.find((j) => j.video === video);
+function jobText(j) {
+  const name = uploadName(j.video);
+  if (j.state === 'queued') return `${name} is next in the queue. You can close this page.`;
+  if (j.state === 'running') return `Analysing ${name} on the server: ${j.pct || 0}%. You can close this page, and the results will be here when it's done.`;
+  if (j.state === 'waiting') return `${name} is waiting at ${j.pct || 0}%: the live cameras need the server. It carries on when one stops.`;
+  if (j.state === 'done') return `${name} is analysed. The results are on the right.`;
+  if (j.state === 'failed') return `${name} wasn't finished. ${j.why || ''} Use Judge again to retry.`;
+  return `${name}: ${j.why || 'Stopped. What it found so far is on the right.'}`;
 }
-async function stopAnalysis() {
-  const a = upRun();
-  if (a) a.stop = true;
-  upAnalysing = false; upPaused = false;
-  $('upStatus').textContent = 'Stopping the analysis…'; $('busyNote').hidden = true; busyTick();
-  for (let i = 0; i < 40 && a && !a.done; i++) await new Promise((r) => setTimeout(r, 100));
-  await new Promise((r) => setTimeout(r, 800)); // what it found so far is on its way to the server
-  $('upStage').innerHTML = '<div class="msg">Analysis stopped. Use Judge again below to analyse the whole video.</div>'; upRunning = '';
-  $('upStatus').textContent = 'Analysis stopped. What it found so far is on the right.';
-  athRev = -1; loadAthletes(); loadUploads(); renderJudges();
+async function loadJobs() {
+  const list = await fetch('/api/upload-jobs').then((r) => (r.ok ? r.json() : null)).catch(() => null);
+  if (!list) return;
+  const finished = list.filter((j) => !JOB_ACTIVE.has(j.state) && JOB_ACTIVE.has(jobStates[j.id]));
+  const changed = list.some((j) => jobStates[j.id] !== j.state);
+  jobs = list; jobStates = Object.fromEntries(list.map((j) => [j.id, j.state]));
+  const j = upShown ? jobOf(upShown) : null;
+  $('upStop').hidden = !JOB_ACTIVE.has(j?.state);
+  if (j) $('upStatus').textContent = jobText(j);
+  // what it's found so far, and everything once it's done
+  if (finished.length || (list.some((x) => x.state === 'running') && ++jobTicks % 3 === 0)) { athRev = -1; loadAthletes(); }
+  if (changed) loadUploads();
+  for (const x of finished) if (x.state === 'done') toast(`${uploadName(x.video)} is analysed`);
 }
-// keeps the buttons and the "AI judge waiting" message up to date, and notices when the analysis has finished
-function busyTick() {
-  const a = upAnalysing ? upRun() : null;
-  if (a?.done) {
-    upAnalysing = false; upPaused = false;
-    if (/^Analysing/.test($('upStatus').textContent)) $('upStatus').textContent = 'Analysis finished. The results are on the right.';
-    athRev = -1; loadAthletes(); loadUploads(); renderJudges();
-  }
-  $('upPause').hidden = $('upStop').hidden = !upAnalysing;
-  $('upPause').disabled = !upAnalysing || !upRun();
-  $('upPause').textContent = upPaused ? '▶ Resume' : '⏸ Pause';
-  if (a && !a.done && upPaused) $('upStatus').textContent = `Analysis paused at ${a.pct}%. Live AI judges can run while it's paused.`;
-  const held = analysingNow() && st ? st.cams.filter((c) => c.live && !judges[c.n]?.frame && !aiOff(c.n)).map((c) => c.n) : [];
-  if (held.length) {
-    $('busyText').textContent = `${camList(held)} ${held.length === 1 ? 'is' : 'are'} live and recording, but not being judged: AI judges can't run while a video is being analysed. They start when it finishes, or if you pause or stop it.`;
-    $('busyNote').hidden = false; $('busyPause').hidden = !upRun(); $('busyStop').hidden = false; $('busyClose').hidden = true; busyShown = -1;
-  } else if (busyShown === -1) { busyShown = 0; $('busyNote').hidden = true; }
+setInterval(loadJobs, 3000); loadJobs();
+function showUpload(video) {
+  upShown = video; renderSides();
+  $('upStage').innerHTML = `<video controls playsinline preload="metadata" src="/uploads/${encodeURIComponent(video)}"></video>`;
+  const j = jobOf(video);
+  $('upStop').hidden = !JOB_ACTIVE.has(j?.state);
+  if (j) $('upStatus').textContent = jobText(j);
 }
-setInterval(busyTick, 500);
+const jobStop = (video) => fetch('/api/upload-jobs/stop', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ video }) }).catch(() => {});
+$('upStop').onclick = async () => { $('upStatus').textContent = 'Stopping the analysis…'; await jobStop(upShown); loadJobs(); };
 $('busyClose').onclick = () => { busyShown = 0; $('busyNote').hidden = true; };
-$('busyPause').onclick = $('upPause').onclick = () => setUpPaused(!upPaused);
-$('busyStop').onclick = $('upStop').onclick = stopAnalysis;
 $('upFile').addEventListener('click', (e) => { if (blockedByLive()) e.preventDefault(); });
-function judgeUpload(saved, name) {
-  if (blockedByLive()) { $('upStatus').textContent = `${name} is on the server. Use Judge again in the list below when live judging has stopped.`; return; }
-  if (upAnalysing && !confirm('A video is still being analysed. Stop it and analyse this one instead?')) return;
-  upAnalysing = true; upPaused = false;
-  // judges still waiting for a camera that dropped mustn't wake up partway through
-  for (const j of Object.values(judges)) if (j.frame) { const fr = j; saveRound(fr).finally(() => { fr.frame?.remove(); fr.frame = null; }); }
-  upRunning = saved; upShown = saved; renderSides();
-  $('upStage').innerHTML = `<iframe title="AI judge: uploaded video" allow="autoplay; fullscreen" src="/judge/judge.html?video=${encodeURIComponent('/uploads/' + encodeURIComponent(saved))}&name=${encodeURIComponent(name)}&go=1&cfg=upload"></iframe>`;
-  $('upStatus').textContent = `Analysing ${name}: every frame is checked before anything plays, so no jump is missed. Results appear on the right as athletes finish or leave.`;
+async function judgeUpload(saved, name) {
+  showUpload(saved);
+  $('upStatus').textContent = `Sending ${name} to the server's AI judge…`;
+  const r = await fetch('/api/upload-jobs', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ video: saved, name }) }).catch(() => null);
+  if (!r?.ok) { $('upStatus').textContent = `${name} is on the server, but its analysis didn't start. Use Judge again in the list below.`; return; }
+  await loadJobs();
 }
 let upPending = null;   // { name, saved, go } the video chosen, while its Config is open
+let upPicking = false, upConfigured = 0;   // the Config comes first, then the video is chosen
+let upChosen = null;   // a previous recording chosen, while its Config is open
+const recordingLabel = (r) => (r.cam ? `Camera ${r.cam}` : r.name || 'Uploaded video');
+$('upPrev').onclick = async () => {
+  $('prevList').innerHTML = '<p class="muted">Looking…</p>';
+  $('prevBox').hidden = false;
+  const r = await fetch('/api/previous-recordings').then((x) => x.json()).catch(() => ({ error: 'Can\'t reach the server' }));
+  if (r.error) { $('prevList').innerHTML = `<p class="muted">${esc(r.error)}</p>`; return; }
+  $('prevList').innerHTML = r.recordings.length ? r.recordings.map((x) => `<button type="button" data-id="${esc(x.id)}"><span><b>${esc(recordingLabel(x))}</b> · ${esc(new Date(x.startedAt).toLocaleString())}</span><small>${(x.size / 1e6).toFixed(0)} MB</small></button>`).join('')
+    : '<p class="muted">No recordings yet. A recording appears here a couple of minutes after it finishes.</p>';
+  $('prevList').querySelectorAll('button').forEach((b) => {
+    b.onclick = () => {
+      upChosen = r.recordings.find((x) => x.id === b.dataset.id);
+      $('prevBox').hidden = true;
+      $('upSettingsFrame').src = '/judge/judge.html?settings=1&cfg=upload';
+      $('upSettings').hidden = false;
+    };
+  });
+};
+$('prevClose').onclick = () => { $('prevBox').hidden = true; };
+async function judgePrevious(rec) {
+  showTab('upload');
+  $('upStatus').textContent = `Fetching ${recordingLabel(rec)} from cloud storage…`;
+  const r = await fetch('/api/upload-jobs', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ previous: rec.id }) }).then((x) => x.json()).catch(() => ({ error: 'Can\'t reach the server' }));
+  if (r.error) { $('upStatus').textContent = `That recording couldn't be fetched: ${r.error}`; return; }
+  await loadJobs();
+  showUpload(r.video); loadUploads();
+}
+const PICK_WITHIN_MS = 60e3;
+$('upChoose').onclick = () => {
+  if (blockedByLive()) return;
+  if (Date.now() - upConfigured < PICK_WITHIN_MS) { $('upFile').click(); return; } // a browser may refuse to open the picker by itself
+  upPicking = true;
+  $('upSettingsFrame').src = '/judge/judge.html?settings=1&cfg=upload';
+  $('upSettings').hidden = false;
+};
 function upConfig(name, saved) {
   upPending = { name, saved: saved || '', go: false };
   $('upSettingsFrame').src = '/judge/judge.html?settings=1&cfg=upload';
@@ -972,7 +1049,8 @@ function upConfig(name, saved) {
 function upReady() { if (upPending && upPending.go && upPending.saved) { const p = upPending; upPending = null; judgeUpload(p.saved, p.name); } }
 $('upFile').onchange = () => {
   const file = $('upFile').files[0]; $('upFile').value = ''; if (!file) return;
-  upConfig(file.name);
+  upConfigured = 0;
+  upPending = { name: file.name, saved: '', go: true };
   const mine = upPending;
   const x = new XMLHttpRequest();
   x.open('POST', '/api/upload?name=' + encodeURIComponent(file.name));
@@ -987,7 +1065,6 @@ $('upFile').onchange = () => {
   x.onerror = () => { $('upStatus').textContent = 'The upload didn\'t work: can\'t reach the server'; };
   x.send(file);
 };
-$('upCfg').onclick = () => { $('upSettingsFrame').src = '/judge/judge.html?settings=1&cfg=upload'; $('upSettings').hidden = false; };
 
 // ---------------------------------------------------------------- log: camera events on the day
 let logSig = '';

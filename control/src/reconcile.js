@@ -8,6 +8,7 @@ const START_LIMIT_MS = 25 * 60e3;      // not answering this long after starting
 const STOP_GRACE_MS = 15 * 60e3;       // told to stop: this long to finish sending its recordings
 const NO_BOOKING_LIMIT_MS = 18 * 3600e3; // on with no booked end (which shouldn't happen): this long at most
 
+const expired = (want, t) => !!want?.until && t >= want.until;
 const monthOf = (t) => new Date(t).toISOString().slice(0, 7);
 
 /**
@@ -75,8 +76,11 @@ async function reconcile({ store, arm, health, seedFor, now = Date.now, log = ()
         const add = (name, v) => { next[name] = { ...(st[name] || {}) }; next[name][k] = (next[name][k] || 0) + v; };
         next.minutes[k] = (next.minutes[k] || 0) + mins;
         // charged at the price its booking started at, for the cameras booked on this server
-        add('cameraMinutes', mins * (want.bookedCameras || 0));
-        add('charge', (mins / 60) * (want.bookedCameras || 0) * (want.cameraHour || 0));
+        // Customers pay until they press Stop or their booked time ends. The minutes after that, saving the recordings, are our cost.
+        if (want.desired === 'on' && !expired(want, t)) {
+          add('cameraMinutes', mins * (want.bookedCameras || 0));
+          add('charge', (mins / 60) * (want.bookedCameras || 0) * (want.cameraHour || 0));
+        }
         add('azure', (mins / 60) * (want.azureHour || 0));
       }
       if (d.error) { next.error = d.error; next.errorAt = next.errorAt && st.error === d.error ? next.errorAt : t; } else if (d.action === 'create' || d.action === 'start' || d.state === 'on') { next.error = ''; next.errorAt = 0; next.errorDetail = ''; }

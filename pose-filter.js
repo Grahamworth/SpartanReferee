@@ -28,6 +28,22 @@ const copy = (p) => ({ x: p.x, y: p.y, z: p.z ?? 0 });
 
 // Outside the picture: the model still estimates these, just past the edge. Hidden behind someone isn't outside it.
 const EDGE = 0.005;
+// For drawing only, never judging. A joint the model is unsure of sits right at the cut-off, so it would flash on and off from one
+// frame to the next. This keeps a joint where it was last seen for a moment, so it only disappears if it's really gone.
+export const JOINT_HOLD_MS = 600;
+export class JointHold {
+  constructor(holdMs = JOINT_HOLD_MS) { this.holdMs = holdMs; this.people = new Map(); }
+  steady(key, lm, minVis, now) {
+    const seen = this.people.get(key) || [];
+    const out = lm.map((p, i) => {
+      if ((p.visibility ?? 1) >= minVis) { seen[i] = { p, at: now }; return p; }
+      return seen[i] && now - seen[i].at < this.holdMs ? seen[i].p : p;
+    });
+    this.people.set(key, seen);
+    return out;
+  }
+}
+
 export const offPicture = (p) => !!p && (p.x < EDGE || p.x > 1 - EDGE || p.y < EDGE || p.y > 1 - EDGE);
 
 export class PoseFilter {

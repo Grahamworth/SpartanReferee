@@ -18,13 +18,13 @@ function renderFilters() {
 function renderCams() {
   const keep = $('cam').value;
   const cams = [...new Set(all.filter((r) => dayOf(r.startedAt) === $('day').value).map((r) => r.cam))].sort((a, b) => a - b);
-  $('cam').innerHTML = '<option value="">All cameras</option>' + cams.map((c) => `<option value="${c}">Camera ${c}</option>`).join('');
+  $('cam').innerHTML = '<option value="">All cameras</option>' + cams.map((c) => `<option value="${c}">${c ? `Camera ${c}` : 'Uploaded videos'}</option>`).join('');
   if (cams.map(String).includes(keep)) $('cam').value = keep;
   renderList();
 }
 function renderList() {
   const rows = all.filter((r) => dayOf(r.startedAt) === $('day').value && (!$('cam').value || r.cam === +$('cam').value));
-  $('list').innerHTML = rows.map((r) => `<div class="rec-row"><div><b>Camera ${r.cam}</b> · ${esc(new Date(r.startedAt).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' }))}<br><small class="muted">${esc(r.receiver)} · ${size(r.size)}</small></div>
+  $('list').innerHTML = rows.map((r) => `<div class="rec-row"><div><b>${r.cam ? `Camera ${r.cam}` : esc(r.name || 'Uploaded video')}</b> · ${esc(new Date(r.startedAt).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' }))}<br><small class="muted">${esc(r.receiver)} · ${size(r.size)}</small></div>
     <button class="btn btn-red" type="button" data-play="${esc(r.id)}">Play</button><a class="btn btn-ghost" href="${esc(r.download)}">Download</a></div>`).join('')
     || '<p class="empty">Nothing here yet. Recordings appear once a linked Receiver has sent them.</p>';
 }

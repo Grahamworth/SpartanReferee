@@ -55,7 +55,7 @@ test('names that could reach another path are refused', async () => {
   const s = setup();
   const { rk } = await linked(s);
   for (const file of ['../x.mp4', 'a/b.mp4', 'x.exe', '.mp4', '']) assert.strictEqual((await call(s.api, 'POST', 'recordings/upload', rk, { cam: 1, file, size: 1 })).status, 400, file);
-  for (const cam of [0, 100, 'x', 1.5]) assert.strictEqual((await call(s.api, 'POST', 'recordings/upload', rk, { cam, file: FILE, size: 1 })).status, 400);
+  for (const cam of [-1, 100, 'x', 1.5]) assert.strictEqual((await call(s.api, 'POST', 'recordings/upload', rk, { cam, file: FILE, size: 1 })).status, 400);
   for (const size of [0, -1, 6e9, 'x']) assert.strictEqual((await call(s.api, 'POST', 'recordings/upload', rk, { cam: 1, file: FILE, size })).status, 400);
 });
 

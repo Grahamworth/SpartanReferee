@@ -89,6 +89,17 @@ body.picking #replayGrid .tile { cursor: crosshair; outline: 2px dashed var(--am
 
 .settingsbox { background: var(--ink); padding: 10px; display: grid; gap: 10px; margin-bottom: 12px; }
 .settingsbox iframe { width: 100%; height: 75vh; border: 0; background: var(--bg); }
+.settingsbox.popout { position: fixed; z-index: 200; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(900px, 94vw); max-height: 92vh; margin: 0; border: 1px solid var(--line); box-shadow: 0 0 0 100vmax rgba(0, 0, 0, .72); grid-template-rows: auto minmax(0, 1fr); }
+.settingsbox.popout iframe { height: min(74vh, 720px); }
+.settingsbox .check { display: inline-flex; align-items: center; gap: 6px; }
+.jtile .msg.waiting { pointer-events: auto; overflow: auto; padding: 42px 12px 12px; place-items: start center; font-weight: 500; }
+.waitCard { display: grid; gap: 8px; justify-items: center; color: #fff; }
+.waitCard h4 { margin: 0; font-size: 1rem; }
+.waitQrs { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; }
+.waitQrs figure { margin: 0; display: grid; gap: 4px; justify-items: center; font-size: .82rem; color: var(--muted); }
+.waitQrs img { width: clamp(96px, 15vw, 170px); height: auto; background: #fff; }
+.larixBy { font-size: .82rem; color: var(--muted); max-width: 100%; }
+.larixBy code { display: block; margin-top: 3px; padding: 4px 6px; background: #000; color: #fff; overflow-wrap: anywhere; user-select: all; }
 #analysis iframe { height: 80vh; }
 
 /* one athlete (timeline marker / number search) */
@@ -116,7 +127,11 @@ body.picking #replayGrid .tile { cursor: crosshair; outline: 2px dashed var(--am
 .uploadbar select { max-width: 320px; font-size: 15px; padding: 9px; }
 #upStatus { flex: 1 1 300px; }
 .upstage { position: relative; background: #000; aspect-ratio: 16 / 9; max-height: calc(100vh - 200px); width: 100%; }
-.upstage iframe { width: 100%; height: 100%; border: 0; display: block; }
+.prevlist { overflow: auto; max-height: 70vh; display: grid; gap: 6px; }
+.prevlist button { display: flex; justify-content: space-between; gap: 12px; width: 100%; text-align: left; padding: 10px 12px; background: var(--bg); color: #fff; border: 1px solid var(--line); cursor: pointer; font: inherit; }
+.prevlist button:hover, .prevlist button:focus-visible { border-color: #fff; }
+.prevlist small { color: var(--muted); white-space: nowrap; }
+.upstage video { width: 100%; height: 100%; display: block; background: #000; }
 .upstage .msg { position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); font-weight: 700; }
 
 /* AI judge: everyone tracked */

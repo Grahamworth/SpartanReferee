@@ -63,8 +63,9 @@ function createRecordings({ store, signer, now, reply, session, isAdmin }) {
     if (a === 'upload' && method === 'POST') {
       const link = await byKey(h); if (!link) return reply(401, { error: 'That Receiver key isn\'t recognised' });
       const cam = Number(body?.cam), file = String(body?.file || ''), size = Number(body?.size);
-      if (!Number.isInteger(cam) || cam < 1 || cam > 99) return reply(400, { error: 'Which camera?' });
-      if (!/^[\w.+-]{1,100}\.mp4$/.test(file)) return reply(400, { error: 'That isn\'t a recording' });
+      // camera 0 is a video someone uploaded, which can be any of the usual kinds
+      if (!Number.isInteger(cam) || cam < 0 || cam > 99) return reply(400, { error: 'Which camera?' });
+      if (!(cam === 0 ? /^[\w.+-]{1,160}\.(mp4|mov|m4v|webm|mkv)$/i : /^[\w.+-]{1,100}\.mp4$/).test(file)) return reply(400, { error: 'That isn\'t a recording' });
       if (!(size > 0 && size <= MAX_FILE)) return reply(400, { error: 'That recording is too big' });
       const used = (await entries(link.partition)).reduce((n, r) => n + r.size, 0);
       if (used + size > MAX_OWNER) return reply(507, { error: 'Your cloud storage is full' });
@@ -73,12 +74,20 @@ function createRecordings({ store, signer, now, reply, session, isAdmin }) {
     }
     if (a === 'done' && method === 'POST') {
       const link = await byKey(h); if (!link) return reply(401, { error: 'That Receiver key isn\'t recognised' });
-      const blob = String(body?.blob || ''), m = /\/cam(\d{1,2})\/([\w.+-]{1,100}\.mp4)$/.exec(blob), size = Number(body?.size);
+      const blob = String(body?.blob || ''), m = /\/cam(\d{1,2})\/([\w.+-]{1,160}\.(?:mp4|mov|m4v|webm|mkv))$/i.exec(blob), size = Number(body?.size);
       if (!m || !blob.startsWith(`${link.partition.slice(4)}/${link.id}/`) || !(size > 0 && size <= MAX_FILE)) return reply(400, { error: 'That isn\'t your recording' });
       const when = Date.parse(body?.startedAt);
       const id = sha(blob).slice(0, 32);
-      await store.put(link.partition, id, { id, blob, cam: +m[1], file: m[2], size, startedAt: new Date(Number.isNaN(when) ? now() : when).toISOString(), receiver: link.name, at: now() });
+      await store.put(link.partition, id, { id, blob, cam: +m[1], file: m[2], size, name: String(body?.name || '').slice(0, 120), startedAt: new Date(Number.isNaN(when) ? now() : when).toISOString(), receiver: link.name, at: now() });
       return reply(200, { ok: true });
+    }
+    // a server choosing one of its company's recordings to analyse
+    if (a === 'by-key' && method === 'GET') {
+      const link = await byKey(h); if (!link) return reply(401, { error: 'That Receiver key isn\'t recognised' });
+      const list = await entries(link.partition);
+      if (!b) return reply(200, { recordings: list.sort((x, y) => y.startedAt.localeCompare(x.startedAt)).slice(0, 500).map((r) => ({ id: r.id, cam: r.cam, size: r.size, startedAt: r.startedAt, file: r.file, name: r.name || '' })) });
+      const r = list.find((x) => x.id === b); if (!r) return reply(404, { error: 'That recording has gone' });
+      return reply(200, { id: r.id, cam: r.cam, file: r.file, name: r.name || '', startedAt: r.startedAt, url: signer({ blob: r.blob, perm: 'r', minutes: READ_MINUTES }) });
     }
     // ---- what the account holder does, signed in
     const me = session(h); if (!me) return reply(401, { error: 'Sign in to see cloud recordings' });

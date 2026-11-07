@@ -170,6 +170,19 @@ test('Azure: the requests are built as Azure expects, and a power state is read 
   assert.strictEqual(await none.power('nope'), 'none');
 });
 
+test('the charge stops the moment Stop is pressed or the booking ends, though Azure\'s cost carries on until it\'s off', async () => {
+  const k = new Date(NOW).toISOString().slice(0, 7);
+  for (const [why, want] of [['stopped', { desired: 'off', stopRequestedAt: NOW - 60e3, until: NOW + 3600e3 }], ['booked time over', { desired: 'on', until: NOW - 1 }]]) {
+    const rows = new Map([['serverwant/a', { id: 'a', bookedCameras: 2, cameraHour: 1, azureHour: 0.66, ...want }], ['server/a', { id: 'a', vm: 'hj-a', host: 'h' }], ['serverstate/a', { id: 'a', state: 'stopping', checkedAt: NOW - 60e3, minutes: {}, cameraMinutes: { [k]: 10 }, charge: { [k]: 5 }, azure: { [k]: 1 } }]]);
+    const store = { list: async (p) => [...rows].filter(([x]) => x.startsWith(`${p}/`)).map(([, v]) => v), get: async (p, x) => rows.get(`${p}/${x}`) || null, put: async (p, x, v) => { rows.set(`${p}/${x}`, v); } };
+    await reconcile({ store, arm: { power: async () => 'running', deallocate: async () => {} }, health: async () => true, seedFor: async () => ({}), now: () => NOW });
+    const st = rows.get('serverstate/a');
+    assert.strictEqual(st.charge[k], 5, `${why}: no more charge`);
+    assert.strictEqual(st.cameraMinutes[k], 10, `${why}: no more camera time`);
+    assert.ok(st.azure[k] > 1, `${why}: it still costs us`);
+  }
+});
+
 test('Azure: "not yet" is waited out, as a new address takes a few seconds to be ready for its network card', async () => {
   const waits = [], tries = {};
   const doFetch = async (url) => {

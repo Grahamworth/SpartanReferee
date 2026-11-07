@@ -1,6 +1,6 @@
 import { BurpeeJudge, GestureJudge, computeMetrics, DEFAULTS, LM } from './burpee.js';
 import { EXERCISES, exercise, applyStrictness, PushupJudge, STRICTNESS_DEFAULT, strictnessWord, strictnessValue } from './exercises.js';
-import { PoseFilter, TRACKING } from './pose-filter.js';
+import { PoseFilter, TRACKING, JointHold } from './pose-filter.js';
 import { MultiTracker, MULTI_DEFAULTS, fromCrop, drawMasks, scanAreas, joinResults, unclaimedBoxes, boxArea } from './multi.js';
 import { loadFinder } from './finder.js';
 import { prepareDigits } from './ocr-prep.js';
@@ -41,6 +41,7 @@ const PRACTICE = new URLSearchParams(location.search).get('mode') === 'practice'
 // On the server each camera's judge is its own browser (engine=<camera>), sending what it sees many times a second. What people
 // watch (follow=<camera>) is the same page playing the same camera: it runs no models and draws what the judge sent.
 const ENGINE = (new URLSearchParams(location.search).get('engine') || '').replace(/\D/g, '');
+const BACKGROUND = !!new URLSearchParams(location.search).get('bg'); // analysing an upload on the server, with nobody watching
 const FOLLOW = (new URLSearchParams(location.search).get('follow') || '').replace(/\D/g, '');
 // served by the Receiver app (its window, or /judge/ from its review server): the only place the fist test is offered
 const IN_RECEIVER = location.protocol === 'app:' || location.pathname.startsWith('/judge/');
@@ -75,6 +76,7 @@ for (const k of OLD_THRESHOLD_SETTINGS) delete settings[k];
 // Several athletes became the default; phones that saved 'one' before then switch once.
 // The official judge always tracks several athletes. The one-person hand-close test is only in the Receiver.
 settings.people = 'multi';
+if (IN_RECEIVER) settings.captureBib = true; // numbers shown to a camera are always noted, with the time; nobody's asked for one
 if (ENGINE || FOLLOW) settings.record = false; // the server keeps the recordings
 if (exercise(settings.exercise).gestures && !IN_RECEIVER) settings.exercise = 'burpees';
 // Analysing a test video first, then playing it at normal speed, became the
@@ -826,7 +828,9 @@ function sendSnap(t) {
   snapAt = at; snapBusy = true;
   const snap = snapshot(t);
   snap.fps = Math.round((procFps() ?? 0) * 10) / 10;
-  snap.tracks = snap.tracks.map((k) => ({ ...k, lm: k.lm.map((p) => ({ x: small(p.x), y: small(p.y), visibility: Math.round((p.visibility ?? 1) * 100) / 100 })) }));
+  const small3 = (p) => ({ x: small(p.x), y: small(p.y), visibility: Math.round((p.visibility ?? 1) * 100) / 100 });
+  if (snap.lm) snap.lm = snap.lm.map(small3);
+  if (snap.tracks) snap.tracks = snap.tracks.map((k) => ({ ...k, lm: k.lm.map((p) => ({ x: small(p.x), y: small(p.y), visibility: Math.round((p.visibility ?? 1) * 100) / 100 })) }));
   fetch(`/api/engine/${ENGINE}/snap`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(snap) }).catch(() => {}).finally(() => { snapBusy = false; });
 }
 
@@ -850,6 +854,7 @@ function goScan() {
   $('manualBib').value = '';
   S.multi = null;
   if (multiMode()) { startMulti(); return; }
+  if (IN_RECEIVER && !PRACTICE) { startAtOnce(); return; }
   if (!settings.captureBib || currentExercise().gestures) { goPosition(String(++S.athleteNo), 'none'); return; }
   show('scan');
 }
@@ -870,6 +875,16 @@ function goPosition(bib, source = 'typed', conf = null) {
   loadLandmarker().catch((e) => showFlash(false, 'Pose model not loaded', e.message));
 }
 
+// On a server there's nothing to answer and nothing to wait for: judging starts the moment it's asked to.
+function startAtOnce() {
+  S.bib = String(++S.athleteNo);
+  S.bibSource = 'none';
+  S.bibConf = null;
+  setBibWord('none');
+  if (!FOLLOW) loadLandmarker().catch((e) => showFlash(false, 'Pose model not loaded', e.message)); // a viewer only draws what the server sends
+  startAttempt();
+}
+
 // Number known and athlete standing in view: show the number and a green
 // START, and start judging straight away (the first plank is a second away).
 function startAttempt() {
@@ -878,6 +893,7 @@ function startAttempt() {
   S.attempt = newAttempt(S.bib, settings.station);
   startRecording();
   beginCounting();
+  if (IN_RECEIVER && !PRACTICE) return;
   if (PRACTICE) { S.finalSaid = null; showCallout('GO!', 900); return; }
   showStart(S.bib);
   beep(1320, 400, 'square', 0.2);
@@ -970,7 +986,7 @@ function beginCounting() {
   S.lastPoseT = null;
   $('cntBib').textContent = S.attempt.bib;
   setBibWord(S.attempt.bibSource);
-  $('count').classList.toggle('multi', !!S.multi);
+  $('count').classList.toggle('multi', !!S.multi || (IN_RECEIVER && !PRACTICE)); // no counter in the middle of the picture
   $('endAttempt').textContent = PRACTICE ? 'Stop' : S.multi ? 'End round' : 'End attempt';
   if (S.multi) renderMulti();
   $('cntTarget').textContent = S.attempt.target;
@@ -1614,9 +1630,11 @@ const BONES = [
   [LM.R_ANK, LM.R_HEEL], [LM.R_HEEL, LM.R_FOOT], [LM.R_ANK, LM.R_FOOT],
 ];
 
-function drawSkeleton(lm, w, h, color, thin = false) {
+const jointHold = new JointHold();
+function drawSkeleton(raw, w, h, color, thin = false, who = 'one') {
   const lw = Math.max(thin ? 2 : 3, w / (thin ? 400 : 220));
   const minVis = tracking().minVis;
+  const lm = jointHold.steady(who, raw, minVis, performance.now());
   const ok = (i) => (lm[i].visibility ?? 1) >= minVis;
   ctx.lineWidth = lw;
   ctx.lineCap = 'round';
@@ -1656,7 +1674,7 @@ function drawBurnIn(w, h) {
   const elapsed = a.goAt ? fmtTime(clockNow() - a.goAt) : 'starting';
   const line1 = S.multi
     ? `${(S.replay ? replayAt(clockNow())?.people || [] : S.multi.athletes.map((k) => ({ label: k.label, count: k.judge.count }))).map((k) => `${k.label}: ${k.count}/${a.target}`).join('   ') || 'WAITING FOR ATHLETES'}   ${elapsed}`
-    : `${a.bibSource === 'none' ? 'ATHLETE' : 'BIB'} ${a.bib}   ${a.reps}/${a.target}   NO REP ${a.noReps}   ${elapsed}`;
+    : `${a.bibSource === 'none' ? 'ATHLETE' : 'BIB'} ${a.bib}   ${a.target >= PRACTICE_REPS ? a.reps : `${a.reps}/${a.target}`}   NO REP ${a.noReps}   ${elapsed}`;
   const line2 = `${a.station || 'Station'}   ${new Date().toLocaleString()}`;
   let fs = Math.max(14, Math.round(h / 28));
   ctx.font = `700 ${fs}px Barlow, Arial, sans-serif`;
@@ -1772,7 +1790,8 @@ function analyseFrame(src, w, h, t) {
     S.procTimes.push(performance.now());
     if (S.procTimes.length > 30) S.procTimes.shift();
     paceTestVideo();
-    if (S.multi) { onMulti(t); if (ENGINE) sendSnap(t); } else onPose(t);
+    if (S.multi) onMulti(t); else onPose(t);
+    if (ENGINE && S.attempt) sendSnap(t);
 }
 
 function drawFrame(src, w, h, wantPose, practice) {
@@ -1797,8 +1816,8 @@ function drawFrame(src, w, h, wantPose, practice) {
     // Everyone being tracked is outlined, so it's clear they've been seen:
     // thin grey until their first good burpee, then in their own colour.
     for (const k of view) {
-      if (k.label == null) { drawSkeleton(k.lm, w, h, 'rgba(200, 200, 200, 0.8)', true); continue; }
-      drawSkeleton(k.lm, w, h, k.flash ? (k.flash === 'good' ? '#22c55e' : '#e2231a') : athleteColour(k.label));
+      if (k.label == null) { drawSkeleton(k.lm, w, h, 'rgba(200, 200, 200, 0.8)', true, `new${view.indexOf(k)}`); continue; }
+      drawSkeleton(k.lm, w, h, k.flash ? (k.flash === 'good' ? '#22c55e' : '#e2231a') : athleteColour(k.label), false, k.label);
     }
   }
   if (practice && S.handLm) {
@@ -2421,7 +2440,7 @@ async function prepass(range) {
       try { S.findBoxes = await S.finder.find(src, w, h); } catch { S.findBoxes = null; }
     }
     analyseFrame(src, w, h, t);
-    S.replay.push(snapshot(t));
+    if (!BACKGROUND) S.replay.push(snapshot(t)); // for playing it back here, and a long video would fill the memory
     if (i % 5 === 0) {
       showLoader(`${range ? 'Analysing the athlete' : 'Analysing the video'}… ${Math.round((100 * (i - i0)) / Math.max(1, n - i0))}%`);
       await new Promise((r) => setTimeout(r));
@@ -2817,7 +2836,8 @@ else if (onlyRules) {
   showRules(true);
   $('rulesClose').addEventListener('click', () => { try { parent.postMessage({ judge: 'close', cfg: CFG }, location.origin); } catch { /* not in a frame */ } });
 } else if (!new URLSearchParams(location.search).get('settings')) show('home');
-preloadModel();
+// A viewer of a server's judge, and the settings and rules pages, draw and show things: the models are never needed there.
+if (!FOLLOW && !new URLSearchParams(location.search).get('settings') && !onlyRules && !onlyAttempt) preloadModel();
 requestAnimationFrame(frame);
 
 // The round in progress, saved (counts, numbers, video): before the video review stops or restarts this judge.
