@@ -1,6 +1,7 @@
 // Registering a company for HeadJudge: sign in, details, logo and colours with a live preview. Once registered, the same page
 // shows where the application stands and changes the details.
 import { call, googleButton, signedIn, getMe, signOut } from './api-base.js';
+import { emailButtons } from './email-signin-web.js';
 
 const { applyTheme, themeVars, contrast, HEADJUDGE } = window.HeadJudgeBrand;
 const $ = (id) => document.getElementById(id);
@@ -154,7 +155,9 @@ async function start() {
   wire(); drawPreview();
   if (!signedIn()) {
     show($('signIn'), true);
-    await googleButton($('googleBtn'), () => { show($('signIn'), false); enter(); }, (e) => error('signInError', e.message || 'Sign-in didn\'t work: try again'));
+    const failed = (e) => error('signInError', e.message || 'Sign-in didn\'t work: try again');
+    emailButtons($('emailBtns'), 'register.html', failed);
+    await googleButton($('googleBtn'), () => { show($('signIn'), false); enter(); }, failed);
     return;
   }
   enter();

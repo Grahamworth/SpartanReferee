@@ -1,8 +1,8 @@
-// Sets up email registration for the Broadcaster: Microsoft Entra External ID, as FinFun uses. Microsoft sends the
+// Sets up email accounts for companies on the website: Microsoft Entra External ID, as FinFun uses. Microsoft sends the
 // emails (the code that proves an address at sign-up, the code at each sign-in, password reset), so this needs no
 // mail service or DNS. Each step is skipped if it's done, so it's safe to run again.
-//   node scripts/set-up-broadcaster-sign-in.mjs --tenant-only   creates the tenant (up to 30 minutes), with no sign-in
-//   node scripts/set-up-broadcaster-sign-in.mjs                 asks for one Microsoft sign-in by code, then does the rest
+//   node scripts/set-up-email-sign-in.mjs --tenant-only   creates the tenant (up to 30 minutes), with no sign-in
+//   node scripts/set-up-email-sign-in.mjs                 asks for one Microsoft sign-in by code, then does the rest
 // The rest is: the app (a public client, so there's no secret to keep), the sign-up flow, emailed codes as the second
 // step, a Conditional Access policy requiring it, and the site's settings.
 // Microsoft refuses a policy aimed at a public client, so this one covers everything in the tenant, which holds only
@@ -20,8 +20,9 @@ const RESOURCE_GROUP = "rg-headjudge-uksouth";
 const SITE = "headjudge";
 const SUBDOMAIN = "headjudge";
 const TENANT_NAME = "HeadJudge";
-const APP_NAME = "HeadJudge Broadcaster";
-const REDIRECT_URI = "com.vdaso.spartans.broadcast://auth"; // the app's own link; api/src/email-signin.js has it too
+const APP_NAME = "HeadJudge Broadcaster"; // the name it was first made under, which is how this finds it; people see "HeadJudge"
+// api/src/email-signin.js has these too. The first is for Broadcaster apps installed while that app had sign-in.
+const REDIRECT_URIS = ["com.vdaso.spartans.broadcast://auth", "https://zealous-island-03d6db503.8.azurestaticapps.net/email-return.html"];
 const USER_FLOW_NAME = "BroadcasterSignUpSignIn";
 const POLICY_NAME = "HeadJudge Broadcaster: require MFA";
 
@@ -45,7 +46,7 @@ const TENANT_WAIT_MINUTES = 45;
 const DEFAULTS_WAIT_MINUTES = 15;
 
 const { values } = parseArgs({ options: { "tenant-only": { type: "boolean", default: false } } });
-const settingsFile = join(dirname(fileURLToPath(import.meta.url)), "broadcaster-sign-in.json");
+const settingsFile = join(dirname(fileURLToPath(import.meta.url)), "email-sign-in.json");
 const az = (...args) => execFileSync("az", [...args, "--subscription", SUBSCRIPTION], { encoding: "utf8", shell: process.platform === "win32", stdio: ["ignore", "pipe", "inherit"] }).trim();
 
 async function arm(path, { method = "GET", body } = {}) {
@@ -123,14 +124,22 @@ function makeGraph(token) {
 
 async function createApp(graph) {
   const found = await graph(`/applications?$filter=displayName eq '${APP_NAME}'`);
-  if (found?.value?.[0]) return found.value[0];
+  const existing = found?.value?.[0];
+  if (existing) {
+    const known = existing.publicClient?.redirectUris ?? [];
+    if (REDIRECT_URIS.some((uri) => !known.includes(uri))) {
+      console.log("Adding the website's return address.");
+      await graph(`/applications/${existing.id}`, { method: "PATCH", body: { publicClient: { redirectUris: [...new Set([...known, ...REDIRECT_URIS])] } } });
+    }
+    return existing;
+  }
   console.log(`Creating the ${APP_NAME} app.`);
   return graph("/applications", {
     method: "POST",
     body: {
       displayName: APP_NAME,
       signInAudience: "AzureADMyOrg",
-      publicClient: { redirectUris: [REDIRECT_URI] },
+      publicClient: { redirectUris: REDIRECT_URIS },
       // so the ID token carries the address the person signed up with
       optionalClaims: { idToken: [{ name: "email", essential: false }] },
       requiredResourceAccess: [{ resourceAppId: MICROSOFT_GRAPH_APP_ID, resourceAccess: Object.values(SIGN_IN_PERMISSIONS).map((id) => ({ id, type: "Scope" })) }],

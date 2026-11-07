@@ -189,3 +189,10 @@ select { width: 100%; font: inherit; color: var(--text); background: var(--bg); 
 .custUse { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; margin: 12px 0 0; padding-top: 10px; border-top: 1px solid var(--line); }
 .custUse dt { color: var(--muted); font-size: .85rem; }
 .custUse dd { margin: 0; font: 700 1.3rem var(--display); }
+
+/* email sign-in, beside the Google button */
+.orLine { display: flex; align-items: center; gap: 10px; margin: 16px 0 0; color: var(--muted); font-size: .9rem; }
+.orLine::before, .orLine::after { content: ""; flex: 1; border-top: 1px solid var(--line); }
+.emailBtn { margin-top: 12px; }
+.emailCreate { display: block; margin: 10px auto 0; }
+#emailBtns .note { text-align: center; }

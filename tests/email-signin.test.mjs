@@ -1,34 +1,13 @@
-// The Broadcaster's sign-in: the parts that must be right whatever Microsoft's page does.
+// Email sign-in on the website: the parts that must be right whatever Microsoft's page does. And the Broadcaster has none.
 import test from 'node:test';
 import assert from 'node:assert';
 import fs from 'node:fs';
+import { randomText, challengeFor, signInAddress, readReturn } from '../email-signin-core.js';
 
-globalThis.location ??= { protocol: 'file:', hostname: '', port: '' }; // api-base.js looks at where it's running
-const { sessionOpen, needsRenewal, lockDue, randomText, challengeFor, signInAddress, readReturn } = await import('../broadcaster-signin.js');
+const read = (f) => fs.readFileSync(new URL(`../${f}`, import.meta.url), 'utf8');
+const RETURN = 'https://site.example/email-return.html', APP = 'com.vdaso.spartans.broadcast://auth';
+const pending = { verifier: 'v', state: 'the-state', redirectUri: RETURN };
 
-const session = (exp) => `${Buffer.from(JSON.stringify({ uid: 'e_x', exp })).toString('base64url')}.signature`;
-const REDIRECT = 'com.vdaso.spartans.broadcast://auth';
-const pending = { verifier: 'v', state: 'the-state', redirectUri: REDIRECT };
-
-test('a session counts until it runs out', () => {
-  assert.strictEqual(sessionOpen(session(2000), 1000), true);
-  assert.strictEqual(sessionOpen(session(1000), 2000), false);
-});
-test('anything that isn\'t a session doesn\'t count', () => {
-  for (const t of ['', 'nonsense', 'a.b', null, undefined]) assert.strictEqual(sessionOpen(t), false);
-});
-test('a session is renewed once it has been used for about a day, not at every unlock', () => {
-  const DAY = 24 * 3600 * 1000, NOW = 1000 * DAY;
-  assert.strictEqual(needsRenewal(session(NOW + 30 * DAY), NOW), false);
-  assert.strictEqual(needsRenewal(session(NOW + 29 * DAY - 1), NOW), true);
-  assert.strictEqual(needsRenewal('nonsense', NOW), false);
-});
-test('the phone\'s lock asks again after five minutes away, and not when the app was never away', () => {
-  const MIN = 60 * 1000, NOW = 1000 * MIN;
-  assert.strictEqual(lockDue(0, NOW), false);
-  assert.strictEqual(lockDue(NOW - 5 * MIN + 1, NOW), false);
-  assert.strictEqual(lockDue(NOW - 5 * MIN, NOW), true);
-});
 test('the challenge is the standard PKCE one (RFC 7636\'s worked example)', async () => {
   assert.strictEqual(await challengeFor('dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk'), 'E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM');
 });
@@ -38,48 +17,51 @@ test('a verifier is long enough for Microsoft and the API, and different each ti
   assert.notStrictEqual(a, b);
 });
 test('the sign-in address asks for a code with PKCE, and opens on sign-up or asks again', () => {
-  const cfg = { authorizeUrl: 'https://headjudge.ciamlogin.com/t/oauth2/v2.0/authorize', clientId: 'cid', redirectUri: REDIRECT };
+  const cfg = { authorizeUrl: 'https://headjudge.ciamlogin.com/t/oauth2/v2.0/authorize', clientId: 'cid', redirectUri: RETURN };
   const q = (create) => new URL(signInAddress(cfg, { create, state: 's', challenge: 'c' })).searchParams;
   assert.strictEqual(q(true).get('prompt'), 'create');
   assert.strictEqual(q(false).get('prompt'), 'login');
-  assert.strictEqual(q(false).get('redirect_uri'), REDIRECT);
+  assert.strictEqual(q(false).get('redirect_uri'), RETURN);
   assert.strictEqual(q(false).get('response_type'), 'code');
   assert.strictEqual(q(false).get('code_challenge_method'), 'S256');
   assert.strictEqual(q(false).get('scope'), 'openid profile email');
 });
 test('a good return gives the code', () => {
-  assert.deepStrictEqual(readReturn(`${REDIRECT}?code=abc&state=the-state`, pending), { code: 'abc' });
+  assert.deepStrictEqual(readReturn(`${RETURN}?code=abc&state=the-state`, pending), { code: 'abc' });
 });
-test('Microsoft adds a slash to the address when it sends you back, and that still signs you in', () => {
-  assert.deepStrictEqual(readReturn(`${REDIRECT}/?code=abc&state=the-state`, pending), { code: 'abc' });
-  assert.match(readReturn(`${REDIRECT}/?error=login_required&error_description=AADSTS50058%3a+no+user&state=the-state`, pending).message, /AADSTS50058/);
-  assert.strictEqual(readReturn(`${REDIRECT}/other?code=abc&state=the-state`, pending), null);
+test('Microsoft adds a slash to an address with no path, and that still counts', () => {
+  const app = { ...pending, redirectUri: APP };
+  assert.deepStrictEqual(readReturn(`${APP}/?code=abc&state=the-state`, app), { code: 'abc' });
+  assert.match(readReturn(`${APP}/?error=login_required&error_description=AADSTS50058%3a+no+user&state=the-state`, app).message, /AADSTS50058/);
+  assert.strictEqual(readReturn(`${APP}/other?code=abc&state=the-state`, app), null);
 });
 test('a return with the wrong state is refused, so a stranger\'s link can\'t sign you in as them', () => {
-  assert.match(readReturn(`${REDIRECT}?code=abc&state=other`, pending).message, /match/);
+  assert.match(readReturn(`${RETURN}?code=abc&state=other`, pending).message, /match/);
 });
 test('other links, or a link with no sign-in under way, are ignored', () => {
   assert.strictEqual(readReturn('https://example.com/?code=abc', pending), null);
-  assert.strictEqual(readReturn(`${REDIRECT}.evil?code=abc&state=the-state`, pending), null);
-  assert.strictEqual(readReturn(`${REDIRECT}?code=abc&state=the-state`, null), null);
+  assert.strictEqual(readReturn(`${RETURN}.evil?code=abc&state=the-state`, pending), null);
+  assert.strictEqual(readReturn(`${RETURN}?code=abc&state=the-state`, null), null);
 });
 test('cancelling and Microsoft\'s errors say so, with its code to look up', () => {
-  assert.match(readReturn(`${REDIRECT}?error=access_denied&state=the-state`, pending).message, /cancelled/);
-  assert.match(readReturn(`${REDIRECT}?error=access_denied&error_description=AADSTS53003%3A+blocked&state=the-state`, pending).message, /AADSTS53003/);
+  assert.match(readReturn(`${RETURN}?error=access_denied&state=the-state`, pending).message, /cancelled/);
+  assert.match(readReturn(`${RETURN}?error=access_denied&error_description=AADSTS53003%3A+blocked&state=the-state`, pending).message, /AADSTS53003/);
 });
-test('the app is built with the sign-in screen, its link and the plugins it needs', () => {
-  const s = fs.readFileSync(new URL('../scripts/build-broadcaster.sh', import.meta.url), 'utf8');
-  assert.match(s, /broadcaster-signin\.js/);
-  assert.match(s, /android:scheme="com\.vdaso\.spartans\.broadcast" android:host="auth"/);
-  assert.match(s, /@capacitor\/browser/);
-  assert.match(s, /@capacitor\/app/);
-  assert.match(s, /html:not\(\.hj-in\) main/, 'the page stays hidden until signed in');
-  assert.match(s, /registerPlugin\(PhoneLockPlugin\.class\)/, 'the phone\'s lock opens the app');
-  assert.match(s, /androidx\.biometric/);
+test('companies can use email on the registration page and console, but the admin area stays Google only', () => {
+  for (const [html, js] of [['register.html', 'register.js'], ['console.html', 'console.js']]) {
+    assert.match(read(html), /id="emailBtns"/, html);
+    assert.match(read(js), /emailButtons\(/, js);
+  }
+  assert.doesNotMatch(read('customers.html'), /emailBtns/);
+  assert.doesNotMatch(read('customers.js'), /emailButtons/);
 });
-test('the phone\'s lock is only in the Broadcaster, not the Spartans app', () => {
-  const main = fs.readFileSync(new URL('../app/native/android/MainActivity.java', import.meta.url), 'utf8');
-  assert.doesNotMatch(main, /PhoneLock/);
-  const plugin = fs.readFileSync(new URL('../app/native/broadcaster/PhoneLockPlugin.java', import.meta.url), 'utf8');
-  assert.match(plugin, /BIOMETRIC_WEAK \| BiometricManager\.Authenticators\.DEVICE_CREDENTIAL/, 'fingerprint or face, and the passcode');
+test('the return page only ever goes back to our own pages', () => {
+  assert.match(read('email-signin-web.js'), /new Set\(\['register\.html', 'console\.html'\]\)/);
+});
+test('the Broadcaster has no account: it opens straight on its camera page', () => {
+  const s = read('scripts/build-broadcaster.sh');
+  assert.match(s, /judge-gate\.js\\"><\\\/script>\\s\*\/, ''\)/);
+  for (const gone of ['broadcaster-signin', '@capacitor/browser', '@capacitor/app', 'PhoneLock', 'biometric', 'android:scheme']) assert.ok(!s.includes(gone), gone);
+  assert.ok(!fs.existsSync(new URL('../broadcaster-signin.js', import.meta.url)));
+  for (const guide of ['phone.html', 'streaming.html']) assert.doesNotMatch(read(guide), /<b>Create account<\/b>/, guide);
 });

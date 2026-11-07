@@ -78,7 +78,6 @@ const DEFAULT_CONTENT = {
 const ABUSE = /\b(kys|kill (your|ur) ?self|go die|hope you die|neck yourself|idiot|idiots|moron|morons|imbecile|dumbass|dumb ass|loser|losers|scumbag|piece of (shit|crap)|shut up|stfu|gtfo|fat (cow|pig)|ugly (cow|pig|bitch)|retarded|cripple|freak|worthless|pathetic|i('| wi)ll (kill|hurt|find) you|slag|whore|tramp|nonce|paedo|pedo)\b/i;
 const MAX_LEN = 500, SHOW = 80, KEEP = 400, GAP_MS = 10 * 1000, PER_DAY = 60, REPORTERS_TO_BAN = 3, GROUP_MAX = 60;
 const LINKY = /(https?:\/\/|www\.|\b[a-z0-9-]+\.(com|net|org|io|co|uk|de|fr|it|ch|at|ru|xyz|info|biz|link|ly|me|app)\b|@[a-z0-9-]+\.[a-z]{2,}|(\+?\d[\s-]?){9,})/i;
-const EMAIL_SESSION_MS = 30 * 24 * 3600 * 1000, EMAIL_CHECK_MS = 90 * 24 * 3600 * 1000;
 const CORS = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Authorization, Content-Type, X-Device, X-Admin-Key, X-Server-Key', 'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS' };
 const clean = (s, max) => String(s || '').replace(/[\u0000-\u0009\u000b-\u001f<>]/g, '').replace(/\n{3,}/g, '\n\n').trim().slice(0, max);
 
@@ -329,21 +328,13 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
     if (!emailSignIn || !secret) return reply(503, { error: 'Email sign-in isn’t set up on the server yet' });
     const code = (body && body.code) || '', verifier = (body && body.verifier) || '';
     if (typeof code !== 'string' || !code || code.length > 8192 || typeof verifier !== 'string' || !/^[\w.~-]{43,128}$/.test(verifier)) return reply(400, { error: 'That sign-in link isn’t right – try again' });
-    let c; try { c = await emailSignIn.redeem(code, verifier); } catch { return reply(401, { error: 'Sign-in didn’t work – try again' }); }
+    const redirectUri = body && typeof body.redirectUri === 'string' ? body.redirectUri : undefined; // the website's; the app sends none
+    let c; try { c = await emailSignIn.redeem(code, verifier, redirectUri); } catch { return reply(401, { error: 'Sign-in didn’t work – try again' }); }
     const uid = 'e_' + crypto.createHash('sha256').update(String(c.sub)).digest('base64url').slice(0, 22);
     const user = { id: uid, email: c.email, name: c.name, picture: '' };
     await store.put('user', uid, user);
     await touchProfile(uid, { email: user.email, ...(user.name && !(await store.get('profile', uid) || {}).name ? { name: user.name.slice(0, 30) } : {}) });
-    return reply(200, { token: sign({ uid, since: now(), exp: now() + EMAIL_SESSION_MS }), user });
-  }
-  // The Broadcaster asks for this after the phone's fingerprint or passcode has opened it, so someone in regular use
-  // isn't sent back to their email each month. Microsoft still checks the account at least every 90 days, which is
-  // also the longest an account removed there can carry on.
-  function authRenew(h) {
-    const s = session(h);
-    if (!s || !String(s.uid).startsWith('e_')) return reply(401, { error: 'Please sign in again' });
-    const since = s.since || s.exp - EMAIL_SESSION_MS; // a session from before this existed says only when it ends
-    return reply(200, { token: sign({ uid: s.uid, since, exp: Math.max(s.exp, Math.min(now() + EMAIL_SESSION_MS, since + EMAIL_CHECK_MS)) }) });
+    return reply(200, { token: sign({ uid, exp: now() + 30 * 24 * 3600 * 1000 }), user });
   }
   async function me(h) {
     const id = who(h); if (!id) return reply(400, { error: 'This device has no id yet – reload the app' });
@@ -572,7 +563,6 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
       if (parts[0] === 'config' && method === 'GET') r = reply(200, { googleClientId, signIn: !!(verifyGoogle && secret && googleClientId), emailSignIn: emailSignIn && secret ? emailSignIn.config : null });
       if (parts[0] === 'auth' && parts[1] === 'google' && method === 'POST') r = await authGoogle(body, h);
       if (parts[0] === 'auth' && parts[1] === 'email' && method === 'POST') r = await authEmail(body);
-      if (parts[0] === 'auth' && parts[1] === 'renew' && method === 'POST') r = authRenew(h);
       if (parts[0] === 'me' && method === 'GET') r = await me(h);
       if (parts[0] === 'profile' && parts.length <= 2) r = await profile(method, parts[1], body, h);
       if (parts[0] === 'news' && method === 'GET') r = await news();

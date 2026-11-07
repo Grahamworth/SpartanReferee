@@ -3,7 +3,7 @@ const test = require('node:test');
 const assert = require('node:assert');
 const { createApi } = require('../src/core');
 const { memoryStore } = require('../src/store');
-const { createEmailSignIn, REDIRECT_URI } = require('../src/email-signin');
+const { createEmailSignIn, REDIRECT_URI, WEB_REDIRECT_URI } = require('../src/email-signin');
 
 const TENANT = '3F85A2EE-0000-0000-0000-000000000001', CLIENT = 'broadcaster-client';
 const VERIFIER = 'a'.repeat(43), NOW = 1_800_000_000_000;
@@ -15,9 +15,9 @@ test('with no settings there is no email sign-in', () => {
   assert.strictEqual(createEmailSignIn({ subdomain: '', tenantId: TENANT, clientId: CLIENT }), null);
 });
 
-test('the app is told where to go, and nothing secret', () => {
+test('the page is told where to go, and nothing secret', () => {
   const { config } = signIn(answering(200, {}));
-  assert.deepStrictEqual(config, { authorizeUrl: `https://headjudge.ciamlogin.com/${TENANT}/oauth2/v2.0/authorize`, clientId: CLIENT, redirectUri: REDIRECT_URI });
+  assert.deepStrictEqual(config, { authorizeUrl: `https://headjudge.ciamlogin.com/${TENANT}/oauth2/v2.0/authorize`, clientId: CLIENT, redirectUri: REDIRECT_URI, webRedirectUri: WEB_REDIRECT_URI });
 });
 
 test('a code is swapped with its verifier, and gives who it is', async () => {
@@ -51,56 +51,12 @@ function site(emailSignIn) {
 }
 const pretend = (who) => ({ config: { authorizeUrl: 'u', clientId: 'c', redirectUri: REDIRECT_URI }, redeem: async (code) => { if (code !== 'good') throw new Error('bad'); return who; } });
 
-const DAY = 24 * 3600 * 1000;
-const claims = (token) => JSON.parse(Buffer.from(token.split('.')[0], 'base64url').toString());
-function renewing(startAt) {
-  let at = startAt;
-  const api = createApi({ store: memoryStore(), now: () => at, secret: 'test-secret-test-secret-test-secret', adminEmails: [], emailSignIn: pretend({ sub: 'person-1', email: 'sam@example.com', name: 'Sam' }) });
-  const renew = (token) => api.handle({ method: 'POST', path: 'auth/renew', headers: token ? { authorization: `Bearer ${token}` } : {}, body: {} });
-  return { api, renew, later: (days) => { at += days * DAY; return at; } };
-}
-test('using the app renews its session, up to 90 days from the last email sign-in', async () => {
-  const { api, renew, later } = renewing(NOW);
-  const first = (await api.handle({ method: 'POST', path: 'auth/email', headers: {}, body: { code: 'good', verifier: VERIFIER } })).body.token;
-  assert.strictEqual(claims(first).since, NOW);
-  assert.strictEqual(claims(first).exp, NOW + 30 * DAY);
-  const at20 = later(20);
-  const second = (await renew(first)).body.token;
-  assert.strictEqual(claims(second).exp, at20 + 30 * DAY);
-  assert.strictEqual(claims(second).since, NOW, 'renewing doesn\'t restart the 90 days');
-  later(25); // day 45
-  const third = (await renew(second)).body.token;
-  later(25); // day 70: the limit is now nearer than 30 days away
-  const fourth = (await renew(third)).body.token;
-  assert.strictEqual(claims(fourth).exp, NOW + 90 * DAY);
-  later(19); // day 89
-  assert.strictEqual(claims((await renew(fourth)).body.token).exp, NOW + 90 * DAY);
-  later(2); // day 91: over, so it's back to email
-  assert.strictEqual((await renew(fourth)).status, 401);
-});
-test('a session from before renewing existed counts its 90 days from when it began', async () => {
-  const { api, renew, later } = renewing(NOW);
-  const old = (await api.handle({ method: 'POST', path: 'auth/email', headers: {}, body: { code: 'good', verifier: VERIFIER } })).body.token;
-  const c = claims(old); delete c.since;
-  const crypto = require('node:crypto'), p = Buffer.from(JSON.stringify(c)).toString('base64url');
-  const noSince = `${p}.${crypto.createHmac('sha256', 'test-secret-test-secret-test-secret').update(p).digest('base64url')}`;
-  later(1);
-  assert.strictEqual(claims((await renew(noSince)).body.token).since, NOW);
-});
-test('renewing needs a real, live email session', async () => {
-  const { api, renew, later } = renewing(NOW);
-  assert.strictEqual((await renew('')).status, 401);
-  const token = (await api.handle({ method: 'POST', path: 'auth/email', headers: {}, body: { code: 'good', verifier: VERIFIER } })).body.token;
-  assert.strictEqual((await renew(`${token}x`)).status, 401, 'an altered session');
-  const [p] = token.split('.');
-  assert.strictEqual((await renew(`${p}.forged`)).status, 401, 'a forged signature');
-  later(31);
-  assert.strictEqual((await renew(token)).status, 401, 'a session that has run out can\'t be renewed');
-});
-test('a Google session isn\'t renewed this way', async () => {
-  const crypto = require('node:crypto'), { renew } = renewing(NOW);
-  const p = Buffer.from(JSON.stringify({ uid: 'g_someone', exp: NOW + DAY })).toString('base64url');
-  assert.strictEqual((await renew(`${p}.${crypto.createHmac('sha256', 'test-secret-test-secret-test-secret').update(p).digest('base64url')}`)).status, 401);
+test('the website swaps its code using its own return address, and no other address is accepted', async () => {
+  const sent = [];
+  await signIn(answering(200, { id_token: idToken({}) }, sent)).redeem('c', VERIFIER, WEB_REDIRECT_URI);
+  assert.strictEqual(sent[0].form.redirect_uri, WEB_REDIRECT_URI);
+  await assert.rejects(signIn(answering(200, { id_token: idToken({}) }, sent)).redeem('c', VERIFIER, 'https://evil.example/return'), /return addresses/);
+  assert.strictEqual(sent.length, 1, 'and Microsoft is not even asked');
 });
 test('a good code gives a session, and the account is recorded', async () => {
   const { api, store, post } = site(pretend({ sub: 'person-1', email: 'sam@example.com', name: 'Sam' }));

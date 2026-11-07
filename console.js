@@ -1,6 +1,7 @@
 // A company's own page: say how many cameras and for how long, see what it costs, start. The servers run for that long and shut down by
 // themselves, so this page never has to be left open; while they run it opens each one's video review and extends the booking.
 import { call, googleButton, signedIn, getMe, signOut } from './api-base.js';
+import { emailButtons } from './email-signin-web.js';
 
 const { applyTheme } = window.HeadJudgeBrand;
 const { quote, timeLeft, money, plural } = window.HeadJudgeBooking;
@@ -111,6 +112,8 @@ async function enter() {
 async function start() {
   if (signedIn()) return enter();
   show($('signIn'), true);
-  await googleButton($('googleBtn'), () => enter(), (e) => { $('signInError').textContent = e.message || 'Sign-in didn\'t work: try again'; show($('signInError'), true); });
+  const failed = (e) => { $('signInError').textContent = e.message || 'Sign-in didn\'t work: try again'; show($('signInError'), true); };
+  emailButtons($('emailBtns'), 'console.html', failed);
+  await googleButton($('googleBtn'), () => enter(), failed);
 }
 start();

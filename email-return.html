@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Signing you in: HeadJudge</title>
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#12161c">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;1,800&family=Barlow:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="headjudge.css">
+</head>
+<body>
+<header class="top"><a class="mark" href="./">Head<span>Judge</span></a></header>
+<main class="page">
+  <section class="card narrow">
+    <h2 id="head">Signing you in…</h2>
+    <p class="error" id="why" role="alert" hidden></p>
+    <a class="primary linkbtn" id="again" hidden>Try again</a>
+  </section>
+</main>
+<script type="module">
+  import { finishEmailSignIn } from './email-signin-web.js';
+  const link = location.href;
+  history.replaceState(null, '', location.pathname); // the one-time code needn't stay in the address bar or history
+  const r = await finishEmailSignIn(link);
+  if (r.done) location.replace(r.back);
+  else {
+    document.getElementById('head').textContent = 'That didn’t work';
+    const why = document.getElementById('why'), again = document.getElementById('again');
+    why.textContent = r.message; why.hidden = false;
+    again.href = r.back; again.hidden = false;
+  }
+</script>
+</body>
+</html>
