@@ -4,7 +4,7 @@ import { call } from './api-base.js';
 import { randomText, challengeFor, signInAddress, readReturn } from './email-signin-core.js';
 
 const PENDING = 'hj_web_signin', TOKEN = 'sp_token';
-const BACK_TO = new Set(['register.html', 'console.html']);
+const BACK_TO = new Set(['register.html', 'console.html', 'results.html']);
 const safeBack = (page) => (BACK_TO.has(page) ? page : './');
 
 /** Draws the two email buttons into el. `back` is the page to come back to. Nothing shows if email sign-in isn't switched on. */

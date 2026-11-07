@@ -44,12 +44,13 @@ const sha = (s) => crypto.createHash('sha256').update(String(s)).digest('hex');
 /** where an account's cloud recordings are listed */
 const recordingsPartition = (uid) => `rec:${sha(uid).slice(0, 32)}`;
 
-function createRecordings({ store, signer, now, reply, session, isAdmin }) {
+function createRecordings({ store, signer, now, reply, session, isAdmin, fetchFn = fetch }) {
   const owned = recordingsPartition;
   async function byKey(h) {
     const key = String(h['x-receiver-key'] || '');
     return key ? store.get('reckey', sha(key)) : null;
   }
+  const resultsBase = (link) => `${link.partition.slice(4)}/${link.id}/results`;
   async function entries(partition) {
     const list = await store.list(partition);
     const before = new Date(now() - KEEP_DAYS * 864e5).toISOString();
@@ -81,6 +82,19 @@ function createRecordings({ store, signer, now, reply, session, isAdmin }) {
       await store.put(link.partition, id, { id, blob, cam: +m[1], file: m[2], size, name: String(body?.name || '').slice(0, 120), startedAt: new Date(Number.isNaN(when) ? now() : when).toISOString(), receiver: link.name, at: now() });
       return reply(200, { ok: true });
     }
+    // a server saving its results (athletes, tracking, numbers), so they can be seen when it's off
+    if (a === 'results-urls' && method === 'POST') {
+      const link = await byKey(h); if (!link) return reply(401, { error: 'That Receiver key isn\'t recognised' });
+      const names = Array.isArray(body?.names) ? body.names.slice(0, 100) : [];
+      if (!names.every((n) => /^(results\.json|tracks\/\d{1,9}\.jsonl|pics\/\d{1,9}\.jpg)$/.test(String(n)))) return reply(400, { error: 'That isn\'t a result' });
+      const base = resultsBase(link);
+      return reply(200, { urls: Object.fromEntries(names.map((n) => [n, signer({ blob: `${base}/${n}`, perm: 'cw', minutes: WRITE_MINUTES })])) });
+    }
+    if (a === 'results-done' && method === 'POST') {
+      const link = await byKey(h); if (!link) return reply(401, { error: 'That Receiver key isn\'t recognised' });
+      await store.put(`${link.partition}:results`, link.id, { id: link.id, base: resultsBase(link), at: now() });
+      return reply(200, { ok: true });
+    }
     // a server choosing one of its company's recordings to analyse
     if (a === 'by-key' && method === 'GET') {
       const link = await byKey(h); if (!link) return reply(401, { error: 'That Receiver key isn\'t recognised' });
@@ -91,6 +105,32 @@ function createRecordings({ store, signer, now, reply, session, isAdmin }) {
     }
     // ---- what the account holder does, signed in
     const me = session(h); if (!me) return reply(401, { error: 'Sign in to see cloud recordings' });
+    // what its servers found: the week's athletes and numbers, whether or not a server is on now
+    if (a === 'results' && !b && method === 'GET') {
+      const from = now() - KEEP_DAYS * 864e5, out = { keepDays: KEEP_DAYS, athletes: [], numbers: [], sources: {} };
+      const rows = (await store.list(`${owned(me.uid)}:results`)).filter((r) => r.at >= from);
+      for (const r of rows) {
+        let j; try { j = await (await fetchFn(signer({ blob: `${r.base}/results.json`, perm: 'r', minutes: READ_MINUTES }))).json(); } catch { continue; }
+        const recent = (iso) => Date.parse(iso) >= from;
+        for (const x of j.athletes || []) if (recent(x.firstAt)) out.athletes.push({ ...x, server: r.id, pic: x.pic ? signer({ blob: `${r.base}/pics/${x.n}.jpg`, perm: 'r', minutes: READ_MINUTES }) : '' });
+        for (const x of j.numbers || []) if (recent(x.firstAt)) out.numbers.push({ ...x, server: r.id });
+        Object.assign(out.sources, j.sources || {});
+      }
+      out.athletes.sort((x, y) => String(y.firstAt).localeCompare(String(x.firstAt)));
+      out.numbers.sort((x, y) => String(y.firstAt).localeCompare(String(x.firstAt)));
+      return reply(200, out);
+    }
+    if (a === 'track' && b && method === 'GET') {
+      const m = /^([\w-]{1,80})~(\d{1,9})$/.exec(decodeURIComponent(String(b)));
+      const row = m && await store.get(`${owned(me.uid)}:results`, m[1]);
+      if (!row) return reply(404, { error: 'not found' });
+      const out = { frames: [], events: [] };
+      let text = '';
+      try { const r = await fetchFn(signer({ blob: `${row.base}/tracks/${m[2]}.jsonl`, perm: 'r', minutes: READ_MINUTES })); if (r.ok) text = await r.text(); } catch { return reply(200, out); }
+      for (const l of text.split('\n')) { if (!l) continue; try { const o = JSON.parse(l); if (o.f) out.frames.push(o.f); else if (o.e) out.events.push(o.e); } catch { /* cut short */ } }
+      out.frames.sort((x, y) => x[0] - y[0]); out.events.sort((x, y) => x.t - y.t);
+      return reply(200, out);
+    }
     if (a === 'links') {
       if (!isAdmin(h)) return reply(403, { error: 'Only admins can link a Receiver for now' });
       if (!b && method === 'GET') return reply(200, { links: (await store.list(owned(me.uid) + ':links')).map(({ id, name, at }) => ({ id, name, at })) });

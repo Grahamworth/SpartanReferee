@@ -10,7 +10,8 @@ const QUIET_MS = 90e3;        // a file unchanged this long is finished (the ser
 const RETRY_MS = 5 * 60e3;
 
 const uploadedName = (file) => file.replace(/^\d{4}-\d\d-\d\dT[\d-]+Z?_/, '');
-function createCloud({ dir, uploadsDir, stateFile, api, settings, doFetch = fetch, now = Date.now }) {
+const RESULTS_EVERY_MS = 2 * 60e3;
+function createCloud({ dir, uploadsDir, stateFile, api, settings, results = null, doFetch = fetch, now = Date.now }) {
   let sent = {}; try { sent = JSON.parse(fs.readFileSync(stateFile, 'utf8')); } catch { /* none yet */ }
   const status = { state: 'off', waiting: 0, sentCount: Object.keys(sent).length, current: '', lastAt: 0, error: '' };
   let busy = false, waitUntil = 0;
@@ -65,6 +66,7 @@ function createCloud({ dir, uploadsDir, stateFile, api, settings, doFetch = fetc
   async function tick() {
     const { cloudOn, cloudKey } = settings();
     if (!cloudOn || !cloudKey) { status.state = 'off'; status.waiting = 0; status.current = ''; return; }
+    sendResults().catch(() => {});
     if (busy) return;
     const todo = finished(); status.waiting = todo.length;
     if (!todo.length) { if (!status.error) status.state = 'idle'; return; }
@@ -83,6 +85,32 @@ function createCloud({ dir, uploadsDir, stateFile, api, settings, doFetch = fetc
       waitUntil = now() + RETRY_MS; // the recording's still here: it goes when the internet's back
     } finally { busy = false; status.current = ''; }
   }
+  // Athletes, tracking and numbers go up too, so a company can still see them when this server is off. Only what's changed.
+  const resultsSent = {}; let resultsAt = 0, resultsBusy = false;
+  async function sendResults(force) {
+    const { cloudOn, cloudKey } = settings();
+    if (!results || !cloudOn || !cloudKey || resultsBusy || (!force && now() - resultsAt < RESULTS_EVERY_MS)) return;
+    resultsBusy = true; resultsAt = now();
+    try {
+      const { json, files } = results(), text = JSON.stringify(json), changed = [];
+      if (resultsSent['results.json'] !== text) changed.push({ name: 'results.json', body: () => Promise.resolve(Buffer.from(text)), mark: text, type: 'application/json' });
+      for (const f of files) {
+        let st; try { st = fs.statSync(f.path); } catch { continue; }
+        const mark = `${st.size}:${st.mtimeMs}`;
+        if (resultsSent[f.name] !== mark) changed.push({ name: f.name, body: () => fs.promises.readFile(f.path), mark, type: f.name.endsWith('.jpg') ? 'image/jpeg' : 'application/x-ndjson' });
+      }
+      for (let i = 0; i < changed.length; i += 100) {
+        const part = changed.slice(i, i + 100);
+        const { urls } = await post('results-urls', cloudKey, { names: part.map((c) => c.name) });
+        for (const c of part) {
+          const put = await doFetch(urls[c.name], { method: 'PUT', body: await c.body(), headers: { 'x-ms-blob-type': 'BlockBlob', 'Content-Type': c.type } });
+          if (!put.ok) throw new Error(`Storage said ${put.status}`);
+          resultsSent[c.name] = c.mark;
+        }
+      }
+      if (changed.length) await post('results-done', cloudKey, {});
+    } catch (e) { status.resultsError = e.message; resultsAt = 0; } finally { resultsBusy = false; }
+  }
   async function keyed(where) {
     const { cloudOn, cloudKey } = settings();
     if (!cloudOn || !cloudKey) throw new Error('This server isn\'t linked to cloud storage');
@@ -92,7 +120,7 @@ function createCloud({ dir, uploadsDir, stateFile, api, settings, doFetch = fetc
     return j;
   }
   return {
-    tick, status,
+    tick, status, sendResults,
     /** this company's recordings in cloud storage, newest first */
     previous: async () => (await keyed('')).recordings,
     /** one of them, with a link to fetch it from */

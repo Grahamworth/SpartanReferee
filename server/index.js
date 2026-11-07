@@ -86,7 +86,7 @@ async function refreshBrand() {
 refreshBrand(); setInterval(refreshBrand, 5 * 60e3);
 
 // ---------------------------------------------------------------- recordings to cloud storage
-const cloud = createCloud({ dir: RECORDINGS, uploadsDir: path.join(DATA, 'training'), stateFile: path.join(DATA, 'cloud-sent.json'), api: () => C.api, settings: () => ({ cloudOn: !!(C.api && C.receiverKey), cloudKey: C.receiverKey, cloudSince: 0 }) });
+const cloud = createCloud({ dir: RECORDINGS, uploadsDir: path.join(DATA, 'training'), stateFile: path.join(DATA, 'cloud-sent.json'), results: () => { const r = review.results(); return { json: { athletes: r.athletes, numbers: r.numbers, sources: previousSources }, files: r.files }; }, api: () => C.api, settings: () => ({ cloudOn: !!(C.api && C.receiverKey), cloudKey: C.receiverKey, cloudSince: 0 }) });
 
 // ---------------------------------------------------------------- the page's own requests beyond the review API
 const ADDRESSES = () => ({ lan: [C.host], lanNames: ['internet'], tailscale: null });
@@ -118,6 +118,9 @@ function followLive(req, res, n) {
 }
 setInterval(() => { for (const l of live.values()) for (const r of l.viewers) r.write(': still here\n\n'); }, 15000);
 
+// which recording in cloud storage each fetched video came from, so its results can find it when this server is off
+const PREVIOUS = path.join(DATA, 'previous-sources.json');
+let previousSources = {}; try { previousSources = JSON.parse(fs.readFileSync(PREVIOUS, 'utf8')); } catch { /* none yet */ }
 // a recording from cloud storage, fetched here to be analysed. It's already in the cloud, so it doesn't go back up.
 async function fetchPrevious(id) {
   const r = await cloud.previousLink(id);
@@ -127,6 +130,7 @@ async function fetchPrevious(id) {
   const dir = path.join(DATA, 'training'), file = path.join(dir, video);
   fs.mkdirSync(dir, { recursive: true });
   cloud.markSent(`uploads/${video}`);
+  previousSources[video] = r.file; fs.writeFile(PREVIOUS, JSON.stringify(previousSources), () => {});
   const got = await fetch(r.url);
   if (!got.ok || !got.body) throw new Error(`Storage said ${got.status}`);
   try { await pipeline(Readable.fromWeb(got.body), fs.createWriteStream(file)); }
@@ -228,6 +232,7 @@ const sleeper = createSleep({
   flush: async () => {
     await uploadJobs.stopAll('The booking ended before it finished. What it found so far is on the right.');
     await engines.stopAll();
+    await cloud.sendResults(true).catch(() => {});
     stopping = true; try { mtx?.kill('SIGTERM'); } catch { /* gone */ }
     await new Promise((r) => setTimeout(r, QUIET_MS + 10000)); // a recording counts as finished once it's stopped changing
     for (let i = 0; i < 40; i++) { await cloud.tick().catch(() => {}); if (!cloud.status.waiting && cloud.status.state !== 'sending') break; await new Promise((r) => setTimeout(r, 15000)); }
@@ -262,6 +267,6 @@ engineServer.listen(S.enginePort, '127.0.0.1');
 setInterval(async () => { await review.watchCameras(); engines.tick(review.cams()); }, 1000);
 setInterval(() => { cloud.tick().catch(() => {}); }, 60000);
 sleeper.start();
-const quit = async () => { if (stopping) return; stopping = true; await uploadJobs.stopAll().catch(() => {}); await engines.stopAll().catch(() => {}); try { mtx?.kill('SIGTERM'); } catch { /* gone */ } setTimeout(() => process.exit(0), 500); };
+const quit = async () => { if (stopping) return; stopping = true; await uploadJobs.stopAll().catch(() => {}); await engines.stopAll().catch(() => {}); await cloud.sendResults(true).catch(() => {}); try { mtx?.kill('SIGTERM'); } catch { /* gone */ } setTimeout(() => process.exit(0), 500); };
 process.on('SIGTERM', quit); process.on('SIGINT', quit);
 log('Server started');

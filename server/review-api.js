@@ -304,7 +304,13 @@ function sendRange(req, res, buf, name) {
     send(res, 200, fs.readFileSync(file), TYPES[path.extname(file)] || 'application/octet-stream');
   } catch (e) { send(res, 500, { error: e.message }); }
   }
-  return { handler, watchCameras, cams: () => cams, serverOk: () => serverOk };
+  // what goes to cloud storage, to be seen when this server is off
+  const results = () => ({
+    athletes: athletes.map(({ n, src, video, cam, bib, label, firstT, lastT, firstAt, lastAt, reps, noReps, questionable, done, pic }) => ({ n, src, video, cam, bib, label, firstT, lastT, firstAt, lastAt, reps, noReps, questionable, done, pic })),
+    numbers: numbersSeen,
+    files: athletes.flatMap((a) => [{ name: `tracks/${a.n}.jsonl`, path: path.join(TRACKS, `${a.n}.jsonl`) }, { name: `pics/${a.n}.jpg`, path: path.join(PICS, `${a.n}.jpg`) }]),
+  });
+  return { handler, watchCameras, cams: () => cams, serverOk: () => serverOk, results };
 }
 
 module.exports = { createReview, send, readBody, isJson, TYPES };
