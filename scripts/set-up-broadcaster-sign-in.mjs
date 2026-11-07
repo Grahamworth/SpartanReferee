@@ -4,7 +4,9 @@
 //   node scripts/set-up-broadcaster-sign-in.mjs --tenant-only   creates the tenant (up to 30 minutes), with no sign-in
 //   node scripts/set-up-broadcaster-sign-in.mjs                 asks for one Microsoft sign-in by code, then does the rest
 // The rest is: the app (a public client, so there's no secret to keep), the sign-up flow, emailed codes as the second
-// step, a Conditional Access policy requiring it for this app only, and the site's settings.
+// step, a Conditional Access policy requiring it, and the site's settings.
+// Microsoft refuses a policy aimed at a public client, so this one covers everything in the tenant, which holds only
+// this app. The admin running this is left out, as Microsoft advises, so the policy can't lock them out.
 // Security defaults are turned off in this tenant only, because Microsoft doesn't allow them alongside that policy.
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
@@ -40,6 +42,7 @@ const SCOPES = [
 ].join(" ");
 const ALL_USERS = [{ targetType: "group", id: "all_users", isRegistrationRequired: false }];
 const TENANT_WAIT_MINUTES = 45;
+const DEFAULTS_WAIT_MINUTES = 15;
 
 const { values } = parseArgs({ options: { "tenant-only": { type: "boolean", default: false } } });
 const settingsFile = join(dirname(fileURLToPath(import.meta.url)), "broadcaster-sign-in.json");
@@ -186,7 +189,7 @@ async function enableEmailCodes(graph) {
   console.log("Sign-in methods now on:", methods.filter((entry) => entry.state === "enabled").map((entry) => entry.id).join(", "));
 }
 
-async function requireMfa(graph, appId) {
+async function requireMfa(graph, adminId) {
   const { value: policies } = await graph("/identity/conditionalAccess/policies");
   const existing = policies.find((policy) => policy.displayName === POLICY_NAME);
   if (existing) { console.log(`The "${POLICY_NAME}" policy is already there, and is ${existing.state}.`); return; }
@@ -194,15 +197,26 @@ async function requireMfa(graph, appId) {
   const defaultsWereOn = (await graph(defaultsPath)).isEnabled;
   if (defaultsWereOn) await graph(defaultsPath, { method: "PATCH", body: { isEnabled: false } });
   try {
-    await graph("/identity/conditionalAccess/policies", {
-      method: "POST",
-      body: {
-        displayName: POLICY_NAME,
-        state: "enabled",
-        conditions: { clientAppTypes: ["all"], applications: { includeApplications: [appId] }, users: { includeUsers: ["All"] } },
-        grantControls: { operator: "OR", builtInControls: ["mfa"] },
-      },
-    });
+    // Microsoft can take a while to notice that security defaults are off, and refuses the policy until it does.
+    const deadline = Date.now() + DEFAULTS_WAIT_MINUTES * 60_000;
+    for (;;) {
+      try {
+        await graph("/identity/conditionalAccess/policies", {
+          method: "POST",
+          body: {
+            displayName: POLICY_NAME,
+            state: "enabled",
+            conditions: { clientAppTypes: ["all"], applications: { includeApplications: ["All"] }, users: { includeUsers: ["All"], excludeUsers: [adminId] } },
+            grantControls: { operator: "OR", builtInControls: ["mfa"] },
+          },
+        });
+        break;
+      } catch (error) {
+        if (!/Security Defaults is enabled/i.test(error.message) || Date.now() > deadline) throw error;
+        console.log("Waiting for Microsoft to register that security defaults are off.");
+        await sleep(30_000);
+      }
+    }
   } catch (error) {
     if (defaultsWereOn) await graph(defaultsPath, { method: "PATCH", body: { isEnabled: true } });
     throw error;
@@ -213,12 +227,14 @@ async function requireMfa(graph, appId) {
 try {
   const tenantId = await createTenant();
   if (!values["tenant-only"]) {
-    const graph = makeGraph(await signInWithCode(tenantId));
+    const token = await signInWithCode(tenantId);
+    const adminId = JSON.parse(Buffer.from(token.split(".")[1], "base64url").toString()).oid;
+    const graph = makeGraph(token);
     const app = await createApp(graph);
     await approvePermissions(graph, app.appId);
     await createUserFlow(graph, app.appId);
     await enableEmailCodes(graph);
-    await requireMfa(graph, app.appId);
+    await requireMfa(graph, adminId);
 
     const discovery = await fetch(`https://${SUBDOMAIN}.ciamlogin.com/${tenantId}/v2.0/.well-known/openid-configuration`);
     if (!discovery.ok) throw new Error(`Microsoft doesn't recognise the new tenant yet (status ${discovery.status}). Run this again in a few minutes.`);
