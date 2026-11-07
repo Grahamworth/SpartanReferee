@@ -1,5 +1,5 @@
-// Registering a company for HeadJudge: sign in, details, logo and colours with a live preview. Once registered, the same page
-// shows where the application stands and changes the details.
+// Registering a company for HeadJudge: sign in, then details, logo and colours, and on to the console. Coming back later, the
+// same page shows where the application stands and changes the details.
 import { call, googleButton, signedIn, getMe, signOut } from './api-base.js';
 import { emailButtons } from './email-signin-web.js';
 
@@ -15,11 +15,8 @@ const theme = () => ({ primary: $('primary').value, accent: $('accent').value, m
 const toId = (name) => name.toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 32).replace(/-+$/, '');
 
 function drawPreview() {
-  const t = theme(), box = $('preview');
-  applyTheme(t, box);
-  applyTheme(t);          // the whole page takes the colours too
-  $('pvName').textContent = $('name').value.trim() || 'Your company';
-  $('pvLogo').src = logoShown; show($('pvLogo'), !!logoShown);
+  const t = theme();
+  applyTheme(t);          // the page itself takes the colours, so you see them as you choose
   const v = themeVars(t);
   const moved = v['--primary-text'] !== t.primary || contrast(t.accent, v['--panel']) < 3;
   $('readNote').textContent = moved ? 'One of these colours is hard to read on this background, so its text is shown a little lighter or darker. Buttons keep your exact colour.' : '';
@@ -143,10 +140,9 @@ async function save(e) {
   const btn = $('save'); btn.disabled = true;
   try {
     const r = company ? await call('companies/mine', { method: 'PUT', body }) : await call('companies', { method: 'POST', body: { ...body, id: $('id').value } });
-    const first = !company;
+    if (!company) { location.assign('console.html'); return; } // just registered: straight on to their main page
     company = r.company; fill(company); drawStatus(); drawPreview();
-    toast(first ? 'Registered: we\'ll be in touch' : 'Saved');
-    if (first) window.scrollTo({ top: 0, behavior: 'smooth' });
+    toast('Saved');
   } catch (err) { error('formError', err.message); }
   finally { btn.disabled = false; }
 }

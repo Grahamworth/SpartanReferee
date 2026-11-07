@@ -60,6 +60,15 @@ test('the site sends its session in a header Azure leaves alone, as Azure replac
   assert.ok(base.includes("headers['X-Session'] = token"));
   assert.ok(!base.includes('headers.Authorization'));
 });
+test('registering goes straight on to the console, with no preview panel', () => {
+  assert.ok(read('register.js').includes("location.assign('console.html')"));
+  assert.doesNotMatch(read('register.html'), /How it will look|pvCam/);
+  assert.ok(!read('headjudge.css').includes('.pvCam'));
+});
+test('the console shows the way to the admin area only to admins', () => {
+  assert.match(read('console.html'), /id="adminLink" href="customers.html" hidden/);
+  assert.ok(read('console.js').includes("show($('adminLink'), !!me.admin)"));
+});
 test('the return page only ever goes back to our own pages', () => {
   assert.match(read('email-signin-web.js'), /new Set\(\['register\.html', 'console\.html'\]\)/);
 });

@@ -1,6 +1,6 @@
 // A company's colours as the CSS variables its pages use. A brand colour that would be hard to read on the page's background
 // keeps its hue but is moved lighter or darker until it can be read; buttons get whichever of black or white reads best on them.
-// Used by the registration preview, the company's own pages and the Receiver's review page (plain script, and tests require it).
+// Used by the registration page, the company's own pages and the Receiver's review page (plain script, and tests require it).
 (function (root) {
   const HEADJUDGE = { primary: '#ffc400', accent: '#3ddc97', mode: 'dark' };
   const toRgb = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));

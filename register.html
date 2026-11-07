@@ -34,7 +34,7 @@
 
   <section id="status" class="card status" role="status" hidden></section>
 
-  <form id="form" class="layout" novalidate hidden>
+  <form id="form" class="regForm" novalidate hidden>
     <div class="fields">
       <fieldset class="card">
         <legend>Your company</legend>
@@ -79,18 +79,6 @@
       <p class="error" id="formError" role="alert" hidden></p>
       <button class="primary" id="save" type="submit">Register my company</button>
     </div>
-
-    <aside class="preview" aria-label="Preview of your pages">
-      <h2>How it will look</h2>
-      <div class="device" id="preview">
-        <div class="pvTop"><img id="pvLogo" alt="" hidden><b id="pvName">Your company</b><span class="pvTab on">Live</span><span class="pvTab">Review</span></div>
-        <div class="pvBody">
-          <div class="pvCam"><span class="pvLabel">Camera 1</span><span class="pvCount"><b>12</b> good reps</span><svg viewBox="0 0 160 90" aria-hidden="true"><g fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path class="pvBones" d="M78 18 80 40 70 62 68 80M80 40 92 60 96 80M80 26 62 38 54 52M80 26 98 36 108 50"/></g><circle class="pvHead" cx="78" cy="12" r="6"/></svg></div>
-          <div class="pvSide"><p class="pvHint">Latest athletes</p><div class="pvRow"><b>#214</b><span class="good">30 reps</span></div><div class="pvRow"><b>#87</b><span class="good">28 reps</span></div><button type="button" class="pvBtn" tabindex="-1">Start judging</button></div>
-        </div>
-      </div>
-      <div class="onPhone"><b>Text that's hard to read</b> is adjusted for you, so a brand colour still works on either background.</div>
-    </aside>
   </form>
 </main>
 <div class="toast" id="toast" role="status"></div>
