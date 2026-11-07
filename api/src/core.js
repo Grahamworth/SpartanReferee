@@ -25,6 +25,7 @@
    Accounts (Google sign-in, as in SkiTour) and profiles:
    GET    /api/config                     -> { googleClientId }
    POST   /api/auth/google {idToken}      -> { token, user }   (a 30-day session token; this phone's groups, profile and burpee scores move to the account)
+   POST   /api/auth/email {code, verifier} -> { token, user }  (the Broadcaster's email accounts; see email-signin.js)
    GET    /api/me                         -> { user, profile, admin, judge }
    PUT    /api/profile {name, spartanUrl, racerNo, country, ageGroup}
    POST   /api/profile/judge {code}       -> become a Burpee judge with the judge code an admin handed out
@@ -91,7 +92,7 @@ const NEWS_FEEDS = [
  * verifyGoogle(idToken) -> {sub, email, name, picture} (throws when invalid); secret signs our own session tokens.
  * adminEmails: Google accounts that are admins. While neither adminEmails nor adminKey is set, everyone is (the prototype).
  */
-function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], verifyGoogle = null, secret = '', googleClientId = '', fetchText = null, blobSigner = null, putBrand = null, maxRunningServers = 1, serverHourPrice = 0.66 }) {
+function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], verifyGoogle = null, emailSignIn = null, secret = '', googleClientId = '', fetchText = null, blobSigner = null, putBrand = null, maxRunningServers = 1, serverHourPrice = 0.66 }) {
   const reply = (status, body) => ({ status, body, headers: { 'Content-Type': 'application/json', ...CORS } });
   const admins = adminEmails.map((e) => String(e).trim().toLowerCase()).filter(Boolean);
   // session tokens: base64url(payload).HMAC
@@ -321,6 +322,19 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
     await touchProfile(uid, { email: user.email, google: true, ...(user.name && !(await store.get('profile', uid) || {}).name ? { name: user.name.slice(0, 30) } : {}) });
     return reply(200, { token: sign({ uid, email: user.email, exp: now() + 30 * 24 * 3600 * 1000 }), user });
   }
+  // The Broadcaster's email accounts (email-signin.js). The session deliberately has no email in it, so one of these
+  // can never count as an admin through ADMIN_EMAILS: admins sign in with Google on the site.
+  async function authEmail(body) {
+    if (!emailSignIn || !secret) return reply(503, { error: 'Email sign-in isn’t set up on the server yet' });
+    const code = (body && body.code) || '', verifier = (body && body.verifier) || '';
+    if (typeof code !== 'string' || !code || code.length > 8192 || typeof verifier !== 'string' || !/^[\w.~-]{43,128}$/.test(verifier)) return reply(400, { error: 'That sign-in link isn’t right – try again' });
+    let c; try { c = await emailSignIn.redeem(code, verifier); } catch { return reply(401, { error: 'Sign-in didn’t work – try again' }); }
+    const uid = 'e_' + crypto.createHash('sha256').update(String(c.sub)).digest('base64url').slice(0, 22);
+    const user = { id: uid, email: c.email, name: c.name, picture: '' };
+    await store.put('user', uid, user);
+    await touchProfile(uid, { email: user.email, ...(user.name && !(await store.get('profile', uid) || {}).name ? { name: user.name.slice(0, 30) } : {}) });
+    return reply(200, { token: sign({ uid, exp: now() + 30 * 24 * 3600 * 1000 }), user });
+  }
   async function me(h) {
     const id = who(h); if (!id) return reply(400, { error: 'This device has no id yet – reload the app' });
     const s = session(h), profile = await touchProfile(id);
@@ -545,8 +559,9 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
       if (parts[0] === 'board' && parts.length <= 4) r = await board(method, parts[1], parts[2], parts[3], body, h);
       if (parts[0] === 'groups' && parts.length <= 4) r = await groups(method, parts[1], parts[2], parts[3], body, h);
       if (parts[0] === 'admin' && parts.length <= 5 && (parts.length < 5 || parts[4] === 'lift')) r = await admin(method, parts[1], parts[2], parts[3], h, body);
-      if (parts[0] === 'config' && method === 'GET') r = reply(200, { googleClientId, signIn: !!(verifyGoogle && secret && googleClientId) });
+      if (parts[0] === 'config' && method === 'GET') r = reply(200, { googleClientId, signIn: !!(verifyGoogle && secret && googleClientId), emailSignIn: emailSignIn && secret ? emailSignIn.config : null });
       if (parts[0] === 'auth' && parts[1] === 'google' && method === 'POST') r = await authGoogle(body, h);
+      if (parts[0] === 'auth' && parts[1] === 'email' && method === 'POST') r = await authEmail(body);
       if (parts[0] === 'me' && method === 'GET') r = await me(h);
       if (parts[0] === 'profile' && parts.length <= 2) r = await profile(method, parts[1], body, h);
       if (parts[0] === 'news' && method === 'GET') r = await news();

@@ -5,8 +5,10 @@ const { app } = require('@azure/functions');
 const { createApi, CORS } = require('./core');
 const { tableStore } = require('./store');
 const { blobSigner, brandWriter } = require('./recordings');
+const { createEmailSignIn } = require('./email-signin');
 
-// Settings: GOOGLE_CLIENT_ID (the web client for Google sign-in), SESSION_SECRET (signs session tokens), ADMIN_EMAILS (comma separated)
+// Settings: GOOGLE_CLIENT_ID (the web client for Google sign-in), SESSION_SECRET (signs session tokens), ADMIN_EMAILS (comma separated),
+// CIAM_SUBDOMAIN, CIAM_TENANT_ID, CIAM_CLIENT_ID (the Broadcaster's email sign-in; none is a secret)
 let api;
 function googleVerifier(clientId) {
   const { OAuth2Client } = require('google-auth-library');
@@ -17,6 +19,7 @@ const getApi = () => (api = api || createApi({
   store: tableStore(process.env.STORAGE_CONNECTION), blobSigner: blobSigner(process.env.STORAGE_CONNECTION), putBrand: brandWriter(process.env.STORAGE_CONNECTION), maxRunningServers: +process.env.MAX_RUNNING_SERVERS || 1, serverHourPrice: +process.env.SERVER_HOUR_PRICE || 0.66, adminKey: process.env.ADMIN_KEY || '',
   adminEmails: (process.env.ADMIN_EMAILS || '').split(','), googleClientId: process.env.GOOGLE_CLIENT_ID || '',
   verifyGoogle: process.env.GOOGLE_CLIENT_ID ? googleVerifier(process.env.GOOGLE_CLIENT_ID) : null, secret: process.env.SESSION_SECRET || '',
+  emailSignIn: createEmailSignIn({ subdomain: process.env.CIAM_SUBDOMAIN, tenantId: process.env.CIAM_TENANT_ID, clientId: process.env.CIAM_CLIENT_ID }),
   fetchText: async (url) => { const r = await fetch(url, { headers: { 'User-Agent': 'Spartans app (news reader)' } }); if (!r.ok) throw new Error(String(r.status)); return r.text(); },
 }));
 

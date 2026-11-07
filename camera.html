@@ -35,22 +35,22 @@
 <main class="hub">
   <a href="./" class="home-link">‹ Spartans home</a>
   <h1 class="brand">Camera <span>station</span></h1>
-  <p class="muted">Film a burpee station with this phone. The picture goes to the <b>judging computer</b> and, if you like, <b>live on YouTube</b> at the same time, each on its own connection. No watermark.</p> <p class="muted"><a href="streaming.html">Setting up cameras for an event? Read the setup guide</a> (Larix and Tailscale, two cameras, iPad review).</p>
+  <p class="muted">Film a burpee station with this phone. The picture goes to the <b>judging server</b> and, if you like, <b>live on YouTube</b> at the same time, each on its own connection. No watermark.</p> <p class="muted"><a href="streaming.html">Setting up cameras for an event? Read the setup guide</a> (Larix, two cameras, iPad review).</p>
 
   <section class="form" id="notApp" hidden>
     <p><b>The camera station needs the Spartans app on an Android phone.</b> A web browser can't send video this way.</p>
     <div class="row"><a class="btn btn-red" href="downloads/spartans.apk">Get the Android app</a></div>
-    <p class="muted" style="margin:0">On an iPhone, use Larix Broadcaster for now (scan the station's QR code on the judging computer's connection page).</p>
+    <p class="muted" style="margin:0">On an iPhone, use Larix Broadcaster for now (scan its QR code on the <b>Cameras</b> tab of the video review).</p>
   </section>
 
   <form class="form dest" id="judgeForm">
-    <label class="switchline"><input type="checkbox" id="judgeOn" checked> Send to the judging computer</label>
-    <p class="muted" style="margin:0">Scan the station's <b>Broadcaster</b> QR code in the <b>HeadJudge Receiver</b> on the judging computer. On the same Wi-Fi (or its hotspot) the phone connects <b>direct</b>; anywhere else it uses <b>Tailscale</b>, which must be on and connected on this phone (same account as the judging computer).</p>
+    <label class="switchline"><input type="checkbox" id="judgeOn" checked> Send to the judging server</label>
+    <p class="muted" style="margin:0">On any screen, open the video review's <b>Cameras</b> tab and scan this camera's code. This phone needs an internet connection.</p>
     <div class="row">
       <button class="btn btn-red" type="button" id="scanBtn">Scan station QR code</button>
     </div>
-    <label>…or paste the station link or RTMP address from the connection details page
-      <textarea id="link" rows="3" placeholder="rtmp://100.x.y.z:1935/live/station1?user=larix&amp;pass=…"></textarea></label>
+    <label>…or paste the camera's link or RTMP address from the Cameras tab
+      <textarea id="link" rows="3" placeholder="rtmp://…:1935/live/station1?user=larix&amp;pass=…"></textarea></label>
     <div class="summary" id="judgeSummary">No station set yet.</div>
     <label>Station number<select id="station"></select></label>
   </form>
@@ -74,7 +74,7 @@
     <p class="muted" style="margin:0">Then tap <b>GO LIVE</b>. Keep the app open with the screen on while filming; the phone in landscape, on a tripod if you can.</p>
   </form>
 </main>
-<div id="scanBox" hidden><p>Point at the station's QR code on the judging computer</p><video id="scanVideo" playsinline muted></video><button class="btn btn-ghost" type="button" id="scanClose">Cancel</button></div>
+<div id="scanBox" hidden><p>Point at this camera's QR code on the Cameras tab</p><video id="scanVideo" playsinline muted></video><button class="btn btn-ghost" type="button" id="scanClose">Cancel</button></div>
 <div class="toast-msg" id="toast"></div>
 </body>
 </html>

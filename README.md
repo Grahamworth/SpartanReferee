@@ -35,6 +35,8 @@ A company applies at `register.html` and an admin approves it in `admin.html`. O
 What people watch is the camera's picture with what its judge on the server sees drawn over it, so judges carry on when the page is closed.
 A login link from the site is good for 5 minutes and becomes a 14-hour cookie, signed with a secret only that server and the site hold.
 
+The Broadcaster app has its own accounts, by email: Microsoft Entra External ID, in the tenant `headjudge.onmicrosoft.com`. Microsoft holds the passwords and sends the emails (the code proving an address at sign-up, the code at each sign-in, password reset), so this needs no mail service or DNS. `node scripts/set-up-broadcaster-sign-in.mjs` sets it all up and is safe to run again. It asks for one Microsoft sign-in, by code. `api/src/email-signin.js` swaps the code Microsoft's page returns for a session, and `broadcaster-signin.js` is the app's sign-in screen. These accounts can't be admins, and they don't protect a server: its camera password does that.
+
 ## What keeps the bill down
 
 A company books cameras and hours on `console.html`. Each server takes 2 cameras (a T4 judges two at about 8 frames a second; three fall to about 6), which sets the number of servers and the cost shown. Servers run for the booked time, used or not, then save their recordings and shut down; the booking can be extended. The control app is the backstop: it turns off a server past its booking, one that's stopped reporting (15 minutes), one that didn't come up (25 minutes), and any machine it doesn't recognise.

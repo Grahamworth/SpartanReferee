@@ -17,7 +17,7 @@ async function loadPeople() {
   const list = r.people.filter((p) => !q || (p.name + ' ' + p.email).toLowerCase().includes(q));
   $('people').innerHTML = list.length ? `<table class="people"><thead><tr><th>Name</th><th>Account</th><th>Last seen</th><th>Burpee judge</th></tr></thead><tbody>${list.map((p, i) => `<tr>
       <td>${esc(p.name || '(no name)')}${p.spartanUrl ? ` · <a href="${esc(p.spartanUrl)}" target="_blank" rel="noopener" style="color:#aaa">Spartan</a>` : ''}</td>
-      <td>${p.google ? esc(p.email) : '<span class="muted">this phone only</span>'}</td>
+      <td>${p.email ? esc(p.email) : '<span class="muted">this phone only</span>'}</td>
       <td class="muted">${p.seen ? esc(ago(p.seen)) : ''}</td>
       <td><label class="switch"><input type="checkbox" data-i="${i}" ${p.judge ? 'checked' : ''}> ${p.judge ? 'Yes' : 'No'}</label></td></tr>`).join('')}</tbody></table>`
     : '<div class="empty">Nobody yet: people appear here once they’ve opened their profile or used the chat.</div>';

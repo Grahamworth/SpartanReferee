@@ -54,7 +54,7 @@ if (S.judge && S.judge.host && !S.judge.hosts) S.judge.hosts = [S.judge.host];  
 function render() {
   const c = S.judge;
   $('judgeSummary').innerHTML = c
-    ? `Station <b>${c.station}</b>${c.user ? ' · password set' : ''}<br>${c.hosts.map((h, i) => `${i ? 'then ' : 'Tries '}${isTs(h) ? '<span class="ok">Tailscale</span>' : 'direct (same Wi-Fi)'} <b>${h}</b>`).join('<br>')}`
+    ? `Station <b>${c.station}</b>${c.user ? ' · password set' : ''}<br>${c.hosts.map((h, i) => `${i ? 'then ' : 'Sends to '}<b>${h}</b>`).join('<br>')}`
     : 'No station set yet: scan the QR code or paste the link.';
   $('station').value = c ? String(c.station) : '1';
   $('judgeOn').checked = S.judgeOn !== false;
@@ -65,7 +65,7 @@ function render() {
 }
 function setLink(text) {
   const c = parseStationLink(text);
-  if (!c) { toast("That isn't a station link: use the QR code or RTMP address from the connection details page"); return false; }
+  if (!c) { toast("That isn't a camera link: use the QR code or RTMP address from the Cameras tab"); return false; }
   S.judge = c; S.judgeOn = true; save(S); render();
   toast(`Station ${c.station} set`);
   return true;
@@ -124,7 +124,7 @@ $('goForm').onsubmit = async (e) => {
   S.ytKey = $('ytKey').value.trim(); save(S);
   const toJudge = S.judgeOn !== false && S.judge, toYt = S.ytOn && S.ytKey;
   if (S.ytOn && !/^[\w-]{4,}$/.test(S.ytKey || '')) { toast('Paste the YouTube stream key first'); return; }
-  if (!toJudge && !toYt) { toast('Set the judging computer or YouTube (or both) first'); return; }
+  if (!toJudge && !toYt) { toast('Set the judging server or YouTube (or both) first'); return; }
   if (!plugin) { $('notApp').hidden = false; $('notApp').scrollIntoView({ behavior: 'smooth' }); return; }
   const [height, bitrate] = $('quality').value.split(':').map(Number);
   try {

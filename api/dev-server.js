@@ -5,6 +5,7 @@ const http = require('node:http'), fs = require('node:fs'), path = require('node
 const { createApi } = require('./src/core');
 const { memoryStore } = require('./src/store');
 const { blobSigner } = require('./src/recordings');
+const { REDIRECT_URI } = require('./src/email-signin');
 
 const root = path.join(__dirname, '..'), port = +process.argv[2] || 8795;
 const api = createApi({
@@ -14,6 +15,8 @@ const api = createApi({
   maxRunningServers: +process.env.MAX_RUNNING_SERVERS || 1, serverHourPrice: 0.66,
   store: memoryStore(), secret: 'dev-secret-dev-secret-dev-secret-dev', googleClientId: 'dev', adminEmails: (process.env.ADMIN_EMAILS || '').split(','),
   verifyGoogle: async (t) => { const m = /^dev:(.+@.+)$/.exec(t); if (!m) throw new Error('bad'); return { sub: m[1], email: m[1], name: m[1].split('@')[0] }; },
+  // a pretend Microsoft: the code "dev:someone@example.com" signs in as that address
+  emailSignIn: { config: { authorizeUrl: 'https://login.invalid/authorize', clientId: 'dev', redirectUri: REDIRECT_URI }, redeem: async (c) => { const m = /^dev:(.+@.+)$/.exec(c); if (!m) throw new Error('bad'); return { sub: m[1], email: m[1], name: m[1].split('@')[0] }; } },
   fetchText: async (url) => (await fetch(url)).text(),
 });
 const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.glb': 'model/gltf-binary', '.onnx': 'application/octet-stream', '.png': 'image/png', '.svg': 'image/svg+xml', '.webmanifest': 'application/manifest+json', '.wasm': 'application/wasm', '.mjs': 'text/javascript' };
