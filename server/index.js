@@ -26,7 +26,7 @@ const SETTINGS = path.join(DATA, 'settings.json');
 const readFile = (f, fallback) => { try { return JSON.parse(fs.readFileSync(f, 'utf8')); } catch { return fallback; } };
 const saved = readFile(SETTINGS, {});
 const MAX_CAMERAS = C.maxCameras || 2;
-const S = { stations: 2, rtmpPort: 1935, srtPort: 8890, webrtcPort: 8889, iceUdpPort: 8189, apiPort: 9997, playbackPort: 9996, viewPort: 8800, enginePort: 8801, record: true, keepDays: 14, bitrate: 3500, ...C, ...saved, password: C.password, youtube: saved.youtube || {} };
+const S = { stations: 2, rtmpPort: 1935, srtPort: 8890, webrtcPort: 8889, iceUdpPort: 8189, apiPort: 9997, playbackPort: 9996, viewPort: 8800, enginePort: 8801, record: true, keepDays: 7, bitrate: 3500, ...C, ...saved, password: C.password, youtube: saved.youtube || {} };
 S.stations = Math.min(S.stations, MAX_CAMERAS);
 const save = () => fs.writeFile(SETTINGS, JSON.stringify({ stations: S.stations, ai: engines.list(), youtube: S.youtube }), () => {});
 const JUDGE_SETTINGS = path.join(DATA, 'judge-settings.json');

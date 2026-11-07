@@ -27,12 +27,12 @@ test('you have to be signed in to apply', async () => {
   assert.strictEqual((await api.handle({ method: 'GET', path: 'companies/mine' })).status, 401);
 });
 
-test('an application is saved as waiting, with its logo stored and the account\'s email', async () => {
+test('a registration is approved straight away, with its logo stored and the account\'s email', async () => {
   const { api, login, puts } = await setup();
   const r = await apply(api, await login('sam'));
   assert.strictEqual(r.status, 200);
   const c = r.body.company;
-  assert.strictEqual(c.status, 'pending');
+  assert.strictEqual(c.status, 'approved');
   assert.strictEqual(c.email, 'sam@example.com');
   assert.strictEqual(c.website, 'https://spartan.com/');
   assert.strictEqual(c.theme.primary, '#e2231a');
@@ -41,9 +41,10 @@ test('an application is saved as waiting, with its logo stored and the account\'
   assert.ok(puts[0].buf.equals(PNG));
 });
 
-test('nothing public until an admin approves, then only the brand and never the contact details', async () => {
+test('a blocked company disappears from public view, and only the brand is ever public', async () => {
   const { api, login, boss } = await setup();
   await apply(api, await login('sam'));
+  await api.handle({ method: 'POST', path: 'admin/companies/spartan/suspend', headers: boss, body: {} });
   assert.strictEqual((await api.handle({ method: 'GET', path: 'companies/spartan' })).status, 404);
   const a = await api.handle({ method: 'POST', path: 'admin/companies/spartan/approve', headers: boss, body: {} });
   assert.strictEqual(a.body.company.status, 'approved');
@@ -69,7 +70,7 @@ test('only admins can list or decide', async () => {
   await apply(api, h);
   assert.strictEqual((await api.handle({ method: 'GET', path: 'admin/companies', headers: h })).status, 403);
   assert.strictEqual((await api.handle({ method: 'POST', path: 'admin/companies/spartan/approve', headers: h, body: {} })).status, 403);
-  assert.strictEqual((await api.handle({ method: 'GET', path: 'companies/mine', headers: h })).body.company.status, 'pending');
+  assert.strictEqual((await api.handle({ method: 'GET', path: 'companies/mine', headers: h })).body.company.status, 'approved');
 });
 
 test('one company per account, and web addresses are unique and sensible', async () => {
@@ -119,7 +120,7 @@ test('the owner changes the brand; the address and status stay, and nobody else 
   const r = await api.handle({ method: 'PUT', path: 'companies/mine', headers: h, body: { name: 'Spartan', id: 'stolen', status: 'approved', owner: 'x', theme: { primary: '#00ff00' } } });
   assert.strictEqual(r.status, 200);
   assert.strictEqual(r.body.company.id, 'spartan');
-  assert.strictEqual(r.body.company.status, 'pending');
+  assert.strictEqual(r.body.company.status, 'approved');
   assert.strictEqual(r.body.company.theme.primary, '#00ff00');
   assert.strictEqual(r.body.company.theme.mode, 'dark', 'other colours stay');
   assert.strictEqual((await api.handle({ method: 'PUT', path: 'companies/mine', headers: other, body: { name: 'Hacked' } })).status, 404);

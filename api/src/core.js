@@ -92,7 +92,7 @@ const NEWS_FEEDS = [
  * verifyGoogle(idToken) -> {sub, email, name, picture} (throws when invalid); secret signs our own session tokens.
  * adminEmails: Google accounts that are admins. While neither adminEmails nor adminKey is set, everyone is (the prototype).
  */
-function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], verifyGoogle = null, emailSignIn = null, secret = '', googleClientId = '', fetchText = null, blobSigner = null, putBrand = null, maxRunningServers = 1, serverHourPrice = 0.66 }) {
+function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], verifyGoogle = null, emailSignIn = null, payments = null, secret = '', googleClientId = '', fetchText = null, blobSigner = null, putBrand = null, maxRunningServers = 1, serverHourPrice = 0.66 }) {
   const reply = (status, body) => ({ status, body, headers: { 'Content-Type': 'application/json', ...CORS } });
   const admins = adminEmails.map((e) => String(e).trim().toLowerCase()).filter(Boolean);
   // session tokens: base64url(payload).HMAC
@@ -107,9 +107,18 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
   const deviceOf = (h) => { const d = String(h['x-device'] || ''); return /^[\w-]{16,64}$/.test(d) ? crypto.createHash('sha256').update(d).digest('base64url').slice(0, 22) : null; };
   // who's asking: the signed-in account, or (not signed in) this phone
   const who = (h) => { const s = session(h); return s ? s.uid : deviceOf(h); };
+  // Admins added in the admin area, on top of ADMIN_EMAILS (which can't be removed there, so nobody can lock everyone out).
+  // Kept for 30 seconds, as nearly every request asks, so someone removed loses access within that. Only Google sessions carry an
+  // address, so an admin signs in with Google: Microsoft email accounts can't be admins.
+  let addedAdmins = new Set(), addedAt = -Infinity;
+  const loadAdmins = async (force) => {
+    if (!force && now() - addedAt < 30e3) return;
+    try { addedAdmins = new Set((await store.list('admin')).map((a) => a.email)); addedAt = now(); } catch { /* keep the last list until the store answers */ }
+  };
   const isAdmin = (h) => {
     if (adminKey && h['x-admin-key'] === adminKey) return true;
-    const s = session(h); if (s && admins.includes(String(s.email || '').toLowerCase())) return true;
+    const s = session(h), email = String(s?.email || '').toLowerCase();
+    if (email && (admins.includes(email) || addedAdmins.has(email))) return true;
     return !adminKey && !admins.length; // prototype: nothing set = everyone is an admin
   };
 
@@ -514,12 +523,33 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
     return reply(200, { code });
   }
 
+  // ---------------------------------------------------------------- admin: who's an admin
+  async function adminList(method, action, body, h) {
+    const you = String(session(h)?.email || '').toLowerCase();
+    const list = async () => reply(200, { permanent: admins, added: (await store.list('admin')).sort((x, y) => x.email.localeCompare(y.email)), you });
+    if (!action && method === 'GET') return list();
+    if (method !== 'POST') return null;
+    const email = String(body?.email || '').trim().toLowerCase();
+    if (email.length > 200 || !/^[^\s@/#?\\]+@[^\s@/#?\\]+\.[^\s@/#?\\]+$/.test(email)) return reply(400, { error: 'That doesn\'t look like an email address' });
+    if (!action) {
+      if (admins.includes(email) || await store.get('admin', email)) return reply(409, { error: 'That address is already an admin' });
+      await store.put('admin', email, { email, addedBy: you, at: now() });
+    } else if (action === 'remove') {
+      if (admins.includes(email)) return reply(400, { error: 'That admin is permanent, so nobody can lock everyone out' });
+      if (email === you) return reply(400, { error: 'You can\'t remove yourself: ask another admin' });
+      await store.remove('admin', email);
+    } else return null;
+    await loadAdmins(true);
+    return list();
+  }
+
   // ---------------------------------------------------------------- admin: bans
   async function admin(method, a, b, c, h, body) {
     if (!isAdmin(h)) return reply(403, { error: 'Admins only' });
+    if (a === 'admins') return adminList(method, b, body, h);
     if (a === 'companies') return adminCompanies(method, b, c, body);
     if (a === 'pricing' && !b) return adminPricing(method, body);
-    if (a === 'customers') return adminCustomers(method, b, c);
+    if (a === 'customers') return adminCustomers(method, b, c, body);
     if (a === 'people') return adminPeople(method, b, c, body);
     if (a === 'judgecode' && !b) return judgeCode(method);
     if (a === 'bans' && !b && method === 'GET') {
@@ -535,12 +565,13 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
   }
 
   const recordings = createRecordings({ store, signer: blobSigner, now, reply, session, isAdmin });
-  const { servers, adminPricing, adminCustomers, stopCompany } = createServers({ store, now, reply, session, maxRunning: maxRunningServers, hourPrice: serverHourPrice });
+  const { servers, adminPricing, adminCustomers, stopCompany } = createServers({ store, now, reply, session, isAdmin, payments, maxRunning: maxRunningServers, hourPrice: serverHourPrice });
   const { companies, adminCompanies } = createCompanies({ store, now, reply, session, isAdmin, putBrand, onBlocked: stopCompany });
 
   async function handle({ method, path, headers = {}, body, query: extraQuery = {} }) {
     const h = Object.fromEntries(Object.entries(headers).map(([k, v]) => [k.toLowerCase(), v]));
     if (method === 'OPTIONS') return { status: 204, body: null, headers: CORS };
+    await loadAdmins();
     // The app (another origin) sends everything as a plain-text POST: browsers then skip the CORS pre-check, which
     // Static Web Apps answers without CORS headers. The real method, who's asking and the body are inside.
     if (method === 'POST' && body && body._env === 1) {

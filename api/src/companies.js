@@ -75,7 +75,7 @@ function createCompanies({ store, now, reply, session, isAdmin, putBrand, onBloc
     if (b?.logo) { const l = await saveLogo(id, b.logo); if (l.error) return reply(400, { error: l.error }); logo = l.url; }
     // an email account's session doesn't carry its address (so it can never count as an admin), but its record does
     const email = me.email || (await store.get('user', me.uid))?.email || '';
-    const c = { id, name, website: site.website, about, contact, email, owner: me.uid, logo, theme: theme.theme, status: 'pending', at: now() };
+    const c = { id, name, website: site.website, about, contact, email, owner: me.uid, logo, theme: theme.theme, status: 'approved', at: now() }; // approved straight away: an admin can block them
     await store.put('company', id, c); await store.put('companyof', me.uid, { id });
     return reply(200, { company: ownerView(c) });
   }

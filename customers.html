@@ -40,7 +40,7 @@
       </dl>
 
       <form id="pricing" class="card pricing">
-        <h2>Pricing</h2>
+        <h2>Default pricing</h2>
         <label for="markup">Added to Azure's cost</label>
         <div class="suffixed"><input id="markup" type="number" inputmode="decimal" min="0" max="1000" step="1" required><span>%</span></div>
         <div class="sums" aria-live="polite">
@@ -50,7 +50,7 @@
           <div><span>2 cameras for 8 hours</span><b id="exampleLine"></b></div>
         </div>
         <p class="note warnNote" id="oddNote" hidden></p>
-        <p class="note">New bookings use this price. Bookings already made keep theirs.</p>
+        <p class="note">New bookings use this price, unless a customer has a price of their own, set on their card below. Bookings already made keep theirs.</p>
         <p class="error" id="pricingError" role="alert" hidden></p>
         <button class="primary" id="savePricing" type="submit" disabled>Save price</button>
       </form>
@@ -62,12 +62,23 @@
         <div class="filters" role="group" aria-label="Show">
           <input id="find" type="search" placeholder="Find a customer" aria-label="Find a customer">
           <select id="statusFilter" aria-label="Status">
-            <option value="">All</option><option value="pending">Waiting for you</option><option value="approved">Approved</option><option value="suspended">Suspended</option><option value="declined">Declined</option>
+            <option value="">All</option><option value="approved">Active</option><option value="suspended">Blocked</option>
           </select>
         </div>
       </div>
       <div id="list" class="customerList"></div>
-      <p class="note">Azure's cost here is running time. Each customer who has started a server also keeps a disk and an internet address, about £10 a month in all, whether it's running or not.</p>
+      <p class="note">Azure's cost here is running time and storing the recordings. Each customer who has started a server also keeps a disk and an internet address, about £10 a month in all, whether it's running or not.</p>
+    </section>
+
+    <section class="card adminsBox">
+      <h2>Admins</h2>
+      <p class="note">Admins can see every customer, change your prices, and add or remove other admins. They sign in with Google using this exact address.</p>
+      <ul id="adminList" class="adminList"></ul>
+      <form id="addAdmin" class="addAdmin">
+        <label for="adminEmail">Add an admin</label>
+        <div><input id="adminEmail" type="email" autocomplete="off" maxlength="200" placeholder="name@example.com" required><button class="small" type="submit">Add</button></div>
+      </form>
+      <p class="error" id="adminError" role="alert" hidden></p>
     </section>
   </div>
 </main>

@@ -62,9 +62,9 @@ function setLogoPick() {
 
 const STATUS = {
   pending: ['We\'re checking your application', 'We check each company by hand. You can still change anything below.'],
-  approved: ['You\'re approved', 'Your logo and colours are live.'],
+  approved: ['You\'re all set', 'Your logo and colours are live.'],
   declined: ['We can\'t offer HeadJudge to this company at the moment', ''],
-  suspended: ['This company is suspended', 'Get in touch with us to sort this out.'],
+  suspended: ['This company is blocked', 'Get in touch with us to sort this out.'],
 };
 function drawStatus() {
   const box = $('status');

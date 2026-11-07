@@ -5,7 +5,7 @@
    Storage deletes recordings after KEEP_DAYS (a lifecycle rule on the storage account); the list here forgets them too. */
 const crypto = require('node:crypto');
 
-const KEEP_DAYS = 30;
+const KEEP_DAYS = 7;
 const MAX_FILE = 5e9;           // a 10-minute recording is well under this
 const MAX_OWNER = 200e9;        // about £3 a month of storage, per account
 const WRITE_MINUTES = 120, READ_MINUTES = 240;

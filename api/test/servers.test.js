@@ -11,10 +11,10 @@ async function setup(opts = {}) {
   const api = createApi({ store, now: () => clock, secret: 'test-secret-test-secret-test-secret', googleClientId: 'x', adminEmails: ['boss@example.com'], maxRunningServers: opts.max ?? 1, serverHourPrice: 0.66, verifyGoogle: async (t) => ({ sub: t, email: `${t}@example.com`, name: t }) });
   const login = async (who) => ({ Authorization: `Bearer ${(await api.handle({ method: 'POST', path: 'auth/google', body: { idToken: who } })).body.token}` });
   const call = (method, path, headers, body) => api.handle({ method, path, headers, body });
-  const company = async (who, id, approve = true) => {
+  const company = async (who, id, { card = true } = {}) => {
     const h = await login(who);
     await call('POST', 'companies', h, { name: `${id} Co`, id, contact: 'Sam', theme: {} });
-    if (approve) await call('POST', `admin/companies/${id}/approve`, await login('boss'), {});
+    if (card) await store.put('company', id, { ...(await store.get('company', id)), payment: { brand: 'visa', last4: '4242', expMonth: 1, expYear: 2030 } });
     return h;
   };
   return { api, store, login, call, company, pass: (ms) => { clock += ms; }, now: () => clock };
@@ -27,12 +27,14 @@ test('you must be signed in and have a company', async () => {
   assert.strictEqual((await start(call, await login('nobody'))).status, 404);
 });
 
-test('a company waiting for approval, or suspended, can\'t start a server, so can\'t run up a bill', async () => {
+test('a company is approved as soon as it registers, and blocking it stops it starting a server', async () => {
   const { call, company, login } = await setup();
-  const h = await company('sam', 'peak', false);
+  const h = await company('sam', 'peak');
+  assert.strictEqual((await call('GET', 'servers/mine', h)).body.server.canStart, true);
+  const boss = await login('boss');
+  await call('POST', 'admin/companies/peak/suspend', boss, { note: 'no' });
   assert.strictEqual((await call('GET', 'servers/mine', h)).body.server.canStart, false);
   assert.strictEqual((await start(call, h)).status, 403);
-  const boss = await login('boss');
   await call('POST', 'admin/companies/peak/approve', boss, {});
   assert.strictEqual((await start(call, h)).status, 200);
   await call('POST', 'servers/mine/stop', h, {});
@@ -44,7 +46,7 @@ test('the page gets what it needs to work out a price before anything starts', a
   const { call, company } = await setup({ max: 4 });
   const h = await company('sam', 'peak');
   const { price } = (await call('GET', 'servers/mine', h)).body.server;
-  assert.deepStrictEqual(price, { cameraHour: 0.33, camerasPerServer: 2, maxHours: 24, maxExtendHours: 12, maxCameras: 8 });
+  assert.deepStrictEqual(price, { cameraHour: 0.34, keepDays: 7, camerasPerServer: 2, maxHours: 24, maxExtendHours: 12, maxCameras: 8 });
 });
 
 test('two cameras per server: cameras and hours decide how many servers, what it costs and when they stop', async () => {
@@ -53,7 +55,7 @@ test('two cameras per server: cameras and hours decide how many servers, what it
   const r = await start(call, h, 3, 4);
   const s = r.body.server;
   assert.strictEqual(s.serverCount, 2);
-  assert.strictEqual(s.bookedCost, 3.96, '3 cameras x 4 hours x 0.33');
+  assert.strictEqual(s.bookedCost, 4.08, '3 cameras x 4 hours x 0.34');
   assert.strictEqual(s.until, now() + 4 * HOUR);
   assert.strictEqual(s.wanted, 'on');
   assert.strictEqual(s.servers.length, 2);
@@ -79,7 +81,7 @@ test('extending moves the stop time on every server, and adds to the cost', asyn
   assert.strictEqual(r.status, 200);
   assert.strictEqual(r.body.server.until, until + 3 * HOUR);
   assert.strictEqual(r.body.server.bookedHours, 5);
-  assert.strictEqual(r.body.server.bookedCost, 6.6);
+  assert.strictEqual(r.body.server.bookedCost, 6.8);
   assert.strictEqual((await store.get('serverwant', 'peak~2')).until, until + 3 * HOUR);
 });
 

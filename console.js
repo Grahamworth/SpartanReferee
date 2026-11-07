@@ -1,13 +1,14 @@
 // A company's own page: say how many cameras and for how long, see what it costs, start. The servers run for that long and shut down by
 // themselves, so this page never has to be left open; while they run it opens each one's video review and extends the booking.
-import { call, googleButton, signedIn, getMe, signOut } from './api-base.js';
+import { call, googleButton, signedIn, getMe, signOut, esc } from './api-base.js';
 import { emailButtons } from './email-signin-web.js';
+import { drawTracked } from './tracked-demos.js';
 
 const { applyTheme } = window.HeadJudgeBrand;
 const { quote, timeLeft, money, plural } = window.HeadJudgeBooking;
 const $ = (id) => document.getElementById(id);
 const show = (el, on) => { el.hidden = !on; };
-let poll = null, busy = false, last = null, listKey = '';
+let poll = null, busy = false, last = null, listKey = '', payMessage = '';
 
 const fail = (msg) => { $('error').textContent = msg || ''; show($('error'), !!msg); };
 const clock = (t) => new Date(t).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -21,11 +22,15 @@ function fillHours(sel, max, chosen) {
 function drawQuote() {
   if (!last) return;
   const p = last.price, cams = Math.floor(Number($('cameras').value)), ok = cams >= 1 && cams <= p.maxCameras;
-  $('start').disabled = busy || !last.canStart || !ok;
+  // the first booking asks for a card, unless it's an admin's
+  const askCard = last.needsCard && last.canStart;
+  $('start').disabled = busy || !ok || !last.canStart || (askCard && !last.cardsOn);
+  $('payNote').textContent = payMessage || (askCard ? (last.cardsOn ? 'Before your first booking, add a card on Stripe\'s secure page. Nothing is charged today.' : 'Card payments aren\'t switched on yet: please try again soon.') : '');
+  show($('payNote'), !!$('payNote').textContent);
   if (!ok) { $('quoteHow').textContent = cams > p.maxCameras ? `We can run ${p.maxCameras} cameras at once at the moment` : 'How many cameras do you need?'; $('quoteCost').textContent = ''; return; }
   const q = quote(cams, +$('hours').value, p);
-  $('quoteHow').textContent = `${q.how} · ${plural(q.servers, 'server')} (${p.camerasPerServer} cameras each)`; $('quoteCost').textContent = money(q.cost);
-  $('start').textContent = q.servers === 1 ? 'Start server' : `Start ${q.servers} servers`;
+  $('quoteHow').textContent = q.how; $('quoteCost').textContent = money(q.cost);
+  $('start').textContent = askCard ? 'Add payment details' : 'Book and start';
 }
 function drawExtendQuote() {
   if (!last?.serverCount) return;
@@ -54,10 +59,10 @@ function draw(s) {
   const state = s.wanted === 'on' ? (s.state === 'on' ? 'on' : 'starting') : (s.state === 'on' || s.state === 'starting' || s.state === 'stopping' ? 'stopping' : 'off');
   $('light').dataset.state = state;
   const many = s.serverCount > 1;
-  $('stateText').textContent = { off: 'Book your server', starting: many ? 'Your servers are starting' : 'Your server is starting', on: many ? 'Your servers are on' : 'Your server is on', stopping: many ? 'Your servers are stopping' : 'Your server is stopping' }[state];
+  $('stateText').textContent = { off: 'Book your cameras', starting: many ? 'Your servers are starting' : 'Your server is starting', on: many ? 'Your servers are on' : 'Your server is on', stopping: many ? 'Your servers are stopping' : 'Your server is stopping' }[state];
   const ending = s.until && s.until - Date.now() < 20 * 60e3;
   $('stateMore').textContent = state === 'stopping' ? 'Saving the recordings first, so nothing is lost. This can take a few minutes.'
-    : state === 'off' ? (s.canStart ? 'Tell us how many cameras and for how long.' : 'You can start a server once we\'ve approved your company.')
+    : state === 'off' ? (s.canStart ? 'How many cameras, and for how long?' : 'This company has been blocked from starting servers. Get in touch with us to sort this out.')
       : `${state === 'starting' ? 'This takes about 5 minutes. ' : ''}${many ? 'They shut' : 'It shuts'} down at ${dayClock(s.until)}, ${timeLeft(s.until - Date.now())}.`;
   $('stateMore').classList.toggle('warn', !!ending);
   fail(state === 'off' ? s.error : '');
@@ -65,16 +70,33 @@ function draw(s) {
   const p = s.price;
   fillHours($('hours'), p.maxHours, 4); fillHours($('extendHours'), p.maxExtendHours, 1);
   $('cameras').max = p.maxCameras;
+  $('keepDays').textContent = p.keepDays;
   drawQuote(); drawExtendQuote(); drawList(s);
   $('extendBtn').disabled = busy; $('stop').disabled = busy;
   show($('factBooked'), s.wanted === 'on');
   if (s.wanted === 'on') $('booked').textContent = `${plural(s.bookedHours, 'hour')} · ${money(s.bookedCost)}`;
+  show($('factCard'), !!s.card || s.adminNoCard);
+  $('cardText').textContent = s.card ? `${s.card.brand[0].toUpperCase()}${s.card.brand.slice(1)} ending ${s.card.last4}` : 'Not needed: you\'re an admin';
+  show($('changeCard'), !!s.card && s.cardsOn);
   $('hours2').textContent = `${plural(s.used.cameraHours, 'camera hour')} · ${money(s.used.charge)}`;
+}
+const STATE_WORD = { running: 'On now', stopped: 'Stopped early', finished: 'Finished' };
+async function drawHistory() {
+  let bookings; try { ({ bookings } = await call('servers/mine/history')); } catch { return; }
+  $('history').innerHTML = bookings.length ? `<div class="historyTable" role="table" aria-label="Your bookings">
+    <div class="historyRow head" role="row"><span role="columnheader">Booked</span><span role="columnheader">Cameras</span><span role="columnheader">Hours</span><span role="columnheader">Status</span><span role="columnheader">Cost</span></div>
+    ${bookings.map((b) => `<div class="historyRow" role="row">
+      <span role="cell">${esc(new Date(b.at).toLocaleString([], { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }))}</span>
+      <span role="cell">${esc(b.cameras)}</span>
+      <span role="cell">${esc(b.state === 'stopped' ? `${b.hoursRun} of ${b.hours}` : b.hours)}</span>
+      <span role="cell">${esc(STATE_WORD[b.state] || '')}</span>
+      <span role="cell"><b>${esc(money(b.cost))}</b></span>
+    </div>`).join('')}</div>` : '<p class="muted">Your bookings will show here.</p>';
 }
 async function refresh() { try { draw((await call('servers/mine')).server); } catch { /* the next try */ } }
 async function act(path, body = {}) {
   busy = true; fail('');
-  try { listKey = ''; draw((await call(`servers/mine/${path}`, { method: 'POST', body })).server); }
+  try { listKey = ''; draw((await call(`servers/mine/${path}`, { method: 'POST', body })).server); drawHistory(); }
   catch (e) { fail(e.message); }
   busy = false; if (last) draw(last);
 }
@@ -84,7 +106,14 @@ async function openServer(n) {
   try { const { url } = await call('servers/mine/open', { method: 'POST', body: { n } }); if (w) w.location = url; else location.href = url; }
   catch (e) { w?.close(); fail(e.message); }
 }
-$('book').addEventListener('submit', (e) => { e.preventDefault(); act('start', { cameras: Math.floor(Number($('cameras').value)), hours: +$('hours').value }); });
+async function addCard() {
+  busy = true; payMessage = ''; drawQuote();
+  try { const { url } = await call('servers/mine/payment', { method: 'POST', body: {} }); location.assign(url); return; }
+  catch (e) { payMessage = e.message; }
+  busy = false; drawQuote();
+}
+$('changeCard').onclick = addCard;
+$('book').addEventListener('submit', (e) => { e.preventDefault(); if (last?.needsCard) { addCard(); return; } act('start', { cameras: Math.floor(Number($('cameras').value)), hours: +$('hours').value }); });
 $('cameras').addEventListener('input', drawQuote);
 $('hours').addEventListener('change', drawQuote);
 $('extendHours').addEventListener('change', drawExtendQuote);
@@ -97,6 +126,14 @@ function enterBrand(c) {
   $('company').textContent = c.name;
   if (c.logo) { $('logo').src = c.logo; show($('logo'), true); }
 }
+async function cameBackFromStripe() {
+  const back = new URLSearchParams(location.search).get('payment');
+  if (!back) return;
+  history.replaceState(null, '', location.pathname);
+  if (back === 'cancelled') { payMessage = 'No card was saved. You can add one whenever you\'re ready.'; return; }
+  try { await call('servers/mine/payment-done', { method: 'POST', body: { session: back } }); }
+  catch (e) { payMessage = e.message; }
+}
 async function enter() {
   const me = await getMe(true);
   if (!me.user) { signOut(); return start(); }
@@ -106,8 +143,11 @@ async function enter() {
   const { company } = await call('companies/mine');
   if (!company) { show($('none'), true); return; }
   enterBrand(company);
-  show($('server'), true); show($('more'), true);
+  show($('server'), true); show($('more'), true); show($('historyBox'), true); show($('tracked'), true);
+  drawTracked($('trackedList'));
+  await cameBackFromStripe();
   await refresh();
+  drawHistory();
   clearInterval(poll); poll = setInterval(refresh, 5000);
 }
 async function start() {

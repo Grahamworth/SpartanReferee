@@ -79,7 +79,28 @@ textarea { resize: vertical; }
 /* a company's own page */
 .brandline { display: inline-flex; align-items: center; gap: 12px; min-width: 0; }
 .toplogo { height: 40px; max-width: 170px; object-fit: contain; }
-.console { max-width: 720px; }
+.console { max-width: 1180px; }
+.console > .card.narrow { margin-left: auto; margin-right: auto; }
+.consoleGrid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 24px; align-items: start; }
+.consoleGrid:has(> .tracked[hidden]) { display: block; max-width: 720px; margin: 0 auto; }
+.consoleMain { min-width: 0; }
+@media (max-width: 860px) { .consoleGrid { grid-template-columns: minmax(0, 1fr); } .tracked { order: 2; } }
+.tracked h2 { font-size: 1.5rem; }
+.trackCard { display: flex; gap: 14px; align-items: center; background: var(--panel); border: 1px solid var(--line); padding: 10px 14px 10px 10px; margin-top: 10px; min-width: 0; }
+.trackCard canvas { width: 118px; height: 118px; flex: none; background: var(--bg); }
+.trackCard div { min-width: 0; }
+.trackCard h3 { margin: 0 0 4px; font: italic 800 1.3rem var(--display); text-transform: uppercase; }
+.trackCard ul { list-style: none; margin: 0; padding: 0; font-size: .92rem; color: var(--muted); }
+.trackCard li { padding-left: 16px; position: relative; transition: color .12s; }
+.trackCard li::before { content: ""; position: absolute; left: 2px; top: .55em; width: 7px; height: 7px; border-radius: 50%; background: var(--line); transition: background .12s; }
+.trackCard li.lit { color: var(--text); font-weight: 600; }
+.trackCard li.lit::before { background: var(--accent); }
+.historyBox { margin-top: 18px; }
+.historyBox h2 { font-size: 1.5rem; margin-bottom: 8px; }
+.historyRow { display: grid; grid-template-columns: minmax(0, 2.6fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.5fr) minmax(0, 1fr); gap: 8px; padding: 8px 0; border-top: 1px solid var(--line); font-size: .92rem; align-items: baseline; }
+.historyRow.head { color: var(--muted); font-size: .82rem; border-top: 0; }
+.historyRow span:last-child { text-align: right; }
+@media (max-width: 480px) { .historyRow { grid-template-columns: minmax(0, 1fr) auto; } .historyRow.head { display: none; } .historyRow span:nth-child(2)::after { content: " cameras"; } .historyRow span:nth-child(3)::after { content: " hours"; } }
 .serverCard { padding: clamp(20px, 4vw, 32px); }
 .stateLine { display: flex; align-items: center; gap: 12px; }
 .stateLine h1 { font-size: clamp(1.9rem, 6vw, 2.6rem); line-height: 1.05; font-style: italic; }
@@ -167,6 +188,21 @@ select { width: 100%; font: inherit; color: var(--text); background: var(--bg); 
 .custUse { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; margin: 12px 0 0; padding-top: 10px; border-top: 1px solid var(--line); }
 .custUse dt { color: var(--muted); font-size: .85rem; }
 .custUse dd { margin: 0; font: 700 1.3rem var(--display); }
+
+/* payment on the console, and customers' prices and admins in the admin area */
+.facts .cardText { font: 600 1rem inherit; font-family: inherit; }
+.custPrice { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: 10px 0; }
+.custPrice label { margin: 0; }
+.custPrice small { flex-basis: 100%; }
+.custPriceBox { display: flex; align-items: center; gap: 4px; }
+.custPriceBox input { width: 90px; }
+.adminsBox { margin-top: 18px; max-width: 720px; }
+.adminList { list-style: none; margin: 12px 0; padding: 0; }
+.adminList li { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; border-top: 1px solid var(--line); }
+.adminList b { display: block; overflow-wrap: anywhere; }
+.adminList small { color: var(--muted); }
+.addAdmin > div { display: flex; gap: 8px; }
+.addAdmin input { flex: 1; min-width: 0; }
 
 /* email sign-in, above the Google button */
 .orLine { display: flex; align-items: center; gap: 10px; margin: 16px 0 0; color: var(--muted); font-size: .9rem; }

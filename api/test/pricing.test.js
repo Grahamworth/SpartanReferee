@@ -10,7 +10,7 @@ async function setup() {
   const login = async (who) => ({ Authorization: `Bearer ${(await api.handle({ method: 'POST', path: 'auth/google', body: { idToken: who } })).body.token}` });
   const call = (method, path, headers, body) => api.handle({ method, path, headers, body });
   const boss = await login('boss');
-  const company = async (who, id) => { const h = await login(who); await call('POST', 'companies', h, { name: `${id} Co`, id, contact: 'Sam', website: 'x.example', theme: {} }); await call('POST', `admin/companies/${id}/approve`, boss, {}); return h; };
+  const company = async (who, id) => { const h = await login(who); await call('POST', 'companies', h, { name: `${id} Co`, id, contact: 'Sam', website: 'x.example', theme: {} }); await store.put('company', id, { ...(await store.get('company', id)), payment: { brand: 'visa', last4: '4242', expMonth: 1, expYear: 2030 } }); await call('POST', `admin/companies/${id}/approve`, boss, {}); return h; };
   return { store, call, login, boss, company, month: new Date(clock).toISOString().slice(0, 7) };
 }
 
@@ -26,8 +26,11 @@ test('only admins see or change pricing and customers', async () => {
 test('the price per camera hour is Azure\'s price for a server, shared by its 2 cameras, plus the percentage, rounded up to the penny', async () => {
   const { call, boss } = await setup();
   const r0 = await call('GET', 'admin/pricing', boss);
-  assert.deepStrictEqual(r0.body, { markupPercent: 0, azureServerHour: 0.66, azureCameraHour: 0.33, camerasPerServer: 2, cameraHour: 0.33 });
-  for (const [m, want] of [[30, 0.43], [50, 0.5], [100, 0.66], [0, 0.33]]) {
+  const { storageCameraHour, azureCameraHour, ...rest } = r0.body;
+  assert.deepStrictEqual(rest, { markupPercent: 0, azureServerHour: 0.66, keepDays: 7, camerasPerServer: 2, standardCameraHour: 0.34, cameraHour: 0.34, customPrice: false });
+  assert.ok(Math.abs(storageCameraHour - 0.0055) < 0.0001, 'about 1.63 GB for 7 days at £0.0144 per GB per month');
+  assert.ok(Math.abs(azureCameraHour - (0.33 + storageCameraHour)) < 1e-9);
+  for (const [m, want] of [[30, 0.44], [50, 0.51], [100, 0.68], [0, 0.34]]) {
     const r = await call('PUT', 'admin/pricing', boss, { markupPercent: m });
     assert.strictEqual(r.body.cameraHour, want, `${m}%`);
   }
@@ -39,7 +42,7 @@ test('customers see the price but not Azure\'s cost or your percentage', async (
   await call('PUT', 'admin/pricing', boss, { markupPercent: 50 });
   const h = await company('sam', 'peak');
   const r = await call('GET', 'servers/mine', h);
-  assert.strictEqual(r.body.server.price.cameraHour, 0.5);
+  assert.strictEqual(r.body.server.price.cameraHour, 0.51);
   const text = JSON.stringify(r.body);
   for (const secret of ['markup', 'azure', '0.66', '0.33']) assert.ok(!text.includes(secret), secret);
 });
@@ -50,15 +53,16 @@ test('the cost shown is per camera, including an odd number of them, and a booki
   const h = await company('sam', 'peak');
   const r = await call('POST', 'servers/mine/start', h, { cameras: 3, hours: 4 });
   assert.strictEqual(r.body.server.serverCount, 2);
-  assert.strictEqual(r.body.server.bookedCost, 6, '3 cameras x 4 hours x 0.50');
+  assert.strictEqual(r.body.server.bookedCost, 6.12, '3 cameras x 4 hours x 0.51');
   assert.strictEqual((await store.get('serverwant', 'peak')).bookedCameras, 2);
   assert.strictEqual((await store.get('serverwant', 'peak~2')).bookedCameras, 1);
-  assert.strictEqual((await store.get('serverwant', 'peak')).cameraHour, 0.5);
-  assert.strictEqual((await store.get('serverwant', 'peak')).azureHour, 0.66);
+  assert.strictEqual((await store.get('serverwant', 'peak')).cameraHour, 0.51);
+  // its 2 cameras: the server, and keeping what they record for 7 days (about 0.55p per camera hour)
+  assert.ok(Math.abs((await store.get('serverwant', 'peak')).azureHour - 0.671) < 0.0005);
   await call('PUT', 'admin/pricing', boss, { markupPercent: 200 });
   const e = await call('POST', 'servers/mine/extend', h, { hours: 2 });
-  assert.strictEqual(e.body.server.bookedCost, 9, 'still 0.50, now 6 hours');
-  assert.strictEqual(e.body.server.price.cameraHour, 0.99, 'new bookings pay the new price');
+  assert.strictEqual(e.body.server.bookedCost, 9.18, 'still 0.51, now 6 hours');
+  assert.strictEqual(e.body.server.price.cameraHour, 1.01, 'new bookings pay the new price');
 });
 
 test('the customer list shows each one\'s booking and use, and totals them', async () => {
