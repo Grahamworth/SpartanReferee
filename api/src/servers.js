@@ -42,7 +42,7 @@ const serversFor = (cameras) => Math.ceil(cameras / CAMERAS_PER_SERVER);
 const pounds = (v) => Math.round(v * 100) / 100;
 
 const pence = (v) => Math.ceil(Math.round(v * 1e6) / 1e4) / 100;
-const MAX_MARKUP = 1000, MAX_CAMERA_HOUR = 100, BOOKINGS_SHOWN = 50;
+const MAX_MARKUP = 1000, MAX_CAMERA_HOUR = 100, BOOKINGS_SHOWN = 50, MAX_SETTINGS = 30000;
 
 // Keeping what a camera records. A camera at the recommended 720p sends about 3.6 Mbps with its sound, so 1.63 GB an hour. Hot
 // storage in UK South is £0.0144 per GB per month (Azure's price list, November 2026), and is the cheapest tier for 7 days, as
@@ -185,6 +185,16 @@ function createServers({ store, now, reply, session, isAdmin = () => false, paym
   }
 
   async function servers(method, a, b, body, h) {
+    // a server's settings, kept here as the server itself is deleted when it's shut down
+    if (a === 'settings' && (method === 'GET' || method === 'POST')) {
+      const k = await store.get('serverkey', sha(h['x-server-key'] || ''));
+      if (!k) return reply(401, { error: 'That key isn\'t recognised' });
+      if (method === 'GET') return reply(200, { settings: (await store.get('servercfg', k.id))?.settings || null });
+      const settings = body?.settings;
+      if (!settings || typeof settings !== 'object' || JSON.stringify(settings).length > MAX_SETTINGS) return reply(400, { error: 'Those settings won\'t fit' });
+      await store.put('servercfg', k.id, { id: k.id, settings, at: now() });
+      return reply(200, { ok: true });
+    }
     if (a === 'report' && method === 'POST') {
       const k = await store.get('serverkey', sha(h['x-server-key'] || ''));
       if (!k) return reply(401, { error: 'That key isn\'t recognised' });
@@ -192,7 +202,7 @@ function createServers({ store, now, reply, session, isAdmin = () => false, paym
       want.lastReport = now();
       want.cameras = Math.max(0, Math.min(99, +body?.cams || 0)); want.judges = Math.max(0, Math.min(99, +body?.judges || 0));
       // finished: nothing left to send, so it may now be turned off
-      if (body?.what === 'finished') { want.finished = true; want.desired = 'off'; }
+      if (body?.what === 'finished') { want.finished = true; want.desired = 'off'; want.saved = body.saved === true; } // saved: all of it is in cloud storage
       await store.put('serverwant', k.id, want);
       return reply(200, { stop: want.desired === 'off' || (!!want.until && want.until <= now()), until: want.until || 0 });
     }
@@ -236,7 +246,7 @@ function createServers({ store, now, reply, session, isAdmin = () => false, paym
       const bookedAt = now(), bookingKey = String(bookedAt).padStart(15, '0');
       await store.put('serverplan', c.id, { id: c.id, cameras, servers: needed, hours, until, cameraHour, requestedAt: bookedAt, requestedBy: me.email || '', bookingKey });
       await store.put(`booking:${c.id}`, bookingKey, { key: bookingKey, at: bookedAt, cameras, hours, until, cameraHour });
-      await forEachWant(c.id, needed, { desired: 'on', requestedAt: now(), requestedBy: me.email || '', finished: false, stopRequestedAt: 0, until, lastReport: 0, cameraHour, azureHour: azureServerHour });
+      await forEachWant(c.id, needed, { desired: 'on', requestedAt: now(), requestedBy: me.email || '', finished: false, saved: false, stopRequestedAt: 0, until, lastReport: 0, cameraHour, azureHour: azureServerHour });
       // each server's own share of the cameras, as that's what its time is charged at
       // and what its time costs us: the server, and keeping what its cameras record
       for (let n = 1, left = cameras; n <= needed; n++, left -= CAMERAS_PER_SERVER) { const on = Math.min(left, CAMERAS_PER_SERVER); await forEachWant(c.id, n, { azureHour: azureServerHour + on * storageCameraHour }, n, on); }

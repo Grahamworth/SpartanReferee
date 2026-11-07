@@ -1,7 +1,7 @@
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert');
-const { decide, reconcile, NO_BOOKING_LIMIT_MS, REPORT_LIMIT_MS, STOP_GRACE_MS, START_LIMIT_MS } = require('../src/reconcile');
+const { decide, reconcile, UNSAVED_KEEP_MS, NO_BOOKING_LIMIT_MS, REPORT_LIMIT_MS, STOP_GRACE_MS, START_LIMIT_MS } = require('../src/reconcile');
 const { createArm } = require('../src/arm');
 
 const NOW = 1_800_000_000_000;
@@ -181,6 +181,77 @@ test('the charge stops the moment Stop is pressed or the booking ends, though Az
     assert.strictEqual(st.cameraMinutes[k], 10, `${why}: no more camera time`);
     assert.ok(st.azure[k] > 1, `${why}: it still costs us`);
   }
+});
+
+// ---------- deleting a server when it's done with
+function deleting(wantExtra, stExtra = {}, power = 'deallocated') {
+  const rows = new Map([['serverwant/a', { id: 'a', desired: 'off', finished: true, until: NOW - 1, ...wantExtra }], ['server/a', { id: 'a', vm: 'hj-a-abc123', label: 'hj-a-abc123', host: 'hj-a-abc123.italynorth.cloudapp.azure.com', secret: 'keep', password: 'keep' }], ['serverstate/a', { id: 'a', state: 'off', minutes: {}, checkedAt: NOW - 60e3, ...stExtra }]]);
+  const store = { list: async (p) => [...rows].filter(([x]) => x.startsWith(`${p}/`)).map(([, v]) => v), get: async (p, x) => rows.get(`${p}/${x}`) || null, put: async (p, x, v) => { rows.set(`${p}/${x}`, v); } };
+  const s = { power, calls: [] };
+  const arm = { power: async () => s.power, diskOf: async () => 'disk1', deleteMachine: async (vm) => { s.calls.push(`machine ${vm}`); }, deleteLeftovers: async (vm, disk) => { s.calls.push(`leftovers ${vm} ${disk}`); if (s.failLeftovers) throw new Error('busy'); }, create: async (server) => { s.calls.push(`create ${server.vm}`); }, start: async () => { s.calls.push('start'); }, deallocate: async () => {} };
+  return { rows, s, go: (t = NOW) => reconcile({ store, arm, health: async () => false, seedFor: async () => ({}), now: () => t }) };
+}
+test('a server that has said everything is saved is deleted, with its disk and address, and the next gets a new address', async () => {
+  const { rows, s, go } = deleting({ saved: true });
+  await go();
+  assert.deepStrictEqual(s.calls, ['machine hj-a-abc123']);
+  assert.strictEqual(rows.get('serverstate/a').removing.disk, 'disk1');
+  await go();
+  assert.deepStrictEqual(s.calls, ['machine hj-a-abc123'], 'waits for the machine to go');
+  s.power = 'none';
+  await go();
+  assert.strictEqual(s.calls[1], 'leftovers hj-a-abc123 disk1');
+  const after = rows.get('server/a');
+  assert.notStrictEqual(after.vm, 'hj-a-abc123');
+  assert.match(after.vm, /^hj-a-[0-9a-f]{6}$/);
+  assert.strictEqual(after.host, `${after.label}.italynorth.cloudapp.azure.com`);
+  assert.strictEqual(after.secret, 'keep', 'its secrets stay');
+  assert.strictEqual(rows.get('serverstate/a').removing, null);
+  await go();
+  assert.strictEqual(s.calls.length, 2, 'nothing more to do');
+});
+test('with no word that everything is saved, its disk is kept for a week, then deleted regardless', async () => {
+  const { rows, s, go } = deleting({ saved: false }, { lastOff: { at: NOW, why: 'grace' } });
+  await go();
+  assert.deepStrictEqual(s.calls, []);
+  await go(NOW + UNSAVED_KEEP_MS - 1000);
+  assert.deepStrictEqual(s.calls, []);
+  await go(NOW + UNSAVED_KEEP_MS + 1000);
+  assert.deepStrictEqual(s.calls, ['machine hj-a-abc123']);
+  assert.ok(rows.get('serverstate/a').removing);
+});
+test('a server that\'s on, or wanted, is never deleted', async () => {
+  for (const [want, power] of [[{ desired: 'on', until: NOW + 3600e3, saved: true, finished: false }, 'running'], [{ desired: 'off', saved: true, stopRequestedAt: NOW }, 'running'], [{ desired: 'on', until: NOW + 3600e3, saved: false, finished: false }, 'deallocated']]) {
+    const { s, go } = deleting(want, { state: 'on', startedAt: NOW - 60e3 }, power);
+    await go();
+    assert.ok(!s.calls.some((c) => c.startsWith('machine')), JSON.stringify(want));
+  }
+});
+test('booking while one is being deleted waits, then makes a new one on the new address', async () => {
+  const { rows, s, go } = deleting({ desired: 'on', until: NOW + 3600e3, saved: false, requestedAt: NOW }, { removing: { disk: 'disk1', at: NOW - 1000 } }, 'none');
+  await go();
+  assert.strictEqual(s.calls[0], 'leftovers hj-a-abc123 disk1');
+  assert.strictEqual(s.calls.length, 1, 'tidied up first');
+  const next = rows.get('server/a').vm;
+  await go(NOW + 60e3);
+  assert.strictEqual(s.calls[1], `create ${next}`);
+});
+test('if what\'s left can\'t go yet, it\'s tried again', async () => {
+  const { rows, s, go } = deleting({ saved: true }, { removing: { disk: 'disk1', at: NOW } }, 'none');
+  s.failLeftovers = true;
+  const out = await go();
+  assert.ok(out[0].failed);
+  assert.ok(rows.get('serverstate/a').removing);
+  assert.strictEqual(rows.get('server/a').vm, 'hj-a-abc123', 'same address until it\'s gone');
+  s.failLeftovers = false;
+  await go();
+  assert.strictEqual(rows.get('serverstate/a').removing, null);
+});
+test('Azure: deleting a server asks for each piece by name, and anything gone already is fine', async () => {
+  const seen = [];
+  const arm = createArm({ subscription: 'S', group: 'G', token: async () => 'T', doFetch: async (url, o) => { seen.push(`${o.method} ${url.split('?')[0].split('/providers')[1]}`); return { ok: false, status: 404, text: async () => '' }; } });
+  await arm.deleteMachine('hj-a'); await arm.deleteLeftovers('hj-a', 'd1');
+  assert.deepStrictEqual(seen, ['DELETE /Microsoft.Compute/virtualMachines/hj-a', 'DELETE /Microsoft.Network/networkInterfaces/hj-a-nic', 'DELETE /Microsoft.Network/publicIPAddresses/hj-a-ip', 'DELETE /Microsoft.Compute/disks/d1']);
 });
 
 test('Azure: "not yet" is waited out, as a new address takes a few seconds to be ready for its network card', async () => {

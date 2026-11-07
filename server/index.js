@@ -182,12 +182,13 @@ async function extra(req, res, u, { local }) {
     if (!b || !/^burpeeJudge\.settings(\.[a-z0-9]{1,20})?$/i.test(String(b.key || '')) || typeof b.value !== 'string' || b.value.length > 20000) return send(res, 400, { error: 'Not a judge setting' }), true;
     judgeSettings[b.key] = b.value;
     fs.writeFile(JUDGE_SETTINGS, JSON.stringify(judgeSettings), () => {});
+    saveSettingsToSite().catch(() => {});
     send(res, 200, { ok: true }); return true;
   }
   if (p === '/api/cameras' && req.method === 'GET') { send(res, 200, { cameras: await cameraList(), bitrate: S.bitrate, max: MAX_CAMERAS }); return true; }
   if (p === '/api/cameras' && req.method === 'POST') {
     if (!isJson(req)) return send(res, 415, { error: 'JSON only' }), true;
-    if (S.stations < MAX_CAMERAS) { S.stations++; save(); await review.watchCameras(); }
+    if (S.stations < MAX_CAMERAS) { S.stations++; save(); saveSettingsToSite().catch(() => {}); await review.watchCameras(); }
     send(res, 200, { stations: S.stations }); return true;
   }
   if (p === '/api/server' && req.method === 'GET') { send(res, 200, { log: mtxLog.slice(-60), cloud: { ...cloud.status }, idle: sleeper.status() }); return true; }
@@ -235,14 +236,49 @@ const sleeper = createSleep({
     await cloud.sendResults(true).catch(() => {});
     stopping = true; try { mtx?.kill('SIGTERM'); } catch { /* gone */ }
     await new Promise((r) => setTimeout(r, QUIET_MS + 10000)); // a recording counts as finished once it's stopped changing
-    for (let i = 0; i < 40; i++) { await cloud.tick().catch(() => {}); if (!cloud.status.waiting && cloud.status.state !== 'sending') break; await new Promise((r) => setTimeout(r, 15000)); }
+    for (let i = 0; i < 40; i++) { await cloud.tick().catch(() => {}); await cloud.sendResults(true).catch(() => {}); if (!cloud.status.waiting && cloud.status.state !== 'sending' && !cloud.status.resultsError) break; await new Promise((r) => setTimeout(r, 15000)); }
   },
   tell: (what) => callSite(what), log,
 });
+// Everything this server holds that anyone will want again: only once all of it is safe may the control app delete the server.
+async function allSaved() {
+  const settings = await saveSettingsToSite().then(() => true).catch(() => false);
+  return settings && cloud.status.state !== 'off' && !cloud.status.waiting && !cloud.status.error && !cloud.status.resultsError;
+}
+// Camera settings live with the site, as the server's deleted when it's shut down.
+async function saveSettingsToSite() {
+  if (!C.api || !C.serverKey) throw new Error('not linked to the site');
+  const r = await fetch(`${C.api}/servers/settings`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Server-Key': C.serverKey }, body: JSON.stringify({ settings: { judge: judgeSettings, stations: S.stations, youtube: S.youtube || {} } }), signal: AbortSignal.timeout(20000) });
+  if (!r.ok) throw new Error(`The site said ${r.status}`);
+}
+// On a new server, they come back from the site. A server that already has its own keeps them.
+async function loadSettingsFromSite() {
+  if (!C.api || !C.serverKey || Object.keys(judgeSettings).length) return;
+  for (let i = 0; i < 10; i++) {
+    try {
+      const r = await fetch(`${C.api}/servers/settings`, { headers: { 'X-Server-Key': C.serverKey }, signal: AbortSignal.timeout(15000) });
+      if (r.ok) {
+        const { settings } = await r.json();
+        if (settings) {
+          Object.assign(judgeSettings, settings.judge || {});
+          fs.writeFile(JUDGE_SETTINGS, JSON.stringify(judgeSettings), () => {});
+          if (settings.youtube) S.youtube = settings.youtube;
+          if (+settings.stations > S.stations) S.stations = Math.min(MAX_CAMERAS, +settings.stations);
+          save(); await review.watchCameras().catch(() => {});
+          log('Camera settings restored from the last booking');
+        }
+        return;
+      }
+    } catch { /* the internet may not be up yet */ }
+    await new Promise((ok) => setTimeout(ok, 6000));
+  }
+}
+loadSettingsFromSite().catch(() => {});
 // the site is told we're alive, and asks us to stop by answering so
-function callSite(what) {
-  if (!C.api || !C.serverKey) return Promise.resolve(null);
-  return fetch(`${C.api}/servers/report`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Server-Key': C.serverKey }, body: JSON.stringify({ what, cams: review.cams().filter((c) => c.live).length, judges: engines.list().length }), signal: AbortSignal.timeout(15000) })
+async function callSite(what) {
+  if (!C.api || !C.serverKey) return null;
+  const saved = what === 'finished' ? await allSaved() : undefined;
+  return fetch(`${C.api}/servers/report`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Server-Key': C.serverKey }, body: JSON.stringify({ what, saved, cams: review.cams().filter((c) => c.live).length, judges: engines.list().length }), signal: AbortSignal.timeout(15000) })
     .then((r) => r.json()).catch(() => null);
 }
 

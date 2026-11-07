@@ -1,7 +1,7 @@
 'use strict';
 // The few things the control app asks of Azure, with its own identity (no passwords). It only has rights over the servers' resource group.
 const API = 'https://management.azure.com';
-const COMPUTE = '2024-07-01', NETWORK = '2024-05-01';
+const COMPUTE = '2024-07-01', NETWORK = '2024-05-01', DISKS = '2024-03-02';
 const RETRY_TRIES = 8, RETRY_SECONDS = 5, MAX_RETRY_SECONDS = 30;
 
 async function identityToken() {
@@ -53,6 +53,15 @@ function createArm({ subscription, group, region, image, subnet, nsg, sshKey, si
     async listRunning() {
       const r = await call('GET', `/Microsoft.Compute/virtualMachines?api-version=${COMPUTE}&statusOnly=true`);
       return (r?.value || []).filter((v) => (v.properties?.instanceView?.statuses || []).some((x) => x.code === 'PowerState/running')).map((v) => v.name);
+    },
+    /** the machine's disk's name, as deleting the machine leaves it behind */
+    diskOf: async (vm) => (await call('GET', `/Microsoft.Compute/virtualMachines/${vm}?api-version=${COMPUTE}`))?.properties?.storageProfile?.osDisk?.name || '',
+    deleteMachine: (vm) => call('DELETE', `/Microsoft.Compute/virtualMachines/${vm}?api-version=${COMPUTE}`),
+    /** what's left once the machine has gone. Anything already gone is fine. */
+    async deleteLeftovers(vm, disk) {
+      await call('DELETE', `/Microsoft.Network/networkInterfaces/${vm}-nic?api-version=${NETWORK}`);
+      await call('DELETE', `/Microsoft.Network/publicIPAddresses/${vm}-ip?api-version=${NETWORK}`);
+      if (disk) await call('DELETE', `/Microsoft.Compute/disks/${disk}?api-version=${DISKS}`);
     },
     start: (vm) => call('POST', `/Microsoft.Compute/virtualMachines/${vm}/start?api-version=${COMPUTE}`),
     deallocate: (vm) => call('POST', `/Microsoft.Compute/virtualMachines/${vm}/deallocate?api-version=${COMPUTE}`),

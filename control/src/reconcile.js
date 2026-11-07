@@ -1,14 +1,23 @@
 'use strict';
+const crypto = require('node:crypto');
 // Every minute: make each company's server what the site says is wanted, and turn off anything that shouldn't be costing money. This
 // is the safety net, so it holds however badly a server is behaving: one that's stopped reporting, has been on too long, or has been
 // told to stop and hasn't finished is turned off regardless. A server runs for the time booked, whether or not anyone's using it, then stops.
-// A turned-off server keeps its disk (and recordings), and costs only that.
+// A turned-off server is deleted, with its disk and address, as soon as it has said everything's safe in cloud storage, so it costs
+// nothing between bookings. If it never could say so, it's kept for a week in case anything's needed from its disk, then deleted too.
+// The next booking makes a new one, on a new address, as a certificate authority limits how often one address can be issued for.
 const REPORT_LIMIT_MS = 15 * 60e3;     // silent this long while on: something's wrong
 const START_LIMIT_MS = 25 * 60e3;      // not answering this long after starting: give up
 const STOP_GRACE_MS = 15 * 60e3;       // told to stop: this long to finish sending its recordings
 const NO_BOOKING_LIMIT_MS = 18 * 3600e3; // on with no booked end (which shouldn't happen): this long at most
+const UNSAVED_KEEP_MS = 7 * 24 * 3600e3;  // off, with no word that everything's safe: this long at most
 
 const expired = (want, t) => !!want?.until && t >= want.until;
+// the same name with a new ending, for the next machine
+function newAddress(server) {
+  const label = `${server.label.replace(/-[0-9a-f]{6}$/, '')}-${crypto.randomBytes(3).toString('hex')}`, region = server.host.split('.').slice(1).join('.');
+  return { ...server, vm: label, label, host: `${label}.${region}` };
+}
 const monthOf = (t) => new Date(t).toISOString().slice(0, 7);
 
 /**
@@ -66,6 +75,17 @@ async function reconcile({ store, arm, health, seedFor, now = Date.now, log = ()
     const st = (await store.get('serverstate', want.id)) || { id: want.id, state: 'off', minutes: {} };
     try {
       const power = await arm.power(server.vm);
+      // being deleted: once the machine has gone, what's left goes too, and the next one gets a new address
+      if (st.removing) {
+        if (power === 'none') {
+          await arm.deleteLeftovers(server.vm, st.removing.disk);
+          log(`${want.id}: deleted`);
+          await store.put('server', want.id, newAddress(server));
+          await store.put('serverstate', want.id, { ...st, removing: null, state: 'off', power: 'none', host: '', startedAt: 0, checkedAt: t, offSince: 0 });
+          out.push({ id: want.id, action: 'removed' });
+        } else await store.put('serverstate', want.id, { ...st, checkedAt: t });
+        continue;
+      }
       const running = power === 'running' || power === 'starting';
       const healthy = running ? await health(server.host) : false;
       const d = decide({ want, st, power, healthy, now: t });
@@ -98,6 +118,15 @@ async function reconcile({ store, arm, health, seedFor, now = Date.now, log = ()
       }
       if (d.state === 'off' && !d.action) next.startedAt = 0;
       if (d.state === 'off' || power === 'deallocated') { if (!want.desired || want.desired === 'off') next.startedAt = 0; }
+      // off, and not wanted: delete it once everything's safe, or after a week regardless
+      next.offSince = power === 'deallocated' ? (st.offSince || st.lastOff?.at || t) : 0;
+      if (power === 'deallocated' && !d.action && d.state === 'off' && (want.saved || t - next.offSince > UNSAVED_KEEP_MS)) {
+        const disk = await arm.diskOf(server.vm);
+        await arm.deleteMachine(server.vm);
+        next.removing = { disk, at: t };
+        log(`${want.id}: deleting (${want.saved ? 'everything is saved' : 'off for a week'})`);
+        d.action = 'delete';
+      }
       await store.put('serverstate', want.id, next);
       out.push({ id: want.id, power, ...d });
     } catch (e) { log(`${want.id}: ${e.message}`); out.push({ id: want.id, failed: e.message }); }
@@ -105,4 +134,4 @@ async function reconcile({ store, arm, health, seedFor, now = Date.now, log = ()
   return out;
 }
 
-module.exports = { decide, reconcile, REPORT_LIMIT_MS, START_LIMIT_MS, STOP_GRACE_MS, NO_BOOKING_LIMIT_MS };
+module.exports = { decide, reconcile, UNSAVED_KEEP_MS, REPORT_LIMIT_MS, START_LIMIT_MS, STOP_GRACE_MS, NO_BOOKING_LIMIT_MS };

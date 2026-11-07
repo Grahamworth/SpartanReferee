@@ -184,3 +184,33 @@ test('past bookings: newest first, with what happened to each, and only your own
   assert.deepStrictEqual((await call('GET', 'servers/mine/history', other)).body.bookings, []);
   assert.strictEqual((await call('GET', 'servers/mine/history', {})).status, 401);
 });
+
+test('a server\'s settings stay with the site, and only that server can reach them', async () => {
+  const { call, company, store } = await setup(pretend());
+  const h = await company('sam', 'peak');
+  await call('POST', 'servers/mine/payment-done', h, { session: 'cs_peak' });
+  await call('POST', 'servers/mine/start', h, BOOK);
+  const key = { 'x-server-key': (await store.get('server', 'peak')).serverKey };
+  assert.strictEqual((await call('GET', 'servers/settings', key)).body.settings, null);
+  const settings = { judge: { 'burpeeJudge.settings.cam1': '{"exercise":"squats"}' }, stations: 3, youtube: {} };
+  assert.strictEqual((await call('POST', 'servers/settings', key, { settings })).status, 200);
+  assert.deepStrictEqual((await call('GET', 'servers/settings', key)).body.settings, settings);
+  assert.strictEqual((await call('GET', 'servers/settings', { 'x-server-key': 'nope' })).status, 401);
+  assert.strictEqual((await call('GET', 'servers/settings', h)).status, 401);
+  assert.strictEqual((await call('POST', 'servers/settings', key, { settings: { judge: { x: 'y'.repeat(40000) } } })).status, 400);
+});
+test('a server may only be deleted once it says everything is saved, and a new booking starts over', async () => {
+  const { call, company, store } = await setup(pretend());
+  const h = await company('sam', 'peak');
+  await call('POST', 'servers/mine/payment-done', h, { session: 'cs_peak' });
+  await call('POST', 'servers/mine/start', h, BOOK);
+  const key = { 'x-server-key': (await store.get('server', 'peak')).serverKey };
+  await call('POST', 'servers/report', key, { what: 'finished', saved: false });
+  assert.strictEqual((await store.get('serverwant', 'peak')).saved, false);
+  await call('POST', 'servers/report', key, { what: 'finished', saved: 'yes' });
+  assert.strictEqual((await store.get('serverwant', 'peak')).saved, false, 'only a plain yes');
+  await call('POST', 'servers/report', key, { what: 'finished', saved: true });
+  assert.strictEqual((await store.get('serverwant', 'peak')).saved, true);
+  await call('POST', 'servers/mine/start', h, BOOK);
+  assert.strictEqual((await store.get('serverwant', 'peak')).saved, false);
+});

@@ -109,6 +109,7 @@ function createCloud({ dir, uploadsDir, stateFile, api, settings, results = null
         }
       }
       if (changed.length) await post('results-done', cloudKey, {});
+      status.resultsError = '';
     } catch (e) { status.resultsError = e.message; resultsAt = 0; } finally { resultsBusy = false; }
   }
   async function keyed(where) {
