@@ -30,7 +30,8 @@ http.createServer(async (req, res) => {
     res.writeHead(r.status, r.headers);
     return res.end(r.body === null ? '' : JSON.stringify(r.body));
   }
-  let p = path.join(root, decodeURIComponent(url.pathname));
+  // staticwebapp.config.json does this on the real site
+  let p = path.join(root, url.pathname === '/app' ? 'app.html' : decodeURIComponent(url.pathname));
   if (!p.startsWith(root)) { res.writeHead(403); return res.end(); }
   if (fs.existsSync(p) && fs.statSync(p).isDirectory()) p = path.join(p, 'index.html');
   fs.readFile(p, (err, data) => {

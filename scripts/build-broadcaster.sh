@@ -39,7 +39,7 @@ let h = fs.readFileSync(process.argv[1], 'utf8');
 h = h.replace(/<title>[^<]*<\/title>/, '<title>HeadJudge Broadcaster</title>')
   .replace(/<script type=\"module\" src=\"judge-gate.js\"><\/script>\s*/, '<script type=\"module\" src=\"broadcaster-signin.js\"></script>\n<style>html:not(.hj-in) main { visibility: hidden; }</style>\n')      // email sign-in, no referee check; hidden until signed in
   .replace(/<link rel=\"manifest\"[^>]*>\s*/, '')
-  .replace(/<a href=\"\.\/\" class=\"home-link\">[^<]*<\/a>/, '')                   // nothing to go back to
+  .replace(/<a href=\"app\.html\" class=\"home-link\">[^<]*<\/a>/, '')              // nothing to go back to
   .replace(/<h1 class=\"brand\">Camera <span>station<\/span><\/h1>/, '<h1 class=\"brand\">HeadJudge <span>Broadcaster</span></h1>')
   // the setup guide, big and first: everything a camera person needs (opens in the phone's browser)
   .replace(/ <p class=\"muted\"><a href=\"streaming.html\">[\s\S]*?<\/p>/, '\n  <a class=\"btn btn-red btn-big setup-guide\" href=\"https://zealous-island-03d6db503.8.azurestaticapps.net/streaming.html#phone\">📖 Setup guide: start here</a>\n  <p class=\"muted\" style=\"margin-top:6px\">Scanning your camera\\'s code, where to put the camera, and what to do if it won\\'t connect.</p>')

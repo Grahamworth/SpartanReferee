@@ -21,5 +21,5 @@ const fromReceiver = new URLSearchParams(location.search).get('mode') === 'pract
     <p style="color:#9a9a9a">If you’re refereeing, ask an admin to switch on Burpee judge for you, or enter the judge code they give you in your profile.</p>
     <p style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:18px">
       <a href="profile.html" style="background:#e2231a;color:#fff;padding:12px 18px;font-weight:800;text-decoration:none;text-transform:uppercase">My profile</a>
-      <a href="./" style="border:2px solid #fff;color:#fff;padding:10px 16px;font-weight:800;text-decoration:none;text-transform:uppercase">Home</a></p></div>`;
+      <a href="app.html" style="border:2px solid #fff;color:#fff;padding:10px 16px;font-weight:800;text-decoration:none;text-transform:uppercase">Home</a></p></div>`;
 });

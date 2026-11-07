@@ -13,12 +13,13 @@ cp "$SRC/app/package.json" "$SRC/app/capacitor.config.json" "$BUILD/"
 
 # the web files the app carries (everything the site serves, except downloads and the PC streaming kit)
 rm -rf "$BUILD/www" && mkdir -p "$BUILD/www"
-WEB="index.html judge.html course.html chat.html camera.html profile.html admin.html news.html past.html
+WEB="app.html judge.html course.html chat.html camera.html profile.html admin.html news.html past.html
   styles.css hub.css hub-pages.css looks.css looks.js streaming.html phone.html scoreboard.html scoreboard.js judging.html hub.js hub-edit.js chat.js camera.js profile.js admin.js news.js past.js api-base.js judge-gate.js
   manifest.webmanifest app.js burpee.js exercises.js pose-filter.js multi.js finder.js ocr-prep.js readers.js digit-model.js
   digit-model.json rtmo-s.onnx course-world.js course-game.js course-people.js course-crowd.js course-sky.js course-look.js
   course-map.js course-games.js course-rules.js course-obstacles.js"
 for f in $WEB; do cp "$SRC/$f" "$BUILD/www/"; done
+cp "$SRC/app.html" "$BUILD/www/index.html" # the app opens on its Spartans home
 cp -r "$SRC/icons" "$SRC/vendor" "$SRC/courses" "$BUILD/www/"
 
 cd "$BUILD"

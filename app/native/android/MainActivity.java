@@ -31,6 +31,6 @@ public class MainActivity extends BridgeActivity {
         String url = web.getUrl();
         if (url == null) return true;
         String path = Uri.parse(url).getPath();
-        return path == null || path.isEmpty() || path.equals("/") || path.equals("/index.html");
+        return path == null || path.isEmpty() || path.equals("/") || path.equals("/index.html") || path.equals("/app.html");
     }
 }

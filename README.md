@@ -89,7 +89,7 @@ Each failed rep shows **NO REP** and the reason on screen and is called out by v
 
 | File | What it is |
 |---|---|
-| `judge.html`, `styles.css` | The Burpee Judge's screens and race-day styling (`index.html` is now the Spartans home page) |
+| `judge.html`, `styles.css` | The Burpee Judge's screens and race-day styling (`app.html` is the Spartans home page) |
 | `app.js` | Camera, race-number scanner, live counting, recording, results |
 | `burpee.js` | Burpee rep-judging rules and body measurements. Pure logic, no camera needed |
 | `exercises.js` | The exercise list and the judges for squats, push-ups, jumping jacks and sit-ups |
@@ -252,7 +252,7 @@ Credits, also shown in the game: terrain © Copernicus (ESA/Airbus); map data ©
 
 | File | What it is |
 |---|---|
-| `index.html`, `hub.js`, `hub.css` | Home page: the next race with a countdown, latest news, past winners, links to everything, and "Get the app" |
+| `app.html`, `hub.js`, `hub.css` | Spartans home page, at `/app`: the next race with a countdown, latest news, past winners, links to everything, and "Get the app" |
 | `chat.html`, `chat.js` | Chat rooms, like SkiTour's notice board (Spartans chat, Morzine 2026, Training, Kit, Lift shares), plus private groups |
 | `admin.html`, `admin.js` | Admin: who's banned from the chat and why, with unban |
 | `api-base.js` | Where the backend is: `/api`, or the hosted site's `/api` inside the installed app |
@@ -274,7 +274,7 @@ Credits, also shown in the game: terrain © Copernicus (ESA/Airbus); map data ©
 
 ## Home page, accounts, judges (current)
 
-- **Home** (`index.html`, `hub.js`):
+- **Home** (`app.html`, `hub.js`, at `/app`):
   - **Next race** at the top: the soonest upcoming event, with a countdown, **Take me to the race** (its spartan.com page and tickets) and **All upcoming events**.
   - **Your stats:** race results will come from the linked Spartan profile once Spartan gives access. For now it shows Course Run bests from this phone.
   - The main buttons: **News**, **Past competitions**, **Courses** (`course.html#courses`) and **Connect** (the chat).

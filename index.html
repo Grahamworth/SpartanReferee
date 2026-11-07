@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>HeadJudge: AI judging for fitness events</title>
+<meta name="description" content="Film your event on phones, and HeadJudge records every camera and runs an AI judge on each one, under your own logo and colours.">
+<meta name="theme-color" content="#12161c">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;1,800&family=Barlow:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="headjudge.css">
+<style>
+  .hero { max-width: 760px; padding: clamp(16px, 5vw, 56px) 0 clamp(24px, 5vw, 48px); }
+  .hero h1 { font-size: clamp(2.6rem, 8vw, 4.6rem); line-height: .98; font-style: italic; margin: 0; }
+  .hero h1 span { color: var(--primary-text); }
+  .hero p { color: var(--muted); font-size: clamp(1.05rem, 2.4vw, 1.25rem); margin: 18px 0 0; }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+  .actions a { display: inline-block; padding: 13px 24px; font-weight: 700; text-decoration: none; border: 2px solid var(--primary); }
+  .actions .go { background: var(--primary); color: var(--on-primary); }
+  .actions .second { color: var(--text); border-color: var(--line); }
+  .actions .second:hover { border-color: var(--primary-text); }
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; margin: 0; padding: 0; list-style: none; counter-reset: step; }
+  .steps li { background: var(--panel); border: 1px solid var(--line); padding: 20px; counter-increment: step; }
+  .steps li::before { content: counter(step); display: block; font: italic 800 2.2rem/1 var(--display); color: var(--primary-text); margin-bottom: 8px; }
+  .steps h3 { margin: 0 0 6px; font-size: 1.1rem; }
+  .steps p { margin: 0; color: var(--muted); }
+  section > h2 { font-size: 1.8rem; margin: 40px 0 14px; }
+  .cost { max-width: 760px; color: var(--muted); }
+  .more { display: flex; flex-wrap: wrap; gap: 8px 24px; margin-top: 44px; padding-top: 18px; border-top: 1px solid var(--line); font-size: .95rem; }
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="mark" href="./">Head<span>Judge</span></a>
+  <a href="console.html">Sign in</a>
+</header>
+<main class="page">
+  <section class="hero">
+    <h1>Every rep judged, <span>under your name</span></h1>
+    <p>Film your event on phones. HeadJudge records every camera and runs an AI judge on each one, with your logo and colours, in any browser.</p>
+    <div class="actions">
+      <a class="go" href="register.html">Register your company</a>
+      <a class="second" href="console.html">Go to my console</a>
+    </div>
+  </section>
+
+  <section>
+    <h2>How it works</h2>
+    <ol class="steps">
+      <li><h3>Register your company</h3><p>Add your logo and colours. We check each application before it can book anything.</p></li>
+      <li><h3>Book your cameras</h3><p>Choose how many cameras and how many hours, and see the cost before you start. Each server takes 2 cameras.</p></li>
+      <li><h3>Film on phones</h3><p>Android phones use the HeadJudge Broadcaster app, and iPhones use Larix. Scan your camera's code to connect.</p></li>
+      <li><h3>Judge and review</h3><p>Watch every camera live and review the recordings. Your server shuts itself down when your booked time ends, and you can extend it if you run over.</p></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>What it costs</h2>
+    <p class="cost">You pay per camera, per hour your servers actually run, so stopping early costs less. There's nothing to install on a computer.</p>
+  </section>
+
+  <nav class="more" aria-label="More">
+    <a href="streaming.html">Camera setup guide</a>
+    <a href="phone.html">Setting up a camera phone</a>
+    <a href="/app">Looking for the Spartans app?</a>
+  </nav>
+</main>
+</body>
+</html>

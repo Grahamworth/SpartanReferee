@@ -10,6 +10,6 @@ self.addEventListener('fetch', (e) => {
     fetch(e.request).then((r) => {
       if (r.ok && r.type === 'basic') { const copy = r.clone(); caches.open(CACHE).then((c) => c.put(e.request, copy)); }
       return r;
-    }).catch(() => caches.match(e.request).then((m) => m || caches.match('./'))),
+    }).catch(() => caches.match(e.request).then((m) => m || caches.match('app.html'))),
   );
 });
