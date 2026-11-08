@@ -9,6 +9,8 @@ import { fileURLToPath } from 'node:url';
 const DIR = path.dirname(fileURLToPath(import.meta.url));
 const MUXER = path.join(DIR, 'node_modules/mp4-muxer/build/mp4-muxer.js');
 const [, , what, out, ...times] = process.argv;
+// which video: promo.html (the Broadcaster and Receiver promo) unless PROMO_PAGE names another, such as headjudge.html
+const PAGE = process.env.PROMO_PAGE || 'promo.html';
 let finished;
 const uploaded = new Promise((r) => { finished = r; });
 const server = http.createServer((q, r) => {
@@ -18,7 +20,10 @@ const server = http.createServer((q, r) => {
     q.on('end', () => { fs.writeFileSync(out, Buffer.concat(parts)); r.end('ok'); finished(); });
     return;
   }
-  const file = q.url.startsWith('/muxer') ? MUXER : path.join(DIR, 'promo.html');
+  // the page itself; its muxer; and, under /repo/, the app's own files it borrows (the exercises and how they move)
+  const repo = q.url.startsWith('/repo/') && path.resolve(DIR, '..', '.' + q.url.slice(5).split('?')[0]);
+  const file = q.url.startsWith('/muxer') ? MUXER : repo && repo.startsWith(path.resolve(DIR, '..')) ? repo : path.join(DIR, PAGE);
+  if (!fs.existsSync(file)) { r.writeHead(404); r.end(); return; }
   r.writeHead(200, { 'Content-Type': file.endsWith('.js') ? 'text/javascript' : 'text/html' });
   fs.createReadStream(file).pipe(r);
 }).listen(8797);
@@ -35,6 +40,7 @@ await send('Page.enable'); await send('Runtime.enable');
 await send('Emulation.setDeviceMetricsOverride', { width: 1920, height: 1080, deviceScaleFactor: 1, mobile: false });
 await send('Page.navigate', { url: 'http://localhost:8797/' });
 await new Promise((r) => setTimeout(r, 2000));
+for (let i = 0; i < 50 && !(await ev('!!window.ready')); i++) await new Promise((r) => setTimeout(r, 200)); // a module page sets it a little later
 await ev('window.ready');
 console.log('fonts', await ev(`document.fonts.check('italic 900 40px "Barlow Condensed"') + ' ' + document.fonts.check('600 40px Barlow')`));
 

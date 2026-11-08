@@ -28,6 +28,8 @@
   .steps p { margin: 0; color: var(--muted); }
   section > h2 { font-size: 1.8rem; margin: 40px 0 14px; }
   .cost { max-width: 760px; color: var(--muted); }
+  .howVideo { margin: 8px 0 0; max-width: 960px; }
+  .howVideo video { display: block; width: 100%; aspect-ratio: 16 / 9; background: var(--panel); border: 1px solid var(--line); }
   .more { display: flex; flex-wrap: wrap; gap: 8px 24px; margin-top: 44px; padding-top: 18px; border-top: 1px solid var(--line); font-size: .95rem; }
 </style>
 </head>
@@ -45,6 +47,12 @@
       <a class="second" href="console.html">Go to my console</a>
     </div>
   </section>
+
+  <!-- 30 seconds of how it works (promo/headjudge.html, rendered by promo/render.mjs); silent, so it can play by itself -->
+  <figure class="howVideo">
+    <video id="howVideo" src="headjudge-how-it-works.mp4" poster="headjudge-how-it-works.jpg" muted loop playsinline controls preload="metadata"
+      aria-label="How HeadJudge works, in 30 seconds: book cameras, scan a camera's code on a phone, every rep of five exercises judged live, and runners tracked by their numbers"></video>
+  </figure>
 
   <section>
     <h2>How it works</h2>
@@ -67,5 +75,13 @@
     <a href="/app">Looking for the Spartans app?</a>
   </nav>
 </main>
+<script>
+  // it plays by itself once it's on screen, unless someone's asked for less motion; the controls are always there
+  (() => {
+    const v = document.getElementById('howVideo');
+    if (!v || matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+    new IntersectionObserver(([e]) => { if (e.isIntersecting) v.play().catch(() => {}); else v.pause(); }, { threshold: 0.4 }).observe(v);
+  })();
+</script>
 </body>
 </html>

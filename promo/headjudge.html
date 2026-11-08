@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>HeadJudge: how it works</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@1,700;1,800&family=Barlow:wght@600;700&display=swap">
+<style>html, body { margin: 0; background: #12161c; } canvas { display: block; }</style>
+</head>
+<body>
+<canvas id="c" width="1920" height="1080"></canvas>
+<script type="module">
+// HeadJudge's 30-second "how it works" for the home page, drawn frame by frame in the site's colours: renderAt(seconds) always gives the
+// same picture, so render.mjs can export it without dropped frames. Illustration only, no real footage. The exercises move exactly as
+// the booking page's animations do (tracked-demos.js) and are named as the judge names them (exercises.js).
+import { MOVES_FOR_TEST as MOVES, poseAt } from '/repo/tracked-demos.js';
+import { EXERCISES } from '/repo/exercises.js';
+
+const W = 1920, H = 1080, DURATION = 30;
+const ctx = document.getElementById('c').getContext('2d');
+const BG = '#12161c', PANEL = '#1c222a', LINE = '#343c46', TEXT = '#f4f6f8', MUTED = '#a3acb7', YELLOW = '#ffc400', GREEN = '#3ddc97', BAD = '#ff8a80', INK = '#101010';
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const ease = (p) => 1 - Math.pow(1 - p, 3);
+const lerp = (a, b, p) => a + (b - a) * p;
+
+function text(s, x, y, size, color = TEXT, { align = 'left', head = true, weight } = {}) {
+  ctx.save();
+  ctx.font = head ? `italic ${weight || 800} ${size}px "Barlow Condensed"` : `${weight || 600} ${size}px Barlow`;
+  ctx.fillStyle = color; ctx.textAlign = align; ctx.textBaseline = 'alphabetic';
+  ctx.fillText(s, x, y);
+  const w = ctx.measureText(s).width;
+  ctx.restore();
+  return w;
+}
+function box(x, y, w, h, r, fill, stroke, lw = 3) {
+  ctx.beginPath(); ctx.roundRect(x, y, w, h, r);
+  if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+  if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = lw; ctx.stroke(); }
+}
+function reveal(t, a, draw) {
+  const p = ease(prog(t, a, a + 0.45));
+  if (p <= 0) return;
+  ctx.save(); ctx.globalAlpha *= p; ctx.translate(0, (1 - p) * 26); draw(); ctx.restore();
+}
+// the site's mark: HEAD in white, JUDGE in yellow
+function mark(x, y, size, align = 'left') {
+  ctx.save(); ctx.font = `italic 800 ${size}px "Barlow Condensed"`;
+  const a = ctx.measureText('HEAD').width, b = ctx.measureText('JUDGE').width;
+  ctx.restore();
+  const x0 = align === 'center' ? x - (a + b) / 2 : x;
+  text('HEAD', x0, y, size); text('JUDGE', x0 + a, y, size, YELLOW);
+  return a + b;
+}
+function bar(x, y, w, h = 10) { ctx.fillStyle = YELLOW; ctx.fillRect(x, y, w, h); }
+// a step's heading on the left: its number, then its name
+function step(t, n, lines, about) {
+  reveal(t, 0, () => text(String(n), 110, 300, 190, YELLOW));
+  lines.forEach((l, i) => reveal(t, .15 + i * .15, () => text(l, 110, 430 + i * 104, 110)));
+  reveal(t, .3 + lines.length * .15, () => bar(114, 400 + lines.length * 104, 160));
+  about.forEach((l, i) => reveal(t, .9 + i * .25, () => text(l, 110, 500 + lines.length * 104 + i * 54, 38, MUTED, { head: false })));
+}
+function cursor(x, y, down) {
+  ctx.save(); ctx.translate(x, y); if (down) ctx.scale(.9, .9);
+  ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(0, 46); ctx.lineTo(12, 35); ctx.lineTo(22, 56); ctx.lineTo(30, 52); ctx.lineTo(20, 32); ctx.lineTo(36, 32); ctx.closePath();
+  ctx.fillStyle = '#fff'; ctx.fill(); ctx.strokeStyle = '#000'; ctx.lineWidth = 3; ctx.stroke();
+  ctx.restore();
+}
+function browser(x, y, w, h, address, draw) {
+  box(x, y, w, h, 14, '#0b0e12', '#4a535e', 3);
+  ctx.save(); ctx.beginPath(); ctx.roundRect(x, y, w, h, 14); ctx.clip();
+  ctx.fillStyle = '#232a33'; ctx.fillRect(x, y, w, 54);
+  ['#ff5f57', '#febc2e', '#28c840'].forEach((c, i) => { ctx.fillStyle = c; ctx.beginPath(); ctx.arc(x + 30 + i * 26, y + 27, 8, 0, 7); ctx.fill(); });
+  box(x + 120, y + 12, w - 150, 30, 15, '#12161c');
+  text(address, x + 140, y + 35, 20, MUTED, { head: false });
+  ctx.fillStyle = BG; ctx.fillRect(x, y + 54, w, h - 54);
+  draw(x, y + 54, w, h - 54);
+  ctx.restore();
+}
+function phone(x, y, w, h, draw) { // landscape
+  box(x - 14, y - 14, w + 28, h + 28, 30, '#050505', '#596069', 4);
+  ctx.save(); ctx.beginPath(); ctx.roundRect(x, y, w, h, 14); ctx.clip();
+  ctx.fillStyle = '#000'; ctx.fillRect(x, y, w, h); draw(x, y, w, h);
+  ctx.restore();
+}
+function liveTag(x, y, t, size = 20) {
+  box(x, y, size * 3.9, size * 1.7, 4, YELLOW);
+  ctx.save(); ctx.globalAlpha *= .55 + .45 * Math.sin(t * 6) ** 2;
+  ctx.fillStyle = INK; ctx.beginPath(); ctx.arc(x + size * .75, y + size * .85, size * .3, 0, 7); ctx.fill(); ctx.restore();
+  text('LIVE', x + size * 1.3, y + size * 1.27, size * 1.15, INK);
+}
+// A code-like pattern for the scan moment. Decorative only: it doesn't encode anything.
+function codePattern(x, y, s) {
+  box(x, y, s, s, 6, '#fff');
+  const n = 21, c = (s - 24) / n;
+  for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) {
+    const corner = (a, b) => i >= a && i < a + 7 && j >= b && j < b + 7;
+    const on = corner(0, 0) || corner(14, 0) || corner(0, 14)
+      ? (() => { const a = i >= 14 ? 14 : 0, b = j >= 14 ? 14 : 0, u = i - a, v = j - b; return u === 0 || u === 6 || v === 0 || v === 6 || (u >= 2 && u <= 4 && v >= 2 && v <= 4); })()
+      : ((i * 7 + j * 13 + i * j * 3) % 5) < 2;
+    if (on) { ctx.fillStyle = '#000'; ctx.fillRect(x + 12 + i * c, y + 12 + j * c, c + .5, c + .5); }
+  }
+}
+function scene(x, y, w, h) { // the room or course behind an athlete: dark slate, a floor
+  const g = ctx.createLinearGradient(0, y, 0, y + h);
+  g.addColorStop(0, '#1d2630'); g.addColorStop(.72, '#2a3542'); g.addColorStop(.72, '#30302c'); g.addColorStop(1, '#24231f');
+  ctx.fillStyle = g; ctx.fillRect(x, y, w, h);
+}
+
+// ---------------------------------------------------------------- an athlete as the booking page draws them, at any size
+function drawPose(x, y, size, pose, hit, shirt = YELLOW) {
+  const u = size / 100, P = (p) => [x + p[0] * u, y + p[1] * u];
+  ctx.save(); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  const line = (points, width, colour) => { ctx.beginPath(); ctx.strokeStyle = colour; ctx.lineWidth = width * u; points.forEach((p, i) => (i ? ctx.lineTo(...P(p)) : ctx.moveTo(...P(p)))); ctx.stroke(); };
+  const arms = pose.arms ?? [pose.arm], legs = pose.legs ?? [pose.leg], torso = pose.torso;
+  for (const limb of legs) line(limb, 6, '#7d8792');
+  if (torso.length === 2) line(torso, 9, shirt);
+  else { ctx.beginPath(); ctx.fillStyle = shirt; ctx.strokeStyle = shirt; ctx.lineWidth = 3 * u; torso.forEach((p, i) => (i ? ctx.lineTo(...P(p)) : ctx.moveTo(...P(p)))); ctx.closePath(); ctx.fill(); ctx.stroke(); }
+  for (const limb of arms) line(limb, 4.2, '#7d8792');
+  ctx.beginPath(); ctx.fillStyle = '#7d8792'; ctx.arc(...P(pose.head), 5.2 * u, 0, 7); ctx.fill();
+  const track = hit ? '#7fffc4' : GREEN;
+  for (const limb of legs) line(limb, 1.1, track);
+  line(torso.length === 2 ? torso : [...torso, torso[0]], 1.1, track);
+  for (const limb of arms) line(limb, 1.1, track);
+  ctx.fillStyle = TEXT;
+  for (const p of [...legs.flat(), ...arms.flat(), ...torso, pose.head]) { ctx.beginPath(); ctx.arc(...P(p), 1.3 * u, 0, 7); ctx.fill(); }
+  ctx.restore();
+}
+const loopLength = (steps) => steps.reduce((n, s) => n + s.move + s.hold, 0);
+
+// ---------------------------------------------------------------- a runner, side-on, heading left
+function runnerAt(x, y, s, phase) {
+  const bob = -Math.abs(Math.sin(phase)) * .025 * s;
+  const H = [x, y - .5 * s + bob], S = [x - .07 * s, y - .8 * s + bob], head = [x - .1 * s, y - .91 * s + bob];
+  const legs = [0, Math.PI].map((o) => {
+    const f = phase + o, a = .62 * Math.sin(f), flex = .3 + 1.5 * Math.max(0, Math.cos(f)) ** 1.5;
+    const K = [H[0] - Math.sin(a) * .25 * s, H[1] + Math.cos(a) * .25 * s];
+    const A = [K[0] - Math.sin(a - flex) * .25 * s, K[1] + Math.cos(a - flex) * .25 * s];
+    return [H, K, A, [A[0] - .06 * s, A[1] + .01 * s]];
+  });
+  const arms = [0, Math.PI].map((o) => {
+    const c = -.55 * Math.sin(phase + o);
+    const E = [S[0] - Math.sin(c) * .15 * s, S[1] + Math.cos(c) * .15 * s];
+    const Wr = [E[0] - Math.sin(c + 1.5) * .13 * s, E[1] + Math.cos(c + 1.5) * .13 * s];
+    return [S, E, Wr];
+  });
+  return { head, torso: [S, H], legs, arms };
+}
+function drawRunner(r, s, shirt, bib, tracked) {
+  ctx.save(); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  const line = (pts, w, c) => { ctx.beginPath(); ctx.strokeStyle = c; ctx.lineWidth = w; pts.forEach((p, i) => (i ? ctx.lineTo(...p) : ctx.moveTo(...p))); ctx.stroke(); };
+  line(r.legs[1], .06 * s, '#5d6670'); line(r.arms[1], .042 * s, '#5d6670');
+  line(r.legs[0], .06 * s, '#7d8792');
+  line(r.torso, .1 * s, shirt);
+  line(r.arms[0], .042 * s, '#7d8792');
+  ctx.fillStyle = '#7d8792'; ctx.beginPath(); ctx.arc(...r.head, .055 * s, 0, 7); ctx.fill();
+  // the number on their front
+  const bx = (r.torso[0][0] + r.torso[1][0]) / 2 - .05 * s, by = (r.torso[0][1] + r.torso[1][1]) / 2 - .05 * s;
+  box(bx - .045 * s, by - .03 * s, .09 * s, .075 * s, 2, '#fff');
+  text(bib, bx, by + .032 * s, .055 * s, INK, { align: 'center', head: false, weight: 700 });
+  if (tracked) {
+    for (const l of [...r.legs, ...r.arms, r.torso]) line(l, Math.max(2, .011 * s), GREEN);
+    line([r.torso[0], r.head], Math.max(2, .011 * s), GREEN);
+    ctx.fillStyle = TEXT;
+    for (const p of [...r.legs.flat(), ...r.arms.flat(), r.head]) { ctx.beginPath(); ctx.arc(...p, Math.max(3, .013 * s), 0, 7); ctx.fill(); }
+  }
+  ctx.restore();
+}
+
+// ---------------------------------------------------------------- the scenes (each gets its own time)
+function title(t) {
+  reveal(t, .05, () => mark(W / 2, 250, 70, 'center'));
+  reveal(t, .35, () => text('EVERY REP.', W / 2, 470, 170, TEXT, { align: 'center' }));
+  reveal(t, .8, () => text('EVERY RUNNER.', W / 2, 640, 170, TEXT, { align: 'center' }));
+  reveal(t, 1.3, () => text('JUDGED ONLINE.', W / 2, 810, 170, YELLOW, { align: 'center' }));
+  reveal(t, 1.6, () => bar(W / 2 - 150, 860, 300, 14));
+}
+function book(t) {
+  step(t, 1, ['BOOK YOUR', 'CAMERAS'], ['Choose cameras and hours,', 'and see the cost first.']);
+  const bx = 820, by = 150, bw = 1000, bh = 780;
+  reveal(t, .3, () => browser(bx, by, bw, bh, 'headjudge  ›  console', (x, y, w, h) => {
+    ctx.fillStyle = BG; ctx.fillRect(x, y, w, h);
+    mark(x + 40, y + 62, 40); ctx.fillStyle = YELLOW; ctx.fillRect(x, y + 92, w, 4);
+    const cx = x + 60, cy = y + 140, cw = w - 120;
+    box(cx, cy, cw, 520, 0, PANEL, LINE, 2);
+    const on = t > 3.7, starting = t > 2.45 && !on;
+    ctx.fillStyle = on ? GREEN : starting ? YELLOW : MUTED;
+    ctx.save(); if (starting) ctx.globalAlpha *= .4 + .6 * Math.abs(Math.cos(t * 3)); ctx.beginPath(); ctx.arc(cx + 50, cy + 66, 13, 0, 7); ctx.fill(); ctx.restore();
+    text(on ? 'YOUR SERVERS ARE ON' : starting ? 'YOUR SERVERS ARE STARTING' : 'BOOK YOUR CAMERAS', cx + 80, cy + 84, 54);
+    const cams = t < .9 ? 1 : t < 1.25 ? 2 : 3;
+    if (!on) {
+      text('Cameras', cx + 40, cy + 160, 28, TEXT, { head: false });
+      text('Hours', cx + 460, cy + 160, 28, TEXT, { head: false });
+      box(cx + 40, cy + 180, 380, 70, 0, BG, LINE, 2); text(String(cams), cx + 64, cy + 230, 40, TEXT, { head: false, weight: 700 });
+      box(cx + 460, cy + 180, 380, 70, 0, BG, LINE, 2); text('2', cx + 484, cy + 230, 40, TEXT, { head: false, weight: 700 });
+      box(cx + 40, cy + 290, 800, 86, 0, BG); ctx.fillStyle = YELLOW; ctx.fillRect(cx + 40, cy + 290, 6, 86);
+      text(`${cams} camera${cams > 1 ? 's' : ''} for 2 hours`, cx + 70, cy + 345, 28, MUTED, { head: false });
+      text(`£${(cams * 2 * .34).toFixed(2)}`, cx + 820, cy + 350, 52, TEXT, { align: 'right', head: false, weight: 700 });
+      const pressed = t > 2.1 && t < 2.35;
+      box(cx + 40, cy + 405, 800, 84, 0, pressed ? '#e0ac00' : YELLOW);
+      text(starting ? 'STARTING…' : 'START', cx + 440, cy + 462, 46, INK, { align: 'center' });
+    } else {
+      [['Server 1', 'Cameras 1 and 2'], ['Server 2', 'Camera 3']].forEach(([a, b], i) => reveal(t, 3.7 + i * .2, () => {
+        const ry = cy + 140 + i * 130;
+        box(cx + 40, ry, 800, 110, 0, BG);
+        text(a, cx + 70, ry + 48, 30, TEXT, { head: false, weight: 700 }); text(b, cx + 70, ry + 86, 26, MUTED, { head: false });
+        box(cx + 520, ry + 22, 296, 66, 0, YELLOW); text('OPEN VIDEO REVIEW', cx + 668, ry + 68, 32, INK, { align: 'center' });
+      }));
+    }
+    // the cursor: to the cameras, then to Start
+    const p1 = [x + 300, y + 400], p2 = [x + 480, y + 610];
+    const k = ease(prog(t, 1.4, 2.0)), cxp = lerp(p1[0], p2[0], k), cyp = lerp(p1[1], p2[1], k);
+    if (t < 3.6) cursor(cxp, cyp, t > 2.1 && t < 2.35);
+  }));
+}
+function scan(t) {
+  step(t, 2, ['SCAN AND', 'FILM'], ['Any Android phone with', 'HeadJudge Broadcaster,', 'or an iPhone with Larix.']);
+  const bx = 820, by = 150, bw = 1000, bh = 640;
+  const live = t > 2.6;
+  reveal(t, .2, () => browser(bx, by, bw, bh, 'video review', (x, y, w, h) => {
+    ctx.fillStyle = '#000'; ctx.fillRect(x, y, w, h);
+    if (!live) {
+      text('Camera 3: waiting for its phone', x + w / 2, y + 90, 36, TEXT, { align: 'center', head: false, weight: 700 });
+      codePattern(x + w / 2 - 170, y + 130, 340);
+    } else {
+      scene(x, y, w, h);
+      const { pose, rules } = poseAt(MOVES.squats, t - 2.6);
+      drawPose(x + w / 2 - 230, y + h - 470, 520, pose, rules.length > 0);
+      liveTag(x + 22, y + 22, t, 22);
+      text('CAMERA 3', x + w - 24, y + 62, 42, TEXT, { align: 'right' });
+    }
+  }));
+  // the phone, scanning the code on the screen behind it
+  const px = 560, py = 640, pw = 520, ph = 292;
+  reveal(t, .5, () => phone(px, py, pw, ph, (x, y, w, h) => {
+    if (!live) {
+      ctx.fillStyle = '#1b1f24'; ctx.fillRect(x, y, w, h);
+      const s = 170, cx = x + w / 2 - s / 2, cy = y + h / 2 - s / 2 + 16;
+      codePattern(cx, cy, s);
+      const got = t > 1.9;
+      ctx.strokeStyle = got ? GREEN : TEXT; ctx.lineWidth = 6;
+      const m = 18, q = s + m * 2, a = 34;
+      for (const [ox, oy, dx, dy] of [[0, 0, 1, 1], [q, 0, -1, 1], [0, q, 1, -1], [q, q, -1, -1]]) { ctx.beginPath(); ctx.moveTo(cx - m + ox + dx * a, cy - m + oy); ctx.lineTo(cx - m + ox, cy - m + oy); ctx.lineTo(cx - m + ox, cy - m + oy + dy * a); ctx.stroke(); }
+      if (!got) { ctx.fillStyle = YELLOW; ctx.fillRect(cx - 12, cy + s * ((t * 1.1) % 1), s + 24, 4); }
+      text(got ? 'CAMERA 3 CONNECTED' : 'SCAN THE CAMERA’S CODE', x + w / 2, y + 40, 30, got ? GREEN : TEXT, { align: 'center' });
+    } else {
+      scene(x, y, w, h);
+      const { pose } = poseAt(MOVES.squats, t - 2.6);
+      drawPose(x + w / 2 - 110, y + h - 250, 250, pose, false);
+      ctx.save(); ctx.globalAlpha = .9; box(x + w - 92, y + h / 2 - 40, 80, 80, 40, YELLOW, '#fff', 4); ctx.restore();
+      text('STOP', x + w - 52, y + h / 2 + 9, 24, INK, { align: 'center' });
+    }
+  }));
+}
+function judge(t) {
+  reveal(t, 0, () => { text('3', 110, 150, 120, YELLOW); text('EVERY REP JUDGED, LIVE', 200, 150, 96); });
+  reveal(t, .3, () => text('Each exercise to its own standard, counted on every camera at once.', 112, 212, 34, MUTED, { head: false }));
+  const keys = ['burpees', 'squats', 'pushups', 'jacks', 'situps'], gx = 110, gy = 260, tw = 548, th = 372, gap = 28;
+  keys.forEach((k, i) => reveal(t, .2 + i * .12, () => {
+    const col = i % 3, row = Math.floor(i / 3), x = gx + col * (tw + gap), y = gy + row * (th + gap);
+    const steps = MOVES[k], len = loopLength(steps), sec = t * 1.15 + i * .37;
+    const { pose, rules } = poseAt(steps, sec);
+    ctx.save(); ctx.beginPath(); ctx.rect(x, y, tw, th); ctx.clip();
+    scene(x, y, tw, th);
+    // the athlete on the right, the rules on the left
+    drawPose(x + tw - 300, y + th - 268, 290, pose, rules.length > 0);
+    ctx.restore();
+    box(x, y, tw, th, 0, null, LINE, 3);
+    text(EXERCISES[k].label.toUpperCase(), x + 20, y + 50, 40);
+    // the count, up by one at the end of each rep
+    const done = Math.floor(sec / len), count = [14, 21, 18, 33, 12][i] + done, since = sec - done * len;
+    const flash = since < .35 ? 1 - since / .35 : 0;
+    box(x + tw - 128, y + 14, 112, 76, 4, flash ? `rgba(61,220,151,${.35 + .65 * flash})` : 'rgba(0,0,0,.55)');
+    text(String(count), x + tw - 72, y + 74, 58, flash ? INK : TEXT, { align: 'center' });
+    // the standards, each lighting as it's seen
+    const shown = EXERCISES[k].standards.slice(0, 3);
+    shown.forEach(([name], j) => {
+      const lit = rules.includes(j), ly = y + 112 + j * 38;
+      ctx.fillStyle = lit ? GREEN : 'rgba(255,255,255,.25)'; ctx.beginPath(); ctx.arc(x + 30, ly - 8, 8, 0, 7); ctx.fill();
+      text(name, x + 48, ly, 23, lit ? TEXT : MUTED, { head: false, weight: lit ? 700 : 600 });
+    });
+  }));
+  // the sixth place: the results, as the review page lists them
+  reveal(t, .9, () => {
+    const x = gx + 2 * (tw + gap), y = gy + th + gap;
+    box(x, y, tw, th, 0, PANEL, LINE, 3);
+    text('RESULTS', x + 24, y + 54, 44);
+    [['#214', '23 reps', 0], ['#88', '19 reps · 1 no rep', 1], ['#131', '17 reps', 0]].forEach(([n, r, nr], j) => reveal(t, 1.4 + j * .35, () => {
+      const ry = y + 84 + j * 92;
+      box(x + 24, ry, tw - 48, 78, 0, BG);
+      text(n, x + 46, ry + 52, 40, YELLOW); text(r, x + 160, ry + 49, 28, nr ? BAD : TEXT, { head: false });
+    }));
+  });
+}
+function runners(t) {
+  reveal(t, 0, () => text('RUNNERS TRACKED BY NUMBER', 110, 150, 96));
+  reveal(t, .3, () => text('Each number is read as it passes a camera, with the time it was seen.', 112, 212, 34, MUTED, { head: false }));
+  const vx = 110, vy = 260, vw = 1180, vh = 700;
+  ctx.save(); ctx.beginPath(); ctx.rect(vx, vy, vw, vh); ctx.clip();
+  // the course: sky, trees, the track
+  let g = ctx.createLinearGradient(0, vy, 0, vy + vh * .55); g.addColorStop(0, '#22303e'); g.addColorStop(1, '#3a4b5b'); ctx.fillStyle = g; ctx.fillRect(vx, vy, vw, vh * .55);
+  ctx.fillStyle = '#1b2530'; for (let i = 0; i < 9; i++) { ctx.beginPath(); ctx.arc(vx + vw * (i + .5) / 9, vy + vh * .55, vw * (.05 + .025 * (i % 3)), Math.PI, 0); ctx.fill(); }
+  g = ctx.createLinearGradient(0, vy + vh * .55, 0, vy + vh); g.addColorStop(0, '#4a3f33'); g.addColorStop(1, '#2c251e'); ctx.fillStyle = g; ctx.fillRect(vx, vy + vh * .55, vw, vh * .45);
+  // the runners: number, speed, how far back, when they appear, shirt
+  const R = [['214', 330, .97, -.2, YELLOW, 0], ['88', 300, .86, 1.2, '#4aa3ff', 1.9], ['131', 350, .92, 2.5, '#ff7a59', 4.1]];
+  const seen = [];
+  for (const [bib, speed, depth, start, shirt, stride] of [...R].sort((a, b) => a[2] - b[2])) {
+    const s = 430 * depth, x = vx + vw + 120 - (t - start) * speed, y = vy + vh * (.55 + .4 * depth);
+    if (x < vx - 200 || x > vx + vw + 200) continue;
+    const r = runnerAt(x, y, s, (t - start) * 9 + stride);
+    drawRunner(r, s, shirt, bib, true);
+    // once the number's been read, its box follows them
+    const readAt = start + 1.1;
+    if (t > readAt) {
+      const xs = [...r.legs.flat(), ...r.arms.flat(), r.head].map((p) => p[0]), ys = [...r.legs.flat(), ...r.arms.flat(), r.head].map((p) => p[1]);
+      const x0 = Math.min(...xs) - 20, y0 = Math.min(...ys) - 30, x1 = Math.max(...xs) + 20, y1 = Math.max(...ys) + 10;
+      ctx.setLineDash([14, 9]); box(x0, y0, x1 - x0, y1 - y0, 4, null, YELLOW, 4); ctx.setLineDash([]);
+      box(x0, y0 - 52, 116, 52, 4, YELLOW); text(`#${bib}`, x0 + 14, y0 - 12, 42, INK);
+    }
+  }
+  for (const [bib, , , start] of R) if (t > start + 1.1) seen.push([bib, start + 1.1]);
+  ctx.restore();
+  box(vx, vy, vw, vh, 0, null, LINE, 3);
+  liveTag(vx + 20, vy + 20, t, 22);
+  text('CAMERA 2', vx + vw - 24, vy + 60, 42, TEXT, { align: 'right' });
+  // the list of numbers seen, newest at the top
+  const lx = 1330, lw = 480;
+  reveal(t, .4, () => {
+    box(lx, vy, lw, vh, 0, PANEL, LINE, 3);
+    text('NUMBERS SEEN', lx + 28, vy + 62, 48);
+    seen.sort((a, b) => b[1] - a[1]).forEach(([bib, at], j) => {
+      const p = ease(prog(t, at, at + .35));
+      ctx.save(); ctx.globalAlpha *= p;
+      const ry = vy + 100 + j * 108 + (1 - p) * -30;
+      box(lx + 24, ry, lw - 48, 90, 0, BG);
+      text(`#${bib}`, lx + 48, ry + 60, 48, YELLOW);
+      const clock = `10:42:${String(7 + Math.round(at * 2.4)).padStart(2, '0')}`;
+      text(clock, lx + lw - 48, ry + 44, 30, TEXT, { align: 'right', head: false, weight: 700 });
+      text('Camera 2', lx + lw - 48, ry + 76, 22, MUTED, { align: 'right', head: false });
+      ctx.restore();
+    });
+  });
+}
+function endCard(t) {
+  // the app's HJ icon
+  reveal(t, .05, () => {
+    const s = 220, x = W / 2 - s / 2, y = 150;
+    box(x, y, s, s, 44, '#1a2029', LINE, 3);
+    const k = s / 512;
+    ctx.save(); ctx.translate(x, y); ctx.scale(k, k);
+    ctx.save(); ctx.transform(1, 0, -.2, 1, 91, 0);
+    ctx.fillStyle = TEXT; ctx.fillRect(146, 141, 34, 184); ctx.fillRect(214, 141, 34, 184); ctx.fillRect(146, 219, 102, 31);
+    ctx.fillStyle = YELLOW; ctx.fillRect(332, 141, 34, 184); ctx.fillRect(274, 293, 92, 32); ctx.fillRect(274, 266, 34, 59);
+    ctx.restore();
+    ctx.fillStyle = YELLOW; ctx.fillRect(169, 356, 174, 16);
+    ctx.restore();
+  });
+  reveal(t, .35, () => mark(W / 2, 560, 150, 'center'));
+  reveal(t, .8, () => text('Online judging for fitness events', W / 2, 650, 50, MUTED, { align: 'center', head: false }));
+  reveal(t, 1.3, () => { box(W / 2 - 290, 730, 580, 100, 0, YELLOW); text('REGISTER YOUR COMPANY', W / 2, 800, 56, INK, { align: 'center' }); });
+}
+
+const SCENES = [[0, 3.4, title], [3.4, 9, book], [9, 13.6, scan], [13.6, 21.4, judge], [21.4, 26.4, runners], [26.4, DURATION, endCard]];
+window.DURATION = DURATION;
+window.renderAt = (t) => {
+  ctx.globalAlpha = 1; ctx.fillStyle = BG; ctx.fillRect(0, 0, W, H);
+  const FADE = .3;
+  for (const [a, b, draw] of SCENES) {
+    if (t < a || t >= b + (b === DURATION ? 1 : 0)) continue;
+    ctx.save();
+    ctx.globalAlpha = a === 0 ? Math.min(1, t / .3, (b - t) / FADE) : b === DURATION ? Math.min(1, (t - a) / FADE) : Math.min(1, (t - a) / FADE, (b - t) / FADE);
+    draw(t - a, b - a);
+    ctx.restore();
+  }
+};
+window.ready = document.fonts.load('italic 800 40px "Barlow Condensed"').then(() => document.fonts.load('600 40px Barlow')).then(() => document.fonts.load('700 40px Barlow')).then(() => { renderAt(1.5); return true; });
+</script>
+</body>
+</html>
