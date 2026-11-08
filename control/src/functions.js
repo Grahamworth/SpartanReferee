@@ -11,6 +11,13 @@ const seedFor = (server) => ({
   companyId: server.company || server.id, site: `${E.SITE}/console.html`, api: `${E.SITE}/api`, serverKey: server.serverKey, receiverKey: server.receiverKey, bundleUrl: E.BUNDLE_URL,
   brand: null,
 });
+// how many of the booking's cameras it has, and the number its first goes by: a booking's cameras are numbered 1, 2, 3… across its servers.
+// The server asks the site again each time it starts, so this only saves it showing the wrong ones for a moment.
+const PER_SERVER = 2;
+const bookedOn = (server, want) => {
+  const cameras = Math.max(1, Math.min(PER_SERVER, Number(want?.bookedCameras) || PER_SERVER));
+  return { stations: cameras, bookedCameras: cameras, firstCamera: ((server.n || 1) - 1) * PER_SERVER + 1 };
+};
 
 app.timer('reconcile', {
   schedule: '0 * * * * *',
@@ -19,8 +26,8 @@ app.timer('reconcile', {
     const arm = createArm({ subscription: E.SERVERS_SUBSCRIPTION, group: E.SERVERS_GROUP, region: E.SERVERS_REGION, image: E.SERVERS_IMAGE, subnet: E.SERVERS_SUBNET, nsg: E.SERVERS_NSG, sshKey: E.SERVERS_SSH_KEY });
     // the company's brand goes on the server each time it's first made; afterwards the server asks for it
     const seed = async (server) => {
-      const c = await store.get('company', server.company || server.id);
-      return { ...seedFor(server), brand: c ? { id: c.id, name: c.name, logo: c.logo, theme: c.theme } : null };
+      const [c, want] = await Promise.all([store.get('company', server.company || server.id), store.get('serverwant', server.id)]);
+      return { ...seedFor(server), ...bookedOn(server, want), brand: c ? { id: c.id, name: c.name, logo: c.logo, theme: c.theme } : null };
     };
     const done = await reconcile({ store, arm, health, seedFor: seed, log: (l) => context.log(l) });
     for (const d of done) if (d.action || d.failed) context.log(JSON.stringify(d));

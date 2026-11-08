@@ -199,6 +199,19 @@ test('a server\'s settings stay with the site, and only that server can reach th
   assert.strictEqual((await call('GET', 'servers/settings', h)).status, 401);
   assert.strictEqual((await call('POST', 'servers/settings', key, { settings: { judge: { x: 'y'.repeat(40000) } } })).status, 400);
 });
+test('each server is told how many of the booking\'s cameras it has, numbered across the booking', async () => {
+  const { call, company, store } = await setup(pretend());
+  const h = await company('sam', 'peak');
+  await call('POST', 'servers/mine/payment-done', h, { session: 'cs_peak' });
+  await call('POST', 'servers/mine/start', h, { cameras: 3, hours: 1 });
+  const keyOf = async (slot) => ({ 'x-server-key': (await store.get('server', slot)).serverKey });
+  assert.deepStrictEqual((await call('GET', 'servers/settings', await keyOf('peak'))).body.booked, { cameras: 2, first: 1 });
+  assert.deepStrictEqual((await call('GET', 'servers/settings', await keyOf('peak~2'))).body.booked, { cameras: 1, first: 3 });
+  // the next booking, with fewer cameras, changes it
+  await call('POST', 'servers/mine/stop', h, {});
+  await call('POST', 'servers/mine/start', h, { cameras: 1, hours: 1 });
+  assert.deepStrictEqual((await call('GET', 'servers/settings', await keyOf('peak'))).body.booked, { cameras: 1, first: 1 });
+});
 test('a server may only be deleted once it says everything is saved, and a new booking starts over', async () => {
   const { call, company, store } = await setup(pretend());
   const h = await company('sam', 'peak');

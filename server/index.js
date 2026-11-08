@@ -30,7 +30,11 @@ const readFile = (f, fallback) => { try { return JSON.parse(fs.readFileSync(f, '
 const saved = readFile(SETTINGS, {});
 const MAX_CAMERAS = C.maxCameras || 2;
 const S = { stations: 2, rtmpPort: 1935, srtPort: 8890, webrtcPort: 8889, iceUdpPort: 8189, apiPort: 9997, playbackPort: 9996, viewPort: 8800, enginePort: 8801, record: true, keepDays: 7, bitrate: 3500, ...C, ...saved, password: C.password, youtube: saved.youtube || {} };
-S.stations = Math.min(S.stations, MAX_CAMERAS);
+// how many of the booking's cameras this server has, and the number its first goes by: a booking's cameras are numbered 1, 2, 3… across its
+// servers. Inside, this server's are always 1 and 2 (their stream paths); people see them by their number in the booking.
+const booked = () => Math.max(1, Math.min(MAX_CAMERAS, S.bookedCameras || MAX_CAMERAS));
+const camName = (n) => n + (S.firstCamera || 1) - 1;
+S.stations = booked();
 const save = () => fs.writeFile(SETTINGS, JSON.stringify({ stations: S.stations, ai: engines.list(), youtube: S.youtube }), () => {});
 const JUDGE_SETTINGS = path.join(DATA, 'judge-settings.json');
 let judgeSettings = readFile(JUDGE_SETTINGS, {});
@@ -72,7 +76,7 @@ const liveOf = (n) => { if (!live.has(n)) live.set(n, { last: '', at: 0, viewers
 const review = createReview({
   DATA, S, REVIEW, SITE_DIR,
   extraState: (cams) => ({
-    brand, maxJudges: engines.max, until: sleeper.until(),
+    brand, maxJudges: engines.max, until: sleeper.until(), firstCamera: S.firstCamera || 1,
     cams: cams.map((c) => { const l = live.get(c.n); return { ...c, ai: engines.wanted(c.n), judging: engines.running(c.n) && !!l && Date.now() - l.at < 4000, fps: l && Date.now() - l.at < 4000 ? l.fps : 0 }; }),
   }),
 });
@@ -86,7 +90,9 @@ async function refreshBrand() {
 refreshBrand(); setInterval(refreshBrand, 5 * 60e3);
 
 // ---------------------------------------------------------------- recordings to cloud storage
-const cloud = createCloud({ dir: RECORDINGS, uploadsDir: path.join(DATA, 'training'), stateFile: path.join(DATA, 'cloud-sent.json'), results: () => { const r = review.results(); return { json: { athletes: r.athletes, numbers: r.numbers, sources: previousSources }, files: r.files }; }, api: () => C.api, settings: () => ({ cloudOn: !!(C.api && C.receiverKey), cloudKey: C.receiverKey, cloudSince: 0 }) });
+// what goes up names cameras by their number in the booking, as the past results show every server's together
+const named = (x) => (x.src !== 'upload' && x.cam ? { ...x, cam: camName(x.cam) } : x);
+const cloud = createCloud({ dir: RECORDINGS, uploadsDir: path.join(DATA, 'training'), stateFile: path.join(DATA, 'cloud-sent.json'), camName, results: () => { const r = review.results(); return { json: { athletes: r.athletes.map(named), numbers: r.numbers.map(named), sources: previousSources }, files: r.files }; }, api: () => C.api, settings: () => ({ cloudOn: !!(C.api && C.receiverKey), cloudKey: C.receiverKey, cloudSince: 0 }) });
 
 // ---------------------------------------------------------------- the page's own requests beyond the review API
 const ADDRESSES = () => ({ lan: [C.host], lanNames: ['internet'], tailscale: null });
@@ -185,10 +191,10 @@ async function extra(req, res, u, { local }) {
     saveSettingsToSite().catch(() => {});
     send(res, 200, { ok: true }); return true;
   }
-  if (p === '/api/cameras' && req.method === 'GET') { send(res, 200, { cameras: await cameraList(), bitrate: S.bitrate, max: MAX_CAMERAS }); return true; }
+  if (p === '/api/cameras' && req.method === 'GET') { send(res, 200, { cameras: await cameraList(), bitrate: S.bitrate, max: booked(), firstCamera: S.firstCamera || 1 }); return true; }
   if (p === '/api/cameras' && req.method === 'POST') {
     if (!isJson(req)) return send(res, 415, { error: 'JSON only' }), true;
-    if (S.stations < MAX_CAMERAS) { S.stations++; save(); saveSettingsToSite().catch(() => {}); await review.watchCameras(); }
+    if (S.stations < booked()) { S.stations++; save(); saveSettingsToSite().catch(() => {}); await review.watchCameras(); }
     send(res, 200, { stations: S.stations }); return true;
   }
   if (p === '/api/server' && req.method === 'GET') { send(res, 200, { log: mtxLog.slice(-60), cloud: { ...cloud.status }, idle: sleeper.status() }); return true; }
@@ -251,22 +257,28 @@ async function saveSettingsToSite() {
   const r = await fetch(`${C.api}/servers/settings`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Server-Key': C.serverKey }, body: JSON.stringify({ settings: { judge: judgeSettings, stations: S.stations, youtube: S.youtube || {} } }), signal: AbortSignal.timeout(20000) });
   if (!r.ok) throw new Error(`The site said ${r.status}`);
 }
-// On a new server, they come back from the site. A server that already has its own keeps them.
+// On a new server, they come back from the site. A server that already has its own keeps them. Either way the site says which of the booking's
+// cameras are this server's.
 async function loadSettingsFromSite() {
-  if (!C.api || !C.serverKey || Object.keys(judgeSettings).length) return;
+  if (!C.api || !C.serverKey) return;
+  const fresh = !Object.keys(judgeSettings).length;
   for (let i = 0; i < 10; i++) {
     try {
       const r = await fetch(`${C.api}/servers/settings`, { headers: { 'X-Server-Key': C.serverKey }, signal: AbortSignal.timeout(15000) });
       if (r.ok) {
-        const { settings } = await r.json();
-        if (settings) {
+        const { settings, booked: mine } = await r.json();
+        if (mine) { S.bookedCameras = +mine.cameras || S.bookedCameras; S.firstCamera = +mine.first || S.firstCamera; }
+        if (settings && fresh) {
           Object.assign(judgeSettings, settings.judge || {});
           fs.writeFile(JUDGE_SETTINGS, JSON.stringify(judgeSettings), () => {});
           if (settings.youtube) S.youtube = settings.youtube;
-          if (+settings.stations > S.stations) S.stations = Math.min(MAX_CAMERAS, +settings.stations);
-          save(); await review.watchCameras().catch(() => {});
           log('Camera settings restored from the last booking');
         }
+        // every camera booked on it is ready for its phone; one no longer booked has its judge stopped
+        const judging = engines.list();
+        S.stations = booked();
+        for (const n of judging) if (n > S.stations) engines.set(n, false);
+        save(); await review.watchCameras().catch(() => {});
         return;
       }
     } catch { /* the internet may not be up yet */ }

@@ -100,13 +100,14 @@ let camsDrawn = '';
 async function loadCameras() {
   const r = await fetch('/api/cameras').then((x) => x.json()).catch(() => null);
   if (!r) { $('camList').innerHTML = '<p class="muted">Can\'t reach the server.</p>'; return; }
-  const key = JSON.stringify(r.cameras.map((c) => [c.n, c.live, c.video]));
+  firstCamera = r.firstCamera || 1;
+  const key = JSON.stringify([firstCamera, ...r.cameras.map((c) => [c.n, c.live, c.video])]);
   if (key === camsDrawn) return; camsDrawn = key;
   $('camList').innerHTML = r.cameras.map((c) => `<article class="camcard${c.live ? ' live' : ''}">
-    <h3>Camera ${c.n} <small>${c.live ? `Live${c.video ? ' · ' + esc(c.video) : ''}` : 'Waiting for its phone'}</small></h3>
-    <img src="${c.phone}" alt="QR code for camera ${c.n}, to scan in HeadJudge Broadcaster" width="220" height="220">
+    <h3>Camera ${camNo(c.n)} <small>${c.live ? `Live${c.video ? ' · ' + esc(c.video) : ''}` : 'Waiting for its phone'}</small></h3>
+    <img src="${c.phone}" alt="QR code for camera ${camNo(c.n)}, to scan in HeadJudge Broadcaster" width="220" height="220">
     <p class="small muted">Scan in <b>HeadJudge Broadcaster</b> (Android)</p>
-    <details><summary>iPhone (Larix)</summary><img src="${c.larix}" alt="QR code for camera ${c.n}, to scan in Larix" width="220" height="220"></details>
+    <details><summary>iPhone (Larix)</summary><img src="${c.larix}" alt="QR code for camera ${camNo(c.n)}, to scan in Larix" width="220" height="220"></details>
   </article>`).join('');
   $('addCam').hidden = r.cameras.length >= r.max;
 }
@@ -123,7 +124,10 @@ const judges = {};   // n → { tile, frame, view }
 // miss reps. Streaming and recording carry on regardless, as they take next to nothing.
 const analysingNow = () => false; // both are on the server, which holds an upload's analysis back while live judges need the card
 const judgedLive = () => (st ? st.cams.filter((c) => c.live && judges[c.n]?.frame).map((c) => c.n) : []);
-const camList = (ns) => (ns.length === 1 ? `Camera ${ns[0]}` : `Cameras ${ns.slice(0, -1).join(', ')} and ${ns.at(-1)}`);
+// this server's cameras are 1 and 2 inside; people see them by their number in the whole booking (a second server's are 3 and 4)
+let firstCamera = 1;
+const camNo = (n) => (n ? n + ((st && st.firstCamera) || firstCamera) - 1 : n);
+const camList = (ns) => (ns.length === 1 ? `Camera ${camNo(ns[0])}` : `Cameras ${ns.slice(0, -1).map(camNo).join(', ')} and ${camNo(ns.at(-1))}`);
 const whepUrl = (n) => `/whep/live/station${n}/whep`;
 // what's shown is this camera's picture with what its judge on the server sees drawn over it
 const judgeUrl = (n) => '/judge/judge.html?stream=' + encodeURIComponent(whepUrl(n)) + `&go=1&cfg=cam${n}&follow=${n}`;
@@ -136,18 +140,19 @@ let camInfo = {};
 async function loadCamInfo() {
   const r = await fetch('/api/cameras').then((x) => x.json()).catch(() => null);
   if (!r) return;
+  firstCamera = r.firstCamera || 1;
   camInfo = Object.fromEntries(r.cameras.map((c) => [c.n, c]));
   renderJudges();
 }
 setInterval(() => { if (st?.cams.some((c) => !c.live && !camInfo[c.n])) loadCamInfo(); }, 3000);
-const waitingCard = (c) => `<div class="waitCard"><h4>Camera ${c.n}: waiting for its phone</h4>
-  <div class="waitQrs"><figure><img src="${c.phone}" alt="QR code for camera ${c.n}, to scan in HeadJudge Broadcaster"><figcaption>Android: scan in HeadJudge Broadcaster</figcaption></figure>
-  <figure><img src="${c.larix}" alt="QR code for camera ${c.n}, to scan in Larix"><figcaption>iPhone: scan in Larix</figcaption></figure></div>
+const waitingCard = (c) => `<div class="waitCard"><h4>Camera ${camNo(c.n)}: waiting for its phone</h4>
+  <div class="waitQrs"><figure><img src="${c.phone}" alt="QR code for camera ${camNo(c.n)}, to scan in HeadJudge Broadcaster"><figcaption>Android: scan in HeadJudge Broadcaster</figcaption></figure>
+  <figure><img src="${c.larix}" alt="QR code for camera ${camNo(c.n)}, to scan in Larix"><figcaption>iPhone: scan in Larix</figcaption></figure></div>
   <div class="larixBy">Setting up Larix by hand, use this as its connection URL:<code>${esc(c.larixUrl)}</code></div></div>`;
 function drawWaiting(c, j) {
   let msg = j.tile.querySelector('.msg');
   if (c.live) { msg?.remove(); return; }
-  if (!msg) { j.tile.insertAdjacentHTML('afterbegin', `<div class="msg">Waiting for camera ${c.n}</div>`); msg = j.tile.querySelector('.msg'); }
+  if (!msg) { j.tile.insertAdjacentHTML('afterbegin', `<div class="msg">Waiting for camera ${camNo(c.n)}</div>`); msg = j.tile.querySelector('.msg'); }
   const info = camInfo[c.n];
   if (info && msg.dataset.drawn !== '1') { msg.dataset.drawn = '1'; msg.classList.add('waiting'); msg.innerHTML = waitingCard(info); }
 }
@@ -155,16 +160,18 @@ const camName = (n) => { try { return (JSON.parse(localStorage.getItem('burpeeJu
 const aiOff = (n) => !st?.cams.find((c) => c.n === n)?.ai;
 function renderJudges() {
   if (!st) return;
+  // a camera that isn't part of this booking goes
+  for (const n of Object.keys(judges)) if (!st.cams.some((c) => c.n === +n)) { judges[n].view?.pc?.close(); judges[n].tile.remove(); delete judges[n]; }
   for (const c of st.cams) {
     let j = judges[c.n];
     if (!j) {
       const tile = document.createElement('div');
       tile.className = 'jtile'; tile.dataset.cam = c.n;
-      tile.innerHTML = `<div class="msg">Waiting for camera ${c.n}</div><div class="label">Camera ${c.n}</div><span class="livetag">LIVE</span>
+      tile.innerHTML = `<div class="msg">Waiting for camera ${camNo(c.n)}</div><div class="label">Camera ${camNo(c.n)}</div><span class="livetag">LIVE</span>
         <div class="tools"><button class="btn track"></button><button class="btn cfg" title="This camera's AI judge settings">⚙ Config</button></div>`;
       tile.onclick = (e) => { if (!e.target.closest('button, .waitCard')) toggleBig(c.n); };
       tile.querySelector('.cfg').onclick = (e) => { e.stopPropagation(); openCamSettings(c.n); };
-      tile.querySelector('.track').onclick = (e) => { e.stopPropagation(); if (!aiOff(c.n)) return setAi(c.n, false); if (analysingNow()) return busyNote(`Camera ${c.n}'s AI judge can't start while a video is being analysed. Pause or stop the analysis first.`, true); openCamSettings(c.n, true); };
+      tile.querySelector('.track').onclick = (e) => { e.stopPropagation(); if (!aiOff(c.n)) return setAi(c.n, false); if (analysingNow()) return busyNote(`Camera ${camNo(c.n)}'s AI judge can't start while a video is being analysed. Pause or stop the analysis first.`, true); openCamSettings(c.n, true); };
       $('judgeGrid').appendChild(tile);
       j = judges[c.n] = { tile, frame: null, view: null };
       applyView();
@@ -174,7 +181,7 @@ function renderJudges() {
     if (c.live && !j.frame && !aiOff(c.n) && !analysingNow()) {
       j.view?.pc?.close(); j.view?.video.remove(); j.view = null;
       j.frame = document.createElement('iframe');
-      j.frame.title = `AI judge camera ${c.n}`;
+      j.frame.title = `AI judge camera ${camNo(c.n)}`;
       j.frame.allow = 'autoplay; fullscreen';
       j.frame.src = judgeUrl(c.n);
       // a click on the picture (not on the judge's own buttons) makes the camera big
@@ -187,7 +194,7 @@ function renderJudges() {
     const held = !off && !j.frame && analysingNow();
     if ((off || held) && c.live) plainView(c.n, j); else if (j.view && !c.live) { j.view.pc?.close(); j.view.video.remove(); j.view = null; }
     drawWaiting(c, j);
-    const nm = camName(c.n); j.tile.querySelector('.label').innerHTML = `Camera ${c.n}${nm ? `<small>${esc(nm)}</small>` : ''}${off ? '<small>AI judge off</small>' : held ? '<small>AI judge waiting</small>' : ''}`;
+    const nm = camName(c.n); j.tile.querySelector('.label').innerHTML = `Camera ${camNo(c.n)}${nm ? `<small>${esc(nm)}</small>` : ''}${off ? '<small>AI judge off</small>' : held ? '<small>AI judge waiting</small>' : ''}`;
   }
 }
 async function setAi(n, on) {
@@ -261,7 +268,7 @@ function fitLive() {
 let settingsFor = 0, startAfter = false;
 function openCamSettings(n, start) {
   settingsFor = n; startAfter = !!start;
-  $('settingsTitle').textContent = start ? `Start the AI judge on camera ${n}${camName(n) ? ' · ' + camName(n) : ''}` : `Camera ${n}${camName(n) ? ' · ' + camName(n) : ''} settings`;
+  $('settingsTitle').textContent = start ? `Start the AI judge on camera ${camNo(n)}${camName(n) ? ' · ' + camName(n) : ''}` : `Camera ${camNo(n)}${camName(n) ? ' · ' + camName(n) : ''} settings`;
   $('settingsNote').textContent = start ? 'Check its settings, then Save to start judging (Close: not now).' : 'Saved for this camera. Save restarts its judge with them.';
   $('settingsFrame').src = `/judge/judge.html?settings=1&cfg=cam${n}`;
   $('settingsAllRow').hidden = !st || st.cams.length < 2;
@@ -310,9 +317,9 @@ addEventListener('message', (e) => {
   try { localStorage.setItem('hj_settingsTogether', together ? '1' : '0'); } catch { /* private mode */ }
   closeCamSettings();
   if (e.data.judge === 'saved' && together) shareSettings(n);
-  if (e.data.judge === 'saved' && startAfter) { startAfter = false; pushJudgeSettings('cam' + n); setAi(n, true); toast(`AI judge started on camera ${n}`); return; }
+  if (e.data.judge === 'saved' && startAfter) { startAfter = false; pushJudgeSettings('cam' + n); setAi(n, true); toast(`AI judge started on camera ${camNo(n)}`); return; }
   startAfter = false;
-  if (e.data.judge === 'saved') { pushJudgeSettings('cam' + n).then(() => engineCall(n, 'restart')).then(() => { const j = judges[n]; if (j && j.frame) j.frame.src = judgeUrl(n); }); toast(`Camera ${n} settings saved`); }
+  if (e.data.judge === 'saved') { pushJudgeSettings('cam' + n).then(() => engineCall(n, 'restart')).then(() => { const j = judges[n]; if (j && j.frame) j.frame.src = judgeUrl(n); }); toast(`Camera ${camNo(n)} settings saved`); }
 });
 // opened from a camera in the Receiver (?focus=1): that camera big, live
 window.focusCamera = (n) => { showTab('live'); const tryIt = () => { if (judges[n]) { if (!judges[n].tile.classList.contains('big')) toggleBig(n); } else setTimeout(tryIt, 300); }; if (n) tryIt(); };
@@ -324,8 +331,11 @@ function renderViewPick() {
   const want = ['0', ...st.cams.map((c) => String(c.n))].join(',');
   if (box.dataset.want !== want) {
     box.dataset.want = want;
-    box.innerHTML = [`<button class="btn" data-view="0">${st.cams.length > 2 ? 'All' : 'Both'}</button>`, ...st.cams.map((c) => `<button class="btn" data-view="${c.n}">Camera ${c.n}</button>`)].join('');
+    box.innerHTML = [`<button class="btn" data-view="0">${st.cams.length > 2 ? 'All' : 'Both'}</button>`, ...st.cams.map((c) => `<button class="btn" data-view="${c.n}">Camera ${camNo(c.n)}</button>`)].join('');
     box.querySelectorAll('button').forEach((b) => b.onclick = () => { viewCam = +b.dataset.view; applyView(); });
+    // with one camera there's nothing to choose between
+    box.hidden = st.cams.length < 2;
+    if (st.cams.length < 2) viewCam = 0;
     applyView();
   }
 }
@@ -390,7 +400,7 @@ function showRanges() {
   const out = st.cams.map((c) => {
     const merged = [];
     for (const [a, b] of recSegs[c.n] || []) { const last = merged[merged.length - 1]; if (last && a - last[1] < 3000) last[1] = Math.max(last[1], b); else merged.push([a, b]); }
-    return `<b>Camera ${c.n}</b>: ${merged.length ? merged.slice(-4).map(([a, b]) => `${hms(new Date(a))}–${hms(new Date(b))}`).join(', ') : 'nothing recorded'}`;
+    return `<b>Camera ${camNo(c.n)}</b>: ${merged.length ? merged.slice(-4).map(([a, b]) => `${hms(new Date(a))}–${hms(new Date(b))}`).join(', ') : 'nothing recorded'}`;
   });
   $('ranges').innerHTML = 'Recorded: ' + out.join(' &nbsp;·&nbsp; ');
 }
@@ -421,7 +431,7 @@ async function replay(start, dur, autoplay) {
     const src = `/clip?cam=${c.n}&start=${encodeURIComponent(start.toISOString())}&duration=${clipDur}`;
     const tile = document.createElement('div');
     tile.className = 'tile'; tile.dataset.cam = c.n;
-    tile.innerHTML = `<video playsinline muted preload="auto"></video><div class="label">Camera ${c.n}<small>replay</small></div><div class="msg">Loading…</div><a class="dl" href="${src}&download=1">Save clip</a><button class="btn cfgbtn" title="AI judge settings for this camera">⚙ Config</button>`;
+    tile.innerHTML = `<video playsinline muted preload="auto"></video><div class="label">Camera ${camNo(c.n)}<small>replay</small></div><div class="msg">Loading…</div><a class="dl" href="${src}&download=1">Save clip</a><button class="btn cfgbtn" title="AI judge settings for this camera">⚙ Config</button>`;
     grid.appendChild(tile);
     const v = tile.querySelector('video'), msg = tile.querySelector('.msg');
     tile.querySelector('.cfgbtn').onclick = (e) => { e.stopPropagation(); openCamSettings(c.n); };
@@ -493,7 +503,7 @@ function pickAt(e, cam, v) {
   const x = (e.clientX - r.left - (r.width - w) / 2) / w, y = (e.clientY - r.top - (r.height - h) / 2) / h;
   if (x < 0 || x > 1 || y < 0 || y > 1) return toast('Click on the picture itself');
   const at = clipStart.getTime() + (master ? master.currentTime : v.currentTime) * 1000;
-  detailedAt(cam, at, at, x, y, `Camera ${cam} · athlete picked at ${hms(new Date(at))}`);
+  detailedAt(cam, at, at, x, y, `Camera ${camNo(cam)} · athlete picked at ${hms(new Date(at))}`);
 }
 
 // ---------------------------------------------------------------- everyone the AI judges tracked (the chosen day)
@@ -509,7 +519,7 @@ async function loadAthletes() {
 const athName = (a) => (a.bib && a.bib !== 'No number' ? `#${a.bib}` : `No number <small>(athlete ${a.label})</small>`);
 const upName = (v) => String(v || '').replace(/^[\dTZ-]+_/, '');
 const picUrl = (a) => (a.pic ? `/api/athlete-pic?n=${a.n}&v=${a.pic}` : '');
-function whereText(a) { return a.src === 'upload' ? `Uploaded video · ${esc(upName(a.video))}` : `Camera ${a.cam}${camName(a.cam) ? ' · ' + esc(camName(a.cam)) : ''} · live`; }
+function whereText(a) { return a.src === 'upload' ? `Uploaded video · ${esc(upName(a.video))}` : `Camera ${camNo(a.cam)}${camName(a.cam) ? ' · ' + esc(camName(a.cam)) : ''} · live`; }
 function whenText(a) {
   const f = new Date(a.firstAt), l = new Date(a.lastAt);
   if (a.src === 'upload' && a.firstT != null) return `In the video ${mss(a.firstT)}–${mss(a.lastT)} (${span((a.lastT - a.firstT) * 1000)}) · judged at ${hms(f)}`;
@@ -520,7 +530,7 @@ const repsText = (a) => `<b>${Number(a.reps)}</b> reps${a.noReps ? ` · ${Number
 // the All results tab: the list, filtered
 function fillCamFilter() {
   const cams = [...new Set([...(st ? st.cams.map((c) => c.n) : []), ...athList.filter((a) => a.src === 'live').map((a) => a.cam)])].sort((a, b) => a - b);
-  const html = '<option value="">All</option>' + cams.map((n) => `<option value="${n}">Camera ${n}</option>`).join('');
+  const html = '<option value="">All</option>' + cams.map((n) => `<option value="${n}">Camera ${camNo(n)}</option>`).join('');
   if ($('fCam').dataset.html !== html) { const v = $('fCam').value; $('fCam').innerHTML = html; $('fCam').dataset.html = html; $('fCam').value = v; }
 }
 function filtered() {
@@ -553,7 +563,7 @@ const hasNum = (a) => a.bib && a.bib !== 'No number';
 const sideMatch = (a, num, res) => (!num || (hasNum(a) && String(a.bib).toLowerCase().includes(num)))
   && (res !== 'reps' || a.reps > 0) && (res !== 'noreps' || (!a.reps && a.noReps > 0)) && (res !== 'nonum' || !hasNum(a)) && (res !== 'check' || a.questionable > 0);
 const sideCard = (a) => `<div class="ath" data-n="${a.n}">
-    ${athBody(a, a.src === 'upload' ? `<span>${mss(a.firstT ?? 0)}–${mss(a.lastT ?? 0)} in the video</span>` : `<span>Camera ${a.cam} · ${hms(new Date(a.lastAt))}</span>`)}
+    ${athBody(a, a.src === 'upload' ? `<span>${mss(a.firstT ?? 0)}–${mss(a.lastT ?? 0)} in the video</span>` : `<span>Camera ${camNo(a.cam)} · ${hms(new Date(a.lastAt))}</span>`)}
   </div>`;
 function fillSide(el, count, list, total, empty) {
   const sig = JSON.stringify(list.map((a) => [a.n, a.bib, a.reps, a.noReps, a.questionable, a.pic, a.lastAt])) + empty;
@@ -564,7 +574,7 @@ function fillSide(el, count, list, total, empty) {
 let upShown = '';   // the uploaded video whose results are beside it
 function renderSides() {
   const cams = [...new Set([...(st ? st.cams.map((c) => c.n) : []), ...athList.filter((a) => a.src === 'live').map((a) => a.cam)])].sort((a, b) => a - b);
-  const camHtml = '<option value="">All cameras</option>' + cams.map((n) => `<option value="${n}">Camera ${n}</option>`).join('');
+  const camHtml = '<option value="">All cameras</option>' + cams.map((n) => `<option value="${n}">Camera ${camNo(n)}</option>`).join('');
   if ($('lsCam').dataset.html !== camHtml) { const v = $('lsCam').value; $('lsCam').innerHTML = camHtml; $('lsCam').dataset.html = camHtml; $('lsCam').value = v; }
   const live = athList.filter((a) => a.src === 'live' && a.done);
   const lNum = $('lsNum').value.trim().toLowerCase(), lCam = $('lsCam').value, lRes = $('lsRes').value;
@@ -765,8 +775,8 @@ function renderMarkers(force) {
   const shown = numbersSeen.filter((x) => x.src === 'live' && Date.parse(x.firstAt) >= tlFrom && Date.parse(x.firstAt) <= end);
   const sig = JSON.stringify([list.map((a) => [a.n, a.bib]), shown.map((x) => x.id), tlFrom, Math.round(end / 30000)]);
   if (sig === markSig && !force) return; markSig = sig;
-  $('tlMarks').innerHTML = list.map((a) => `<button data-n="${a.n}" style="left:${(100 * (Date.parse(a.firstAt) - tlFrom) / Math.max(1, end - tlFrom)).toFixed(2)}%;background:${CAM_COLOURS[(a.cam - 1 + CAM_COLOURS.length) % CAM_COLOURS.length]}" title="Camera ${a.cam} · ${a.bib && a.bib !== 'No number' ? 'No. ' + esc(a.bib) : 'athlete ' + a.label + ' (no number yet)'} · ${hms(new Date(a.firstAt))} · ${Number(a.reps)} reps">${a.bib && a.bib !== 'No number' ? '#' + esc(a.bib) : 'A' + a.label}</button>`).join('');
-  $('tlMarks').insertAdjacentHTML('beforeend', shown.map((x) => `<button class="seen" data-seen="${esc(x.id)}" style="left:${(100 * (Date.parse(x.firstAt) - tlFrom) / Math.max(1, end - tlFrom)).toFixed(2)}%" title="#${esc(x.number)} shown to camera ${x.cam} at ${hms(new Date(x.firstAt))}">#${esc(x.number)}</button>`).join(''));
+  $('tlMarks').innerHTML = list.map((a) => `<button data-n="${a.n}" style="left:${(100 * (Date.parse(a.firstAt) - tlFrom) / Math.max(1, end - tlFrom)).toFixed(2)}%;background:${CAM_COLOURS[(a.cam - 1 + CAM_COLOURS.length) % CAM_COLOURS.length]}" title="Camera ${camNo(a.cam)} · ${a.bib && a.bib !== 'No number' ? 'No. ' + esc(a.bib) : 'athlete ' + a.label + ' (no number yet)'} · ${hms(new Date(a.firstAt))} · ${Number(a.reps)} reps">${a.bib && a.bib !== 'No number' ? '#' + esc(a.bib) : 'A' + a.label}</button>`).join('');
+  $('tlMarks').insertAdjacentHTML('beforeend', shown.map((x) => `<button class="seen" data-seen="${esc(x.id)}" style="left:${(100 * (Date.parse(x.firstAt) - tlFrom) / Math.max(1, end - tlFrom)).toFixed(2)}%" title="#${esc(x.number)} shown to camera ${camNo(x.cam)} at ${hms(new Date(x.firstAt))}">#${esc(x.number)}</button>`).join(''));
   $('tlMarks').querySelectorAll('button').forEach((b) => b.onclick = () => (b.dataset.seen ? goToNumber(numbersSeen.find((x) => x.id === b.dataset.seen)) : showAthlete(athList.find((a) => a.n === +b.dataset.n))));
 }
 
@@ -787,7 +797,7 @@ function numSearch() {
   // when that number was shown to a camera, newest first, with who started next to narrow down who to watch
   const seen = numbersSeen.filter((x) => x.number.includes(q)).sort((a, b) => b.firstAt.localeCompare(a.firstAt)).slice(0, 12);
   const nextUp = (x) => athList.filter((a) => a.src === x.src && a.cam === x.cam && a.video === x.video && a.firstAt >= x.firstAt).sort((a, b) => a.firstAt.localeCompare(b.firstAt))[0];
-  const seenHtml = seen.map((x) => { const a = nextUp(x), start = a && (x.src !== 'live' || Date.parse(a.firstAt) - Date.parse(x.firstAt) < 120000) ? a : null; return `<button data-seen="${esc(x.id)}"><span><b>#${esc(x.number)} shown</b> ${x.src === 'upload' ? `at ${mss(x.firstT ?? 0)} in ${esc(upName(x.video))}` : `at ${hms(new Date(x.firstAt))} · Camera ${x.cam}`}<br><small>${start ? `Next to start: ${shortName(start)}` : 'Go to this moment'}</small></span></button>`; }).join('');
+  const seenHtml = seen.map((x) => { const a = nextUp(x), start = a && (x.src !== 'live' || Date.parse(a.firstAt) - Date.parse(x.firstAt) < 120000) ? a : null; return `<button data-seen="${esc(x.id)}"><span><b>#${esc(x.number)} shown</b> ${x.src === 'upload' ? `at ${mss(x.firstT ?? 0)} in ${esc(upName(x.video))}` : `at ${hms(new Date(x.firstAt))} · Camera ${camNo(x.cam)}`}<br><small>${start ? `Next to start: ${shortName(start)}` : 'Go to this moment'}</small></span></button>`; }).join('');
   box.hidden = false;
   if (seenHtml || found.length) box.innerHTML = seenHtml + (found.length ? found.map((a) => `<button data-n="${a.n}">${a.pic ? `<img src="${picUrl(a)}" alt="">` : ''}<span><b>#${esc(a.bib)}</b> ${whereText(a)}<br><small>${whenText(a)} · ${Number(a.reps)} reps</small></span></button>`).join('')
     : '');
@@ -1075,7 +1085,7 @@ function renderLog() {
   const sig = JSON.stringify([dayKey, ev.length]);
   if (sig === logSig) return; logSig = sig;
   $('eventList').innerHTML = ev.slice().reverse().slice(0, 200).map((e) => `<tr>
-    <td class="t">${esc(dayStr(new Date(e.t)))} <b>${esc(hms(new Date(e.t)))}</b></td><td>Camera ${e.cam}</td>
+    <td class="t">${esc(dayStr(new Date(e.t)))} <b>${esc(hms(new Date(e.t)))}</b></td><td>Camera ${camNo(e.cam)}</td>
     <td class="${e.type}">${e.type === 'lost' ? 'Signal lost' : `Connected${e.route ? ' (' + esc(e.route) + ')' : ''}`}</td></tr>`).join('') || '<tr><td colspan="3" class="muted">No camera events on this day.</td></tr>';
 }
 $('csv').onclick = () => {

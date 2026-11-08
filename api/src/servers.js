@@ -138,6 +138,13 @@ function createServers({ store, now, reply, session, isAdmin = () => false, paym
       await store.put('serverwant', id, { id, company, ...was, ...change, ...(bookedCameras === undefined ? {} : { bookedCameras }) });
     }
   }
+  // how many of the booking's cameras this server has, and the number its first one goes by, so a booking's cameras are numbered 1, 2, 3…
+  // across its servers
+  async function bookedOn(slot) {
+    const [server, want] = await Promise.all([store.get('server', slot), store.get('serverwant', slot)]);
+    const n = server?.n || 1;
+    return { cameras: Math.max(1, Math.min(CAMERAS_PER_SERVER, Number(want?.bookedCameras) || CAMERAS_PER_SERVER)), first: (n - 1) * CAMERAS_PER_SERVER + 1 };
+  }
   async function stopCompany(id) {
     const plan = await store.get('serverplan', id);
     if (plan) await forEachWant(id, plan.servers, { desired: 'off', stopRequestedAt: now() });
@@ -189,7 +196,7 @@ function createServers({ store, now, reply, session, isAdmin = () => false, paym
     if (a === 'settings' && (method === 'GET' || method === 'POST')) {
       const k = await store.get('serverkey', sha(h['x-server-key'] || ''));
       if (!k) return reply(401, { error: 'That key isn\'t recognised' });
-      if (method === 'GET') return reply(200, { settings: (await store.get('servercfg', k.id))?.settings || null });
+      if (method === 'GET') return reply(200, { settings: (await store.get('servercfg', k.id))?.settings || null, booked: await bookedOn(k.id) });
       const settings = body?.settings;
       if (!settings || typeof settings !== 'object' || JSON.stringify(settings).length > MAX_SETTINGS) return reply(400, { error: 'Those settings won\'t fit' });
       await store.put('servercfg', k.id, { id: k.id, settings, at: now() });

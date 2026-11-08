@@ -11,7 +11,7 @@ const RETRY_MS = 5 * 60e3;
 
 const uploadedName = (file) => file.replace(/^\d{4}-\d\d-\d\dT[\d-]+Z?_/, '');
 const RESULTS_EVERY_MS = 2 * 60e3;
-function createCloud({ dir, uploadsDir, stateFile, api, settings, results = null, doFetch = fetch, now = Date.now }) {
+function createCloud({ dir, uploadsDir, stateFile, api, settings, results = null, camName = (n) => n, doFetch = fetch, now = Date.now }) {
   let sent = {}; try { sent = JSON.parse(fs.readFileSync(stateFile, 'utf8')); } catch { /* none yet */ }
   const status = { state: 'off', waiting: 0, sentCount: Object.keys(sent).length, current: '', lastAt: 0, error: '' };
   let busy = false, waitUntil = 0;
@@ -56,7 +56,8 @@ function createCloud({ dir, uploadsDir, stateFile, api, settings, results = null
     return j;
   }
   async function send(f, key) {
-    const u = await post('upload', key, { cam: f.cam, file: f.file, size: f.size });
+    // a camera goes by its number in the whole booking, so another server's camera 1 isn't mixed up with this one's
+    const u = await post('upload', key, { cam: f.cam ? camName(f.cam) : 0, file: f.file, size: f.size });
     const put = await doFetch(u.url, { method: 'PUT', duplex: 'half', body: Readable.toWeb(fs.createReadStream(f.p)), headers: { 'x-ms-blob-type': 'BlockBlob', 'x-ms-blob-content-type': 'video/mp4', 'Content-Length': String(f.size) } });
     if (!put.ok) throw new Error(`Storage said ${put.status}`);
     await post('done', key, { blob: u.blob, size: f.size, name: f.name, startedAt: startedAt(f.file, f.mtime) });

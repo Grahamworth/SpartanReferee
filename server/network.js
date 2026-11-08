@@ -46,9 +46,10 @@ function spartansLink(addr, n, cfg) {
 function larixLink(addr, n, cfg) {
   const r = routes(addr)[0];
   const conns = [];
-  if (r) conns.push({ url: rtmp(r.ip, n, cfg), name: `Camera ${n} to laptop` });
+  const shown = n + (cfg.firstCamera || 1) - 1;
+  if (r) conns.push({ url: rtmp(r.ip, n, cfg), name: `Camera ${shown} to laptop` });
   const key = (cfg.youtube || {})[n];
-  if (key) conns.push({ url: `rtmp://a.rtmp.youtube.com/live2/${key}`, name: `Camera ${n} to YouTube` });
+  if (key) conns.push({ url: `rtmp://a.rtmp.youtube.com/live2/${key}`, name: `Camera ${shown} to YouTube` });
   const q = conns.map((c) => [
     `conn[][url]=${encodeURIComponent(c.url)}`, `conn[][name]=${encodeURIComponent(c.name)}`,
     'conn[][mode]=av', 'conn[][active]=on', 'conn[][overwrite]=on',
