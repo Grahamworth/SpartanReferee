@@ -3,119 +3,106 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0b0b0b">
-<title>Set up streaming</title>
+<meta name="theme-color" content="#12161c">
+<title>Set up the cameras: HeadJudge</title>
 <link rel="icon" href="icons/headjudge/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;1,800;1,900&family=Barlow:wght@400;600;700&display=swap">
-<link rel="stylesheet" href="styles.css">
-<link rel="stylesheet" href="hub.css">
-<link rel="stylesheet" href="hub-pages.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;1,800&family=Barlow:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="headjudge.css">
 <style>
-  .toc { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 4px; }
-  .toc a { background: #161616; border: 1px solid #2a2a2a; border-radius: 999px; padding: 6px 12px; color: #fff; text-decoration: none; font-weight: 600; font-size: .9rem; }
-  .part { border-left: 4px solid var(--red, #e2231a); background: #111; padding: 14px 16px 16px; margin: 18px 0; border-radius: 0 10px 10px 0; }
-  .part h2 { margin: 0 0 4px; }
-  .part h3 { margin: 14px 0 6px; }
-  .part > p { margin: 0 0 10px; }
-  .steps { margin: 0; padding-left: 1.4em; display: grid; gap: 12px; }
-  .steps li::marker { color: var(--red, #e2231a); font-family: var(--display); font-weight: 700; }
-  .steps li b { color: #fff; }
-  .warn { background: #2a2208; border: 1px solid #6b5410; color: #f3dc8a; border-radius: 8px; padding: 10px 12px; margin-top: 8px; font-size: .95rem; }
-  .warn b { color: #ffe9a3; }
-  .tip { background: #0f2018; border: 1px solid #1d5a3a; color: #a9e9c4; border-radius: 8px; padding: 10px 12px; margin-top: 8px; font-size: .95rem; }
-  .tip b { color: #d2ffe5; }
-  .row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
-  .when { color: var(--muted); font-size: .95rem; }
-  .fix dt { color: #fff; font-weight: 700; margin-top: 12px; }
-  .fix dd { margin: 4px 0 0; color: var(--muted); }
-  .flow { display: grid; gap: 6px; margin-top: 14px; font-size: .95rem; color: var(--muted); }
-  .flow b { color: #fff; }
-  .ptabs { display: flex; gap: 6px; flex-wrap: wrap; margin: 4px 0 12px; }
-  .ptabs button { font: 700 1rem var(--body); padding: 9px 14px; border: 1px solid var(--line); background: transparent; color: var(--white); cursor: pointer; }
-  .ptabs button[aria-selected="true"] { background: var(--white); color: var(--black); border-color: var(--white); }
-  .ptabs button:focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
-  .way > p.muted { margin: 0 0 10px; }
-  .diagram { margin: 6px 0 16px; --zone: color-mix(in srgb, var(--muted) 14%, transparent); }
-  .diagram svg { width: 100%; height: auto; display: block; max-width: 100%; }
-  .diagram figcaption { color: var(--muted); font-size: .9rem; margin-top: 6px; }
-  .diagram .lab { fill: var(--white); font: 600 17px var(--body); }
-  .diagram .lab.small { font-size: 15px; fill: var(--muted); }
-  .diagram .bad-t { fill: var(--red); }
-  .diagram .ath rect { fill: color-mix(in srgb, var(--muted) 22%, transparent); }
-  .diagram .body circle, .diagram .body rect { fill: var(--white); }
-  .diagram .cam circle { fill: var(--good); }
-  .diagram .cam text { fill: #08210f; font: 800 18px var(--display); }
-  .diagram .bad path { stroke: var(--red); stroke-width: 4; stroke-linecap: round; fill: none; }
-  .diagram .tripod line { stroke: var(--muted); stroke-width: 3; }
-  .diagram .phone { fill: var(--white); }
-  code { background: #1d1d1d; padding: 1px 5px; border-radius: 4px; word-break: break-all; }
-  .promo video { display: block; width: 100%; max-width: 800px; background: #000; }
-</style>
-<link rel="stylesheet" href="looks.css">
-<script src="looks.js"></script>
-<style>
-  .guide h2 { margin-top: 26px; } .guide h3 { margin: 16px 0 4px; } .guide li { margin: 6px 0; } .guide video { width: 100%; display: block; margin: 12px 0; background: #000; } .guide a:not(.btn) { color: var(--white, #fff); }
+  .guide { max-width: 860px; }
+  .guide .intro { margin-bottom: 20px; }
+  .guide video { display: block; width: 100%; aspect-ratio: 16 / 9; background: var(--panel); border: 1px solid var(--line); margin: 0 0 26px; }
+  .guide .card h2 { margin-bottom: 10px; }
+  .guide .card h3 { font: italic 800 1.15rem var(--display); text-transform: uppercase; margin: 18px 0 6px; }
+  .guide ol, .guide ul { margin: 0; padding-left: 1.3em; display: grid; gap: 8px; }
+  .guide ol li::marker { color: var(--primary-text); font: italic 800 1.1rem var(--display); }
+  .guide b { color: var(--text); }
+  .guide .card p { margin: 10px 0 0; color: var(--muted); }
+  .guide .tip { margin-top: 12px; padding: 10px 14px; background: var(--bg); border-left: 4px solid var(--primary); color: var(--muted); }
+  .guide .foot { color: var(--muted); }
 </style>
 </head>
 <body>
-<main class="hub guide">
-  <a href="./" class="home-link">‹ Home</a>
-  <h1 class="brand">Set up <span>the cameras</span></h1>
-  <p class="muted">Phones film the burpee zone and send their pictures to your HeadJudge server over any Wi-Fi or mobile signal. The server records them, runs an AI judge on each camera, and shows everything in a browser for the referees. There's nothing to install on the judging computer.</p>
-  <div class="videobox"><video controls playsinline preload="metadata" src="broadcaster-receiver-promo.mp4#t=1.5" aria-label="HeadJudge Broadcaster and the online Receiver, as an animated demo"></video></div>
+<header class="top">
+  <a class="mark" href="./">Head<span>Judge</span></a>
+  <span class="topRight"><a href="console.html">My console</a></span>
+</header>
+<main class="page guide">
+  <div class="intro">
+    <h1>Set up <span>the cameras</span></h1>
+    <p>Phones film the event and send their pictures to your HeadJudge server over any Wi-Fi or mobile signal. The server records them, runs an AI judge on each camera, and shows everything in a browser for the referees. There's nothing to install on the judging computer.</p>
+  </div>
+  <video src="headjudge-how-it-works.mp4" poster="headjudge-how-it-works.jpg" controls playsinline muted preload="metadata" aria-label="How HeadJudge works, in 30 seconds"></video>
 
-  <h2>What you need</h2>
-  <ul>
-    <li><b>A HeadJudge account</b> for your company. <a href="register.html">Register here</a>, add a card, and you can start a server.</li>
-    <li><b>A phone per camera</b> on a tripod or stand, with a power bank and mobile data or Wi-Fi. Android uses HeadJudge Broadcaster; iPhones use Larix.</li>
-    <li><b>Any computer or iPad</b> for the referees, with a browser.</li>
-    <li><b>A good upload.</b> Each camera sends about 3.5 Mbit/s, and the venue's connection has to carry them all: try it there before the event.</li>
-  </ul>
+  <section class="card">
+    <h2>What you need</h2>
+    <ul>
+      <li><b>A HeadJudge account</b> for your company. <a href="register.html">Register here</a>: your first booking asks for a card.</li>
+      <li><b>A phone per camera</b> on a tripod or stand, with a power bank and mobile data or Wi-Fi. Android uses HeadJudge Broadcaster; iPhones use Larix.</li>
+      <li><b>Any computer, tablet or phone</b> for the referees, with a browser.</li>
+      <li><b>A good upload.</b> Each camera sends about 3.5 Mbit/s, and the venue's connection has to carry them all: try it there before the event.</li>
+    </ul>
+  </section>
 
-  <h2>1. Start your server</h2>
-  <ol>
-    <li>Go to <a href="console.html">your server</a>, say how many cameras and for how long, check the cost and press <b>Start</b>. Each server takes 2 cameras, and starting takes about 5 minutes, so allow for that.</li>
-    <li>Press <b>Open video review</b>. With more than one server, each has its own review page and its own 2 cameras. Share nothing from the address bar: anyone else who needs it signs in to your company's account.</li>
-  </ol>
-  <p class="muted">Your servers run for the time you booked, used or not, then save their recordings and shut down. Running over? Press <b>Extend</b> on the same page. The review page warns you 20 minutes before the end.</p>
+  <section class="card">
+    <h2>1. Book your cameras</h2>
+    <ol>
+      <li>On <a href="console.html">your console</a>, choose how many cameras and for how long, check the cost and press <b>Book and start</b>. Starting takes about 5 minutes, so allow for that.</li>
+      <li>Press <b>Open video review</b>. Each server takes 2 cameras, so with 3 or more you get a review page per server, and the cameras are numbered across the booking (the second server's are Camera 3 and 4).</li>
+    </ol>
+    <p>Your cameras run for the time you booked, then the recordings are saved and everything shuts down. Running over? Press <b>Extend</b> on the console. Finished early? Press <b>Stop</b>, and you pay only for the time used. The review page warns you 20 minutes before the end.</p>
+  </section>
 
-  <h2>2. Each phone</h2>
-  <p>In the video review, open the <b>Cameras</b> tab. Each camera has its own codes.</p>
-  <h3>Android: HeadJudge Broadcaster</h3>
-  <ol>
-    <li><a href="https://zealous-island-03d6db503.8.azurestaticapps.net/downloads/spartans-broadcaster.apk">Install HeadJudge Broadcaster</a>. The phone warns you, as it isn't from the Play Store: tap Settings, turn on Allow from this source, go back and tap Install.</li>
-    <li>Tap <b>Scan station QR code</b> and scan that camera's code.</li>
-    <li>Optional: tick <b>Also stream live to YouTube</b> and paste that camera's stream key.</li>
-    <li>Leave Quality on 720p unless the signal is weak, then tap <b>Open the camera</b> and <b>GO LIVE</b>.</li>
-  </ol>
-  <h3>iPhone: Larix</h3>
-  <ol>
-    <li>Install Larix Broadcaster from the App Store and open it once, allowing the camera and microphone.</li>
-    <li>In the Cameras tab, open <b>iPhone (Larix)</b> and scan that camera's code with the phone's camera. Open the link in Larix and tap <b>Import</b>.</li>
-    <li>In Larix, go to Settings, then Connections, tick the camera, and press the red button.</li>
-  </ol>
+  <section class="card">
+    <h2>2. Connect each phone</h2>
+    <p style="margin-top:0">In the video review, every camera waiting for its phone shows its QR codes on the <b>Live</b> tab (they're on the <b>Cameras</b> tab too). The codes change with each booking, so scan them again each time.</p>
+    <h3>Android: HeadJudge Broadcaster</h3>
+    <ol>
+      <li><a href="downloads/spartans-broadcaster.apk">Install HeadJudge Broadcaster</a>. The phone warns you, as it isn't from the Play Store: tap Settings, turn on Allow from this source, go back and tap Install.</li>
+      <li>Tap <b>Scan the camera's QR code</b> and scan that camera's code.</li>
+      <li>Optional: tick <b>Also stream live to YouTube</b> and paste that camera's stream key.</li>
+      <li>Leave Quality on 720p unless the signal is weak, then tap <b>Open the camera</b> and <b>GO LIVE</b>.</li>
+    </ol>
+    <h3>iPhone: Larix</h3>
+    <ol>
+      <li>Install Larix Broadcaster from the App Store and open it once, allowing the camera and microphone.</li>
+      <li>Scan that camera's <b>iPhone (Larix)</b> code with the phone's camera, open the link in Larix and tap <b>Import</b>.</li>
+      <li>In Larix, go to Settings, then Connections, tick the camera, and press the red button.</li>
+    </ol>
+  </section>
 
-  <h2>3. Start judging</h2>
-  <ol>
-    <li>On the <b>Live</b> tab, each phone shows within a few seconds of going live.</li>
-    <li>Press <b>Start AI judge</b> on each camera, check its settings and press Save. The judge runs on the server, so it carries on when you close the page.</li>
-    <li>Do a few test burpees in front of each camera and check they're counted.</li>
-  </ol>
+  <section class="card">
+    <h2>3. Start judging</h2>
+    <ol>
+      <li>On the <b>Live</b> tab, each phone's picture shows within a few seconds of going live.</li>
+      <li>Press <b>Start AI judge</b> on a camera, give it a name and choose what it's judging (burpees, squats, push-ups and more). It starts from that camera's last setup. <b>Advanced settings</b> has everything else. Then press <b>Start judging</b>.</li>
+      <li>Do a few test reps in front of each camera and check they're counted. The judge runs on the server, so it carries on when you close the page.</li>
+    </ol>
+  </section>
 
-  <h2>Review and protests</h2>
-  <p>Rewind any camera with the timeline, find an athlete by number, or watch how their reps were judged from <b>All results</b>. Recordings stay on the server for 14 days and in your <a href="recordings.html">cloud recordings</a> for 30.</p>
+  <section class="card">
+    <h2>Review and protests</h2>
+    <ul>
+      <li><b>Results</b> shows everyone judged on the live cameras, from a previous recording, or in a video you upload, which is analysed on the server.</li>
+      <li><b>Watch</b> plays an athlete from 5 seconds before they appear, with their tracking and every rep and no rep, and lists everyone else in that video to jump to.</li>
+      <li><b>Find athlete number</b> lists every moment a number was seen, on any camera or uploaded video.</li>
+    </ul>
+    <p>Recordings and results are kept for 7 days. After your servers have shut down, <a href="results.html">Past results</a> lets you search, watch and download them until then.</p>
+  </section>
 
-  <h2>If something fails</h2>
-  <ul>
-    <li><b>A phone won't connect:</b> check it has signal, and scan its code again. Codes change only if the server is replaced.</li>
-    <li><b>The picture stutters on the phone or drops:</b> the signal is too weak for 720p. Pick a lower quality.</li>
-    <li><b>A camera shows but no picture in the browser:</b> the venue's network may block video. Try the browser on a phone's mobile data to check.</li>
-    <li><b>The server didn't start:</b> your page says why. Azure sometimes has no graphics-card servers free for a few minutes: press Start again.</li>
-    <li><b>The internet at the venue fails:</b> nothing reaches the server until it's back. Each phone keeps filming its own backup only in Larix, so keep one running on an iPhone if you can.</li>
-  </ul>
-  <p class="foot">Trouble with the Broadcaster on a phone? <a href="phone.html">The phone's own steps</a></p>
+  <section class="card">
+    <h2>If something fails</h2>
+    <ul>
+      <li><b>A phone won't connect:</b> check it has signal, and scan its code again from this booking's review page.</li>
+      <li><b>The picture stutters on the phone or drops:</b> the signal is too weak for 720p. Pick a lower quality.</li>
+      <li><b>A camera shows but no picture in the browser:</b> the venue's network may block video. Try the browser on a phone's mobile data to check.</li>
+      <li><b>The server didn't start:</b> your console says why. Azure sometimes has no graphics-card servers free for a few minutes: try again.</li>
+      <li><b>The internet at the venue fails:</b> nothing reaches the server until it's back. Only Larix keeps its own copy on the phone, so keep one running on an iPhone if you can.</li>
+    </ul>
+  </section>
+  <p class="foot">Setting up one phone? <a href="phone.html">The phone's own steps</a></p>
 </main>
 </body>
 </html>

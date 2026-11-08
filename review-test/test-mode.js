@@ -41,7 +41,7 @@
     { id: 'n2', number: '88', src: 'live', cam: 1, video: '', firstAt: minsAgo(15.3), lastAt: minsAgo(15.2), firstT: 0, lastT: 0 },
   ];
   const events = [{ t: minsAgo(25), cam: 1, type: 'connected', route: 'internet' }, { t: minsAgo(10), cam: 2, type: 'lost', route: '' }];
-  const uploads = [], files = new Map(), jobs = [];
+  const uploads = [], files = new Map(), jobs = [], prevSources = {};
   const track = (a) => ({ frames: [], events: Array.from({ length: Math.min(a.reps, 6) }, (_, i) => ({ type: i === 2 && a.noReps ? 'norep' : 'rep', count: i + 1, t: a.src === 'upload' ? ((a.firstT || 0) + 2 + i * 5) * 1000 : Date.parse(a.firstAt) + 20000 + i * 9000, reasons: i === 2 && a.noReps ? ['Jump: both feet off the ground'] : [] })) });
   const jobView = (j) => {
     const pct = Math.min(100, Math.round((Date.now() - j.at) / 80));
@@ -94,23 +94,28 @@
         if (method === 'POST') {
           const video = body?.video || '';
           // a previous recording, "fetched" to be analysed (there's no video to play in test mode)
-          if (body?.previous) { const j = { id: `job${jobs.length + 1}`, video: `${body.previous}.mp4`, name: `Recording ${body.previous}`, state: 'running', at: Date.now() }; jobs.push(j); return json(jobView(j)); }
+          if (body?.previous) {
+            const rec = recordingsNow().find((x) => x.id === body.previous), video = `${new Date().toISOString().replace(/[:.]/g, '-')}_Recording_${body.previous}.mp4`;
+            if (rec) prevSources[video] = rec.file; // as the server does: its local copy, and the recording it came from
+            const j = { id: `job${jobs.length + 1}`, video, name: `Recording ${body.previous}`, state: 'running', at: Date.now() }; jobs.push(j); return json(jobView(j));
+          }
           const old = jobs.find((j) => j.video === video); if (old) jobs.splice(jobs.indexOf(old), 1);
           const j = { id: `job${jobs.length + 1}`, video, name: body?.name || video, state: 'running', at: Date.now() };
           jobs.push(j); return json(jobView(j));
         }
         return json(jobs.map(jobView));
       case '/api/upload-jobs/stop': { const j = jobs.find((x) => x.video === body?.video); if (j && j.state === 'running') { j.state = 'stopped'; j.why = 'Stopped. What it found so far is on the right.'; } return json({ stopped: !!j }); }
-      case '/api/previous-recordings': {
-        // each camera's 10-minute recordings over the last half hour, one from yesterday nobody's judged, and the videos uploaded here
-        const seg = (id, cam, startMs) => ({ id, cam, size: 380e6 + cam * 7e6, startedAt: iso(startMs), file: `cam${cam}-${id}.mp4`, name: '' });
-        const recs = [seg('c1a', 1, T0 - 10 * 60e3), seg('c2a', 2, T0 - 10 * 60e3), seg('c1b', 1, T0 - 20 * 60e3), seg('c2b', 2, T0 - 20 * 60e3), seg('c1c', 1, T0 - 30 * 60e3), seg('old', 1, T0 - 26 * 3600e3)];
-        for (const u of uploads) recs.push({ id: `u-${u.name}`, cam: 0, size: u.size, startedAt: iso(Date.now() - 60e3), file: u.name, name: u.name.replace(/^[\dTZ-]+_/, '') });
-        return json({ recordings: recs.sort((a, b) => b.startedAt.localeCompare(a.startedAt)) });
-      }
+      case '/api/previous-recordings': return json({ recordings: recordingsNow(), sources: prevSources });
       case '/api/server': return json({ log: ['Test mode: there is no server'], cloud: {}, idle: {} });
       default: return json({ error: 'Not in test mode' }, 404);
     }
+  }
+  // each camera's 10-minute recordings over the last half hour, one from yesterday nobody's judged, and the videos uploaded here
+  function recordingsNow() {
+        const seg = (id, cam, startMs) => ({ id, cam, size: 380e6 + cam * 7e6, startedAt: iso(startMs), file: `cam${cam}-${id}.mp4`, name: '' });
+        const recs = [seg('c1a', 1, T0 - 10 * 60e3), seg('c2a', 2, T0 - 10 * 60e3), seg('c1b', 1, T0 - 20 * 60e3), seg('c2b', 2, T0 - 20 * 60e3), seg('c1c', 1, T0 - 30 * 60e3), seg('old', 1, T0 - 26 * 3600e3)];
+        for (const u of uploads) recs.push({ id: `u-${u.name}`, cam: 0, size: u.size, startedAt: iso(Date.now() - 60e3), file: u.name, name: u.name.replace(/^[\dTZ-]+_/, '') });
+        return recs.sort((a, b) => b.startedAt.localeCompare(a.startedAt));
   }
   const ours = (path) => (path.startsWith('/api/') && path !== '/api/me') || path.startsWith('/whep/') || path === '/clip';
   window.fetch = async (input, init = {}) => {

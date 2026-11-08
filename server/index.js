@@ -165,7 +165,8 @@ async function extra(req, res, u, { local }) {
   }
   if (p === '/api/upload-jobs' && req.method === 'GET') { send(res, 200, uploadJobs.list()); return true; }
   if (p === '/api/previous-recordings' && req.method === 'GET') {
-    try { send(res, 200, { recordings: await cloud.previous() }); } catch (e) { send(res, 502, { error: e.message }); }
+    // with which local copy came from which recording, so a recording analysed here finds its athletes
+    try { send(res, 200, { recordings: await cloud.previous(), sources: previousSources }); } catch (e) { send(res, 502, { error: e.message }); }
     return true;
   }
   if ((p === '/api/upload-jobs' || p === '/api/upload-jobs/stop') && req.method === 'POST') {

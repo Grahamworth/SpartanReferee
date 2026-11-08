@@ -127,10 +127,6 @@ body.picking #replayGrid .tile { cursor: crosshair; outline: 2px dashed var(--am
 .uploadbar select { max-width: 320px; font-size: 15px; padding: 9px; }
 #upStatus { flex: 1 1 300px; }
 .upstage { position: relative; background: #000; aspect-ratio: 16 / 9; max-height: calc(100vh - 200px); width: 100%; }
-.prevlist { overflow: auto; max-height: 70vh; display: grid; gap: 6px; }
-.prevlist button { display: flex; justify-content: space-between; gap: 12px; width: 100%; text-align: left; padding: 10px 12px; background: var(--bg); color: #fff; border: 1px solid var(--line); cursor: pointer; font: inherit; }
-.prevlist button:hover, .prevlist button:focus-visible { border-color: #fff; }
-.prevlist small { color: var(--muted); white-space: nowrap; }
 .upstage video { width: 100%; height: 100%; display: block; background: #000; }
 .upstage .msg { position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); font-weight: 700; }
 

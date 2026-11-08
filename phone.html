@@ -3,58 +3,50 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0b0b0b">
-<title>Set up a camera phone</title>
+<meta name="theme-color" content="#12161c">
+<title>Set up a camera phone: HeadJudge</title>
 <link rel="icon" href="icons/headjudge/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;1,800;1,900&family=Barlow:wght@400;600;700&display=swap">
-<link rel="stylesheet" href="styles.css">
-<link rel="stylesheet" href="hub.css">
-<link rel="stylesheet" href="hub-pages.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;1,800&family=Barlow:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="headjudge.css">
 <style>
-  .steps { list-style: none; margin: 16px 0 0; padding: 0; display: grid; gap: 12px; counter-reset: s; }
-  .steps li { counter-increment: s; background: #111; border-left: 4px solid var(--red, #e2231a); padding: 14px 14px 14px 54px; position: relative; border-radius: 0 10px 10px 0; }
-  .steps li::before { content: counter(s); position: absolute; left: 14px; top: 14px; width: 28px; height: 28px; border-radius: 50%; background: var(--red, #e2231a); color: #fff; font-weight: 800; display: grid; place-items: center; }
-  .steps li.done { border-left-color: #33d17a; opacity: .7; }
-  .steps li.done::before { content: "✓"; background: #33d17a; color: #000; }
-  .steps h2 { margin: 0 0 4px; font-size: 1.25rem; }
-  .steps p { margin: 0 0 10px; color: var(--muted); }
-  .steps p b { color: #fff; }
-  .row { display: flex; flex-wrap: wrap; gap: 8px; }
-  .tick { display: flex; align-items: center; gap: 8px; margin-top: 10px; color: var(--muted); font-size: .95rem; }
-  .tick input { width: 20px; height: 20px; }
-  .which { color: var(--muted); font-size: .95rem; margin-top: 8px; }
-  .which a { color: #fff; }
-  .steps.cont { counter-reset: s 1; margin-top: 0; }
-  .ptabs { display: flex; gap: 6px; flex-wrap: wrap; margin: 14px 0 10px; }
-  .ptabs button { font: 700 1rem var(--body); padding: 9px 14px; border: 1px solid var(--line); background: transparent; color: var(--white); cursor: pointer; }
-  .ptabs button[aria-selected="true"] { background: var(--white); color: var(--black); border-color: var(--white); }
-  .ptabs button:focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
-</style>
-<link rel="stylesheet" href="looks.css">
-<script src="looks.js"></script>
-<style>
-  .guide h2 { margin-top: 26px; } .guide h3 { margin: 16px 0 4px; } .guide li { margin: 6px 0; } .guide video { width: 100%; display: block; margin: 12px 0; background: #000; } .guide a:not(.btn) { color: var(--white, #fff); }
+  .guide { max-width: 720px; }
+  .guide .card h2 { margin-bottom: 10px; }
+  .guide ol { margin: 0; padding-left: 1.3em; display: grid; gap: 10px; }
+  .guide ol li::marker { color: var(--primary-text); font: italic 800 1.1rem var(--display); }
+  .guide b { color: var(--text); }
+  .guide .get { margin: 4px 0 8px; }
+  .guide .note { margin-top: 12px; }
 </style>
 </head>
 <body>
-<main class="hub guide">
-  <a href="./" class="home-link">‹ Home</a>
-  <h1 class="brand">Camera <span>phone</span></h1>
-  <p class="muted">A few steps to make this phone a camera for your HeadJudge server. It works over any Wi-Fi or mobile signal.</p>
-  <h2>Android</h2>
-  <ol>
-    <li><a class="btn btn-red" href="https://zealous-island-03d6db503.8.azurestaticapps.net/downloads/spartans-broadcaster.apk">Get HeadJudge Broadcaster</a><br>The phone warns you, as it isn't from the Play Store: tap Settings, turn on Allow from this source, go back and tap Install.</li>
-    <li>Tap <b>Scan station QR code</b>. On the judging computer, open the video review's <b>Cameras</b> tab and scan this camera's code.</li>
-    <li>Put the phone on its stand in landscape, tap <b>Open the camera</b> and <b>GO LIVE</b>. The camera shows as live within a few seconds.</li>
-  </ol>
-  <h2>iPhone</h2>
-  <ol>
-    <li>Install Larix Broadcaster from the App Store and open it once, allowing the camera and microphone.</li>
-    <li>On the judging computer, open the <b>Cameras</b> tab, then <b>iPhone (Larix)</b>, and scan the code with this phone's camera. Open the link in Larix and tap <b>Import</b>.</li>
-    <li>In Larix, go to Settings, then Connections, tick the camera, put the phone on its stand in landscape, and press the red button.</li>
-  </ol>
+<header class="top">
+  <a class="mark" href="./">Head<span>Judge</span></a>
+  <span class="topRight"><a href="streaming.html">Full setup guide</a></span>
+</header>
+<main class="page guide">
+  <div class="intro">
+    <h1>Camera <span>phone</span></h1>
+    <p>A few steps to make this phone a camera for your HeadJudge server. It works over any Wi-Fi or mobile signal.</p>
+  </div>
+  <section class="card">
+    <h2>Android</h2>
+    <ol>
+      <li><a class="primary linkbtn get" href="downloads/spartans-broadcaster.apk">Get HeadJudge Broadcaster</a>The phone warns you, as it isn't from the Play Store: tap Settings, turn on Allow from this source, go back and tap Install.</li>
+      <li>Tap <b>Scan the camera's QR code</b>. On the judging computer, the video review shows each waiting camera's codes on its <b>Live</b> tab: scan this camera's.</li>
+      <li>Put the phone on its stand in landscape, tap <b>Open the camera</b> and <b>GO LIVE</b>. The camera shows as live within a few seconds.</li>
+    </ol>
+  </section>
+  <section class="card">
+    <h2>iPhone</h2>
+    <ol>
+      <li>Install Larix Broadcaster from the App Store and open it once, allowing the camera and microphone.</li>
+      <li>On the judging computer, scan the camera's <b>iPhone (Larix)</b> code with this phone's camera. Open the link in Larix and tap <b>Import</b>.</li>
+      <li>In Larix, go to Settings, then Connections, tick the camera, put the phone on its stand in landscape, and press the red button.</li>
+    </ol>
+  </section>
+  <p class="note">The codes change with each booking, so scan again each time.</p>
 </main>
 </body>
 </html>

@@ -289,7 +289,9 @@ async function openQuick(n, running = false) {
   $('quickGo').textContent = running ? 'Save and restart' : 'Start judging';
   fillQuick(quick.base);
   $('quickStart').hidden = false;
-  const list = await exerciseChoices(), want = quick.base.exercise || 'burpees';
+  const list = await exerciseChoices();
+  if (!quick || quick.n !== n) return; // closed (or another camera opened) while the list loaded
+  const want = quick.base.exercise || 'burpees';
   const opts = list.some(([k]) => k === want) ? list : [...list, [want, want]];
   $('quickExercise').innerHTML = opts.map(([k, label]) => `<option value="${esc(k)}">${esc(label)}</option>`).join('');
   $('quickExercise').value = want;
@@ -576,11 +578,12 @@ async function loadAthletes() {
     const [a, b] = dayBounds();
     const r = await fetch(`/api/athletes?from=${encodeURIComponent(new Date(a).toISOString())}&to=${encodeURIComponent(new Date(b).toISOString())}`).then((x) => x.json()).catch(() => null);
     if (r) { athRev = r.rev; athList = r.list; numbersSeen = r.numbers || []; renderAthletes(); renderSides(); renderMarkers(true); fillCamFilter(); numSearch(); }
-    if (r && resMode === 'previous') loadAll().then(() => { drawRecordings(); showRecPick(); renderAthletes(true); });
+    // every athlete ever judged here is a big list: while live judges keep changing it, fetched again at most every 15 s
+    if (r && resMode === 'previous' && Date.now() - allAt > 15000) loadAll().then(() => { drawRecordings(); showRecPick(); renderAthletes(true); });
   } finally { athLoading = false; }
 }
 // ---------------------------------------------------------------- Results: the live cameras, a previous recording, or an uploaded video
-let resMode = 'live', recShown = null, recordings = null, allAth = null;
+let resMode = 'live', recShown = null, recordings = null, recSources = {}, allAth = null, allAt = 0;
 const athByN = (n) => athList.find((x) => x.n === n) || allAth?.find((x) => x.n === n);
 const hm = (d) => d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
 // A camera's recordings are cut every 10 minutes; one ends where the next begins.
@@ -591,7 +594,9 @@ function recordingEnd(r) {
 }
 // who a recording holds: an uploaded video's people, or everyone on that camera while it was recording
 function inRecording(a, r) {
-  if (!r.cam) return a.src === 'upload' && a.video === r.file;
+  // analysed as a video: uploaded here, or fetched from cloud storage to be analysed (a copy under its own name)
+  if (a.src === 'upload' && (a.video === r.file || recSources[a.video] === r.file)) return true;
+  if (!r.cam) return false;
   const s = Date.parse(r.startedAt), e = recordingEnd(r);
   return a.src === 'live' && camNo(a.cam) === r.cam && Date.parse(a.lastAt) >= s && Date.parse(a.firstAt) <= e;
 }
@@ -607,13 +612,13 @@ function resultsBase() {
 }
 async function loadAll() {
   const r = await fetch('/api/athletes?from=2000&to=9').then((x) => x.json()).catch(() => null);
-  if (r) allAth = r.list;
+  if (r) { allAth = r.list; allAt = Date.now(); }
 }
 async function loadRecordings() {
   if (!recordings) $('recList').innerHTML = '<p class="muted">Looking…</p>';
   const [r] = await Promise.all([fetch('/api/previous-recordings').then((x) => x.json()).catch(() => ({ error: 'Can\'t reach the server' })), loadAll()]);
   if (r.error) { $('recList').innerHTML = `<p class="muted">${esc(r.error)}</p>`; return; }
-  recordings = r.recordings; drawRecordings(); showRecPick(); renderAthletes(true);
+  recordings = r.recordings; recSources = r.sources || {}; drawRecordings(); showRecPick(); renderAthletes(true);
 }
 function drawRecordings() {
   const list = recordings || [];
@@ -972,7 +977,7 @@ function renderMarkers(force) {
 function goToNumber(x) {
   if (!x) return;
   if (x.src === 'live') { viewCam = x.cam; showTab('live'); replay(new Date(Date.parse(x.firstAt) - 3000), 40, true); return; }
-  showTab('upload');
+  setResMode('upload');
   if (upShown !== x.video) showUpload(x.video);
   const v = document.querySelector('#upStage video');
   if (v) v.currentTime = Math.max(0, (x.firstT ?? 0) - 3);
@@ -1056,7 +1061,7 @@ document.addEventListener('keydown', (e) => {
   e.preventDefault();
 });
 $('countMarks').onclick = (e) => { const b = e.target.closest('[data-at]'); if (b) pv.currentTime = Math.max(0, +b.dataset.at / 1000 - 1); };
-$('countCancel').onclick = () => { proofClose(); showTab('upload'); };
+$('countCancel').onclick = () => { proofClose(); setResMode('upload'); };
 $('countMissed').onclick = () => (upShown ? startCount(null) : toast('Open a video\'s Results first, then count who it missed'));
 $('countDone').onclick = async () => {
   const c = counting; if (!c) return;
@@ -1091,7 +1096,7 @@ function showCompare(c, m) {
 $('countResult').onclick = async (e) => {
   const b = e.target.closest('button'); if (!b) return;
   if (b.dataset.see) { pv.currentTime = Math.max(0, +b.dataset.see / 1000 - 2); pv.play().catch(() => {}); return; }
-  if (b.id === 'countNext') { proofClose(); showTab('upload'); return; }
+  if (b.id === 'countNext') { proofClose(); setResMode('upload'); return; }
   if (b.id === 'countAgain') { const { c, m } = shownCompare; proofClose(); startCount(m.athlete, c); }
 };
 // the list under the video: everyone counted by hand, against the latest judging of their video
@@ -1209,23 +1214,6 @@ let upPending = null;   // { name, saved, go } the video chosen, while its Confi
 let upPicking = false, upConfigured = 0;   // the Config comes first, then the video is chosen
 let upChosen = null;   // a previous recording chosen, while its Config is open
 const recordingLabel = (r) => (r.cam ? `Camera ${r.cam}` : r.name || 'Uploaded video');
-$('upPrev').onclick = async () => {
-  $('prevList').innerHTML = '<p class="muted">Looking…</p>';
-  $('prevBox').hidden = false;
-  const r = await fetch('/api/previous-recordings').then((x) => x.json()).catch(() => ({ error: 'Can\'t reach the server' }));
-  if (r.error) { $('prevList').innerHTML = `<p class="muted">${esc(r.error)}</p>`; return; }
-  $('prevList').innerHTML = r.recordings.length ? r.recordings.map((x) => `<button type="button" data-id="${esc(x.id)}"><span><b>${esc(recordingLabel(x))}</b> · ${esc(new Date(x.startedAt).toLocaleString())}</span><small>${(x.size / 1e6).toFixed(0)} MB</small></button>`).join('')
-    : '<p class="muted">No recordings yet. A recording appears here a couple of minutes after it finishes.</p>';
-  $('prevList').querySelectorAll('button').forEach((b) => {
-    b.onclick = () => {
-      upChosen = r.recordings.find((x) => x.id === b.dataset.id);
-      $('prevBox').hidden = true;
-      $('upSettingsFrame').src = '/judge/judge.html?settings=1&cfg=upload';
-      $('upSettings').hidden = false;
-    };
-  });
-};
-$('prevClose').onclick = () => { $('prevBox').hidden = true; };
 async function judgePrevious(rec) {
   setResMode('upload');
   $('upStatus').textContent = `Fetching ${recordingLabel(rec)} from cloud storage…`;

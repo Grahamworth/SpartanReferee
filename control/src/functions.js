@@ -4,6 +4,7 @@ const { app } = require('@azure/functions');
 const { tableStore } = require('./store');
 const { reconcile } = require('./reconcile');
 const { createArm, health } = require('./arm');
+const cameraSplit = require('./cameras'); // api/src/cameras.js, copied in when this is published
 
 const E = process.env;
 const seedFor = (server) => ({
@@ -11,12 +12,11 @@ const seedFor = (server) => ({
   companyId: server.company || server.id, site: `${E.SITE}/console.html`, api: `${E.SITE}/api`, serverKey: server.serverKey, receiverKey: server.receiverKey, bundleUrl: E.BUNDLE_URL,
   brand: null,
 });
-// how many of the booking's cameras it has, and the number its first goes by: a booking's cameras are numbered 1, 2, 3… across its servers.
-// The server asks the site again each time it starts, so this only saves it showing the wrong ones for a moment.
-const PER_SERVER = 2;
+// how many of the booking's cameras it has, and the number its first goes by (the same rule as the site's). The server asks the site
+// again each time it starts, so this only saves it showing the wrong ones for a moment.
 const bookedOn = (server, want) => {
-  const cameras = Math.max(1, Math.min(PER_SERVER, Number(want?.bookedCameras) || PER_SERVER));
-  return { stations: cameras, bookedCameras: cameras, firstCamera: ((server.n || 1) - 1) * PER_SERVER + 1 };
+  const { cameras, first } = cameraSplit.bookedOn(server.n, want?.bookedCameras);
+  return { stations: cameras, bookedCameras: cameras, firstCamera: first };
 };
 
 app.timer('reconcile', {

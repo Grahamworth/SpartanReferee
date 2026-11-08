@@ -117,13 +117,9 @@
 <!-- Upload video: every frame analysed first, then it waits to be played; everyone it tracks goes in All results -->
 <section id="upload" class="pane offstage">
   <div class="row uploadbar">
-    <button class="btn red" id="upChoose" type="button">Choose a video</button><button class="btn" id="upPrev" type="button" hidden>Select a previous recording</button><input id="upFile" type="file" accept="video/*" hidden>
+    <button class="btn red" id="upChoose" type="button">Choose a video</button><input id="upFile" type="file" accept="video/*" hidden>
     <button class="btn" id="upStop" type="button" hidden>■ Stop</button>
     <span id="upStatus" class="muted">Videos are analysed on the server, in the background. You can close this page: the results are here when it's done.</span>
-  </div>
-  <div id="prevBox" class="settingsbox popout prevbox" role="dialog" aria-modal="true" aria-labelledby="prevTitle" hidden>
-    <div class="row"><b id="prevTitle">Select a previous recording</b><span class="muted small">Kept for 7 days.</span><span class="spacer"></span><button class="btn" id="prevClose" type="button">Close</button></div>
-    <div id="prevList" class="prevlist"></div>
   </div>
   <div id="upSettings" class="settingsbox popout" role="dialog" aria-modal="true" aria-label="AI judge settings for uploaded videos" hidden>
     <div class="row"><b>AI judge settings for uploaded videos</b><span class="muted small" id="upSettingsNote">Check them, then Save (Close: not now).</span></div>

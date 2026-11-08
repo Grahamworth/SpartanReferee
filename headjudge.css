@@ -190,7 +190,7 @@ select { width: 100%; font: inherit; color: var(--text); background: var(--bg); 
 .custUse dd { margin: 0; font: 700 1.3rem var(--display); }
 
 /* payment on the console, and customers' prices and admins in the admin area */
-.facts .cardText { font: 600 1rem inherit; font-family: inherit; }
+.facts .cardText { font: 600 1.05rem/1.35 Barlow, -apple-system, "Segoe UI", system-ui, sans-serif; padding-top: 4px; } /* words, not a figure */
 .custPrice { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: 10px 0; }
 .custPrice label { margin: 0; }
 .custPrice small { flex-basis: 100%; }

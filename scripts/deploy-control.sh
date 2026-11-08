@@ -36,6 +36,7 @@ node -e "require('fs').rmSync(process.argv[1], { recursive: true, force: true })
 mkdir -p "$BUILD/src"
 cp "$SRC/control/package.json" "$SRC/control/host.json" "$BUILD/"; cp "$SRC"/control/src/*.js "$BUILD/src/"
 cp "$SRC/api/src/store.js" "$BUILD/src/store.js"
+cp "$SRC/api/src/cameras.js" "$BUILD/src/cameras.js" # how a booking's cameras are spread over servers, as the site does it
 (cd "$BUILD" && npm install --omit=dev --silent --no-audit --no-fund)
 ZIP="$(dirname "$BUILD")/headjudge-control.zip"
 (cd "$BUILD" && powershell.exe -NoProfile -Command "Compress-Archive -Force -Path * -DestinationPath '$(cygpath -w "$ZIP")'")

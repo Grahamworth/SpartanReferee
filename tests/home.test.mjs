@@ -32,8 +32,14 @@ test('Spartans has left: its pages are gone, and their old addresses go to the S
   assert.match(read('sw.js'), /registration\.unregister\(\)/);
 });
 test('HeadJudge\'s pages go back to HeadJudge\'s home, and what the judge still links to of Spartans is on the Spartans site', () => {
-  for (const f of ['phone', 'recordings', 'streaming']) assert.match(read(`${f}.html`), /href="\.\/"[^>]*>‹ Home/, f);
-  for (const f of ['register', 'customers']) assert.match(read(`${f}.html`), /class="mark" href="\.\/"/, f);
+  assert.match(read('recordings.html'), /href="\.\/"[^>]*>‹ Home/);
+  for (const f of ['register', 'customers', 'streaming', 'phone']) assert.match(read(`${f}.html`), /class="mark" href="\.\/"/, f);
+  // the camera guides are HeadJudge's, and up to date
+  for (const f of ['streaming', 'phone']) {
+    const p = read(`${f}.html`);
+    assert.match(p, /headjudge\.css/, f);
+    assert.doesNotMatch(p, /styles\.css|Scan station QR code|14 days|recordings\.html/, f);
+  }
   for (const f of ['judge.html', 'judge-gate.js']) assert.doesNotMatch(read(f), /href="(app|profile|scoreboard)\.html/, f);
 });
 test('the Broadcaster has its own HeadJudge page, with no way back to the Spartans home and no setup guide', () => {

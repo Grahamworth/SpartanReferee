@@ -14,6 +14,15 @@
 <script type="module" src="app.js"></script>
 <link rel="stylesheet" href="looks.css">
 <script src="looks.js" data-dark-only></script>
+<script>
+  // Opened as a camera's settings (from HeadJudge's video review, or its test mode): in HeadJudge's colours, slate and yellow.
+  // Judging itself keeps red, where it means a no rep.
+  if (new URLSearchParams(location.search).get('settings')) document.documentElement.classList.add('hj-settings');
+</script>
+<style>
+  html.hj-settings[data-look], html.hj-settings { --black: #12161c; --ink: #1c222a; --steel: #2a323c; --line: #343c46; --white: #f4f6f8; --muted: #a3acb7; --red: #ffc400; --red-deep: #e0ac00; }
+  html.hj-settings .btn-red, html.hj-settings .btn-red:active { color: #101010; }
+</style>
 </head>
 <body>
 
@@ -313,8 +322,8 @@
   </header>
   <form id="settingsForm" class="panel">
     <div class="spartan-default">
-      <button type="button" id="spartanDefault" class="btn btn-red">Spartan default</button>
-      <p id="spartanDone" class="status" hidden>Spartan default set and saved.</p>
+      <button type="button" id="spartanDefault" class="btn btn-red">Race-day default</button>
+      <p id="spartanDone" class="status" hidden>Race-day default set and saved.</p>
       <p class="status">One tap for race day: burpees, several athletes at once, race numbers read from the head bands laid in front of them, lenient judging (strictness 20), forgiving body tracking, Full pose model, count called out, video recorded.</p>
     </div>
     <h3>Station</h3>

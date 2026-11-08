@@ -30,8 +30,10 @@
    A booking keeps the price it started at. The control app adds up the time, cost and charge, by the minute. */
 const crypto = require('node:crypto');
 const { recordingsPartition, KEEP_DAYS } = require('./recordings');
+const cameraSplit = require('./cameras');
 
-const CAMERAS_PER_SERVER = 2, MAX_HOURS = 24, MAX_EXTEND_HOURS = 12, MAX_AHEAD_HOURS = 72, LOGIN_MINUTES = 5;
+const { CAMERAS_PER_SERVER } = cameraSplit;
+const MAX_HOURS = 24, MAX_EXTEND_HOURS = 12, MAX_AHEAD_HOURS = 72, LOGIN_MINUTES = 5;
 const HOUR = 3600e3;
 const sha = (s) => crypto.createHash('sha256').update(String(s)).digest('hex');
 const random = (n) => crypto.randomBytes(n).toString('base64url');
@@ -142,8 +144,7 @@ function createServers({ store, now, reply, session, isAdmin = () => false, paym
   // across its servers
   async function bookedOn(slot) {
     const [server, want] = await Promise.all([store.get('server', slot), store.get('serverwant', slot)]);
-    const n = server?.n || 1;
-    return { cameras: Math.max(1, Math.min(CAMERAS_PER_SERVER, Number(want?.bookedCameras) || CAMERAS_PER_SERVER)), first: (n - 1) * CAMERAS_PER_SERVER + 1 };
+    return cameraSplit.bookedOn(server?.n, want?.bookedCameras);
   }
   async function stopCompany(id) {
     const plan = await store.get('serverplan', id);
