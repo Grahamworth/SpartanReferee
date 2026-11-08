@@ -247,7 +247,7 @@ header .tabs svg, header .tabs .ts { display: none; }
   header .dayPick { order: 3; } .dayPick select { padding: 7px; }
   header .numSearch { order: 4; flex: 1 1 140px; } .numSearch input { width: 100%; padding: 7px 10px; }
   /* the tabs: a bar along the bottom, like an app */
-  header .tabs { position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0;
+  header .tabs { position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0;
     background: #16191d; border-top: 1px solid var(--line); padding: 0 0 env(safe-area-inset-bottom); box-shadow: 0 -6px 18px rgba(0, 0, 0, .35); }
   header .tabs button { display: grid; justify-items: center; gap: 3px; padding: 9px 2px 8px; background: none; color: var(--muted); font-size: 11.5px; font-weight: 700; border-top: 3px solid transparent; }
   header .tabs button.on { background: none; color: #fff; border-top-color: var(--brand, var(--red)); }
@@ -342,3 +342,29 @@ header .tabs svg, header .tabs .ts { display: none; }
 #proof:not([hidden]) { position: fixed; inset: 0; z-index: 150; margin: 0; overflow-y: auto; padding: 10px 14px 16px; background: var(--bg); align-content: start; }
 #proofVideo { height: calc(100vh - 270px); min-height: 240px; }
 @media (max-width: 760px) { #proof:not([hidden]) { padding: 8px 8px calc(16px + env(safe-area-inset-bottom)); } #proofVideo { height: auto; max-height: calc(100dvh - 300px); } }
+
+/* Results: where they're from (the live cameras, a previous recording, an upload) */
+.srcbar { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 4px 0 14px; }
+.srcbar button { display: grid; gap: 2px; text-align: left; padding: 10px 14px; background: #2b3037; color: #fff; border: 1px solid #4a525c; border-top: 3px solid transparent; cursor: pointer; font: inherit; }
+.srcbar button b { font-size: 15px; } .srcbar button small { color: var(--muted); font-size: 12.5px; }
+.srcbar button:hover { border-color: #8a929c; }
+.srcbar button.on { background: var(--ink); border-color: var(--line); border-top-color: var(--brand, var(--red)); cursor: default; }
+.recpick { margin-bottom: 12px; }
+.recshown { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 10px 14px; background: var(--ink); border-left: 4px solid var(--brand, var(--red)); }
+.reclist { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 8px; }
+.recday { grid-column: 1 / -1; margin: 10px 0 2px; font-size: 14px; color: var(--muted); text-transform: uppercase; }
+.recitem { display: grid; gap: 2px; text-align: left; padding: 10px 12px; background: var(--ink); color: #fff; border: 1px solid var(--line); cursor: pointer; font: inherit; }
+.recitem:hover, .recitem:focus-visible { border-color: #fff; }
+.recitem span { color: var(--muted); font-size: 13.5px; } .recitem small { color: var(--muted); font-size: 12.5px; } .recitem small.found { color: var(--green); font-weight: 700; }
+/* an upload being analysed: how much of it is done */
+.upprogress { display: grid; gap: 6px; margin: 10px 0 4px; }
+.upprogress .bar { height: 10px; background: #16191d; border: 1px solid var(--line); overflow: hidden; }
+.upprogress .bar i { display: block; height: 100%; width: 0; background: var(--brand, var(--red)); transition: width .6s ease; }
+.upprogress[data-state="done"] .bar i { background: var(--green); }
+.upprogress[data-state="waiting"] .bar i { background: var(--amber); }
+.upprogress span { font-weight: 700; }
+@media (prefers-reduced-motion: reduce) { .upprogress .bar i { transition: none; } }
+@media (max-width: 760px) {
+  .srcbar { gap: 6px; } .srcbar button { padding: 8px 8px; } .srcbar button b { font-size: 13.5px; } .srcbar button small { display: none; }
+  .reclist { grid-template-columns: 1fr; }
+}

@@ -18,8 +18,7 @@
   <nav class="tabs" role="tablist">
     <!-- on a phone these are the bar along the bottom, with their icons and short names -->
     <button data-tab="live" class="on"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2" fill="currentColor"/><path d="M6.3 6.3a8 8 0 0 0 0 11.4M17.7 6.3a8 8 0 0 1 0 11.4"/></svg><span class="tl">Live</span><span class="ts">Live</span></button>
-    <button data-tab="upload"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5M4 16v4h16v-4"/></svg><span class="tl">Upload video</span><span class="ts">Upload</span></button>
-    <button data-tab="judge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1" fill="currentColor"/><circle cx="4" cy="12" r="1" fill="currentColor"/><circle cx="4" cy="18" r="1" fill="currentColor"/></svg><span class="tl">All results</span><span class="ts">Results</span></button>
+    <button data-tab="judge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1" fill="currentColor"/><circle cx="4" cy="12" r="1" fill="currentColor"/><circle cx="4" cy="18" r="1" fill="currentColor"/></svg><span class="tl">Results</span><span class="ts">Results</span></button>
     <button data-tab="cameras"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="13" height="10" rx="1.5"/><path d="M16 11l5-3v8l-5-3"/></svg><span class="tl">Cameras</span><span class="ts">Cameras</span></button>
     <button data-tab="log"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><span class="tl">Log</span><span class="ts">Log</span></button>
   </nav>
@@ -118,7 +117,7 @@
 <!-- Upload video: every frame analysed first, then it waits to be played; everyone it tracks goes in All results -->
 <section id="upload" class="pane offstage">
   <div class="row uploadbar">
-    <button class="btn red" id="upChoose" type="button">Upload from computer</button><button class="btn" id="upPrev" type="button">Select a previous recording</button><input id="upFile" type="file" accept="video/*" hidden>
+    <button class="btn red" id="upChoose" type="button">Choose a video</button><button class="btn" id="upPrev" type="button" hidden>Select a previous recording</button><input id="upFile" type="file" accept="video/*" hidden>
     <button class="btn" id="upStop" type="button" hidden>■ Stop</button>
     <span id="upStatus" class="muted">Videos are analysed on the server, in the background. You can close this page: the results are here when it's done.</span>
   </div>
@@ -131,7 +130,9 @@
     <iframe id="upSettingsFrame" title="Upload judge settings"></iframe>
   </div>
   <div class="split"><div class="splitmain">
-    <div id="upStage" class="upstage"><div class="msg">Upload a video to judge it.</div></div>
+    <div id="upStage" class="upstage"><div class="msg">Choose a video to analyse it.</div></div>
+    <!-- how much of the video the server has analysed so far -->
+    <div id="upProgress" class="upprogress" hidden><div class="bar"><i></i></div><span id="upProgressText"></span></div>
   </div>
   <aside class="side" aria-label="AI judge results for this video">
     <h2>Results <small id="upCount" class="muted"></small></h2>
@@ -152,11 +153,21 @@
 
 <!-- All results: everyone tracked, for review -->
 <section id="judge" class="pane" hidden>
+  <!-- what Results shows: the live cameras, one previous recording, or a video uploaded now (which moves this bar to the upload area) -->
+  <div id="srcBar" class="srcbar" role="group" aria-label="Results from">
+    <button type="button" data-src="live" class="on"><b>Live cameras</b><small>Everyone judged live</small></button>
+    <button type="button" data-src="previous"><b>A previous recording</b><small>From the last 7 days</small></button>
+    <button type="button" data-src="upload"><b>Upload a video</b><small>Analysed on the server</small></button>
+  </div>
+  <div id="recPick" class="recpick" hidden>
+    <div id="recShown" class="recshown" hidden><span id="recShownText"></span><span class="spacer"></span><button class="btn" id="recAnalyse" type="button" hidden>Analyse it now</button><button class="btn" id="recChange" type="button">Choose another</button></div>
+    <div id="recList" class="reclist"></div>
+  </div>
   <details class="filterbox" id="filterBox" open><summary>Filters</summary>
   <div class="row filters">
     <label>Number <input id="fNum" inputmode="numeric" placeholder="any" autocomplete="off"></label>
     <label>Camera <select id="fCam"><option value="">All</option></select></label>
-    <label>Source <select id="fSrc"><option value="">Live and uploaded</option><option value="live">Live cameras</option><option value="upload">Uploaded videos</option></select></label>
+    <label hidden>Source <select id="fSrc"><option value="">Live and uploaded</option><option value="live">Live cameras</option><option value="upload">Uploaded videos</option></select></label>
     <label>From <input id="fFrom" type="time" step="60"></label>
     <label>To <input id="fTo" type="time" step="60"></label>
     <button class="btn" id="fClear">Clear</button>

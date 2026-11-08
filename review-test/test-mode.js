@@ -93,14 +93,21 @@
       case '/api/upload-jobs':
         if (method === 'POST') {
           const video = body?.video || '';
-          if (body?.previous) return json({ error: 'There are no recordings in test mode' }, 502);
+          // a previous recording, "fetched" to be analysed (there's no video to play in test mode)
+          if (body?.previous) { const j = { id: `job${jobs.length + 1}`, video: `${body.previous}.mp4`, name: `Recording ${body.previous}`, state: 'running', at: Date.now() }; jobs.push(j); return json(jobView(j)); }
           const old = jobs.find((j) => j.video === video); if (old) jobs.splice(jobs.indexOf(old), 1);
           const j = { id: `job${jobs.length + 1}`, video, name: body?.name || video, state: 'running', at: Date.now() };
           jobs.push(j); return json(jobView(j));
         }
         return json(jobs.map(jobView));
       case '/api/upload-jobs/stop': { const j = jobs.find((x) => x.video === body?.video); if (j && j.state === 'running') { j.state = 'stopped'; j.why = 'Stopped. What it found so far is on the right.'; } return json({ stopped: !!j }); }
-      case '/api/previous-recordings': return json({ recordings: [{ id: 'r1', cam: 1, size: 412e6, startedAt: minsAgo(40), file: 'test.mp4', name: '' }] });
+      case '/api/previous-recordings': {
+        // each camera's 10-minute recordings over the last half hour, one from yesterday nobody's judged, and the videos uploaded here
+        const seg = (id, cam, startMs) => ({ id, cam, size: 380e6 + cam * 7e6, startedAt: iso(startMs), file: `cam${cam}-${id}.mp4`, name: '' });
+        const recs = [seg('c1a', 1, T0 - 10 * 60e3), seg('c2a', 2, T0 - 10 * 60e3), seg('c1b', 1, T0 - 20 * 60e3), seg('c2b', 2, T0 - 20 * 60e3), seg('c1c', 1, T0 - 30 * 60e3), seg('old', 1, T0 - 26 * 3600e3)];
+        for (const u of uploads) recs.push({ id: `u-${u.name}`, cam: 0, size: u.size, startedAt: iso(Date.now() - 60e3), file: u.name, name: u.name.replace(/^[\dTZ-]+_/, '') });
+        return json({ recordings: recs.sort((a, b) => b.startedAt.localeCompare(a.startedAt)) });
+      }
       case '/api/server': return json({ log: ['Test mode: there is no server'], cloud: {}, idle: {} });
       default: return json({ error: 'Not in test mode' }, 404);
     }

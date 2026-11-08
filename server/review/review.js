@@ -25,9 +25,10 @@ $('who').textContent = 'Your local time';
 
 // ---------------------------------------------------------------- tabs
 // The Upload tab is moved out of sight rather than hidden, so a video being judged carries on.
-document.querySelectorAll('header .tabs button').forEach((b) => b.onclick = () => showTab(b.dataset.tab));
+// Results is the live cameras, a previous recording or an uploaded video: uploading has its own area, under the Results tab
+document.querySelectorAll('header .tabs button').forEach((b) => b.onclick = () => showTab(b.dataset.tab === 'judge' && resMode === 'upload' ? 'upload' : b.dataset.tab));
 function showTab(name) {
-  document.querySelectorAll('header .tabs button').forEach((b) => b.classList.toggle('on', b.dataset.tab === name));
+  document.querySelectorAll('header .tabs button').forEach((b) => b.classList.toggle('on', b.dataset.tab === (name === 'upload' ? 'judge' : name)));
   for (const p of document.querySelectorAll('.pane')) {
     if (p.id === 'upload') p.classList.toggle('offstage', name !== 'upload');
     else p.hidden = p.id !== name;
@@ -575,7 +576,96 @@ async function loadAthletes() {
     const [a, b] = dayBounds();
     const r = await fetch(`/api/athletes?from=${encodeURIComponent(new Date(a).toISOString())}&to=${encodeURIComponent(new Date(b).toISOString())}`).then((x) => x.json()).catch(() => null);
     if (r) { athRev = r.rev; athList = r.list; numbersSeen = r.numbers || []; renderAthletes(); renderSides(); renderMarkers(true); fillCamFilter(); numSearch(); }
+    if (r && resMode === 'previous') loadAll().then(() => { drawRecordings(); showRecPick(); renderAthletes(true); });
   } finally { athLoading = false; }
+}
+// ---------------------------------------------------------------- Results: the live cameras, a previous recording, or an uploaded video
+let resMode = 'live', recShown = null, recordings = null, allAth = null;
+const athByN = (n) => athList.find((x) => x.n === n) || allAth?.find((x) => x.n === n);
+const hm = (d) => d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+// A camera's recordings are cut every 10 minutes; one ends where the next begins.
+const SEGMENT_MS = 10 * 60e3;
+function recordingEnd(r) {
+  const s = Date.parse(r.startedAt), next = (recordings || []).filter((x) => x.cam && x.cam === r.cam && Date.parse(x.startedAt) > s).map((x) => Date.parse(x.startedAt)).sort((a, b) => a - b)[0];
+  return Math.min(next || Infinity, s + SEGMENT_MS);
+}
+// who a recording holds: an uploaded video's people, or everyone on that camera while it was recording
+function inRecording(a, r) {
+  if (!r.cam) return a.src === 'upload' && a.video === r.file;
+  const s = Date.parse(r.startedAt), e = recordingEnd(r);
+  return a.src === 'live' && camNo(a.cam) === r.cam && Date.parse(a.lastAt) >= s && Date.parse(a.firstAt) <= e;
+}
+// a video judged more than once: only its latest judging
+function latestOnly(list) {
+  const newest = {};
+  for (const a of list) if (a.src === 'upload' && (!newest[a.video] || a.firstAt > newest[a.video].firstAt)) newest[a.video] = a;
+  return list.filter((a) => a.src !== 'upload' || a.round === newest[a.video].round);
+}
+function resultsBase() {
+  if (resMode === 'previous') return recShown && allAth ? latestOnly(allAth.filter((a) => inRecording(a, recShown))) : [];
+  return athList.filter((a) => a.src === 'live');
+}
+async function loadAll() {
+  const r = await fetch('/api/athletes?from=2000&to=9').then((x) => x.json()).catch(() => null);
+  if (r) allAth = r.list;
+}
+async function loadRecordings() {
+  if (!recordings) $('recList').innerHTML = '<p class="muted">Looking…</p>';
+  const [r] = await Promise.all([fetch('/api/previous-recordings').then((x) => x.json()).catch(() => ({ error: 'Can\'t reach the server' })), loadAll()]);
+  if (r.error) { $('recList').innerHTML = `<p class="muted">${esc(r.error)}</p>`; return; }
+  recordings = r.recordings; drawRecordings(); showRecPick(); renderAthletes(true);
+}
+function drawRecordings() {
+  const list = recordings || [];
+  if (!list.length) { $('recList').innerHTML = '<p class="muted">No recordings yet. A camera\'s recording appears here a few minutes after it finishes, and each is kept for 7 days.</p>'; return; }
+  let day = '';
+  $('recList').innerHTML = list.map((r) => {
+    const t = new Date(r.startedAt), d = t.toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long' });
+    const n = allAth ? latestOnly(allAth.filter((a) => inRecording(a, r))).length : 0;
+    const head = d !== day ? `<h3 class="recday">${esc(d)}</h3>` : ''; day = d;
+    return `${head}<button type="button" class="recitem" data-rec="${esc(r.id)}"><b>${esc(recordingLabel(r))}</b><span>${r.cam ? `${hm(t)}–${hm(new Date(recordingEnd(r)))}` : hm(t)} · ${(r.size / 1e6).toFixed(0)} MB</span><small class="${n ? 'found' : ''}">${n ? `${n} athlete${n === 1 ? '' : 's'}` : 'Not analysed yet'}</small></button>`;
+  }).join('');
+}
+function showRecPick() {
+  const prev = resMode === 'previous';
+  $('recPick').hidden = !prev;
+  $('recShown').hidden = !recShown; $('recList').hidden = !!recShown;
+  $('filterBox').hidden = prev && !recShown; $('athleteList').hidden = prev && !recShown; $('athleteSummary').hidden = prev && !recShown;
+  if (!recShown) return;
+  const t = new Date(recShown.startedAt);
+  $('recShownText').innerHTML = `<b>${esc(recordingLabel(recShown))}</b> · ${esc(t.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' }))} ${recShown.cam ? `${hm(t)}–${hm(new Date(recordingEnd(recShown)))}` : hm(t)}`;
+  $('recAnalyse').hidden = !allAth || resultsBase().length > 0;
+}
+function setResMode(m) {
+  resMode = m;
+  $('srcBar').querySelectorAll('[data-src]').forEach((b) => b.classList.toggle('on', b.dataset.src === m));
+  if (m === 'upload') { $('upload').prepend($('srcBar')); showTab('upload'); return; }
+  $('judge').prepend($('srcBar'));
+  if (m === 'previous' && !recShown) loadRecordings();
+  showRecPick(); listSig = '';
+  if ($('judge').hidden) showTab('judge'); else renderAthletes(true);
+}
+$('srcBar').onclick = (e) => { const b = e.target.closest('[data-src]'); if (b) setResMode(b.dataset.src); };
+$('recList').onclick = (e) => { const b = e.target.closest('[data-rec]'); if (!b) return; recShown = recordings.find((x) => x.id === b.dataset.rec); showRecPick(); renderAthletes(true); scrollTo({ top: 0 }); };
+$('recChange').onclick = () => { recShown = null; loadRecordings(); showRecPick(); renderAthletes(true); };
+// a recording nobody's judged here (from an earlier booking, say): analysed like an upload, with its settings first
+$('recAnalyse').onclick = () => {
+  if (!recShown) return;
+  upChosen = recShown; setResMode('upload');
+  $('upSettingsFrame').src = '/judge/judge.html?settings=1&cfg=upload';
+  $('upSettings').hidden = false;
+};
+// how much of an uploaded video the server has analysed: a bar, and how far into the video that is
+function showProgress(j) {
+  const box = $('upProgress');
+  if (!j) { box.hidden = true; return; }
+  const v = $('upStage').querySelector('video'), dur = v && Number.isFinite(v.duration) ? v.duration : 0;
+  const pct = j.state === 'done' ? 100 : Math.max(0, Math.min(100, Math.round(j.pct || 0))), part = dur ? `${mss((dur * pct) / 100)} of ${mss(dur)}` : `${pct}%`;
+  box.hidden = false; box.dataset.state = j.state;
+  box.querySelector('i').style.width = `${pct}%`;
+  $('upProgressText').textContent = j.state === 'done' ? `Analysed: all of it${dur ? ` (${mss(dur)})` : ''}`
+    : j.state === 'queued' ? 'Waiting to start' : j.state === 'running' ? `Analysing: ${part} done${dur ? ` (${pct}%)` : ''}`
+    : j.state === 'waiting' ? `Paused at ${part}: the live cameras come first` : `Stopped at ${part}`;
 }
 const athName = (a) => (a.bib && a.bib !== 'No number' ? `#${a.bib}` : `No number <small>(athlete ${a.label})</small>`);
 const upName = (v) => String(v || '').replace(/^[\dTZ-]+_/, '');
@@ -598,7 +688,7 @@ function filtered() {
   const num = $('fNum').value.trim().toLowerCase(), cam = $('fCam').value, src = $('fSrc').value;
   const tod = (iso) => { const d = new Date(iso); return pad(d.getHours()) + ':' + pad(d.getMinutes()); };
   const from = $('fFrom').value, to = $('fTo').value;
-  return athList.filter((a) => (!num || (num === 'no' || num === 'none' ? !a.bib || a.bib === 'No number' : String(a.bib).toLowerCase().includes(num)))
+  return resultsBase().filter((a) => (!num || (num === 'no' || num === 'none' ? !a.bib || a.bib === 'No number' : String(a.bib).toLowerCase().includes(num)))
     && (!cam || (a.src === 'live' && a.cam === +cam)) && (!src || a.src === src)
     && (!from || tod(a.lastAt) >= from) && (!to || tod(a.firstAt) <= to));
 }
@@ -614,7 +704,8 @@ function renderAthletes(force) {
   const sig = JSON.stringify(list.map((a) => [a.n, a.bib, a.reps, a.noReps, a.questionable, a.done, a.pic, a.lastAt]));
   if (sig === listSig && !force) return; listSig = sig;
   const numbered = list.filter((a) => a.bib && a.bib !== 'No number').length;
-  $('athleteSummary').textContent = athList.length ? `${list.length} athlete${list.length === 1 ? '' : 's'}${list.length < athList.length ? ` (of ${athList.length})` : ''} · ${numbered} with a number read` : 'Nobody tracked on this day yet. Turn the AI judge on for a camera (Live tab) or upload a video.';
+  const base = resultsBase();
+  $('athleteSummary').textContent = resMode === 'previous' && !recShown ? '' : base.length ? `${list.length} athlete${list.length === 1 ? '' : 's'}${list.length < base.length ? ` (of ${base.length})` : ''} · ${numbered} with a number read` : resMode === 'previous' ? 'Nobody from this recording has been judged on this server.' : 'Nobody tracked on this day yet. Turn the AI judge on for a camera (Live tab) or upload a video.';
   $('athleteList').innerHTML = list.map((a) => `<div class="ath${a.done ? '' : ' going'}" data-n="${a.n}">
     ${athBody(a, `<span>${whereText(a)}</span><span>${whenText(a)}</span>${a.done ? '' : '<span class="going">Being judged</span>'}`)}
   </div>`).join('');
@@ -654,7 +745,7 @@ $('lsClear').onclick = () => { for (const id of ['lsNum', 'lsCam', 'lsRes']) $(i
 $('usClear').onclick = () => { for (const id of ['usNum', 'usRes']) $(id).value = ''; $('usSort').value = 'video'; renderSides(); };
 $('liveList').onclick = $('upResults').onclick = $('athleteList').onclick = (e) => {
   const b = e.target.closest('button'); if (!b) return;
-  const a = athList.find((x) => x.n === +(b.dataset.watch || b.dataset.detail || b.dataset.del || b.dataset.count)); if (!a) return;
+  const a = athByN(+(b.dataset.watch || b.dataset.detail || b.dataset.del || b.dataset.count)); if (!a) return;
   if (b.dataset.count) return startCount(a);
   if (b.dataset.del) { if (confirm(`Delete ${a.bib && a.bib !== 'No number' ? '#' + a.bib : 'athlete ' + a.label} from the results?`)) fetch(`/api/athlete?n=${a.n}`, { method: 'DELETE' }).then(() => { athRev = -1; loadAthletes(); toast('Deleted'); }); return; }
   if (b.dataset.watch) watch(a); else detailed(a);
@@ -682,7 +773,7 @@ function watchInLive(a) {
 let proofFrom = '';   // the tab Watch was opened from, to go back to
 async function watch(a) {
   $('athletePop').hidden = true;
-  if (!proof) proofFrom = document.querySelector('header .tabs button.on')?.dataset.tab || '';
+  if (!proof) proofFrom = !$('upload').classList.contains('offstage') ? 'upload' : document.querySelector('header .tabs button.on')?.dataset.tab || '';
   showTab('judge');
   const r = await fetch(`/api/athlete-track?n=${a.n}`).then((x) => x.json()).catch(() => null);
   const frames = r?.frames || [], evs = r?.events || [], up = a.src === 'upload';
@@ -711,7 +802,7 @@ async function watch(a) {
 // Tapping one goes to them in the video, with their skeleton and count.
 function renderProofPeople(a) {
   const box = $('proofPeople'), up = a.src === 'upload';
-  let list = athList.filter((x) => (up ? x.src === 'upload' && x.video === a.video : x.src === 'live' && x.cam === a.cam));
+  let list = [...new Map([...athList, ...(allAth || [])].map((x) => [x.n, x])).values()].filter((x) => (up ? x.src === 'upload' && x.video === a.video : x.src === 'live' && x.cam === a.cam));
   if (up) { const newest = list.reduce((m, x) => (!m || x.firstAt > m.firstAt ? x : m), null); list = list.filter((x) => x.round === newest?.round || x.n === a.n); }
   const t0 = (x) => (up ? (x.firstT ?? 0) * 1000 : Date.parse(x.firstAt)), t1 = (x) => Math.max(t0(x), up ? (x.lastT ?? x.firstT ?? 0) * 1000 : Date.parse(x.lastAt));
   list.sort((x, y) => t0(x) - t0(y));
@@ -730,7 +821,7 @@ function renderProofPeople(a) {
 }
 $('proofPeople').onclick = (e) => {
   const b = e.target.closest('[data-pn]'); if (!b || counting) return;
-  const x = athList.find((y) => y.n === +b.dataset.pn);
+  const x = athByN(+b.dataset.pn);
   if (x && x.n !== proof?.a.n) watch(x);
 };
 // the recording at a time: a live camera's is cut from the recordings, a stretch at a time
@@ -1087,6 +1178,7 @@ async function loadJobs() {
   const j = upShown ? jobOf(upShown) : null;
   $('upStop').hidden = !JOB_ACTIVE.has(j?.state);
   if (j) $('upStatus').textContent = jobText(j);
+  showProgress(j);
   // what it's found so far, and everything once it's done
   if (finished.length || (list.some((x) => x.state === 'running') && ++jobTicks % 3 === 0)) { athRev = -1; loadAthletes(); }
   if (changed) loadUploads();
@@ -1096,9 +1188,11 @@ setInterval(loadJobs, 3000); loadJobs();
 function showUpload(video) {
   upShown = video; renderSides();
   $('upStage').innerHTML = `<video controls playsinline preload="metadata" src="/uploads/${encodeURIComponent(video)}"></video>`;
+  $('upStage').querySelector('video').addEventListener('loadedmetadata', () => showProgress(jobOf(upShown))); // how long it is, for "1:10 of 2:30"
   const j = jobOf(video);
   $('upStop').hidden = !JOB_ACTIVE.has(j?.state);
   if (j) $('upStatus').textContent = jobText(j);
+  showProgress(j);
 }
 const jobStop = (video) => fetch('/api/upload-jobs/stop', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ video }) }).catch(() => {});
 $('upStop').onclick = async () => { $('upStatus').textContent = 'Stopping the analysis…'; await jobStop(upShown); loadJobs(); };
@@ -1133,7 +1227,7 @@ $('upPrev').onclick = async () => {
 };
 $('prevClose').onclick = () => { $('prevBox').hidden = true; };
 async function judgePrevious(rec) {
-  showTab('upload');
+  setResMode('upload');
   $('upStatus').textContent = `Fetching ${recordingLabel(rec)} from cloud storage…`;
   const r = await fetch('/api/upload-jobs', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ previous: rec.id }) }).then((x) => x.json()).catch(() => ({ error: 'Can\'t reach the server' }));
   if (r.error) { $('upStatus').textContent = `That recording couldn't be fetched: ${r.error}`; return; }
