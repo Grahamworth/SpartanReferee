@@ -1,7 +1,6 @@
 {
   "mimeTypes": {
     ".onnx": "application/octet-stream",
-    ".glb": "model/gltf-binary",
     ".webmanifest": "application/manifest+json",
     ".apk": "application/vnd.android.package-archive",
     ".mp4": "video/mp4"
@@ -12,17 +11,68 @@
   "routes": [
     {
       "route": "/app",
-      "rewrite": "/app.html"
+      "redirect": "https://mango-glacier-03e711403.4.azurestaticapps.net/",
+      "statusCode": 301
+    },
+    {
+      "route": "/app.html",
+      "redirect": "https://mango-glacier-03e711403.4.azurestaticapps.net/",
+      "statusCode": 301
+    },
+    {
+      "route": "/chat.html",
+      "redirect": "https://mango-glacier-03e711403.4.azurestaticapps.net/chat.html",
+      "statusCode": 301
+    },
+    {
+      "route": "/course.html",
+      "redirect": "https://mango-glacier-03e711403.4.azurestaticapps.net/course.html",
+      "statusCode": 301
+    },
+    {
+      "route": "/profile.html",
+      "redirect": "https://mango-glacier-03e711403.4.azurestaticapps.net/profile.html",
+      "statusCode": 301
+    },
+    {
+      "route": "/news.html",
+      "redirect": "https://mango-glacier-03e711403.4.azurestaticapps.net/news.html",
+      "statusCode": 301
+    },
+    {
+      "route": "/past.html",
+      "redirect": "https://mango-glacier-03e711403.4.azurestaticapps.net/past.html",
+      "statusCode": 301
+    },
+    {
+      "route": "/scoreboard.html",
+      "redirect": "https://mango-glacier-03e711403.4.azurestaticapps.net/scoreboard.html",
+      "statusCode": 301
+    },
+    {
+      "route": "/admin.html",
+      "redirect": "https://mango-glacier-03e711403.4.azurestaticapps.net/admin.html",
+      "statusCode": 301
+    },
+    {
+      "route": "/judging.html",
+      "redirect": "https://mango-glacier-03e711403.4.azurestaticapps.net/judging.html",
+      "statusCode": 301
+    },
+    {
+      "route": "/camera.html",
+      "redirect": "https://mango-glacier-03e711403.4.azurestaticapps.net/camera.html",
+      "statusCode": 301
     },
     {
       "route": "/downloads/spartans.apk",
-      "redirect": "https://headjudge.blob.core.windows.net/downloads/spartans.apk?se=2028-11-02T19%3A58Z&sp=r&spr=https&sv=2026-02-06&sr=b&sig=tcYRq7L51vxDrQ8TdyqpfJ6SJEzY%2B94FUj%2FMGqoKc5E%3D",
-      "statusCode": 302
+      "redirect": "https://mango-glacier-03e711403.4.azurestaticapps.net/downloads/spartans.apk",
+      "statusCode": 301
     },
     {
       "route": "/downloads/spartans-ios-project.zip",
-      "redirect": "https://headjudge.blob.core.windows.net/downloads/spartans-ios-project.zip?se=2028-11-02T19%3A58Z&sp=r&spr=https&sv=2026-02-06&sr=b&sig=T5dCY%2FbOAgp57UeT6y9SW%2F4NW1rNuPDV%2F4TGzrdto54%3D",
-      "statusCode": 302
+      "redirect": "https://mango-glacier-03e711403.4.azurestaticapps.net/downloads/spartans-ios-project.zip",
+      "statusCode": 301
     },
     {
       "route": "/downloads/spartans-broadcaster.apk",

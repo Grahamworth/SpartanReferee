@@ -19,7 +19,6 @@ const api = createApi({
   emailSignIn: { config: { authorizeUrl: 'https://login.invalid/authorize', clientId: 'dev', redirectUri: REDIRECT_URI, webRedirectUri: 'http://localhost:8795/email-return.html' }, redeem: async (c) => { const m = /^dev:(.+@.+)$/.exec(c); if (!m) throw new Error('bad'); return { sub: m[1], email: m[1], name: m[1].split('@')[0] }; } },
   // a pretend Stripe: its page is checkout.invalid, and the session cs_dev_<company> is that company saving a card
   payments: { startSetup: async ({ companyId }) => ({ url: 'https://checkout.invalid/pay?company=' + companyId, customerId: 'cus_dev' }), finishSetup: async (id, companyId) => { if (id !== 'cs_dev_' + companyId) throw new Error('no'); return { customerId: 'cus_dev', paymentMethodId: 'pm_dev', brand: 'visa', last4: '4242', expMonth: 12, expYear: 2030 }; } },
-  fetchText: async (url) => (await fetch(url)).text(),
 });
 const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.glb': 'model/gltf-binary', '.onnx': 'application/octet-stream', '.png': 'image/png', '.svg': 'image/svg+xml', '.webmanifest': 'application/manifest+json', '.wasm': 'application/wasm', '.mjs': 'text/javascript' };
 

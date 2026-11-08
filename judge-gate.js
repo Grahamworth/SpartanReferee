@@ -20,6 +20,6 @@ const fromReceiver = new URLSearchParams(location.search).get('mode') === 'pract
     <p>The Burpee Judge is for referees.</p>${me.offline ? '<p style="color:#9a9a9a">No internet right now: connect once so this phone can confirm you’re a referee. After that it works offline.</p>' : ''}
     <p style="color:#9a9a9a">If you’re refereeing, ask an admin to switch on Burpee judge for you, or enter the judge code they give you in your profile.</p>
     <p style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:18px">
-      <a href="profile.html" style="background:#e2231a;color:#fff;padding:12px 18px;font-weight:800;text-decoration:none;text-transform:uppercase">My profile</a>
-      <a href="app.html" style="border:2px solid #fff;color:#fff;padding:10px 16px;font-weight:800;text-decoration:none;text-transform:uppercase">Home</a></p></div>`;
+      <a href="https://mango-glacier-03e711403.4.azurestaticapps.net/profile.html" style="background:#e2231a;color:#fff;padding:12px 18px;font-weight:800;text-decoration:none;text-transform:uppercase">My profile</a>
+      <a href="https://mango-glacier-03e711403.4.azurestaticapps.net/" style="border:2px solid #fff;color:#fff;padding:10px 16px;font-weight:800;text-decoration:none;text-transform:uppercase">Home</a></p></div>`;
 });

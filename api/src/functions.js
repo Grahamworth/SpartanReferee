@@ -23,7 +23,6 @@ const getApi = () => (api = api || createApi({
   verifyGoogle: process.env.GOOGLE_CLIENT_ID ? googleVerifier(process.env.GOOGLE_CLIENT_ID) : null, secret: process.env.SESSION_SECRET || '',
   emailSignIn: createEmailSignIn({ subdomain: process.env.CIAM_SUBDOMAIN, tenantId: process.env.CIAM_TENANT_ID, clientId: process.env.CIAM_CLIENT_ID }),
   payments: createPayments({ secretKey: process.env.STRIPE_SECRET_KEY, siteUrl: 'https://zealous-island-03d6db503.8.azurestaticapps.net' }),
-  fetchText: async (url) => { const r = await fetch(url, { headers: { 'User-Agent': 'Spartans app (news reader)' } }); if (!r.ok) throw new Error(String(r.status)); return r.text(); },
 }));
 
 app.http('api', {

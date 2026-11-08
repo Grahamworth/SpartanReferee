@@ -1,8 +1,8 @@
 {
-  "name": "spartans-api",
+  "name": "headjudge-api",
   "version": "0.1.0",
   "private": true,
-  "description": "Spartans app backend: home page content and the chat (Azure Functions + Table Storage)",
+  "description": "HeadJudge backend: sign-in, companies, servers and recordings (Azure Functions + Table Storage)",
   "main": "src/functions.js",
   "scripts": {
     "test": "node --test test/*.test.js",

@@ -2857,7 +2857,7 @@ $('atNumberSave').addEventListener('click', () => {
 
 // ---------------------------------------------------------------- Spartans Challenge (judge.html?mode=practice&exercise=...&challenge=...)
 // For anyone, to the Spartan setup, the phone's owner only (no race number, no station). Chosen on the menu
-// (scoreboard.html). Where to put the camera, then front or back; once they're in position a spoken countdown starts
+// (https://mango-glacier-03e711403.4.azurestaticapps.net/scoreboard.html). Where to put the camera, then front or back; once they're in position a spoken countdown starts
 // it. Practice counts until they stop; the 1-minute and 5-minute challenges run out the clock, calling the last 5
 // seconds. Every attempt goes in their history; a full challenge can go on the scoreboard if they say so. The hand test
 // is for admins: the menu only shows it to them, this page sends anyone else back, and the server refuses their scores.
@@ -2910,13 +2910,13 @@ function callFinalSeconds(left) {
 
 function practiceHome() {
   const chosen = new URLSearchParams(location.search).get('challenge');
-  if (!CHALLENGES[chosen]) { location.replace('scoreboard.html'); return; }
+  if (!CHALLENGES[chosen]) { location.replace('https://mango-glacier-03e711403.4.azurestaticapps.net/scoreboard.html'); return; }
   S.challenge = { mode: chosen, ...CHALLENGES[chosen] };
   document.documentElement.classList.add('practice-mode');
-  const ex = currentExercise(), menu = `scoreboard.html?mode=${chosen}&exercise=${settings.exercise}`;
+  const ex = currentExercise(), menu = `https://mango-glacier-03e711403.4.azurestaticapps.net/scoreboard.html?mode=${chosen}&exercise=${settings.exercise}`;
   if (ex.gestures) {
     $('setup').hidden = true;
-    getMe().then((me) => { if (!me.admin) location.replace('scoreboard.html'); else if (S.screen === 'setup') $('setup').hidden = false; });
+    getMe().then((me) => { if (!me.admin) location.replace('https://mango-glacier-03e711403.4.azurestaticapps.net/scoreboard.html'); else if (S.screen === 'setup') $('setup').hidden = false; });
     document.querySelector('.setup-pictures').hidden = true;
     document.querySelector('.setup-tips').hidden = true;
     $('chkBody').hidden = true;

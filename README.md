@@ -1,9 +1,8 @@
-# HeadJudge and Spartans
+# HeadJudge
 
-Two things share this repository and one Azure home:
+Online judging for fitness events. Companies register with their own logo and colours, start a server, film with phones, and judge in any browser.
 
-- **HeadJudge**: online judging for fitness events. Companies register with their own logo and colours, start a server, film with phones, and judge in any browser.
-- **Spartans**: the app and site for Spartan racers (news, chat, scoreboards, Course Run, the burpee challenge).
+The Spartans app and site for Spartan racers were split out on 8 November 2026 into their own repository (`Grahamworth/Spartans`), with their own site, backend and data in the VDASO subscription. HeadJudge keeps its own copy of the AI judge (`judge.html`, `app.js`, `burpee.js` and the rest), which the Spartans copy no longer shares.
 
 Everything runs in Azure subscription **HeadJudge** (DEXYS directory, always pass `--subscription 65c0ccca-69f7-43eb-9246-3bd6a6a06b24`).
 
@@ -26,7 +25,7 @@ The site (Static Web App)  says what's wanted  -->  table  <--  makes it so, eve
 | `api/` | The site's backend. `companies.js`: registration and brand. `servers.js`: what each company wants its server to do. |
 | `server/` | What runs on a company's server. `review/` is the review page. `setup/` prepares a new machine. |
 | `control/` | The always-on app that starts and stops servers, and turns off anything that shouldn't be running. |
-| `app/`, `scripts/build-app.sh`, `scripts/build-broadcaster.sh` | The Android apps. |
+| `app/`, `scripts/build-broadcaster.sh` | The Broadcaster Android app (`app/native/android` is its camera screen). |
 | `promo/` | The animated demo video. |
 
 ## Who can do what
@@ -57,7 +56,7 @@ swa deploy <site folder> --api-location "$(pwd)/api" --api-language node --api-v
 - Server software: `bash scripts/build-server.sh`, then upload `downloads/headjudge-server.tar.gz` to the `downloads` container. Servers fetch it each time they start.
 - Control app: `bash scripts/deploy-control.sh`.
 - Shared server pieces (network, firewall, image store): `bash scripts/setup-servers.sh`.
-- Phone apps: `bash scripts/build-broadcaster.sh`, `bash scripts/build-app.sh`, then upload to the `downloads` container.
+- Broadcaster app: `bash scripts/build-broadcaster.sh`, then upload `downloads/spartans-broadcaster.apk` to the `downloads` container.
 
 Personal test videos (`clips/`, `test.mp4`) stay on this PC: they're never deployed or uploaded. Cloud tests use public footage.
 
@@ -67,8 +66,6 @@ Personal test videos (`clips/`, `test.mp4`) stay on this PC: they're never deplo
 
 - `?engine=<camera>`: the judge itself, running the models and sending what it sees.
 - `?follow=<camera>`: what people watch, playing the same camera and drawing what the judge sent.
-
-Each phone needs internet the **first** time it opens the Spartans app, to download the pose model and number reader (roughly 20 to 30 MB in total).
 
 Judging an uploaded video runs in the viewer's browser, then saves its results to the server. Recordings stay on the server for 14 days and in cloud storage for 30.
 
@@ -89,7 +86,7 @@ Each failed rep shows **NO REP** and the reason on screen and is called out by v
 
 | File | What it is |
 |---|---|
-| `judge.html`, `styles.css` | The Burpee Judge's screens and race-day styling (`app.html` is the Spartans home page) |
+| `judge.html`, `styles.css` | The Burpee Judge's screens and race-day styling |
 | `app.js` | Camera, race-number scanner, live counting, recording, results |
 | `burpee.js` | Burpee rep-judging rules and body measurements. Pure logic, no camera needed |
 | `exercises.js` | The exercise list and the judges for squats, push-ups, jumping jacks and sit-ups |
@@ -127,10 +124,6 @@ Then open http://localhost:8791.
 5. **Complete** when the target is reached: a big green tick, then the screen resets to the number scan for the next athlete after 6 s. An attempt the marshal ends early shows a red cross and "Not complete".
 
 With **Capture each athlete's race number** turned off (Settings → Race numbers), step 2 is skipped and athletes are numbered 1, 2, 3 in order at the station.
-
-### Camera station (Spartans app, Android)
-
-Home → Camera station (referees and admins): the phone films a station and streams it to the judging computer and, optionally, to YouTube at the same time, each on its own connection (one encoder, RootEncoder's MultiStream; `app/native/android/StationActivity.java`, opened through the `Station` Capacitor plugin from `camera.html`). No watermark. YouTube goes over RTMPS (RTMP if that fails) with the stream key kept on the phone.
 
 ### Judging a phone's stream on a computer
 
@@ -194,108 +187,6 @@ Settings → **Exercise** picks what the station judges. It starts on **Burpees*
 | Hand close (practice) | A fist, then an open hand. A thumbs down is a no rep | Anyone in view |
 
 The only judging control in Settings is the **Judging strictness** slider. The limits it starts from are the defaults in `burpee.js` and `exercises.js`, which haven't been checked against real footage yet. Push-ups and sit-ups need the phone side-on at floor level.
-
-## Course Run (3D game)
-
-`course.html` is a separate section of the site, linked from the home screen, and the judging app doesn't load any of it. It is a playable 3D run of a whole race course on the real terrain.
-
-- **Courses:** Ultra, Beast, Super, Sprint and the three kids' courses from the organisers' route file (`Morzine_UWC_26_V1_1.kmz`). Every obstacle in the file sits on its course in race order. Water stations top up your energy, and marshals, medical points, start and finish arches, penalty loops and the burpee area are all in place.
-- **Scenery:** terrain heights come from Copernicus GLO-30. Buildings, forests, roads, rivers, lakes and lift pylons come from OpenStreetMap. Both are cut out of SkiTour's Portes du Soleil 3D pack. The heights are a 30 m grid, smoothed, with the forest canopy taken off.
-- **Controls:** the same as SkiTour's play mode.
-  - **Phone:** the thumb pad sits bottom right. Left and right steer, forward runs, back slows down and steps back. **Jump** charges while you hold it, and **Sprint** (hold) uses energy.
-  - **Keyboard:** arrows or WASD move, Space jumps, Shift sprints, C changes the camera, R resets and Esc pauses.
-  - **Steer assist** (on by default) keeps you on the course, and the pad still steers.
-  - **Camera:** far, close or first person. Drag to look around; the view eases back after you let go.
-- **Obstacles:** each obstacle plays one of 11 mini-games (`course-games.js`), and they get harder the further round the course you are and with the course (Kids, Sprint, Super, Beast, Ultra; shown as Level 1–5):
-  - **Skill:** *sequence*, keys in a set order to watch and repeat (multi-ring, Hydra, Armer, Spider); *arrows*, press each as it comes up (Z-wall, Bender); *swing*, the side that lights, in time (monkey bars, ape hanger, Tyrolean).
-  - **Strength:** *bash*, tap fast while it slides back (carries, drags, Hercules hoist against the clock).
-  - **Climbing and crawling:** left and right in turn on the beat; off the beat and you stall.
-  - **Grip:** hold to keep a needle in a wandering band (slip wall, inverted wall, Olympus).
-  - **Balance.**
-  - **Jumps:** time each hurdle or fire.
-  - **Power jump:** for the bell.
-  - **Throw:** set the aim, then hold for power and let go in the band; the spear flies at the screen.
-  - **Laser:** hit the targets as they light.
-  - **Memory:** the board's code is asked at the test.
-  - The keyboard works too: arrows and WASD, Space to tap or hold.
-- **Official rules:** each mini-game's start screen has a **📖 Official rules** button. It shows what a referee checks at that obstacle (how to complete it, what counts as a fail, and whether it's multiple-attempt, single-attempt or mandatory). These are short summaries in our own words of Spartan's 2026 Rules of Competition (`course-rules.js`), with links to Spartan's official rules page and rulebook PDF. When Spartan updates the rules, update the summaries.
-- **Obstacle practice:** an alternative to running a course. On the course page, *Or practise one obstacle* lists every obstacle (Kids ones too). Pick a level (1–5) and an obstacle, and you start 25 m before it. Afterwards it says how you did and offers *Try again* (at any level) or *Another obstacle*.
-- **Penalties:** each mini-game starts with what to do and a **Start** button, and you get **5 tries** at each obstacle. After 5 misses:
-  - An obstacle with a penalty loop in the file means running that loop there and then.
-  - Any other obstacle adds **30 burpees owed**, shown in the HUD. You do them at the next **burpee station**, where the course passes the burpee area in the route file (near the finish; the Ultra passes it twice). Anything still owed is done at the finish line before you can finish.
-  - Kids never get penalties.
-- **Free running:** steer assist is off by default, so you can run anywhere. An arrow on the ground just ahead points the way along the course, or back to it if you've wandered off: green when you're heading the right way, red (and pulsing) when you're not.
-- **Start:** the menu has two pages. First *Your runner*, then *Choose a course*, listed easiest to hardest.
-- **Mini-map:** the same drawing as the 2D course map (terrain, roads, numbered and coloured obstacles, water stations), close up and following you with an arrow. Tap it to see the whole course.
-- **Carrying:** carry obstacles show the load. A sandbag, log or chain goes on the shoulders, a bucket or atlas stone is hugged to the chest, and a tyre or plate is dragged behind on a rope. Contestants carry them too.
-- **Race clock:** it adds real-life time for obstacles, burpees and anything you skip, so the time on the finish card is close to a real race time.
-- **People:** the runner, the other contestants, officials and spectators all use one rigged, animated human (three.js's Xbot figure, from Mixamo). It is dressed per person: skin, top (vest, T-shirt or long sleeves) and bottoms (shorts, 3/4 tights or leggings) are coloured in the shader by the bone each part of the body follows. Hair, hats, eyes and the race number are attached to the bones. Obstacle poses (climb, hang, crawl, carry, throw, balance, cheer, burpee) are set by pointing the limbs, on top of the idle, walk and run animations.
-- **Your runner:** on the course list you can set the race number, skin, hair and hair colour, hat, top, bottoms and shoes, with a turning 3D preview. Your choices are saved on the device.
-- **Company:** contestants start in a wave with you and run at their own pace. They stop at obstacles, and now and then they fail one and do burpees beside the trail. Anyone far ahead or behind drops back in near you. Officials in hi-vis stand at every obstacle and marshal point and turn to watch you go by. Crowds line the tape in town and at the start and finish, cheering, and you can hear them.
-- **Rivers** sit in a channel carved about 2 m into the terrain, with muddy, stony banks either side. Where the course crosses a river the ground stays level (a bridge). **No building, lift station or pylon** is drawn on the course: any whose footprint touches it is left out.
-- **Look:** ground textures blend meadow and rock by slope. The trail is textured dirt (4.2 m between the tapes), roads are tarmac or gravel, and grass tufts grow around you. Chalets have boards or plaster, windows, shutters and tiled roofs, all drawn in the shader. There are shadows, a sky with the sun, and ACES tone mapping.
-- **Weather and time of day:** sunny, light cloud, heavy cloud, mist, rain or thunderstorm, like SkiTour's weather menu, or *changes as you go* (spells drift in and clear every few minutes). The time of day can be morning, midday, afternoon or evening. The 🌦️ button changes the weather mid-run.
-- **Course map** (tap a course on the list): a 2D map of the course on shaded terrain with forests, lakes, roads and buildings. It shows every obstacle (numbered and coloured by kind), the water stations, penalty loops and kilometre marks. You can drag, pinch or wheel to zoom, and the obstacle list and height profile jump the map to a spot. From here you can **simulate the course**, which runs it at a fit amateur's pace (Tobler-style slope pace, real time at each obstacle and a stop at every water station) at 30×–600× speed and gives an estimated finish time (Sprint about 1 h, Super about 2 h, Beast about 4 h, Ultra about 9 h). You can also **start from the beginning**, or tap the course to start the 3D run from there. Obstacles before that point are skipped and the contestants start around you.
-- **In the 3D run:** **Run** (hold) runs forward without the pad, at a slightly quicker pace than before. Sprinting is switched off for now (`SPRINT` in `course-game.js`). **🤖 Auto** runs the whole course by itself: it completes each obstacle and stops to drink when energy is under 70%. **⏭ Skip** jumps to the next obstacle. During each mini-game the runner acts it out as you play, and finishes it when you pass: over the wall, up and down the A-frame, up the rope to the bell, along the rig, the carry, the crawl, the balance beam, hurdles, the spear throw. Carries, crawls and the hoist slide back if you stop tapping, so you have to bash the button.
-- **Energy** goes by distance: a full tank is about 10 km of running on the flat (less uphill), so it always reaches the second water station. Stop at a water station for a second or two to fill it again.
-- **Phones:** quality adjusts itself the way SkiTour's does. It drops shadows first, then resolution, then view distance. Trees, buildings and the like are drawn in 500 m tiles, and only tiles in view are drawn. Trees between the camera and the runner are hidden. A run pauses itself when the phone locks.
-
-To rebuild the course pack after the route file or the map data changes, unzip the `.kmz` (a `.kmz` is a zip) and run this, using any SkiTour 3D pack that covers the area:
-
-```bash
-node scripts/build-course.cjs doc.kml ../SkiTour/data3d/portes-soleil.json courses/morzine-26.json "Morzine 2026"
-```
-
-Credits, also shown in the game: terrain © Copernicus (ESA/Airbus); map data © OpenStreetMap contributors (ODbL); three.js (MIT, `vendor/three.min.js`).
-
-## Spartans home page, chat and apps
-
-| File | What it is |
-|---|---|
-| `app.html`, `hub.js`, `hub.css` | Spartans home page, at `/app`: the next race with a countdown, latest news, past winners, links to everything, and "Get the app" |
-| `chat.html`, `chat.js` | Chat rooms, like SkiTour's notice board (Spartans chat, Morzine 2026, Training, Kit, Lift shares), plus private groups |
-| `admin.html`, `admin.js` | Admin: who's banned from the chat and why, with unban |
-| `api-base.js` | Where the backend is: `/api`, or the hosted site's `/api` inside the installed app |
-| `api/` | The backend: Azure Functions (Node 20), managed by the Static Web App, storing everything in Azure Table Storage (`spartans893191`, table `spartans`). Tests: `cd api; npm test`. Run the site and API locally (in-memory, nothing saved): `node api/dev-server.js`, then open http://localhost:8795 |
-| `manifest.webmanifest`, `sw.js`, `icons/` | Lets the site install as an app (iPhone: Safari → Share → Add to Home Screen) and open without signal |
-| `app/`, `scripts/build-app.sh` | The Android and iPhone apps (Capacitor) |
-| `scripts/make-icons.cjs` | Draws the app icon at every size |
-
-- **Home page content.** Admins edit the race, news and winners on the page itself (the Edit buttons). For the prototype anyone can edit, because the setting `ADMIN_KEY` isn't set. To lock it, set `ADMIN_KEY` on the Static Web App (`az staticwebapp appsettings set ... --setting-names ADMIN_KEY=<secret>`). Admins then put the key in their browser with `localStorage.sp_admin = '<secret>'` until there are proper admin sign-ins. Nothing is pre-filled: the race date, news and winners are for you to add.
-- **Upcoming events** (home page): Spartan races with dates, places and races, each with a **Tickets** button to its page on spartan.com, plus a link to Spartan's full race finder. Past events drop off by themselves. The list starts with the European races from uk.spartan.com's race finder (checked 2 November 2026), and admins keep it current with Edit.
-- **Chat.** There are no accounts yet. Each phone has a random id (only a hash is stored) and picks a display name.
-  - **Public rooms:** swearing and slurs (SkiTour's filter), insults, abuse and threats are refused, and so are links, email addresses and phone numbers. Each phone can send one message every 10 seconds and 60 a day.
-  - **Private groups** (＋ Group): make a group and share its 6-letter **join code**, or tap **Invite to group** on someone's message to send them an invite, which they accept or decline next time they open the chat. Only members can read a group. Links and numbers are allowed in groups; rude words are not. The owner can make a new code (the old one stops working). Anyone can leave, and the owner's role passes on.
-  - **Self-moderation:** once 3 different people have reported someone in a chat (any of their messages there), they're **banned from that chat** (that room or group, not the others) and their reported messages are hidden.
-  - **Admin** (`admin.html`, linked from home): everyone banned, from which chat, when, how many reported them and the messages they were reported for, with **Unban**. It's open to all until `ADMIN_KEY` is set, like the home page editing.
-  - Each room keeps its latest 400 messages.
-- **Android app.** Run `bash scripts/build-app.sh`; it needs Node, JDK 21 and the Android SDK. It writes `downloads/spartans.apk`, which carries the whole site. Course Run works without signal. The Burpee Judge still downloads its body-tracking models (MediaPipe, ONNX Runtime) from their CDNs, so it needs signal the first time. The chat and news always need a connection. It's a debug-signed build for the prototype. Google Play needs a release build signed with your own key and a Play developer account.
-- **iPhone app.** The same script writes `downloads/spartans-ios-project.zip`, the Xcode project. Building it needs a Mac with Xcode (`npm install`, then `npx cap open ios`), and installing it on other people's phones needs an Apple developer account (TestFlight or the App Store). Until then, iPhone users install the web app from Safari.
-
-## Home page, accounts, judges (current)
-
-- **Home** (`app.html`, `hub.js`, at `/app`):
-  - **Next race** at the top: the soonest upcoming event, with a countdown, **Take me to the race** (its spartan.com page and tickets) and **All upcoming events**.
-  - **Your stats:** race results will come from the linked Spartan profile once Spartan gives access. For now it shows Course Run bests from this phone.
-  - The main buttons: **News**, **Past competitions**, **Courses** (`course.html#courses`) and **Connect** (the chat).
-  - **Burpee Judge** and **Admin** buttons appear only for judges and admins.
-  - The profile button sits at the top right.
-  - "Get the app" is hidden inside the Android app and home-screen installs.
-- **News** (`news.html`): the organisers' own news (admins edit it), then the latest stories from Spartan's blogs (race stories, training, community, newsroom on shop.spartan.com). They're read by the API from the blogs' Atom feeds and cached for an hour. Spartan posts there rarely: the newest story was from August 2025 when this was built.
-- **Past competitions** (`past.html`): each competition's winners per course, with **Play the course** where the Course Run map exists (Morzine 2026). Admins edit it.
-- **Courses:** tap a course for its map. In the course view's obstacle list, tap an obstacle for its details, the referee rules summary and **Try this obstacle**. Below it, the other stations (water, medical, timing, burpee station, penalty loops) are listed with their distances.
-- **Profile** (`profile.html`):
-  - **Sign in with Google** (as SkiTour does; this phone's groups and profile move to the account).
-  - Name, racer number, country, age group.
-  - **Your Spartan profile:** a link to the person's profile or results on spartan.com, kept for when results can be pulled in. Spartan has no public API for this yet; that would need an arrangement with them.
-  - Becoming a **Burpee judge** with the judge code.
-- **Burpee judges:** the Burpee Judge (`judge.html`) opens only for judges and admins. Admins switch people's **Burpee judge** on or off on the Admin page (people appear once they've opened their profile or used the chat), or hand out the **judge code** shown there.
-- **Settings on the Static Web App:**
-  - `GOOGLE_CLIENT_ID`: the Google web client for sign-in; SkiTour's can be reused once this site's address is added to its *Authorised JavaScript origins*.
-  - `SESSION_SECRET`: a long random string that signs session tokens.
-  - `ADMIN_EMAILS`: comma-separated Google accounts that are admins.
-  - `ADMIN_KEY`: optional, an admin key typed on the Admin page.
-  - While neither `ADMIN_EMAILS` nor `ADMIN_KEY` is set, everyone is treated as an admin and a judge (the prototype).
 
 ## Before using it for prize money
 
