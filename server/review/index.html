@@ -72,6 +72,16 @@
     </details>
   </div>
   <div id="pickHint" class="banner pick" hidden>Click the athlete you want analysed, on either camera. <button class="btn" id="pickCancel">Cancel</button></div>
+  <!-- Start AI judge: the camera's name and what it judges (the last setup used, to start with); everything else under Advanced settings -->
+  <div id="quickStart" class="quickbox" role="dialog" aria-modal="true" aria-labelledby="quickTitle" hidden>
+    <h3 id="quickTitle">Start the AI judge</h3>
+    <label class="field" for="quickName">Camera name</label>
+    <input id="quickName" maxlength="40" autocomplete="off" placeholder="e.g. Burpee zone – front">
+    <label class="field" for="quickExercise">Judging</label>
+    <select id="quickExercise"></select>
+    <button type="button" class="linkbtn quickadv" id="quickAdvanced">⚙ Advanced settings</button>
+    <div class="quickacts"><button type="button" class="btn" id="quickCancel">Cancel</button><button type="button" class="btn red" id="quickGo">Start judging</button></div>
+  </div>
   <div id="judgeSettings" class="settingsbox popout" role="dialog" aria-modal="true" aria-labelledby="settingsTitle" hidden>
     <div class="row"><b id="settingsTitle">Camera settings</b><span class="muted small" id="settingsNote">Saved for this camera on this device. Save restarts its judge with them.</span><label class="check small" id="settingsAllRow"><input type="checkbox" id="settingsAll"> Use these settings on all cameras</label></div>
     <iframe id="settingsFrame" title="Judge settings"></iframe>

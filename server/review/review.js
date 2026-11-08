@@ -170,8 +170,8 @@ function renderJudges() {
       tile.innerHTML = `<div class="msg">Waiting for camera ${camNo(c.n)}</div><div class="label">Camera ${camNo(c.n)}</div><span class="livetag">LIVE</span>
         <div class="tools"><button class="btn track"></button><button class="btn cfg" title="This camera's AI judge settings">⚙ Config</button></div>`;
       tile.onclick = (e) => { if (!e.target.closest('button, .waitCard')) toggleBig(c.n); };
-      tile.querySelector('.cfg').onclick = (e) => { e.stopPropagation(); openCamSettings(c.n); };
-      tile.querySelector('.track').onclick = (e) => { e.stopPropagation(); if (!aiOff(c.n)) return setAi(c.n, false); if (analysingNow()) return busyNote(`Camera ${camNo(c.n)}'s AI judge can't start while a video is being analysed. Pause or stop the analysis first.`, true); openCamSettings(c.n, true); };
+      tile.querySelector('.cfg').onclick = (e) => { e.stopPropagation(); openQuick(c.n, true); };
+      tile.querySelector('.track').onclick = (e) => { e.stopPropagation(); if (!aiOff(c.n)) return setAi(c.n, false); if (analysingNow()) return busyNote(`Camera ${camNo(c.n)}'s AI judge can't start while a video is being analysed. Pause or stop the analysis first.`, true); openQuick(c.n); };
       $('judgeGrid').appendChild(tile);
       j = judges[c.n] = { tile, frame: null, view: null };
       applyView();
@@ -191,6 +191,7 @@ function renderJudges() {
     }
     const off = aiOff(c.n), t = j.tile.querySelector('.track');
     t.textContent = off ? '▶ Start AI judge' : '■ Stop AI judge'; t.classList.toggle('red', off);
+    j.tile.querySelector('.cfg').hidden = off; // its setup is chosen as it starts; Config is for changing it while it runs
     const held = !off && !j.frame && analysingNow();
     if ((off || held) && c.live) plainView(c.n, j); else if (j.view && !c.live) { j.view.pc?.close(); j.view.video.remove(); j.view = null; }
     drawWaiting(c, j);
@@ -264,12 +265,64 @@ function fitLive() {
   document.documentElement.style.setProperty('--avail', `${Math.max(220, innerHeight - top - bar - 14)}px`);
 }
 
-// one camera's settings (from its ⚙ Config): the judge's settings for that camera, with Close / Save at its foot
+// Start AI judge: a small box with the camera's name and what it judges, starting from this camera's last setup (or, for a camera
+// that's never had one, the last setup started anywhere). Advanced settings opens everything the judge has; Start judging or Cancel.
+// While a judge runs, its Config opens the same box, to save and restart it.
+const EXERCISES_FALLBACK = [['burpees', 'Burpees'], ['squats', 'Air squats'], ['pushups', 'Push-ups'], ['jacks', 'Jumping jacks'], ['situps', 'Sit-ups']];
+let exerciseList = null;
+async function exerciseChoices() {
+  if (exerciseList) return exerciseList;
+  try {
+    const m = await import(window.HJ_TEST ? '/exercises.js' : '/judge/exercises.js'); // the judge's own list
+    exerciseList = Object.entries(m.EXERCISES).filter(([, x]) => !x.gestures).map(([k, x]) => [k, x.label]);
+  } catch { exerciseList = EXERCISES_FALLBACK; }
+  return exerciseList;
+}
+const readSaved = (cfg) => { try { return JSON.parse(localStorage.getItem(SYNC_KEY(cfg))) || null; } catch { return null; } };
+const writeSaved = (cfg, v) => { try { if (v) localStorage.setItem(SYNC_KEY(cfg), JSON.stringify(v)); else localStorage.removeItem(SYNC_KEY(cfg)); } catch { /* private mode */ } };
+let quick = null;   // { n, running, before: the camera's setup when the box opened, base: what the box started from, advanced }
+async function openQuick(n, running = false) {
+  const own = readSaved('cam' + n), last = readSaved('last');
+  quick = { n, running, before: own, base: own || (last ? { ...last, station: '' } : {}), advanced: false };
+  $('quickTitle').textContent = running ? `Camera ${camNo(n)}: change its setup` : `Start the AI judge on camera ${camNo(n)}`;
+  $('quickGo').textContent = running ? 'Save and restart' : 'Start judging';
+  fillQuick(quick.base);
+  $('quickStart').hidden = false;
+  const list = await exerciseChoices(), want = quick.base.exercise || 'burpees';
+  const opts = list.some(([k]) => k === want) ? list : [...list, [want, want]];
+  $('quickExercise').innerHTML = opts.map(([k, label]) => `<option value="${esc(k)}">${esc(label)}</option>`).join('');
+  $('quickExercise').value = want;
+  $('quickGo').focus({ preventScroll: true });
+}
+function fillQuick(v) { $('quickName').value = v.station || ''; if (v.exercise && $('quickExercise').querySelector(`option[value="${CSS.escape(v.exercise)}"]`)) $('quickExercise').value = v.exercise; }
+// what the box says, on top of everything else the camera has
+const quickSetup = () => ({ ...(readSaved('cam' + quick.n) || quick.base), station: $('quickName').value.trim().slice(0, 40), exercise: $('quickExercise').value || 'burpees' });
+function closeQuick() { $('quickStart').hidden = true; quick = null; }
+$('quickCancel').onclick = () => { if (quick) writeSaved('cam' + quick.n, quick.before); closeQuick(); };
+$('quickAdvanced').onclick = () => {
+  if (!quick) return;
+  writeSaved('cam' + quick.n, quickSetup()); // the full settings open with the name and exercise chosen here
+  quick.advanced = true; $('quickStart').hidden = true;
+  openCamSettings(quick.n, false, true);
+};
+$('quickGo').onclick = async () => {
+  if (!quick) return;
+  const { n, running } = quick, v = quickSetup();
+  writeSaved('cam' + n, v); writeSaved('last', v);
+  closeQuick();
+  await pushJudgeSettings('cam' + n); pushJudgeSettings('last');
+  if (running) { await engineCall(n, 'restart').catch(() => {}); const j = judges[n]; if (j?.frame) j.frame.src = judgeUrl(n); toast(`Camera ${camNo(n)} restarted with its new setup`); }
+  else { setAi(n, true); toast(`AI judge started on camera ${camNo(n)}`); }
+};
+$('quickName').onkeydown = (e) => { if (e.key === 'Enter') $('quickGo').click(); };
+addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('quickStart').hidden) $('quickCancel').click(); });
+
+// one camera's full settings (Advanced settings, from the box above): the judge's settings for that camera, with Close / Save at its foot
 let settingsFor = 0, startAfter = false;
-function openCamSettings(n, start) {
+function openCamSettings(n, start, fromQuick) {
   settingsFor = n; startAfter = !!start;
-  $('settingsTitle').textContent = start ? `Start the AI judge on camera ${camNo(n)}${camName(n) ? ' · ' + camName(n) : ''}` : `Camera ${camNo(n)}${camName(n) ? ' · ' + camName(n) : ''} settings`;
-  $('settingsNote').textContent = start ? 'Check its settings, then Save to start judging (Close: not now).' : 'Saved for this camera. Save restarts its judge with them.';
+  $('settingsTitle').textContent = fromQuick ? `Camera ${camNo(n)}: advanced settings` : start ? `Start the AI judge on camera ${camNo(n)}${camName(n) ? ' · ' + camName(n) : ''}` : `Camera ${camNo(n)}${camName(n) ? ' · ' + camName(n) : ''} settings`;
+  $('settingsNote').textContent = fromQuick ? 'Save, or Close, takes you back to start judging.' : start ? 'Check its settings, then Save to start judging (Close: not now).' : 'Saved for this camera. Save restarts its judge with them.';
   $('settingsFrame').src = `/judge/judge.html?settings=1&cfg=cam${n}`;
   $('settingsAllRow').hidden = !st || st.cams.length < 2;
   try { $('settingsAll').checked = localStorage.getItem('hj_settingsTogether') === '1'; } catch { /* private mode */ }
@@ -316,6 +369,14 @@ addEventListener('message', (e) => {
   const n = settingsFor, together = $('settingsAll').checked;
   try { localStorage.setItem('hj_settingsTogether', together ? '1' : '0'); } catch { /* private mode */ }
   closeCamSettings();
+  // from Start AI judge's Advanced settings: back to its box, with whatever was saved
+  if (quick?.advanced && quick.n === n) {
+    quick.advanced = false;
+    if (e.data.judge === 'saved' && together) shareSettings(n);
+    const v = readSaved('cam' + n); if (v) fillQuick(v);
+    $('quickStart').hidden = false; $('quickGo').focus({ preventScroll: true });
+    return;
+  }
   if (e.data.judge === 'saved' && together) shareSettings(n);
   if (e.data.judge === 'saved' && startAfter) { startAfter = false; pushJudgeSettings('cam' + n); setAi(n, true); toast(`AI judge started on camera ${camNo(n)}`); return; }
   startAfter = false;

@@ -19,7 +19,7 @@ const swap = (from, to) => { if (!html.includes(from)) throw new Error(`The revi
 swap('<link rel="stylesheet" href="review.css">', '<script src="test-mode.js"></script>\n<link rel="stylesheet" href="review.css">');
 swap('<script src="/judge/brand.js" defer></script>', '<script src="/brand.js" defer></script>');
 // a banner, so it's never mistaken for a real event, and only admins get past it
-swap('</body>', `<div id="testBanner" style="position:fixed;left:10px;bottom:10px;z-index:9000;background:#ffc400;color:#101010;font:700 14px/1.3 Barlow,system-ui,sans-serif;padding:7px 14px;box-shadow:0 2px 12px rgba(0,0,0,.5);pointer-events:none">TEST MODE<span class="tmMore"> · pretend data, no server, nothing is saved</span></div>
+swap('</body>', `<div id="testBanner" style="position:fixed;left:10px;bottom:10px;z-index:40;background:#ffc400;color:#101010;font:700 14px/1.3 Barlow,system-ui,sans-serif;padding:7px 14px;box-shadow:0 2px 12px rgba(0,0,0,.5);pointer-events:none">TEST MODE<span class="tmMore"> · pretend data, no server, nothing is saved</span></div>
 <style>@media (max-width: 760px) { #testBanner { bottom: calc(72px + env(safe-area-inset-bottom)) !important; font-size: 12px !important; padding: 4px 9px !important; } #testBanner .tmMore { display: none; } }</style>
 <script type="module">
   import { getMe } from '/api-base.js';

@@ -313,3 +313,13 @@ header .tabs svg, header .tabs .ts { display: none; }
   .camcard { padding: 10px; } .camcard h3 { font-size: 16px; }
   .list td, .list th { padding: 7px 5px; font-size: 14px; }
 }
+
+/* Start AI judge: a small box, the camera's name and what it judges */
+.quickbox { position: fixed; z-index: 210; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(420px, calc(100vw - 24px)); background: var(--ink); border: 1px solid var(--line); border-top: 4px solid var(--brand, var(--red)); padding: 18px 18px 16px; box-shadow: 0 0 0 100vmax rgba(0, 0, 0, .72); display: grid; gap: 6px; }
+.quickbox h3 { margin: 0 0 8px; font-size: 18px; text-transform: uppercase; }
+.quickbox label.field { display: block; color: var(--muted); font-size: 13px; font-weight: 700; margin-top: 6px; }
+.quickbox input, .quickbox select { width: 100%; }
+.quickbox .quickadv { justify-self: start; margin-top: 8px; padding-left: 0; font-size: 14px; }
+.quickacts { display: flex; gap: 10px; justify-content: flex-end; margin-top: 12px; }
+.quickacts .btn { flex: 0 0 auto; }
+@media (max-width: 760px) { .quickbox { top: auto; bottom: 0; transform: translateX(-50%); width: 100vw; padding-bottom: calc(16px + env(safe-area-inset-bottom)); z-index: 260; } .quickacts .btn { flex: 1 1 0; padding: 13px; } }
