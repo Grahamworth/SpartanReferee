@@ -16,33 +16,19 @@ cat > "$BUILD/capacitor.config.json" <<EOF
   "appId": "$APP_ID",
   "appName": "HeadJudge Broadcaster",
   "webDir": "www",
-  "backgroundColor": "#1f2328",
+  "backgroundColor": "#12161c",
   "android": { "allowMixedContent": true },
   "server": { "androidScheme": "https" }
 }
 EOF
 cp "$SRC/app/package.json" "$BUILD/"
 
-# the web side: the camera page as the app's only page
-rm -rf "$BUILD/www" && mkdir -p "$BUILD/www/vendor"
-for f in camera.js styles.css hub.css hub-pages.css looks.css looks.js; do cp "$SRC/$f" "$BUILD/www/"; done
+# the web side: its own page in HeadJudge's look (broadcaster.html), working as the Spartans camera page does (camera.js)
+rm -rf "$BUILD/www" && mkdir -p "$BUILD/www/vendor" "$BUILD/www/icons"
+cp "$SRC/camera.js" "$SRC/headjudge.css" "$BUILD/www/"
+cp "$SRC/broadcaster.html" "$BUILD/www/index.html"
 cp "$SRC/vendor/jsQR.min.js" "$BUILD/www/vendor/"
-cp -r "$SRC/icons" "$BUILD/www/"
-node -e "
-const fs = require('fs');
-let h = fs.readFileSync(process.argv[1], 'utf8');
-h = h.replace(/<title>[^<]*<\/title>/, '<title>HeadJudge Broadcaster</title>')
-  .replace(/<script type=\"module\" src=\"judge-gate.js\"><\/script>\s*/, '')      // no sign-in or referee check
-  .replace(/<link rel=\"manifest\"[^>]*>\s*/, '')
-  .replace(/<a href=\"app\.html\" class=\"home-link\">[^<]*<\/a>/, '')              // nothing to go back to
-  .replace(/<h1 class=\"brand\">Camera <span>station<\/span><\/h1>/, '<h1 class=\"brand\">HeadJudge <span>Broadcaster</span></h1>')
-  // the setup guide, big and first: everything a camera person needs (opens in the phone's browser)
-  .replace(/ <p class=\"muted\"><a href=\"streaming.html\">[\s\S]*?<\/p>/, '\n  <a class=\"btn btn-red btn-big setup-guide\" href=\"https://zealous-island-03d6db503.8.azurestaticapps.net/streaming.html#phone\">📖 Setup guide: start here</a>\n  <p class=\"muted\" style=\"margin-top:6px\">Scanning your camera\\'s code, where to put the camera, and what to do if it won\\'t connect.</p>')
-  .replace('The camera station needs the Spartans app on an Android phone.', 'This needs the HeadJudge Broadcaster app on an Android phone.')
-  .replace('</style>','  .setup-guide { display: flex; width: 100%; justify-content: center; text-align: center; margin: 14px 0 4px; clip-path: none; font-size: 1.5rem; padding: 18px; }\n</style>')
-  .replace(/href=\"downloads\/spartans.apk\"/, 'href=\"https://zealous-island-03d6db503.8.azurestaticapps.net/downloads/spartans-broadcaster.apk\"');
-fs.writeFileSync(process.argv[2], h);
-" "$SRC/camera.html" "$BUILD/www/index.html"
+cp -r "$SRC/icons/headjudge" "$BUILD/www/icons/"
 
 cd "$BUILD"
 [ -d node_modules/@capacitor/cli ] || npm install --no-audit --no-fund
@@ -53,7 +39,11 @@ sed -i -E 's#(<string name="(app_name|title_activity_main)">)[^<]*#\1HeadJudge B
 # the native camera screen (RootEncoder from JitPack), in this app's own package
 JAVA="android/app/src/main/java/${APP_ID//.//}"
 mkdir -p "$JAVA"
-for f in "$SRC"/app/native/android/*.java; do sed "s/^package com\.vdaso\.spartans;/package $APP_ID;/" "$f" > "$JAVA/$(basename "$f")"; done
+# in HeadJudge's colours: a yellow GO LIVE button with dark lettering, and dark slate panels
+for f in "$SRC"/app/native/android/*.java; do
+  sed -e "s/^package com\.vdaso\.spartans;/package $APP_ID;/" -e 's/0xffe2231a/0xffffc400/' -e 's/go\.setTextColor(Color\.WHITE)/go.setTextColor(0xff101010)/' \
+      -e 's/0x99000000/0xcc12161c/g' -e 's/"Judging computer"/"Judging server"/' -e 's/"Camera station"/"Camera"/' "$f" > "$JAVA/$(basename "$f")"
+done
 GR=android/app/build.gradle
 grep -q jitpack "$GR" || sed -i "s#dirs '../capacitor-cordova-android-plugins/src/main/libs', 'libs'#&\n    }\n    maven { url 'https://jitpack.io'#" "$GR"
 grep -q RootEncoder "$GR" || sed -i 's#implementation project(.:capacitor-android.)#&\n    implementation "com.github.pedroSG94.RootEncoder:library:2.8.1"#' "$GR"
@@ -63,8 +53,11 @@ grep -q 'android.permission.CAMERA' "$MAN" || sed -i 's#<uses-permission android
 grep -q StationActivity "$MAN" || sed -i 's#<provider#<activity android:name=".StationActivity" android:exported="false" android:screenOrientation="sensorLandscape" android:configChanges="orientation|screenSize|keyboardHidden" android:theme="@style/AppTheme.NoActionBar" />\n\n        <provider#' "$MAN"
 for d in mdpi:48 hdpi:72 xhdpi:96 xxhdpi:144 xxxhdpi:192; do
   dir="android/app/src/main/res/mipmap-${d%%:*}"
-  [ -d "$dir" ] && node "$SRC/scripts/resize-icon.cjs" "$SRC/icons/icon-512.png" "${d##*:}" "$dir/ic_launcher.png" "$dir/ic_launcher_round.png" "$dir/ic_launcher_foreground.png"
+  [ -d "$dir" ] && node "$SRC/scripts/resize-icon.cjs" "$SRC/icons/headjudge/icon-512.png" "${d##*:}" "$dir/ic_launcher.png" "$dir/ic_launcher_round.png" "$dir/ic_launcher_foreground.png"
 done
+
+# the launcher icon's background, behind the HJ
+sed -i -E 's|<color name="ic_launcher_background">[^<]*|<color name="ic_launcher_background">#12161C|' android/app/src/main/res/values/ic_launcher_background.xml
 
 (cd android && ./gradlew assembleDebug --no-daemon -q)
 cp android/app/build/outputs/apk/debug/app-debug.apk "$SRC/downloads/spartans-broadcaster.apk"

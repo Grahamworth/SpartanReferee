@@ -74,7 +74,7 @@ test('the return page only ever goes back to our own pages', () => {
 });
 test('the Broadcaster has no account: it opens straight on its camera page', () => {
   const s = read('scripts/build-broadcaster.sh');
-  assert.match(s, /judge-gate\.js\\"><\\\/script>\\s\*\/, ''\)/);
+  assert.ok(!read('broadcaster.html').includes('judge-gate.js'), 'no sign-in on its page');
   for (const gone of ['broadcaster-signin', '@capacitor/browser', '@capacitor/app', 'PhoneLock', 'biometric', 'android:scheme']) assert.ok(!s.includes(gone), gone);
   assert.ok(!fs.existsSync(new URL('../broadcaster-signin.js', import.meta.url)));
   for (const guide of ['phone.html', 'streaming.html']) assert.doesNotMatch(read(guide), /<b>Create account<\/b>/, guide);

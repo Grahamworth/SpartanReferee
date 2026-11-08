@@ -39,6 +39,9 @@ test('the Spartans app still opens on the Spartans home, and the back button sti
   assert.match(build, /cp "\$SRC\/app\.html" "\$BUILD\/www\/index\.html"/);
   assert.match(read('app/native/android/MainActivity.java'), /path\.equals\("\/app\.html"\)/);
 });
-test('the Broadcaster still drops the way back to the Spartans home from its camera page', () => {
-  assert.match(read('scripts/build-broadcaster.sh'), /href=\\"app\\\.html\\" class=\\"home-link\\"/);
+test('the Broadcaster has its own HeadJudge page, with no way back to the Spartans home and no setup guide', () => {
+  const page = read('broadcaster.html');
+  assert.match(read('scripts/build-broadcaster.sh'), /cp "\$SRC\/broadcaster\.html" "\$BUILD\/www\/index\.html"/);
+  assert.match(page, /headjudge\.css/);
+  for (const gone of ['app.html', 'home-link', 'styles.css', 'streaming.html', 'Setup guide']) assert.ok(!page.includes(gone), gone);
 });

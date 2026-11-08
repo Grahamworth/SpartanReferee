@@ -5,6 +5,9 @@
 const $ = (id) => document.getElementById(id);
 const STORE = 'sp_station';
 const MAX_STATIONS = 12;
+// the Broadcaster calls them cameras, by their number in the booking; the Spartans camera page calls them stations
+const WORD = document.documentElement.dataset.word || 'Station';
+const shownNo = (c) => c.cam || c.station;
 
 function toast(s) { const t = $('toast'); t.textContent = s; t.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 2600); }
 const load = () => { try { return JSON.parse(localStorage.getItem(STORE)) || {}; } catch { return {}; } };
@@ -27,19 +30,24 @@ export function parseStationLink(text) {
     const hosts = [...q.getAll('lan'), ...(q.get('ts') ? [q.get('ts')] : [])].filter((h) => /^[\w.-]+$/.test(h));
     const n = parseInt(q.get('n'), 10);
     if (!hosts.length || !(n > 0)) return null;
-    return { hosts, port: q.get('port') || '1935', station: n, user: q.get('user') || '', pass: q.get('pass') || '' };
+    return { hosts, port: q.get('port') || '1935', station: n, cam: parseInt(q.get('cam'), 10) || 0, user: q.get('user') || '', pass: q.get('pass') || '' };
   }
-  let urls = [s];
+  let urls = [s], cam = 0;
   if (/^larix:/i.test(s)) {
     urls = [];
-    for (const [k, v] of new URLSearchParams(s.slice(s.indexOf('?') + 1))) if (/\[url\]$/.test(k) && /^rtmp/i.test(v)) urls.push(v);
+    for (const [k, v] of new URLSearchParams(s.slice(s.indexOf('?') + 1))) {
+      if (/\[url\]$/.test(k) && /^rtmp/i.test(v)) urls.push(v);
+      // a HeadJudge server names its connections by the camera's number in the booking: "Camera 3 to laptop"
+      const named = /\[name\]$/.test(k) && /^Camera (\d+)/.exec(v);
+      if (named && !cam) cam = +named[1];
+    }
   }
   let out = null;
   for (const u of urls) {
     const m = u.match(/^rtmps?:\/\/([^/:?\s]+)(?::(\d+))?\/live\/station(\d+)(?:\?(\S*))?/i);
     if (!m) continue;
     const q = new URLSearchParams(m[4] || '');
-    if (!out) out = { hosts: [], port: m[2] || '1935', station: +m[3], user: q.get('user') || '', pass: q.get('pass') || '' };
+    if (!out) out = { hosts: [], port: m[2] || '1935', station: +m[3], cam, user: q.get('user') || '', pass: q.get('pass') || '' };
     out.hosts.push(m[1]);
   }
   if (out) out.hosts.sort((a, b) => isTs(a) - isTs(b));   // direct before Tailscale
@@ -54,8 +62,8 @@ if (S.judge && S.judge.host && !S.judge.hosts) S.judge.hosts = [S.judge.host];  
 function render() {
   const c = S.judge;
   $('judgeSummary').innerHTML = c
-    ? `Station <b>${c.station}</b>${c.user ? ' · password set' : ''}<br>${c.hosts.map((h, i) => `${i ? 'then ' : 'Sends to '}<b>${h}</b>`).join('<br>')}`
-    : 'No station set yet: scan the QR code or paste the link.';
+    ? `${WORD} <b>${shownNo(c)}</b>${c.user ? ' · password set' : ''}<br>${c.hosts.map((h, i) => `${i ? 'then ' : 'Sends to '}<b>${h}</b>`).join('<br>')}`
+    : `No ${WORD.toLowerCase()} set yet: scan the QR code or paste the link.`;
   $('station').value = c ? String(c.station) : '1';
   $('judgeOn').checked = S.judgeOn !== false;
   $('ytOn').checked = !!S.ytOn;
@@ -67,12 +75,12 @@ function setLink(text) {
   const c = parseStationLink(text);
   if (!c) { toast("That isn't a camera link: use the QR code or RTMP address from the Cameras tab"); return false; }
   S.judge = c; S.judgeOn = true; save(S); render();
-  toast(`Station ${c.station} set`);
+  toast(`${WORD} ${shownNo(c)} set`);
   return true;
 }
 
 $('station').innerHTML = Array.from({ length: MAX_STATIONS }, (_, i) => `<option value="${i + 1}">Station ${i + 1}</option>`).join('');
-$('station').onchange = () => { if (S.judge) { S.judge.station = +$('station').value; save(S); render(); } };
+$('station').onchange = () => { if (S.judge) { S.judge.station = +$('station').value; S.judge.cam = 0; save(S); render(); } };
 $('link').onchange = () => { if ($('link').value.trim()) setLink($('link').value); };
 $('judgeOn').onchange = () => { S.judgeOn = $('judgeOn').checked; save(S); };
 $('ytOn').onchange = () => { S.ytOn = $('ytOn').checked; save(S); render(); };
@@ -130,7 +138,7 @@ $('goForm').onsubmit = async (e) => {
   try {
     await plugin.open({
       judge: toJudge ? judgeUrls(S.judge).join('|') : '', youtube: toYt ? ytUrl(S.ytKey) : '',
-      label: toJudge ? `Station ${S.judge.station}` : 'YouTube live', height, bitrate,
+      label: toJudge ? `${WORD} ${shownNo(S.judge)}` : 'YouTube live', height, bitrate,
     });
   } catch (err) { toast(`Couldn't open the camera: ${err.message || err}`); }
 };

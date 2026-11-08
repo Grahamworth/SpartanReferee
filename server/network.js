@@ -34,6 +34,8 @@ const rtmp = (ip, n, cfg) => `rtmp://${ip}:${cfg.rtmpPort}/live/station${n}${cfg
 /** What the Spartans app scans: every route, so it can go direct first and fall back to Tailscale by itself. */
 function spartansLink(addr, n, cfg) {
   const q = new URLSearchParams({ n: String(n), port: String(cfg.rtmpPort) });
+  // the camera's number in the whole booking, for the phone to show (n stays this server's own)
+  if (cfg.firstCamera) q.set('cam', String(n + cfg.firstCamera - 1));
   for (const ip of addr.lan) q.append('lan', ip);
   if (addr.tailscale) q.set('ts', addr.tailscale);
   if (cfg.password) { q.set('user', 'larix'); q.set('pass', cfg.password); }
