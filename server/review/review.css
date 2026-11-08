@@ -231,3 +231,85 @@ body.picking #replayGrid .tile { cursor: crosshair; outline: 2px dashed var(--am
 .camcard img { display: block; background: #fff; padding: 6px; max-width: 100%; height: auto; }
 .camcard p { margin: 8px 0; }
 .camcard summary { cursor: pointer; color: var(--muted); font-weight: 600; margin-bottom: 8px; }
+
+/* the tabs' icons and short names are for phones; the filters' fold is too */
+header .tabs svg, header .tabs .ts { display: none; }
+.filterbox > summary { display: none; }
+
+/* ---------------------------------------------------------------- on a phone */
+@media (max-width: 760px) {
+  body { font-size: 15px; padding-bottom: calc(66px + env(safe-area-inset-bottom)); }
+  /* the header: the name and clock, then the day and the number search */
+  header { position: static; gap: 8px 10px; padding: 10px 14px 12px; }
+  header h1 { order: 1; flex: 1 1 auto; font-size: 21px; }
+  header .brandlogo { order: 0; height: 30px; }
+  header .clock { order: 2; } .clock b { font-size: 17px; } .clock small { display: none; }
+  header .dayPick { order: 3; } .dayPick select { padding: 7px; }
+  header .numSearch { order: 4; flex: 1 1 140px; } .numSearch input { width: 100%; padding: 7px 10px; }
+  /* the tabs: a bar along the bottom, like an app */
+  header .tabs { position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0;
+    background: #16191d; border-top: 1px solid var(--line); padding: 0 0 env(safe-area-inset-bottom); box-shadow: 0 -6px 18px rgba(0, 0, 0, .35); }
+  header .tabs button { display: grid; justify-items: center; gap: 3px; padding: 9px 2px 8px; background: none; color: var(--muted); font-size: 11.5px; font-weight: 700; border-top: 3px solid transparent; }
+  header .tabs button.on { background: none; color: #fff; border-top-color: var(--brand, var(--red)); }
+  header .tabs svg { display: block; width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  header .tabs .tl { display: none; } header .tabs .ts { display: block; }
+  #toast { bottom: calc(80px + env(safe-area-inset-bottom)); max-width: calc(100vw - 32px); }
+  .transport { bottom: calc(62px + env(safe-area-inset-bottom)); }
+  .pane { padding: 10px 12px 28px; }
+  .banner { padding: 10px 14px; }
+  .busynote { margin: 10px 12px; }
+
+  /* Live: the live button and time, the timeline the full width, then what's shown */
+  .dvr { gap: 8px; margin: 18px 0 10px; }
+  .dvr #goLive { order: 1; padding: 8px 12px; }
+  .dvr .at { order: 2; margin-left: auto; min-width: 0; font-size: 17px; text-align: right; }
+  .dvr .tlwrap { order: 3; flex: 1 1 100%; margin-top: 14px; }
+  .dvr .viewpick, .dvr #pickBtnTop, .dvr details.more { order: 4; }
+  .dvr .viewpick { flex: 0 1 auto; min-width: 0; overflow-x: auto; scrollbar-width: none; }
+  .dvr .viewpick .btn, .dvr #pickBtnTop { padding: 8px 10px; font-size: 13.5px; white-space: nowrap; }
+  .dvr details.more summary { padding: 8px 4px; }
+  header .dayPick { font-size: 0; gap: 0; } /* just the day, no "Day" */
+  .judgegrid .jtile { aspect-ratio: 16 / 10; }
+  /* a camera waiting for its phone shows its codes in full, with its buttons under them */
+  .judgegrid .jtile:has(.msg.waiting) { aspect-ratio: auto; max-height: none; cursor: default; }
+  .jtile .msg.waiting { position: relative; inset: auto; padding: 44px 12px 66px; overflow: visible; }
+  .jtile:has(.msg.waiting) .tools { top: auto; bottom: 12px; left: 50%; right: auto; transform: translateX(-50%); }
+  .jtile:has(.msg.waiting) .tools .btn.track.red { font-size: 14px; padding: 8px 14px; }
+  .waitQrs { gap: 10px; flex-wrap: nowrap; width: 100%; }
+  .waitQrs figure { flex: 1 1 0; min-width: 0; text-align: center; }
+  .waitQrs img { width: min(150px, 100%); }
+  .larixBy code { font-size: 12px; }
+
+  /* Config: the whole screen */
+  .settingsbox.popout { left: 0; top: 0; transform: none; width: 100vw; height: 100dvh; max-height: none; border: 0; padding: 8px 8px calc(8px + env(safe-area-inset-bottom)); z-index: 300; }
+  .settingsbox.popout iframe { height: 100%; }
+  .settingsbox.popout > .row { gap: 4px 10px; }
+  .settingsbox.popout #settingsNote { display: none; }
+
+  /* Results: the filters fold away, the cards are tighter */
+  .filterbox { margin-bottom: 10px; }
+  .filterbox > summary { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; padding: 9px 14px; background: #2f353d; border: 1px solid #4a525c; font-weight: 700; list-style: none; }
+  .filterbox > summary::-webkit-details-marker { display: none; }
+  .filterbox > summary::after { content: "▾"; color: var(--muted); }
+  .filterbox[open] > summary::after { content: "▴"; }
+  .filterbox .filters { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0 0; }
+  .filterbox .filters label { display: grid; gap: 3px; font-size: 13px; }
+  .filterbox .filters input, .filterbox .filters select, .filters #fNum { width: 100%; min-width: 0; }
+  .filterbox .filters label:has(#fSrc) { grid-column: 1 / -1; }
+  .filterbox .filters .spacer { display: none; }
+  .athletes { gap: 8px; }
+  .ath, .side .ath { grid-template-columns: 64px minmax(0, 1fr); gap: 2px 10px; padding: 8px; }
+  .ath .pic, .side .ath .pic { width: 64px; height: 84px; }
+  .ath .reps b { font-size: 26px; }
+  .ath .acts { flex-wrap: wrap; }
+  .side .athletes { max-height: none; }
+
+  /* Watch */
+  #proofVideo { height: auto; aspect-ratio: 16 / 9; max-height: 56vh; }
+  #proof .row { gap: 8px; }
+
+  /* Cameras: two codes a row where they fit */
+  .camlist { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+  .camcard { padding: 10px; } .camcard h3 { font-size: 16px; }
+  .list td, .list th { padding: 7px 5px; font-size: 14px; }
+}

@@ -16,11 +16,12 @@
   <img id="brandLogo" class="brandlogo" hidden alt="">
   <h1>Video <span>review</span></h1>
   <nav class="tabs" role="tablist">
-    <button data-tab="live" class="on">Live</button>
-    <button data-tab="upload">Upload video</button>
-    <button data-tab="judge">All results</button>
-    <button data-tab="cameras">Cameras</button>
-    <button data-tab="log">Log</button>
+    <!-- on a phone these are the bar along the bottom, with their icons and short names -->
+    <button data-tab="live" class="on"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2" fill="currentColor"/><path d="M6.3 6.3a8 8 0 0 0 0 11.4M17.7 6.3a8 8 0 0 1 0 11.4"/></svg><span class="tl">Live</span><span class="ts">Live</span></button>
+    <button data-tab="upload"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5M4 16v4h16v-4"/></svg><span class="tl">Upload video</span><span class="ts">Upload</span></button>
+    <button data-tab="judge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1" fill="currentColor"/><circle cx="4" cy="12" r="1" fill="currentColor"/><circle cx="4" cy="18" r="1" fill="currentColor"/></svg><span class="tl">All results</span><span class="ts">Results</span></button>
+    <button data-tab="cameras"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="13" height="10" rx="1.5"/><path d="M16 11l5-3v8l-5-3"/></svg><span class="tl">Cameras</span><span class="ts">Cameras</span></button>
+    <button data-tab="log"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><span class="tl">Log</span><span class="ts">Log</span></button>
   </nav>
   <label class="dayPick">Day <select id="day" aria-label="Show this day"></select></label>
   <div class="numSearch">
@@ -141,6 +142,7 @@
 
 <!-- All results: everyone tracked, for review -->
 <section id="judge" class="pane" hidden>
+  <details class="filterbox" id="filterBox" open><summary>Filters</summary>
   <div class="row filters">
     <label>Number <input id="fNum" inputmode="numeric" placeholder="any" autocomplete="off"></label>
     <label>Camera <select id="fCam"><option value="">All</option></select></label>
@@ -151,6 +153,7 @@
     <span class="spacer"></span>
     <button class="btn" id="whatCounts">What counts?</button>
   </div>
+  </details>
   <div id="proof" class="settingsbox" hidden>
     <div class="row"><b id="proofTitle">Watch</b><span class="muted small" id="proofNote"></span><span class="spacer"></span>
       <span class="speeds" id="proofSpeeds"><button class="btn" data-prate="0.25">¼×</button><button class="btn" data-prate="0.5">½×</button><button class="btn on" data-prate="1">1×</button></span>

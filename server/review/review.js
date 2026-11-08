@@ -599,6 +599,8 @@ $('liveList').onclick = $('upResults').onclick = $('athleteList').onclick = (e) 
   if (b.dataset.watch) watch(a); else detailed(a);
 };
 for (const id of ['fNum', 'fCam', 'fSrc', 'fFrom', 'fTo']) $(id).addEventListener('input', () => renderAthletes(true));
+// on a phone the filters fold away until wanted; on a wider screen they're always there
+(() => { const narrow = matchMedia('(max-width: 760px)'), fit = () => { $('filterBox').open = !narrow.matches; }; fit(); narrow.addEventListener('change', fit); })();
 $('fClear').onclick = () => { for (const id of ['fNum', 'fCam', 'fSrc', 'fFrom', 'fTo']) $(id).value = ''; renderAthletes(true); };
 
 // Watch: the recording (or uploaded video) from just before they started, with what the AI judge saw drawn on it: their
