@@ -679,17 +679,22 @@ function watchInLive(a) {
   const t0 = Date.parse(a.firstAt) - 5000, t1 = Math.min(Date.parse(a.lastAt) + 8000, laptopNow().getTime() - 3000);
   replay(new Date(t0), Math.max(20, Math.min(600, Math.round((t1 - t0) / 1000))), true);
 }
+let proofFrom = '';   // the tab Watch was opened from, to go back to
 async function watch(a) {
   $('athletePop').hidden = true;
+  if (!proof) proofFrom = document.querySelector('header .tabs button.on')?.dataset.tab || '';
   showTab('judge');
   const r = await fetch(`/api/athlete-track?n=${a.n}`).then((x) => x.json()).catch(() => null);
   const frames = r?.frames || [], evs = r?.events || [], up = a.src === 'upload';
   const times = [...(frames.length ? [frames[0][0], frames.at(-1)[0]] : []), ...evs.flatMap((e) => (e.from != null ? [e.from, e.t] : [e.t])),
     ...(up ? [(a.firstT ?? 0) * 1000, ...(a.lastT != null ? [a.lastT * 1000] : [])] : [Date.parse(a.firstAt), Date.parse(a.lastAt)])];
   cancelAnimationFrame(proof?.raf);
-  proof = { a, frames, evs, up, first: Math.min(...times) - 3000, last: Math.max(...times) + 3000, base: 0, dur: 0, stopAt: null, raf: 0 };
+  // it starts 5 s before they're first on screen; the recording around that stays within reach
+  const seen = up ? (a.firstT ?? 0) * 1000 : Date.parse(a.firstAt), startAt = Number.isFinite(seen) ? seen - 5000 : Math.min(...times) - 3000;
+  proof = { a, frames, evs, up, first: Math.min(Math.min(...times) - 3000, startAt), last: Math.max(...times) + 3000, base: 0, dur: 0, stopAt: null, raf: 0 };
   if (up) proof.first = Math.max(0, proof.first);
-  $('proofTitle').innerHTML = `${athName(a)} · ${up ? esc(upName(a.video)) : 'camera ' + a.cam}`;
+  $('proofTitle').innerHTML = `${athName(a)} · ${up ? esc(upName(a.video)) : 'camera ' + camNo(a.cam)}`;
+  renderProofPeople(a);
   $('proofNote').textContent = frames.length ? 'What the AI judge saw: their skeleton and count as it judged them.' : 'No skeleton saved for this athlete: they were judged before this was added. Detailed analysis draws one.';
   $('proofLive').hidden = up; $('proofSync').hidden = up || !frames.length; showProofLag();
   const nth = (e) => (e.type === 'rep' ? `${e.assumed?.length ? '⚠' : '✓'} Rep ${e.count}` : '✗ No rep');
@@ -697,10 +702,37 @@ async function watch(a) {
   $('proofReps').innerHTML = evs.map((e, i) => `<button class="btn ${e.type === 'rep' ? 'good' : 'bad'}" data-ev="${i}" title="${esc(e.reasons.join(' · '))}">${nth(e)} <small>${stamp(e.t)}${e.reasons.length ? ' · ' + esc(e.reasons[0]) : ''}${e.assumed?.length ? ' · not in picture: ' + esc(e.assumed.join(', ')) : ''}</small></button>`).join('') || '<span class="muted small">No reps or no reps saved for this athlete.</span>';
   $('proof').hidden = false; $('athleteBox').hidden = true; $('analysis').hidden = true; $('rulesBox').hidden = true;
   setProofRate(1);
-  proofGo(proof.first, true);
+  proofGo(up ? Math.max(0, startAt) : startAt, true);
   proofDraw();
   scrollTo({ top: 0 });
 }
+// Everyone the AI judge found in the same video (an upload's latest judging) or on the same camera that day (a live camera), laid
+// out across it: a bar with each person's time on screen (people on screen together get a lane each) and a list in order.
+// Tapping one goes to them in the video, with their skeleton and count.
+function renderProofPeople(a) {
+  const box = $('proofPeople'), up = a.src === 'upload';
+  let list = athList.filter((x) => (up ? x.src === 'upload' && x.video === a.video : x.src === 'live' && x.cam === a.cam));
+  if (up) { const newest = list.reduce((m, x) => (!m || x.firstAt > m.firstAt ? x : m), null); list = list.filter((x) => x.round === newest?.round || x.n === a.n); }
+  const t0 = (x) => (up ? (x.firstT ?? 0) * 1000 : Date.parse(x.firstAt)), t1 = (x) => Math.max(t0(x), up ? (x.lastT ?? x.firstT ?? 0) * 1000 : Date.parse(x.lastAt));
+  list.sort((x, y) => t0(x) - t0(y));
+  if (list.length < 2) { box.hidden = true; box.innerHTML = ''; return; }
+  const lo = Math.min(...list.map(t0)), hi = Math.max(lo + 1000, ...list.map(t1)), pct = (t) => (100 * (t - lo)) / (hi - lo);
+  const lanes = [], laneOf = new Map();
+  for (const x of list) { let i = lanes.findIndex((end) => end < t0(x)); if (i < 0) { i = lanes.length; lanes.push(0); } lanes[i] = t1(x); laneOf.set(x.n, i); }
+  const when = (x) => (up ? mss(t0(x) / 1000) : hms(new Date(t0(x))));
+  box.hidden = false;
+  box.innerHTML = `<div class="pphead"><b>People in this ${up ? 'video' : 'camera’s recording'}</b><span class="muted small">${list.length} · tap one to go to them</span></div>
+    <div class="ppbar" style="--lanes:${lanes.length}">${list.map((x) => `<button type="button" data-pn="${x.n}" class="${x.n === a.n ? 'on' : ''}" style="--lane:${laneOf.get(x.n)};left:${pct(t0(x)).toFixed(2)}%;width:max(8px, ${(pct(t1(x)) - pct(t0(x))).toFixed(2)}%)" title="${shortName(x)} · ${when(x)}" aria-label="${shortName(x)} at ${when(x)}"></button>`).join('')}</div>
+    <div class="pplist">${list.map((x) => `<button type="button" data-pn="${x.n}" class="pchip${x.n === a.n ? ' on' : ''}"><b>${shortName(x)}</b><small>${when(x)} · ${Number(x.reps)} rep${Number(x.reps) === 1 ? '' : 's'}${x.noReps ? ` · ${Number(x.noReps)} no` : ''}</small></button>`).join('')}</div>`;
+  const on = box.querySelector('.pplist .on'), row = box.querySelector('.pplist');
+  // the one being watched in the middle of the list (once it's laid out)
+  if (on) requestAnimationFrame(() => { row.scrollLeft = on.offsetLeft - row.offsetLeft - row.clientWidth / 2 + on.offsetWidth / 2; });
+}
+$('proofPeople').onclick = (e) => {
+  const b = e.target.closest('[data-pn]'); if (!b || counting) return;
+  const x = athList.find((y) => y.n === +b.dataset.pn);
+  if (x && x.n !== proof?.a.n) watch(x);
+};
 // the recording at a time: a live camera's is cut from the recordings, a stretch at a time
 function proofGo(at, play) {
   const p = proof; if (!p) return;
@@ -722,8 +754,9 @@ function proofGo(at, play) {
 pv.addEventListener('error', () => { if (proof && pv.getAttribute('src')) $('proofNote').textContent = proof.up ? 'That video is no longer on the server.' : `No recording of that time (recordings are kept for ${st ? st.keepDays : '?'} days).`; });
 pv.addEventListener('ended', () => { const p = proof; if (p && !p.up && p.base + p.dur * 1000 < p.last - 1000) proofGo(p.base + p.dur * 1000, true); });
 function setProofRate(r) { pv.defaultPlaybackRate = r; pv.playbackRate = r; document.querySelectorAll('[data-prate]').forEach((b) => b.classList.toggle('on', +b.dataset.prate === r)); }
-function proofClose() { if (counting && !counting.marks.length) fetch('/api/counts?id=' + encodeURIComponent(counting.id), { method: 'DELETE' }).catch(() => {}); stopCount(); if (proof) cancelAnimationFrame(proof.raf); proof = null; pv.pause(); pv.removeAttribute('src'); pv.load(); $('proof').hidden = true; $('athleteBox').hidden = false; }
+function proofClose() { if (counting && !counting.marks.length) fetch('/api/counts?id=' + encodeURIComponent(counting.id), { method: 'DELETE' }).catch(() => {}); stopCount(); if (proof) cancelAnimationFrame(proof.raf); proof = null; pv.pause(); pv.removeAttribute('src'); pv.load(); $('proof').hidden = true; $('athleteBox').hidden = false; if (proofFrom && proofFrom !== 'judge') showTab(proofFrom); proofFrom = ''; }
 $('proofClose').onclick = proofClose;
+addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('proof').hidden && !counting && $('quickStart').hidden) proofClose(); });
 $('proofLive').onclick = () => { const a = proof?.a; proofClose(); if (a) watchInLive(a); };
 $('proofSpeeds').onclick = (e) => { const b = e.target.closest('[data-prate]'); if (b) setProofRate(+b.dataset.prate); };
 $('proofSync').onclick = (e) => { const b = e.target.closest('[data-shift]'); if (!b) return; proofLag += +b.dataset.shift; showProofLag(); try { localStorage.setItem('proofLag', proofLag); } catch { /* not kept */ } };
@@ -900,13 +933,14 @@ async function startCount(a, existing) {
   proof.first = 0; proof.last = 86400e3;
   $('proofTitle').textContent = `Counting ${name}`;
   $('proofNote').textContent = a ? 'Their skeleton shows who to follow. The AI\'s count is hidden until you finish.' : 'Follow one person. The AI\'s count is hidden until you finish.';
+  $('proofPeople').hidden = true; // one person at a time while counting
   $('proofReps').hidden = true; $('countResult').hidden = true; $('countBar').hidden = false; $('countMarks').hidden = false;
   $('proof').classList.add('counting'); $('proof').classList.remove('comparing');
   showCountMarks();
   setProofRate(0.5); proofGo(0, true);
   document.activeElement?.blur?.();
 }
-function stopCount() { $('proof').classList.remove('counting', 'comparing'); counting = null; $('countBar').hidden = true; $('countMarks').hidden = true; $('countResult').hidden = true; $('proofReps').hidden = false; }
+function stopCount() { $('proof').classList.remove('counting', 'comparing'); counting = null; if (proof) renderProofPeople(proof.a); $('countBar').hidden = true; $('countMarks').hidden = true; $('countResult').hidden = true; $('proofReps').hidden = false; }
 function showCountMarks() {
   const c = counting; if (!c) return;
   const reps = c.marks.filter((m) => m.type === 'rep').length, nos = c.marks.length - reps;

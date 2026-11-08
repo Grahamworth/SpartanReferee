@@ -171,6 +171,8 @@
       <span id="proofSync" class="proofsync" title="If the skeleton runs ahead of or behind the athlete in this recording">Timing <button class="btn" data-shift="-100">−</button><b id="proofShift"></b><button class="btn" data-shift="100">+</button></span>
       <button class="btn" id="proofLive">Open in Live</button><button class="btn" id="proofClose">Close</button></div>
     <div class="proofstage"><video id="proofVideo" controls playsinline muted></video><canvas id="proofCanvas"></canvas></div>
+    <!-- everyone the AI judge found in this video, across it: tap one to go to them -->
+    <div id="proofPeople" class="proofpeople" hidden></div>
     <div id="countBar" class="countbar" hidden>
       <div class="countkeys"><span><kbd>Space</kbd> good rep</span><span><kbd>N</kbd> no rep</span><span><kbd>Z</kbd> undo</span><span><kbd>←</kbd><kbd>→</kbd> 2 s</span><span><kbd>P</kbd> play or pause</span></div>
       <b id="countTally" class="counttally"></b>

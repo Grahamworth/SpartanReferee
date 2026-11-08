@@ -31,19 +31,27 @@
     { n: 2, src: 'live', video: '', cam: 1, round: 1, label: 2, bib: '88', firstAt: minsAgo(15), lastAt: minsAgo(11), reps: 19, noReps: 1, questionable: 1, done: true, pic: 0 },
     { n: 3, src: 'live', video: '', cam: 2, round: 1, label: 3, bib: 'No number', firstAt: minsAgo(9), lastAt: minsAgo(6), reps: 17, noReps: 2, done: true, pic: 0 },
     { n: 4, src: 'live', video: '', cam: 1, round: 2, label: 4, bib: '131', firstAt: minsAgo(2), lastAt: minsAgo(0.1), reps: 8, noReps: 0, done: false, pic: 0 },
+    // on camera 1 at the same time as others, so the people bar needs a second lane
+    { n: 5, src: 'live', video: '', cam: 1, round: 1, label: 5, bib: '57', firstAt: minsAgo(20), lastAt: minsAgo(16), reps: 21, noReps: 0, done: true, pic: 0 },
+    { n: 6, src: 'live', video: '', cam: 1, round: 1, label: 6, bib: '302', firstAt: minsAgo(8), lastAt: minsAgo(4), reps: 25, noReps: 3, done: true, pic: 0 },
   ];
+  seq = 6;
   const numbers = [
     { id: 'n1', number: '214', src: 'live', cam: 1, video: '', firstAt: minsAgo(22.2), lastAt: minsAgo(22.1), firstT: 0, lastT: 0 },
     { id: 'n2', number: '88', src: 'live', cam: 1, video: '', firstAt: minsAgo(15.3), lastAt: minsAgo(15.2), firstT: 0, lastT: 0 },
   ];
   const events = [{ t: minsAgo(25), cam: 1, type: 'connected', route: 'internet' }, { t: minsAgo(10), cam: 2, type: 'lost', route: '' }];
   const uploads = [], files = new Map(), jobs = [];
-  const track = (a) => ({ frames: [], events: Array.from({ length: Math.min(a.reps, 6) }, (_, i) => ({ type: i === 2 && a.noReps ? 'norep' : 'rep', count: i + 1, t: Date.parse(a.firstAt) + 20000 + i * 9000, reasons: i === 2 && a.noReps ? ['Jump: both feet off the ground'] : [] })) });
+  const track = (a) => ({ frames: [], events: Array.from({ length: Math.min(a.reps, 6) }, (_, i) => ({ type: i === 2 && a.noReps ? 'norep' : 'rep', count: i + 1, t: a.src === 'upload' ? ((a.firstT || 0) + 2 + i * 5) * 1000 : Date.parse(a.firstAt) + 20000 + i * 9000, reasons: i === 2 && a.noReps ? ['Jump: both feet off the ground'] : [] })) });
   const jobView = (j) => {
     const pct = Math.min(100, Math.round((Date.now() - j.at) / 80));
     if (j.state === 'running' && pct >= 100) {
       j.state = 'done';
-      athletes.push({ n: ++seq, src: 'upload', video: j.video, cam: 0, round: 1, label: seq, bib: '305', firstT: 3, lastT: 41, firstAt: iso(j.at), lastAt: iso(Date.now()), reps: 12, noReps: 1, done: true, pic: 0 });
+      // the people "found" in it, at different points in the video
+      const round = Date.now();
+      for (const [bib, firstT, lastT, reps, noReps] of [['305', 3, 41, 12, 1], ['44', 12, 58, 15, 0], ['No number', 47, 80, 9, 2], ['118', 66, 112, 18, 0]]) {
+        athletes.push({ n: ++seq, src: 'upload', video: j.video, cam: 0, round, label: seq, bib, firstT, lastT, firstAt: iso(j.at), lastAt: iso(Date.now()), reps, noReps, done: true, pic: 1 });
+      }
       athletesRev++;
     }
     return { id: j.id, video: j.video, name: j.name, state: j.state, pct: j.state === 'done' ? 100 : pct, why: j.why || '' };
@@ -124,22 +132,34 @@
       setTimeout(tick, 150);
     }
   };
-  // what the page points frames and videos at: the camera settings come from the site's own judge page, a started AI judge shows TEST,
-  // and an uploaded video plays from this browser
+  // a pretend picture of an athlete, as the judge crops one from the video: a figure in a coloured top, with their number
+  const SHIRTS = ['#ffc400', '#4aa3ff', '#ff7a59', '#3ddc97', '#c084fc', '#f472b6'];
+  const pic = (n) => {
+    const a = athletes.find((x) => x.n === n), bib = a && a.bib !== 'No number' ? a.bib : '', shirt = SHIRTS[n % SHIRTS.length];
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 80"><rect width="60" height="80" fill="#2b3640"/><rect y="62" width="60" height="18" fill="#3a352d"/>
+      <circle cx="30" cy="14" r="8" fill="#c9a27e"/><path d="M17 26h26l3 24H14z" fill="${shirt}"/><path d="M19 50h9l-1 26h-7zM32 50h9l-1 26h-7z" fill="#39424d"/>
+      <path d="M17 27l-7 20M43 27l7 20" stroke="#c9a27e" stroke-width="5" stroke-linecap="round"/>
+      ${bib ? `<rect x="21" y="32" width="18" height="11" fill="#fff"/><text x="30" y="40.5" font-size="8" font-family="Arial" font-weight="700" text-anchor="middle">${bib}</text>` : ''}</svg>`;
+    return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+  };
+  for (const a of athletes) a.pic = 1;
+  // what the page points frames, videos and pictures at: the camera settings come from the site's own judge page, a started AI judge
+  // shows TEST, an uploaded video plays from this browser, and athletes' pictures are drawn here
   const rewrite = (v) => {
     const s = String(v);
+    const p = /\/api\/athlete-pic\?n=(\d+)/.exec(s); if (p) return pic(+p[1]);
     if (s.startsWith('/judge/judge.html')) return s.includes('settings=1') ? s.replace('/judge/judge.html', '/judge.html') : 'test-judge.html';
     const up = /^\/uploads\/(.+)$/.exec(s); if (up) return files.get(decodeURIComponent(up[1])) || s;
     return s;
   };
-  for (const El of [HTMLIFrameElement, HTMLVideoElement]) {
-    const d = Object.getOwnPropertyDescriptor(El === HTMLIFrameElement ? HTMLIFrameElement.prototype : HTMLMediaElement.prototype, 'src');
+  for (const El of [HTMLIFrameElement, HTMLVideoElement, HTMLImageElement]) {
+    const d = Object.getOwnPropertyDescriptor(El === HTMLVideoElement ? HTMLMediaElement.prototype : El.prototype, 'src');
     Object.defineProperty(El.prototype, 'src', { get() { return d.get.call(this); }, set(v) { d.set.call(this, rewrite(v)); }, configurable: true });
   }
   new MutationObserver((list) => {
     for (const m of list) for (const n of m.addedNodes) {
       if (n.nodeType !== 1) continue;
-      for (const el of [n, ...n.querySelectorAll('video[src], iframe[src]')]) if (el.matches?.('video[src], iframe[src]')) { const was = el.getAttribute('src'), now = rewrite(was); if (now !== was) el.setAttribute('src', now); }
+      for (const el of [n, ...n.querySelectorAll('video[src], iframe[src], img[src]')]) if (el.matches?.('video[src], iframe[src], img[src]')) { const was = el.getAttribute('src'), now = rewrite(was); if (now !== was) el.setAttribute('src', now); }
     }
   }).observe(document.documentElement, { childList: true, subtree: true });
   window.HJ_TEST = true;
