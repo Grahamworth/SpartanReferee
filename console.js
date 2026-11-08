@@ -139,6 +139,7 @@ async function enter() {
   if (!me.user) { signOut(); return start(); }
   $('who').textContent = me.user.email;
   show($('adminLink'), !!me.admin); // only you see the way to customers and prices
+  show($('testReviewLink'), !!me.admin); // and to the video review with pretend data, to try it without a server
   show($('signIn'), false);
   const { company } = await call('companies/mine');
   if (!company) { show($('none'), true); return; }
