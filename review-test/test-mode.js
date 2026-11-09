@@ -1,8 +1,10 @@
 // Test mode for the video review: the real page (server/review), on the site, with no server behind it. Everything it would ask its
 // server for is answered here, in the browser, with a pretend company: two cameras, some results, and uploads that "analyse" in a
-// few seconds. Camera 1 is this browser's own camera: shown live the way a server shows one (WebRTC), and recorded here, so rewinding
-// Live, Watch, Pick athlete and previous recordings play real video. Camera 2 waits for its phone, with its QR codes. Starting an AI
-// judge shows TEST over the picture instead of a judge, and pretend athletes turn up in the recording. Nothing is sent anywhere:
+// few seconds. Camera 1 is an animated demo of the pretend athletes doing burpees (drawn in the colours and numbers of their results'
+// pictures, doing the reps they're credited with): shown live the way a server shows a camera (WebRTC), and recorded here, with its
+// last 8 minutes made in advance, so rewinding Live, Watch, Pick athlete and previous recordings show them. Camera 2 waits for its
+// phone, with its QR codes. Starting an AI judge shows TEST over the picture instead of a judge, and the people who come along are
+// added to the results. Nothing is sent anywhere:
 // recordings and uploaded videos stay in this browser. Built into the site by scripts/build-review-test.mjs; admins only.
 //
 // The free camera (window.HJ_FREE, built as /review-free/ for any company) is the same thing with nothing pretend: one camera, this
@@ -34,24 +36,76 @@
     { n: 2, live: false, from: '', route: '', video: '', watchers: 0, ai: false },
   ].slice(0, FREE ? 1 : 2);
   let athletesRev = 1, seq = 4, judgeSettings = {}, counts = [];
-  const athletes = FREE ? [] : [
-    { n: 1, src: 'live', video: '', cam: 1, round: 1, label: 1, bib: '214', firstAt: minsAgo(22), lastAt: minsAgo(18), reps: 23, noReps: 0, done: true, pic: 0 },
-    { n: 2, src: 'live', video: '', cam: 1, round: 1, label: 2, bib: '88', firstAt: minsAgo(15), lastAt: minsAgo(11), reps: 19, noReps: 1, questionable: 1, done: true, pic: 0 },
-    { n: 3, src: 'live', video: '', cam: 2, round: 1, label: 3, bib: 'No number', firstAt: minsAgo(9), lastAt: minsAgo(6), reps: 17, noReps: 2, done: true, pic: 0 },
-    { n: 4, src: 'live', video: '', cam: 1, round: 2, label: 4, bib: '131', firstAt: minsAgo(2), lastAt: minsAgo(0.1), reps: 8, noReps: 0, done: false, pic: 0 },
-    // on camera 1 at the same time as others, so the people bar needs a second lane
-    { n: 5, src: 'live', video: '', cam: 1, round: 1, label: 5, bib: '57', firstAt: minsAgo(20), lastAt: minsAgo(16), reps: 21, noReps: 0, done: true, pic: 0 },
-    { n: 6, src: 'live', video: '', cam: 1, round: 1, label: 6, bib: '302', firstAt: minsAgo(8), lastAt: minsAgo(4), reps: 25, noReps: 3, done: true, pic: 0 },
-  ];
+  // ---- test mode's people: who camera 1's animated demo shows (below), on a timetable. Each is drawn doing exactly the reps and no
+  // reps they're credited with, in the colours and number of their picture. The first six were there before the page was opened
+  // (its last 8 minutes are made in advance, as if it had been recording); more come along while it's open.
+  const SHIRTS = ['#ffc400', '#4aa3ff', '#ff7a59', '#3ddc97', '#c084fc', '#f472b6'];
+  const BIBS = ['12', '407', 'No number', '73', '219', '5', '640'];
+  const PAST_MS = 8 * 60e3;
+  const timetable = [];   // { bib, shirt, lane, first, last, reps, noReps, questionable, cycle, events: [{ t, type, count }], n }
+  const NOREP_WHY = ['Hands: not over the ears at the top'];
+  function plan(o) {
+    const total = o.reps + o.noReps, from = o.first + 3000, step = (o.last - 2000 - from) / total;
+    const misses = new Set(Array.from({ length: o.noReps }, (_, k) => Math.floor(((k + 1) * total) / (o.noReps + 1))));
+    let count = 0;
+    o.events = Array.from({ length: total }, (_, i) => (misses.has(i) ? { t: from + step * (i + 0.5), type: 'norep', count } : { t: from + step * (i + 0.5), type: 'rep', count: ++count }));
+    o.cycle = Math.min(3000, step * 0.9);
+    timetable.push(o);
+    return o;
+  }
+  const athletes = [], schedOf = new Map();   // n → { a: its timetable entry, base: the time 0 of its video (an analysed recording) }
+  const numbers = [];
+  if (!FREE) {
+    const m = (x) => T0 + x * 60e3;
+    for (const [n, bib, lane, from, to, reps, noReps, questionable, round] of [
+      [1, '214', 0, -7.8, -5.2, 23, 0, 0, 1], [5, '57', 1, -7.2, -4.6, 21, 0, 0, 1], [2, '88', 0, -4.8, -2.2, 19, 1, 1, 1],
+      [6, '302', 1, -4.2, -1.4, 25, 3, 0, 1], [3, 'No number', 0, -2.0, -0.3, 17, 2, 0, 1], [4, '131', 1, -1.0, 1.6, 18, 0, 0, 2]]) {
+      const a = plan({ bib, shirt: SHIRTS[n % SHIRTS.length], lane, first: m(from), last: m(to), reps, noReps, questionable, n });
+      athletes.push({ n, src: 'live', video: '', cam: 1, round, label: n, bib, firstAt: iso(a.first), lastAt: iso(a.first), reps: 0, noReps: 0, questionable, done: false, pic: 1 });
+      schedOf.set(n, { a, base: 0 });
+    }
+    // two numbers shown to the camera just before their athletes started
+    for (const [id, n] of [['n1', 1], ['n2', 2]]) { const a = schedOf.get(n).a; numbers.push({ id, number: a.bib, src: 'live', cam: 1, video: '', firstAt: iso(a.first - 12e3), lastAt: iso(a.first - 11e3), firstT: 0, lastT: 0 }); }
+  }
   seq = FREE ? 0 : 6;
-  const numbers = FREE ? [] : [
-    { id: 'n1', number: '214', src: 'live', cam: 1, video: '', firstAt: minsAgo(22.2), lastAt: minsAgo(22.1), firstT: 0, lastT: 0 },
-    { id: 'n2', number: '88', src: 'live', cam: 1, video: '', firstAt: minsAgo(15.3), lastAt: minsAgo(15.2), firstT: 0, lastT: 0 },
-  ];
-  const events = FREE ? [] : [{ t: minsAgo(25), cam: 1, type: 'connected', route: 'internet' }, { t: minsAgo(10), cam: 2, type: 'lost', route: '' }];
+  // more people while it's open, each lane free again a few seconds after the last one left; picked up by camera 1's AI judge if it's on
+  const laneFree = [T0 + 12e3, T0 + 1.6 * 60e3 + 10e3];
+  function planAhead(until) {
+    for (let l = 0; l < 2; l++) while (laneFree[l] < until) {
+      const k = timetable.length, first = laneFree[l], last = first + 60e3 + ((k * 17) % 30) * 1e3;
+      plan({ bib: BIBS[k % BIBS.length], shirt: SHIRTS[(k + 2) % SHIRTS.length], lane: l, first, last, reps: 8 + ((k * 5) % 7), noReps: k % 3 === 0 ? 1 : 0, questionable: 0 });
+      laneFree[l] = last + 8e3 + (k % 3) * 4e3;
+    }
+  }
+  // what the results say now: reps so far, still going or done, and anyone the AI judge has just picked up
+  function catchUp() {
+    if (FREE) return;
+    const now = Date.now();
+    planAhead(now + 5 * 60e3);
+    for (const a of timetable) if (a.n == null && cams[0].ai && cams[0].live && now >= a.first && now < a.last) {
+      a.n = ++seq;
+      athletes.push({ n: a.n, src: 'live', video: '', cam: 1, round: 3, label: a.n, bib: a.bib, firstAt: iso(now), lastAt: iso(now), reps: 0, noReps: 0, done: false, pic: 1 });
+      schedOf.set(a.n, { a, base: 0 }); athletesRev++;
+    }
+    for (const x of athletes) {
+      const sc = x.src === 'live' && schedOf.get(x.n); if (!sc) continue;
+      const seen = sc.a.events.filter((e) => e.t <= now), reps = seen.filter((e) => e.type === 'rep').length, noReps = seen.length - reps, done = now > sc.a.last;
+      if (reps !== x.reps || noReps !== x.noReps || done !== x.done) { Object.assign(x, { reps, noReps, done }); athletesRev++; }
+      x.lastAt = iso(Math.min(now, sc.a.last));
+    }
+  }
+  const events = FREE ? [] : [{ t: minsAgo(10), cam: 2, type: 'lost', route: '' }];
   const uploads = [], files = new Map(), jobs = [], prevSources = {};
-  // a few reps and a no rep, spread across the time they were on screen
+  // an athlete's proof for Watch: for one in the demo, their skeleton and every rep and no rep, as the AI judge would have saved them
+  // (times on the clock, or ms into the video for one found in an analysed recording); otherwise a few reps and a no rep
   const track = (a) => {
+    const sc = schedOf.get(a.n);
+    if (sc) {
+      const now = Date.now(), d = sc.a, lo = a.src === 'upload' ? sc.base + (a.firstT || 0) * 1000 : d.first, hi = Math.min(now, a.src === 'upload' ? sc.base + (a.lastT || 0) * 1000 : d.last + 1500);
+      const frames = [];
+      for (let t = lo; t <= hi; t += 83) { const p = poseAt(d, t); if (p) frames.push(proofFrame(d, p.j, Math.round(t - sc.base))); }
+      return { frames, events: d.events.filter((e) => e.t >= lo && e.t <= hi).map((e) => ({ type: e.type, count: e.count, t: Math.round(e.t - sc.base), from: Math.round(e.t - 0.52 * d.cycle - sc.base), reasons: e.type === 'norep' ? NOREP_WHY : [], assumed: [] })) };
+    }
     const k = Math.min(a.reps, 6), up = a.src === 'upload';
     const t0 = up ? (a.firstT || 0) * 1000 : Date.parse(a.firstAt), t1 = up ? (a.lastT ?? a.firstT ?? 0) * 1000 : Date.parse(a.lastAt), step = (t1 - t0) / (k + 1);
     return { frames: [], events: Array.from({ length: k }, (_, i) => ({ type: i === 2 && a.noReps ? 'norep' : 'rep', count: i + 1, t: Math.round(t0 + step * (i + 1)), reasons: i === 2 && a.noReps ? ['Jump: both feet off the ground'] : [] })) };
@@ -60,8 +114,20 @@
     const pct = Math.min(100, Math.round((Date.now() - j.at) / 80));
     if (j.state === 'running' && pct >= 100) {
       j.state = 'done';
-      // the people "found" in it, at different points in the video (a share of how long it is: about 2 minutes for an upload)
       const round = Date.now(), span = j.span || 115;
+      // a recording of the demo camera: the people in it while it recorded, with what they did in it
+      if (j.from != null) {
+        const s = j.from, e = s + span * 1000;
+        for (const d of timetable) {
+          if (d.last < s || d.first > e) continue;
+          const seen = d.events.filter((x) => x.t >= s && x.t <= e), reps = seen.filter((x) => x.type === 'rep').length;
+          athletes.push({ n: ++seq, src: 'upload', video: j.video, cam: 0, round, label: seq, bib: d.bib, firstT: Math.max(0, (d.first - s) / 1000), lastT: Math.min(span, (d.last - s) / 1000), firstAt: iso(j.at), lastAt: iso(Date.now()), reps, noReps: seen.length - reps, done: true, pic: 1 });
+          schedOf.set(seq, { a: d, base: s });
+        }
+        athletesRev++;
+        return { id: j.id, video: j.video, name: j.name, state: j.state, pct: 100, why: '' };
+      }
+      // an uploaded video: the people "found" in it, at different points in it (a share of how long it is: about 2 minutes)
       for (const [bib, from, to, reps, noReps] of [['305', 0.03, 0.36, 12, 1], ['44', 0.1, 0.5, 15, 0], ['No number', 0.41, 0.7, 9, 2], ['118', 0.57, 0.97, 18, 0]]) {
         const firstT = Math.round(from * span * 10) / 10, lastT = Math.round(to * span * 10) / 10;
         athletes.push({ n: ++seq, src: 'upload', video: j.video, cam: 0, round, label: seq, bib, firstT, lastT, firstAt: iso(j.at), lastAt: iso(Date.now()), reps, noReps, done: true, pic: 1 });
@@ -83,10 +149,139 @@
   const PIECE_MS = 10e3, KEEP_MS = 20 * 60e3, BLOCK_MS = FREE ? 60e3 : 10 * 60e3, MAX_SECS = 60;
   const cam1 = { stream: null, rec: null, live: null, type: '', pieces: [], began: 0, why: '', gen: 0, tries: 0 };
   const say = (what) => { cam1.why = what; const el = document.getElementById('tmCam'); if (el) el.textContent = what; };
+
+  // ---- test mode's camera 1: an animated demo, drawn from the timetable for any moment. Side-on figures doing burpees in two lanes:
+  // down, chest to the floor, back up and a jump with hands over the head (a no rep: no jump, hands at the chest).
+  const DW = 640, DH = 360, FLOOR = 0.86 * DH, SIZE = 0.5 * DH, LANE_X = [0.3 * DW, 0.68 * DW], DEMO_FPS = 15, PAST_FPS = 10;
+  const J = (toe, heel, ankle, knee, hip, shoulder, elbow, wrist, ear, nose) => ({ toe, heel, ankle, knee, hip, shoulder, elbow, wrist, ear, nose });
+  const POSE = {
+    stand: J([0.09, 0], [-0.04, 0], [0, -0.02], [0.01, -0.27], [0, -0.52], [0.01, -0.8], [0.03, -0.64], [0.06, -0.5], [0, -0.9], [0.07, -0.9]),
+    squat: J([0.09, 0], [-0.04, 0], [0, -0.02], [0.2, -0.2], [-0.04, -0.26], [0.17, -0.46], [0.27, -0.24], [0.32, -0.01], [0.22, -0.55], [0.29, -0.54]),
+    plank: J([-0.6, 0], [-0.67, -0.05], [-0.64, -0.03], [-0.4, -0.05], [-0.13, -0.07], [0.2, -0.07], [0.12, -0.13], [0.25, -0.01], [0.3, -0.1], [0.37, -0.07]),
+    jump: J([0.09, -0.1], [-0.04, -0.13], [0, -0.12], [0.01, -0.38], [0, -0.62], [0.01, -0.9], [0.03, -1.06], [0.04, -1.2], [0, -1], [0.07, -1]),
+    top: J([0.09, 0], [-0.04, 0], [0, -0.02], [0.01, -0.27], [0, -0.52], [0.01, -0.8], [0.12, -0.7], [0.16, -0.82], [0, -0.9], [0.07, -0.9]),
+  };
+  // where in a burpee (0 to 1) each pose is reached; the rep counts at the top of the jump (0.82)
+  const CYCLE = [[0, 'stand'], [0.15, 'squat'], [0.3, 'plank'], [0.4, 'plank'], [0.55, 'squat'], [0.7, 'stand'], [0.82, 'top'], [1, 'stand']];
+  function cyclePose(p, good) {
+    let i = 0; while (i < CYCLE.length - 2 && p >= CYCLE[i + 1][0]) i++;
+    const [a0, n0] = CYCLE[i], [a1, n1] = CYCLE[i + 1], k = Math.max(0, Math.min(1, (p - a0) / (a1 - a0))), e = k * k * (3 - 2 * k);
+    const A = POSE[n0 === 'top' && good ? 'jump' : n0], B = POSE[n1 === 'top' && good ? 'jump' : n1], out = {};
+    for (const j in A) out[j] = [A[j][0] + (B[j][0] - A[j][0]) * e, A[j][1] + (B[j][1] - A[j][1]) * e];
+    return out;
+  }
+  // someone's pose at time t, and how faded in or out they are (null: not there)
+  function poseAt(d, t) {
+    if (t < d.first || t > d.last + 1500) return null;
+    const alpha = Math.max(0, Math.min(1, (t - d.first) / 800, (d.last + 1500 - t) / 800));
+    const e = d.events.find((x) => t >= x.t - 0.82 * d.cycle && t <= x.t + 0.18 * d.cycle);
+    return { j: e ? cyclePose((t - (e.t - 0.82 * d.cycle)) / d.cycle, e.type === 'rep') : POSE.stand, alpha };
+  }
+  const place = (d, u, side = 0) => [LANE_X[d.lane] + u[0] * SIZE + side, FLOOR + u[1] * SIZE];
+  // the points the AI judge saves for Watch (app.js PROOF_POINTS: nose, ears, shoulders, elbows, wrists, hips, knees, ankles, heels, toes)
+  const PROOF_JOINTS = ['nose', 'ear', 'ear', 'shoulder', 'shoulder', 'elbow', 'elbow', 'wrist', 'wrist', 'hip', 'hip', 'knee', 'knee', 'ankle', 'ankle', 'heel', 'heel', 'toe', 'toe'];
+  const proofFrame = (d, j, t) => [t, 0, ...PROOF_JOINTS.flatMap((k, i) => { const [x, y] = place(d, j[k], i % 2 ? 0 : 3); return [Math.round((x / DW) * 1e4), Math.round((y / DH) * 1e4)]; })];
+  function drawPerson(x, d, j, alpha) {
+    const P = (k, side = 0) => place(d, j[k], side), line = (pts, w, colour) => { x.strokeStyle = colour; x.lineWidth = w; x.beginPath(); pts.forEach(([a, b], i) => (i ? x.lineTo(a, b) : x.moveTo(a, b))); x.stroke(); };
+    x.save(); x.globalAlpha = alpha; x.lineCap = 'round'; x.lineJoin = 'round';
+    const [fx] = P('ankle'), [hx] = P('hip');
+    x.fillStyle = 'rgba(0,0,0,.25)'; x.beginPath(); x.ellipse((fx + hx) / 2, FLOOR + 3, SIZE * 0.32, 5, 0, 0, Math.PI * 2); x.fill();
+    for (const side of [5, 0]) { // the far leg and arm a shade darker, then the near ones
+      line([P('hip', side), P('knee', side), P('ankle', side)], SIZE * 0.075, side ? '#2c333c' : '#39424d');
+      line([P('heel', side), P('toe', side)], SIZE * 0.045, '#15191e');
+      if (side) line([P('shoulder', side), P('elbow', side), P('wrist', side)], SIZE * 0.05, '#a9845f');
+      else {
+        line([P('shoulder'), P('hip')], SIZE * 0.16, d.shirt);
+        line([P('shoulder'), P('elbow'), P('wrist')], SIZE * 0.055, '#c9a27e');
+      }
+    }
+    // the number on their chest, along their body
+    if (d.bib && d.bib !== 'No number') {
+      const [sx, sy] = P('shoulder'), [qx, qy] = P('hip'), ang = Math.atan2(qy - sy, qx - sx) - Math.PI / 2;
+      x.save(); x.translate((sx + qx) / 2, (sy + qy) / 2); x.rotate(ang);
+      x.fillStyle = '#fff'; x.fillRect(-SIZE * 0.07, -SIZE * 0.045, SIZE * 0.14, SIZE * 0.09);
+      x.fillStyle = '#111'; x.font = `700 ${Math.round(SIZE * 0.065)}px Arial`; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(d.bib, 0, 1);
+      x.restore();
+    }
+    const [ex, ey] = P('ear'), [nx, ny] = P('nose');
+    x.fillStyle = '#c9a27e'; x.beginPath(); x.arc(ex + (nx - ex) * 0.4, ey + (ny - ey) * 0.4, SIZE * 0.075, 0, Math.PI * 2); x.fill();
+    x.fillStyle = '#3b2a1e'; x.beginPath(); x.arc(ex + (nx - ex) * 0.25, ey + (ny - ey) * 0.25 - SIZE * 0.02, SIZE * 0.07, Math.PI, Math.PI * 2); x.fill();
+    x.restore();
+  }
+  const clock = (t) => { const d = new Date(t), p = (n) => String(n).padStart(2, '0'); return `${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`; };
+  function drawScene(x, t) {
+    const g = x.createLinearGradient(0, 0, 0, FLOOR); g.addColorStop(0, '#26303a'); g.addColorStop(1, '#3a4652');
+    x.fillStyle = g; x.fillRect(0, 0, DW, FLOOR);
+    x.fillStyle = '#3a352d'; x.fillRect(0, FLOOR, DW, DH - FLOOR);
+    x.fillStyle = '#2a2620'; for (const lx of LANE_X) x.fillRect(lx - SIZE * 0.78, FLOOR - 2, SIZE * 1.25, 8);
+    x.fillStyle = 'rgba(255,255,255,.06)'; for (let i = 0; i < 6; i++) x.fillRect(40 + i * 110, 40, 70, 50); // windows on the far wall
+    for (const d of timetable) { const p = poseAt(d, t); if (p) drawPerson(x, d, p.j, p.alpha); }
+    x.fillStyle = 'rgba(0,0,0,.55)'; x.fillRect(8, 8, 196, 26); x.fillRect(DW - 70, 8, 62, 26);
+    x.fillStyle = '#fff'; x.font = '700 15px Arial'; x.textAlign = 'left'; x.textBaseline = 'middle';
+    x.fillText(`CAMERA 1  ${clock(t)}`, 16, 21); x.fillStyle = '#ffc400'; x.fillText('DEMO', DW - 62, 21);
+  }
+  // live: drawn 15 times a second, and given to the page as camera 1 (recorded and shown just as a real camera is)
+  function demoStream() {
+    const c = document.createElement('canvas'); c.width = DW; c.height = DH;
+    const x = c.getContext('2d'), draw = () => drawScene(x, Date.now());
+    draw(); setInterval(draw, 1000 / DEMO_FPS);
+    return c.captureStream(DEMO_FPS);
+  }
+
+  // ---- its last 8 minutes, made in advance: drawn and compressed as fast as this computer can (WebCodecs), as 10-second pieces like
+  // the ones recorded live, so it's as if camera 1 had been recording before the page was opened. Newest first.
+  const cat = (parts) => { const o = new Uint8Array(parts.reduce((n, p) => n + p.length, 0)); let i = 0; for (const p of parts) { o.set(p, i); i += p.length; } return o; };
+  const vsize = (n) => { let len = 1; while (len < 8 && n >= 2 ** (7 * len) - 1) len++; const o = new Uint8Array(len); for (let i = len - 1, v = n; i >= 0; i--, v = Math.floor(v / 256)) o[i] = v % 256; o[0] |= 1 << (8 - len); return o; };
+  const el = (id, ...body) => { const b = cat(body); return cat([new Uint8Array(id), vsize(b.length), b]); };
+  const uint = (id, v) => { const o = []; do { o.unshift(v % 256); v = Math.floor(v / 256); } while (v > 0); return el(id, new Uint8Array(o)); };
+  const text = (id, s) => el(id, new TextEncoder().encode(s));
+  // a WebM file of VP8 frames, one cluster per key frame (times in ms; the segment's size left open, as a browser's recorder does)
+  function webm(frames) {
+    const head = el([0x1A, 0x45, 0xDF, 0xA3], uint([0x42, 0x86], 1), uint([0x42, 0xF7], 1), uint([0x42, 0xF2], 4), uint([0x42, 0xF3], 8), text([0x42, 0x82], 'webm'), uint([0x42, 0x87], 2), uint([0x42, 0x85], 2));
+    const info = el([0x15, 0x49, 0xA9, 0x66], uint([0x2A, 0xD7, 0xB1], 1e6), text([0x4D, 0x80], 'HeadJudge demo'), text([0x57, 0x41], 'HeadJudge demo'));
+    const tracks = el([0x16, 0x54, 0xAE, 0x6B], el([0xAE], uint([0xD7], 1), uint([0x73, 0xC5], 1), uint([0x83], 1), text([0x86], 'V_VP8'), el([0xE0], uint([0xB0], DW), uint([0xBA], DH))));
+    const clusters = [];
+    let at = 0, blocks = [];
+    const close = () => { if (blocks.length) clusters.push(el([0x1F, 0x43, 0xB6, 0x75], uint([0xE7], at), ...blocks)); blocks = []; };
+    for (const f of frames) {
+      if (f.key) { close(); at = Math.round(f.t); }
+      const rel = Math.round(f.t) - at;
+      blocks.push(el([0xA3], new Uint8Array([0x81, (rel >> 8) & 255, rel & 255, f.key ? 0x80 : 0]), f.data));
+    }
+    close();
+    return new Blob([head, new Uint8Array([0x18, 0x53, 0x80, 0x67, 0x01, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]), info, tracks, ...clusters], { type: 'video/webm' });
+  }
+  async function makePast(until) {
+    if (!window.VideoEncoder || cam1.type !== 'video/webm;codecs=vp8') return;
+    const config = { codec: 'vp8', width: DW, height: DH, bitrate: 1e6, framerate: PAST_FPS };
+    if (!(await VideoEncoder.isConfigSupported(config).catch(() => null))?.supported) return;
+    const c = document.createElement('canvas'); c.width = DW; c.height = DH;
+    const x = c.getContext('2d', { willReadFrequently: false });
+    for (let end = until; end > until - PAST_MS + 500; end -= PIECE_MS) {
+      const start = Math.max(until - PAST_MS, end - PIECE_MS), frames = [];
+      const enc = new VideoEncoder({ output: (ch) => { const data = new Uint8Array(ch.byteLength); ch.copyTo(data); frames.push({ t: ch.timestamp / 1000, key: ch.type === 'key', data }); }, error: () => {} });
+      enc.configure(config);
+      const n = Math.round(((end - start) / 1000) * PAST_FPS);
+      for (let i = 0; i < n; i++) {
+        drawScene(x, start + (i * 1000) / PAST_FPS);
+        const f = new VideoFrame(c, { timestamp: Math.round((i * 1e6) / PAST_FPS), duration: Math.round(1e6 / PAST_FPS) });
+        enc.encode(f, { keyFrame: i % PAST_FPS === 0 }); f.close();
+        while (enc.encodeQueueSize > 4) await new Promise((r) => setTimeout(r, 2));
+      }
+      await enc.flush(); enc.close();
+      if (!frames.length) return;
+      const blob = webm(frames.sort((a, b) => a.t - b.t));
+      const at = cam1.pieces.findIndex((p) => p.start > start);
+      cam1.pieces.splice(at < 0 ? cam1.pieces.length : at, 0, { start, end, chunks: [blob], size: blob.size });
+      await new Promise((r) => setTimeout(r, 30)); // the page carries on meanwhile
+    }
+  }
+
   async function startCamera() {
-    if (!navigator.mediaDevices?.getUserMedia) return say('camera 1: this browser can\'t share a camera here');
+    if (FREE && !navigator.mediaDevices?.getUserMedia) return say('camera 1: this browser can\'t share a camera here');
     try {
-      cam1.stream = await navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 1280 }, height: { ideal: 720 }, frameRate: { ideal: 30 } }, audio: false });
+      // test mode's camera 1 is the animated demo; the free camera's is this browser's own
+      cam1.stream = FREE ? await navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 1280 }, height: { ideal: 720 }, frameRate: { ideal: 30 } }, audio: false }) : demoStream();
     } catch (e) {
       if (cam1.began && e.name !== 'NotAllowedError' && cam1.tries++ < 10) { setTimeout(startCamera, 3000); return; } // it was on: keep trying a while
       return say(e.name === 'NotAllowedError' ? 'camera 1: allow the camera (address bar) and reload to record from it' : cam1.began ? 'camera 1: this browser\'s camera stopped' : 'camera 1: no camera found on this computer');
@@ -94,8 +289,9 @@
     const gen = ++cam1.gen, track = cam1.stream.getVideoTracks()[0], s = track.getSettings();
     cam1.live = cam1.stream.clone(); // what live viewers are sent (whep, below)
     cam1.tries = 0;
-    Object.assign(cams[0], { live: true, route: 'this browser', video: s.width ? `${s.width}×${s.height}` : '' });
-    events.push({ t: iso(Date.now()), cam: 1, type: 'connected', route: 'this browser' });
+    const route = FREE ? 'this browser' : 'demo';
+    Object.assign(cams[0], { live: true, route, video: s.width ? `${s.width}×${s.height}` : `${DW}×${DH}` });
+    events.push({ t: iso(cam1.began || FREE ? Date.now() : T0 - PAST_MS), cam: 1, type: 'connected', route });
     // lost (unplugged, the computer slept, the browser's camera service restarted): back as soon as it can be, as a phone reconnects
     track.addEventListener('ended', () => {
       if (gen !== cam1.gen) return;
@@ -106,10 +302,12 @@
     });
     cam1.type = REC_TYPES.find((t) => window.MediaRecorder?.isTypeSupported(t) && window.MediaSource?.isTypeSupported(t)) || '';
     if (!cam1.type) return say('camera 1: live from this browser\'s camera, but this browser can\'t record it here');
-    if (!cam1.began) cam1.began = Date.now();
+    const first = !cam1.began;
+    if (first) cam1.began = FREE ? Date.now() : T0 - PAST_MS; // the demo has been "recording" for 8 minutes
     cam1.rec = cam1.stream.clone(); // the recording's own copy: a live viewer joining doesn't hold up its frames
-    say('camera 1: this browser\'s camera, recorded in this browser');
+    say(FREE ? 'camera 1: this browser\'s camera, recorded in this browser' : 'camera 1: an animated demo, recorded in this browser');
     nextPiece(gen);
+    if (first && !FREE) makePast(cam1.pieces[0].start).catch(() => {});
   }
   // Each piece is a recording of its own, so any of them can start a clip. Its clock starts at its first frame, the one the camera
   // gives just after it's started, so that's where it's placed in time. Where it ends is measured once it stops: a recorder
@@ -196,15 +394,6 @@
     pc.addEventListener('connectionstatechange', () => { if (['failed', 'disconnected'].includes(pc.connectionState)) pc.close(); });
     return new Response(pc.localDescription.sdp, { status: 201, headers: { 'Content-Type': 'application/sdp' } });
   }
-  // while camera 1's AI judge is "on", someone turns up in its recording every half minute, so Watch has real video to show
-  const BIBS = ['12', '407', 'No number', '73', '219', '5', '640'];
-  if (!FREE) setInterval(() => {
-    const now = Date.now();
-    if (!cams[0].live || !cams[0].ai || !piecesIn(1, now - 26e3, now - 2e3).length) return;
-    const reps = 6 + (seq % 9);
-    athletes.push({ n: ++seq, src: 'live', video: '', cam: 1, round: 3, label: seq, bib: BIBS[seq % BIBS.length], firstAt: iso(Math.max(now - 26e3, cam1.pieces[0].start)), lastAt: iso(now - 2e3), reps, noReps: seq % 3 ? 0 : 1, done: true, pic: 1 });
-    athletesRev++;
-  }, 30e3);
 
   // ---- the free camera's AI judge: what it reports about each athlete is kept here, as a server's review keeps it
   const tracks = new Map(), pics = new Map();
@@ -352,7 +541,7 @@
             if (rec) prevSources[video] = rec.file; // as the server does: its local copy, and the recording it came from
             const j = { id: `job${jobs.length + 1}`, video, name: `Recording ${body.previous}`, state: 'running', at: Date.now() };
             // one recorded here plays: the people found in it are spread across how long it is
-            if (rec?.span) { const [s, e] = rec.span, secs = Math.max(5, Math.round((e - s) / 1000)); j.span = secs; files.set(video, () => clipUrl(1, s, secs)); }
+            if (rec?.span) { const [s, e] = rec.span, secs = Math.max(5, Math.round((e - s) / 1000)); j.span = secs; j.from = s; files.set(video, (win) => clipUrl(1, s, secs, win)); }
             jobs.push(j); return json(jobView(j));
           }
           const old = jobs.find((j) => j.video === video); if (old) jobs.splice(jobs.indexOf(old), 1);
@@ -372,11 +561,9 @@
       default: return json({ error: 'Not in test mode' }, 404);
     }
   }
-  // camera 1's recordings made in this browser, camera 2's pretend 10-minute recordings from the last half hour (it has no video), one
-  // from yesterday nobody's judged, and the videos uploaded here
+  // camera 1's recordings made in this browser (the demo's, or the free camera's), and the videos uploaded here
   function recordingsNow() {
-        const seg = (id, cam, startMs) => ({ id, cam, size: 380e6 + cam * 7e6, startedAt: iso(startMs), file: `cam${cam}-${id}.mp4`, name: '' });
-        const recs = [...browserRecordings(), ...(FREE ? [] : [seg('c2a', 2, T0 - 10 * 60e3), seg('c2b', 2, T0 - 20 * 60e3), seg('old', 1, T0 - 26 * 3600e3)])];
+        const recs = browserRecordings();
         // (a minute of camera 1 being judged is listed as camera 1's, not as an upload)
         for (const u of uploads) if (!FREE || !prevSources[u.name]) recs.push({ id: `u-${u.name}`, cam: 0, size: u.size, startedAt: iso(Date.now() - 60e3), file: u.name, name: u.name.replace(/^[\dTZ-]+_/, '') });
         return recs.sort((a, b) => b.startedAt.localeCompare(a.startedAt));
@@ -396,6 +583,7 @@
     }
     let body = null; try { body = init.body ? JSON.parse(init.body) : null; } catch { /* not JSON */ }
     await new Promise((r) => setTimeout(r, 60)); // a little like a real server
+    catchUp(); // the demo's people: what they've done by now
     return answer(url.pathname, url.searchParams, (init.method || 'GET').toUpperCase(), body);
   };
   // uploads go nowhere: the file stays in this browser, and plays from here
@@ -429,10 +617,9 @@
       setTimeout(tick, 150);
     }
   };
-  // a pretend picture of an athlete, as the judge crops one from the video: a figure in a coloured top, with their number
-  const SHIRTS = ['#ffc400', '#4aa3ff', '#ff7a59', '#3ddc97', '#c084fc', '#f472b6'];
+  // a pretend picture of an athlete, as the judge crops one from the video: a figure in their coloured top, with their number
   const pic = (n) => {
-    const a = athletes.find((x) => x.n === n), bib = a && a.bib !== 'No number' ? a.bib : '', shirt = SHIRTS[n % SHIRTS.length];
+    const a = athletes.find((x) => x.n === n), bib = a && a.bib !== 'No number' ? a.bib : '', shirt = schedOf.get(n)?.a.shirt || SHIRTS[n % SHIRTS.length];
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 80"><rect width="60" height="80" fill="#2b3640"/><rect y="62" width="60" height="18" fill="#3a352d"/>
       <circle cx="30" cy="14" r="8" fill="#c9a27e"/><path d="M17 26h26l3 24H14z" fill="${shirt}"/><path d="M19 50h9l-1 26h-7zM32 50h9l-1 26h-7z" fill="#39424d"/>
       <path d="M17 27l-7 20M43 27l7 20" stroke="#c9a27e" stroke-width="5" stroke-linecap="round"/>

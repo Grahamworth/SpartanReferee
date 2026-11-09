@@ -24,7 +24,7 @@
   const q = new URLSearchParams(location.search), v = document.querySelector('video'), note = document.querySelector('.tag span');
   try {
     const stream = q.get('cam') && parent.hjTestCamera?.(+q.get('cam'));
-    if (stream) { v.srcObject = stream; document.body.classList.add('seen'); note.textContent = 'Test mode: no AI judge is running. Pretend athletes turn up every half minute.'; }
+    if (stream) { v.srcObject = stream; document.body.classList.add('seen'); note.textContent = 'Test mode: no AI judge is running. The people in the demo are added to the results as they come along.'; }
     else if (q.get('clip')) {
       v.src = parent.hjTestMedia(q.get('clip')); v.controls = true;
       v.addEventListener('loadedmetadata', () => { if (+q.get('at')) v.currentTime = +q.get('at'); }, { once: true });

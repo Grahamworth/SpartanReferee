@@ -53,7 +53,7 @@ function build(folder, { first, end, more = (s) => s }) {
 // ---- test mode: a banner, so it's never mistaken for a real event, and only admins get past it
 build('review-test', {
   first: '',
-  end: banner('TEST MODE<span class="tmMore"> · <span id="tmCam">camera 1: asking for this browser\'s camera…</span> · the rest is pretend · nothing leaves this browser</span>')
+  end: banner('TEST MODE<span class="tmMore"> · <span id="tmCam">camera 1: starting the demo…</span> · the rest is pretend · nothing leaves this browser</span>')
     + gate('Test review', 'if (me?.admin) { cover.remove(); window.hjTestStart?.(); return; } // camera 1 is this browser\'s camera',
       'This is for HeadJudge admins. Sign in to your console with your admin account, then open it from there.'),
 });
