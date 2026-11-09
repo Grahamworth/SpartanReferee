@@ -6,10 +6,11 @@ const { createApi, CORS } = require('./core');
 const { tableStore } = require('./store');
 const { blobSigner, brandWriter } = require('./recordings');
 const { createEmailSignIn } = require('./email-signin');
+const { createMicrosoftSignIn } = require('./microsoft-signin');
 const { createPayments } = require('./payments');
 
 // Settings: GOOGLE_CLIENT_ID (the web client for Google sign-in), SESSION_SECRET (signs session tokens), ADMIN_EMAILS (comma separated),
-// CIAM_SUBDOMAIN, CIAM_TENANT_ID, CIAM_CLIENT_ID (email sign-in; none is a secret),
+// CIAM_SUBDOMAIN, CIAM_TENANT_ID, CIAM_CLIENT_ID (email sign-in; none is a secret), MICROSOFT_CLIENT_ID (Sign in with Microsoft; not a secret),
 // STRIPE_SECRET_KEY (saving cards; a secret)
 let api;
 function googleVerifier(clientId) {
@@ -22,6 +23,7 @@ const getApi = () => (api = api || createApi({
   adminEmails: (process.env.ADMIN_EMAILS || '').split(','), googleClientId: process.env.GOOGLE_CLIENT_ID || '',
   verifyGoogle: process.env.GOOGLE_CLIENT_ID ? googleVerifier(process.env.GOOGLE_CLIENT_ID) : null, secret: process.env.SESSION_SECRET || '',
   emailSignIn: createEmailSignIn({ subdomain: process.env.CIAM_SUBDOMAIN, tenantId: process.env.CIAM_TENANT_ID, clientId: process.env.CIAM_CLIENT_ID }),
+  microsoftSignIn: createMicrosoftSignIn({ clientId: process.env.MICROSOFT_CLIENT_ID }),
   payments: createPayments({ secretKey: process.env.STRIPE_SECRET_KEY, siteUrl: 'https://zealous-island-03d6db503.8.azurestaticapps.net' }),
 }));
 

@@ -1,7 +1,7 @@
 // A company's past week, with or without a server running: what each camera recorded, every athlete found with their tracking and
 // reps, and the numbers shown to a camera, to search, watch and download. It only reads: recording and uploading are on the server's page.
 import { call, googleButton, signedIn, getMe, signOut, esc } from './api-base.js';
-import { emailButtons } from './email-signin-web.js';
+import { emailButtons, microsoftButton } from './email-signin-web.js';
 
 const { applyTheme } = window.HeadJudgeBrand;
 const $ = (id) => document.getElementById(id);
@@ -164,6 +164,7 @@ async function start() {
   show($('signIn'), true);
   const failed = (e) => { $('signInError').textContent = e.message || 'Sign-in didn\'t work: try again'; show($('signInError'), true); };
   emailButtons($('emailBtns'), 'results.html', failed);
+  microsoftButton($('msBtn'), 'results.html', failed);
   await googleButton($('googleBtn'), () => enter(), failed);
 }
 start();

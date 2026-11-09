@@ -21,6 +21,13 @@ test('a login link gives a cookie that opens the server', () => {
   assert.strictEqual(auth.session(SECRET, reqWith(`other=1; ${value}`), NOW).who, 'sam');
 });
 
+test('signing out replaces the session cookie with an empty one that ends at once, on the same path', () => {
+  const out = auth.logout();
+  assert.match(out, new RegExp(`^${auth.COOKIE}=;`)); assert.match(out, /Max-Age=0/); assert.match(out, /Path=\//); assert.match(out, /HttpOnly/);
+  assert.strictEqual(auth.session(SECRET, reqWith(out.split(';')[0]), NOW), null);
+  assert.match(fs.readFileSync(new URL('../server/index.js', import.meta.url), 'utf8'), /u\.pathname === '\/logout'[\s\S]{0,120}auth\.logout\(\)/, 'the server answers /logout before asking for a session');
+});
+
 test('an old, forged or wrong kind of link is refused, and so is using a session as a link', () => {
   assert.strictEqual(auth.login(SECRET, auth.sign(SECRET, { kind: 'login', who: 'x', exp: NOW - 1 }), NOW), null, 'expired');
   assert.strictEqual(auth.login(SECRET, auth.sign('another-secret', { kind: 'login', who: 'x', exp: NOW + 60000 }), NOW), null, 'other server');

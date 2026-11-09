@@ -19,6 +19,7 @@ header .tabs button.on { background: #fff; color: #000; }
 .numresults img { width: 36px; height: 48px; object-fit: cover; background: #000; }
 .numresults small { color: var(--muted); }
 .numresults p { margin: 6px; }
+header .signout { color: var(--muted); font-weight: 700; font-size: 14px; white-space: nowrap; } header .signout:hover { color: #fff; }
 .clock { text-align: right; } .clock b { font: 700 22px Consolas, ui-monospace, monospace; display: block; } .clock small { color: var(--muted); }
 .banner { background: #3a0d0b; border-bottom: 2px solid var(--red); padding: 10px 18px; font-weight: 700; }
 .pane { padding: 14px 18px 40px; }
@@ -240,6 +241,7 @@ header .tabs svg, header .tabs .ts { display: none; }
   header h1 { order: 1; flex: 1 1 auto; font-size: 21px; }
   header .brandlogo { order: 0; height: 30px; }
   header .clock { order: 2; } .clock b { font-size: 17px; } .clock small { display: none; }
+  header .signout { order: 2; font-size: 13px; }
   header .dayPick { order: 3; } .dayPick select { padding: 7px; }
   header .numSearch { order: 4; flex: 1 1 140px; } .numSearch input { width: 100%; padding: 7px 10px; }
   /* the tabs: a bar along the bottom, like an app */

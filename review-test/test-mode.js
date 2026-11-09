@@ -174,5 +174,11 @@
       for (const el of [n, ...n.querySelectorAll('video[src], iframe[src], img[src]')]) if (el.matches?.('video[src], iframe[src], img[src]')) { const was = el.getAttribute('src'), now = rewrite(was); if (now !== was) el.setAttribute('src', now); }
     }
   }).observe(document.documentElement, { childList: true, subtree: true });
+  // there's no server to sign out of: Sign out says what it would do
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest?.('#signOut')) return;
+    e.preventDefault();
+    window.toast?.('Test mode: on a real server, this signs this browser out of the video review');
+  }, true);
   window.HJ_TEST = true;
 })();

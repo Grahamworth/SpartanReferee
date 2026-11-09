@@ -27,4 +27,6 @@ function login(secret, token, now = Date.now()) {
   const exp = now + SESSION_HOURS * 3600e3;
   return { cookie: `${COOKIE}=${sign(secret, { kind: 'session', who: v.who, exp })}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${SESSION_HOURS * 3600}`, who: v.who };
 }
-module.exports = { sign, verify, session, login, cookieValue, COOKIE };
+/** Sign out: the cookie that replaces this browser's session with nothing */
+const logout = () => `${COOKIE}=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0`;
+module.exports = { sign, verify, session, login, logout, cookieValue, COOKIE };

@@ -17,6 +17,8 @@ const api = createApi({
   verifyGoogle: async (t) => { const m = /^dev:(.+@.+)$/.exec(t); if (!m) throw new Error('bad'); return { sub: m[1], email: m[1], name: m[1].split('@')[0] }; },
   // a pretend Microsoft: the code "dev:someone@example.com" signs in as that address
   emailSignIn: { config: { authorizeUrl: 'https://login.invalid/authorize', clientId: 'dev', redirectUri: REDIRECT_URI, webRedirectUri: 'http://localhost:8795/email-return.html' }, redeem: async (c) => { const m = /^dev:(.+@.+)$/.exec(c); if (!m) throw new Error('bad'); return { sub: m[1], email: m[1], name: m[1].split('@')[0] }; } },
+  // and a pretend "Sign in with Microsoft", the same way
+  microsoftSignIn: { config: { authorizeUrl: 'https://login.invalid/ms/authorize', clientId: 'dev', webRedirectUri: 'http://localhost:8795/email-return.html' }, redeem: async (c) => { const m = /^dev:(.+@.+)$/.exec(c); if (!m) throw new Error('bad'); return { sub: 'ms:' + m[1], email: m[1], shownEmail: m[1], name: m[1].split('@')[0] }; } },
   // a pretend Stripe: its page is checkout.invalid, and the session cs_dev_<company> is that company saving a card
   payments: { startSetup: async ({ companyId }) => ({ url: 'https://checkout.invalid/pay?company=' + companyId, customerId: 'cus_dev' }), finishSetup: async (id, companyId) => { if (id !== 'cs_dev_' + companyId) throw new Error('no'); return { customerId: 'cus_dev', paymentMethodId: 'pm_dev', brand: 'visa', last4: '4242', expMonth: 12, expYear: 2030 }; } },
 });

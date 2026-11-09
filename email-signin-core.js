@@ -6,11 +6,12 @@ export const randomText = (bytes = 32) => base64url(crypto.getRandomValues(new U
 export async function challengeFor(verifier) {
   return base64url(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(verifier))));
 }
-/** Microsoft's page. prompt=create opens on sign-up; prompt=login always asks again, so a shared phone is safe. */
-export function signInAddress(cfg, { create, state, challenge }) {
+/** Microsoft's page. prompt=create opens on sign-up; prompt=login always asks again, so a shared phone is safe. "Sign in with
+ *  Microsoft" passes select_account instead, so whoever signed out can pick another account. */
+export function signInAddress(cfg, { create, state, challenge, prompt }) {
   const q = new URLSearchParams({
     client_id: cfg.clientId, response_type: 'code', response_mode: 'query', redirect_uri: cfg.redirectUri, scope: 'openid profile email',
-    state, code_challenge: challenge, code_challenge_method: 'S256', prompt: create ? 'create' : 'login',
+    state, code_challenge: challenge, code_challenge_method: 'S256', prompt: prompt || (create ? 'create' : 'login'),
   });
   return `${cfg.authorizeUrl}?${q}`;
 }

@@ -47,13 +47,39 @@ test('cancelling and Microsoft\'s errors say so, with its code to look up', () =
   assert.match(readReturn(`${RETURN}?error=access_denied&state=the-state`, pending).message, /cancelled/);
   assert.match(readReturn(`${RETURN}?error=access_denied&error_description=AADSTS53003%3A+blocked&state=the-state`, pending).message, /AADSTS53003/);
 });
-test('companies can use email on the registration page and console, but the admin area stays Google only', () => {
+test('companies can use email on the registration page and console, but the admin area stays Google and Microsoft only', () => {
   for (const [html, js] of [['register.html', 'register.js'], ['console.html', 'console.js']]) {
     assert.match(read(html), /id="emailBtns"/, html);
     assert.match(read(js), /emailButtons\(/, js);
   }
   assert.doesNotMatch(read('customers.html'), /emailBtns/);
   assert.doesNotMatch(read('customers.js'), /emailButtons/);
+});
+test('every sign-in page offers Sign in with Microsoft, which comes back to the same return page', () => {
+  for (const [html, js] of [['register.html', 'register.js'], ['console.html', 'console.js'], ['results.html', 'results.js'], ['customers.html', 'customers.js']]) {
+    assert.match(read(html), /<div id="msBtn"><\/div>\s*<div id="googleBtn">/, html);
+    assert.match(read(js), new RegExp(`microsoftButton\\(\\$\\('msBtn'\\), '${html}'`), js);
+  }
+  const web = read('email-signin-web.js');
+  assert.ok(web.includes("pending.provider === 'microsoft' ? 'auth/microsoft' : 'auth/email'"));
+  assert.ok(web.includes("prompt: 'select_account'"), 'so someone who signed out can pick another account');
+  const cfg = { authorizeUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize', clientId: 'cid', redirectUri: RETURN };
+  assert.strictEqual(new URL(signInAddress(cfg, { state: 's', challenge: 'c', prompt: 'select_account' })).searchParams.get('prompt'), 'select_account');
+});
+test('Sign out is at the top right of every page with an account, from the shared api-base.js', () => {
+  const base = read('api-base.js');
+  assert.ok(base.includes("button.className = 'link signOut'"));
+  assert.ok(base.includes("querySelector('header.top, [data-account-bar]')"));
+  for (const f of ['index.html', 'register.html', 'console.html', 'results.html', 'customers.html', 'streaming.html', 'phone.html']) {
+    const page = read(f);
+    assert.match(page, /<header class="top">/, f);
+    const js = { 'register.html': 'register.js', 'console.html': 'console.js', 'results.html': 'results.js', 'customers.html': 'customers.js' }[f];
+    assert.ok(page.includes('src="api-base.js"') || (js && read(js).includes("from './api-base.js'")), `${f} loads api-base.js`);
+  }
+  assert.match(read('recordings.html'), /data-account-bar/);
+  assert.match(read('index.html'), /data-signin-link>Sign in</, 'the home page\'s Sign in becomes My console');
+  // and the video review on the server
+  assert.match(read('server/review/index.html'), /id="signOut" class="signout" href="logout"/);
 });
 test('the site sends its session in a header Azure leaves alone, as Azure replaces Authorization', () => {
   const base = read('api-base.js');
@@ -70,7 +96,7 @@ test('the console shows the way to the admin area only to admins', () => {
   assert.ok(read('console.js').includes("show($('adminLink'), !!me.admin)"));
 });
 test('the return page only ever goes back to our own pages', () => {
-  assert.match(read('email-signin-web.js'), /new Set\(\['register\.html', 'console\.html', 'results\.html'\]\)/);
+  assert.match(read('email-signin-web.js'), /new Set\(\['register\.html', 'console\.html', 'results\.html', 'customers\.html'\]\)/);
 });
 test('the Broadcaster has no account: it opens straight on its camera page', () => {
   const s = read('scripts/build-broadcaster.sh');

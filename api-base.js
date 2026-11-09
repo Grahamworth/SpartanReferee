@@ -37,10 +37,10 @@ export async function getMe(fresh) {
   return meCache;
 }
 export const signedIn = () => !!ls.get('sp_token');
-export function signOut() { ls.set('sp_token', ''); meCache = null; }
+export function signOut() { ls.set('sp_token', ''); meCache = null; drawSignOut(); }
 async function exchange(idToken) {
   const r = await call('auth/google', { method: 'POST', body: { idToken } });
-  ls.set('sp_token', r.token); meCache = null;
+  ls.set('sp_token', r.token); meCache = null; drawSignOut();
   if (r.user && r.user.name && !ls.get('sp_name')) ls.set('sp_name', r.user.name.slice(0, 30));
   return r.user;
 }
@@ -72,6 +72,31 @@ export async function googleButton(el, onDone, onError) {
   window.google.accounts.id.initialize({ client_id: cfg.googleClientId, callback: async (resp) => { try { onDone(await exchange(resp.credential)); } catch (e) { onError(e); } } });
   el.textContent = '';
   window.google.accounts.id.renderButton(el, { theme: 'outline', size: 'large', shape: 'pill', text: 'signin_with', width: Math.min(300, el.clientWidth || 300) });
+}
+
+// ---------------------------------------------------------------- Sign out, at the top right of every page while you're signed in
+// Any page with a HeadJudge header gets it just by loading this file. A "Sign in" link there (data-signin-link) becomes "My console".
+export function drawSignOut() {
+  const top = typeof document !== 'undefined' && document.querySelector('header.top, [data-account-bar]');
+  if (!top) return;
+  const on = signedIn();
+  for (const a of document.querySelectorAll('[data-signin-link]')) a.textContent = on ? 'My console' : 'Sign in';
+  let right = top.querySelector('.topRight'), button = top.querySelector('.signOut');
+  if (!on) { if (button) button.remove(); return; }
+  if (button) return;
+  if (!right) { right = document.createElement('span'); right.className = 'topRight'; top.appendChild(right); }
+  button = document.createElement('button');
+  button.type = 'button'; button.className = 'link signOut'; button.textContent = 'Sign out';
+  button.onclick = () => {
+    signOut();
+    try { window.google?.accounts?.id?.disableAutoSelect(); } catch { /* Google's button isn't on this page */ }
+    location.reload();
+  };
+  right.appendChild(button);
+}
+if (typeof document !== 'undefined') {
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', drawSignOut); else drawSignOut();
+  addEventListener('storage', (e) => { if (e.key === 'sp_token') drawSignOut(); }); // signed in or out in another tab
 }
 
 /** true inside the installed app (Android app, or added to the home screen) */

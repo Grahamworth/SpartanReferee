@@ -6,6 +6,7 @@
    GET  /api/config                      -> { googleClientId, signIn, emailSignIn }
    POST /api/auth/google {idToken}       -> { token, user }
    POST /api/auth/email {code, verifier} -> { token, user }
+   POST /api/auth/microsoft {code, verifier, redirectUri} -> { token, user }
    GET  /api/me                          -> { user, profile, admin, judge }
    /api/admin/admins|companies|pricing|customers (admins), /api/companies, /api/servers, /api/recordings: see their files */
 const crypto = require('node:crypto');
@@ -19,7 +20,7 @@ const CORS = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers
  * verifyGoogle(idToken) -> {sub, email, name, picture} (throws when invalid); secret signs our own session tokens.
  * adminEmails: Google accounts that are admins. While neither adminEmails nor adminKey is set, everyone is (the prototype).
  */
-function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], verifyGoogle = null, emailSignIn = null, payments = null, secret = '', googleClientId = '', blobSigner = null, putBrand = null, maxRunningServers = 1, serverHourPrice = 0.66 }) {
+function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], verifyGoogle = null, emailSignIn = null, microsoftSignIn = null, payments = null, secret = '', googleClientId = '', blobSigner = null, putBrand = null, maxRunningServers = 1, serverHourPrice = 0.66 }) {
   const reply = (status, body) => ({ status, body, headers: { 'Content-Type': 'application/json', ...CORS } });
   const admins = adminEmails.map((e) => String(e).trim().toLowerCase()).filter(Boolean);
   // session tokens: base64url(payload).HMAC
@@ -35,8 +36,8 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
   // who's asking: the signed-in account, or (not signed in) this phone
   const who = (h) => { const s = session(h); return s ? s.uid : deviceOf(h); };
   // Admins added in the admin area, on top of ADMIN_EMAILS (which can't be removed there, so nobody can lock everyone out).
-  // Kept for 30 seconds, as nearly every request asks, so someone removed loses access within that. Only Google sessions carry an
-  // address, so an admin signs in with Google: Microsoft email accounts can't be admins.
+  // Kept for 30 seconds, as nearly every request asks, so someone removed loses access within that. Only Google sessions, and
+  // Microsoft ones whose address Microsoft vouches for, carry an address: email accounts can't be admins.
   let addedAdmins = new Set(), addedAt = -Infinity;
   const loadAdmins = async (force) => {
     if (!force && now() - addedAt < 30e3) return;
@@ -76,6 +77,19 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
     await store.put('user', uid, user);
     await touchProfile(uid, { email: user.email, ...(user.name && !(await store.get('profile', uid) || {}).name ? { name: user.name.slice(0, 30) } : {}) });
     return reply(200, { token: sign({ uid, exp: now() + 30 * 24 * 3600 * 1000 }), user });
+  }
+  // "Sign in with Microsoft" (microsoft-signin.js). The session carries the address only when Microsoft vouches for it, so only
+  // then can it count as an admin; the account's record keeps the address it showed either way.
+  async function authMicrosoft(body) {
+    if (!microsoftSignIn || !secret) return reply(503, { error: 'Microsoft sign-in isn’t set up on the server yet' });
+    const code = (body && body.code) || '', verifier = (body && body.verifier) || '';
+    if (typeof code !== 'string' || !code || code.length > 8192 || typeof verifier !== 'string' || !/^[\w.~-]{43,128}$/.test(verifier)) return reply(400, { error: 'That sign-in link isn’t right – try again' });
+    let m; try { m = await microsoftSignIn.redeem(code, verifier, body.redirectUri); } catch { return reply(401, { error: 'Microsoft sign-in didn’t work – try again' }); }
+    const uid = 'm_' + crypto.createHash('sha256').update(String(m.sub)).digest('base64url').slice(0, 22);
+    const user = { id: uid, email: m.shownEmail, name: m.name, picture: '' };
+    await store.put('user', uid, user);
+    await touchProfile(uid, { email: user.email, microsoft: true, ...(user.name && !(await store.get('profile', uid) || {}).name ? { name: user.name.slice(0, 30) } : {}) });
+    return reply(200, { token: sign({ uid, ...(m.email ? { email: m.email } : {}), exp: now() + 30 * 24 * 3600 * 1000 }), user });
   }
   async function me(h) {
     const id = who(h); if (!id) return reply(400, { error: 'This device has no id yet – reload the app' });
@@ -139,9 +153,10 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
     try {
       let r = null;
       if (parts[0] === 'admin' && parts.length <= 5 && (parts.length < 5 || parts[4] === 'lift')) r = await admin(method, parts[1], parts[2], parts[3], h, body);
-      if (parts[0] === 'config' && method === 'GET') r = reply(200, { googleClientId, signIn: !!(verifyGoogle && secret && googleClientId), emailSignIn: emailSignIn && secret ? emailSignIn.config : null });
+      if (parts[0] === 'config' && method === 'GET') r = reply(200, { googleClientId, signIn: !!(verifyGoogle && secret && googleClientId), emailSignIn: emailSignIn && secret ? emailSignIn.config : null, microsoftSignIn: microsoftSignIn && secret ? microsoftSignIn.config : null });
       if (parts[0] === 'auth' && parts[1] === 'google' && method === 'POST') r = await authGoogle(body, h);
       if (parts[0] === 'auth' && parts[1] === 'email' && method === 'POST') r = await authEmail(body);
+      if (parts[0] === 'auth' && parts[1] === 'microsoft' && method === 'POST') r = await authMicrosoft(body);
       if (parts[0] === 'me' && method === 'GET') r = await me(h);
       if (parts[0] === 'recordings' && parts.length <= 3) r = await recordings(method, parts[1], parts[2], body, h);
       if (parts[0] === 'servers' && parts.length <= 3) r = await servers(method, parts[1], parts[2], body, h);

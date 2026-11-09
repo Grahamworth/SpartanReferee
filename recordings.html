@@ -18,6 +18,7 @@
   .rec-filters select { min-width: 150px; }
   .rec-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 10px 0; border-top: 1px solid rgba(255, 255, 255, .12); }
   .rec-row > div { flex: 1 1 200px; min-width: 0; }
+  [data-account-bar] .signOut { background: none; border: 0; padding: 0; color: inherit; font: inherit; font-weight: 700; text-decoration: underline; cursor: pointer; }
   .rec-key { word-break: break-all; font-family: monospace; background: #000; padding: 10px; display: block; margin: 8px 0; }
 </style>
 <script type="module" src="recordings.js"></script>
@@ -26,7 +27,7 @@
 </head>
 <body>
 <main class="hub">
-  <a href="./" class="home-link">‹ Home</a>
+  <div data-account-bar style="display:flex;justify-content:space-between;align-items:center;gap:12px"><a href="./" class="home-link">‹ Home</a></div>
   <h1 class="brand">Cloud <span>recordings</span></h1>
   <p id="signInBox" class="empty" hidden>Sign in to see your recordings. <a href="console.html">Sign in</a></p>
   <p id="error" class="empty" hidden></p>

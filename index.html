@@ -36,7 +36,7 @@
 <body>
 <header class="top">
   <a class="mark" href="./">Head<span>Judge</span></a>
-  <a href="console.html">Sign in</a>
+  <span class="topRight"><a href="console.html" data-signin-link>Sign in</a></span>
 </header>
 <main class="page">
   <section class="hero">
@@ -83,5 +83,6 @@
     new IntersectionObserver(([e]) => { if (e.isIntersecting) v.play().catch(() => {}); else v.pause(); }, { threshold: 0.4 }).observe(v);
   })();
 </script>
+<script type="module" src="api-base.js"></script>
 </body>
 </html>
