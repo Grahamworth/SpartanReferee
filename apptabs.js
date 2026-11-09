@@ -13,7 +13,7 @@ const ICONS = {
   cameras: '<rect x="3" y="7" width="13" height="10" rx="1.5"/><path d="M16 11l5-3v8l-5-3"/>',
   history: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
 };
-const TABS = [['booking', 'Booking'], ['live', 'Live'], ['results', 'Results'], ['cameras', 'Cameras'], ['history', 'History']];
+const TABS = [['booking', 'Booking'], ['cameras', 'Cameras'], ['live', 'Live'], ['results', 'Results'], ['history', 'History']];
 
 export { tabsFor };
 
@@ -29,7 +29,7 @@ let drawn = '';
  * Booking and History. onError(message): when a server couldn't be opened.
  */
 export function drawAppTabs(el, { active, server, hasBookings, local = () => false, onError = () => {} }) {
-  const t = tabsFor(server, hasBookings);
+  const t = tabsFor(server, hasBookings, active);
   const key = JSON.stringify([active, t]);
   if (key === drawn && el.childElementCount) return;
   drawn = key;

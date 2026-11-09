@@ -38,10 +38,17 @@ test('the console and the results page both have the tab bar; the console\'s Pas
   // the review's tabs and its server switcher come back through the console: ?go=live&n=2
   assert.ok(read('console.js').includes("['live', 'results', 'cameras'].includes(go)"));
 });
+test('the tab you\'re on always shows: History from the test review, before any booking', () => {
+  assert.deepStrictEqual(shown(tabsFor(null, false, 'history')), ['booking', 'history']);
+  assert.deepStrictEqual(shown(tabsFor(null, false, 'results')), ['booking', 'results']);
+});
+test('the console\'s tabs are in the same order as the review\'s', () => {
+  assert.ok(read('apptabs.js').includes("[['booking', 'Booking'], ['cameras', 'Cameras'], ['live', 'Live'], ['results', 'Results'], ['history', 'History']]"));
+});
 test('the video review has the same five tabs, Booking first, and its log is folded under Cameras', () => {
   const page = read('server/review/index.html');
   const tabs = [...page.matchAll(/<button data-(tab|go)="(\w+)"/g)].map((m) => m[2]);
-  assert.deepStrictEqual(tabs.slice(0, 5), ['booking', 'live', 'judge', 'cameras', 'history']);
+  assert.deepStrictEqual(tabs.slice(0, 5), ['booking', 'cameras', 'live', 'judge', 'history'], 'Cameras before Live');
   assert.ok(!page.includes('data-tab="log"') && !page.includes('<section id="log"'));
   assert.match(page, /<details class="logBox" id="logBox">[\s\S]*id="eventList"/);
   assert.match(read('server/review/review.css'), /grid-template-columns: repeat\(5, minmax\(0, 1fr\)\)/, 'five along the bottom on a phone');
