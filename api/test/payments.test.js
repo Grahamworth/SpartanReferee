@@ -52,6 +52,8 @@ async function setup(payments, maxRunning = 3) {
 }
 const pretend = () => ({ startSetup: async ({ companyId }) => ({ url: 'https://stripe.example/' + companyId, customerId: 'cus_' + companyId }), finishSetup: async (id, company) => { if (id !== 'cs_' + company) throw new Error('no'); return { customerId: 'cus_' + company, paymentMethodId: 'pm', brand: 'visa', last4: '4242', expMonth: 1, expYear: 2030 }; } });
 const BOOK = { cameras: 2, hours: 2 };
+// a customer with a card saved on (pretend) Stripe's page
+const withCard = async (call, h, id) => { await call('POST', 'servers/mine/payment-done', h, { session: 'cs_' + id }); return h; };
 // a customer's booking: checkout, then the (pretend) payment, which makes it
 const book = async (call, h, body) => { const co = await call('POST', 'servers/mine/checkout', h, body); return co.status === 200 ? call('POST', 'servers/mine/pay', h, { checkout: co.body.checkout.id }) : co; };
 
@@ -91,20 +93,37 @@ test('an admin books with no card', async () => {
   assert.strictEqual(s.needsCard, false); assert.strictEqual(s.adminNoCard, true);
   assert.strictEqual((await call('POST', 'servers/mine/start', h, BOOK)).status, 200);
 });
-test('with cards off, a customer needs no card, but books only through the payment page', async () => {
-  const { call, company } = await setup(null);
+test('until card payments are set up, only admins can start servers: a customer can\'t book, pay or extend', async () => {
+  const { call, company, now } = await setup(null);
   const h = await company('sam', 'peak');
   const s = (await call('GET', 'servers/mine', h)).body.server;
-  assert.strictEqual(s.cardsOn, false); assert.strictEqual(s.needsCard, false); assert.strictEqual(s.paysFirst, true);
+  assert.strictEqual(s.cardsOn, false); assert.strictEqual(s.bookingsOpen, false);
   assert.strictEqual((await call('POST', 'servers/mine/payment', h, {})).status, 503);
+  const co = await call('POST', 'servers/mine/checkout', h, BOOK);
+  assert.strictEqual(co.status, 503); assert.match(co.body.error, /once card payments are set up/);
+  assert.strictEqual((await call('POST', 'servers/mine/checkout', h, { cameras: 2, from: now() + 864e5, until: now() + 864e5 + 72e5 })).status, 503, 'nor ahead');
+  assert.strictEqual((await call('POST', 'servers/mine/start', h, BOOK)).status, 402);
+  assert.strictEqual((await call('POST', 'servers/mine/extend', h, { hours: 1 })).status, 503);
+  assert.strictEqual((await call('GET', 'servers/mine', h)).body.server.wanted, 'off');
+  // an admin still can
+  const boss = await company('boss', 'mine');
+  assert.strictEqual((await call('GET', 'servers/mine', boss)).body.server.bookingsOpen, true);
+  assert.strictEqual((await call('POST', 'servers/mine/start', boss, BOOK)).status, 200);
+  assert.strictEqual((await call('POST', 'servers/mine/extend', boss, { hours: 1 })).status, 200);
+});
+test('once card payments are on, a customer with a card books, through the payment page only', async () => {
+  const { call, company } = await setup(pretend());
+  const h = await withCard(call, await company('sam', 'peak'), 'peak');
+  const s = (await call('GET', 'servers/mine', h)).body.server;
+  assert.strictEqual(s.bookingsOpen, true); assert.strictEqual(s.paysFirst, true);
   assert.strictEqual((await call('POST', 'servers/mine/start', h, BOOK)).status, 402, 'no booking without paying');
   assert.strictEqual((await book(call, h, BOOK)).status, 200);
 });
 
 // ---------- the pretend payment page, and bookings made ahead
 test('checkout says what a booking comes to and makes nothing; paying makes it, marked as a pretend payment', async () => {
-  const { call, company, store } = await setup(null);
-  const h = await company('sam', 'peak');
+  const { call, company, store } = await setup(pretend());
+  const h = await withCard(call, await company('sam', 'peak'), 'peak');
   const co = await call('POST', 'servers/mine/checkout', h, { cameras: 3, hours: 2 });
   assert.strictEqual(co.status, 200);
   assert.deepStrictEqual({ ...co.body.checkout, id: 'x', expires: 0 }, { id: 'x', cameras: 3, hours: 2, startNow: true, from: 0, until: 0, cameraHour: 0.34, cost: 2.04, servers: 2, expires: 0, pretend: true });
@@ -119,16 +138,16 @@ test('checkout says what a booking comes to and makes nothing; paying makes it, 
   assert.strictEqual((await call('POST', 'servers/mine/pay', h, { checkout: co.body.checkout.id })).status, 404);
 });
 test('a payment page runs out after 30 minutes', async () => {
-  const { call, company, pass } = await setup(null);
-  const h = await company('sam', 'peak');
+  const { call, company, pass } = await setup(pretend());
+  const h = await withCard(call, await company('sam', 'peak'), 'peak');
   const co = (await call('POST', 'servers/mine/checkout', h, BOOK)).body.checkout;
   pass(31 * 60e3);
   assert.strictEqual((await call('POST', 'servers/mine/pay', h, { checkout: co.id })).status, 410);
   assert.strictEqual((await call('GET', 'servers/mine', h)).body.server.wanted, 'off');
 });
 test('checkout checks the booking first: times, size, and whether there\'s room', async () => {
-  const { call, company, now } = await setup(null);
-  const h = await company('sam', 'peak');
+  const { call, company, now } = await setup(pretend());
+  const h = await withCard(call, await company('sam', 'peak'), 'peak');
   const HOUR = 3600e3, t = now();
   for (const [why, body] of [['no cameras', { cameras: 0, hours: 2 }], ['in the past', { cameras: 2, from: t - HOUR, until: t + HOUR }], ['too short', { cameras: 2, from: t + HOUR, until: t + 1.5 * HOUR }],
     ['too long', { cameras: 2, from: t + HOUR, until: t + 26 * HOUR }], ['too far ahead', { cameras: 2, from: t + 91 * 24 * HOUR, until: t + 91 * 24 * HOUR + 2 * HOUR }], ['end before start', { cameras: 2, from: t + 3 * HOUR, until: t + HOUR }], ['no end', { cameras: 2, from: t + HOUR }]]) {
@@ -136,8 +155,8 @@ test('checkout checks the booking first: times, size, and whether there\'s room'
   }
 });
 test('a booking made ahead: its servers wait for it, it shows as booked, and cancelling it costs nothing', async () => {
-  const { call, company, store, pass, now } = await setup(null);
-  const h = await company('sam', 'peak'), HOUR = 3600e3, from = now() + 24 * HOUR, until = from + 3 * HOUR;
+  const { call, company, store, pass, now } = await setup(pretend());
+  const h = await withCard(call, await company('sam', 'peak'), 'peak'), HOUR = 3600e3, from = now() + 24 * HOUR, until = from + 3 * HOUR;
   const r = await book(call, h, { cameras: 2, from, until });
   assert.strictEqual(r.status, 200);
   const s = r.body.server;
@@ -157,8 +176,8 @@ test('a booking made ahead: its servers wait for it, it shows as booked, and can
   assert.deepStrictEqual([b.state, b.hoursRun, b.cost], ['cancelled', 0, 0]);
 });
 test('room is checked over a booking\'s own times: another company\'s booking tomorrow doesn\'t block today', async () => {
-  const { call, company, now } = await setup(null, 1);
-  const a = await company('sam', 'peak'), b = await company('jo', 'other'), HOUR = 3600e3, t = now();
+  const { call, company, now } = await setup(pretend(), 1);
+  const a = await withCard(call, await company('sam', 'peak'), 'peak'), b = await withCard(call, await company('jo', 'other'), 'other'), HOUR = 3600e3, t = now();
   assert.strictEqual((await book(call, a, { cameras: 2, from: t + 24 * HOUR, until: t + 26 * HOUR })).status, 200);
   assert.strictEqual((await book(call, b, { cameras: 2, hours: 4 })).status, 200, 'today is free');
   await call('POST', 'servers/mine/stop', b, {});
@@ -203,7 +222,7 @@ test('a bad or repeated address is refused', async () => {
 
 test('prices: everyone pays the default, unless a customer has their own', async () => {
   const { call, login, company, store } = await setup(pretend());
-  const boss = await login('boss'), h = await company('sam', 'peak');
+  const boss = await login('boss'), h = await withCard(call, await company('sam', 'peak'), 'peak');
   await call('PUT', 'admin/pricing', boss, { markupPercent: 100 });
   const price = async () => (await call('GET', 'servers/mine', h)).body.server.price.cameraHour;
   assert.strictEqual(await price(), 0.68);
@@ -223,7 +242,7 @@ test('prices: everyone pays the default, unless a customer has their own', async
 });
 test('a booking uses the customer\'s own price, and keeps it', async () => {
   const { call, login, company } = await setup(pretend());
-  const boss = await login('boss'), h = await company('sam', 'peak');
+  const boss = await login('boss'), h = await withCard(call, await company('sam', 'peak'), 'peak');
   await call('POST', 'servers/mine/payment-done', h, { session: 'cs_peak' });
   await call('PUT', 'admin/customers/peak/price', boss, { cameraHour: 0.5 });
   assert.strictEqual((await book(call, h, BOOK)).body.server.bookedCost, 2);
@@ -233,7 +252,7 @@ test('a booking uses the customer\'s own price, and keeps it', async () => {
 
 test('past bookings: newest first, with what happened to each, and only your own', async () => {
   const { call, company, pass } = await setup(pretend());
-  const h = await company('sam', 'peak'), other = await company('jo', 'other');
+  const h = await withCard(call, await company('sam', 'peak'), 'peak'), other = await withCard(call, await company('jo', 'other'), 'other');
   await call('POST', 'servers/mine/payment-done', h, { session: 'cs_peak' });
   assert.deepStrictEqual((await call('GET', 'servers/mine/history', h)).body.bookings, []);
   await book(call, h, BOOK);
@@ -257,7 +276,7 @@ test('past bookings: newest first, with what happened to each, and only your own
 
 test('a server\'s settings stay with the site, and only that server can reach them', async () => {
   const { call, company, store } = await setup(pretend());
-  const h = await company('sam', 'peak');
+  const h = await withCard(call, await company('sam', 'peak'), 'peak');
   await call('POST', 'servers/mine/payment-done', h, { session: 'cs_peak' });
   await book(call, h, BOOK);
   const key = { 'x-server-key': (await store.get('server', 'peak')).serverKey };
@@ -271,7 +290,7 @@ test('a server\'s settings stay with the site, and only that server can reach th
 });
 test('each server is told how many of the booking\'s cameras it has, numbered across the booking', async () => {
   const { call, company, store } = await setup(pretend());
-  const h = await company('sam', 'peak');
+  const h = await withCard(call, await company('sam', 'peak'), 'peak');
   await call('POST', 'servers/mine/payment-done', h, { session: 'cs_peak' });
   await book(call, h, { cameras: 3, hours: 1 });
   const keyOf = async (slot) => ({ 'x-server-key': (await store.get('server', slot)).serverKey });
@@ -284,7 +303,7 @@ test('each server is told how many of the booking\'s cameras it has, numbered ac
 });
 test('a server may only be deleted once it says everything is saved, and a new booking starts over', async () => {
   const { call, company, store } = await setup(pretend());
-  const h = await company('sam', 'peak');
+  const h = await withCard(call, await company('sam', 'peak'), 'peak');
   await call('POST', 'servers/mine/payment-done', h, { session: 'cs_peak' });
   await book(call, h, BOOK);
   const key = { 'x-server-key': (await store.get('server', 'peak')).serverKey };

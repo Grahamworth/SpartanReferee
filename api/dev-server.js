@@ -19,8 +19,9 @@ const api = createApi({
   emailSignIn: { config: { authorizeUrl: 'https://login.invalid/authorize', clientId: 'dev', redirectUri: REDIRECT_URI, webRedirectUri: 'http://localhost:8795/email-return.html' }, redeem: async (c) => { const m = /^dev:(.+@.+)$/.exec(c); if (!m) throw new Error('bad'); return { sub: m[1], email: m[1], name: m[1].split('@')[0] }; } },
   // and a pretend "Sign in with Microsoft", the same way
   microsoftSignIn: { config: { authorizeUrl: 'https://login.invalid/ms/authorize', clientId: 'dev', webRedirectUri: 'http://localhost:8795/email-return.html' }, redeem: async (c) => { const m = /^dev:(.+@.+)$/.exec(c); if (!m) throw new Error('bad'); return { sub: 'ms:' + m[1], email: m[1], shownEmail: m[1], name: m[1].split('@')[0] }; } },
-  // a pretend Stripe: its page is checkout.invalid, and the session cs_dev_<company> is that company saving a card
-  payments: { startSetup: async ({ companyId }) => ({ url: 'https://checkout.invalid/pay?company=' + companyId, customerId: 'cus_dev' }), finishSetup: async (id, companyId) => { if (id !== 'cs_dev_' + companyId) throw new Error('no'); return { customerId: 'cus_dev', paymentMethodId: 'pm_dev', brand: 'visa', last4: '4242', expMonth: 12, expYear: 2030 }; } },
+  // a pretend Stripe: its page is checkout.invalid, and the session cs_dev_<company> is that company saving a card. DEV_NO_CARDS=1 leaves
+  // card payments off, as the live site is until Stripe is set up: then only admins can book.
+  payments: process.env.DEV_NO_CARDS ? null : { startSetup: async ({ companyId }) => ({ url: 'https://checkout.invalid/pay?company=' + companyId, customerId: 'cus_dev' }), finishSetup: async (id, companyId) => { if (id !== 'cs_dev_' + companyId) throw new Error('no'); return { customerId: 'cus_dev', paymentMethodId: 'pm_dev', brand: 'visa', last4: '4242', expMonth: 12, expYear: 2030 }; } },
 });
 const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.glb': 'model/gltf-binary', '.onnx': 'application/octet-stream', '.png': 'image/png', '.svg': 'image/svg+xml', '.webmanifest': 'application/manifest+json', '.wasm': 'application/wasm', '.mjs': 'text/javascript' };
 

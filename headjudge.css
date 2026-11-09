@@ -246,3 +246,4 @@ input[type=datetime-local] { color-scheme: dark; min-height: 44px; }
 .pcRow b { font: 600 1.05rem ui-monospace, Consolas, monospace; letter-spacing: .04em; }
 .pcSplit { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .payBack { display: block; margin: 12px auto 0; }
+.closedNote { margin: 0 0 4px; padding: 10px 14px; background: var(--bg); border-left: 4px solid var(--primary); color: var(--text); font-size: .95rem; }

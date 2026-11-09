@@ -9,7 +9,7 @@ const book = async (call, h, body) => { const co = await call('POST', 'servers/m
 
 async function setup() {
   const store = memoryStore(), clock = 1_800_000_000_000;
-  const api = createApi({ store, now: () => clock, secret: 'test-secret-test-secret-test-secret', googleClientId: 'x', adminEmails: ['boss@example.com'], maxRunningServers: 4, serverHourPrice: 0.66, verifyGoogle: async (t) => ({ sub: t, email: `${t}@example.com`, name: t }) });
+  const api = createApi({ store, now: () => clock, payments: { startSetup: async () => ({}), finishSetup: async () => ({}) }, secret: 'test-secret-test-secret-test-secret', googleClientId: 'x', adminEmails: ['boss@example.com'], maxRunningServers: 4, serverHourPrice: 0.66, verifyGoogle: async (t) => ({ sub: t, email: `${t}@example.com`, name: t }) });
   const login = async (who) => ({ Authorization: `Bearer ${(await api.handle({ method: 'POST', path: 'auth/google', body: { idToken: who } })).body.token}` });
   const call = (method, path, headers, body) => api.handle({ method, path, headers, body });
   const boss = await login('boss');

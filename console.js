@@ -52,9 +52,13 @@ function drawQuote() {
   const p = last.price, b = chosen();
   // once card payments are on, the first booking asks for a card, unless it's an admin's
   const askCard = last.needsCard && last.canStart;
-  $('start').disabled = busy || !!b.error || !last.canStart || (askCard && !last.cardsOn);
-  $('payNote').textContent = payMessage || (askCard ? (last.cardsOn ? 'Before your first booking, add a card on Stripe\'s secure page. Nothing is charged today.' : 'Card payments aren\'t switched on yet: please try again soon.') : '');
+  // until card payments are properly set up, only admins can start servers
+  const closed = !last.bookingsOpen && last.canStart;
+  $('start').disabled = busy || !!b.error || !last.canStart || closed || (askCard && !last.cardsOn);
+  $('payNote').textContent = payMessage || (closed ? 'Bookings open once card payments are set up. Get in touch with us if you need cameras before then.'
+    : askCard ? (last.cardsOn ? 'Before your first booking, add a card on Stripe\'s secure page. Nothing is charged today.' : 'Card payments aren\'t switched on yet: please try again soon.') : '');
   show($('payNote'), !!$('payNote').textContent);
+  $('payNote').classList.toggle('closedNote', closed);
   show($('nowFields'), !choosingTimes()); show($('timeFields'), choosingTimes());
   show($('nowNote'), !choosingTimes()); show($('timesNote'), choosingTimes());
   if (b.error) { $('quoteHow').textContent = b.error; $('quoteCost').textContent = ''; return; }
@@ -111,7 +115,7 @@ function draw(s) {
   $('fromAt').min = min; $('fromAt').max = max; $('untilAt').min = min;
   setDefaultTimes();
   drawQuote(); drawExtendQuote(); drawList(s);
-  $('extendBtn').disabled = busy; $('stop').disabled = busy;
+  $('extendBtn').disabled = busy || !s.bookingsOpen; $('stop').disabled = busy;
   show($('factBooked'), s.wanted === 'on');
   if (s.wanted === 'on') $('booked').textContent = `${plural(s.bookedHours, 'hour')} · ${money(s.bookedCost)}`;
   show($('factCard'), !!s.card || s.adminNoCard);

@@ -30,6 +30,7 @@
    Customers pay per camera, per hour the servers actually run: Azure's price for a server, shared between its 2 cameras, plus the percentage,
    or a price set for that customer. Once card payments are on, their first booking asks for a card, saved on Stripe's page (payments.js);
    admins don't need one. Every customer booking goes through the payment page first: for now a pretend one, where nothing is charged.
+   Until card payments are on, though, only admins can start servers at all.
    A booking starts now or at a time chosen ahead (from): its servers are turned on START_LEAD before, so the cameras are ready on time,
    and those minutes aren't charged.
    A booking keeps the price it started at. The control app adds up the time, cost and charge, by the minute. */
@@ -39,6 +40,8 @@ const cameraSplit = require('./cameras');
 
 const { CAMERAS_PER_SERVER } = cameraSplit;
 const MAX_HOURS = 24, MAX_EXTEND_HOURS = 12, MAX_AHEAD_HOURS = 72, LOGIN_MINUTES = 5, MAX_DAYS_AHEAD = 90, CHECKOUT_MINUTES = 30;
+// Until card payments are properly set up (STRIPE_SECRET_KEY), only admins can start servers: customers can't book or extend at all.
+const BOOKINGS_CLOSED = 'Bookings open once card payments are set up. Get in touch with us if you need cameras before then.';
 const START_LEAD_MS = 10 * 60e3; // the control app turns servers on this long before a booking starts (control/src/reconcile.js has it too)
 const HOUR = 3600e3;
 const sha = (s) => crypto.createHash('sha256').update(String(s)).digest('hex');
@@ -104,6 +107,8 @@ function createServers({ store, now, reply, session, isAdmin = () => false, paym
       // once card payments are on, the first booking asks for a card; admins don't need one. Customers pay for each booking first.
       card: cardView(c.payment), cardsOn: !!payments, adminNoCard: !c.payment && !!h && isAdmin(h), needsCard: !!payments && !c.payment && !(h && isAdmin(h)),
       paysFirst: !(h && isAdmin(h)),
+      // until card payments are properly set up, only admins can start servers
+      bookingsOpen: !!payments || !!(h && isAdmin(h)),
       price: { cameraHour: price.cameraHour, keepDays: KEEP_DAYS, camerasPerServer: CAMERAS_PER_SERVER, maxHours: MAX_HOURS, maxExtendHours: MAX_EXTEND_HOURS, maxCameras: maxRunning * CAMERAS_PER_SERVER, maxDaysAhead: MAX_DAYS_AHEAD, startLeadMinutes: START_LEAD_MS / 60e3 },
     };
   }
@@ -165,6 +170,7 @@ function createServers({ store, now, reply, session, isAdmin = () => false, paym
   // why this booking can't be made now, if it can't
   async function cantBook(c, h, a) {
     if (c.status !== 'approved') return reply(403, { error: c.status === 'pending' ? 'We\'re still checking your application' : 'This company has been blocked from starting servers' });
+    if (!payments && !isAdmin(h)) return reply(503, { error: BOOKINGS_CLOSED });
     if (payments && !c.payment && !isAdmin(h)) return reply(402, { error: 'Add your payment details first' });
     const plan = await store.get('serverplan', c.id);
     if (active(plan) && (await view(c, h)).wanted === 'on') return reply(409, { error: plan.from && plan.from > now() ? 'You already have a booking: cancel it first, or extend it' : 'Your servers are already booked: extend them instead' });
@@ -318,6 +324,7 @@ function createServers({ store, now, reply, session, isAdmin = () => false, paym
       return book(c, me, h, a);
     }
     if (b === 'extend') {
+      if (!payments && !isAdmin(h)) return reply(503, { error: BOOKINGS_CLOSED });
       const hours = Number(body?.hours), plan = await store.get('serverplan', c.id);
       if (!active(plan) || (await view(c, h)).wanted !== 'on') return reply(409, { error: 'Your servers aren\'t running: start them instead' });
       if (!Number.isInteger(hours) || hours < 1 || hours > MAX_EXTEND_HOURS) return reply(400, { error: `Add between 1 and ${MAX_EXTEND_HOURS} hours at a time` });
