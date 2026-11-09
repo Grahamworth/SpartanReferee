@@ -497,6 +497,12 @@ html.embedded #home::before { content: "Connecting to the camera…"; color: var
 /* only EXIT stays inside a camera (it stops the AI judge); End round and What counts? are the review's */
 html.embedded #endAttempt, html.embedded #rulesBtn { display: none !important; }
 html.rules-only #home::before { content: none; }
+/* Pick athlete and Details in the video review: just the analysis, with no way to the judge's own home or saved results */
+html.analysis #home > * { display: none !important; }
+html.analysis #home { display: grid; place-items: center; min-height: 100vh; }
+html.analysis #home::before { content: "Getting the video ready…"; color: var(--muted); font-weight: 700; font-size: 1.2rem; }
+html.analysis #home #homeError:not([hidden]) { display: block !important; }
+html.analysis #attemptBack, html.analysis #nextAthlete, html.analysis #doneMenu, html.analysis .back { display: none !important; }
 .at-number { align-items: flex-end; gap: 10px; margin: 6px 0 12px; }
 .at-number .field { flex: 1; min-width: 180px; }
 

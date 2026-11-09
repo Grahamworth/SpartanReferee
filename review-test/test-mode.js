@@ -7,7 +7,8 @@
 //
 // The free camera (window.HJ_FREE, built as /review-free/ for any company) is the same thing with nothing pretend: one camera, this
 // browser's, and the real AI judge (/judge-free.html) run here, in this browser, on a minute of video at a time: a minute of camera 1
-// (its recordings come in 1-minute pieces) or an uploaded video of up to a minute. There's no live AI judge: it would need a server.
+// (its recordings come in 1-minute pieces) or an uploaded video of up to a minute; and live, camera 1's own judge judging its picture
+// here (rather than following a server's, as on a server).
 (() => {
   const FREE = !!window.HJ_FREE;
   const realFetch = window.fetch.bind(window);
@@ -288,7 +289,6 @@
     if (eng) {
       const c = cams.find((x) => x.n === +eng[1]);
       if (!c) return json({ error: 'No such camera' }, 404);
-      if (FREE && !eng[2] && body?.on) return json({ error: 'The free camera has no live AI judge. Analyse a minute of its recording on the Results tab (Previous recordings), or book a server to judge live.' });
       if (!eng[2]) c.ai = !!body?.on;
       return json({ ok: true });
     }
@@ -447,7 +447,8 @@
     const s = String(v);
     const p = /\/api\/athlete-pic\?n=(\d+)/.exec(s); if (p) return FREE ? pics.get(+p[1]) || 'data:,' : pic(+p[1]);
     // the free camera's AI judge is the real one, in this browser
-    if (FREE && s.startsWith('/judge/judge.html')) return s.replace('/judge/judge.html', '/judge-free.html');
+    // (a live camera's judge judges here, rather than following a server's: no follow=)
+    if (FREE && s.startsWith('/judge/judge.html')) return s.replace('/judge/judge.html', '/judge-free.html').replace(/([?&])follow=\d+&?/, '$1').replace(/[?&]$/, '');
     if (s.startsWith('/judge/judge.html')) {
       if (s.includes('settings=1')) return s.replace('/judge/judge.html', '/judge.html');
       const jq = new URL(s, location.href).searchParams;
@@ -459,7 +460,8 @@
     return s;
   };
   // the free camera's AI judge page (/judge-free.html) reports here, and plays its videos from here
-  window.hjFree = FREE ? { fetch: (input, init) => window.fetch(input, init), media: rewrite, ours: (p) => /^\/api\/(athlete|athlete-track|number-seen|engine\/\d+\/\w+)$/.test(p) } : null;
+  // (its live judge gets camera 1 itself, shared with the live view: no WebRTC between the two pages)
+  window.hjFree = FREE ? { camera: (url) => (/station1\b/.test(url) && cam1.live?.active ? cam1.live : null), fetch: (input, init) => window.fetch(input, init), media: rewrite, ours: (p) => /^\/api\/(athlete|athlete-track|number-seen|engine\/\d+\/\w+)$/.test(p) || p.startsWith('/whep/') } : null;
   // for the TEST judge window: camera 1 live, or a clip or video to play
   window.hjTestCamera = (n) => (n === 1 && cam1.stream?.active ? cam1.stream : null);
   window.hjTestMedia = rewrite;

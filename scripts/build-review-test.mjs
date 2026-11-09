@@ -61,9 +61,9 @@ build('review-test', {
 // ---- the free camera: any company that's signed in (and not blocked), in its own colours
 build('review-free', {
   first: '<script>window.HJ_FREE = true;</script>\n',
-  end: banner('FREE CAMERA<span class="tmMore"> · <span id="tmCam">camera 1: asking for this browser\'s camera…</span> · the AI judge runs in this browser, a minute at a time · nothing leaves this browser</span>')
-    // no live AI judge, no phones and no clips to save: those need a server
-    + '\n<style>.jtile .track, .jtile .cfg, #judgeRestart, #addCam, .camcard img, .camcard p, .camcard details { display: none !important; }</style>\n'
+  end: banner('FREE CAMERA<span class="tmMore"> · <span id="tmCam">camera 1: asking for this browser\'s camera…</span> · the AI judge runs in this browser · nothing leaves this browser</span>')
+    // no phones and no clips to save: those need a server
+    + '\n<style>#addCam, .camcard img, .camcard p, .camcard details { display: none !important; }</style>\n'
     + gate('Free camera', `if (me?.user) {
       const { company } = await call('companies/mine').catch(() => ({}));
       if (me.admin || company?.status === 'approved') {
@@ -72,7 +72,7 @@ build('review-free', {
       }
     }`, 'The free camera is for companies using HeadJudge. Sign in to your console, then open it from there.'),
   more: (swap) => swap('This server takes two cameras. Open HeadJudge Broadcaster on the phone and scan a camera\'s code. Any Wi-Fi or mobile signal will do.',
-    'The free camera is this computer\'s own camera, recorded in this browser for 20 minutes. Phones as cameras, live AI judging and saving clips need a server: book one from your console.')
+    'The free camera is this computer\'s own camera, recorded in this browser for 20 minutes. Its AI judge runs in this browser too, live or on a minute of video. Phones as cameras and saving clips need a server: book one from your console.')
     ('<small>From the last 7 days</small>', '<small>A minute of camera 1</small>')
     ('<small>Analysed on the server</small>', '<small>Up to 1 minute, analysed here</small>')
     ('Videos are analysed on the server, in the background. You can close this page: the results are here when it\'s done.',
@@ -93,6 +93,7 @@ j.swap('<script type="module" src="judge-gate.js"></script>\n', '')
       const u = new URL(typeof input === 'string' ? input : input.url, location.href);
       return u.origin === location.origin && P.ours(u.pathname) ? P.fetch(input, init) : realFetch(input, init);
     };
+    window.hjLocalCamera = (url) => P.camera(url); // a live camera: this browser's own, handed over (app.js connectStream)
     const d = Object.getOwnPropertyDescriptor(HTMLMediaElement.prototype, 'src');
     Object.defineProperty(HTMLMediaElement.prototype, 'src', { get() { return d.get.call(this); }, set(v) { d.set.call(this, P.media(v, window)); }, configurable: true });
   })();

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0b0b0b">
-<title>Burpee Judge</title>
+<title>AI Judge</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;1,800;1,900&family=Barlow:wght@400;600;700&display=swap">
@@ -96,10 +96,10 @@
     <button type="button" id="goSettings" class="cog-btn" aria-label="Settings">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M10.3 2h3.4l.5 2.6c.7.3 1.3.6 1.9 1.1l2.5-.9 1.7 2.9-2 1.7a7 7 0 0 1 0 2.2l2 1.7-1.7 2.9-2.5-.9c-.6.5-1.2.8-1.9 1.1l-.5 2.6h-3.4l-.5-2.6a7 7 0 0 1-1.9-1.1l-2.5.9-1.7-2.9 2-1.7a7 7 0 0 1 0-2.2l-2-1.7 1.7-2.9 2.5.9c.6-.5 1.2-.8 1.9-1.1L10.3 2zM12 8.6a3.4 3.4 0 1 0 0 6.8 3.4 3.4 0 0 0 0-6.8z"/></svg>
     </button>
-    <a href="https://mango-glacier-03e711403.4.azurestaticapps.net/" class="home-link">‹ Spartans home</a>
-    <p class="eyebrow">Penalty station</p>
-    <h1>Burpee<br>Judge</h1>
-    <p class="lede">Counts 30 penalty burpees live, to race standard. A rep only counts with chest to ground, both feet off the ground, full hip extension and hands over ears.</p>
+    <a href="/console.html" class="home-link">‹ HeadJudge</a>
+    <p class="eyebrow">HeadJudge</p>
+    <h1>AI<br>Judge</h1>
+    <p class="lede">Counts reps live and checks each one against the exercise's standard. For burpees: chest to ground, both feet off the ground, full hip extension and hands over ears.</p>
   </header>
 
   <div class="panel">
@@ -117,7 +117,7 @@
 
     <label class="field" for="stationName">
       <span>Station name</span>
-      <input id="stationName" type="text" placeholder="e.g. Spear throw – phone A" autocomplete="off">
+      <input id="stationName" type="text" placeholder="e.g. Station 1 – camera A" autocomplete="off">
     </label>
 
     <div class="field">
@@ -322,14 +322,14 @@
   </header>
   <form id="settingsForm" class="panel">
     <div class="spartan-default">
-      <button type="button" id="spartanDefault" class="btn btn-red">Race-day default</button>
-      <p id="spartanDone" class="status" hidden>Race-day default set and saved.</p>
-      <p class="status">One tap for race day: burpees, several athletes at once, race numbers read from the head bands laid in front of them, lenient judging (strictness 20), forgiving body tracking, Full pose model, count called out, video recorded.</p>
+      <button type="button" id="spartanDefault" class="btn btn-red">Event default</button>
+      <p id="spartanDone" class="status" hidden>Event default set and saved.</p>
+      <p class="status">One tap for an event: burpees, several athletes at once, athletes' numbers read, lenient judging (strictness 20), forgiving body tracking, Full pose model, count called out, video recorded.</p>
     </div>
     <h3>Station</h3>
     <label class="field" for="s_exercise"><span>Exercise</span>
       <select id="s_exercise">
-        <option value="burpees">Burpees (Spartan penalty)</option>
+        <option value="burpees">Burpees</option>
         <option value="squats">Air squats</option>
         <option value="pushups">Push-ups</option>
         <option value="jacks">Jumping jacks</option>
@@ -473,7 +473,7 @@
     <button type="button" id="rulesClose" class="rules-x" aria-label="Close">
       <svg viewBox="0 0 100 100" aria-hidden="true"><path d="M24 24 L76 76 M76 24 L24 76" fill="none" stroke="currentColor" stroke-width="14" stroke-linecap="square"/></svg>
     </button>
-    <p class="eyebrow" id="rulesEyebrow">Spartan penalty burpee</p>
+    <p class="eyebrow" id="rulesEyebrow">Burpee standard</p>
     <h2 id="rulesTitle">What counts as one rep</h2>
     <p class="rules-flow" id="rulesFlow"></p>
     <p class="status" id="rulesCamera" hidden></p>

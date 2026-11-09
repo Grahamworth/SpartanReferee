@@ -696,8 +696,6 @@ function setResMode(m) {
   if ($('judge').hidden) showTab('judge'); else renderAthletes(true);
 }
 $('srcBar').onclick = (e) => { const b = e.target.closest('[data-src]'); if (b) setResMode(b.dataset.src); };
-// the free camera judges nothing live: its Results start at its recordings
-if (FREE) setTimeout(() => { $('srcBar').querySelector('[data-src="live"]').hidden = true; resMode = 'previous'; $('srcBar').querySelectorAll('[data-src]').forEach((b) => b.classList.toggle('on', b.dataset.src === 'previous')); showRecPick(); loadRecordings(); });
 $('recList').onclick = (e) => { const b = e.target.closest('[data-rec]'); if (!b) return; recShown = recordings.find((x) => x.id === b.dataset.rec); showRecPick(); renderAthletes(true); scrollTo({ top: 0 }); };
 $('recChange').onclick = () => { recShown = null; loadRecordings(); showRecPick(); renderAthletes(true); };
 // a recording nobody's judged here (from an earlier booking, say): analysed like an upload, with its settings first
@@ -757,7 +755,7 @@ function renderAthletes(force) {
   if (sig === listSig && !force) return; listSig = sig;
   const numbered = list.filter((a) => a.bib && a.bib !== 'No number').length;
   const base = resultsBase();
-  $('athleteSummary').textContent = resMode === 'previous' && !recShown ? '' : base.length ? `${list.length} athlete${list.length === 1 ? '' : 's'}${list.length < base.length ? ` (of ${base.length})` : ''} · ${numbered} with a number read` : resMode === 'previous' ? `Nobody from this recording has been judged ${FREE ? 'yet' : 'on this server'}.` : (FREE ? 'Nobody tracked yet. Analyse a minute of camera 1 (Previous recordings, below) or upload a video of up to a minute.' : 'Nobody tracked on this day yet. Turn the AI judge on for a camera (Live tab) or upload a video.');
+  $('athleteSummary').textContent = resMode === 'previous' && !recShown ? '' : base.length ? `${list.length} athlete${list.length === 1 ? '' : 's'}${list.length < base.length ? ` (of ${base.length})` : ''} · ${numbered} with a number read` : resMode === 'previous' ? `Nobody from this recording has been judged ${FREE ? 'yet' : 'on this server'}.` : (FREE ? 'Nobody tracked yet. Start the AI judge on camera 1 (Live tab), analyse a minute of its recording, or upload a video of up to a minute.' :'Nobody tracked on this day yet. Turn the AI judge on for a camera (Live tab) or upload a video.');
   $('athleteList').innerHTML = list.map((a) => `<div class="ath${a.done ? '' : ' going'}" data-n="${a.n}">
     ${athBody(a, `<span>${whereText(a)}</span><span>${whenText(a)}</span>${a.done ? '' : '<span class="going">Being judged</span>'}`)}
   </div>`).join('');

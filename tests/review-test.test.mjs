@@ -45,7 +45,7 @@ test('the free camera: any approved company, one camera, the real AI judge in th
   assert.match(html, /cover\.remove\(\); window\.hjTestStart\?\.\(\); return;/, 'the camera is asked for only once they\'re let in');
   assert.match(html, /FREE CAMERA/);
   assert.doesNotMatch(html, /This server takes two cameras/);
-  assert.match(html, /\.jtile \.track/, 'no Start AI judge: live judging needs a server');
+  assert.doesNotMatch(html, /\.jtile \.track/, 'Start AI judge stays: camera 1 is judged live, in this browser');
   const judge = fs.readFileSync(path.join(site, 'judge-free.html'), 'utf8');
   assert.doesNotMatch(judge, /judge-gate\.js/, 'no referee check: the free page checked who it is');
   assert.ok(judge.indexOf('parent.hjFree') < judge.indexOf('app.js'), 'reports to the free page before the judge starts');
@@ -54,5 +54,20 @@ test('the free camera: any approved company, one camera, the real AI judge in th
   assert.match(mode, /MAX_SECS = 60/);
   assert.match(mode, /BLOCK_MS = FREE \? 60e3/, 'recordings listed a minute at a time');
   assert.match(mode, /\/judge-free\.html\?/, 'the real judge, not TEST');
+  assert.ok(mode.includes(".replace(/([?&])follow=\\d+&?/, '$1')"), 'a live camera\'s judge judges here, not following a server\'s');
+  assert.ok(mode.includes("|| p.startsWith('/whep/')"), 'and gets camera 1\'s picture from this page');
   assert.match(mode, /secs > MAX_SECS/, 'longer uploads are refused');
+});
+
+test('the judge: the free camera hands its live camera over directly, and frames never reported are not waited for in full', () => {
+  const app = fs.readFileSync(path.join(ROOT, 'app.js'), 'utf8');
+  assert.match(app, /const here = window\.hjLocalCamera\?\.\(url\);\n  if \(here\) return \{ pc: localLink\(here\), media: here \};/, 'only when the opener offers it: a server\'s judge uses WebRTC as before');
+  assert.match(app, /unreported >= 5 \? UNREPORTED_WAIT_MS : NEW_FRAME_WAIT_MS/);
+  assert.match(app, /framed = true; unreported = 0;/, 'a reported frame puts the full wait back');
+  // Pick athlete and Details: the analysis only, never the judge's own home screen, and nothing about Spartans on its main screens
+  assert.match(app, /if \(q\.get\('clip'\)\) document\.documentElement\.classList\.add\('analysis'\);/);
+  assert.match(fs.readFileSync(path.join(ROOT, 'styles.css'), 'utf8'), /html\.analysis #attemptBack, html\.analysis #nextAthlete/);
+  const judge = fs.readFileSync(path.join(ROOT, 'judge.html'), 'utf8'), home = judge.slice(judge.indexOf('<!-- HOME -->'));
+  assert.doesNotMatch(home.replace(/<[^>]*>/g, ' '), /Spartan|Penalty station/i, 'in what it shows');
+  assert.doesNotMatch(fs.readFileSync(path.join(ROOT, 'judge-gate.js'), 'utf8'), /mango-glacier|referees\.<\/p>/);
 });

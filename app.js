@@ -316,7 +316,7 @@ function renderExercise() {
   $('posTitle').textContent = ex.ready.title;
   $('chkStand').textContent = ex.ready.check;
   // What counts? panel: drawn figures for burpees, a plain list otherwise.
-  $('rulesEyebrow').textContent = key === 'burpees' ? 'Spartan penalty burpee' : ex.label;
+  $('rulesEyebrow').textContent = key === 'burpees' ? 'Burpee standard' : ex.label;
   $('rulesFlow').textContent = ex.flow;
   $('rulesCamera').textContent = ex.camera || '';
   $('rulesCamera').hidden = !ex.camera;
@@ -395,7 +395,20 @@ function stopCamera() {
 // an https page from fetching a plain http address elsewhere on the network.
 const DEFAULT_STREAM_URL = 'http://localhost:8889/live/station1/whep';
 
+// The free camera (judge-free.html): its camera is in the page that opened this one, and is handed over as it is. A WebRTC link
+// between the two would compress and uncompress every frame, and on a laptop most of them were lost (2 a second reached the judge).
+// Seen as a connection that drops when the camera does, so it reconnects the same way.
+function localLink(media) {
+  const pc = new EventTarget();
+  pc.connectionState = 'connected';
+  const watch = setInterval(() => { if (media.active) return; clearInterval(watch); pc.connectionState = 'disconnected'; pc.dispatchEvent(new Event('connectionstatechange')); }, 1000);
+  pc.close = () => { clearInterval(watch); pc.connectionState = 'closed'; }; // the camera is the opener's: left on
+  return pc;
+}
+
 async function connectStream(url) {
+  const here = window.hjLocalCamera?.(url);
+  if (here) return { pc: localLink(here), media: here };
   // the stream's page address (…/live/station1) works too: WHEP lives at …/whep
   url = url.trim();
   if (!/\/whep\/?$/i.test(url)) url = url.replace(/\/+$/, '') + '/whep';
@@ -2389,16 +2402,20 @@ async function jumpTo(time) {
 const NEW_FRAME_WAIT_MS = 500;
 // Stepping lands exactly on the line between two of the video's frames, where rounding can pick either: aim just inside.
 const SEEK_INSIDE_FRAME_S = 0.005;
-let lastFrameTime = -1;
+// Some videos never report their new frames when stepped through (one put together in the browser, as the free camera's recordings
+// are): waiting the full limit at every step made a minute of one take three times as long. Once it's happened a few steps running,
+// the wait is a moment, until a new frame is reported again.
+const UNREPORTED_WAIT_MS = 40;
+let lastFrameTime = -1, unreported = 0;
 function seekTo(time) {
   return new Promise((r) => {
     let seeked = false, framed = !video.requestVideoFrameCallback, settle = null;
     const check = () => { if (seeked && framed) { clearTimeout(timer); clearTimeout(settle); r(); } };
     const timer = setTimeout(() => { video.removeEventListener('seeked', onSeeked); r(); }, 3000);
-    const onSeeked = () => { seeked = true; if (!framed) settle = setTimeout(() => { framed = true; check(); }, NEW_FRAME_WAIT_MS); check(); };
+    const onSeeked = () => { seeked = true; if (!framed) settle = setTimeout(() => { unreported++; framed = true; check(); }, unreported >= 5 ? UNREPORTED_WAIT_MS : NEW_FRAME_WAIT_MS); check(); };
     const onFrame = (_, m) => {
       if (m.mediaTime === lastFrameTime) { video.requestVideoFrameCallback(onFrame); return; }
-      lastFrameTime = m.mediaTime; framed = true; check();
+      lastFrameTime = m.mediaTime; framed = true; unreported = 0; check();
     };
     if (!framed) video.requestVideoFrameCallback(onFrame);
     video.addEventListener('seeked', onSeeked, { once: true });
@@ -2426,7 +2443,7 @@ async function prepass(range) {
   for (let i = i0; i < n && S.testMode; i++) {
     while (run.paused && !run.stop && S.testMode) { showLoader(`Paused at ${run.pct}%`); await new Promise((r) => setTimeout(r, 200)); }
     if (run.stop) break;
-    run.pct = Math.round((100 * (i - i0)) / Math.max(1, n - i0));
+    run.pct = Math.round((100 * (i - i0)) / Math.max(1, n - i0)); run.unreported = unreported; // (for checking: frames stepped to without a report)
     await seekTo(i / PREPASS_FPS + SEEK_INSIDE_FRAME_S);
     S.lastVideoTime = video.currentTime;
     S.frame = frameSource();
@@ -2663,6 +2680,8 @@ async function analysePick(url, px, py, pt) {
 {
   const q = new URLSearchParams(location.search);
   if (q.get('heavy')) S.modelOverride = 'heavy';
+  // Pick athlete and Details in the video review: the analysis only, never the judge's own home screen (the review has its own Close)
+  if (q.get('clip')) document.documentElement.classList.add('analysis');
   if (q.get('clip')) analysePick(q.get('clip'), +q.get('pickx'), +q.get('picky'), +q.get('pickt'));
   // an uploaded video in the review's Upload tab: judged as it plays, exactly like a live camera (judge.html?video=&go=1&cfg=upload)
   else if (q.get('video') && q.get('go')) {
