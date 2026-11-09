@@ -18,6 +18,8 @@ const span = (ms) => { const s = Math.max(0, Math.round(ms / 1000)); return s < 
 const params = new URLSearchParams(location.search);
 const device = params.get('device') || (/iPad|Macintosh/.test(navigator.userAgent) && 'ontouchend' in document ? 'iPad' : /iPhone|Android/.test(navigator.userAgent) ? 'Phone' : 'Browser');
 let st = null, skew = 0;   // the server's state; laptop clock − this device's clock (ms)
+// the free camera (review-test/test-mode.js with HJ_FREE): no server, its AI judge runs in this browser on a minute at a time
+const FREE = !!window.HJ_FREE, where = FREE ? 'in this browser' : 'on the server';
 
 function toast(s) { const t = $('toast'); t.textContent = s; t.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 2500); }
 const laptopNow = () => new Date(Date.now() + skew);
@@ -404,7 +406,7 @@ addEventListener('message', (e) => {
       if (e.data.judge === 'saved') { upConfigured = Date.now(); $('upStatus').textContent = 'Settings saved. Now choose your video.'; $('upFile').click(); }
       return;
     }
-    if (e.data.judge === 'saved' && upPending) { upPending.go = true; if (!upPending.saved) $('upStatus').textContent = 'Starting as soon as the video is on the server…'; pushed.then(upReady); }
+    if (e.data.judge === 'saved' && upPending) { upPending.go = true; if (!upPending.saved) $('upStatus').textContent = `Starting as soon as the video is ${where}…`; pushed.then(upReady); }
     else if (e.data.judge === 'saved') toast('Upload settings saved: used for the next video');
     else if (upPending) { upPending = null; $('upStatus').textContent = 'Not started. Judge it from the list below when you\'re ready.'; }
     return;
@@ -631,6 +633,7 @@ const hm = (d) => d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-
 // A camera's recordings are cut every 10 minutes; one ends where the next begins.
 const SEGMENT_MS = 10 * 60e3;
 function recordingEnd(r) {
+  if (r.span) return r.span[1]; // recorded in this browser (the free camera, test mode): its own start and end
   const s = Date.parse(r.startedAt), next = (recordings || []).filter((x) => x.cam && x.cam === r.cam && Date.parse(x.startedAt) > s).map((x) => Date.parse(x.startedAt)).sort((a, b) => a - b)[0];
   return Math.min(next || Infinity, s + SEGMENT_MS);
 }
@@ -664,7 +667,7 @@ async function loadRecordings() {
 }
 function drawRecordings() {
   const list = recordings || [];
-  if (!list.length) { $('recList').innerHTML = '<p class="muted">No recordings yet. A camera\'s recording appears here a few minutes after it finishes, and each is kept for 7 days.</p>'; return; }
+  if (!list.length) { $('recList').innerHTML = `<p class="muted">${FREE ? 'Nothing recorded yet. Once camera 1 is on, each minute it records is listed here, ready to analyse.' : 'No recordings yet. A camera\'s recording appears here a few minutes after it finishes, and each is kept for 7 days.'}</p>`; return; }
   let day = '';
   $('recList').innerHTML = list.map((r) => {
     const t = new Date(r.startedAt), d = t.toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long' });
@@ -693,6 +696,8 @@ function setResMode(m) {
   if ($('judge').hidden) showTab('judge'); else renderAthletes(true);
 }
 $('srcBar').onclick = (e) => { const b = e.target.closest('[data-src]'); if (b) setResMode(b.dataset.src); };
+// the free camera judges nothing live: its Results start at its recordings
+if (FREE) setTimeout(() => { $('srcBar').querySelector('[data-src="live"]').hidden = true; resMode = 'previous'; $('srcBar').querySelectorAll('[data-src]').forEach((b) => b.classList.toggle('on', b.dataset.src === 'previous')); showRecPick(); loadRecordings(); });
 $('recList').onclick = (e) => { const b = e.target.closest('[data-rec]'); if (!b) return; recShown = recordings.find((x) => x.id === b.dataset.rec); showRecPick(); renderAthletes(true); scrollTo({ top: 0 }); };
 $('recChange').onclick = () => { recShown = null; loadRecordings(); showRecPick(); renderAthletes(true); };
 // a recording nobody's judged here (from an earlier booking, say): analysed like an upload, with its settings first
@@ -752,7 +757,7 @@ function renderAthletes(force) {
   if (sig === listSig && !force) return; listSig = sig;
   const numbered = list.filter((a) => a.bib && a.bib !== 'No number').length;
   const base = resultsBase();
-  $('athleteSummary').textContent = resMode === 'previous' && !recShown ? '' : base.length ? `${list.length} athlete${list.length === 1 ? '' : 's'}${list.length < base.length ? ` (of ${base.length})` : ''} · ${numbered} with a number read` : resMode === 'previous' ? 'Nobody from this recording has been judged on this server.' : 'Nobody tracked on this day yet. Turn the AI judge on for a camera (Live tab) or upload a video.';
+  $('athleteSummary').textContent = resMode === 'previous' && !recShown ? '' : base.length ? `${list.length} athlete${list.length === 1 ? '' : 's'}${list.length < base.length ? ` (of ${base.length})` : ''} · ${numbered} with a number read` : resMode === 'previous' ? `Nobody from this recording has been judged ${FREE ? 'yet' : 'on this server'}.` : (FREE ? 'Nobody tracked yet. Analyse a minute of camera 1 (Previous recordings, below) or upload a video of up to a minute.' : 'Nobody tracked on this day yet. Turn the AI judge on for a camera (Live tab) or upload a video.');
   $('athleteList').innerHTML = list.map((a) => `<div class="ath${a.done ? '' : ' going'}" data-n="${a.n}">
     ${athBody(a, `<span>${whereText(a)}</span><span>${whenText(a)}</span>${a.done ? '' : '<span class="going">Being judged</span>'}`)}
   </div>`).join('');
@@ -1182,7 +1187,7 @@ $('upList').onclick = async (e) => {
   if (b.dataset.show) { showUpload(b.dataset.show); return; }
   if (b.dataset.judge) return blockedByLive() ? undefined : upConfig(uploadName(b.dataset.judge), b.dataset.judge);
   const name = b.dataset.delup;
-  if (!confirm(`Delete ${uploadName(name)} from the server, with the athletes the AI judge found in it?`)) return;
+  if (!confirm(`Delete ${uploadName(name)} from ${FREE ? 'this browser' : 'the server'}, with the athletes the AI judge found in it?`)) return;
   if (JOB_ACTIVE.has(jobOf(name)?.state)) await jobStop(name);
   if (upShown === name) { upShown = ''; $('upStage').innerHTML = '<div class="msg">Upload a video to judge it.</div>'; renderSides(); }
   const r = await fetch('/api/uploads?name=' + encodeURIComponent(name), { method: 'DELETE' }).then((x) => x.json()).catch(() => ({ error: 'can\'t reach the server' }));
@@ -1209,8 +1214,8 @@ let jobs = [], jobStates = {}, jobTicks = 0;
 const jobOf = (video) => jobs.find((j) => j.video === video);
 function jobText(j) {
   const name = uploadName(j.video);
-  if (j.state === 'queued') return `${name} is next in the queue. You can close this page.`;
-  if (j.state === 'running') return `Analysing ${name} on the server: ${j.pct || 0}%. You can close this page, and the results will be here when it's done.`;
+  if (j.state === 'queued') return `${name} is next in the queue.${FREE ? '' : ' You can close this page.'}`;
+  if (j.state === 'running') return FREE ? `Analysing ${name} in this browser: ${j.pct || 0}%. Keep this tab open and in front: it slows right down behind another tab, and closing it stops the analysis.` : `Analysing ${name} on the server: ${j.pct || 0}%. You can close this page, and the results will be here when it's done.`;
   if (j.state === 'waiting') return `${name} is waiting at ${j.pct || 0}%: the live cameras need the server. It carries on when one stops.`;
   if (j.state === 'done') return `${name} is analysed. The results are on the right.`;
   if (j.state === 'failed') return `${name} wasn't finished. ${j.why || ''} Use Judge again to retry.`;
@@ -1247,9 +1252,9 @@ $('busyClose').onclick = () => { busyShown = 0; $('busyNote').hidden = true; };
 $('upFile').addEventListener('click', (e) => { if (blockedByLive()) e.preventDefault(); });
 async function judgeUpload(saved, name) {
   showUpload(saved);
-  $('upStatus').textContent = `Sending ${name} to the server's AI judge…`;
+  $('upStatus').textContent = FREE ? `Starting the AI judge in this browser on ${name}…` : `Sending ${name} to the server's AI judge…`;
   const r = await fetch('/api/upload-jobs', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ video: saved, name }) }).catch(() => null);
-  if (!r?.ok) { $('upStatus').textContent = `${name} is on the server, but its analysis didn't start. Use Judge again in the list below.`; return; }
+  if (!r?.ok) { $('upStatus').textContent = `${name} is ${where}, but its analysis didn't start. Use Judge again in the list below.`; return; }
   await loadJobs();
 }
 let upPending = null;   // { name, saved, go } the video chosen, while its Config is open
@@ -1258,7 +1263,7 @@ let upChosen = null;   // a previous recording chosen, while its Config is open
 const recordingLabel = (r) => (r.cam ? `Camera ${r.cam}` : r.name || 'Uploaded video');
 async function judgePrevious(rec) {
   setResMode('upload');
-  $('upStatus').textContent = `Fetching ${recordingLabel(rec)} from cloud storage…`;
+  $('upStatus').textContent = FREE ? `Getting ${recordingLabel(rec)} ready…` : `Fetching ${recordingLabel(rec)} from cloud storage…`;
   const r = await fetch('/api/upload-jobs', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ previous: rec.id }) }).then((x) => x.json()).catch(() => ({ error: 'Can\'t reach the server' }));
   if (r.error) { $('upStatus').textContent = `That recording couldn't be fetched: ${r.error}`; return; }
   await loadJobs();
@@ -1285,12 +1290,12 @@ $('upFile').onchange = () => {
   const mine = upPending;
   const x = new XMLHttpRequest();
   x.open('POST', '/api/upload?name=' + encodeURIComponent(file.name));
-  x.upload.onprogress = (e) => { if (e.lengthComputable) $('upStatus').textContent = `Sending ${file.name} to the server… ${Math.round((100 * e.loaded) / e.total)}%`; };
+  x.upload.onprogress = (e) => { if (e.lengthComputable) $('upStatus').textContent = `${FREE ? 'Checking' : 'Sending'} ${file.name}${FREE ? '' : ' to the server'}… ${Math.round((100 * e.loaded) / e.total)}%`; };
   x.onload = () => {
     let r = {}; try { r = JSON.parse(x.responseText); } catch { /* not JSON */ }
-    if (x.status !== 200 || !r.saved) { $('upStatus').textContent = `The upload didn't work: ${r.error || x.status}`; if (upPending === mine) upPending = null; return; }
+    if (x.status !== 200 || !r.saved) { $('upStatus').textContent = FREE ? `${file.name} can't be judged here: ${r.error || x.status}.` : `The upload didn't work: ${r.error || x.status}`; if (upPending === mine) upPending = null; return; }
     loadUploads(); mine.saved = r.saved;
-    $('upStatus').textContent = mine.go ? `Starting ${file.name}…` : `${file.name} is on the server: check the settings, then Save to start judging.`;
+    $('upStatus').textContent = mine.go ? `Starting ${file.name}…` : `${file.name} is ${where}: check the settings, then Save to start judging.`;
     upReady();
   };
   x.onerror = () => { $('upStatus').textContent = 'The upload didn\'t work: can\'t reach the server'; };

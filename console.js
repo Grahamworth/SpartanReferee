@@ -255,6 +255,9 @@ async function enter() {
   show($('signIn'), false);
   const { company } = await call('companies/mine');
   if (!company) { show($('none'), true); return; }
+  // the free camera: anyone with a company that isn't blocked
+  const free = company.status === 'approved' || !!me.admin;
+  show($('freeLink'), free); show($('freeNote'), free);
   enterBrand(company);
   drawTracked($('trackedList'));
   await cameBackFromStripe();

@@ -4,7 +4,12 @@
 // Live, Watch, Pick athlete and previous recordings play real video. Camera 2 waits for its phone, with its QR codes. Starting an AI
 // judge shows TEST over the picture instead of a judge, and pretend athletes turn up in the recording. Nothing is sent anywhere:
 // recordings and uploaded videos stay in this browser. Built into the site by scripts/build-review-test.mjs; admins only.
+//
+// The free camera (window.HJ_FREE, built as /review-free/ for any company) is the same thing with nothing pretend: one camera, this
+// browser's, and the real AI judge (/judge-free.html) run here, in this browser, on a minute of video at a time: a minute of camera 1
+// (its recordings come in 1-minute pieces) or an uploaded video of up to a minute. There's no live AI judge: it would need a server.
 (() => {
+  const FREE = !!window.HJ_FREE;
   const realFetch = window.fetch.bind(window);
   const T0 = Date.now(), iso = (ms) => new Date(ms).toISOString(), minsAgo = (m) => iso(Date.now() - m * 60e3);
   const json = (body, status = 200) => new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
@@ -26,9 +31,9 @@
   const cams = [
     { n: 1, live: false, from: '', route: '', video: '', watchers: 1, ai: false }, // live once this browser's camera is on
     { n: 2, live: false, from: '', route: '', video: '', watchers: 0, ai: false },
-  ];
+  ].slice(0, FREE ? 1 : 2);
   let athletesRev = 1, seq = 4, judgeSettings = {}, counts = [];
-  const athletes = [
+  const athletes = FREE ? [] : [
     { n: 1, src: 'live', video: '', cam: 1, round: 1, label: 1, bib: '214', firstAt: minsAgo(22), lastAt: minsAgo(18), reps: 23, noReps: 0, done: true, pic: 0 },
     { n: 2, src: 'live', video: '', cam: 1, round: 1, label: 2, bib: '88', firstAt: minsAgo(15), lastAt: minsAgo(11), reps: 19, noReps: 1, questionable: 1, done: true, pic: 0 },
     { n: 3, src: 'live', video: '', cam: 2, round: 1, label: 3, bib: 'No number', firstAt: minsAgo(9), lastAt: minsAgo(6), reps: 17, noReps: 2, done: true, pic: 0 },
@@ -37,12 +42,12 @@
     { n: 5, src: 'live', video: '', cam: 1, round: 1, label: 5, bib: '57', firstAt: minsAgo(20), lastAt: minsAgo(16), reps: 21, noReps: 0, done: true, pic: 0 },
     { n: 6, src: 'live', video: '', cam: 1, round: 1, label: 6, bib: '302', firstAt: minsAgo(8), lastAt: minsAgo(4), reps: 25, noReps: 3, done: true, pic: 0 },
   ];
-  seq = 6;
-  const numbers = [
+  seq = FREE ? 0 : 6;
+  const numbers = FREE ? [] : [
     { id: 'n1', number: '214', src: 'live', cam: 1, video: '', firstAt: minsAgo(22.2), lastAt: minsAgo(22.1), firstT: 0, lastT: 0 },
     { id: 'n2', number: '88', src: 'live', cam: 1, video: '', firstAt: minsAgo(15.3), lastAt: minsAgo(15.2), firstT: 0, lastT: 0 },
   ];
-  const events = [{ t: minsAgo(25), cam: 1, type: 'connected', route: 'internet' }, { t: minsAgo(10), cam: 2, type: 'lost', route: '' }];
+  const events = FREE ? [] : [{ t: minsAgo(25), cam: 1, type: 'connected', route: 'internet' }, { t: minsAgo(10), cam: 2, type: 'lost', route: '' }];
   const uploads = [], files = new Map(), jobs = [], prevSources = {};
   // a few reps and a no rep, spread across the time they were on screen
   const track = (a) => {
@@ -66,14 +71,15 @@
   };
   const state = () => ({
     now: new Date().toISOString(), cams: cams.map((c) => ({ ...c, judging: c.ai && c.live, fps: c.ai && c.live ? 15 : 0 })),
-    marks: [], events, athletesRev, record: true, keepDays: 7, maxJudges: 2, until: T0 + 2 * 3600e3, firstCamera: 1,
+    marks: [], events, athletesRev, record: true, keepDays: 7, maxJudges: FREE ? 0 : 2, until: FREE ? 0 : T0 + 2 * 3600e3, firstCamera: 1,
     site: new URL('../console.html', location.href).href, // the site's own console: Booking and History go there
-    brand: { id: 'test', name: 'Test company', logo: '', theme: { primary: '#ffc400', accent: '#3ddc97', mode: 'dark' } },
+    brand: window.HJ_BRAND || { id: 'test', name: FREE ? 'Free camera' : 'Test company', logo: '', theme: { primary: '#ffc400', accent: '#3ddc97', mode: 'dark' } },
   });
   // ---- camera 1: this browser's camera, recorded here in 10-second pieces kept for 20 minutes. A stretch of it plays as one video,
   // its pieces put together in the browser (Media Source), starting at the moment asked for, just as a server cuts a clip.
   const REC_TYPES = ['video/webm;codecs=vp8', 'video/webm;codecs=vp9', 'video/mp4;codecs=avc1.42E01E'];
-  const PIECE_MS = 10e3, KEEP_MS = 20 * 60e3, BLOCK_MS = 10 * 60e3;
+  // the free camera's recordings are listed a minute at a time: as much as the AI judge analyses in one go here
+  const PIECE_MS = 10e3, KEEP_MS = 20 * 60e3, BLOCK_MS = FREE ? 60e3 : 10 * 60e3, MAX_SECS = 60;
   const cam1 = { stream: null, rec: null, live: null, type: '', pieces: [], began: 0, why: '', gen: 0, tries: 0 };
   const say = (what) => { cam1.why = what; const el = document.getElementById('tmCam'); if (el) el.textContent = what; };
   async function startCamera() {
@@ -132,12 +138,13 @@
     while (cam1.pieces.length && cam1.pieces[0].end < old) cam1.pieces.shift();
   }
   const piecesIn = (cam, from, to) => (cam === 1 ? cam1.pieces.filter((p) => p.size && p.end > from && p.start < to) : []);
-  // a clip from `from` for `secs`: a Media Source the video plays, its time 0 being `from`
-  function clipUrl(cam, from, secs) {
+  // a clip from `from` for `secs`: a Media Source the video plays, its time 0 being `from` (made in the window that plays it: a Media
+  // Source only plays in the page it was made in, and the AI judge has a page of its own)
+  function clipUrl(cam, from, secs, win = window) {
     const pieces = piecesIn(cam, from, from + secs * 1000).map((p) => ({ start: p.start, blob: new Blob(p.chunks, { type: cam1.type }) }));
-    const ms = new MediaSource(), url = URL.createObjectURL(ms);
+    const ms = new win.MediaSource(), url = win.URL.createObjectURL(ms);
     ms.addEventListener('sourceopen', async () => {
-      URL.revokeObjectURL(url);
+      win.URL.revokeObjectURL(url);
       try {
         const sb = ms.addSourceBuffer(cam1.type);
         ms.duration = secs; // its whole length from the start, so a jump ahead isn't cut short while the pieces go in
@@ -168,9 +175,10 @@
   function browserRecordings() {
     const out = [], last = cam1.pieces.at(-1);
     if (!last) return out;
+    // each stretch exactly: a piece that runs over its end is cut there, and its rest starts the next one
     for (let b = cam1.began, i = 1; b < last.end; b += BLOCK_MS, i++) {
-      const ps = piecesIn(1, b, b + BLOCK_MS).filter((p) => p.start >= b);
-      if (ps.length) out.push({ id: `here${i}`, cam: 1, size: ps.reduce((n, p) => n + p.size, 0), startedAt: iso(ps[0].start), file: `camera1-here${i}.webm`, name: '', span: [ps[0].start, ps.at(-1).end] });
+      const ps = piecesIn(1, b, b + BLOCK_MS), from = ps.length ? Math.max(b, ps[0].start) : 0, to = Math.min(b + BLOCK_MS, Math.max(...ps.map((p) => p.end)));
+      if (ps.length && to - from >= 1000) out.push({ id: `here${i}`, cam: 1, size: ps.reduce((n, p) => n + p.size, 0), startedAt: iso(from), file: `camera1-here${i}.webm`, name: '', span: [from, to] });
     }
     return out;
   }
@@ -189,7 +197,7 @@
   }
   // while camera 1's AI judge is "on", someone turns up in its recording every half minute, so Watch has real video to show
   const BIBS = ['12', '407', 'No number', '73', '219', '5', '640'];
-  setInterval(() => {
+  if (!FREE) setInterval(() => {
     const now = Date.now();
     if (!cams[0].live || !cams[0].ai || !piecesIn(1, now - 26e3, now - 2e3).length) return;
     const reps = 6 + (seq % 9);
@@ -197,11 +205,90 @@
     athletesRev++;
   }, 30e3);
 
+  // ---- the free camera's AI judge: what it reports about each athlete is kept here, as a server's review keeps it
+  const tracks = new Map(), pics = new Map();
+  const athleteFor = (b, at) => {
+    const src = b.src === 'upload' ? 'upload' : 'live', cam = +b.cam || 0, video = String(b.video || ''), round = String(b.round || ''), label = +b.label || 0;
+    let a = athletes.find((x) => x.src === src && x.cam === cam && x.video === video && x.round === round && x.label === label);
+    if (!a) { a = { n: ++seq, src, cam, video, round, label, bib: '', firstAt: at, lastAt: at, reps: 0, noReps: 0, done: false, pic: 0 }; athletes.push(a); athletesRev++; }
+    return a;
+  };
+  const isNum = (v) => v != null && v !== '' && Number.isFinite(+v);
+  function athleteSaid(b) {
+    const at = !isNaN(Date.parse(b.at)) ? iso(Date.parse(b.at)) : iso(Date.now()), a = athleteFor(b, at);
+    if (at < a.firstAt) a.firstAt = at;
+    if (at > a.lastAt) a.lastAt = at;
+    if (isNum(b.t)) { const t = +b.t; if (a.firstT == null || t < a.firstT) a.firstT = t; if (a.lastT == null || t > a.lastT) a.lastT = t; }
+    if (b.bib) a.bib = String(b.bib).slice(0, 12);
+    for (const k of ['reps', 'noReps', 'questionable']) if (isNum(b[k])) a[k] = Math.max(0, +b[k] | 0);
+    if (b.box && isNum(b.box.x) && isNum(b.box.y)) { a.box = { x: +b.box.x, y: +b.box.y }; a.boxAt = at; if (isNum(b.t)) a.boxT = +b.t; }
+    if (b.done) { a.done = true; a.id = String(b.id || ''); }
+    if (typeof b.pic === 'string' && b.pic.startsWith('data:image/jpeg;base64,')) { pics.set(a.n, b.pic); a.pic = Date.now(); }
+    athletesRev++;
+    return a;
+  }
+  function trackSaid(b) {
+    const a = athleteFor(b, !isNaN(Date.parse(b.at)) ? iso(Date.parse(b.at)) : iso(Date.now())), t = tracks.get(a.n) || { frames: [], events: [] };
+    for (const f of Array.isArray(b.frames) ? b.frames : []) if (Array.isArray(f)) t.frames.push(f);
+    for (const e of Array.isArray(b.events) ? b.events : []) if (e && (e.type === 'rep' || e.type === 'norep')) t.events.push(e);
+    tracks.set(a.n, t);
+  }
+  function numberSaid(b) {
+    const number = String(b.number || '').replace(/\D/g, '').slice(0, 12); if (!number) return;
+    const at = !isNaN(Date.parse(b.at)) ? iso(Date.parse(b.at)) : iso(Date.now()), src = b.src === 'upload' ? 'upload' : 'live', cam = +b.cam || 0, video = String(b.video || ''), t = isNum(b.t) ? +b.t : null;
+    const same = numbers.findLast((x) => x.number === number && x.src === src && x.cam === cam && x.video === video);
+    if (same && (src === 'upload' ? t != null && same.lastT != null && t >= same.lastT && t - same.lastT <= 20 : Date.parse(at) - Date.parse(same.lastAt) <= 20000)) { same.lastAt = at; same.lastT = t; }
+    else { numbers.push({ id: `n${numbers.length + 1}`, number, src, cam, video, firstAt: at, lastAt: at, firstT: t, lastT: t }); athletesRev++; }
+  }
+  // One video at a time, in a page of its own out of sight (the judge exactly as a server runs it), followed until it's done.
+  let judging = null, jobSeq = 0;
+  const LOAD_MS = 3 * 60e3, STALL_MS = 2 * 60e3;
+  function nextJob() {
+    if (judging) return;
+    const j = jobs.find((x) => x.state === 'queued'); if (!j) return;
+    const f = document.createElement('iframe');
+    f.title = 'AI judge'; f.setAttribute('aria-hidden', 'true'); f.tabIndex = -1;
+    // in view but invisible: a page out of view is slowed down by the browser
+    f.style.cssText = 'position:fixed;left:0;top:0;width:640px;height:400px;border:0;opacity:0;pointer-events:none;z-index:-1';
+    f.src = `/judge-free.html?${new URLSearchParams({ video: '/uploads/' + encodeURIComponent(j.video), name: j.name, go: '1', cfg: 'upload', bg: '1' })}`;
+    document.body.append(f);
+    judging = { j, f, began: Date.now(), movedAt: Date.now() };
+    Object.assign(j, { state: 'running', pct: 0, why: '' });
+  }
+  function endJob(state, why = '') {
+    const { j, f } = judging; judging = null;
+    Object.assign(j, { state, why }); if (state === 'done') j.pct = 100;
+    f.remove(); athletesRev++;
+    nextJob();
+  }
+  setInterval(() => {
+    if (!judging) return;
+    const { j, f } = judging, w = f.contentWindow, a = w?.__analysis;
+    let err = ''; try { const e = w?.document.getElementById('homeError'); if (e && !e.hidden) err = e.textContent.trim(); } catch { /* loading */ }
+    if (a) { a.stop = !!j.stopAsked; if (a.pct !== j.pct) { j.pct = a.pct; judging.movedAt = Date.now(); } }
+    if (a?.done) { judging.doneAt ??= Date.now(); if (Date.now() - judging.doneAt > 1500) endJob(j.stopAsked ? 'stopped' : 'done', j.stopAsked ? 'Stopped. What it found so far is on the right.' : ''); return; }
+    if (err) return endJob('failed', err.replace(/\.?$/, '.'));
+    if (j.stopAsked && !a) return endJob('stopped', 'Stopped before it began.');
+    if (!a && Date.now() - judging.began > LOAD_MS) return endJob('failed', 'The AI judge didn\'t load in this browser.');
+    if (a && Date.now() - judging.movedAt > STALL_MS) return endJob('failed', 'It stopped making progress.');
+  }, 1000);
+  // how long a video is (a recording straight from a browser may not say until it's been looked through)
+  const lengthOf = (url) => new Promise((ok) => {
+    const v = document.createElement('video'); v.preload = 'metadata'; v.muted = true;
+    const done = (d) => { v.removeAttribute('src'); v.load(); ok(d); };
+    v.onloadedmetadata = () => { if (Number.isFinite(v.duration)) return done(v.duration); v.ondurationchange = () => Number.isFinite(v.duration) && done(v.duration); v.currentTime = 1e9; };
+    v.onerror = () => done(NaN);
+    setTimeout(() => done(Number.isFinite(v.duration) ? v.duration : NaN), 15000);
+    v.src = url;
+  });
+  const mmss = (s) => `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, '0')}`;
+
   async function answer(path, q, method, body) {
     const eng = /^\/api\/engine\/(\d+)(?:\/(\w+))?$/.exec(path);
     if (eng) {
       const c = cams.find((x) => x.n === +eng[1]);
       if (!c) return json({ error: 'No such camera' }, 404);
+      if (FREE && !eng[2] && body?.on) return json({ error: 'The free camera has no live AI judge. Analyse a minute of its recording on the Results tab (Previous recordings), or book a server to judge live.' });
       if (!eng[2]) c.ai = !!body?.on;
       return json({ ok: true });
     }
@@ -210,10 +297,15 @@
       case '/api/days': return json([new Date().toISOString().slice(0, 10)]);
       case '/api/cameras': return json({ cameras: cams.map((c) => ({ n: c.n, live: c.live, video: c.video, larixUrl: `rtmp://test.headjudge.invalid:1935/live/station${c.n}?user=larix&pass=test`, rtmp: '', phone: qr, larix: qr })), bitrate: 3500, max: 2, firstCamera: 1 });
       case '/api/athletes': return json({ rev: athletesRev, list: [...athletes].reverse(), numbers });
-      case '/api/athlete-track': return json(track(athletes.find((a) => a.n === +q.get('n')) || { reps: 0, firstAt: iso(Date.now()) }));
+      case '/api/athlete-track':
+        if (method === 'POST') { trackSaid(body || {}); return json({ ok: true }); }
+        if (FREE) { const t = tracks.get(+q.get('n')) || { frames: [], events: [] }; return json({ frames: [...t.frames].sort((x, y) => x[0] - y[0]), events: [...t.events].sort((x, y) => x.t - y.t) }); }
+        return json(track(athletes.find((a) => a.n === +q.get('n')) || { reps: 0, firstAt: iso(Date.now()) }));
       case '/api/athlete':
+        if (method === 'POST') return json({ ok: true, n: athleteSaid(body || {}).n });
         if (method === 'DELETE') { const i = athletes.findIndex((a) => a.n === +q.get('n')); if (i >= 0) athletes.splice(i, 1); athletesRev++; }
         return json({ ok: true });
+      case '/api/number-seen': numberSaid(body || {}); return json({ ok: true });
       case '/api/judge-settings':
         if (method === 'PUT') { judgeSettings[body.key] = body.value; return json({ ok: true }); }
         return json(judgeSettings);
@@ -224,9 +316,34 @@
         if (method === 'DELETE') { counts = counts.filter((c) => c.id !== q.get('id')); return json({ ok: true }); }
         return json({ counts });
       case '/api/uploads':
-        if (method === 'DELETE') { const name = q.get('name'); uploads.splice(uploads.findIndex((u) => u.name === name) >>> 0, 1); return json({ ok: true }); }
+        if (method === 'DELETE') {
+          const name = q.get('name'); uploads.splice(uploads.findIndex((u) => u.name === name) >>> 0, 1);
+          if (FREE) { for (let i = athletes.length - 1; i >= 0; i--) if (athletes[i].src === 'upload' && athletes[i].video === name) { tracks.delete(athletes[i].n); pics.delete(athletes[i].n); athletes.splice(i, 1); } athletesRev++; }
+          return json({ ok: true });
+        }
         return json(uploads);
       case '/api/upload-jobs':
+        if (FREE && method === 'POST') {
+          let video = body?.video || '', name = body?.name || video;
+          if (body?.previous) {
+            const rec = recordingsNow().find((x) => x.id === body.previous);
+            if (!rec) return json({ error: 'That recording is no longer in this browser' });
+            if (rec.cam) {
+              // a minute of camera 1, kept as a video of its own while it's judged and watched
+              const [s, e] = rec.span, secs = Math.min(MAX_SECS, Math.max(1, Math.round((e - s) / 1000)));
+              video = `${iso(s).replace(/[:.]/g, '-')}_Camera_1.webm`; name = `Camera 1, ${new Date(s).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+              files.set(video, (win) => clipUrl(1, s, secs, win)); prevSources[video] = rec.file;
+              if (!uploads.some((u) => u.name === video)) uploads.unshift({ name: video, size: rec.size });
+            } else { video = rec.file; name = rec.name; }
+          }
+          if (!files.has(video)) return json({ error: 'That video is no longer in this browser' });
+          if (judging?.j.video === video) return json({ id: judging.j.id, video, name, state: 'running', pct: judging.j.pct || 0 });
+          for (let i = jobs.length - 1; i >= 0; i--) if (jobs[i].video === video) jobs.splice(i, 1);
+          const j = { id: `job${++jobSeq}`, video, name, state: 'queued', pct: 0, at: Date.now() };
+          jobs.push(j); nextJob();
+          return json({ id: j.id, video, name, state: j.state, pct: 0 });
+        }
+        if (FREE) return json(jobs.map(({ id, video, name, state, pct, why }) => ({ id, video, name, state, pct: pct || 0, why: why || '' })));
         if (method === 'POST') {
           const video = body?.video || '';
           // a previous recording, "fetched" to be analysed (there's no video to play in test mode)
@@ -243,7 +360,13 @@
           jobs.push(j); return json(jobView(j));
         }
         return json(jobs.map(jobView));
-      case '/api/upload-jobs/stop': { const j = jobs.find((x) => x.video === body?.video); if (j && j.state === 'running') { j.state = 'stopped'; j.why = 'Stopped. What it found so far is on the right.'; } return json({ stopped: !!j }); }
+      case '/api/upload-jobs/stop': {
+        const j = jobs.find((x) => x.video === body?.video);
+        if (FREE && j?.state === 'queued') Object.assign(j, { state: 'stopped', why: 'Stopped before it began.' });
+        else if (FREE && j?.state === 'running') j.stopAsked = true;
+        else if (j && j.state === 'running') { j.state = 'stopped'; j.why = 'Stopped. What it found so far is on the right.'; }
+        return json({ stopped: !!j });
+      }
       case '/api/previous-recordings': return json({ recordings: recordingsNow(), sources: prevSources });
       case '/api/server': return json({ log: ['Test mode: there is no server'], cloud: {}, idle: {} });
       default: return json({ error: 'Not in test mode' }, 404);
@@ -253,11 +376,14 @@
   // from yesterday nobody's judged, and the videos uploaded here
   function recordingsNow() {
         const seg = (id, cam, startMs) => ({ id, cam, size: 380e6 + cam * 7e6, startedAt: iso(startMs), file: `cam${cam}-${id}.mp4`, name: '' });
-        const recs = [...browserRecordings(), seg('c2a', 2, T0 - 10 * 60e3), seg('c2b', 2, T0 - 20 * 60e3), seg('old', 1, T0 - 26 * 3600e3)];
-        for (const u of uploads) recs.push({ id: `u-${u.name}`, cam: 0, size: u.size, startedAt: iso(Date.now() - 60e3), file: u.name, name: u.name.replace(/^[\dTZ-]+_/, '') });
+        const recs = [...browserRecordings(), ...(FREE ? [] : [seg('c2a', 2, T0 - 10 * 60e3), seg('c2b', 2, T0 - 20 * 60e3), seg('old', 1, T0 - 26 * 3600e3)])];
+        // (a minute of camera 1 being judged is listed as camera 1's, not as an upload)
+        for (const u of uploads) if (!FREE || !prevSources[u.name]) recs.push({ id: `u-${u.name}`, cam: 0, size: u.size, startedAt: iso(Date.now() - 60e3), file: u.name, name: u.name.replace(/^[\dTZ-]+_/, '') });
         return recs.sort((a, b) => b.startedAt.localeCompare(a.startedAt));
   }
-  const ours = (path) => (path.startsWith('/api/') && path !== '/api/me') || path.startsWith('/whep/') || path === '/clip';
+  // who you are and your company go to the site's real API; everything a server would answer is answered here
+  const SITE_API = /^\/api\/(me|companies\/mine)$/;
+  const ours = (path) => (path.startsWith('/api/') && !SITE_API.test(path)) || path.startsWith('/whep/') || path === '/clip';
   window.fetch = async (input, init = {}) => {
     const url = new URL(typeof input === 'string' ? input : input.url, location.href);
     if (url.origin !== location.origin || !ours(url.pathname)) return realFetch(input, init);
@@ -279,7 +405,20 @@
     send(file) {
       if (!this.testUrl || this.testUrl.pathname !== '/api/upload') return super.send(file);
       const name = this.testUrl.searchParams.get('name') || 'video.mp4', saved = `${new Date().toISOString().replace(/[:.]/g, '-')}_${name.replace(/[^\w.-]+/g, '_')}`;
-      files.set(saved, URL.createObjectURL(file)); uploads.unshift({ name: saved, size: file.size || 0 });
+      const url = URL.createObjectURL(file);
+      const refuse = (error) => { URL.revokeObjectURL(url); Object.defineProperty(this, 'status', { value: 413 }); Object.defineProperty(this, 'responseText', { value: JSON.stringify({ error }) }); this.onload?.(); };
+      // the free camera's AI judge takes a minute of video at a time
+      if (FREE) {
+        lengthOf(url).then((secs) => {
+          if (!Number.isFinite(secs)) return refuse('this browser can\'t play that video');
+          if (secs > MAX_SECS + 0.5) return refuse(`the free camera analyses videos of up to 1 minute, and this one is ${mmss(secs)}. Trim it to the minute you want judged, or book a server for longer videos`);
+          files.set(saved, url); uploads.unshift({ name: saved, size: file.size || 0 });
+          Object.defineProperty(this, 'status', { value: 200 }); Object.defineProperty(this, 'responseText', { value: JSON.stringify({ saved }) });
+          this.onload?.();
+        });
+        return;
+      }
+      files.set(saved, url); uploads.unshift({ name: saved, size: file.size || 0 });
       let k = 0;
       const tick = () => {
         k += 25; this.upload.onprogress?.({ lengthComputable: true, loaded: k, total: 100 });
@@ -304,19 +443,23 @@
   // what the page points frames, videos and pictures at: the camera settings come from the site's own judge page, a started AI judge
   // (or a detailed analysis) shows TEST over its camera or clip, recordings and uploaded videos play from this browser, and athletes'
   // pictures are drawn here
-  const rewrite = (v) => {
+  const rewrite = (v, win = window) => {
     const s = String(v);
-    const p = /\/api\/athlete-pic\?n=(\d+)/.exec(s); if (p) return pic(+p[1]);
+    const p = /\/api\/athlete-pic\?n=(\d+)/.exec(s); if (p) return FREE ? pics.get(+p[1]) || 'data:,' : pic(+p[1]);
+    // the free camera's AI judge is the real one, in this browser
+    if (FREE && s.startsWith('/judge/judge.html')) return s.replace('/judge/judge.html', '/judge-free.html');
     if (s.startsWith('/judge/judge.html')) {
       if (s.includes('settings=1')) return s.replace('/judge/judge.html', '/judge.html');
       const jq = new URL(s, location.href).searchParams;
       return `test-judge.html?${new URLSearchParams({ cam: jq.get('follow') || '', clip: jq.get('clip') || '', at: jq.get('pickt') || '' })}`;
     }
-    if (s.startsWith('/clip?')) { const cq = new URL(s, location.href).searchParams; return clipUrl(+cq.get('cam'), Date.parse(cq.get('start')), +cq.get('duration') || 60); }
+    if (s.startsWith('/clip?')) { const cq = new URL(s, location.href).searchParams; return clipUrl(+cq.get('cam'), Date.parse(cq.get('start')), +cq.get('duration') || 60, win); }
     const up = /^\/uploads\/(.+)$/.exec(s);
-    if (up) { const f = files.get(decodeURIComponent(up[1])); return typeof f === 'function' ? f() : f || s; }
+    if (up) { const f = files.get(decodeURIComponent(up[1])); return typeof f === 'function' ? f(win) : f || s; }
     return s;
   };
+  // the free camera's AI judge page (/judge-free.html) reports here, and plays its videos from here
+  window.hjFree = FREE ? { fetch: (input, init) => window.fetch(input, init), media: rewrite, ours: (p) => /^\/api\/(athlete|athlete-track|number-seen|engine\/\d+\/\w+)$/.test(p) } : null;
   // for the TEST judge window: camera 1 live, or a clip or video to play
   window.hjTestCamera = (n) => (n === 1 && cam1.stream?.active ? cam1.stream : null);
   window.hjTestMedia = rewrite;
@@ -334,13 +477,14 @@
   document.addEventListener('click', (e) => {
     if (!e.target.closest?.('#signOut')) return;
     e.preventDefault();
+    if (FREE) { location.href = '/console.html'; return; }
     window.toast?.('Test mode: on a real server, this signs this browser out of the video review');
   }, true);
   // nor to save a clip from
   document.addEventListener('click', (e) => {
     if (!e.target.closest?.('a[href^="/clip?"]')) return;
     e.preventDefault();
-    window.toast?.('Test mode: on a real server, this saves the clip as an MP4 file');
+    window.toast?.(FREE ? 'Saving clips needs a server: book one from your console' : 'Test mode: on a real server, this saves the clip as an MP4 file');
   }, true);
   window.HJ_TEST = true;
   // the camera is asked for once the page knows it's an admin looking (scripts/build-review-test.mjs)
