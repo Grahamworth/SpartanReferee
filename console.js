@@ -1,5 +1,6 @@
-// A company's own page: say how many cameras and for how long, see what it costs, start. The servers run for that long and shut down by
-// themselves, so this page never has to be left open; while they run it opens each one's video review and extends the booking.
+// A company's own page: say how many cameras and when (now for some hours, or a start and end chosen ahead), see what it costs, book.
+// Customers go through a payment page first (pretend for now); admins book straight away. The servers run for that long and shut down
+// by themselves, so this page never has to be left open; while they run it opens each one's video review and extends the booking.
 import { call, googleButton, signedIn, getMe, signOut, esc } from './api-base.js';
 import { emailButtons, microsoftButton } from './email-signin-web.js';
 import { drawTracked } from './tracked-demos.js';
@@ -19,18 +20,47 @@ function fillHours(sel, max, chosen) {
   if (sel.options.length) return;
   for (const h of [1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 24].filter((x) => x <= max)) sel.add(new Option(plural(h, 'hour'), h, false, h === chosen));
 }
+// ---------------------------------------------------------------- when: now for some hours, or a start and end chosen ahead
+const HOUR = 3600e3;
+const localInput = (t) => { const d = new Date(t); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 16); };
+const fromInput = (v) => (v ? new Date(v).getTime() : NaN); // a datetime-local value is in this computer's own time
+const choosingTimes = () => document.querySelector('input[name="when"]:checked')?.value === 'times';
+const longDay = (t) => new Date(t).toLocaleString([], { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+const span = (from, until) => (new Date(from).toDateString() === new Date(until).toDateString() ? `${longDay(from)} to ${clock(until)}` : `${longDay(from)} to ${longDay(until)}`);
+function setDefaultTimes() {
+  if ($('fromAt').value) return;
+  const start = new Date(); start.setHours(start.getHours() + 1, 0, 0, 0); // the next whole hour
+  $('fromAt').value = localInput(start); $('untilAt').value = localInput(start.getTime() + 4 * HOUR);
+}
+/** what's being booked: { cameras, hours, body } or { error } */
+function chosen() {
+  const p = last.price, cams = Math.floor(Number($('cameras').value));
+  if (!(cams >= 1)) return { error: 'How many cameras do you need?' };
+  if (cams > p.maxCameras) return { error: `We can run ${p.maxCameras} cameras at once at the moment` };
+  if (!choosingTimes()) { const hours = +$('hours').value; return { cameras: cams, hours, body: { cameras: cams, hours } }; }
+  const from = fromInput($('fromAt').value), until = fromInput($('untilAt').value);
+  if (!Number.isFinite(from) || !Number.isFinite(until)) return { error: 'Choose a start and an end time' };
+  if (from < Date.now() - 5 * 60e3) return { error: 'That start time has passed' };
+  if (from > Date.now() + p.maxDaysAhead * 24 * HOUR) return { error: `You can book up to ${p.maxDaysAhead} days ahead` };
+  const hours = Math.round(((until - from) / HOUR) * 100) / 100;
+  if (until <= from) return { error: 'The end needs to be after the start' };
+  if (hours < 1 || hours > p.maxHours) return { error: `A booking runs between 1 and ${p.maxHours} hours` };
+  return { cameras: cams, hours, body: { cameras: cams, from, until } };
+}
 function drawQuote() {
   if (!last) return;
-  const p = last.price, cams = Math.floor(Number($('cameras').value)), ok = cams >= 1 && cams <= p.maxCameras;
-  // the first booking asks for a card, unless it's an admin's
+  const p = last.price, b = chosen();
+  // once card payments are on, the first booking asks for a card, unless it's an admin's
   const askCard = last.needsCard && last.canStart;
-  $('start').disabled = busy || !ok || !last.canStart || (askCard && !last.cardsOn);
+  $('start').disabled = busy || !!b.error || !last.canStart || (askCard && !last.cardsOn);
   $('payNote').textContent = payMessage || (askCard ? (last.cardsOn ? 'Before your first booking, add a card on Stripe\'s secure page. Nothing is charged today.' : 'Card payments aren\'t switched on yet: please try again soon.') : '');
   show($('payNote'), !!$('payNote').textContent);
-  if (!ok) { $('quoteHow').textContent = cams > p.maxCameras ? `We can run ${p.maxCameras} cameras at once at the moment` : 'How many cameras do you need?'; $('quoteCost').textContent = ''; return; }
-  const q = quote(cams, +$('hours').value, p);
+  show($('nowFields'), !choosingTimes()); show($('timeFields'), choosingTimes());
+  show($('nowNote'), !choosingTimes()); show($('timesNote'), choosingTimes());
+  if (b.error) { $('quoteHow').textContent = b.error; $('quoteCost').textContent = ''; return; }
+  const q = quote(b.cameras, b.hours, p);
   $('quoteHow').textContent = q.how; $('quoteCost').textContent = money(q.cost);
-  $('start').textContent = askCard ? 'Add payment details' : 'Book and start';
+  $('start').textContent = askCard ? 'Add payment details' : last.paysFirst ? 'Continue to payment' : choosingTimes() ? 'Book' : 'Book and start';
 }
 function drawExtendQuote() {
   if (!last?.serverCount) return;
@@ -56,21 +86,30 @@ function drawList(s) {
 function draw(s) {
   last = s;
   // what's wanted shows straight away; the servers catch up within a minute
-  const state = s.wanted === 'on' ? (s.state === 'on' ? 'on' : 'starting') : (s.state === 'on' || s.state === 'starting' || s.state === 'stopping' ? 'stopping' : 'off');
+  const state = s.wanted === 'on' ? (s.scheduled ? 'booked' : s.state === 'on' ? 'on' : 'starting') : (s.state === 'on' || s.state === 'starting' || s.state === 'stopping' ? 'stopping' : 'off');
   $('light').dataset.state = state;
   const many = s.serverCount > 1;
-  $('stateText').textContent = { off: 'Book your cameras', starting: many ? 'Your servers are starting' : 'Your server is starting', on: many ? 'Your servers are on' : 'Your server is on', stopping: many ? 'Your servers are stopping' : 'Your server is stopping' }[state];
+  $('stateText').textContent = { off: 'Book your cameras', booked: `Booked for ${longDay(s.from)}`, starting: many ? 'Your servers are starting' : 'Your server is starting', on: many ? 'Your servers are on' : 'Your server is on', stopping: many ? 'Your servers are stopping' : 'Your server is stopping' }[state];
   const ending = s.until && s.until - Date.now() < 20 * 60e3;
   $('stateMore').textContent = state === 'stopping' ? 'Saving the recordings first, so nothing is lost. This can take a few minutes.'
-    : state === 'off' ? (s.canStart ? 'How many cameras, and for how long?' : 'This company has been blocked from starting servers. Get in touch with us to sort this out.')
-      : `${state === 'starting' ? 'This takes about 5 minutes. ' : ''}${many ? 'They shut' : 'It shuts'} down at ${dayClock(s.until)}, ${timeLeft(s.until - Date.now())}.`;
+    : state === 'off' ? (s.canStart ? 'How many cameras, and when?' : 'This company has been blocked from starting servers. Get in touch with us to sort this out.')
+      : state === 'booked' ? `${plural(s.cameras, 'camera')}, ${span(s.from, s.until)}. We start ${many ? 'your servers' : 'your server'} ${s.price.startLeadMinutes} minutes early, ${timeLeft(s.from - s.price.startLeadMinutes * 60e3 - Date.now())}, so your cameras are ready on time.`
+        : `${state === 'starting' ? 'This takes about 5 minutes. ' : ''}${s.from > Date.now() ? `Your booking starts at ${dayClock(s.from)}. ` : ''}${many ? 'They shut' : 'It shuts'} down at ${dayClock(s.until)}, ${timeLeft(s.until - Date.now())}.`;
   $('stateMore').classList.toggle('warn', !!ending);
   fail(state === 'off' ? s.error : '');
-  show($('book'), state === 'off'); show($('running'), state === 'on' || state === 'starting');
+  show($('book'), state === 'off'); show($('running'), state === 'on' || state === 'starting' || state === 'booked');
+  // booked ahead: nothing to open yet, and Stop cancels it
+  show($('serverList'), state !== 'booked');
+  $('stop').textContent = state === 'booked' ? 'Cancel booking' : 'Stop now';
   const p = s.price;
   fillHours($('hours'), p.maxHours, 4); fillHours($('extendHours'), p.maxExtendHours, 1);
   $('cameras').max = p.maxCameras;
-  $('keepDays').textContent = p.keepDays;
+  for (const el of document.querySelectorAll('.keepDays')) el.textContent = p.keepDays;
+  for (const el of document.querySelectorAll('.leadMins')) el.textContent = p.startLeadMinutes;
+  $('daysAhead').textContent = p.maxDaysAhead;
+  const min = localInput(Date.now()), max = localInput(Date.now() + p.maxDaysAhead * 24 * HOUR);
+  $('fromAt').min = min; $('fromAt').max = max; $('untilAt').min = min;
+  setDefaultTimes();
   drawQuote(); drawExtendQuote(); drawList(s);
   $('extendBtn').disabled = busy; $('stop').disabled = busy;
   show($('factBooked'), s.wanted === 'on');
@@ -80,17 +119,17 @@ function draw(s) {
   show($('changeCard'), !!s.card && s.cardsOn);
   $('hours2').textContent = `${plural(s.used.cameraHours, 'camera hour')} · ${money(s.used.charge)}`;
 }
-const STATE_WORD = { running: 'On now', stopped: 'Stopped early', finished: 'Finished' };
+const STATE_WORD = { booked: 'Booked', running: 'On now', stopped: 'Stopped early', finished: 'Finished', cancelled: 'Cancelled' };
 async function drawHistory() {
   let bookings; try { ({ bookings } = await call('servers/mine/history')); } catch { return; }
   $('history').innerHTML = bookings.length ? `<div class="historyTable" role="table" aria-label="Your bookings">
-    <div class="historyRow head" role="row"><span role="columnheader">Booked</span><span role="columnheader">Cameras</span><span role="columnheader">Hours</span><span role="columnheader">Status</span><span role="columnheader">Cost</span></div>
+    <div class="historyRow head" role="row"><span role="columnheader">When</span><span role="columnheader">Cameras</span><span role="columnheader">Hours</span><span role="columnheader">Status</span><span role="columnheader">Cost</span></div>
     ${bookings.map((b) => `<div class="historyRow" role="row">
-      <span role="cell">${esc(new Date(b.at).toLocaleString([], { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }))}</span>
+      <span role="cell">${esc(new Date(b.from || b.at).toLocaleString([], { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }))}</span>
       <span role="cell">${esc(b.cameras)}</span>
       <span role="cell">${esc(b.state === 'stopped' ? `${b.hoursRun} of ${b.hours}` : b.hours)}</span>
       <span role="cell">${esc(STATE_WORD[b.state] || '')}</span>
-      <span role="cell"><b>${esc(money(b.cost))}</b></span>
+      <span role="cell"><b>${esc(money(b.cost))}</b>${b.paid?.pretend ? `<small class="paidNote">Paid ${esc(money(b.paid.amount))} (pretend)</small>` : ''}</span>
     </div>`).join('')}</div>` : '<p class="muted">Your bookings will show here.</p>';
 }
 async function refresh() { try { draw((await call('servers/mine')).server); } catch { /* the next try */ } }
@@ -113,12 +152,63 @@ async function addCard() {
   busy = false; drawQuote();
 }
 $('changeCard').onclick = addCard;
-$('book').addEventListener('submit', (e) => { e.preventDefault(); if (last?.needsCard) { addCard(); return; } act('start', { cameras: Math.floor(Number($('cameras').value)), hours: +$('hours').value }); });
+
+// ---------------------------------------------------------------- the payment page: customers pay before a booking is made (pretend for now)
+let checkout = null;
+function showPay(on) {
+  show($('payArea'), on); show($('server'), !on); show($('historyBox'), !on); show($('more'), !on); show($('tracked'), !on);
+  window.scrollTo({ top: 0 });
+}
+function openPay(co) {
+  checkout = co;
+  $('payCams').textContent = `${plural(co.cameras, 'camera')}${co.servers > 1 ? ` (${co.servers} servers)` : ''}`;
+  $('payWhen').textContent = co.startNow ? `Now, for ${plural(co.hours, 'hour')}` : `${span(co.from, co.until)} (${plural(co.hours, 'hour')})`;
+  $('payRate').textContent = `${money(co.cameraHour)} per camera hour`;
+  $('payTotal').textContent = money(co.cost);
+  $('payBtn').textContent = `Pay ${money(co.cost)}`; $('payBtn').disabled = false;
+  $('payMins').textContent = Math.round((co.expires - Date.now()) / 60e3);
+  show($('payError'), false);
+  showPay(true); $('payHead').focus?.();
+}
+$('payBack').onclick = () => { checkout = null; showPay(false); };
+$('payBtn').onclick = async () => {
+  if (!checkout) return;
+  $('payBtn').disabled = true; show($('payError'), false);
+  try {
+    const { server } = await call('servers/mine/pay', { method: 'POST', body: { checkout: checkout.id } });
+    checkout = null; showPay(false); listKey = ''; draw(server); drawHistory();
+  } catch (e) { $('payError').textContent = e.message; show($('payError'), true); $('payBtn').disabled = false; }
+};
+async function goToPay(body) {
+  busy = true; fail(''); drawQuote();
+  try { openPay((await call('servers/mine/checkout', { method: 'POST', body })).checkout); } catch (e) { fail(e.message); }
+  busy = false; if (last) draw(last);
+}
+
+$('book').addEventListener('submit', (e) => {
+  e.preventDefault();
+  if (last?.needsCard) { addCard(); return; }
+  const b = chosen(); if (b.error) return fail(b.error);
+  if (last?.paysFirst) goToPay(b.body); else act('start', b.body);
+});
 $('cameras').addEventListener('input', drawQuote);
 $('hours').addEventListener('change', drawQuote);
+for (const r of document.querySelectorAll('input[name="when"]')) r.addEventListener('change', drawQuote);
+// moving the start keeps the booking the same length
+let lastFrom = NaN;
+$('fromAt').addEventListener('focus', () => { lastFrom = fromInput($('fromAt').value); });
+$('fromAt').addEventListener('change', () => {
+  const from = fromInput($('fromAt').value), until = fromInput($('untilAt').value);
+  if (Number.isFinite(from) && Number.isFinite(lastFrom) && Number.isFinite(until)) $('untilAt').value = localInput(from + (until - lastFrom));
+  lastFrom = from; drawQuote();
+});
+$('untilAt').addEventListener('change', drawQuote);
 $('extendHours').addEventListener('change', drawExtendQuote);
 $('extend').addEventListener('submit', (e) => { e.preventDefault(); act('extend', { hours: +$('extendHours').value }); });
-$('stop').onclick = () => { if (confirm('Stop now? Any cameras still streaming will stop being recorded. You pay only for the time used.')) act('stop'); };
+$('stop').onclick = () => {
+  const booked = last?.scheduled;
+  if (confirm(booked ? 'Cancel this booking? Its servers won\'t start, and nothing is charged for it.' : 'Stop now? Any cameras still streaming will stop being recorded. You pay only for the time used.')) act('stop');
+};
 
 function enterBrand(c) {
   applyTheme(c.theme);

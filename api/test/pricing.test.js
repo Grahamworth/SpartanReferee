@@ -3,6 +3,9 @@ const test = require('node:test');
 const assert = require('node:assert');
 const { createApi } = require('../src/core');
 const { memoryStore } = require('../src/store');
+// a customer's booking: checkout, then the (pretend) payment, which makes it
+const book = async (call, h, body) => { const co = await call('POST', 'servers/mine/checkout', h, body); return co.status === 200 ? call('POST', 'servers/mine/pay', h, { checkout: co.body.checkout.id }) : co; };
+
 
 async function setup() {
   const store = memoryStore(), clock = 1_800_000_000_000;
@@ -51,7 +54,7 @@ test('the cost shown is per camera, including an odd number of them, and a booki
   const { call, boss, company, store } = await setup();
   await call('PUT', 'admin/pricing', boss, { markupPercent: 50 });
   const h = await company('sam', 'peak');
-  const r = await call('POST', 'servers/mine/start', h, { cameras: 3, hours: 4 });
+  const r = await book(call, h, { cameras: 3, hours: 4 });
   assert.strictEqual(r.body.server.serverCount, 2);
   assert.strictEqual(r.body.server.bookedCost, 6.12, '3 cameras x 4 hours x 0.51');
   assert.strictEqual((await store.get('serverwant', 'peak')).bookedCameras, 2);
@@ -92,8 +95,8 @@ test('a company\'s own usage page shows its use and charge, not another\'s', asy
 test('an admin can stop a company\'s servers, and suspending or declining stops them too', async () => {
   const { call, boss, company, store } = await setup();
   const a = await company('a', 'alpha'), b = await company('b', 'bravo');
-  await call('POST', 'servers/mine/start', a, { cameras: 3, hours: 4 });
-  await call('POST', 'servers/mine/start', b, { cameras: 1, hours: 4 });
+  await book(call, a, { cameras: 3, hours: 4 });
+  await book(call, b, { cameras: 1, hours: 4 });
   assert.strictEqual((await call('POST', 'admin/customers/nobody/stop', boss, {})).status, 404);
   assert.strictEqual((await call('POST', 'admin/customers/alpha/stop', boss, {})).status, 200);
   assert.strictEqual((await store.get('serverwant', 'alpha')).desired, 'off');

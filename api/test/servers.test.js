@@ -19,7 +19,8 @@ async function setup(opts = {}) {
   };
   return { api, store, login, call, company, pass: (ms) => { clock += ms; }, now: () => clock };
 }
-const start = (call, h, cameras = 2, hours = 4) => call('POST', 'servers/mine/start', h, { cameras, hours });
+// a customer's booking: checkout, then the (pretend) payment, which makes it
+const start = async (call, h, cameras = 2, hours = 4) => { const co = await call('POST', 'servers/mine/checkout', h, { cameras, hours }); return co.status === 200 ? call('POST', 'servers/mine/pay', h, { checkout: co.body.checkout.id }) : co; };
 
 test('you must be signed in and have a company', async () => {
   const { call, login } = await setup();
@@ -46,7 +47,7 @@ test('the page gets what it needs to work out a price before anything starts', a
   const { call, company } = await setup({ max: 4 });
   const h = await company('sam', 'peak');
   const { price } = (await call('GET', 'servers/mine', h)).body.server;
-  assert.deepStrictEqual(price, { cameraHour: 0.34, keepDays: 7, camerasPerServer: 2, maxHours: 24, maxExtendHours: 12, maxCameras: 8 });
+  assert.deepStrictEqual(price, { cameraHour: 0.34, keepDays: 7, camerasPerServer: 2, maxHours: 24, maxExtendHours: 12, maxCameras: 8, maxDaysAhead: 90, startLeadMinutes: 10 });
 });
 
 test('two cameras per server: cameras and hours decide how many servers, what it costs and when they stop', async () => {

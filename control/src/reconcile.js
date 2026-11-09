@@ -11,8 +11,12 @@ const START_LIMIT_MS = 25 * 60e3;      // not answering this long after starting
 const STOP_GRACE_MS = 15 * 60e3;       // told to stop: this long to finish sending its recordings
 const NO_BOOKING_LIMIT_MS = 18 * 3600e3; // on with no booked end (which shouldn't happen): this long at most
 const UNSAVED_KEEP_MS = 7 * 24 * 3600e3;  // off, with no word that everything's safe: this long at most
+const START_LEAD_MS = 10 * 60e3;         // a booking made ahead: its servers go on this long before it starts (api/src/servers.js has it too)
 
 const expired = (want, t) => !!want?.until && t >= want.until;
+// a booking made ahead that hasn't started: its servers stay off until START_LEAD before, and nothing is charged until it starts
+const tooEarly = (want, t) => !!want?.from && t < want.from - START_LEAD_MS;
+const started = (want, t) => !want?.from || t >= want.from;
 // the same name with a new ending, for the next machine
 function newAddress(server) {
   const label = `${server.label.replace(/-[0-9a-f]{6}$/, '')}-${crypto.randomBytes(3).toString('hex')}`, region = server.host.split('.').slice(1).join('.');
@@ -26,7 +30,7 @@ const monthOf = (t) => new Date(t).toISOString().slice(0, 7);
  */
 function decide({ want, st, power, healthy, now }) {
   const expired = !!want?.until && now >= want.until;
-  const desired = want?.desired === 'on' && !expired ? 'on' : 'off';
+  const desired = want?.desired === 'on' && !expired && !tooEarly(want, now) ? 'on' : 'off';
   const on = power === 'running' || power === 'starting';
   const startedAt = st?.startedAt || 0;
   if (on) {
@@ -97,7 +101,7 @@ async function reconcile({ store, arm, health, seedFor, now = Date.now, log = ()
         next.minutes[k] = (next.minutes[k] || 0) + mins;
         // charged at the price its booking started at, for the cameras booked on this server
         // Customers pay until they press Stop or their booked time ends. The minutes after that, saving the recordings, are our cost.
-        if (want.desired === 'on' && !expired(want, t)) {
+        if (want.desired === 'on' && !expired(want, t) && started(want, t)) {
           add('cameraMinutes', mins * (want.bookedCameras || 0));
           add('charge', (mins / 60) * (want.bookedCameras || 0) * (want.cameraHour || 0));
         }
@@ -134,4 +138,4 @@ async function reconcile({ store, arm, health, seedFor, now = Date.now, log = ()
   return out;
 }
 
-module.exports = { decide, reconcile, UNSAVED_KEEP_MS, REPORT_LIMIT_MS, START_LIMIT_MS, STOP_GRACE_MS, NO_BOOKING_LIMIT_MS };
+module.exports = { decide, reconcile, START_LEAD_MS, UNSAVED_KEEP_MS, REPORT_LIMIT_MS, START_LIMIT_MS, STOP_GRACE_MS, NO_BOOKING_LIMIT_MS };

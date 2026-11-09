@@ -45,15 +45,28 @@
     <p class="muted" id="stateMore" aria-live="polite"></p>
     <p class="error" id="error" role="alert" hidden></p>
 
-    <form id="book" class="booking" hidden>
+    <form id="book" class="booking" novalidate hidden>
       <div class="bookFields">
         <div><label for="cameras">Cameras</label><input id="cameras" type="number" inputmode="numeric" min="1" step="1" value="2"></div>
+        <div><span class="labelish" id="whenLabel">When</span>
+          <div class="segments when" role="radiogroup" aria-labelledby="whenLabel">
+            <label><input type="radio" name="when" value="now" checked><span>Start now</span></label>
+            <label><input type="radio" name="when" value="times"><span>Choose times</span></label>
+          </div>
+        </div>
+      </div>
+      <div class="bookFields" id="nowFields">
         <div><label for="hours">How long</label><select id="hours"></select></div>
+      </div>
+      <div class="bookFields" id="timeFields" hidden>
+        <div><label for="fromAt">Start</label><input id="fromAt" type="datetime-local"></div>
+        <div><label for="untilAt">End</label><input id="untilAt" type="datetime-local"></div>
       </div>
       <div class="quote" aria-live="polite"><span id="quoteHow"></span><b id="quoteCost"></b></div>
       <p class="note" id="payNote" hidden></p>
       <button class="primary" id="start" type="submit">Start</button>
-      <p class="note">Your cameras are ready for this time, then the recordings are saved and everything shuts down. You can extend, or stop early and pay only for the time used. Starting takes about 5 minutes, and counts as time used. Recordings are kept for <span id="keepDays">7</span> days.</p>
+      <p class="note" id="nowNote">Your cameras are ready for this time, then the recordings are saved and everything shuts down. You can extend, or stop early and pay only for the time used. Starting takes about 5 minutes, and counts as time used. Recordings are kept for <span class="keepDays">7</span> days.</p>
+      <p class="note" id="timesNote" hidden>Book up to <span id="daysAhead">90</span> days ahead. We start your servers <span class="leadMins">10</span> minutes early at no cost, so the cameras are ready at the start time. At the end the recordings are saved and everything shuts down. You can extend, or cancel before it starts and pay nothing. Recordings are kept for <span class="keepDays">7</span> days.</p>
     </form>
 
     <div id="running" hidden>
@@ -72,6 +85,27 @@
       <div id="factCard" hidden><dt>Payment</dt><dd id="cardText" class="cardText"></dd><button class="link" id="changeCard" type="button" hidden>Change card</button></div>
     </dl>
     <p class="note">Costs are estimates. Your card is saved securely by Stripe, and we never see its number. Nothing is charged yet: we'll tell you before we charge anything.</p>
+  </section>
+
+  <!-- the payment page a customer goes through before a booking is made: pretend for now, so nothing is charged and no card is asked for -->
+  <section id="payArea" class="card serverCard payArea" hidden aria-labelledby="payHead">
+    <p class="pretendTag">Pretend payment · nothing is charged</p>
+    <h1 id="payHead" tabindex="-1">Payment</h1>
+    <dl class="paySummary">
+      <div><dt>Cameras</dt><dd id="payCams"></dd></div>
+      <div><dt>When</dt><dd id="payWhen"></dd></div>
+      <div><dt>Price</dt><dd id="payRate"></dd></div>
+      <div class="payTotal"><dt>Total</dt><dd id="payTotal"></dd></div>
+    </dl>
+    <div class="pretendCard" aria-label="A test card: these details can't be changed">
+      <div class="pcRow"><span>Card number</span><b>4242 4242 4242 4242</b></div>
+      <div class="pcRow pcSplit"><div><span>Expiry</span><b>12 / 34</b></div><div><span>CVC</span><b>123</b></div></div>
+      <div class="pcRow"><span>Name on card</span><b>Test Card</b></div>
+    </div>
+    <p class="note">This is a pretend payment page, so you can try booking end to end. Nothing is charged, and no card details are asked for or kept. It's held for <span id="payMins">30</span> minutes.</p>
+    <p class="error" id="payError" role="alert" hidden></p>
+    <button class="primary" id="payBtn" type="button">Pay</button>
+    <button class="link payBack" id="payBack" type="button">Back to the booking</button>
   </section>
 
   <section id="historyBox" class="card historyBox" hidden>

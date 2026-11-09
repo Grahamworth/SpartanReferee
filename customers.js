@@ -28,6 +28,8 @@ function drawPricingSums() {
 function serverLine(c) {
   const s = c.server;
   if (s.wanted !== 'on') return s.state === 'stopping' ? 'Stopping' : 'Off';
+  const when = (t) => new Date(t).toLocaleString([], { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+  if (s.scheduled) return `Booked · ${plural(s.cameras, 'camera')} · ${when(s.from)} to ${when(s.until)} · ${money(s.bookedCameraHour)} per camera hour`;
   const live = `${s.camerasLive} of ${plural(s.cameras, 'camera')} live`;
   return `${s.state === 'on' ? 'On' : 'Starting'} · ${live} · until ${new Date(s.until).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} (${timeLeft(s.until - Date.now())}) · ${money(s.bookedCameraHour)} per camera hour`;
 }
@@ -55,7 +57,7 @@ function drawList() {
       ${c.about ? `<p class="muted custAbout">${esc(c.about)}</p>` : ''}
       ${c.note ? `<p class="custNote">Your note: ${esc(c.note)}</p>` : ''}
       ${c.server.error ? `<p class="error">${esc(c.server.error)}</p>` : ''}
-      <p class="custServer"><span class="light" data-state="${c.server.wanted === 'on' ? (c.server.state === 'on' ? 'on' : 'starting') : c.server.state === 'stopping' ? 'stopping' : 'off'}" aria-hidden="true"></span>${esc(serverLine(c))}</p>
+      <p class="custServer"><span class="light" data-state="${c.server.wanted === 'on' ? (c.server.scheduled ? 'booked' : c.server.state === 'on' ? 'on' : 'starting') : c.server.state === 'stopping' ? 'stopping' : 'off'}" aria-hidden="true"></span>${esc(serverLine(c))}</p>
       <form class="custPrice" data-price="${esc(c.id)}">
         <label for="price-${esc(c.id)}">Price per camera hour</label>
         <div class="suffixed custPriceBox"><span>£</span><input id="price-${esc(c.id)}" type="number" inputmode="decimal" min="0" max="100" step="0.01" placeholder="${esc(c.price.standardCameraHour.toFixed(2))}" value="${c.price.customPrice ? esc(c.price.cameraHour.toFixed(2)) : ''}"></div>

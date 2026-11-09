@@ -12,7 +12,9 @@
    GET  /api/servers/mine/history                 -> { bookings } newest first, the latest 50
    POST /api/servers/mine/payment                 -> { url } Stripe's page for saving a card
    POST /api/servers/mine/payment-done {session}  -> { server } asks Stripe whether that card was saved
-   POST /api/servers/mine/start {cameras, hours}  -> { server }
+   POST /api/servers/mine/checkout {cameras, hours | from, until}  -> { checkout } what it comes to, for the payment page (customers)
+   POST /api/servers/mine/pay {checkout}          -> { server } the pretend payment: makes the booking it was for
+   POST /api/servers/mine/start {cameras, hours | from, until}  -> { server } admins book straight away; customers pay first
    POST /api/servers/mine/extend {hours}          -> { server }
    POST /api/servers/mine/stop                    -> { server }
    POST /api/servers/mine/open {n}                -> { url } a short-lived sign-in link to that server's own page
@@ -26,14 +28,18 @@
    POST /api/admin/customers/<id>/stop            stop a company's servers
 
    Customers pay per camera, per hour the servers actually run: Azure's price for a server, shared between its 2 cameras, plus the percentage,
-   or a price set for that customer. Their first booking asks for a card, saved on Stripe's page (payments.js); admins don't need one.
+   or a price set for that customer. Once card payments are on, their first booking asks for a card, saved on Stripe's page (payments.js);
+   admins don't need one. Every customer booking goes through the payment page first: for now a pretend one, where nothing is charged.
+   A booking starts now or at a time chosen ahead (from): its servers are turned on START_LEAD before, so the cameras are ready on time,
+   and those minutes aren't charged.
    A booking keeps the price it started at. The control app adds up the time, cost and charge, by the minute. */
 const crypto = require('node:crypto');
 const { recordingsPartition, KEEP_DAYS } = require('./recordings');
 const cameraSplit = require('./cameras');
 
 const { CAMERAS_PER_SERVER } = cameraSplit;
-const MAX_HOURS = 24, MAX_EXTEND_HOURS = 12, MAX_AHEAD_HOURS = 72, LOGIN_MINUTES = 5;
+const MAX_HOURS = 24, MAX_EXTEND_HOURS = 12, MAX_AHEAD_HOURS = 72, LOGIN_MINUTES = 5, MAX_DAYS_AHEAD = 90, CHECKOUT_MINUTES = 30;
+const START_LEAD_MS = 10 * 60e3; // the control app turns servers on this long before a booking starts (control/src/reconcile.js has it too)
 const HOUR = 3600e3;
 const sha = (s) => crypto.createHash('sha256').update(String(s)).digest('hex');
 const random = (n) => crypto.randomBytes(n).toString('base64url');
@@ -88,15 +94,17 @@ function createServers({ store, now, reply, session, isAdmin = () => false, paym
     }
     const wanted = slots.some((s) => s.wanted === 'on') ? 'on' : 'off';
     const price = await pricing(c), u = await usage(c.id);
+    const scheduled = wanted === 'on' && !!plan?.from && now() < plan.from - START_LEAD_MS;
     const state = slots.some((s) => s.state === 'stopping') ? 'stopping' : slots.some((s) => s.state === 'starting') ? 'starting' : slots.every((s) => s.state === 'on') ? 'on' : slots.some((s) => s.state === 'on') ? 'starting' : 'off';
     return {
       state, wanted, servers: slots, error: slots.map((s) => s.error).find(Boolean) || '',
-      cameras: plan?.cameras || 0, serverCount: count, until: wanted === 'on' ? plan.until : 0, bookedHours: plan?.hours || 0,
+      cameras: plan?.cameras || 0, serverCount: count, until: wanted === 'on' ? plan.until : 0, from: wanted === 'on' ? plan.from || 0 : 0, scheduled, bookedHours: plan?.hours || 0,
       bookedCost: plan ? pounds(plan.hours * plan.cameras * plan.cameraHour) : 0, bookedCameraHour: plan?.cameraHour || 0,
       used: { cameraHours: u.cameraHours, charge: u.charge }, canStart: c.status === 'approved',
-      // the first booking asks for a card; admins don't need one
-      card: cardView(c.payment), cardsOn: !!payments, adminNoCard: !c.payment && !!h && isAdmin(h), needsCard: !c.payment && !(h && isAdmin(h)),
-      price: { cameraHour: price.cameraHour, keepDays: KEEP_DAYS, camerasPerServer: CAMERAS_PER_SERVER, maxHours: MAX_HOURS, maxExtendHours: MAX_EXTEND_HOURS, maxCameras: maxRunning * CAMERAS_PER_SERVER },
+      // once card payments are on, the first booking asks for a card; admins don't need one. Customers pay for each booking first.
+      card: cardView(c.payment), cardsOn: !!payments, adminNoCard: !c.payment && !!h && isAdmin(h), needsCard: !!payments && !c.payment && !(h && isAdmin(h)),
+      paysFirst: !(h && isAdmin(h)),
+      price: { cameraHour: price.cameraHour, keepDays: KEEP_DAYS, camerasPerServer: CAMERAS_PER_SERVER, maxHours: MAX_HOURS, maxExtendHours: MAX_EXTEND_HOURS, maxCameras: maxRunning * CAMERAS_PER_SERVER, maxDaysAhead: MAX_DAYS_AHEAD, startLeadMinutes: START_LEAD_MS / 60e3 },
     };
   }
   async function ensureServer(c, n) {
@@ -121,19 +129,66 @@ function createServers({ store, now, reply, session, isAdmin = () => false, paym
   async function history(company) {
     const rows = (await store.list(`booking:${company}`)).sort((a, b) => b.at - a.at).slice(0, BOOKINGS_SHOWN);
     return rows.map((b) => {
-      const ended = b.endedAt || Math.min(b.until, now()), hoursRun = Math.max(0, Math.min(b.hours, (ended - b.at) / HOUR));
-      const state = !b.endedAt && b.until > now() ? 'running' : b.endedAt && b.endedAt < b.until ? 'stopped' : 'finished';
-      return { at: b.at, cameras: b.cameras, hours: b.hours, until: b.until, endedAt: b.endedAt || 0, state, hoursRun: Math.round(hoursRun * 100) / 100, cameraHour: b.cameraHour, cost: pounds(hoursRun * b.cameras * b.cameraHour) };
+      const from = b.from || b.at, ended = b.endedAt || Math.min(b.until, now()), hoursRun = Math.max(0, Math.min(b.hours, (ended - from) / HOUR));
+      const state = !b.endedAt && from > now() ? 'booked' : !b.endedAt && b.until > now() ? 'running' : b.endedAt && b.endedAt <= from ? 'cancelled' : b.endedAt && b.endedAt < b.until ? 'stopped' : 'finished';
+      return { at: b.at, from, cameras: b.cameras, hours: b.hours, until: b.until, endedAt: b.endedAt || 0, state, hoursRun: Math.round(hoursRun * 100) / 100, cameraHour: b.cameraHour, cost: pounds((state === 'booked' ? b.hours : hoursRun) * b.cameras * b.cameraHour), paid: b.paid || null }; // booked ahead: what it will come to
     });
   }
   const ofCompany = (slot, company) => slot === company || slot.startsWith(`${company}~`);
-  // how many are on or on their way, not counting this company's own (limited by the subscription's graphics-card allowance)
-  async function othersRunning(company) {
+  // how many other companies' servers are booked over these times, or (for a booking starting soon) are still on (limited by the
+  // subscription's graphics-card allowance)
+  async function othersRunning(company, from = now(), until = now() + HOUR) {
     const busy = new Set();
-    for (const w of await store.list('serverwant')) if (!ofCompany(w.id, company) && w.desired === 'on' && !(w.until && w.until <= now())) busy.add(w.id);
-    for (const st of await store.list('serverstate')) if (!ofCompany(st.id, company) && st.state && st.state !== 'off') busy.add(st.id);
+    for (const w of await store.list('serverwant')) if (!ofCompany(w.id, company) && w.desired === 'on' && !(w.until && w.until <= from) && (w.from || 0) - START_LEAD_MS < until) busy.add(w.id);
+    if (from - START_LEAD_MS < now() + HOUR) for (const st of await store.list('serverstate')) if (!ofCompany(st.id, company) && st.state && st.state !== 'off') busy.add(st.id);
     return busy.size;
   }
+  // what a booking asks for, checked: now for some hours, or from a start time to an end time
+  function asked(body) {
+    const cameras = Number(body?.cameras);
+    if (!Number.isInteger(cameras) || cameras < 1 || cameras > 40) return { error: 'How many cameras do you need?' };
+    if (body?.from === undefined && body?.until === undefined) {
+      const hours = Number(body?.hours);
+      if (!Number.isInteger(hours) || hours < 1 || hours > MAX_HOURS) return { error: `Book between 1 and ${MAX_HOURS} hours: you can extend it later` };
+      return { cameras, hours, startNow: true };
+    }
+    const from = Number(body?.from), until = Number(body?.until);
+    if (!Number.isFinite(from) || !Number.isFinite(until)) return { error: 'Choose a start and an end time' };
+    if (from < now() - 5 * 60e3) return { error: 'That start time has passed: choose a later one, or start now' };
+    if (from > now() + MAX_DAYS_AHEAD * 24 * HOUR) return { error: `You can book up to ${MAX_DAYS_AHEAD} days ahead` };
+    const hours = Math.round(((until - from) / HOUR) * 100) / 100;
+    if (!(hours >= 1 && hours <= MAX_HOURS)) return { error: `A booking runs between 1 and ${MAX_HOURS} hours: you can extend it later` };
+    return { cameras, hours, from, until };
+  }
+  // its times, as of now: a booking to start now starts when it's made
+  const timesOf = (a) => (a.startNow ? { from: now(), until: now() + a.hours * HOUR } : { from: Math.max(a.from, now()), until: a.until });
+  // why this booking can't be made now, if it can't
+  async function cantBook(c, h, a) {
+    if (c.status !== 'approved') return reply(403, { error: c.status === 'pending' ? 'We\'re still checking your application' : 'This company has been blocked from starting servers' });
+    if (payments && !c.payment && !isAdmin(h)) return reply(402, { error: 'Add your payment details first' });
+    const plan = await store.get('serverplan', c.id);
+    if (active(plan) && (await view(c, h)).wanted === 'on') return reply(409, { error: plan.from && plan.from > now() ? 'You already have a booking: cancel it first, or extend it' : 'Your servers are already booked: extend them instead' });
+    const needed = serversFor(a.cameras), { from, until } = timesOf(a);
+    if (await othersRunning(c.id, from, until) + needed > maxRunning) return reply(409, { error: needed > maxRunning ? `We can run ${maxRunning} server${maxRunning === 1 ? '' : 's'} at once at the moment, which is ${maxRunning * CAMERAS_PER_SERVER} cameras` : from > now() + HOUR ? 'All our servers are booked at that time: try other times' : 'All our servers are in use right now: try again a little later' });
+    return null;
+  }
+  // makes the booking: its servers are turned on when it starts, by the control app
+  async function book(c, me, h, a, { cameraHour, paid = null } = {}) {
+    const no = await cantBook(c, h, a); if (no) return no;
+    const { cameras, hours } = a, { from, until } = timesOf(a), needed = serversFor(cameras);
+    for (let n = 1; n <= needed; n++) await ensureServer(c, n);
+    const price = await pricing(c), { azureServerHour } = price;
+    cameraHour = cameraHour ?? price.cameraHour;
+    const bookedAt = now(), bookingKey = String(bookedAt).padStart(15, '0');
+    await store.put('serverplan', c.id, { id: c.id, cameras, servers: needed, hours, from, until, cameraHour, requestedAt: bookedAt, requestedBy: me.email || '', bookingKey, paid });
+    await store.put(`booking:${c.id}`, bookingKey, { key: bookingKey, at: bookedAt, from, cameras, hours, until, cameraHour, paid });
+    await forEachWant(c.id, needed, { desired: 'on', requestedAt: now(), requestedBy: me.email || '', finished: false, saved: false, stopRequestedAt: 0, from, until, lastReport: 0, cameraHour, azureHour: azureServerHour });
+    // each server's own share of the cameras, as that's what its time is charged at
+    // and what its time costs us: the server, and keeping what its cameras record
+    for (let n = 1, left = cameras; n <= needed; n++, left -= CAMERAS_PER_SERVER) { const on = Math.min(left, CAMERAS_PER_SERVER); await forEachWant(c.id, n, { azureHour: azureServerHour + on * storageCameraHour }, n, on); }
+    return reply(200, { server: await view(c, h) });
+  }
+  const checkoutView = (co) => ({ id: co.id, cameras: co.cameras, hours: co.hours, startNow: !!co.startNow, from: co.from || 0, until: co.until || 0, cameraHour: co.cameraHour, cost: co.cost, servers: serversFor(co.cameras), expires: co.exp, pretend: true });
   async function forEachWant(company, count, change, only = 0, bookedCameras = undefined) {
     for (let n = only || 1; n <= (only || count); n++) {
       const id = slotId(company, n), was = await store.get('serverwant', id);
@@ -166,11 +221,11 @@ function createServers({ store, now, reply, session, isAdmin = () => false, paym
       for (const c of (await store.list('company')).sort((x, y) => y.at - x.at)) {
         const v = await view(c), u = await usage(c.id);
         out.push({ id: c.id, name: c.name, status: c.status, note: c.note || '', contact: c.contact, email: c.email, website: c.website, about: c.about, logo: c.logo || '', theme: c.theme, at: c.at, card: cardView(c.payment), price: await pricing(c),
-          server: { state: v.state, wanted: v.wanted, until: v.until, cameras: v.cameras, serverCount: v.serverCount, camerasLive: v.servers.reduce((n, s) => n + s.cameras, 0), bookedCameraHour: v.bookedCameraHour, error: v.error }, usage: u });
+          server: { state: v.state, wanted: v.wanted, scheduled: v.scheduled, from: v.from, until: v.until, cameras: v.cameras, serverCount: v.serverCount, camerasLive: v.servers.reduce((n, s) => n + s.cameras, 0), bookedCameraHour: v.bookedCameraHour, error: v.error }, usage: u });
         for (const k of Object.keys(totals)) totals[k] += u[k];
       }
       for (const k of Object.keys(totals)) totals[k] = Math.round(totals[k] * 100) / 100;
-      return reply(200, { customers: out, totals, month: monthOf(now()), running: out.filter((c) => c.server.wanted === 'on').length, maxRunning, pricing: await pricing() });
+      return reply(200, { customers: out, totals, month: monthOf(now()), running: out.filter((c) => c.server.wanted === 'on' && !c.server.scheduled).length, maxRunning, pricing: await pricing() });
     }
     if (id && action === 'price' && method === 'PUT') {
       const c = await store.get('company', id); if (!c) return reply(404, { error: 'No such company' });
@@ -238,34 +293,36 @@ function createServers({ store, now, reply, session, isAdmin = () => false, paym
       await store.put('company', c.id, next);
       return reply(200, { server: await view(next, h) });
     }
+    // Customers go through the payment page: checkout says what the booking comes to and holds it for a while, and paying for it makes it.
+    // For now the payment is pretend: nothing is charged, and it's marked so on the booking.
+    if (b === 'checkout') {
+      const a = asked(body); if (a.error) return reply(400, { error: a.error });
+      const no = await cantBook(c, h, a); if (no) return no;
+      const { cameraHour } = await pricing(c);
+      const co = { id: random(12), company: c.id, ...a, cameraHour, cost: pounds(a.cameras * a.hours * cameraHour), exp: now() + CHECKOUT_MINUTES * 60e3, by: me.uid };
+      await store.put('checkout', c.id, co);
+      return reply(200, { checkout: checkoutView(co) });
+    }
+    if (b === 'pay') {
+      const co = await store.get('checkout', c.id);
+      if (!co || co.id !== String(body?.checkout || '') || co.by !== me.uid) return reply(404, { error: 'That payment isn\'t open any more: please book again' });
+      if (co.exp < now()) { await store.remove('checkout', c.id); return reply(410, { error: `That payment ran out after ${CHECKOUT_MINUTES} minutes: please book again` }); }
+      if (!co.startNow && co.until - Math.max(co.from, now()) < HOUR) return reply(410, { error: 'That booking\'s start time has passed: please book again' });
+      const r = await book(c, me, h, co, { cameraHour: co.cameraHour, paid: { pretend: true, amount: co.cost, at: now() } });
+      if (r.status === 200) await store.remove('checkout', c.id);
+      return r;
+    }
     if (b === 'start') {
-      if (c.status !== 'approved') return reply(403, { error: c.status === 'pending' ? 'We\'re still checking your application' : 'This company has been blocked from starting servers' });
-      if (!c.payment && !isAdmin(h)) return reply(402, { error: 'Add your payment details first' });
-      const cameras = Number(body?.cameras), hours = Number(body?.hours);
-      if (!Number.isInteger(cameras) || cameras < 1 || cameras > 40) return reply(400, { error: 'How many cameras do you need?' });
-      if (!Number.isInteger(hours) || hours < 1 || hours > MAX_HOURS) return reply(400, { error: `Book between 1 and ${MAX_HOURS} hours: you can extend it later` });
-      const plan = await store.get('serverplan', c.id);
-      if (active(plan) && (await view(c, h)).wanted === 'on') return reply(409, { error: 'Your servers are already booked: extend them instead' });
-      const needed = serversFor(cameras);
-      if (await othersRunning(c.id) + needed > maxRunning) return reply(409, { error: needed > maxRunning ? `We can run ${maxRunning} server${maxRunning === 1 ? '' : 's'} at once at the moment, which is ${maxRunning * CAMERAS_PER_SERVER} cameras` : 'All our servers are in use right now: try again a little later' });
-      for (let n = 1; n <= needed; n++) await ensureServer(c, n);
-      const until = now() + hours * HOUR;
-      const { cameraHour, azureServerHour } = await pricing(c);
-      const bookedAt = now(), bookingKey = String(bookedAt).padStart(15, '0');
-      await store.put('serverplan', c.id, { id: c.id, cameras, servers: needed, hours, until, cameraHour, requestedAt: bookedAt, requestedBy: me.email || '', bookingKey });
-      await store.put(`booking:${c.id}`, bookingKey, { key: bookingKey, at: bookedAt, cameras, hours, until, cameraHour });
-      await forEachWant(c.id, needed, { desired: 'on', requestedAt: now(), requestedBy: me.email || '', finished: false, saved: false, stopRequestedAt: 0, until, lastReport: 0, cameraHour, azureHour: azureServerHour });
-      // each server's own share of the cameras, as that's what its time is charged at
-      // and what its time costs us: the server, and keeping what its cameras record
-      for (let n = 1, left = cameras; n <= needed; n++, left -= CAMERAS_PER_SERVER) { const on = Math.min(left, CAMERAS_PER_SERVER); await forEachWant(c.id, n, { azureHour: azureServerHour + on * storageCameraHour }, n, on); }
-      return reply(200, { server: await view(c, h) });
+      if (!isAdmin(h)) return reply(402, { error: 'Pay for your booking first' });
+      const a = asked(body); if (a.error) return reply(400, { error: a.error });
+      return book(c, me, h, a);
     }
     if (b === 'extend') {
       const hours = Number(body?.hours), plan = await store.get('serverplan', c.id);
       if (!active(plan) || (await view(c, h)).wanted !== 'on') return reply(409, { error: 'Your servers aren\'t running: start them instead' });
       if (!Number.isInteger(hours) || hours < 1 || hours > MAX_EXTEND_HOURS) return reply(400, { error: `Add between 1 and ${MAX_EXTEND_HOURS} hours at a time` });
       const until = plan.until + hours * HOUR;
-      if (until > now() + MAX_AHEAD_HOURS * HOUR) return reply(400, { error: `That's more than ${MAX_AHEAD_HOURS} hours ahead: extend it nearer the time` });
+      if (until > Math.max(now(), plan.from || 0) + MAX_AHEAD_HOURS * HOUR) return reply(400, { error: `That's more than ${MAX_AHEAD_HOURS} hours ahead: extend it nearer the time` });
       await store.put('serverplan', c.id, { ...plan, hours: plan.hours + hours, until });
       await changeBooking(c.id, plan, { hours: plan.hours + hours, until });
       await forEachWant(c.id, plan.servers, { until });
