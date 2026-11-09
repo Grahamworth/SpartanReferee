@@ -26,13 +26,17 @@ $('who').textContent = 'Your local time';
 // ---------------------------------------------------------------- tabs
 // The Upload tab is moved out of sight rather than hidden, so a video being judged carries on.
 // Results is the live cameras, a previous recording or an uploaded video: uploading has its own area, under the Results tab
-document.querySelectorAll('header .tabs button').forEach((b) => b.onclick = () => showTab(b.dataset.tab === 'judge' && resMode === 'upload' ? 'upload' : b.dataset.tab));
+// Booking and History are on the website's console (st.site): they take you there, and its tabs bring you back.
+document.querySelectorAll('header .tabs button').forEach((b) => b.onclick = () => (b.dataset.go ? toConsole(b.dataset.go) : showTab(b.dataset.tab === 'judge' && resMode === 'upload' ? 'upload' : b.dataset.tab)));
 function showTab(name) {
-  document.querySelectorAll('header .tabs button').forEach((b) => b.classList.toggle('on', b.dataset.tab === (name === 'upload' ? 'judge' : name)));
+  document.querySelectorAll('header .tabs button').forEach((b) => b.classList.toggle('on', !!b.dataset.tab && b.dataset.tab === (name === 'upload' ? 'judge' : name)));
   for (const p of document.querySelectorAll('.pane')) {
     if (p.id === 'upload') p.classList.toggle('offstage', name !== 'upload');
     else p.hidden = p.id !== name;
   }
+  // the day and the number search are for what was filmed: not for setting up cameras
+  const filmed = name !== 'cameras';
+  document.querySelector('header .dayPick').hidden = !filmed; document.querySelector('header .numSearch').hidden = !filmed;
   if (name !== 'live') pauseAll();
   if (name === 'upload') loadUploads();
   if (name === 'cameras') loadCameras();
@@ -41,6 +45,39 @@ function showTab(name) {
   if (name === 'live' && !clipStart && !live && st) { if (isToday()) goLive(); else openDay(); }
   placeDock();
 }
+
+// Which tab the console opened this on, and which of the booking's servers this is (from the sign-in link: kept for this tab of the
+// browser, as the address is tidied straight away).
+const nav = (() => {
+  let v = null;
+  try { v = JSON.parse(sessionStorage.getItem('hj_nav')); } catch { /* none yet */ }
+  const q = new URLSearchParams(location.search);
+  if (q.has('tab')) {
+    const num = (x) => { const n = Number(x); return Number.isInteger(n) && n >= 1 && n <= 20 ? n : 1; };
+    v = { tab: q.get('tab'), n: num(q.get('n')), of: Math.max(num(q.get('n')), num(q.get('of'))) };
+    try { sessionStorage.setItem('hj_nav', JSON.stringify({ ...v, tab: '' })); } catch { /* private mode */ }
+    history.replaceState(null, '', location.pathname);
+  }
+  return v || { tab: '', n: 1, of: 1 };
+})();
+// the console's address, from this server's settings; Booking and History open it on that tab, and another server opens through it
+function consoleAt(params, hash = '') {
+  if (!st?.site) return '';
+  const u = new URL(st.site, location.href); u.search = new URLSearchParams(params).toString(); u.hash = hash;
+  return u.href;
+}
+function toConsole(tab) { const at = consoleAt({}, tab); if (at) location.assign(at); else toast('Still connecting: try again in a moment'); }
+function drawServerPick() {
+  const box = document.querySelector('header .serverPick');
+  box.hidden = nav.of < 2; if (nav.of < 2 || $('serverPick').options.length) return;
+  for (let k = 1; k <= nav.of; k++) $('serverPick').add(new Option(`${k} · cameras ${2 * k - 1}–${2 * k}`, k, false, k === nav.n));
+}
+$('serverPick').onchange = () => {
+  const tab = { live: 'live', judge: 'results', upload: 'results', cameras: 'cameras' }[document.querySelector('header .tabs button.on')?.dataset.tab] || 'live';
+  const at = consoleAt({ go: tab, n: $('serverPick').value });
+  if (at) location.assign(at); else { $('serverPick').value = nav.n; toast('Still connecting: try again in a moment'); }
+};
+drawServerPick();
 
 // ---------------------------------------------------------------- the day shown
 // Today by default (live); any earlier day shows that day's recordings, athletes and log.
@@ -73,7 +110,12 @@ async function poll() {
     skew = Date.parse(s.now) - (t0 + Date.now()) / 2;
     const first = !st;
     st = s; $('offline').hidden = true; applyBrand(s.brand); showTimeLeft(s.until);
-    if (first) { loadDays(); if (isToday()) goLive(); else openDay(); }
+    if (first) {
+      loadDays(); if (isToday()) goLive(); else openDay();
+      // opened from the console on Results or Cameras: go there
+      if (nav.tab === 'results') showTab('judge'); else if (nav.tab === 'cameras') showTab('cameras');
+      nav.tab = '';
+    }
   } catch { $('offline').hidden = false; return; }
   // (a mistake drawing the page isn't the server being out of reach)
   for (const f of [renderJudges, renderViewPick, renderLog]) { try { f(); } catch (e) { console.error(e); } }

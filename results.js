@@ -2,6 +2,7 @@
 // reps, and the numbers shown to a camera, to search, watch and download. It only reads: recording and uploading are on the server's page.
 import { call, googleButton, signedIn, getMe, signOut, esc } from './api-base.js';
 import { emailButtons, microsoftButton } from './email-signin-web.js';
+import { drawAppTabs } from './apptabs.js';
 
 const { applyTheme } = window.HeadJudgeBrand;
 const $ = (id) => document.getElementById(id);
@@ -150,7 +151,11 @@ async function enter() {
   if (!me.user) { signOut(); return start(); }
   $('who').textContent = me.user.email;
   show($('signIn'), false);
-  call('companies/mine').then(({ company: c }) => { if (c) { applyTheme(c.theme); $('company').textContent = c.name; document.title = `Past results: ${c.name}`; } }).catch(() => {});
+  call('companies/mine').then(({ company: c }) => { if (c) { applyTheme(c.theme); $('company').textContent = c.name; document.title = `Results: ${c.name}`; } }).catch(() => {});
+  // the console's tabs: this is Results while the servers are off (while they're on, Results is the video review's)
+  Promise.all([call('servers/mine'), call('servers/mine/history')]).then(([{ server }, { bookings }]) => {
+    drawAppTabs($('appTabs'), { active: 'results', server, hasBookings: bookings.length > 0, onError: fail });
+  }).catch(() => { /* no company: no tabs */ });
   try {
     const [results, recs] = await Promise.all([call('recordings/results'), call('recordings')]);
     data = { athletes: results.athletes, numbers: results.numbers, sources: results.sources, recordings: recs.recordings };

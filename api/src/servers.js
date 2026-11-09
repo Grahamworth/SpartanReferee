@@ -17,7 +17,7 @@
    POST /api/servers/mine/start {cameras, hours | from, until}  -> { server } admins book straight away; customers pay first
    POST /api/servers/mine/extend {hours}          -> { server }
    POST /api/servers/mine/stop                    -> { server }
-   POST /api/servers/mine/open {n}                -> { url } a short-lived sign-in link to that server's own page
+   POST /api/servers/mine/open {n, tab}           -> { url } a short-lived sign-in link to that server's own page, on that tab
    POST /api/servers/report                       (a server, with its key) -> { stop, until }
 
    Admins:
@@ -42,6 +42,7 @@ const { CAMERAS_PER_SERVER } = cameraSplit;
 const MAX_HOURS = 24, MAX_EXTEND_HOURS = 12, MAX_AHEAD_HOURS = 72, LOGIN_MINUTES = 5, MAX_DAYS_AHEAD = 90, CHECKOUT_MINUTES = 30;
 // Until card payments are properly set up (STRIPE_SECRET_KEY), only admins can start servers: customers can't book or extend at all.
 const BOOKINGS_CLOSED = 'Bookings open once card payments are set up. Get in touch with us if you need cameras before then.';
+const OPEN_TABS = ['live', 'results', 'cameras']; // the video review's tabs the console can open it on
 const START_LEAD_MS = 10 * 60e3; // the control app turns servers on this long before a booking starts (control/src/reconcile.js has it too)
 const HOUR = 3600e3;
 const sha = (s) => crypto.createHash('sha256').update(String(s)).digest('hex');
@@ -346,7 +347,9 @@ function createServers({ store, now, reply, session, isAdmin = () => false, paym
       const st = await store.get('serverstate', id), s = await store.get('server', id);
       if (!s || st?.state !== 'on') return reply(409, { error: 'That server isn\'t on yet' });
       const t = signFor(s.secret, { kind: 'login', who: me.email || me.uid, exp: now() + LOGIN_MINUTES * 60e3 });
-      return reply(200, { url: `https://${s.host}/login?t=${encodeURIComponent(t)}` });
+      // which of the review's tabs to open on, and how many servers the booking has, so the review can switch to the others
+      const tab = OPEN_TABS.includes(body?.tab) ? body.tab : 'live', of = (await store.get('serverplan', c.id))?.servers || 1;
+      return reply(200, { url: `https://${s.host}/login?t=${encodeURIComponent(t)}&tab=${tab}&n=${n}&of=${of}` });
     }
     return null;
   }

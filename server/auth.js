@@ -27,6 +27,14 @@ function login(secret, token, now = Date.now()) {
   const exp = now + SESSION_HOURS * 3600e3;
   return { cookie: `${COOKIE}=${sign(secret, { kind: 'session', who: v.who, exp })}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${SESSION_HOURS * 3600}`, who: v.who };
 }
+/** Where a sign-in link lands: the review on the tab the console asked for, and which of the booking's servers this is. Only these
+ *  few plain values get through, so a link can't send anyone anywhere else. */
+function landing(q) {
+  const tab = { live: 'live', results: 'results', cameras: 'cameras' }[q.get('tab')] || 'live';
+  const num = (v) => { const n = Number(v); return Number.isInteger(n) && n >= 1 && n <= 20 ? n : 1; };
+  const n = num(q.get('n')), of = Math.max(n, num(q.get('of')));
+  return `/?tab=${tab}&n=${n}&of=${of}`;
+}
 /** Sign out: the cookie that replaces this browser's session with nothing */
 const logout = () => `${COOKIE}=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0`;
-module.exports = { sign, verify, session, login, logout, cookieValue, COOKIE };
+module.exports = { sign, verify, session, login, logout, landing, cookieValue, COOKIE };

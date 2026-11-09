@@ -4,6 +4,7 @@
 import { call, googleButton, signedIn, getMe, signOut, esc } from './api-base.js';
 import { emailButtons, microsoftButton } from './email-signin-web.js';
 import { drawTracked } from './tracked-demos.js';
+import { drawAppTabs, openServer as openTab } from './apptabs.js';
 
 const { applyTheme } = window.HeadJudgeBrand;
 const { quote, timeLeft, money, plural } = window.HeadJudgeBooking;
@@ -122,10 +123,13 @@ function draw(s) {
   $('cardText').textContent = s.card ? `${s.card.brand[0].toUpperCase()}${s.card.brand.slice(1)} ending ${s.card.last4}` : 'Not needed: you\'re an admin';
   show($('changeCard'), !!s.card && s.cardsOn);
   $('hours2').textContent = `${plural(s.used.cameraHours, 'camera hour')} · ${money(s.used.charge)}`;
+  drawTabs(); // Live and Cameras come and go with the servers
 }
 const STATE_WORD = { booked: 'Booked', running: 'On now', stopped: 'Stopped early', finished: 'Finished', cancelled: 'Cancelled' };
+let hasBookings = false;
 async function drawHistory() {
   let bookings; try { ({ bookings } = await call('servers/mine/history')); } catch { return; }
+  hasBookings = bookings.length > 0; drawTabs();
   $('history').innerHTML = bookings.length ? `<div class="historyTable" role="table" aria-label="Your bookings">
     <div class="historyRow head" role="row"><span role="columnheader">When</span><span role="columnheader">Cameras</span><span role="columnheader">Hours</span><span role="columnheader">Status</span><span role="columnheader">Cost</span></div>
     ${bookings.map((b) => `<div class="historyRow" role="row">
@@ -143,12 +147,25 @@ async function act(path, body = {}) {
   catch (e) { fail(e.message); }
   busy = false; if (last) draw(last);
 }
-async function openServer(n) {
-  // opened before the wait, so a browser doesn't treat it as a pop-up
-  const w = window.open('about:blank', '_blank');
-  try { const { url } = await call('servers/mine/open', { method: 'POST', body: { n } }); if (w) w.location = url; else location.href = url; }
-  catch (e) { w?.close(); fail(e.message); }
+// a server's video review opens in this browser tab: its Booking tab comes back here
+async function openServer(n, tab = 'live') {
+  try { await openTab(tab, n); } catch (e) { fail(e.message); }
 }
+
+// ---------------------------------------------------------------- the tabs: Booking and History are here; Live, Results and Cameras on the servers
+let view = 'booking';
+function drawTabs() {
+  drawAppTabs($('appTabs'), { active: view, server: last, hasBookings, local: (tab) => { if (tab !== 'booking' && tab !== 'history') return false; location.hash = tab === 'history' ? 'history' : ''; return true; }, onError: fail });
+}
+function showView(v) {
+  view = v === 'history' ? 'history' : 'booking';
+  checkout = null; show($('payArea'), false);
+  const booking = view === 'booking';
+  show($('server'), booking); show($('tracked'), booking); show($('more'), booking); show($('historyBox'), !booking);
+  if (!booking) drawHistory();
+  drawTabs();
+}
+addEventListener('hashchange', () => { if (last) { showView(location.hash.slice(1)); window.scrollTo({ top: 0 }); } });
 async function addCard() {
   busy = true; payMessage = ''; drawQuote();
   try { const { url } = await call('servers/mine/payment', { method: 'POST', body: {} }); location.assign(url); return; }
@@ -160,7 +177,8 @@ $('changeCard').onclick = addCard;
 // ---------------------------------------------------------------- the payment page: customers pay before a booking is made (pretend for now)
 let checkout = null;
 function showPay(on) {
-  show($('payArea'), on); show($('server'), !on); show($('historyBox'), !on); show($('more'), !on); show($('tracked'), !on);
+  if (on) { show($('server'), false); show($('historyBox'), false); show($('more'), false); show($('tracked'), false); show($('payArea'), true); }
+  else showView('booking');
   window.scrollTo({ top: 0 });
 }
 function openPay(co) {
@@ -238,10 +256,16 @@ async function enter() {
   const { company } = await call('companies/mine');
   if (!company) { show($('none'), true); return; }
   enterBrand(company);
-  show($('server'), true); show($('more'), true); show($('historyBox'), true); show($('tracked'), true);
   drawTracked($('trackedList'));
   await cameBackFromStripe();
   await refresh();
+  // the video review's Live, Results and Cameras tabs, and its server switcher, come through here: ?go=live&n=2
+  const q = new URLSearchParams(location.search), go = q.get('go');
+  if (go) {
+    history.replaceState(null, '', location.pathname + location.hash);
+    if (['live', 'results', 'cameras'].includes(go)) { try { await openTab(go, Math.max(1, Math.floor(Number(q.get('n')) || 1))); return; } catch (e) { fail(e.message); } }
+  }
+  showView(location.hash.slice(1));
   drawHistory();
   clearInterval(poll); poll = setInterval(refresh, 5000);
 }

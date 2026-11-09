@@ -157,6 +157,11 @@ test('the link to a server only works once it\'s on, and is signed with that ser
   const v = JSON.parse(Buffer.from(p, 'base64url').toString());
   assert.strictEqual(v.kind, 'login'); assert.strictEqual(v.who, 'sam@example.com');
   assert.ok(v.exp - now() <= 5 * 60e3);
+  // it opens on Live, and says it's server 2 of 2, so the review can offer the other
+  assert.deepStrictEqual([u.searchParams.get('tab'), u.searchParams.get('n'), u.searchParams.get('of')], ['live', '2', '2']);
+  const on = async (tab) => new URL((await call('POST', 'servers/mine/open', h, { n: 2, tab })).body.url).searchParams.get('tab');
+  assert.strictEqual(await on('results'), 'results'); assert.strictEqual(await on('cameras'), 'cameras');
+  assert.strictEqual(await on('../../evil'), 'live', 'anything else opens on Live');
 });
 
 test('the overall state: on only once every server is', async () => {

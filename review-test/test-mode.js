@@ -59,6 +59,7 @@
   const state = () => ({
     now: new Date().toISOString(), cams: cams.map((c) => ({ ...c, judging: c.ai && c.live, fps: c.ai && c.live ? 15 : 0 })),
     marks: [], events, athletesRev, record: true, keepDays: 7, maxJudges: 2, until: T0 + 2 * 3600e3, firstCamera: 1,
+    site: new URL('../console.html', location.href).href, // the site's own console: Booking and History go there
     brand: { id: 'test', name: 'Test company', logo: '', theme: { primary: '#ffc400', accent: '#3ddc97', mode: 'dark' } },
   });
   async function answer(path, q, method, body) {

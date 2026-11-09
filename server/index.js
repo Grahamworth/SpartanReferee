@@ -76,7 +76,7 @@ const liveOf = (n) => { if (!live.has(n)) live.set(n, { last: '', at: 0, viewers
 const review = createReview({
   DATA, S, REVIEW, SITE_DIR,
   extraState: (cams) => ({
-    brand, maxJudges: engines.max, until: sleeper.until(), firstCamera: S.firstCamera || 1,
+    brand, maxJudges: engines.max, until: sleeper.until(), firstCamera: S.firstCamera || 1, site: C.site || '', // the console, for the Booking and History tabs
     cams: cams.map((c) => { const l = live.get(c.n); return { ...c, ai: engines.wanted(c.n), judging: engines.running(c.n) && !!l && Date.now() - l.at < 4000, fps: l && Date.now() - l.at < 4000 ? l.fps : 0 }; }),
   }),
 });
@@ -213,7 +213,7 @@ const viewServer = http.createServer(async (req, res) => {
     if (u.pathname === '/login') {
       const s = auth.login(C.secret, u.searchParams.get('t'));
       if (!s) { res.writeHead(401, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' }); return res.end(NO_ACCESS(C.site)); }
-      res.writeHead(302, { 'Set-Cookie': s.cookie, Location: '/', 'Cache-Control': 'no-store' }); return res.end();
+      res.writeHead(302, { 'Set-Cookie': s.cookie, Location: auth.landing(u.searchParams), 'Cache-Control': 'no-store' }); return res.end();
     }
     if (u.pathname === '/logout') {
       res.writeHead(200, { 'Set-Cookie': auth.logout(), 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' });

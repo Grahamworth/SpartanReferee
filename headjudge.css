@@ -96,7 +96,8 @@ textarea { resize: vertical; }
 .trackCard li.lit { color: var(--text); font-weight: 600; }
 .trackCard li.lit::before { background: var(--accent); }
 .historyBox { margin-top: 18px; }
-.historyBox h2 { font-size: 1.5rem; margin-bottom: 8px; }
+.historyBox:first-child, #payArea[hidden] + .historyBox { margin-top: 0; }
+.historyBox h1, .historyBox h2 { font-size: 1.5rem; margin-bottom: 8px; }
 .historyRow { display: grid; grid-template-columns: minmax(0, 2.6fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.5fr) minmax(0, 1fr); gap: 8px; padding: 8px 0; border-top: 1px solid var(--line); font-size: .92rem; align-items: baseline; }
 .historyRow.head { color: var(--muted); font-size: .82rem; border-top: 0; }
 .historyRow span:last-child { text-align: right; }
@@ -247,3 +248,19 @@ input[type=datetime-local] { color-scheme: dark; min-height: 44px; }
 .pcSplit { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .payBack { display: block; margin: 12px auto 0; }
 .closedNote { margin: 0 0 4px; padding: 10px 14px; background: var(--bg); border-left: 4px solid var(--primary); color: var(--text); font-size: .95rem; }
+
+/* the tabs along the top (apptabs.js), the same five as the video review's; on a phone, a bar along the bottom */
+.appTabs { display: flex; gap: 6px; flex: 1 1 auto; flex-wrap: wrap; min-width: 0; }
+.appTabs button { display: inline-flex; align-items: center; gap: 7px; background: var(--panel); color: var(--muted); border: 1px solid var(--line); padding: 8px 15px; font: 700 15px Barlow, -apple-system, "Segoe UI", system-ui, sans-serif; cursor: pointer; }
+.appTabs button:hover:not(:disabled) { color: var(--text); }
+.appTabs button.on { background: var(--text); color: var(--bg); border-color: var(--text); }
+.appTabs button:disabled { opacity: .45; cursor: not-allowed; }
+.appTabs svg { display: none; width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+@media (max-width: 760px) {
+  .appTabs { position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 0; background: var(--panel); border-top: 1px solid var(--line); padding: 0 0 env(safe-area-inset-bottom); }
+  .appTabs[hidden] { display: none; }
+  .appTabs button { display: grid; justify-items: center; gap: 3px; padding: 9px 2px 8px; background: none; border: 0; border-top: 3px solid transparent; font-size: 11.5px; }
+  .appTabs button.on { background: none; color: var(--text); border-top-color: var(--primary); }
+  .appTabs svg { display: block; }
+  body:has(.appTabs:not([hidden])) { padding-bottom: calc(66px + env(safe-area-inset-bottom)); }
+}

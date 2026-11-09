@@ -16,12 +16,15 @@
   <img id="brandLogo" class="brandlogo" hidden alt="">
   <h1>Video <span>review</span></h1>
   <nav class="tabs" role="tablist">
-    <!-- on a phone these are the bar along the bottom, with their icons and short names -->
+    <!-- on a phone these are the bar along the bottom, with their icons and short names. Booking and History are on the website's
+         console: they take you there, as its tabs bring you back here. -->
+    <button data-go="booking" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="1.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span class="tl">Booking</span><span class="ts">Booking</span></button>
     <button data-tab="live" class="on"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2" fill="currentColor"/><path d="M6.3 6.3a8 8 0 0 0 0 11.4M17.7 6.3a8 8 0 0 1 0 11.4"/></svg><span class="tl">Live</span><span class="ts">Live</span></button>
     <button data-tab="judge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1" fill="currentColor"/><circle cx="4" cy="12" r="1" fill="currentColor"/><circle cx="4" cy="18" r="1" fill="currentColor"/></svg><span class="tl">Results</span><span class="ts">Results</span></button>
     <button data-tab="cameras"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="13" height="10" rx="1.5"/><path d="M16 11l5-3v8l-5-3"/></svg><span class="tl">Cameras</span><span class="ts">Cameras</span></button>
-    <button data-tab="log"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><span class="tl">Log</span><span class="ts">Log</span></button>
+    <button data-go="history" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><span class="tl">History</span><span class="ts">History</span></button>
   </nav>
+  <label class="serverPick" hidden>Server <select id="serverPick" aria-label="Which of your servers to show"></select></label>
   <label class="dayPick">Day <select id="day" aria-label="Show this day"></select></label>
   <div class="numSearch">
     <input id="numSearch" inputmode="numeric" placeholder="Find athlete number" autocomplete="off" aria-label="Find athlete number">
@@ -41,6 +44,12 @@
   <div class="row"><h2 style="margin:0">Cameras</h2><span class="spacer"></span><button class="btn" id="addCam" type="button">+ Add a camera</button></div>
   <p class="muted">This server takes two cameras. Open HeadJudge Broadcaster on the phone and scan a camera's code. Any Wi-Fi or mobile signal will do.</p>
   <div id="camList" class="camlist"></div>
+  <!-- the log: each camera connecting and dropping out, for protests -->
+  <details class="logBox" id="logBox">
+    <summary>Camera log</summary>
+    <div class="row"><span class="muted">Each time a camera connected or dropped out.</span><span class="spacer"></span><button class="btn" id="csv">Download log (CSV)</button></div>
+    <table class="list"><thead><tr><th>Time</th><th>Camera</th><th>Event</th></tr></thead><tbody id="eventList"></tbody></table>
+  </details>
 </section>
 
 <!-- Live: every camera live (with its AI judge), rewind through everything recorded -->
@@ -204,12 +213,6 @@
     <p id="athleteSummary" class="muted"></p>
     <div id="athleteList" class="athletes"></div>
   </div>
-</section>
-
-<!-- Log: camera connect/lost events, for protests -->
-<section id="log" class="pane" hidden>
-  <div class="row"><h2>Cameras</h2><button class="btn" id="csv">Download log (CSV)</button></div>
-  <table class="list"><thead><tr><th>Time</th><th>Camera</th><th>Event</th></tr></thead><tbody id="eventList"></tbody></table>
 </section>
 
 <!-- the AI judges on the live cameras: always running, shown on the Live tab while it's live, kept out of sight otherwise -->
