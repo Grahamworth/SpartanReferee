@@ -4,13 +4,34 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Test</title>
-<!-- What a started AI judge shows in the review's test mode: no judge runs. -->
+<!-- What a started AI judge, or a detailed analysis, shows in the review's test mode: no judge runs. Over camera 1 (this browser's
+     camera) or the clip it would analyse, when there's one to show; otherwise just TEST. -->
 <style>
-  html, body { margin: 0; height: 100%; background: #12161c; color: #f4f6f8; font-family: Barlow, system-ui, sans-serif; }
+  html, body { margin: 0; height: 100%; background: #12161c; color: #f4f6f8; font-family: Barlow, system-ui, sans-serif; overflow: hidden; }
   body { display: grid; place-content: center; text-align: center; gap: 6px; }
   b { font: italic 800 clamp(48px, 18vw, 160px)/1 "Barlow Condensed", "Arial Narrow", sans-serif; color: #ffc400; letter-spacing: .02em; }
   span { color: #a3acb7; font-size: clamp(13px, 2.4vw, 18px); }
+  video { display: none; }
+  body.seen { display: block; }
+  body.seen video { display: block; position: fixed; inset: 0; width: 100%; height: 100%; object-fit: contain; background: #000; }
+  body.seen .tag { position: fixed; left: 10px; top: 10px; display: flex; align-items: baseline; gap: 10px; background: rgba(0, 0, 0, .7); padding: 6px 12px; text-align: left; }
+  body.seen b { font-size: clamp(22px, 4vw, 34px); }
+  body.seen span { color: #f4f6f8; font-size: clamp(12px, 1.8vw, 15px); }
 </style>
 </head>
-<body><b>TEST</b><span>Test mode: no AI judge is running</span></body>
+<body><video muted playsinline autoplay loop></video><div class="tag"><b>TEST</b><span>Test mode: no AI judge is running</span></div>
+<script>
+  const q = new URLSearchParams(location.search), v = document.querySelector('video'), note = document.querySelector('.tag span');
+  try {
+    const stream = q.get('cam') && parent.hjTestCamera?.(+q.get('cam'));
+    if (stream) { v.srcObject = stream; document.body.classList.add('seen'); note.textContent = 'Test mode: no AI judge is running. Pretend athletes turn up every half minute.'; }
+    else if (q.get('clip')) {
+      v.src = parent.hjTestMedia(q.get('clip')); v.controls = true;
+      v.addEventListener('loadedmetadata', () => { if (+q.get('at')) v.currentTime = +q.get('at'); }, { once: true });
+      v.addEventListener('loadeddata', () => document.body.classList.add('seen'), { once: true });
+      note.textContent = 'Test mode: the stretch a detailed analysis would go through. No AI judge is running.';
+    }
+  } catch { /* opened on its own: just TEST */ }
+</script>
+</body>
 </html>

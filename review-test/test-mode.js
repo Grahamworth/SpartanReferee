@@ -1,7 +1,9 @@
 // Test mode for the video review: the real page (server/review), on the site, with no server behind it. Everything it would ask its
-// server for is answered here, in the browser, with a pretend company: two cameras (one live, one waiting for its phone with its QR
-// codes), some results, and uploads that "analyse" in a few seconds. Starting an AI judge shows TEST instead of a judge. Nothing is
-// sent anywhere: an uploaded video stays in this browser. Built into the site by scripts/build-review-test.mjs; admins only.
+// server for is answered here, in the browser, with a pretend company: two cameras, some results, and uploads that "analyse" in a
+// few seconds. Camera 1 is this browser's own camera: shown live the way a server shows one (WebRTC), and recorded here, so rewinding
+// Live, Watch, Pick athlete and previous recordings play real video. Camera 2 waits for its phone, with its QR codes. Starting an AI
+// judge shows TEST over the picture instead of a judge, and pretend athletes turn up in the recording. Nothing is sent anywhere:
+// recordings and uploaded videos stay in this browser. Built into the site by scripts/build-review-test.mjs; admins only.
 (() => {
   const realFetch = window.fetch.bind(window);
   const T0 = Date.now(), iso = (ms) => new Date(ms).toISOString(), minsAgo = (m) => iso(Date.now() - m * 60e3);
@@ -22,7 +24,7 @@
 
   // ---- the pretend server
   const cams = [
-    { n: 1, live: true, from: '', route: 'internet', video: '1280×720', watchers: 1, ai: false },
+    { n: 1, live: false, from: '', route: '', video: '', watchers: 1, ai: false }, // live once this browser's camera is on
     { n: 2, live: false, from: '', route: '', video: '', watchers: 0, ai: false },
   ];
   let athletesRev = 1, seq = 4, judgeSettings = {}, counts = [];
@@ -42,14 +44,20 @@
   ];
   const events = [{ t: minsAgo(25), cam: 1, type: 'connected', route: 'internet' }, { t: minsAgo(10), cam: 2, type: 'lost', route: '' }];
   const uploads = [], files = new Map(), jobs = [], prevSources = {};
-  const track = (a) => ({ frames: [], events: Array.from({ length: Math.min(a.reps, 6) }, (_, i) => ({ type: i === 2 && a.noReps ? 'norep' : 'rep', count: i + 1, t: a.src === 'upload' ? ((a.firstT || 0) + 2 + i * 5) * 1000 : Date.parse(a.firstAt) + 20000 + i * 9000, reasons: i === 2 && a.noReps ? ['Jump: both feet off the ground'] : [] })) });
+  // a few reps and a no rep, spread across the time they were on screen
+  const track = (a) => {
+    const k = Math.min(a.reps, 6), up = a.src === 'upload';
+    const t0 = up ? (a.firstT || 0) * 1000 : Date.parse(a.firstAt), t1 = up ? (a.lastT ?? a.firstT ?? 0) * 1000 : Date.parse(a.lastAt), step = (t1 - t0) / (k + 1);
+    return { frames: [], events: Array.from({ length: k }, (_, i) => ({ type: i === 2 && a.noReps ? 'norep' : 'rep', count: i + 1, t: Math.round(t0 + step * (i + 1)), reasons: i === 2 && a.noReps ? ['Jump: both feet off the ground'] : [] })) };
+  };
   const jobView = (j) => {
     const pct = Math.min(100, Math.round((Date.now() - j.at) / 80));
     if (j.state === 'running' && pct >= 100) {
       j.state = 'done';
-      // the people "found" in it, at different points in the video
-      const round = Date.now();
-      for (const [bib, firstT, lastT, reps, noReps] of [['305', 3, 41, 12, 1], ['44', 12, 58, 15, 0], ['No number', 47, 80, 9, 2], ['118', 66, 112, 18, 0]]) {
+      // the people "found" in it, at different points in the video (a share of how long it is: about 2 minutes for an upload)
+      const round = Date.now(), span = j.span || 115;
+      for (const [bib, from, to, reps, noReps] of [['305', 0.03, 0.36, 12, 1], ['44', 0.1, 0.5, 15, 0], ['No number', 0.41, 0.7, 9, 2], ['118', 0.57, 0.97, 18, 0]]) {
+        const firstT = Math.round(from * span * 10) / 10, lastT = Math.round(to * span * 10) / 10;
         athletes.push({ n: ++seq, src: 'upload', video: j.video, cam: 0, round, label: seq, bib, firstT, lastT, firstAt: iso(j.at), lastAt: iso(Date.now()), reps, noReps, done: true, pic: 1 });
       }
       athletesRev++;
@@ -62,6 +70,133 @@
     site: new URL('../console.html', location.href).href, // the site's own console: Booking and History go there
     brand: { id: 'test', name: 'Test company', logo: '', theme: { primary: '#ffc400', accent: '#3ddc97', mode: 'dark' } },
   });
+  // ---- camera 1: this browser's camera, recorded here in 10-second pieces kept for 20 minutes. A stretch of it plays as one video,
+  // its pieces put together in the browser (Media Source), starting at the moment asked for, just as a server cuts a clip.
+  const REC_TYPES = ['video/webm;codecs=vp8', 'video/webm;codecs=vp9', 'video/mp4;codecs=avc1.42E01E'];
+  const PIECE_MS = 10e3, KEEP_MS = 20 * 60e3, BLOCK_MS = 10 * 60e3;
+  const cam1 = { stream: null, rec: null, live: null, type: '', pieces: [], began: 0, why: '', gen: 0, tries: 0 };
+  const say = (what) => { cam1.why = what; const el = document.getElementById('tmCam'); if (el) el.textContent = what; };
+  async function startCamera() {
+    if (!navigator.mediaDevices?.getUserMedia) return say('camera 1: this browser can\'t share a camera here');
+    try {
+      cam1.stream = await navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 1280 }, height: { ideal: 720 }, frameRate: { ideal: 30 } }, audio: false });
+    } catch (e) {
+      if (cam1.began && e.name !== 'NotAllowedError' && cam1.tries++ < 10) { setTimeout(startCamera, 3000); return; } // it was on: keep trying a while
+      return say(e.name === 'NotAllowedError' ? 'camera 1: allow the camera (address bar) and reload to record from it' : cam1.began ? 'camera 1: this browser\'s camera stopped' : 'camera 1: no camera found on this computer');
+    }
+    const gen = ++cam1.gen, track = cam1.stream.getVideoTracks()[0], s = track.getSettings();
+    cam1.live = cam1.stream.clone(); // what live viewers are sent (whep, below)
+    cam1.tries = 0;
+    Object.assign(cams[0], { live: true, route: 'this browser', video: s.width ? `${s.width}×${s.height}` : '' });
+    events.push({ t: iso(Date.now()), cam: 1, type: 'connected', route: 'this browser' });
+    // lost (unplugged, the computer slept, the browser's camera service restarted): back as soon as it can be, as a phone reconnects
+    track.addEventListener('ended', () => {
+      if (gen !== cam1.gen) return;
+      cams[0].live = false; events.push({ t: iso(Date.now()), cam: 1, type: 'lost', route: '' });
+      for (const st of [cam1.stream, cam1.rec, cam1.live]) st?.getTracks().forEach((t) => t.stop());
+      say('camera 1: lost this browser\'s camera, trying again…');
+      setTimeout(startCamera, 2000);
+    });
+    cam1.type = REC_TYPES.find((t) => window.MediaRecorder?.isTypeSupported(t) && window.MediaSource?.isTypeSupported(t)) || '';
+    if (!cam1.type) return say('camera 1: live from this browser\'s camera, but this browser can\'t record it here');
+    if (!cam1.began) cam1.began = Date.now();
+    cam1.rec = cam1.stream.clone(); // the recording's own copy: a live viewer joining doesn't hold up its frames
+    say('camera 1: this browser\'s camera, recorded in this browser');
+    nextPiece(gen);
+  }
+  // Each piece is a recording of its own, so any of them can start a clip. Its clock starts at its first frame, the one the camera
+  // gives just after it's started, so that's where it's placed in time. Where it ends is measured once it stops: a recorder
+  // that's fallen behind (a busy computer) loses the frames it hadn't got to, which the next piece, started 3 s before, covers.
+  const append = (sb, buf) => new Promise((ok, no) => { sb.onupdateend = ok; sb.onerror = no; sb.appendBuffer(buf); });
+  async function videoLength(blob) {
+    const v = document.createElement('video'), ms = new MediaSource();
+    v.src = URL.createObjectURL(ms);
+    await new Promise((r) => ms.addEventListener('sourceopen', r, { once: true }));
+    URL.revokeObjectURL(v.src);
+    try { const sb = ms.addSourceBuffer(cam1.type); await append(sb, await blob.arrayBuffer()); const b = sb.buffered; return b.length ? b.end(b.length - 1) : 0; }
+    catch { return 0; } finally { v.removeAttribute('src'); v.load(); }
+  }
+  function nextPiece(gen) {
+    if (gen !== cam1.gen || !cam1.rec?.active) return;
+    // on this computer's clock; its end is its latest data until it's measured
+    let mr;
+    try { mr = new MediaRecorder(cam1.rec, { mimeType: cam1.type, videoBitsPerSecond: 1.5e6, videoKeyFrameIntervalDuration: 1000 }); } catch { return say('camera 1: this browser can\'t record it here'); }
+    const piece = { start: Date.now(), end: Date.now(), chunks: [], size: 0 };
+    mr.ondataavailable = (e) => { if (e.data.size) { piece.chunks.push(e.data); piece.size += e.data.size; piece.end = Date.now(); } };
+    mr.onstop = async () => { const len = piece.size ? await videoLength(new Blob(piece.chunks, { type: cam1.type })) : 0; if (len) piece.end = piece.start + len * 1000; };
+    mr.start(1000);
+    cam1.pieces.push(piece);
+    // the next one starts before this one stops: no gap between them (the next is laid over this one's last moments)
+    setTimeout(() => { nextPiece(gen); setTimeout(() => { if (mr.state !== 'inactive') mr.stop(); }, 3000); }, PIECE_MS);
+    const old = Date.now() - KEEP_MS;
+    while (cam1.pieces.length && cam1.pieces[0].end < old) cam1.pieces.shift();
+  }
+  const piecesIn = (cam, from, to) => (cam === 1 ? cam1.pieces.filter((p) => p.size && p.end > from && p.start < to) : []);
+  // a clip from `from` for `secs`: a Media Source the video plays, its time 0 being `from`
+  function clipUrl(cam, from, secs) {
+    const pieces = piecesIn(cam, from, from + secs * 1000).map((p) => ({ start: p.start, blob: new Blob(p.chunks, { type: cam1.type }) }));
+    const ms = new MediaSource(), url = URL.createObjectURL(ms);
+    ms.addEventListener('sourceopen', async () => {
+      URL.revokeObjectURL(url);
+      try {
+        const sb = ms.addSourceBuffer(cam1.type);
+        ms.duration = secs; // its whole length from the start, so a jump ahead isn't cut short while the pieces go in
+        for (const x of pieces) {
+          // a recording's last cluster has no end, so the parser is reset before each piece (which also resets the window)
+          sb.abort();
+          sb.appendWindowEnd = secs;
+          sb.timestampOffset = (x.start - from) / 1000; // before `from` is cut off
+          await append(sb, await x.blob.arrayBuffer());
+        }
+        if (ms.readyState === 'open') ms.endOfStream();
+      } catch { try { ms.endOfStream('decode'); } catch { /* the video has moved on */ } }
+    }, { once: true });
+    return url;
+  }
+  // a stretch a recorder fell behind on is a gap in a clip: the video steps over it rather than waiting there for good
+  const stepOver = (v) => {
+    if (!(v instanceof HTMLMediaElement) || !v.currentSrc.startsWith('blob:') || v.readyState >= 3) return;
+    const b = v.buffered, t = v.currentTime;
+    for (let i = 0; i < b.length; i++) {
+      if (b.start(i) <= t && t < b.end(i) - 0.1) return; // it has what it needs: just loading
+      if (b.start(i) > t && b.start(i) - t < 8) { v.currentTime = b.start(i) + 0.05; return; }
+    }
+  };
+  document.addEventListener('waiting', (e) => stepOver(e.target), true);
+  setInterval(() => document.querySelectorAll('video').forEach((v) => !v.paused && stepOver(v)), 700); // and once more pieces are in
+  // a server lists a camera's recordings in 10-minute files; here they're the 10-minute stretches since the camera came on
+  function browserRecordings() {
+    const out = [], last = cam1.pieces.at(-1);
+    if (!last) return out;
+    for (let b = cam1.began, i = 1; b < last.end; b += BLOCK_MS, i++) {
+      const ps = piecesIn(1, b, b + BLOCK_MS).filter((p) => p.start >= b);
+      if (ps.length) out.push({ id: `here${i}`, cam: 1, size: ps.reduce((n, p) => n + p.size, 0), startedAt: iso(ps[0].start), file: `camera1-here${i}.webm`, name: '', span: [ps[0].start, ps.at(-1).end] });
+    }
+    return out;
+  }
+  // the server's WebRTC (WHEP) answer for a live camera, given here: a connection inside this page, from the camera to the picture
+  async function whep(path, offer) {
+    const n = +(/station(\d+)/.exec(path) || [])[1];
+    if (n !== 1 || !cam1.live?.active || typeof offer !== 'string') return new Response('not live', { status: 404 });
+    // the viewers share one copy of the camera, kept for as long as the camera is (copies coming and going upset Chrome's camera)
+    const pc = new RTCPeerConnection(), copy = cam1.live;
+    for (const t of copy.getTracks()) pc.addTrack(t, copy);
+    await pc.setRemoteDescription({ type: 'offer', sdp: offer });
+    await pc.setLocalDescription(await pc.createAnswer());
+    await new Promise((ok) => { if (pc.iceGatheringState === 'complete') ok(); pc.addEventListener('icegatheringstatechange', () => pc.iceGatheringState === 'complete' && ok()); setTimeout(ok, 1500); });
+    pc.addEventListener('connectionstatechange', () => { if (['failed', 'disconnected'].includes(pc.connectionState)) pc.close(); });
+    return new Response(pc.localDescription.sdp, { status: 201, headers: { 'Content-Type': 'application/sdp' } });
+  }
+  // while camera 1's AI judge is "on", someone turns up in its recording every half minute, so Watch has real video to show
+  const BIBS = ['12', '407', 'No number', '73', '219', '5', '640'];
+  setInterval(() => {
+    const now = Date.now();
+    if (!cams[0].live || !cams[0].ai || !piecesIn(1, now - 26e3, now - 2e3).length) return;
+    const reps = 6 + (seq % 9);
+    athletes.push({ n: ++seq, src: 'live', video: '', cam: 1, round: 3, label: seq, bib: BIBS[seq % BIBS.length], firstAt: iso(Math.max(now - 26e3, cam1.pieces[0].start)), lastAt: iso(now - 2e3), reps, noReps: seq % 3 ? 0 : 1, done: true, pic: 1 });
+    athletesRev++;
+  }, 30e3);
+
   async function answer(path, q, method, body) {
     const eng = /^\/api\/engine\/(\d+)(?:\/(\w+))?$/.exec(path);
     if (eng) {
@@ -82,7 +217,7 @@
       case '/api/judge-settings':
         if (method === 'PUT') { judgeSettings[body.key] = body.value; return json({ ok: true }); }
         return json(judgeSettings);
-      case '/api/recorded': return json([]);
+      case '/api/recorded': return json(piecesIn(+q.get('cam'), 0, Infinity).map((p) => ({ start: iso(p.start), duration: (p.end - p.start) / 1000 })));
       case '/api/marks': return json({ ok: true });
       case '/api/counts':
         if (method === 'POST') { counts = counts.filter((c) => c.id !== body.id).concat(body); return json({ ok: true }); }
@@ -98,7 +233,10 @@
           if (body?.previous) {
             const rec = recordingsNow().find((x) => x.id === body.previous), video = `${new Date().toISOString().replace(/[:.]/g, '-')}_Recording_${body.previous}.mp4`;
             if (rec) prevSources[video] = rec.file; // as the server does: its local copy, and the recording it came from
-            const j = { id: `job${jobs.length + 1}`, video, name: `Recording ${body.previous}`, state: 'running', at: Date.now() }; jobs.push(j); return json(jobView(j));
+            const j = { id: `job${jobs.length + 1}`, video, name: `Recording ${body.previous}`, state: 'running', at: Date.now() };
+            // one recorded here plays: the people found in it are spread across how long it is
+            if (rec?.span) { const [s, e] = rec.span, secs = Math.max(5, Math.round((e - s) / 1000)); j.span = secs; files.set(video, () => clipUrl(1, s, secs)); }
+            jobs.push(j); return json(jobView(j));
           }
           const old = jobs.find((j) => j.video === video); if (old) jobs.splice(jobs.indexOf(old), 1);
           const j = { id: `job${jobs.length + 1}`, video, name: body?.name || video, state: 'running', at: Date.now() };
@@ -111,10 +249,11 @@
       default: return json({ error: 'Not in test mode' }, 404);
     }
   }
-  // each camera's 10-minute recordings over the last half hour, one from yesterday nobody's judged, and the videos uploaded here
+  // camera 1's recordings made in this browser, camera 2's pretend 10-minute recordings from the last half hour (it has no video), one
+  // from yesterday nobody's judged, and the videos uploaded here
   function recordingsNow() {
         const seg = (id, cam, startMs) => ({ id, cam, size: 380e6 + cam * 7e6, startedAt: iso(startMs), file: `cam${cam}-${id}.mp4`, name: '' });
-        const recs = [seg('c1a', 1, T0 - 10 * 60e3), seg('c2a', 2, T0 - 10 * 60e3), seg('c1b', 1, T0 - 20 * 60e3), seg('c2b', 2, T0 - 20 * 60e3), seg('c1c', 1, T0 - 30 * 60e3), seg('old', 1, T0 - 26 * 3600e3)];
+        const recs = [...browserRecordings(), seg('c2a', 2, T0 - 10 * 60e3), seg('c2b', 2, T0 - 20 * 60e3), seg('old', 1, T0 - 26 * 3600e3)];
         for (const u of uploads) recs.push({ id: `u-${u.name}`, cam: 0, size: u.size, startedAt: iso(Date.now() - 60e3), file: u.name, name: u.name.replace(/^[\dTZ-]+_/, '') });
         return recs.sort((a, b) => b.startedAt.localeCompare(a.startedAt));
   }
@@ -122,7 +261,13 @@
   window.fetch = async (input, init = {}) => {
     const url = new URL(typeof input === 'string' ? input : input.url, location.href);
     if (url.origin !== location.origin || !ours(url.pathname)) return realFetch(input, init);
-    if (url.pathname.startsWith('/whep/') || url.pathname === '/clip') return new Response('no video in test mode', { status: 404 });
+    if (url.pathname.startsWith('/whep/')) return whep(url.pathname, init.body);
+    // asked first, so a missing recording says why (the video itself comes through rewrite, below)
+    if (url.pathname === '/clip') {
+      const cam = +url.searchParams.get('cam'), from = Date.parse(url.searchParams.get('start')), secs = +url.searchParams.get('duration') || 60;
+      if (piecesIn(cam, from, from + secs * 1000).length) return new Response(null, { status: 206 });
+      return json({ error: cam === 1 && !cam1.pieces.length && cam1.why ? cam1.why.replace(/^camera 1: /, 'Nothing recorded: ') : 'No recording at that time' }, 404);
+    }
     let body = null; try { body = init.body ? JSON.parse(init.body) : null; } catch { /* not JSON */ }
     await new Promise((r) => setTimeout(r, 60)); // a little like a real server
     return answer(url.pathname, url.searchParams, (init.method || 'GET').toUpperCase(), body);
@@ -157,14 +302,24 @@
   };
   for (const a of athletes) a.pic = 1;
   // what the page points frames, videos and pictures at: the camera settings come from the site's own judge page, a started AI judge
-  // shows TEST, an uploaded video plays from this browser, and athletes' pictures are drawn here
+  // (or a detailed analysis) shows TEST over its camera or clip, recordings and uploaded videos play from this browser, and athletes'
+  // pictures are drawn here
   const rewrite = (v) => {
     const s = String(v);
     const p = /\/api\/athlete-pic\?n=(\d+)/.exec(s); if (p) return pic(+p[1]);
-    if (s.startsWith('/judge/judge.html')) return s.includes('settings=1') ? s.replace('/judge/judge.html', '/judge.html') : 'test-judge.html';
-    const up = /^\/uploads\/(.+)$/.exec(s); if (up) return files.get(decodeURIComponent(up[1])) || s;
+    if (s.startsWith('/judge/judge.html')) {
+      if (s.includes('settings=1')) return s.replace('/judge/judge.html', '/judge.html');
+      const jq = new URL(s, location.href).searchParams;
+      return `test-judge.html?${new URLSearchParams({ cam: jq.get('follow') || '', clip: jq.get('clip') || '', at: jq.get('pickt') || '' })}`;
+    }
+    if (s.startsWith('/clip?')) { const cq = new URL(s, location.href).searchParams; return clipUrl(+cq.get('cam'), Date.parse(cq.get('start')), +cq.get('duration') || 60); }
+    const up = /^\/uploads\/(.+)$/.exec(s);
+    if (up) { const f = files.get(decodeURIComponent(up[1])); return typeof f === 'function' ? f() : f || s; }
     return s;
   };
+  // for the TEST judge window: camera 1 live, or a clip or video to play
+  window.hjTestCamera = (n) => (n === 1 && cam1.stream?.active ? cam1.stream : null);
+  window.hjTestMedia = rewrite;
   for (const El of [HTMLIFrameElement, HTMLVideoElement, HTMLImageElement]) {
     const d = Object.getOwnPropertyDescriptor(El === HTMLVideoElement ? HTMLMediaElement.prototype : El.prototype, 'src');
     Object.defineProperty(El.prototype, 'src', { get() { return d.get.call(this); }, set(v) { d.set.call(this, rewrite(v)); }, configurable: true });
@@ -181,5 +336,14 @@
     e.preventDefault();
     window.toast?.('Test mode: on a real server, this signs this browser out of the video review');
   }, true);
+  // nor to save a clip from
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest?.('a[href^="/clip?"]')) return;
+    e.preventDefault();
+    window.toast?.('Test mode: on a real server, this saves the clip as an MP4 file');
+  }, true);
   window.HJ_TEST = true;
+  // the camera is asked for once the page knows it's an admin looking (scripts/build-review-test.mjs)
+  window.hjTestStart = () => { window.hjTestStart = () => {}; startCamera(); };
+  document.addEventListener('DOMContentLoaded', () => { if (cam1.why) say(cam1.why); });
 })();

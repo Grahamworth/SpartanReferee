@@ -21,3 +21,17 @@ test('the review\'s test mode is the real page, answered in the browser, for adm
   assert.match(mode, /path !== '\/api\/me'/, 'only who you are goes to the real API');
   assert.match(fs.readFileSync(path.join(out, 'test-judge.html'), 'utf8'), />TEST</);
 });
+
+test('camera 1 in test mode is the browser\'s own camera, asked for only once an admin is seen, and recorded in the browser', () => {
+  const site = fs.mkdtempSync(path.join(os.tmpdir(), 'review-test-'));
+  execFileSync('node', [path.join(ROOT, 'scripts/build-review-test.mjs'), site]);
+  const html = fs.readFileSync(path.join(site, 'review-test/index.html'), 'utf8'), mode = fs.readFileSync(path.join(site, 'review-test/test-mode.js'), 'utf8');
+  assert.match(html, /if \(me\?\.admin\) \{ cover\.remove\(\); window\.hjTestStart\?\.\(\);/, 'not before: non-admins aren\'t asked for their camera');
+  assert.match(html, /<span id="tmCam">/, 'the banner says what camera 1 is doing');
+  assert.equal(mode.match(/startCamera\(\)/g).length, 2, 'its definition, and hjTestStart: loading the page doesn\'t start the camera');
+  assert.match(mode, /window\.hjTestStart = \(\) => \{ window\.hjTestStart = \(\) => \{\}; startCamera\(\); \};/);
+  for (const what of ['getUserMedia', 'new MediaRecorder', 'new MediaSource', 'pathname.startsWith(\'/whep/\')) return whep(', "case '/api/recorded': return json(piecesIn("]) assert.ok(mode.includes(what), what);
+  // a camera that drops out comes back by itself; nothing here is sent anywhere
+  assert.match(mode, /addEventListener\('ended'[\s\S]{0,400}setTimeout\(startCamera/);
+  assert.ok(!/realFetch\([^)]*(clip|whep|upload)/.test(mode));
+});

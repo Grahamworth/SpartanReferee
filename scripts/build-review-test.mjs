@@ -19,7 +19,7 @@ const swap = (from, to) => { if (!html.includes(from)) throw new Error(`The revi
 swap('<link rel="stylesheet" href="review.css">', '<script src="test-mode.js"></script>\n<link rel="stylesheet" href="review.css">');
 swap('<script src="/judge/brand.js" defer></script>', '<script src="/brand.js" defer></script>');
 // a banner, so it's never mistaken for a real event, and only admins get past it
-swap('</body>', `<div id="testBanner" style="position:fixed;left:10px;bottom:10px;z-index:40;background:#ffc400;color:#101010;font:700 14px/1.3 Barlow,system-ui,sans-serif;padding:7px 14px;box-shadow:0 2px 12px rgba(0,0,0,.5);pointer-events:none">TEST MODE<span class="tmMore"> · pretend data, no server, nothing is saved</span></div>
+swap('</body>', `<div id="testBanner" style="position:fixed;left:10px;bottom:10px;z-index:40;background:#ffc400;color:#101010;font:700 14px/1.3 Barlow,system-ui,sans-serif;padding:7px 14px;box-shadow:0 2px 12px rgba(0,0,0,.5);pointer-events:none">TEST MODE<span class="tmMore"> · <span id="tmCam">camera 1: asking for this browser's camera…</span> · the rest is pretend · nothing leaves this browser</span></div>
 <style>@media (max-width: 760px) { #testBanner { bottom: calc(72px + env(safe-area-inset-bottom)) !important; font-size: 12px !important; padding: 4px 9px !important; } #testBanner .tmMore { display: none; } }</style>
 <script type="module">
   import { getMe } from '/api-base.js';
@@ -28,7 +28,7 @@ swap('</body>', `<div id="testBanner" style="position:fixed;left:10px;bottom:10p
   cover.innerHTML = '<p style="color:#a3acb7">Checking…</p>';
   document.body.append(cover);
   getMe(true).then((me) => {
-    if (me?.admin) { cover.remove(); return; }
+    if (me?.admin) { cover.remove(); window.hjTestStart?.(); return; } // camera 1 is this browser's camera
     cover.innerHTML = '<div style="max-width:420px"><p style="font:italic 800 32px Barlow Condensed,sans-serif;text-transform:uppercase;margin:0 0 8px">Test review</p><p>This is for HeadJudge admins. Sign in to your console with your admin account, then open it from there.</p><p><a style="color:#ffc400;font-weight:700" href="/console.html">Go to my console</a></p></div>';
   }, () => { cover.innerHTML = '<p>Can\\'t check who you are right now. <a style="color:#ffc400" href="/console.html">Go to my console</a></p>'; });
 </script>
