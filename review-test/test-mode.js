@@ -216,9 +216,10 @@
     x.fillStyle = '#2a2620'; for (const lx of LANE_X) x.fillRect(lx - SIZE * 0.78, FLOOR - 2, SIZE * 1.25, 8);
     x.fillStyle = 'rgba(255,255,255,.06)'; for (let i = 0; i < 6; i++) x.fillRect(40 + i * 110, 40, 70, 50); // windows on the far wall
     for (const d of timetable) { const p = poseAt(d, t); if (p) drawPerson(x, d, p.j, p.alpha); }
-    x.fillStyle = 'rgba(0,0,0,.55)'; x.fillRect(8, 8, 196, 26); x.fillRect(DW - 70, 8, 62, 26);
+    const ly = DH - 34; // at the bottom, clear of the review's own camera name and LIVE tag
+    x.fillStyle = 'rgba(0,0,0,.55)'; x.fillRect(8, ly, 196, 26); x.fillRect(DW - 70, ly, 62, 26);
     x.fillStyle = '#fff'; x.font = '700 15px Arial'; x.textAlign = 'left'; x.textBaseline = 'middle';
-    x.fillText(`CAMERA 1  ${clock(t)}`, 16, 21); x.fillStyle = '#ffc400'; x.fillText('DEMO', DW - 62, 21);
+    x.fillText(`CAMERA 1  ${clock(t)}`, 16, ly + 13); x.fillStyle = '#ffc400'; x.fillText('DEMO', DW - 62, ly + 13);
   }
   // live: drawn 15 times a second, and given to the page as camera 1 (recorded and shown just as a real camera is)
   function demoStream() {
@@ -251,12 +252,17 @@
     close();
     return new Blob([head, new Uint8Array([0x18, 0x53, 0x80, 0x67, 0x01, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]), info, tracks, ...clusters], { type: 'video/webm' });
   }
+  let pastBackTo = -Infinity; // while the earlier minutes are being made: how far back they go so far
   async function makePast(until) {
     if (!window.VideoEncoder || cam1.type !== 'video/webm;codecs=vp8') return;
     const config = { codec: 'vp8', width: DW, height: DH, bitrate: 1e6, framerate: PAST_FPS };
     if (!(await VideoEncoder.isConfigSupported(config).catch(() => null))?.supported) return;
     const c = document.createElement('canvas'); c.width = DW; c.height = DH;
     const x = c.getContext('2d', { willReadFrequently: false });
+    pastBackTo = until;
+    try { await makePieces(until, config, x, c); } finally { pastBackTo = -Infinity; }
+  }
+  async function makePieces(until, config, x, c) {
     for (let end = until; end > until - PAST_MS + 500; end -= PIECE_MS) {
       const start = Math.max(until - PAST_MS, end - PIECE_MS), frames = [];
       const enc = new VideoEncoder({ output: (ch) => { const data = new Uint8Array(ch.byteLength); ch.copyTo(data); frames.push({ t: ch.timestamp / 1000, key: ch.type === 'key', data }); }, error: () => {} });
@@ -273,6 +279,7 @@
       const blob = webm(frames.sort((a, b) => a.t - b.t));
       const at = cam1.pieces.findIndex((p) => p.start > start);
       cam1.pieces.splice(at < 0 ? cam1.pieces.length : at, 0, { start, end, chunks: [blob], size: blob.size });
+      pastBackTo = start;
       await new Promise((r) => setTimeout(r, 30)); // the page carries on meanwhile
     }
   }
@@ -340,10 +347,12 @@
   // a clip from `from` for `secs`: a Media Source the video plays, its time 0 being `from` (made in the window that plays it: a Media
   // Source only plays in the page it was made in, and the AI judge has a page of its own)
   function clipUrl(cam, from, secs, win = window) {
-    const pieces = piecesIn(cam, from, from + secs * 1000).map((p) => ({ start: p.start, blob: new Blob(p.chunks, { type: cam1.type }) }));
     const ms = new win.MediaSource(), url = win.URL.createObjectURL(ms);
     ms.addEventListener('sourceopen', async () => {
       win.URL.revokeObjectURL(url);
+      // the demo's earlier minutes still being made back to this point: wait for them (the video shows it's loading meanwhile)
+      for (let i = 0; i < 400 && pastBackTo > from; i++) await new Promise((r) => setTimeout(r, 300));
+      const pieces = piecesIn(cam, from, from + secs * 1000).map((p) => ({ start: p.start, blob: new Blob(p.chunks, { type: cam1.type }) }));
       try {
         const sb = ms.addSourceBuffer(cam1.type);
         ms.duration = secs; // its whole length from the start, so a jump ahead isn't cut short while the pieces go in
@@ -578,7 +587,7 @@
     // asked first, so a missing recording says why (the video itself comes through rewrite, below)
     if (url.pathname === '/clip') {
       const cam = +url.searchParams.get('cam'), from = Date.parse(url.searchParams.get('start')), secs = +url.searchParams.get('duration') || 60;
-      if (piecesIn(cam, from, from + secs * 1000).length) return new Response(null, { status: 206 });
+      if (piecesIn(cam, from, from + secs * 1000).length || pastBackTo > from) return new Response(null, { status: 206 }); // (or still being made)
       return json({ error: cam === 1 && !cam1.pieces.length && cam1.why ? cam1.why.replace(/^camera 1: /, 'Nothing recorded: ') : 'No recording at that time' }, 404);
     }
     let body = null; try { body = init.body ? JSON.parse(init.body) : null; } catch { /* not JSON */ }
