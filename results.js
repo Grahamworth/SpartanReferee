@@ -153,7 +153,7 @@ async function enter() {
   const { company: c } = await call('companies/mine').catch(() => ({}));
   if (!c && !me.admin) {
     signOut(); show($('signIn'), true);
-    $('signInError').textContent = `${me.user.email || 'That account'} isn't registered with HeadJudge. Register your company first, then sign in here.`;
+    $('signInError').textContent = `${me.user.email || 'That account'} isn't registered with HeadJudge. Register your company first, then sign in here. Added by your company? Check they used this address, or sign in with it another way.`;
     show($('signInError'), true); show($('registerFirst'), true);
     return start();
   }

@@ -11,7 +11,7 @@
    /api/admin/admins|companies|pricing|customers (admins), /api/companies, /api/servers, /api/recordings: see their files */
 const crypto = require('node:crypto');
 const { createRecordings } = require('./recordings');
-const { createCompanies } = require('./companies');
+const { createCompanies, createMembership } = require('./companies');
 const { createServers } = require('./servers');
 
 const CORS = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Authorization, Content-Type, X-Session, X-Device, X-Admin-Key, X-Server-Key', 'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS' };
@@ -59,7 +59,7 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
     if (!verifyGoogle || !secret) return reply(503, { error: 'Google sign-in isn’t set up on the server yet' });
     let g; try { g = await verifyGoogle(String((body && body.idToken) || '')); } catch { return reply(401, { error: 'Google sign-in didn’t work – try again' }); }
     const uid = 'g_' + crypto.createHash('sha256').update(String(g.sub)).digest('base64url').slice(0, 22);
-    const user = { id: uid, email: g.email || '', name: g.name || '', picture: g.picture || '' };
+    const user = { id: uid, email: g.email || '', name: g.name || '', picture: g.picture || '', emailVerified: g.email_verified !== false };
     await store.put('user', uid, user);
     await touchProfile(uid, { email: user.email, google: true, ...(user.name && !(await store.get('profile', uid) || {}).name ? { name: user.name.slice(0, 30) } : {}) });
     return reply(200, { token: sign({ uid, email: user.email, exp: now() + 30 * 24 * 3600 * 1000 }), user });
@@ -127,9 +127,10 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
     return null;
   }
 
-  const recordings = createRecordings({ store, signer: blobSigner, now, reply, session, isAdmin });
-  const { servers, adminPricing, adminCustomers, stopCompany } = createServers({ store, now, reply, session, isAdmin, payments, maxRunning: maxRunningServers, hourPrice: serverHourPrice });
-  const { companies, adminCompanies } = createCompanies({ store, now, reply, session, isAdmin, putBrand, onBlocked: stopCompany });
+  const membership = createMembership(store); // which company an account is part of, as owner or one of its people
+  const recordings = createRecordings({ store, signer: blobSigner, now, reply, session, isAdmin, membership });
+  const { servers, adminPricing, adminCustomers, stopCompany } = createServers({ store, now, reply, session, isAdmin, membership, payments, maxRunning: maxRunningServers, hourPrice: serverHourPrice });
+  const { companies, adminCompanies } = createCompanies({ store, now, reply, session, isAdmin, putBrand, membership, onBlocked: stopCompany });
 
   async function handle({ method, path, headers = {}, body, query: extraQuery = {} }) {
     const h = Object.fromEntries(Object.entries(headers).map(([k, v]) => [k.toLowerCase(), v]));

@@ -4,6 +4,7 @@
    says it's done. Only the account that made the key sees the list, through links that run out after a few hours.
    Storage deletes recordings after KEEP_DAYS (a lifecycle rule on the storage account); the list here forgets them too. */
 const crypto = require('node:crypto');
+const { createMembership } = require('./companies');
 
 const KEEP_DAYS = 7;
 const MAX_FILE = 5e9;           // a 10-minute recording is well under this
@@ -44,8 +45,11 @@ const sha = (s) => crypto.createHash('sha256').update(String(s)).digest('hex');
 /** where an account's cloud recordings are listed */
 const recordingsPartition = (uid) => `rec:${sha(uid).slice(0, 32)}`;
 
-function createRecordings({ store, signer, now, reply, session, isAdmin, fetchFn = fetch }) {
+function createRecordings({ store, signer, now, reply, session, isAdmin, membership = null, fetchFn = fetch }) {
   const owned = recordingsPartition;
+  // a company's recordings and results are listed under its owner, for everyone in the company to see
+  const { companyFor } = membership || createMembership(store);
+  const ownerOf = async (me) => (await companyFor(me))?.c.owner || me.uid;
   async function byKey(h) {
     const key = String(h['x-receiver-key'] || '');
     return key ? store.get('reckey', sha(key)) : null;
@@ -108,7 +112,7 @@ function createRecordings({ store, signer, now, reply, session, isAdmin, fetchFn
     // what its servers found: the week's athletes and numbers, whether or not a server is on now
     if (a === 'results' && !b && method === 'GET') {
       const from = now() - KEEP_DAYS * 864e5, out = { keepDays: KEEP_DAYS, athletes: [], numbers: [], sources: {} };
-      const rows = (await store.list(`${owned(me.uid)}:results`)).filter((r) => r.at >= from);
+      const rows = (await store.list(`${owned(await ownerOf(me))}:results`)).filter((r) => r.at >= from);
       for (const r of rows) {
         let j; try { j = await (await fetchFn(signer({ blob: `${r.base}/results.json`, perm: 'r', minutes: READ_MINUTES }))).json(); } catch { continue; }
         const recent = (iso) => Date.parse(iso) >= from;
@@ -122,7 +126,7 @@ function createRecordings({ store, signer, now, reply, session, isAdmin, fetchFn
     }
     if (a === 'track' && b && method === 'GET') {
       const m = /^([\w-]{1,80})~(\d{1,9})$/.exec(decodeURIComponent(String(b)));
-      const row = m && await store.get(`${owned(me.uid)}:results`, m[1]);
+      const row = m && await store.get(`${owned(await ownerOf(me))}:results`, m[1]);
       if (!row) return reply(404, { error: 'not found' });
       const out = { frames: [], events: [] };
       let text = '';
@@ -149,7 +153,7 @@ function createRecordings({ store, signer, now, reply, session, isAdmin, fetchFn
       return reply(405, { error: 'Not allowed' });
     }
     if (!a && method === 'GET') {
-      const list = (await entries(owned(me.uid))).sort((x, y) => y.startedAt.localeCompare(x.startedAt));
+      const list = (await entries(owned(await ownerOf(me)))).sort((x, y) => y.startedAt.localeCompare(x.startedAt));
       return reply(200, {
         keepDays: KEEP_DAYS, used: list.reduce((n, r) => n + r.size, 0), limit: MAX_OWNER,
         recordings: list.slice(0, 2000).map((r) => ({ id: r.id, cam: r.cam, receiver: r.receiver, size: r.size, startedAt: r.startedAt, file: r.file,

@@ -36,6 +36,7 @@
    A booking keeps the price it started at. The control app adds up the time, cost and charge, by the minute. */
 const crypto = require('node:crypto');
 const { recordingsPartition, KEEP_DAYS } = require('./recordings');
+const { createMembership } = require('./companies');
 const cameraSplit = require('./cameras');
 
 const { CAMERAS_PER_SERVER } = cameraSplit;
@@ -64,7 +65,7 @@ const storageCameraHour = GB_PER_CAMERA_HOUR * STORAGE_GB_MONTH * (KEEP_DAYS / 3
 
 const cardView = (p) => (p ? { brand: p.brand, last4: p.last4, expMonth: p.expMonth, expYear: p.expYear } : null);
 
-function createServers({ store, now, reply, session, isAdmin = () => false, payments = null, maxRunning = 1, hourPrice = 0.66, region = 'italynorth' }) {
+function createServers({ store, now, reply, session, isAdmin = () => false, membership = null, payments = null, maxRunning = 1, hourPrice = 0.66, region = 'italynorth' }) {
   // The default is Azure's cost plus a percentage. A customer can instead have a price of their own, set in the admin area.
   async function pricing(c) {
     const markupPercent = (await store.get('settings', 'pricing'))?.markupPercent || 0;
@@ -82,11 +83,12 @@ function createServers({ store, now, reply, session, isAdmin = () => false, paym
     }
     return { serverHours: Math.round(out.serverHours * 10) / 10, cameraHours: Math.round(out.cameraHours * 10) / 10, charge: pounds(out.charge), azure: pounds(out.azure), profit: pounds(out.charge - out.azure) };
   }
+  const { companyFor } = membership || createMembership(store); // owner, or one of its people
   async function companyOf(h) {
     const me = session(h); if (!me) return { error: reply(401, { error: 'Sign in first' }) };
-    const of = await store.get('companyof', me.uid), c = of && await store.get('company', of.id);
-    if (!c) return { error: reply(404, { error: 'This account has no company yet' }) };
-    return { me, c };
+    const m = await companyFor(me);
+    if (!m) return { error: reply(404, { error: 'This account has no company yet' }) };
+    return { me, c: m.c, role: m.role };
   }
   const active = (plan) => !!plan && plan.until > now();
   // the whole booking and each server in it, in one view
@@ -277,10 +279,16 @@ function createServers({ store, now, reply, session, isAdmin = () => false, paym
       return reply(200, { stop: want.desired === 'off' || (!!want.until && want.until <= now()), until: want.until || 0 });
     }
     if (a !== 'mine') return null;
-    const { me, c, error } = await companyOf(h); if (error) return error;
-    if (!b && method === 'GET') return reply(200, { server: await view(c, h) });
+    const { me, c, role, error } = await companyOf(h); if (error) return error;
+    // the company's people see its servers and open them; only its owner books, pays and stops them
+    if (!b && method === 'GET') {
+      const v = await view(c, h);
+      if (role !== 'owner') { delete v.card; v.needsCard = false; }
+      return reply(200, { server: { ...v, role } });
+    }
     if (b === 'history' && method === 'GET') return reply(200, { bookings: await history(c.id) });
     if (method !== 'POST') return null;
+    if (role !== 'owner' && b !== 'open') return reply(403, { error: `Only ${c.name}'s owner can book or pay` });
     // Saving a card, on Stripe's own page. Coming back proves nothing by itself, so payment-done asks Stripe what happened.
     if (b === 'payment') {
       if (!payments) return reply(503, { error: 'Card payments aren\'t switched on yet' });

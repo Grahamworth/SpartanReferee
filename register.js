@@ -166,6 +166,15 @@ async function enter() {
   try {
     const r = await call('companies/mine');
     company = r.company;
+    // one of the company's people, not its owner: nothing here for them to change
+    if (company?.role === 'member') {
+      const box = $('status'); box.dataset.state = 'approved'; box.replaceChildren();
+      const h = document.createElement('h2'); h.textContent = `You're part of ${company.name}`;
+      const p = document.createElement('p'); p.textContent = `Only ${company.name}'s owner can change its details, logo and colours.`;
+      const l = document.createElement('a'); l.href = 'console.html'; l.className = 'primary linkbtn'; l.textContent = 'Go to the console';
+      box.append(h, p, l); show(box, true); show($('form'), false);
+      return;
+    }
     if (company) fill(company); else if (me.user.name) $('contact').value = me.user.name;
     drawStatus(); show($('form'), true); drawPreview();
   } catch (e) { error('signInError', e.message); show($('signIn'), true); }

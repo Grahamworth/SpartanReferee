@@ -11,6 +11,8 @@ const { quote, timeLeft, money, plural } = window.HeadJudgeBooking;
 const $ = (id) => document.getElementById(id);
 const show = (el, on) => { el.hidden = !on; };
 let poll = null, busy = false, last = null, listKey = '', payMessage = '';
+// owner: books, pays and adds people; member: one of the people the owner added, who sees the servers and results
+let role = 'owner', company = null;
 
 const fail = (msg) => { $('error').textContent = msg || ''; show($('error'), !!msg); };
 const clock = (t) => new Date(t).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -123,7 +125,17 @@ function draw(s) {
   $('cardText').textContent = s.card ? `${s.card.brand[0].toUpperCase()}${s.card.brand.slice(1)} ending ${s.card.last4}` : 'Not needed: you\'re an admin';
   show($('changeCard'), !!s.card && s.cardsOn);
   $('hours2').textContent = `${plural(s.used.cameraHours, 'camera hour')} · ${money(s.used.charge)}`;
+  if (role !== 'owner') asMember(state);
   drawTabs(); // Live and Cameras come and go with the servers
+}
+// one of the company's people: the servers' state and the way into them, but no booking, extending, stopping or costs
+function asMember(state) {
+  if (state === 'off') {
+    $('stateText').textContent = 'Your cameras are off';
+    $('stateMore').textContent = `Only ${company.name}'s owner books cameras. Once they do, Live, Results and Cameras open from here.`;
+  }
+  show($('book'), false); show($('extend'), false); show($('stop').parentElement, false);
+  show(document.querySelector('#server .facts'), false); show($('costNote'), false);
 }
 const STATE_WORD = { booked: 'Booked', running: 'On now', stopped: 'Stopped early', finished: 'Finished', cancelled: 'Cancelled' };
 let hasBookings = false;
@@ -162,6 +174,7 @@ function showView(v) {
   checkout = null; show($('payArea'), false);
   const booking = view === 'booking';
   show($('server'), booking); show($('tracked'), booking); show($('more'), booking); show($('historyBox'), !booking);
+  show($('people'), booking && role === 'owner');
   if (!booking) drawHistory();
   drawTabs();
 }
@@ -177,7 +190,7 @@ $('changeCard').onclick = addCard;
 // ---------------------------------------------------------------- the payment page: customers pay before a booking is made (pretend for now)
 let checkout = null;
 function showPay(on) {
-  if (on) { show($('server'), false); show($('historyBox'), false); show($('more'), false); show($('tracked'), false); show($('payArea'), true); }
+  if (on) { show($('server'), false); show($('historyBox'), false); show($('more'), false); show($('tracked'), false); show($('people'), false); show($('payArea'), true); }
   else showView('booking');
   window.scrollTo({ top: 0 });
 }
@@ -232,6 +245,29 @@ $('stop').onclick = () => {
   if (confirm(booked ? 'Cancel this booking? Its servers won\'t start, and nothing is charged for it.' : 'Stop now? Any cameras still streaming will stop being recorded. You pay only for the time used.')) act('stop');
 };
 
+// ---------------------------------------------------------------- People: who else signs in as the company (the owner's list)
+const peopleFail = (msg) => { $('peopleError').textContent = msg || ''; show($('peopleError'), !!msg); };
+const onDay = (t) => new Date(t).toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric' });
+function drawPeople(people) {
+  $('peopleList').innerHTML = people.map((p) => `<li><span><b>${esc(p.email)}</b><small>${p.role === 'owner' ? 'Owner' : p.seen ? `Signed in ${esc(onDay(p.seen))}` : 'Not signed in yet'}</small></span>${p.role === 'owner' ? '' : `<button class="small" type="button" data-remove="${esc(p.email)}">Remove</button>`}</li>`).join('');
+  for (const b of $('peopleList').querySelectorAll('button[data-remove]')) b.onclick = () => removePerson(b.dataset.remove);
+}
+async function loadPeople() {
+  try { drawPeople((await call('companies/mine/people')).people); } catch (e) { peopleFail(e.message); }
+}
+async function removePerson(email) {
+  if (!confirm(`Remove ${email}? They can't sign in as ${company.name} any more.`)) return;
+  peopleFail('');
+  try { drawPeople((await call('companies/mine/people', { method: 'POST', body: { email, remove: true } })).people); } catch (e) { peopleFail(e.message); }
+}
+$('addPerson').addEventListener('submit', async (e) => {
+  e.preventDefault(); peopleFail('');
+  const email = $('personEmail').value.trim();
+  if (!email) return peopleFail('Whose email address?');
+  try { drawPeople((await call('companies/mine/people', { method: 'POST', body: { email } })).people); $('personEmail').value = ''; } catch (err) { peopleFail(err.message); }
+});
+$('consoleUrl').textContent = `${location.host}/console.html`; $('consoleUrl').href = `${location.origin}/console.html`;
+
 function enterBrand(c) {
   applyTheme(c.theme);
   document.title = `${c.name}: HeadJudge`;
@@ -253,7 +289,8 @@ async function enter() {
   show($('adminLink'), !!me.admin); // only you see the way to customers and prices
   show($('testReviewLink'), !!me.admin); // and to the video review with pretend data, to try it without a server
   show($('signIn'), false);
-  const { company } = await call('companies/mine');
+  ({ company } = await call('companies/mine'));
+  role = company?.role === 'member' ? 'member' : 'owner';
   // only a registered company signs in here: any other account is signed straight back out and pointed at registering (admins
   // still get in, to reach Admin)
   if (!company && !me.admin) return notRegistered(me.user.email);
@@ -262,6 +299,9 @@ async function enter() {
   const free = company.status === 'approved' || !!me.admin;
   show($('freeLink'), free); show($('freeNote'), free);
   enterBrand(company);
+  for (const el of document.querySelectorAll('.coName')) el.textContent = company.name;
+  show($('detailsLink'), role === 'owner');
+  if (role === 'owner') loadPeople();
   drawTracked($('trackedList'));
   await cameBackFromStripe();
   await refresh();
@@ -279,7 +319,7 @@ function notRegistered(email) {
   signOut();
   $('who').textContent = '';
   show($('signIn'), true);
-  $('signInError').textContent = `${email || 'That account'} isn't registered with HeadJudge. Register your company first, then sign in here.`;
+  $('signInError').textContent = `${email || 'That account'} isn't registered with HeadJudge. Register your company first, then sign in here. Added by your company? Check they used this address, or sign in with it another way.`;
   show($('signInError'), true);
   show($('registerFirst'), true);
   start();
