@@ -410,6 +410,27 @@
     <label class="field" for="s_bibList"><span>Start list (optional). Paste race numbers and only these will be accepted by the scanner.</span>
       <textarea id="s_bibList" rows="3" placeholder="1001, 1002, 1003…"></textarea></label>
 
+    <h3>Cones</h3>
+    <label class="check" for="s_cones"><input id="s_cones" type="checkbox"> Each athlete does their reps behind a cone</label>
+    <p class="status">On: the judge finds the cones and ties each athlete to theirs, so only someone doing reps at a cone is counted, and an athlete lost for a moment is picked up again behind their cone. A number on a cone is read and used as that athlete's number, unless one is read from the athlete. If no cones are found, the judge works as normal.</p>
+    <label class="field" for="s_coneColour"><span>Cone colour</span>
+      <select id="s_coneColour">
+        <option value="orange">Orange</option>
+        <option value="red">Red</option>
+        <option value="yellow">Yellow</option>
+        <option value="green">Green</option>
+        <option value="blue">Blue</option>
+        <option value="pink">Pink</option>
+      </select>
+    </label>
+    <label class="field" for="s_coneSide"><span>Where the cone usually is, in the picture</span>
+      <select id="s_coneSide">
+        <option value="left">Left of them in the picture (top left, say)</option>
+        <option value="right">Right of them in the picture (top right, say)</option>
+        <option value="any">Anywhere near them</option>
+      </select>
+    </label>
+
     <div class="row">
       <button type="submit" class="btn btn-red">Save settings</button>
       <button type="button" id="resetSettings" class="btn btn-ghost">Reset to defaults</button>

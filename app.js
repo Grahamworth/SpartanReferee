@@ -4,6 +4,7 @@ import { PoseFilter, TRACKING, JointHold } from './pose-filter.js';
 import { MultiTracker, MULTI_DEFAULTS, fromCrop, drawMasks, scanAreas, joinResults, unclaimedBoxes, boxArea } from './multi.js';
 import { loadFinder } from './finder.js';
 import { prepareDigits } from './ocr-prep.js';
+import { findCones, ConeTracker, coneReadBox } from './cones.js';
 import { createReader, mirrorImage, ENGINES } from './readers.js';
 import { call, getMe, saveAttempt, loadLocalAttempts, bestAttempt, scoreKey, syncAttempts, loadAttempts } from './api-base.js';
 
@@ -58,6 +59,7 @@ const DEFAULT_SETTINGS = {
   repsChoice: '30', customReps: '',
   speech: true, record: true, debug: false, exercise: 'burpees', tracking: 'balanced',
   bibMin: 1, bibMax: 6, bibList: '', ocrEngine: 'digits', captureBib: true, people: 'multi', videoPace: 'prepass', strictness: STRICTNESS_DEFAULT, targetReps: DEFAULTS.targetReps,
+  cones: false, coneColour: 'orange', coneSide: 'left',
 };
 
 function readJSON(key, fallback) {
@@ -936,8 +938,9 @@ function beginMulti() {
   S.multi = new MultiTracker({
     make: () => applyStrictness(exercise(a.mode).make(a.target, judgeOptions()), a.mode, settings.strictness),
     tracking: tracking(), metricOpts,
-    opts: detailed ? {} : { lookAgainMax: 1, lookEveryMs: 250 },
+    opts: { coneSide: settings.coneSide || 'left', ...(detailed ? {} : { lookAgainMax: 1, lookEveryMs: 250 }) },
   });
+  S.cones = settings.cones ? new ConeTracker() : null; S.coneAt = -Infinity;
   beginCounting();
 }
 
@@ -1179,7 +1182,7 @@ async function finishMulti(status) {
   g.avgFps = procFps() != null ? Number(procFps().toFixed(1)) : null;
   const rows = S.multi.athletes.map((k) => ({
     ...g, events: k.events || [], id: `${g.id}-${k.label}`, athlete: k.label, group: g.id, videoId: g.id,
-    bib: k.bib || (settings.captureBib ? 'No number' : String(k.label)), bibSource: k.bib ? 'scanner (head band)' : settings.captureBib ? 'not read' : 'none', bibConfidence: k.bibConf ?? null,
+    bib: k.bib || (settings.captureBib ? 'No number' : String(k.label)), bibSource: k.bib ? (k.bibFrom === 'cone' ? 'their cone' : 'scanner (head band)') : settings.captureBib ? 'not read' : 'none', bibConfidence: k.bibConf ?? null,
     firstAt: (k.events || [])[0]?.at || null, lastAt: (k.events || []).slice(-1)[0]?.at || null,
     reps: k.judge.count, noReps: k.judge.noReps, questionable: k.judge.questionable, reasons: { ...k.judge.reasonCounts },
     status: S.testMode ? 'test' : k.judge.count >= g.target ? 'complete' : status,
@@ -1290,13 +1293,97 @@ function onMulti(t) {
   try { sample = frameSampler(); } catch { /* match on position alone */ }
   const { src, w, h } = S.frame;
   const lookAgain = (k, poses) => secondLook(src, w, h, lookAround(k, w, h), poses);
+  coneTick(t);
   const moved = S.multi.update(S.multiRes, t, w / h, sample, S.multiExtra, lookAgain);
   recordProof(t);
   for (const { track, ev } of moved) onMultiEvent(track, ev);
+  coneNumbers();
   sendProof();
   shownNumberTick(); // first: the head band reader below takes the number reader whenever it's free
+  coneReadTick();
   multiBibTick();
   renderMulti();
+}
+
+// ---------------------------------------------------------------- cones (a camera setting): one in front of each athlete
+// Twice a second a small copy of the picture is searched for cones (cones.js); the ones that stay put go to the tracker,
+// which ties each athlete to the cone they do their reps behind. Blobs of the cone colour on someone's body (a top) are
+// left out. Each cone's number is read now and then, and an athlete without a number read from them takes their cone's.
+const coneCanvas = document.createElement('canvas');
+const coneCtx = coneCanvas.getContext('2d', { willReadFrequently: true });
+function coneTick(t) {
+  if (!S.cones || !S.frame || t - S.coneAt < 500) return;
+  S.coneAt = t;
+  const { src, w, h } = S.frame;
+  const W = 480, H = Math.max(1, Math.round((W * h) / w));
+  if (coneCanvas.width !== W || coneCanvas.height !== H) { coneCanvas.width = W; coneCanvas.height = H; }
+  try { coneCtx.drawImage(src, 0, 0, W, H); } catch { return; }
+  const found = findCones(coneCtx.getImageData(0, 0, W, H).data, W, H, settings.coneColour);
+  // everyone's body from the shoulders to the knees, a little wider than them
+  const bodies = S.multi.tracks.filter((k) => k.pose && t - k.seenAt < 600).map((k) => {
+    const pts = [11, 12, 23, 24, 25, 26].map((i) => k.pose.lm[i]).filter((q) => q && (q.visibility ?? 1) >= 0.4);
+    if (pts.length < 3) return null;
+    const xs = pts.map((q) => q.x), ys = pts.map((q) => q.y), pad = (Math.max(...xs) - Math.min(...xs)) * 0.25 + 0.01;
+    return { x0: Math.min(...xs) - pad, x1: Math.max(...xs) + pad, y0: Math.min(...ys) - 0.02, y1: Math.max(...ys) };
+  }).filter(Boolean);
+  const onBody = (c) => bodies.some((b) => (c.x0 + c.x1) / 2 > b.x0 && (c.x0 + c.x1) / 2 < b.x1 && (c.y0 + c.y1) / 2 > b.y0 && (c.y0 + c.y1) / 2 < b.y1);
+  S.multi.setCones(S.cones.update(found, t, onBody), w / h);
+}
+// an athlete with no number read from them takes their cone's (one read from them later takes over)
+function coneNumbers() {
+  if (!S.cones) return;
+  for (const k of S.multi.athletes) {
+    const n = S.multi.coneOf(k)?.number;
+    if (!n || k.gone || (k.bib && k.bibFrom !== 'cone') || k.bib === n) continue;
+    if (S.multi.athletes.some((a) => a !== k && a.bib === n && !a.gone && !a.judge.done)) continue;
+    k.bib = n; k.bibFrom = 'cone'; k.bibConf = null;
+    reportAthlete({ type: 'number', label: k.label, bib: k.bib });
+  }
+}
+let coneReadAt = 0, coneTurn = 0;
+async function coneReadTick() {
+  if (!S.cones || multiBibBusy || !S.frame) return;
+  const now = performance.now(); if (now - coneReadAt < 700) return;
+  const todo = S.cones.sure.filter((c) => !c.number && c.tries < 40);
+  if (!todo.length) return;
+  coneReadAt = now;
+  const c = todo[coneTurn++ % todo.length];
+  multiBibBusy = true;
+  try {
+    const reader = await ensureReader();
+    const { w, h } = S.frame, b = coneReadBox(c);
+    const box = { x: b.x0 * w, y: b.y0 * h, w: (b.x1 - b.x0) * w, h: (b.y1 - b.y0) * h };
+    if (box.w < 8 || box.h < 8) { S.cones.read(c, null); return; }
+    const g = grabGray(box, 200);
+    const runs = prepareDigits(g.gray, g.W, g.H, { minDigits: 1, maxDigits: Number(settings.bibMax), checkGaps: false }).slice(0, 3);
+    let best = null;
+    for (const img of runs) {
+      const got = (await reader.read(img)).filter((x) => x.conf >= ENGINES[reader.engine].minConf && x.text.length <= Number(settings.bibMax)).sort((x, y) => y.conf - x.conf);
+      if (got.length) { best = got[0]; break; }
+    }
+    S.cones.read(c, best ? best.text : null);
+  } catch { /* no number reader */ } finally { multiBibBusy = false; }
+}
+function drawCones(w, h) {
+  if (!S.cones) return;
+  const fs = Math.max(13, Math.round(h / 34));
+  ctx.lineWidth = Math.max(2, w / 400);
+  ctx.font = `700 ${fs}px Barlow, Arial, sans-serif`;
+  ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+  for (const c of S.cones.sure) {
+    const owner = S.multi?.athletes.find((k) => k.cone === c.id && !k.gone);
+    const x0 = (S.mirror ? 1 - c.x1 : c.x0) * w, bw = c.w * w;
+    ctx.strokeStyle = owner ? athleteColour(owner.label) : 'rgba(255,255,255,.75)';
+    ctx.setLineDash(owner ? [] : [6, 4]);
+    ctx.strokeRect(x0 - 3, c.y0 * h - 3, bw + 6, c.h * h + 6);
+    if (c.number) {
+      const tw = ctx.measureText(c.number).width + fs * 0.6, x = x0 + bw / 2, y = c.y0 * h - 5;
+      ctx.fillStyle = 'rgba(0,0,0,.7)'; ctx.fillRect(x - tw / 2, y - fs * 1.15, tw, fs * 1.2);
+      ctx.fillStyle = '#fff'; ctx.fillText(c.number, x, y);
+    }
+  }
+  ctx.setLineDash([]);
+  ctx.textAlign = 'start'; ctx.textBaseline = 'alphabetic';
 }
 
 // ---------------------------------------------------------------- several athletes: their numbers from the head bands
@@ -1345,8 +1432,8 @@ async function multiBibTick() {
   const now = performance.now(); if (now - multiBibAt < 500) return; multiBibAt = now;
   // everyone being tracked, from the moment they appear (the number stays with them when they start counting)
   const everyone = S.multi.tracks || S.multi.athletes;
-  const taken = new Set(everyone.map((k) => k.bib).filter(Boolean));
-  const todo = everyone.filter((k) => !k.bib && !k.gone && k.box && (k.label != null || k.pose));
+  const taken = new Set(everyone.filter((k) => k.bibFrom !== 'cone').map((k) => k.bib).filter(Boolean));
+  const todo = everyone.filter((k) => (!k.bib || k.bibFrom === 'cone') && !k.gone && k.box && (k.label != null || k.pose)); // a cone's number gives way to one read from them
   if (!todo.length) return;
   const k = todo[multiBibTurn++ % todo.length];
   multiBibBusy = true;
@@ -1371,7 +1458,7 @@ async function multiBibTick() {
       if (best) break;
     }
     k.bibReads = [...(k.bibReads || []), best ? best.text : null].slice(-6);
-    if (best && k.bibReads.filter((x) => x === best.text).length >= 2) { k.bib = best.text; k.bibConf = Math.round(best.conf); if (!quietJudge()) beep(1200, 120); if (k.label != null) reportAthlete({ type: 'number', label: k.label, bib: k.bib }); }
+    if (best && k.bibReads.filter((x) => x === best.text).length >= 2) { k.bib = best.text; k.bibFrom = 'head band'; k.bibConf = Math.round(best.conf); if (!quietJudge()) beep(1200, 120); if (k.label != null) reportAthlete({ type: 'number', label: k.label, bib: k.bib }); }
   } catch { /* no number reader: the numbers are typed in afterwards */ } finally { multiBibBusy = false; }
 }
 
@@ -1848,6 +1935,7 @@ function drawFrame(src, w, h, wantPose, practice) {
       ctx.strokeRect(b.x, b.y, b.w, b.h);
     }
   }
+  if (S.screen === 'count') drawCones(w, h);
   if (view && S.screen === 'count') drawMultiLabels(w, h, view);
   if (S.attempt?.status === 'running' && !PRACTICE) drawBurnIn(w, h); // the challenge isn't race evidence
   if (S.screen === 'count' && S.attempt?.goAt) {
@@ -2158,7 +2246,7 @@ function confirmDialog(text, yesLabel = 'Yes') {
 
 // ---------------------------------------------------------------- settings form
 
-const FORM_FIELDS = ['exercise', 'people', 'videoPace', 'strictness', 'orientation', 'model', 'tracking', 'acceptOffScreen', 'speech', 'record', 'debug', 'ocrEngine', 'captureBib', 'bibMin', 'bibMax', 'bibList'];
+const FORM_FIELDS = ['exercise', 'people', 'videoPace', 'strictness', 'orientation', 'model', 'tracking', 'acceptOffScreen', 'speech', 'record', 'debug', 'ocrEngine', 'captureBib', 'bibMin', 'bibMax', 'bibList', 'cones', 'coneColour', 'coneSide'];
 
 function fillSettingsForm() {
   for (const k of FORM_FIELDS) {

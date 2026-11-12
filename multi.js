@@ -64,6 +64,14 @@
 // caller to look again (lookAgain): zoomed in on where they were, with the
 // people already found painted over. On a clip of three athletes in a row
 // this found the two still in view together on 44 frames in 72, against 5.
+//
+// Cones (a camera setting, cones.js): when the athletes each do their reps
+// behind a cone, setCones() gives where the cones are. Then someone only
+// becomes an athlete at a rep done near a cone nobody else is using (their
+// cone), so an official or someone walking past isn't counted. An athlete's
+// home spot is then kept where they are behind their cone, so it moves with
+// the cone if the camera drifts, and an athlete lost for a moment is looked
+// for there. Until any cone has been seen, everything works as without.
 import { computeMetrics } from './burpee.js';
 import { PoseFilter } from './pose-filter.js';
 
@@ -107,6 +115,10 @@ export const MULTI_DEFAULTS = {
   hiVisBlue: 0.2,
   edge: 0.04,         // an athlete last seen this close to the side of the picture has walked out of it
   goneMs: 20000,      // an athlete out of sight this long has finished and gone: no more counts for them
+  coneReach: 1.6,     // cones: an athlete's cone is this near where they do their reps (body heights)
+  coneSide: 'left',   // ...usually on this side of them in the picture ('left', 'right' or 'any')
+  coneSidePenalty: 0.5, // ...so a cone on the other side has to be this much nearer to be theirs
+  coneOffMs: 9000,    // how quickly where they are behind their cone follows them
 };
 
 // Where to take the look for new people: the area being watched (r, as
@@ -337,6 +349,34 @@ export class MultiTracker {
     return { x: r.x0, y: r.y0, w: r.x1 - r.x0, h: r.y1 - r.y0 };
   }
 
+  // The cones on the ground (cones.js: { id, x, y, number }, shares of the picture), in the tracker's units. Any
+  // athlete without a cone yet gets the nearest free one.
+  setCones(cones, aspect = 1) {
+    this.cones = cones.map((c) => ({ id: c.id, cx: c.x * aspect, cy: c.y, number: c.number || null }));
+    for (const a of this.athletes) {
+      if (a.cone != null || a.gone || a.judge.done) continue;
+      const c = this._coneFor(a); if (c) this._takeCone(a, c);
+    }
+  }
+  // athlete k's cone, if they have one and it's still there
+  coneOf(k) { return k.cone != null ? (this.cones || []).find((c) => c.id === k.cone) ?? null : null; }
+  // Where athlete k does their reps: behind their cone when they have one, else their home spot.
+  _anchor(k) { const c = this.coneOf(k); return c && k.coneOff ? { cx: c.cx + k.coneOff.dx, cy: c.cy + k.coneOff.dy } : k.home; }
+  // The free cone nearest track k (another athlete still going holds theirs), preferring the usual side; null: none near.
+  _coneFor(k) {
+    const o = this.o, held = new Set(this.athletes.filter((a) => a !== k && !a.gone && !a.merged && !a.judge.done && a.cone != null).map((a) => a.cone));
+    let best = null, bestD = Infinity;
+    for (const c of this.cones || []) {
+      if (held.has(c.id)) continue;
+      let d = Math.hypot(c.cx - k.home.cx, c.cy - k.home.cy) / Math.max(k.scale, 1e-3);
+      if (d > o.coneReach) continue;
+      if ((o.coneSide === 'left' && c.cx > k.home.cx) || (o.coneSide === 'right' && c.cx < k.home.cx)) d += o.coneSidePenalty;
+      if (d < bestD) { best = c; bestD = d; }
+    }
+    return best;
+  }
+  _takeCone(k, c) { k.cone = c.id; k.coneOff = { dx: k.home.cx - c.cx, dy: k.home.cy - c.cy }; }
+
   // Athletes in the order they started.
   get athletes() { return this.tracks.filter((k) => k.label != null).sort((a, b) => a.label - b.label); }
 
@@ -379,7 +419,8 @@ export class MultiTracker {
         : leftView(k) ? o.moveBase : o.rematchDist;
       const size = Math.max(k.scale, p.box.size);
       // After a gap, an athlete is looked for round their home spot.
-      const ref = gone > o.lostMs && k.label != null ? k.home : k.box;
+      const home = k.label != null ? this._anchor(k) : k.home;
+      const ref = gone > o.lostMs && k.label != null ? home : k.box;
       const d = Math.hypot(p.box.cx - ref.cx, p.box.cy - ref.cy) / size;
       if (d > reach) return null;
       if (gone < o.postureMs && p.box.tilt != null && k.box.tilt != null && Math.abs(p.box.tilt - k.box.tilt) > o.postureJump) return null;
@@ -388,7 +429,7 @@ export class MultiTracker {
       // (walking off at the end, say); picked up after losing them, or with
       // clothes that don't clearly match, only near their home spot.
       const following = gone <= o.followMs && gap && gap.same && gap.d <= o.followColour;
-      if (k.label != null && !following && Math.hypot(p.box.cx - k.home.cx, p.box.cy - k.home.cy) / size > o.homeDist) return null;
+      if (k.label != null && !following && Math.hypot(p.box.cx - home.cx, p.box.cy - home.cy) / size > o.homeDist) return null;
       if (gap && gap.d > (gap.same ? o.colourGate : o.colourGateOther)) return null;
       return d + (gap?.d ?? 0) * o.colourWeight + (gone > o.lostMs ? 0.5 : 0) + (k.label == null ? 0.3 : 0);
     };
@@ -451,6 +492,12 @@ export class MultiTracker {
         k.scale = Math.max(p.box.size, k.scale * Math.exp(-(t - k.seenAt) / o.scaleMs));
         const ease = 1 - Math.exp(-Math.max(0, t - k.seenAt) / o.homeMs);
         k.home = { cx: k.home.cx + (p.box.cx - k.home.cx) * ease, cy: k.home.cy + (p.box.cy - k.home.cy) * ease };
+        // where they are behind their cone settles slowly too
+        const cone = this.coneOf(k);
+        if (cone && k.coneOff) {
+          const e = 1 - Math.exp(-Math.max(0, t - k.seenAt) / o.coneOffMs);
+          k.coneOff = { dx: k.coneOff.dx + (k.home.cx - cone.cx - k.coneOff.dx) * e, dy: k.coneOff.dy + (k.home.cy - cone.cy - k.coneOff.dy) * e };
+        }
         k.box = p.box;
         k.seenAt = t;
         learnClothes(k, p);
@@ -470,7 +517,15 @@ export class MultiTracker {
         if (this._twinOf(k, t)) { k.merged = true; continue; }
         const lost = this._lostAthlete(k, t);
         if (lost) this._carryOn(k, lost);
-        else k.label = this.nextLabel++;
+        else {
+          // With cones out, only someone doing reps at a free cone is an athlete: anyone else starts again from nothing.
+          if (this.cones?.length) {
+            const c = this._coneFor(k);
+            if (!c) { k.early = []; k.judge = this.make(); continue; }
+            this._takeCone(k, c);
+          }
+          k.label = this.nextLabel++;
+        }
         for (const e of k.early) events.push({ track: k, ev: e });
         if (ev.type === 'rep') Object.assign(ev, { count: k.judge.count, done: k.judge.done });
         k.early = [];
@@ -488,7 +543,7 @@ export class MultiTracker {
     const o = this.o;
     return this.athletes
       .filter((a) => !a.judge.done && t - a.seenAt > o.lostMs && !a.gone && k.bornAt >= a.seenAt - 300 && (a.reoriented || (!this._leftView(a) &&
-        Math.hypot(k.box.cx - a.home.cx, k.box.cy - a.home.cy) < o.homeDist * Math.max(a.scale, k.scale))))
+        Math.hypot(k.box.cx - this._anchor(a).cx, k.box.cy - this._anchor(a).cy) < o.homeDist * Math.max(a.scale, k.scale))))
       .filter((a) => !['up', 'down'].some((pos) => a.colours[pos]?.n >= o.colourFrames && k.colours[pos]?.n >= o.colourFrames &&
         clothesDist(a.colours[pos], k.colours[pos]) > o.resumeColour))
       .sort((a, b) => (a.reoriented && b.reoriented ? this._likeness(k, a) - this._likeness(k, b) : b.seenAt - a.seenAt))[0] ?? null;
@@ -529,7 +584,8 @@ export class MultiTracker {
     j.done = j.count >= j.o.targetReps;
     k.label = a.label;
     k.events = a.events; // the caller's record of a's reps, if it keeps one
-    if (a.bib && !k.bib) { k.bib = a.bib; k.bibConf = a.bibConf; } // and their race number, once read
+    if (a.bib && !k.bib) { k.bib = a.bib; k.bibConf = a.bibConf; k.bibFrom = a.bibFrom; } // and their race number, once read
+    if (a.cone != null) { k.cone = a.cone; k.coneOff = a.coneOff; } // and their cone
     if (a.picSize) { k.picSize = a.picSize; k.picAt = a.picAt; } // (the review's picture of them)
     k.reported = a.reported;
     if (a.proof?.length) k.proof = [...a.proof, ...(k.proof ?? [])]; // (what hasn't reached the review yet)
