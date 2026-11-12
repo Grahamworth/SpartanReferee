@@ -149,9 +149,17 @@ for (const id of ['find', 'day', 'source']) $(id).addEventListener(id === 'find'
 async function enter() {
   const me = await getMe(true);
   if (!me.user) { signOut(); return start(); }
+  // only a registered company signs in here (admins too): any other account is signed straight back out and pointed at registering
+  const { company: c } = await call('companies/mine').catch(() => ({}));
+  if (!c && !me.admin) {
+    signOut(); show($('signIn'), true);
+    $('signInError').textContent = `${me.user.email || 'That account'} isn't registered with HeadJudge. Register your company first, then sign in here.`;
+    show($('signInError'), true); show($('registerFirst'), true);
+    return start();
+  }
   $('who').textContent = me.user.email;
   show($('signIn'), false);
-  call('companies/mine').then(({ company: c }) => { if (c) { applyTheme(c.theme); $('company').textContent = c.name; document.title = `Results: ${c.name}`; } }).catch(() => {});
+  if (c) { applyTheme(c.theme); $('company').textContent = c.name; document.title = `Results: ${c.name}`; }
   // the console's tabs: this is Results while the servers are off (while they're on, Results is the video review's)
   Promise.all([call('servers/mine'), call('servers/mine/history')]).then(([{ server }, { bookings }]) => {
     drawAppTabs($('appTabs'), { active: 'results', server, hasBookings: bookings.length > 0, onError: fail });

@@ -254,6 +254,9 @@ async function enter() {
   show($('testReviewLink'), !!me.admin); // and to the video review with pretend data, to try it without a server
   show($('signIn'), false);
   const { company } = await call('companies/mine');
+  // only a registered company signs in here: any other account is signed straight back out and pointed at registering (admins
+  // still get in, to reach Admin)
+  if (!company && !me.admin) return notRegistered(me.user.email);
   if (!company) { show($('none'), true); return; }
   // the free camera: anyone with a company that isn't blocked
   const free = company.status === 'approved' || !!me.admin;
@@ -271,6 +274,15 @@ async function enter() {
   showView(location.hash.slice(1));
   drawHistory();
   clearInterval(poll); poll = setInterval(refresh, 5000);
+}
+function notRegistered(email) {
+  signOut();
+  $('who').textContent = '';
+  show($('signIn'), true);
+  $('signInError').textContent = `${email || 'That account'} isn't registered with HeadJudge. Register your company first, then sign in here.`;
+  show($('signInError'), true);
+  show($('registerFirst'), true);
+  start();
 }
 async function start() {
   if (signedIn()) return enter();
