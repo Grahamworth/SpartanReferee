@@ -103,7 +103,30 @@ function drawTrack() {
   for (const [a, b] of BONES) { const m = pt(a), n = pt(b); if (m && n) { ctx.moveTo(m.x, m.y); ctx.lineTo(n.x, n.y); } }
   ctx.stroke();
   ctx.fillStyle = '#fff';
-  for (const p of POINTS) { const m = pt(p); if (m) { ctx.beginPath(); ctx.arc(m.x, m.y, Math.max(2.5, W / 400), 0, 7); ctx.fill(); } }
+  const seen = [];
+  for (const p of POINTS) { const m = pt(p); if (m) { seen.push(m); ctx.beginPath(); ctx.arc(m.x, m.y, Math.max(2.5, W / 400), 0, 7); ctx.fill(); } }
+  if (seen.length) drawCount(T, seen, W, H, colour);
+}
+// The athlete's count at that moment, just above their head, as the judge showed it live: green for a moment after a rep, red after a no rep.
+function countAt(T) {
+  let count = 0, noReps = 0, last = null;
+  for (const e of playing.events || []) { if (e.t > T) break; count = e.count ?? count; if (e.type !== 'rep') noReps++; last = e; }
+  return { count, noReps, flash: last && T - last.t < 700 ? (last.type === 'rep' ? 'good' : 'bad') : null };
+}
+function drawCount(T, seen, W, H, colour) {
+  const a = playing.athlete; if (!a) return;
+  const { count, noReps, flash } = countAt(T);
+  const fs = Math.max(14, Math.round(H / 24));
+  const name = a.bib && a.bib !== 'No number' ? `#${a.bib}` : `Athlete ${a.label ?? a.n}`;
+  const text = `${name}  ${count}${noReps ? `  · ${noReps} ✕` : ''}`;
+  ctx.font = `700 ${fs}px Barlow, Arial, sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+  const tw = ctx.measureText(text).width + fs, x = Math.min(W - tw / 2, Math.max(tw / 2, seen.reduce((s, m) => s + m.x, 0) / seen.length));
+  const y = Math.max(fs * 1.4, Math.min(...seen.map((m) => m.y)) - fs * 0.5);
+  ctx.fillStyle = flash === 'good' ? '#22c55e' : flash === 'bad' ? '#e2231a' : colour;
+  ctx.fillRect(x - tw / 2, y - fs * 1.2, tw, fs * 1.25);
+  ctx.fillStyle = flash ? '#fff' : '#000';
+  ctx.fillText(text, x, y);
+  ctx.textAlign = 'start'; ctx.textBaseline = 'alphabetic';
 }
 async function watch(server, n) {
   const a = data.athletes.find((x) => x.server === server && String(x.n) === String(n)); if (!a) return;
