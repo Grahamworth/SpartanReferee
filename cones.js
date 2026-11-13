@@ -9,6 +9,10 @@
 // clothes in shade aren't), joins the parts of one cone split by a reflective white band, and keeps the cone shapes:
 // narrower at the top than the bottom, filled like a cone, not too big or too small. ConeTracker keeps the ones that
 // stay still over a few looks: a coloured top doing burpees moves, a cone doesn't.
+//
+// Cones of mixed colours are found by their numbers instead (needNumber): any strongly coloured cone shape that
+// stays put is looked at for a number, and only one whose number is read is used. Anything else that happens to be
+// cone shaped and brightly coloured never gets a number, so it's never used.
 
 export const CONE_COLOURS = {
   orange: { label: 'Orange', hues: [[6, 34]] },
@@ -17,6 +21,8 @@ export const CONE_COLOURS = {
   green: { label: 'Green', hues: [[80, 165]] },
   blue: { label: 'Blue', hues: [[190, 250]] },
   pink: { label: 'Pink', hues: [[290, 340]] },
+  // cones of mixed colours, told apart by their numbers: any strong colour, and only a cone whose number is read is used
+  any: { label: 'Any colour', hues: [[0, 360]] },
 };
 
 export const CONE_DEFAULTS = {
@@ -106,7 +112,8 @@ export function findCones(rgba, W, H, colour = 'orange', o = CONE_DEFAULTS) {
   return out;
 }
 
-/** The cones that stay put, from one look after another. Each: { id, x, y, x0, y0, x1, y1, w, h, number, sure }. */
+/** The cones that stay put, from one look after another. Each: { id, x, y, x0, y0, x1, y1, w, h, number, still }.
+ * opts.needNumber: a cone is only used (sure) once its number is read. */
 export class ConeTracker {
   constructor(opts = {}) { this.o = { ...CONE_DEFAULTS, ...opts }; this.cones = []; this.nextId = 1; }
 
@@ -126,17 +133,20 @@ export class ConeTracker {
         // a cone doesn't move, so where it is settles slowly (one look can catch it half hidden)
         for (const k of ['x', 'y', 'x0', 'y0', 'x1', 'y1', 'w', 'h']) best[k] += (f[k] - best[k]) * 0.3;
         best.looks++; best.seenAt = t;
-        if (!best.sure && best.looks >= o.confirmLooks && t - best.firstAt >= o.confirmMs) best.sure = true;
+        if (!best.still && best.looks >= o.confirmLooks && t - best.firstAt >= o.confirmMs) best.still = true;
       } else {
-        const c = { id: this.nextId++, ...f, looks: 1, firstAt: t, seenAt: t, sure: false, number: null, reads: [], tries: 0 };
+        const c = { id: this.nextId++, ...f, looks: 1, firstAt: t, seenAt: t, still: false, number: null, reads: [], tries: 0 };
         this.cones.push(c); used.add(c);
       }
     }
-    this.cones = this.cones.filter((c) => t - c.seenAt < (c.sure ? o.forgetMs : o.dropMs));
+    this.cones = this.cones.filter((c) => t - c.seenAt < (c.still ? o.forgetMs : o.dropMs));
     return this.sure;
   }
 
-  get sure() { return this.cones.filter((c) => c.sure); }
+  /** cones that have stayed put (each worth reading a number from) */
+  get still() { return this.cones.filter((c) => c.still); }
+  /** cones to use: those that stayed put, and (needNumber) whose number is read */
+  get sure() { return this.cones.filter((c) => c.still && (!this.o.needNumber || c.number)); }
 
   /** a number read on cone c (or null, nothing read): read the same twice in its last six reads, it's the cone's. */
   read(c, text) {

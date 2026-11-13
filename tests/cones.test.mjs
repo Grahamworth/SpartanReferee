@@ -151,3 +151,16 @@ test('cones: an athlete counted before the cones were found gets theirs once the
   assert.equal(mt.athletes[0].cone, 4);
   assert.equal(mt.coneOf(mt.athletes[0]).number, '12');
 });
+
+test('cones: by number, cones of any colour are found, and only one whose number is read is used', () => {
+  const p = picture(); cone(p, 60, 160, 28); p.paint((x, y) => y >= 132 && y < 160 && Math.abs(x - 160) <= 1 + (y - 132) * 0.4, [30, 80, 230]);
+  p.paint((x, y) => y >= 132 && y < 160 && Math.abs(x - 260) <= 1 + (y - 132) * 0.4, [40, 200, 60]);
+  assert.equal(findCones(p.d, p.W, p.H, 'any').length, 3, 'orange, blue and green');
+  const ct = new ConeTracker({ needNumber: true });
+  const a = { x: 0.3, y: 0.8, x0: 0.28, x1: 0.32, y0: 0.7, y1: 0.8, w: 0.04, h: 0.1 }, b = { ...a, x: 0.6, x0: 0.58, x1: 0.62 };
+  for (let i = 0; i < 4; i++) ct.update([a, b], i * 500);
+  assert.equal(ct.still.length, 2, 'both stayed put, so both are read');
+  assert.equal(ct.sure.length, 0, 'neither is used before its number is read');
+  const [c1] = ct.still; ct.read(c1, '21'); ct.read(c1, '21');
+  assert.deepEqual(ct.sure.map((c) => c.number), ['21']);
+});
