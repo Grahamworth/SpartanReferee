@@ -24,7 +24,7 @@ class FakeJudge {
   }
   finish() { return null; }
 }
-const tracker = () => new MultiTracker({ make: () => new FakeJudge(), tracking: TRACKING.balanced, metricOpts: () => ({}) });
+const tracker = (opts = {}) => new MultiTracker({ make: () => new FakeJudge(), tracking: TRACKING.balanced, metricOpts: () => ({}), opts });
 const trackAt = (mt, x) => mt.tracks.find((k) => Math.abs(k.box.x - x) < 0.06);
 
 test('multi: each person keeps their own track as they move', () => {
@@ -316,4 +316,66 @@ test('multi: a lost athlete\'s track does not cling to someone walking past', ()
   mt.update(frame(person(0.5, 0.6, 0.2), person(x, 0.6, 0.2)), 4566);
   assert.equal(a.seenAt, 4566);
   assert.ok(Math.abs(a.box.cx - 0.5) < 0.01);
+});
+
+// ---- someone crossing in front of an athlete: the athlete's track is held, not handed to them
+const crossing = () => {
+  const mt = tracker({ holdWalkers: true });
+  for (let t = 0; t < 2000; t += 66) mt.update(frame(person(0.5, 0.6, 0.2)), t); // burpees on one spot
+  const a = mt.tracks[0];
+  a.judge.next = { type: 'rep' };
+  mt.update(frame(person(0.5, 0.6, 0.2)), 2066);
+  return { mt, a };
+};
+
+test('multi: someone walking across in front of an athlete keeps their own track, and the athlete keeps theirs', () => {
+  const { mt, a } = crossing();
+  // a walker comes in from the left, about a body height a second; while they're in front, only they are found
+  let x = 0.1, t = 2132, walker = null, heldSince = null;
+  for (; x < 0.9; t += 66, x += 0.015) {
+    const inFront = Math.abs(x - 0.5) < 0.08;
+    mt.update(inFront ? frame(person(x, 0.6, 0.2)) : frame(person(0.5, 0.6, 0.2), person(x, 0.6, 0.2)), t);
+    if (x > 0.3 && !walker) walker = trackAt(mt, x);
+    if (inFront && heldSince == null) heldSince = a.seenAt;
+    if (inFront) assert.equal(a.seenAt, heldSince, `the walker was handed to the athlete at x ${x.toFixed(2)}`);
+    assert.ok(Math.abs(a.box.cx - 0.5) < 0.03, `the athlete's track was dragged to ${a.box.cx.toFixed(2)}`);
+  }
+  assert.ok(walker && Math.abs(walker.box.x - (x - 0.015)) < 0.02, 'the walker kept their own track all the way across');
+  a.judge.next = { type: 'rep' };
+  mt.update(frame(person(0.5, 0.6, 0.2), person(x, 0.6, 0.2)), t);
+  assert.deepEqual(mt.athletes.map((k) => [k.label, k.judge.count]), [[1, 2]]);
+});
+
+test('multi: an official who stops in front of an athlete for a while doesn\'t take their track or their count', () => {
+  const { mt, a } = crossing();
+  // the official walks in, stops just in front (only they are found for 3 s), then walks off
+  let x = 0.2, t = 2132, official = null;
+  for (; x < 0.52; t += 66, x += 0.015) {
+    mt.update(frame(person(0.5, 0.6, 0.2), person(x, 0.6, 0.2)), t);
+    if (x > 0.35 && !official) official = trackAt(mt, x);
+  }
+  for (const end = t + 3000; t < end; t += 66) mt.update(frame(person(0.52, 0.6, 0.2)), t);
+  assert.ok(Math.abs(official.box.x - 0.52) < 0.01 && official.seenAt === t - 66, 'the official kept their own track while standing there');
+  for (; x < 0.9; t += 66, x += 0.015) mt.update(frame(person(0.5, 0.6, 0.2), person(x, 0.6, 0.2)), t);
+  a.judge.next = { type: 'rep' };
+  mt.update(frame(person(0.5, 0.6, 0.2), person(x, 0.6, 0.2)), t);
+  assert.equal(mt.athletes.length, 1);
+  assert.equal(mt.athletes[0].label, 1);
+  assert.equal(mt.athletes[0].judge.count, 2);
+  assert.ok(Math.abs(mt.athletes[0].box.cx - 0.5) < 0.01);
+});
+
+test('multi: an athlete\'s hips going back and forth through a burpee isn\'t taken for someone walking', () => {
+  const mt = tracker({ holdWalkers: true });
+  // two athletes side by side, each kicking back and coming in again every 3 s (hips move a third of their height)
+  const at = (x0, t) => x0 + (Math.floor(t / 600) % 5 === 2 ? 0.065 : 0);
+  for (let t = 0; t < 1000; t += 66) mt.update(frame(person(at(0.35, t), 0.6, 0.2), person(at(0.65, t), 0.6, 0.2)), t);
+  trackAt(mt, 0.35).judge.next = { type: 'rep' }; trackAt(mt, 0.65).judge.next = { type: 'rep' };
+  mt.update(frame(person(0.35, 0.6, 0.2), person(0.65, 0.6, 0.2)), 1066);
+  for (let t = 1132; t < 9000; t += 66) {
+    mt.update(frame(person(at(0.35, t), 0.6, 0.2), person(at(0.65, t), 0.6, 0.2)), t);
+    for (const k of mt.athletes) assert.ok(!mt._moving(k, t), `athlete ${k.label} taken for a walker at ${t} ms`);
+  }
+  assert.equal(mt.athletes.length, 2);
+  assert.deepEqual(mt.athletes.map((k) => Math.abs(k.home.cx - 0.35) < 0.05 || Math.abs(k.home.cx - 0.65) < 0.05), [true, true]);
 });

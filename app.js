@@ -59,7 +59,7 @@ const DEFAULT_SETTINGS = {
   repsChoice: '30', customReps: '',
   speech: true, record: true, debug: false, exercise: 'burpees', tracking: 'balanced',
   bibMin: 1, bibMax: 6, bibList: '', ocrEngine: 'digits', captureBib: true, people: 'multi', videoPace: 'prepass', strictness: STRICTNESS_DEFAULT, targetReps: DEFAULTS.targetReps,
-  cones: false, coneFind: 'colour', coneColour: 'orange', coneSide: 'left',
+  holdWalkers: false, cones: false, coneFind: 'colour', coneColour: 'orange', coneSide: 'left',
 };
 
 function readJSON(key, fallback) {
@@ -938,7 +938,7 @@ function beginMulti() {
   S.multi = new MultiTracker({
     make: () => applyStrictness(exercise(a.mode).make(a.target, judgeOptions()), a.mode, settings.strictness),
     tracking: tracking(), metricOpts,
-    opts: { coneSide: settings.coneSide || 'left', ...(detailed ? {} : { lookAgainMax: 1, lookEveryMs: 250 }) },
+    opts: { coneSide: settings.coneSide || 'left', holdWalkers: !!settings.holdWalkers, ...(detailed ? {} : { lookAgainMax: 1, lookEveryMs: 250 }) },
   });
   S.cones = settings.cones ? new ConeTracker({ needNumber: settings.coneFind === 'number' }) : null; S.coneAt = -Infinity;
   beginCounting();
@@ -2246,7 +2246,7 @@ function confirmDialog(text, yesLabel = 'Yes') {
 
 // ---------------------------------------------------------------- settings form
 
-const FORM_FIELDS = ['exercise', 'people', 'videoPace', 'strictness', 'orientation', 'model', 'tracking', 'acceptOffScreen', 'speech', 'record', 'debug', 'ocrEngine', 'captureBib', 'bibMin', 'bibMax', 'bibList', 'cones', 'coneFind', 'coneColour', 'coneSide'];
+const FORM_FIELDS = ['exercise', 'people', 'videoPace', 'strictness', 'orientation', 'model', 'tracking', 'acceptOffScreen', 'speech', 'record', 'debug', 'ocrEngine', 'captureBib', 'bibMin', 'bibMax', 'bibList', 'holdWalkers', 'cones', 'coneFind', 'coneColour', 'coneSide'];
 
 function fillSettingsForm() {
   for (const k of FORM_FIELDS) {

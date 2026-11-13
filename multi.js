@@ -72,6 +72,24 @@
 // home spot is then kept where they are behind their cone, so it moves with
 // the cone if the camera drifts, and an athlete lost for a moment is looked
 // for there. Until any cone has been seen, everything works as without.
+//
+// Someone walking past (an official, a spectator) often hides an athlete
+// completely for a moment, and then the model finds only them. A track knows
+// it's someone walking (moving()) when it isn't an athlete, has kept going
+// over the last second and is well away from its home spot (an athlete is
+// never taken for one: a burpee can look like it). Where a walker should be
+// now (predicted()) is where they were plus the way they were going, so they
+// keep their own track as they cross, even unseen for a moment. When a walker
+// isn't found and the body handed to an athlete is where the walker should
+// be, it's the walker's: the athlete's track is held (not seen) while someone
+// is in front of them, so it isn't dragged off and the judge isn't fed
+// someone else's moves. Someone who came walking in (an official who then
+// stands in front) doesn't give way to an athlete in a close call, as a copy
+// of an athlete or someone new does. When they step aside, the one left on
+// the athlete's spot is the athlete, so their tracks don't swap as the two
+// come apart. All of this is a camera setting (holdWalkers, off unless
+// chosen), and only comes into play once someone has been seen walking:
+// otherwise tracking is as it was.
 import { computeMetrics } from './burpee.js';
 import { PoseFilter } from './pose-filter.js';
 
@@ -119,6 +137,13 @@ export const MULTI_DEFAULTS = {
   coneSide: 'left',   // ...usually on this side of them in the picture ('left', 'right' or 'any')
   coneSidePenalty: 0.5, // ...so a cone on the other side has to be this much nearer to be theirs
   coneOffMs: 9000,    // how quickly where they are behind their cone follows them
+  holdWalkers: false, // the camera setting: hold an athlete while someone walks in front of them (all of the below)
+  walkMs: 1000,       // someone walking: over the last this long ...
+  walkSpeed: 0.6,     // ... they moved this fast (body heights a second: a burpee's hips go back and forth, a walker keeps going)
+  walkAway: 0.3,      // ... and are this far from their home spot (body heights)
+  holdRatio: 0.7,     // a body this much nearer where a walker (not found) should be than to an athlete: the walker's
+  heldMs: 10000,      // an athlete hidden up to this long gets their spot back when whoever was in front moves aside ...
+  heldMinMs: 400,     // ... once hidden at least this long (missed for a frame or two is just the model)
 };
 
 // Where to take the look for new people: the area being watched (r, as
@@ -375,6 +400,23 @@ export class MultiTracker {
     }
     return best;
   }
+  // Track k is someone walking (never an athlete: a burpee can look like it): seen lately, kept going over the last
+  // second, well away from their home spot.
+  _moving(k, t) {
+    const o = this.o, tr = k.trail;
+    if (!o.holdWalkers || k.label != null || !tr || tr.length < 3 || t - k.seenAt > o.walkMs) return false;
+    const a = tr[0], b = tr[tr.length - 1], dt = b.t - a.t;
+    if (dt < o.walkMs * 0.4) return false;
+    const scale = Math.max(k.scale, 1e-3);
+    return (Math.hypot(b.cx - a.cx, b.cy - a.cy) / scale) * (1000 / dt) >= o.walkSpeed
+      && Math.hypot(k.box.cx - k.home.cx, k.box.cy - k.home.cy) / scale >= o.walkAway;
+  }
+  // Where track k's person should be now: where they were, plus the way they were going if they're walking.
+  _predicted(k, t) {
+    if (!this._moving(k, t)) return k.box;
+    const tr = k.trail, a = tr[0], b = tr[tr.length - 1], ahead = Math.min(t - k.seenAt, this.o.walkMs) / (b.t - a.t);
+    return { cx: k.box.cx + (b.cx - a.cx) * ahead, cy: k.box.cy + (b.cy - a.cy) * ahead };
+  }
   _takeCone(k, c) { k.cone = c.id; k.coneOff = { dx: k.home.cx - c.cx, dy: k.home.cy - c.cy }; }
 
   // Athletes in the order they started.
@@ -409,6 +451,9 @@ export class MultiTracker {
     // How well person p fits track k (lower is better), or null if p can't
     // be k's person.
     const leftView = (k) => this._leftView(k);
+    // everyone walking, and where they should be now
+    const walkers = this.tracks.filter((w) => !w.merged && !w.gone && this._moving(w, t)).map((w) => ({ w, at: this._predicted(w, t) }));
+    for (const { w } of walkers) w.walked = true; // came walking in: not a copy of an athlete
     const fit = (p, k) => {
       if (k.gone) return null;
       const gone = t - k.seenAt;
@@ -420,7 +465,7 @@ export class MultiTracker {
       const size = Math.max(k.scale, p.box.size);
       // After a gap, an athlete is looked for round their home spot.
       const home = k.label != null ? this._anchor(k) : k.home;
-      const ref = gone > o.lostMs && k.label != null ? home : k.box;
+      const ref = gone > o.lostMs && k.label != null ? home : this._predicted(k, t);
       const d = Math.hypot(p.box.cx - ref.cx, p.box.cy - ref.cy) / size;
       if (d > reach) return null;
       if (gone < o.postureMs && p.box.tilt != null && k.box.tilt != null && Math.abs(p.box.tilt - k.box.tilt) > o.postureJump) return null;
@@ -431,9 +476,25 @@ export class MultiTracker {
       const following = gone <= o.followMs && gap && gap.same && gap.d <= o.followColour;
       if (k.label != null && !following && Math.hypot(p.box.cx - home.cx, p.box.cy - home.cy) / size > o.homeDist) return null;
       if (gap && gap.d > (gap.same ? o.colourGate : o.colourGateOther)) return null;
-      return d + (gap?.d ?? 0) * o.colourWeight + (gone > o.lostMs ? 0.5 : 0) + (k.label == null ? 0.3 : 0);
+      return d + (gap?.d ?? 0) * o.colourWeight + (gone > o.lostMs ? 0.5 : 0) + (k.label == null && !k.walked ? 0.3 : 0);
     };
 
+    // Someone who walked in was in front of an athlete and now steps aside: of the people on the athlete's spot, the one
+    // nearest it is the athlete (they stay put, the other came and goes). Only with two or more there (one alone could
+    // be either), with whoever walked in among them, and not where another athlete works close by.
+    const usedP = new Set(), usedK = new Set();
+    const seen = new Map();
+    const going = this.tracks.filter((a) => a.label != null && !a.gone && !a.merged && !a.judge.done);
+    for (const a of going) {
+      if (t - a.seenAt < o.heldMinMs || t - a.seenAt > o.heldMs) continue;
+      const at = this._anchor(a);
+      if (going.some((b) => b !== a && Math.hypot(this._anchor(b).cx - at.cx, this._anchor(b).cy - at.cy) < 2 * o.homeDist * Math.max(a.scale, b.scale))) continue;
+      if (!this.tracks.some((w) => w.walked && w.label == null && !w.merged && t - w.seenAt <= o.walkMs && Math.hypot(w.box.cx - at.cx, w.box.cy - at.cy) < 2 * o.homeDist * a.scale)) continue;
+      const near = people.map((p, pi) => ({ pi, d: Math.hypot(p.box.cx - at.cx, p.box.cy - at.cy) }))
+        .filter((x) => !usedP.has(x.pi) && x.d < o.homeDist * a.scale).sort((x, y) => x.d - y.d);
+      if (near.length < 2 || fit(people[near[0].pi], a) == null) continue;
+      usedP.add(near[0].pi); usedK.add(a); seen.set(a, people[near[0].pi]);
+    }
     // Greedy matching, closest pair first.
     const pairs = [];
     for (const [pi, p] of people.entries()) {
@@ -443,12 +504,20 @@ export class MultiTracker {
       }
     }
     pairs.sort((a, b) => a.d - b.d);
-    const usedP = new Set(), usedK = new Set();
-    const seen = new Map();
     for (const { pi, k } of pairs) {
       if (usedP.has(pi) || usedK.has(k)) continue;
       usedP.add(pi); usedK.add(k);
       seen.set(k, people[pi]);
+    }
+    // Someone walking past wasn't found, but the body handed to an athlete is where they should be by now: it's
+    // theirs. The athlete is in there behind them, held until they're found again.
+    for (const { w, at } of walkers) {
+      if (seen.has(w)) continue;
+      for (const [k, p] of seen) {
+        if (k.label == null || walkers.some((x) => x.w === k)) continue;
+        const dk = Math.hypot(p.box.cx - k.box.cx, p.box.cy - k.box.cy), dw = Math.hypot(p.box.cx - at.cx, p.box.cy - at.cy);
+        if (dw <= o.holdRatio * dk && fit(p, w) != null) { seen.delete(k); seen.set(w, p); break; }
+      }
     }
     // Look again for people tracked a moment ago but not found this frame,
     // athletes first, with everyone found painted over.
@@ -500,6 +569,8 @@ export class MultiTracker {
         }
         k.box = p.box;
         k.seenAt = t;
+        (k.trail ??= []).push({ t, cx: p.box.cx, cy: p.box.cy });
+        while (k.trail.length > 2 && t - k.trail[0].t > o.walkMs) k.trail.shift();
         learnClothes(k, p);
       }
       k.pose = k.filter.update(p ? { lm: p.lm, wlm: p.wlm } : null, t);
