@@ -131,3 +131,22 @@ test('up to 50 people', async () => {
   for (let i = 1; i < 50; i++) assert.strictEqual((await s.invite(owner, `p${i}@x.com`)).status, 200);
   assert.strictEqual((await s.invite(owner, 'one-too-many@x.com')).status, 400);
 });
+
+test('"our settings": saved by anyone in the company, used by everyone in it, nobody else', async () => {
+  const s = setup();
+  const owner = await s.google('sam'); await s.register(owner);
+  await s.invite(owner, 'jo@spartan.com');
+  const jo = await s.email('jo@spartan.com');
+  assert.deepStrictEqual((await s.call('GET', 'companies/mine/settings', owner)).body.settings, null, 'none saved yet');
+  const saved = await s.call('PUT', 'companies/mine/settings', jo, { settings: { exercise: 'burpees', strictness: 20, cones: true } });
+  assert.strictEqual(saved.status, 200);
+  const got = (await s.call('GET', 'companies/mine/settings', owner)).body;
+  assert.deepStrictEqual(got.settings, { exercise: 'burpees', strictness: 20, cones: true });
+  assert.strictEqual(got.by, 'jo@spartan.com');
+  // someone outside the company, or signed out, gets nothing
+  assert.strictEqual((await s.call('GET', 'companies/mine/settings', await s.google('someone-else'))).status, 404);
+  assert.strictEqual((await s.call('GET', 'companies/mine/settings', {})).status, 401);
+  // not settings, or far too big: refused
+  assert.strictEqual((await s.call('PUT', 'companies/mine/settings', owner, { settings: [1, 2] })).status, 400);
+  assert.strictEqual((await s.call('PUT', 'companies/mine/settings', owner, { settings: { x: 'y'.repeat(30000) } })).status, 400);
+});

@@ -213,3 +213,15 @@ test('its recordings go to the owner\'s cloud recordings with the key it was giv
   const uid = JSON.parse(Buffer.from(h.Authorization.split(' ')[1].split('.')[0], 'base64url').toString()).uid;
   assert.strictEqual(link.partition, `rec:${crypto.createHash('sha256').update(uid).digest('hex').slice(0, 32)}`);
 });
+
+test('a server\'s judge reads and saves its company\'s "our settings" with the server key, the same ones the company sees', async () => {
+  const { call, company, store } = await setup();
+  const h = await company('sam', 'peak');
+  await start(call, h, 2, 1);
+  const key = { 'X-Server-Key': (await store.get('server', 'peak')).serverKey };
+  assert.strictEqual((await call('GET', 'servers/our-settings', { 'X-Server-Key': 'wrong' })).status, 401);
+  assert.strictEqual((await call('PUT', 'servers/our-settings', key, { settings: { strictness: 40 } })).status, 200);
+  assert.deepStrictEqual((await call('GET', 'companies/mine/settings', h)).body.settings, { strictness: 40 });
+  await call('PUT', 'companies/mine/settings', h, { settings: { strictness: 10 } });
+  assert.deepStrictEqual((await call('GET', 'servers/our-settings', key)).body.settings, { strictness: 10 });
+});

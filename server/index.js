@@ -11,6 +11,7 @@ const { createReview, send, readBody, isJson } = require('./review-api');
 const { createEngines } = require('./engines');
 const { createCloud, QUIET_MS } = require('./cloud');
 const { createSleep } = require('./idle');
+const { readGroups } = require('./merge');
 const { mediamtxYaml } = require('./mediamtx');
 const { rtmp, spartansLink, larixLink } = require('./network');
 const { createUploadJobs } = require('./upload-jobs');
@@ -29,13 +30,13 @@ const SETTINGS = path.join(DATA, 'settings.json');
 const readFile = (f, fallback) => { try { return JSON.parse(fs.readFileSync(f, 'utf8')); } catch { return fallback; } };
 const saved = readFile(SETTINGS, {});
 const MAX_CAMERAS = C.maxCameras || 2;
-const S = { stations: 2, rtmpPort: 1935, srtPort: 8890, webrtcPort: 8889, iceUdpPort: 8189, apiPort: 9997, playbackPort: 9996, viewPort: 8800, enginePort: 8801, record: true, keepDays: 7, bitrate: 3500, ...C, ...saved, password: C.password, youtube: saved.youtube || {} };
+const S = { stations: 2, rtmpPort: 1935, srtPort: 8890, webrtcPort: 8889, iceUdpPort: 8189, apiPort: 9997, playbackPort: 9996, viewPort: 8800, enginePort: 8801, record: true, keepDays: 7, bitrate: 3500, ...C, ...saved, password: C.password, youtube: saved.youtube || {}, sameAthletes: readGroups(saved.sameAthletes) };
 // how many of the booking's cameras this server has, and the number its first goes by: a booking's cameras are numbered 1, 2, 3… across its
 // servers. Inside, this server's are always 1 and 2 (their stream paths); people see them by their number in the booking.
 const booked = () => Math.max(1, Math.min(MAX_CAMERAS, S.bookedCameras || MAX_CAMERAS));
 const camName = (n) => n + (S.firstCamera || 1) - 1;
 S.stations = booked();
-const save = () => fs.writeFile(SETTINGS, JSON.stringify({ stations: S.stations, ai: engines.list(), youtube: S.youtube }), () => {});
+const save = () => fs.writeFile(SETTINGS, JSON.stringify({ stations: S.stations, ai: engines.list(), youtube: S.youtube, sameAthletes: S.sameAthletes || [] }), () => {});
 const JUDGE_SETTINGS = path.join(DATA, 'judge-settings.json');
 let judgeSettings = readFile(JUDGE_SETTINGS, {});
 
@@ -92,7 +93,7 @@ refreshBrand(); setInterval(refreshBrand, 5 * 60e3);
 // ---------------------------------------------------------------- recordings to cloud storage
 // what goes up names cameras by their number in the booking, as the past results show every server's together
 const named = (x) => (x.src !== 'upload' && x.cam ? { ...x, cam: camName(x.cam) } : x);
-const cloud = createCloud({ dir: RECORDINGS, uploadsDir: path.join(DATA, 'training'), stateFile: path.join(DATA, 'cloud-sent.json'), camName, results: () => { const r = review.results(); return { json: { athletes: r.athletes.map(named), numbers: r.numbers.map(named), sources: previousSources }, files: r.files }; }, api: () => C.api, settings: () => ({ cloudOn: !!(C.api && C.receiverKey), cloudKey: C.receiverKey, cloudSince: 0 }) });
+const cloud = createCloud({ dir: RECORDINGS, uploadsDir: path.join(DATA, 'training'), stateFile: path.join(DATA, 'cloud-sent.json'), camName, results: () => { const r = review.results(); return { json: { athletes: r.athletes.map(named), numbers: r.numbers.map(named), merged: r.merged.map((m) => ({ ...m, cams: m.cams.map(camName) })), sources: previousSources }, files: r.files }; }, api: () => C.api, settings: () => ({ cloudOn: !!(C.api && C.receiverKey), cloudKey: C.receiverKey, cloudSince: 0 }) });
 
 // ---------------------------------------------------------------- the page's own requests beyond the review API
 const ADDRESSES = () => ({ lan: [C.host], lanNames: ['internet'], tailscale: null });
@@ -192,6 +193,25 @@ async function extra(req, res, u, { local }) {
     saveSettingsToSite().catch(() => {});
     send(res, 200, { ok: true }); return true;
   }
+  // "Our settings": the company's settings, kept with the site (the judge's Settings saves and uses them)
+  if (p === '/api/our-settings' && (req.method === 'GET' || req.method === 'PUT')) {
+    if (!C.api || !C.serverKey) return send(res, 503, { error: "This server isn't linked to the site" }), true;
+    if (req.method === 'PUT' && !isJson(req)) return send(res, 415, { error: 'JSON only' }), true;
+    const b = req.method === 'PUT' ? await readBody(req) : undefined;
+    try {
+      const r = await fetch(`${C.api}/servers/our-settings`, { method: req.method, headers: { 'X-Server-Key': C.serverKey, ...(b ? { 'Content-Type': 'application/json' } : {}) }, body: b ? JSON.stringify(b) : undefined, signal: AbortSignal.timeout(15000) });
+      send(res, r.status, await r.json().catch(() => ({})));
+    } catch { send(res, 502, { error: "The site couldn't be reached: try again" }); }
+    return true;
+  }
+  // cameras that film the same athletes from different angles: each athlete's reps on them are put together
+  if (p === '/api/same-athletes' && req.method === 'GET') { send(res, 200, { groups: S.sameAthletes || [] }); return true; }
+  if (p === '/api/same-athletes' && req.method === 'PUT') {
+    if (!isJson(req)) return send(res, 415, { error: 'JSON only' }), true;
+    const b = await readBody(req);
+    S.sameAthletes = readGroups(b?.groups); save(); saveSettingsToSite().catch(() => {});
+    send(res, 200, { groups: S.sameAthletes }); return true;
+  }
   if (p === '/api/cameras' && req.method === 'GET') { send(res, 200, { cameras: await cameraList(), bitrate: S.bitrate, max: booked(), firstCamera: S.firstCamera || 1 }); return true; }
   if (p === '/api/cameras' && req.method === 'POST') {
     if (!isJson(req)) return send(res, 415, { error: 'JSON only' }), true;
@@ -260,7 +280,7 @@ async function allSaved() {
 // Camera settings live with the site, as the server's deleted when it's shut down.
 async function saveSettingsToSite() {
   if (!C.api || !C.serverKey) throw new Error('not linked to the site');
-  const r = await fetch(`${C.api}/servers/settings`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Server-Key': C.serverKey }, body: JSON.stringify({ settings: { judge: judgeSettings, stations: S.stations, youtube: S.youtube || {} } }), signal: AbortSignal.timeout(20000) });
+  const r = await fetch(`${C.api}/servers/settings`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Server-Key': C.serverKey }, body: JSON.stringify({ settings: { judge: judgeSettings, stations: S.stations, youtube: S.youtube || {}, sameAthletes: S.sameAthletes || [] } }), signal: AbortSignal.timeout(20000) });
   if (!r.ok) throw new Error(`The site said ${r.status}`);
 }
 // On a new server, they come back from the site. A server that already has its own keeps them. Either way the site says which of the booking's
@@ -278,6 +298,7 @@ async function loadSettingsFromSite() {
           Object.assign(judgeSettings, settings.judge || {});
           fs.writeFile(JUDGE_SETTINGS, JSON.stringify(judgeSettings), () => {});
           if (settings.youtube) S.youtube = settings.youtube;
+          if (settings.sameAthletes) S.sameAthletes = readGroups(settings.sameAthletes);
           log('Camera settings restored from the last booking');
         }
         // every camera booked on it is ready for its phone; one no longer booked has its judge stopped

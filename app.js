@@ -59,7 +59,7 @@ const DEFAULT_SETTINGS = {
   repsChoice: '30', customReps: '',
   speech: true, record: true, debug: false, exercise: 'burpees', tracking: 'balanced',
   bibMin: 1, bibMax: 6, bibList: '', ocrEngine: 'digits', captureBib: true, people: 'multi', videoPace: 'prepass', strictness: STRICTNESS_DEFAULT, targetReps: DEFAULTS.targetReps,
-  cones: false, coneColour: 'orange', coneSide: 'left',
+  cones: false, coneFind: 'colour', coneColour: 'orange', coneSide: 'left',
 };
 
 function readJSON(key, fallback) {
@@ -940,7 +940,7 @@ function beginMulti() {
     tracking: tracking(), metricOpts,
     opts: { coneSide: settings.coneSide || 'left', ...(detailed ? {} : { lookAgainMax: 1, lookEveryMs: 250 }) },
   });
-  S.cones = settings.cones ? new ConeTracker() : null; S.coneAt = -Infinity;
+  S.cones = settings.cones ? new ConeTracker({ needNumber: settings.coneFind === 'number' }) : null; S.coneAt = -Infinity;
   beginCounting();
 }
 
@@ -1318,7 +1318,7 @@ function coneTick(t) {
   const W = 480, H = Math.max(1, Math.round((W * h) / w));
   if (coneCanvas.width !== W || coneCanvas.height !== H) { coneCanvas.width = W; coneCanvas.height = H; }
   try { coneCtx.drawImage(src, 0, 0, W, H); } catch { return; }
-  const found = findCones(coneCtx.getImageData(0, 0, W, H).data, W, H, settings.coneColour);
+  const found = findCones(coneCtx.getImageData(0, 0, W, H).data, W, H, settings.coneFind === 'number' ? 'any' : settings.coneColour);
   // everyone's body from the shoulders to the knees, a little wider than them
   const bodies = S.multi.tracks.filter((k) => k.pose && t - k.seenAt < 600).map((k) => {
     const pts = [11, 12, 23, 24, 25, 26].map((i) => k.pose.lm[i]).filter((q) => q && (q.visibility ?? 1) >= 0.4);
@@ -1344,7 +1344,7 @@ let coneReadAt = 0, coneTurn = 0;
 async function coneReadTick() {
   if (!S.cones || multiBibBusy || !S.frame) return;
   const now = performance.now(); if (now - coneReadAt < 700) return;
-  const todo = S.cones.sure.filter((c) => !c.number && c.tries < 40);
+  const todo = S.cones.still.filter((c) => !c.number && c.tries < 40);
   if (!todo.length) return;
   coneReadAt = now;
   const c = todo[coneTurn++ % todo.length];
@@ -2246,7 +2246,7 @@ function confirmDialog(text, yesLabel = 'Yes') {
 
 // ---------------------------------------------------------------- settings form
 
-const FORM_FIELDS = ['exercise', 'people', 'videoPace', 'strictness', 'orientation', 'model', 'tracking', 'acceptOffScreen', 'speech', 'record', 'debug', 'ocrEngine', 'captureBib', 'bibMin', 'bibMax', 'bibList', 'cones', 'coneColour', 'coneSide'];
+const FORM_FIELDS = ['exercise', 'people', 'videoPace', 'strictness', 'orientation', 'model', 'tracking', 'acceptOffScreen', 'speech', 'record', 'debug', 'ocrEngine', 'captureBib', 'bibMin', 'bibMax', 'bibList', 'cones', 'coneFind', 'coneColour', 'coneSide'];
 
 function fillSettingsForm() {
   for (const k of FORM_FIELDS) {
@@ -2255,9 +2255,63 @@ function fillSettingsForm() {
     else el.value = settings[k];
   }
   showStrictness();
+  showConeFind();
   $('settingsSaved').hidden = true;
   $('spartanDone').hidden = true;
+  loadOurSettings();
 }
+// cones found by their number: any colour, so the colour isn't asked
+function showConeFind() {
+  const byNumber = $('s_coneFind').value === 'number';
+  $('coneColourField').hidden = byNumber;
+  $('coneFindNote').hidden = !byNumber;
+}
+$('s_coneFind').addEventListener('change', showConeFind);
+
+// ---------------------------------------------------------------- "our settings": the company's own, kept with the site
+// Saved once from any camera, used on any other (and at the next event) with one tap. On one of the company's servers
+// they go through the server (/api/our-settings); on the site, with the signed-in account. Not anyone else's to see.
+const OUR_SKIP = ['station', 'facing', 'orientation', 'videoPaceV']; // this camera's own
+let ourSaved = null;
+async function ourSettingsCall(method, body) {
+  if (PRACTICE) throw new Error('not here');
+  if (IN_RECEIVER) {
+    const r = await fetch('/api/our-settings', { method, headers: body ? { 'Content-Type': 'application/json' } : {}, body: body ? JSON.stringify(body) : undefined });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(j.error || "Your settings couldn't be reached");
+    return j;
+  }
+  return call('companies/mine/settings', { method, body });
+}
+function ourStatus(text) { $('ourStatus').textContent = text; $('ourStatus').hidden = !text; }
+async function loadOurSettings() {
+  ourStatus('');
+  try {
+    const { settings: saved, at } = await ourSettingsCall('GET');
+    ourSaved = saved; $('ourSettings').hidden = false;
+    $('ourUse').hidden = !saved;
+    if (saved && at) ourStatus(`Last saved ${new Date(at).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })}.`);
+  } catch { $('ourSettings').hidden = true; } // not signed in to a company, or not on one of its servers
+}
+$('ourSave').addEventListener('click', async () => {
+  readSettingsForm(); saveSettings();
+  const mine = Object.fromEntries(Object.entries(settings).filter(([k]) => !OUR_SKIP.includes(k)));
+  $('ourSave').disabled = true;
+  try {
+    await ourSettingsCall('PUT', { settings: mine });
+    ourSaved = mine; $('ourUse').hidden = false;
+    ourStatus('Saved as your settings. On any other camera, or at your next event, open Settings and tap "Use our settings".');
+  } catch (e) { ourStatus(`Not saved: ${e.message}`); }
+  $('ourSave').disabled = false;
+});
+$('ourUse').addEventListener('click', async () => {
+  try { const { settings: saved } = await ourSettingsCall('GET'); if (saved) ourSaved = saved; } catch { /* use the copy we have */ }
+  if (!ourSaved) return;
+  for (const [k, v] of Object.entries(ourSaved)) if (!OUR_SKIP.includes(k) && k in DEFAULT_SETTINGS) settings[k] = v;
+  saveSettings();
+  fillSettingsForm();
+  ourStatus('Your settings are in. Tap "Save settings" to use them on this camera.');
+});
 
 // The word under the strictness slider follows it as it is dragged.
 function showStrictness() {

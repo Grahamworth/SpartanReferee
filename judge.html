@@ -326,6 +326,15 @@
       <p id="spartanDone" class="status" hidden>Event default set and saved.</p>
       <p class="status">One tap for an event: burpees, several athletes at once, athletes' numbers read, lenient judging (strictness 20), forgiving body tracking, Full pose model, count called out, video recorded.</p>
     </div>
+    <div class="our-settings" id="ourSettings" hidden>
+      <h3>Our settings</h3>
+      <p class="status">Save these settings for your company, then use them on any camera, at any event, with one tap. The camera's own name and which way it faces stay as they are.</p>
+      <div class="row">
+        <button type="button" id="ourUse" class="btn btn-red" hidden>Use our settings</button>
+        <button type="button" id="ourSave" class="btn btn-ghost">Save as our settings</button>
+      </div>
+      <p id="ourStatus" class="status" hidden></p>
+    </div>
     <h3>Station</h3>
     <label class="field" for="s_exercise"><span>Exercise</span>
       <select id="s_exercise">
@@ -413,7 +422,14 @@
     <h3>Cones</h3>
     <label class="check" for="s_cones"><input id="s_cones" type="checkbox"> Each athlete does their reps behind a cone</label>
     <p class="status">On: the judge finds the cones and ties each athlete to theirs, so only someone doing reps at a cone is counted, and an athlete lost for a moment is picked up again behind their cone. A number on a cone is read and used as that athlete's number, unless one is read from the athlete. If no cones are found, the judge works as normal.</p>
-    <label class="field" for="s_coneColour"><span>Cone colour</span>
+    <label class="field" for="s_coneFind"><span>Find the cones by</span>
+      <select id="s_coneFind">
+        <option value="colour">Their colour (all the same colour)</option>
+        <option value="number">The number on them (any colours)</option>
+      </select>
+    </label>
+    <p class="status" id="coneFindNote" hidden>Every strongly coloured cone that stays put is looked at for a number, and only cones with a number read are used. Use this when the cones are different colours, and each has a number on it.</p>
+    <label class="field" for="s_coneColour" id="coneColourField"><span>Cone colour</span>
       <select id="s_coneColour">
         <option value="orange">Orange</option>
         <option value="red">Red</option>

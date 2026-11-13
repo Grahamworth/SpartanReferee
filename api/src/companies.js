@@ -28,6 +28,19 @@ const DEFAULT_THEME = { primary: '#ffc400', accent: '#3ddc97', mode: 'dark' };
 const RESERVED = new Set(['admin', 'administrator', 'api', 'app', 'apps', 'auth', 'billing', 'console', 'dashboard', 'dexys', 'download', 'downloads', 'headjudge', 'head-judge', 'help', 'home', 'login', 'mail', 'people', 'register', 'root', 'server', 'servers', 'signin', 'signup', 'status', 'support', 'test', 'www']);
 const EMAIL = /^[^\s@/#?\\]+@[^\s@/#?\\]+\.[^\s@/#?\\]+$/;
 const MAX_PEOPLE = 50;
+const MAX_OUR_SETTINGS = 20000;
+// "Our settings": a company's judge settings, saved once and used on any camera, any booking, with one tap. Kept as
+// the judge sends them (a camera's own name and which way it faces aren't in them).
+async function ourSettings({ store, now, reply }, companyId, method, body, by) {
+  if (method === 'GET') { const row = await store.get('companycfg', companyId); return reply(200, { settings: row?.settings || null, at: row?.at || 0, by: row?.by || '' }); }
+  if (method !== 'PUT') return reply(405, { error: 'Not allowed' });
+  const settings = body?.settings;
+  if (!settings || typeof settings !== 'object' || Array.isArray(settings)) return reply(400, { error: "Those aren't settings" });
+  if (JSON.stringify(settings).length > MAX_OUR_SETTINGS) return reply(400, { error: "Those settings won't fit" });
+  const row = { id: companyId, settings, at: now(), by: String(by || '').slice(0, 200) };
+  await store.put('companycfg', companyId, row);
+  return reply(200, { settings, at: row.at, by: row.by });
+}
 const text = (s, max) => String(s ?? '').replace(/[\u0000-\u001f<>]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, max);
 
 /** The image inside a data: link, or a reason it won't do. What's in the bytes decides the type, not what the link claims. */
@@ -183,6 +196,10 @@ function createCompanies({ store, now, reply, session, isAdmin, putBrand, member
       const me = session(h); if (!me) return reply(401, { error: 'Sign in first' });
       if (!a) return apply(me, body);
       if (b === 'people') return people(me, method, body);
+      if (b === 'settings') {
+        const m = await companyFor(me); if (!m) return reply(404, { error: 'This account has no company yet' });
+        return ourSettings({ store, now, reply }, m.c.id, method, body, m.email || await provenEmail(me));
+      }
       if (b) return null;
       if (method === 'PUT') return change(me, body);
       if (method === 'GET') return mine(me);
@@ -210,4 +227,4 @@ function createCompanies({ store, now, reply, session, isAdmin, putBrand, member
   return { companies, adminCompanies };
 }
 
-module.exports = { createCompanies, createMembership, readLogo, DEFAULT_THEME };
+module.exports = { createCompanies, createMembership, readLogo, ourSettings, DEFAULT_THEME };

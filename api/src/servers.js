@@ -36,7 +36,7 @@
    A booking keeps the price it started at. The control app adds up the time, cost and charge, by the minute. */
 const crypto = require('node:crypto');
 const { recordingsPartition, KEEP_DAYS } = require('./recordings');
-const { createMembership } = require('./companies');
+const { createMembership, ourSettings } = require('./companies');
 const cameraSplit = require('./cameras');
 
 const { CAMERAS_PER_SERVER } = cameraSplit;
@@ -266,6 +266,13 @@ function createServers({ store, now, reply, session, isAdmin = () => false, memb
       if (!settings || typeof settings !== 'object' || JSON.stringify(settings).length > MAX_SETTINGS) return reply(400, { error: 'Those settings won\'t fit' });
       await store.put('servercfg', k.id, { id: k.id, settings, at: now() });
       return reply(200, { ok: true });
+    }
+    // the company's own settings ("Our settings"), from the judge on one of its servers
+    if (a === 'our-settings' && (method === 'GET' || method === 'PUT')) {
+      const k = await store.get('serverkey', sha(h['x-server-key'] || ''));
+      const s = k && await store.get('server', k.id);
+      if (!s) return reply(401, { error: "That key isn't recognised" });
+      return ourSettings({ store, now, reply }, s.company, method, body, 'a camera on your server');
     }
     if (a === 'report' && method === 'POST') {
       const k = await store.get('serverkey', sha(h['x-server-key'] || ''));
