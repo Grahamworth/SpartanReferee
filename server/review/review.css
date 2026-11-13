@@ -370,3 +370,5 @@ header .tabs svg, header .tabs .ts { display: none; }
   .srcbar { gap: 6px; } .srcbar button { padding: 8px 8px; } .srcbar button b { font-size: 13.5px; } .srcbar button small { display: none; }
   .reclist { grid-template-columns: 1fr; }
 }
+.samebox { display: grid; gap: 6px; max-width: 460px; border-top: 1px solid var(--line, #333); padding-top: 10px; }
+.samebox label { display: flex; gap: 8px; align-items: center; }

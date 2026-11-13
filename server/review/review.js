@@ -434,7 +434,39 @@ window.focusCamera = (n) => { showTab('live'); const tryIt = () => { if (judges[
 
 // ---------------------------------------------------------------- both cameras, or one
 let viewCam = 0;
+// cameras that film the same athletes (pairs in order: 1 + 2, 3 + 4): each athlete's reps on both put together
+let sameGroups = [], athMerged = [];
+function renderSamePick() {
+  const cams = (st?.cams || []).map((c) => c.n).sort((a, b) => a - b), pairs = [];
+  for (let i = 0; i + 1 < cams.length; i += 2) pairs.push([cams[i], cams[i + 1]]);
+  $('sameBox').hidden = !pairs.length;
+  const want = JSON.stringify([pairs, sameGroups]);
+  if ($('samePick').dataset.want === want) return;
+  $('samePick').dataset.want = want;
+  $('samePick').innerHTML = pairs.map(([a, b]) => `<label class="check"><input type="checkbox" data-same="${a},${b}"${sameGroups.some((g) => g.includes(a) && g.includes(b)) ? ' checked' : ''}> Cameras ${camNo(a)} + ${camNo(b)} film the same athletes</label>`).join('');
+}
+$('samePick').addEventListener('change', async () => {
+  const groups = [...$('samePick').querySelectorAll('input:checked')].map((x) => x.dataset.same.split(',').map(Number));
+  const r = await fetch('/api/same-athletes', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ groups }) }).then((x) => x.json()).catch(() => null);
+  if (!r) { toast('Not saved: try again'); return; }
+  sameGroups = r.groups; toast(groups.length ? 'Athletes on those cameras are put together' : 'Each camera counts on its own');
+  athRev = -1; listSig = ''; loadAthletes();
+});
+// an athlete seen on two cameras that film the same athletes is one card: their combined count, and each camera's
+function withMerged(list) {
+  if (!athMerged.length) return list;
+  const byN = new Map(list.map((a) => [a.n, a])), drop = new Set(), combined = new Map();
+  for (const m of athMerged) {
+    const a = byN.get(m.ns[0]), b = byN.get(m.ns[1]); if (!a || !b) continue;
+    combined.set(a.n, { ...a, bib: m.bib || a.bib, reps: m.reps, noReps: m.noReps, questionable: (a.questionable || 0) + (b.questionable || 0), done: a.done && b.done, firstAt: m.firstAt, lastAt: m.lastAt, both: m, other: b });
+    drop.add(b.n);
+  }
+  return list.filter((a) => !drop.has(a.n)).map((a) => combined.get(a.n) || a);
+}
+const onCam = (a, cam) => a.cam === cam || a.other?.cam === cam;
+const bothText = (a) => `Camera ${camNo(a.cam)}: ${Number(a.both.counts[0])} · Camera ${camNo(a.other.cam)}: ${Number(a.both.counts[1])} · ${Number(a.both.both)} seen on both`;
 function renderViewPick() {
+  renderSamePick();
   const box = $('viewPick'); if (!st) return;
   const want = ['0', ...st.cams.map((c) => String(c.n))].join(',');
   if (box.dataset.want !== want) {
@@ -621,7 +653,7 @@ async function loadAthletes() {
   try {
     const [a, b] = dayBounds();
     const r = await fetch(`/api/athletes?from=${encodeURIComponent(new Date(a).toISOString())}&to=${encodeURIComponent(new Date(b).toISOString())}`).then((x) => x.json()).catch(() => null);
-    if (r) { athRev = r.rev; athList = r.list; numbersSeen = r.numbers || []; renderAthletes(); renderSides(); renderMarkers(true); fillCamFilter(); numSearch(); }
+    if (r) { athRev = r.rev; athList = r.list; numbersSeen = r.numbers || []; athMerged = r.merged || []; if (r.groups) { sameGroups = r.groups; renderSamePick(); } renderAthletes(); renderSides(); renderMarkers(true); fillCamFilter(); numSearch(); }
     // every athlete ever judged here is a big list: while live judges keep changing it, fetched again at most every 15 s
     if (r && resMode === 'previous' && Date.now() - allAt > 15000) loadAll().then(() => { drawRecordings(); showRecPick(); renderAthletes(true); });
   } finally { athLoading = false; }
@@ -653,7 +685,7 @@ function latestOnly(list) {
 }
 function resultsBase() {
   if (resMode === 'previous') return recShown && allAth ? latestOnly(allAth.filter((a) => inRecording(a, recShown))) : [];
-  return athList.filter((a) => a.src === 'live');
+  return withMerged(athList.filter((a) => a.src === 'live'));
 }
 async function loadAll() {
   const r = await fetch('/api/athletes?from=2000&to=9').then((x) => x.json()).catch(() => null);
@@ -720,7 +752,7 @@ function showProgress(j) {
 const athName = (a) => (a.bib && a.bib !== 'No number' ? `#${a.bib}` : `No number <small>(athlete ${a.label})</small>`);
 const upName = (v) => String(v || '').replace(/^[\dTZ-]+_/, '');
 const picUrl = (a) => (a.pic ? `/api/athlete-pic?n=${a.n}&v=${a.pic}` : '');
-function whereText(a) { return a.src === 'upload' ? `Uploaded video · ${esc(upName(a.video))}` : `Camera ${camNo(a.cam)}${camName(a.cam) ? ' · ' + esc(camName(a.cam)) : ''} · live`; }
+function whereText(a) { return a.src === 'upload' ? `Uploaded video · ${esc(upName(a.video))}` : a.other ? `Cameras ${camNo(a.cam)} + ${camNo(a.other.cam)} · live` : `Camera ${camNo(a.cam)}${camName(a.cam) ? ' · ' + esc(camName(a.cam)) : ''} · live`; }
 function whenText(a) {
   const f = new Date(a.firstAt), l = new Date(a.lastAt);
   if (a.src === 'upload' && a.firstT != null) return `In the video ${mss(a.firstT)}–${mss(a.lastT)} (${span((a.lastT - a.firstT) * 1000)}) · judged at ${hms(f)}`;
@@ -739,25 +771,25 @@ function filtered() {
   const tod = (iso) => { const d = new Date(iso); return pad(d.getHours()) + ':' + pad(d.getMinutes()); };
   const from = $('fFrom').value, to = $('fTo').value;
   return resultsBase().filter((a) => (!num || (num === 'no' || num === 'none' ? !a.bib || a.bib === 'No number' : String(a.bib).toLowerCase().includes(num)))
-    && (!cam || (a.src === 'live' && a.cam === +cam)) && (!src || a.src === src)
+    && (!cam || (a.src === 'live' && onCam(a, +cam))) && (!src || a.src === src)
     && (!from || tod(a.lastAt) >= from) && (!to || tod(a.firstAt) <= to));
 }
 // an athlete's card: their count first, then who, where and what you can do
 const shortName = (a) => (hasNum(a) ? `#${esc(a.bib)}` : `Athlete ${a.label}`);
 const athBody = (a, lines) => `<div class="pic">${a.pic ? `<img src="${picUrl(a)}" alt="" loading="lazy">` : '<span>no picture</span>'}</div>
     <div class="info"><span class="reps"><b>${Number(a.reps)}</b> rep${Number(a.reps) === 1 ? '' : 's'}${a.noReps ? `<small> · ${Number(a.noReps)} no rep${Number(a.noReps) === 1 ? '' : 's'}</small>` : ''}${a.questionable ? `<small class="tocheck" title="Counted with part of the body outside the picture"> · ⚠ ${Number(a.questionable)} to check</small>` : ''}</span><b class="num">${shortName(a)}</b>${lines}</div>
-    <div class="acts"><button class="btn watch" data-watch="${a.n}">▶ Watch</button><button class="linkbtn" data-detail="${a.n}">Details</button>${a.src === 'upload' ? `<button class="linkbtn" data-count="${a.n}">Count reps</button>` : ''}<button class="btn del" data-del="${a.n}" title="Delete this entry" aria-label="Delete this entry">🗑</button></div>`;
+    <div class="acts"><button class="btn watch" data-watch="${a.n}">▶ ${a.other ? `Camera ${camNo(a.cam)}` : 'Watch'}</button>${a.other ? `<button class="btn watch" data-watch="${a.other.n}">▶ Camera ${camNo(a.other.cam)}</button>` : ''}<button class="linkbtn" data-detail="${a.n}">Details</button>${a.src === 'upload' ? `<button class="linkbtn" data-count="${a.n}">Count reps</button>` : ''}<button class="btn del" data-del="${a.n}" title="Delete this entry" aria-label="Delete this entry">🗑</button></div>`;
 let listSig = '';
 function renderAthletes(force) {
   if ($('judge').hidden && !force) return;
   const list = filtered();
-  const sig = JSON.stringify(list.map((a) => [a.n, a.bib, a.reps, a.noReps, a.questionable, a.done, a.pic, a.lastAt]));
+  const sig = JSON.stringify(list.map((a) => [a.n, a.bib, a.reps, a.noReps, a.questionable, a.done, a.pic, a.lastAt, a.other?.n, a.both?.counts]));
   if (sig === listSig && !force) return; listSig = sig;
   const numbered = list.filter((a) => a.bib && a.bib !== 'No number').length;
   const base = resultsBase();
   $('athleteSummary').textContent = resMode === 'previous' && !recShown ? '' : base.length ? `${list.length} athlete${list.length === 1 ? '' : 's'}${list.length < base.length ? ` (of ${base.length})` : ''} · ${numbered} with a number read` : resMode === 'previous' ? `Nobody from this recording has been judged ${FREE ? 'yet' : 'on this server'}.` : (FREE ? 'Nobody tracked yet. Start the AI judge on camera 1 (Live tab), analyse a minute of its recording, or upload a video of up to a minute.' :'Nobody tracked on this day yet. Turn the AI judge on for a camera (Live tab) or upload a video.');
   $('athleteList').innerHTML = list.map((a) => `<div class="ath${a.done ? '' : ' going'}" data-n="${a.n}">
-    ${athBody(a, `<span>${whereText(a)}</span><span>${whenText(a)}</span>${a.done ? '' : '<span class="going">Being judged</span>'}`)}
+    ${athBody(a, `<span>${whereText(a)}</span>${a.other ? `<span>${bothText(a)}</span>` : ''}<span>${whenText(a)}</span>${a.done ? '' : '<span class="going">Being judged</span>'}`)}
   </div>`).join('');
 }
 // beside the cameras and the uploaded video: people who have finished or gone, with their own filters
@@ -765,10 +797,10 @@ const hasNum = (a) => a.bib && a.bib !== 'No number';
 const sideMatch = (a, num, res) => (!num || (hasNum(a) && String(a.bib).toLowerCase().includes(num)))
   && (res !== 'reps' || a.reps > 0) && (res !== 'noreps' || (!a.reps && a.noReps > 0)) && (res !== 'nonum' || !hasNum(a)) && (res !== 'check' || a.questionable > 0);
 const sideCard = (a) => `<div class="ath" data-n="${a.n}">
-    ${athBody(a, a.src === 'upload' ? `<span>${mss(a.firstT ?? 0)}–${mss(a.lastT ?? 0)} in the video</span>` : `<span>Camera ${camNo(a.cam)} · ${hms(new Date(a.lastAt))}</span>`)}
+    ${athBody(a, a.src === 'upload' ? `<span>${mss(a.firstT ?? 0)}–${mss(a.lastT ?? 0)} in the video</span>` : a.other ? `<span>Cameras ${camNo(a.cam)} + ${camNo(a.other.cam)} · ${hms(new Date(a.lastAt))}</span><span>${bothText(a)}</span>` : `<span>Camera ${camNo(a.cam)} · ${hms(new Date(a.lastAt))}</span>`)}
   </div>`;
 function fillSide(el, count, list, total, empty) {
-  const sig = JSON.stringify(list.map((a) => [a.n, a.bib, a.reps, a.noReps, a.questionable, a.pic, a.lastAt])) + empty;
+  const sig = JSON.stringify(list.map((a) => [a.n, a.bib, a.reps, a.noReps, a.questionable, a.pic, a.lastAt, a.other?.n, a.both?.counts])) + empty;
   count.textContent = total ? `${list.length}${list.length < total ? ` of ${total}` : ''}` : '';
   if (el.dataset.sig === sig) return; el.dataset.sig = sig;
   el.innerHTML = list.map(sideCard).join('') || `<p class="empty">${esc(empty)}</p>`;
@@ -778,9 +810,9 @@ function renderSides() {
   const cams = [...new Set([...(st ? st.cams.map((c) => c.n) : []), ...athList.filter((a) => a.src === 'live').map((a) => a.cam)])].sort((a, b) => a - b);
   const camHtml = '<option value="">All cameras</option>' + cams.map((n) => `<option value="${n}">Camera ${camNo(n)}</option>`).join('');
   if ($('lsCam').dataset.html !== camHtml) { const v = $('lsCam').value; $('lsCam').innerHTML = camHtml; $('lsCam').dataset.html = camHtml; $('lsCam').value = v; }
-  const live = athList.filter((a) => a.src === 'live' && a.done);
+  const live = withMerged(athList.filter((a) => a.src === 'live')).filter((a) => a.done);
   const lNum = $('lsNum').value.trim().toLowerCase(), lCam = $('lsCam').value, lRes = $('lsRes').value;
-  fillSide($('liveList'), $('liveCount'), live.filter((a) => (!lCam || a.cam === +lCam) && sideMatch(a, lNum, lRes)).sort((a, b) => Date.parse(b.lastAt) - Date.parse(a.lastAt)), live.length,
+  fillSide($('liveList'), $('liveCount'), live.filter((a) => (!lCam || onCam(a, +lCam)) && sideMatch(a, lNum, lRes)).sort((a, b) => Date.parse(b.lastAt) - Date.parse(a.lastAt)), live.length,
     live.length ? 'Nobody matches these filters.' : 'Athletes appear here, newest first, once they finish or leave the picture.');
   // the latest judging of the video shown (Judge again makes a new one)
   const ofVideo = athList.filter((a) => a.src === 'upload' && a.video === upShown);

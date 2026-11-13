@@ -14,7 +14,7 @@ cp "$SRC"/server/setup/* "$BUILD/setup/"
 
 # the judge (served at /judge/)
 SITE="judge.html styles.css app.js judge-gate.js api-base.js burpee.js exercises.js pose-filter.js multi.js finder.js
-  ocr-prep.js readers.js digit-model.js digit-model.json rtmo-s.onnx looks.css looks.js brand.js"
+  cones.js ocr-prep.js readers.js digit-model.js digit-model.json rtmo-s.onnx looks.css looks.js brand.js"
 for f in $SITE; do cp "$SRC/$f" "$BUILD/site/"; done
 cp -r "$SRC/icons" "$BUILD/site/"
 cp -r "$SRC/vendor/mediapipe" "$SRC/vendor/ort" "$BUILD/site/vendor/"

@@ -4,6 +4,7 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const { mergeAthletes } = require('./merge.js');
 
 const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.mjs': 'text/javascript', '.css': 'text/css', '.png': 'image/png', '.svg': 'image/svg+xml',
   '.json': 'application/json', '.wasm': 'application/wasm', '.webmanifest': 'application/manifest+json', '.onnx': 'application/octet-stream' };
@@ -186,6 +187,14 @@ function sendRange(req, res, buf, name) {
       for (const f of Array.isArray(b.frames) ? b.frames : []) if (Array.isArray(f) && f.length === 40 && f.every((v) => Number.isFinite(v))) lines.push(JSON.stringify({ f: f.map(Math.round) }));
       for (const e of Array.isArray(b.events) ? b.events : []) if (e && (e.type === 'rep' || e.type === 'norep') && num(e.t) != null) lines.push(JSON.stringify({ e: { type: e.type, assumed: (Array.isArray(e.assumed) ? e.assumed : []).filter((x) => ['feet', 'hands', 'hips', 'chest'].includes(x)), count: num(e.count) || 0, t: num(e.t), from: num(e.from), reasons: (Array.isArray(e.reasons) ? e.reasons : []).slice(0, 8).map((r) => String(r).slice(0, 120)) } }));
       if (lines.length) { fs.mkdirSync(TRACKS, { recursive: true }); fs.appendFile(path.join(TRACKS, a.n + '.jsonl'), lines.join('\n') + '\n', () => {}); }
+      // when each rep and no rep was, kept with the athlete: two cameras filming the same athletes are put together by them
+      let timed = false;
+      for (const e of Array.isArray(b.events) ? b.events : []) {
+        const t = e && num(e.t); if (t == null || (e.type !== 'rep' && e.type !== 'norep')) continue;
+        const list = e.type === 'rep' ? (a.repTimes ??= []) : (a.noRepTimes ??= []);
+        if (!list.includes(t) && list.length < 500) { list.push(t); timed = true; }
+      }
+      if (timed) saveAthletes();
       return send(res, 200, { ok: true, n: a.n });
     }
     if (p === '/api/athlete-track') {
@@ -233,7 +242,9 @@ function sendRange(req, res, buf, name) {
     }
     if (p === '/api/athletes') {
       const from = u.searchParams.get('from') || '', to = u.searchParams.get('to') || '9';
-      return send(res, 200, { rev: athletesRev, list: athletes.filter((a) => a.lastAt >= from && a.firstAt <= to).slice(-2000).reverse(), numbers: numbersSeen.filter((x) => x.lastAt >= from && x.firstAt <= to) });
+      const list = athletes.filter((a) => a.lastAt >= from && a.firstAt <= to).slice(-2000).reverse();
+      // athletes seen on two cameras that film the same athletes, put together (the review's "Same athletes" setting)
+      return send(res, 200, { rev: athletesRev, list, numbers: numbersSeen.filter((x) => x.lastAt >= from && x.firstAt <= to), merged: mergeAthletes(list, S.sameAthletes || []), groups: S.sameAthletes || [] });
     }
     if (p === '/api/athlete-pic') {
       const file = path.join(PICS, (+u.searchParams.get('n') | 0) + '.jpg');
@@ -308,6 +319,7 @@ function sendRange(req, res, buf, name) {
   const results = () => ({
     athletes: athletes.map(({ n, src, video, cam, bib, label, firstT, lastT, firstAt, lastAt, reps, noReps, questionable, done, pic }) => ({ n, src, video, cam, bib, label, firstT, lastT, firstAt, lastAt, reps, noReps, questionable, done, pic })),
     numbers: numbersSeen,
+    merged: mergeAthletes(athletes, S.sameAthletes || []),
     files: athletes.flatMap((a) => [{ name: `tracks/${a.n}.jsonl`, path: path.join(TRACKS, `${a.n}.jsonl`) }, { name: `pics/${a.n}.jpg`, path: path.join(PICS, `${a.n}.jpg`) }]),
   });
   return { handler, watchCameras, cams: () => cams, serverOk: () => serverOk, results };

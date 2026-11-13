@@ -13,7 +13,7 @@ const pointIndex = new Map(POINTS.map((p, i) => [p, i]));
 const SEEN_MS = 800; // tracking is only drawn near a saved frame, so it doesn't sit there once someone's gone
 const CLIP_MS = 12 * 60e3; // a recording is cut every 10 minutes, so anything starting within this could hold a moment
 
-let data = { athletes: [], numbers: [], recordings: [], sources: {} };
+let data = { athletes: [], numbers: [], recordings: [], sources: {}, merged: [] };
 let playing = null; // { rec, athlete, frames, events, startMs }
 
 const dayKey = (iso) => { const d = new Date(iso); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
@@ -39,16 +39,28 @@ function fillFilters() {
   $('source').innerHTML = `<option value="">All cameras and videos</option>${list.map(([k, v]) => `<option value="${esc(k)}">${esc(v)}</option>`).join('')}`;
   if (list.some(([k]) => k === keepSource)) $('source').value = keepSource;
 }
+// an athlete filmed by two cameras on the same athletes (the server's setting): one card, their reps put together
+function combined(list) {
+  const drop = new Set(), out = new Map(), key = (a) => `${a.server}~${a.n}`;
+  for (const m of data.merged || []) {
+    const a = list.find((x) => x.server === m.server && x.n === m.ns[0]), b = list.find((x) => x.server === m.server && x.n === m.ns[1]);
+    if (!a || !b) continue;
+    out.set(key(a), { ...a, bib: m.bib || a.bib, reps: m.reps, noReps: m.noReps, other: b, both: m });
+    drop.add(key(b));
+  }
+  return list.filter((a) => !drop.has(key(a))).map((a) => out.get(key(a)) || a);
+}
 function draw() {
   const q = $('find').value.trim(), day = $('day').value, source = $('source').value;
-  const athletes = data.athletes.filter((a) => (!q || String(a.bib || '').includes(q)) && (!day || athleteDay(a) === day) && (!source || sourceOf(a) === source));
+  const athletes = combined(data.athletes).filter((a) => (!q || String(a.bib || '').includes(q)) && (!day || athleteDay(a) === day) && (!source || sourceOf(a) === source || (a.other && sourceOf(a.other) === source)));
   $('athleteCount').textContent = athletes.length ? `(${athletes.length})` : '';
   $('athletes').innerHTML = athletes.map((a) => `<article class="pastCard">
       ${a.pic ? `<img src="${esc(a.pic)}" alt="">` : ''}
       <div><b class="reps">${esc(a.reps ?? 0)}</b> rep${a.reps === 1 ? '' : 's'}${a.noReps ? ` · ${esc(a.noReps)} no rep${a.noReps === 1 ? '' : 's'}` : ''}
-        <small><b>${a.bib && a.bib !== 'No number' ? `Number ${esc(a.bib)}` : `Athlete ${esc(a.label ?? a.n)}`}</b> · ${esc(sourceName(a))}</small>
+        <small><b>${a.bib && a.bib !== 'No number' ? `Number ${esc(a.bib)}` : `Athlete ${esc(a.label ?? a.n)}`}</b> · ${a.other ? `Cameras ${esc(a.cam)} + ${esc(a.other.cam)}` : esc(sourceName(a))}</small>${a.other ? `
+        <small>Camera ${esc(a.cam)}: ${esc(a.both.counts[0])} · Camera ${esc(a.other.cam)}: ${esc(a.both.counts[1])} · ${esc(a.both.both)} seen on both</small>` : ''}
         <small>${esc(dayLabel(athleteDay(a)))}, ${a.src === 'upload' && a.firstT != null ? `${esc(mmss(a.firstT))} in the video` : esc(when(a.firstAt))}</small></div>
-      <button class="small" type="button" data-watch="${esc(a.server)}~${esc(a.n)}">Watch</button>
+      <div class="pastActions"><button class="small" type="button" data-watch="${esc(a.server)}~${esc(a.n)}">${a.other ? `Watch camera ${esc(a.cam)}` : 'Watch'}</button>${a.other ? `<button class="small" type="button" data-watch="${esc(a.server)}~${esc(a.other.n)}">Watch camera ${esc(a.other.cam)}</button>` : ''}</div>
     </article>`).join('') || `<p class="muted">${data.athletes.length ? 'Nobody matches that.' : 'No athletes in the last 7 days.'}</p>`;
   const numbers = data.numbers.filter((x) => (!q || x.number.includes(q)) && (!day || dayKey(x.firstAt) === day) && (!source || sourceOf(x) === source));
   $('numbers').innerHTML = numbers.map((x) => `<div class="pastRow"><div><b>${esc(x.number)}</b><small>${esc(sourceName(x))} · ${esc(dayLabel(dayKey(x.firstAt)))}, ${x.src === 'upload' && x.firstT != null ? `${esc(mmss(x.firstT))} in the video` : esc(when(x.firstAt))}</small></div>
@@ -189,7 +201,7 @@ async function enter() {
   }).catch(() => { /* no company: no tabs */ });
   try {
     const [results, recs] = await Promise.all([call('recordings/results'), call('recordings')]);
-    data = { athletes: results.athletes, numbers: results.numbers, sources: results.sources, recordings: recs.recordings };
+    data = { athletes: results.athletes, numbers: results.numbers, sources: results.sources, merged: results.merged || [], recordings: recs.recordings };
     $('keepNote').textContent = `Your recordings, athletes and numbers for the last ${results.keepDays} days. Download anything you want to keep: after ${results.keepDays} days it's deleted.`;
     fillFilters(); draw(); show($('content'), true);
     requestAnimationFrame(drawTrack);

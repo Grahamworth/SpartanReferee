@@ -64,6 +64,11 @@
     <details class="more"><summary>More</summary>
       <div class="morebox">
       <button class="btn" id="judgeRestart" title="Saves each judge's round, then starts it again">Restart judges</button>
+      <div id="sameBox" class="samebox" hidden>
+        <b>Same athletes, two angles</b>
+        <div id="samePick"></div>
+        <p class="muted small">Ticked: each athlete's reps on both cameras are put together. A rep seen by both counts once, and one camera fills in when the other's view is blocked. They're matched by the number read, or by their reps happening at the same moments.</p>
+      </div>
       <div id="ranges" class="muted small"></div>
       <div class="find">
         <label>Time <input id="when" type="datetime-local" step="1"></label>
