@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<script src="i18n.js"></script>
 <meta name="theme-color" content="#0b0b0b">
 <title>Set up the cameras: SpartanReferee</title>
 <link rel="icon" href="icons/spartanreferee/icon-192.png">
@@ -27,11 +28,11 @@
 <body>
 <header class="top">
   <a class="mark" href="./">Spartan<span>Referee</span></a>
-  <span class="topRight"><a href="console.html">My console</a></span>
+  <span class="topRight"><select class="langPick" data-lang-picker aria-label="Language"></select><a href="console.html">My console</a></span>
 </header>
 <main class="page guide">
   <div class="intro">
-    <h1>Set up <span>the cameras</span></h1>
+    <h1 data-i18n>Set up <span>the cameras</span></h1>
     <p>Phones film the event and send their pictures to your SpartanReferee server over any Wi-Fi or mobile signal. The server records them, runs an AI judge on each camera, and shows everything in a browser for the referees. There's nothing to install on the judging computer.</p>
   </div>
   <video src="headjudge-how-it-works.mp4" poster="headjudge-how-it-works.jpg" controls playsinline muted preload="metadata" aria-label="How SpartanReferee works, in 30 seconds"></video>
@@ -39,37 +40,37 @@
   <section class="card">
     <h2>What you need</h2>
     <ul>
-      <li><b>A SpartanReferee account</b> for your company. <a href="register.html">Register here</a>: your first booking asks for a card.</li>
-      <li><b>A phone per camera</b> on a tripod or stand, with a power bank and mobile data or Wi-Fi. Android uses SpartanReferee Broadcaster; iPhones use Larix.</li>
-      <li><b>Any computer, tablet or phone</b> for the referees, with a browser.</li>
-      <li><b>A good upload.</b> Each camera sends about 3.5 Mbit/s, and the venue's connection has to carry them all: try it there before the event.</li>
+      <li data-i18n><b>A SpartanReferee account</b> for your company. <a href="register.html">Register here</a>: your first booking asks for a card.</li>
+      <li data-i18n><b>A phone per camera</b> on a tripod or stand, with a power bank and mobile data or Wi-Fi. Android uses SpartanReferee Broadcaster; iPhones use Larix.</li>
+      <li data-i18n><b>Any computer, tablet or phone</b> for the referees, with a browser.</li>
+      <li data-i18n><b>A good upload.</b> Each camera sends about 3.5 Mbit/s, and the venue's connection has to carry them all: try it there before the event.</li>
     </ul>
   </section>
 
   <section class="card">
     <h2>1. Book your cameras</h2>
     <ol>
-      <li>On <a href="console.html">your console</a>, choose how many cameras, then either <b>Start now</b> for a number of hours, or <b>Choose times</b>: a start and an end, up to 90 days ahead. Check the cost and press <b>Continue to payment</b>, then <b>Pay</b>. Bookings open once card payments are set up: until then, get in touch with us if you need cameras.</li>
+      <li data-i18n>On <a href="console.html">your console</a>, choose how many cameras, then either <b>Start now</b> for a number of hours, or <b>Choose times</b>: a start and an end, up to 90 days ahead. Check the cost and press <b>Continue to payment</b>, then <b>Pay</b>. Bookings open once card payments are set up: until then, get in touch with us if you need cameras.</li>
       <li>Starting now takes about 5 minutes, so allow for that. A booking made ahead starts its servers 10 minutes early, at no cost, so the cameras are ready on time. Until then you can cancel it and pay nothing.</li>
-      <li>When it's on, the <b>Live</b>, <b>Results</b> and <b>Cameras</b> tabs appear along the top of your console, next to <b>Booking</b> and <b>History</b>. They open the video review, and its own <b>Booking</b> tab brings you back. Each server takes 2 cameras, so with 3 or more you pick the server at the top of the review, and the cameras are numbered across the booking (the second server's are Camera 3 and 4).</li>
+      <li data-i18n>When it's on, the <b>Live</b>, <b>Results</b> and <b>Cameras</b> tabs appear along the top of your console, next to <b>Booking</b> and <b>History</b>. They open the video review, and its own <b>Booking</b> tab brings you back. Each server takes 2 cameras, so with 3 or more you pick the server at the top of the review, and the cameras are numbered across the booking (the second server's are Camera 3 and 4).</li>
     </ol>
-    <p>Your cameras run for the time you booked, then the recordings are saved and everything shuts down. Running over? Press <b>Extend</b> on the console. Finished early? Press <b>Stop</b>, and you pay only for the time used. The review page warns you 20 minutes before the end.</p>
+    <p data-i18n>Your cameras run for the time you booked, then the recordings are saved and everything shuts down. Running over? Press <b>Extend</b> on the console. Finished early? Press <b>Stop</b>, and you pay only for the time used. The review page warns you 20 minutes before the end.</p>
   </section>
 
   <section class="card">
     <h2>2. Connect each phone</h2>
-    <p style="margin-top:0">In the video review, every camera waiting for its phone shows its QR codes on the <b>Live</b> tab (they're on the <b>Cameras</b> tab too). The codes change with each booking, so scan them again each time.</p>
+    <p style="margin-top:0" data-i18n>In the video review, every camera waiting for its phone shows its QR codes on the <b>Live</b> tab (they're on the <b>Cameras</b> tab too). The codes change with each booking, so scan them again each time.</p>
     <h3>Android: SpartanReferee Broadcaster</h3>
     <ol>
-      <li><a href="downloads/spartans-broadcaster.apk">Install SpartanReferee Broadcaster</a>. The phone warns you, as it isn't from the Play Store: tap Settings, turn on Allow from this source, go back and tap Install.</li>
-      <li>Tap <b>Scan the camera's QR code</b> and scan that camera's code.</li>
-      <li>Optional: tick <b>Also stream live to YouTube</b> and paste that camera's stream key.</li>
-      <li>Leave Quality on 720p unless the signal is weak, then tap <b>Open the camera</b> and <b>GO LIVE</b>.</li>
+      <li data-i18n><a href="downloads/spartans-broadcaster.apk">Install SpartanReferee Broadcaster</a>. The phone warns you, as it isn't from the Play Store: tap Settings, turn on Allow from this source, go back and tap Install.</li>
+      <li data-i18n>Tap <b>Scan the camera's QR code</b> and scan that camera's code.</li>
+      <li data-i18n>Optional: tick <b>Also stream live to YouTube</b> and paste that camera's stream key.</li>
+      <li data-i18n>Leave Quality on 720p unless the signal is weak, then tap <b>Open the camera</b> and <b>GO LIVE</b>.</li>
     </ol>
     <h3>iPhone: Larix</h3>
     <ol>
       <li>Install Larix Broadcaster from the App Store and open it once, allowing the camera and microphone.</li>
-      <li>Scan that camera's <b>iPhone (Larix)</b> code with the phone's camera, open the link in Larix and tap <b>Import</b>.</li>
+      <li data-i18n>Scan that camera's <b>iPhone (Larix)</b> code with the phone's camera, open the link in Larix and tap <b>Import</b>.</li>
       <li>In Larix, go to Settings, then Connections, tick the camera, and press the red button.</li>
     </ol>
   </section>
@@ -77,8 +78,8 @@
   <section class="card">
     <h2>3. Start judging</h2>
     <ol>
-      <li>On the <b>Live</b> tab, each phone's picture shows within a few seconds of going live.</li>
-      <li>Press <b>Start AI judge</b> on a camera, give it a name and choose what it's judging (burpees, squats, push-ups and more). It starts from that camera's last setup. <b>Advanced settings</b> has everything else. Then press <b>Start judging</b>.</li>
+      <li data-i18n>On the <b>Live</b> tab, each phone's picture shows within a few seconds of going live.</li>
+      <li data-i18n>Press <b>Start AI judge</b> on a camera, give it a name and choose what it's judging (burpees, squats, push-ups and more). It starts from that camera's last setup. <b>Advanced settings</b> has everything else. Then press <b>Start judging</b>.</li>
       <li>Do a few test reps in front of each camera and check they're counted. The judge runs on the server, so it carries on when you close the page.</li>
     </ol>
   </section>
@@ -86,24 +87,24 @@
   <section class="card">
     <h2>Review and protests</h2>
     <ul>
-      <li><b>Results</b> shows everyone judged on the live cameras, from a previous recording, or in a video you upload, which is analysed on the server.</li>
-      <li><b>Watch</b> plays an athlete from 5 seconds before they appear, with their tracking and every rep and no rep, and lists everyone else in that video to jump to.</li>
-      <li><b>Find athlete number</b> lists every moment a number was seen, on any camera or uploaded video.</li>
+      <li data-i18n><b>Results</b> shows everyone judged on the live cameras, from a previous recording, or in a video you upload, which is analysed on the server.</li>
+      <li data-i18n><b>Watch</b> plays an athlete from 5 seconds before they appear, with their tracking and every rep and no rep, and lists everyone else in that video to jump to.</li>
+      <li data-i18n><b>Find athlete number</b> lists every moment a number was seen, on any camera or uploaded video.</li>
     </ul>
-    <p>Recordings and results are kept for 7 days. After your servers have shut down, the <a href="results.html">Results</a> tab on your console lets you search, watch and download them until then.</p>
+    <p data-i18n>Recordings and results are kept for 7 days. After your servers have shut down, the <a href="results.html">Results</a> tab on your console lets you search, watch and download them until then.</p>
   </section>
 
   <section class="card">
     <h2>If something fails</h2>
     <ul>
-      <li><b>A phone won't connect:</b> check it has signal, and scan its code again from this booking's review page.</li>
-      <li><b>The picture stutters on the phone or drops:</b> the signal is too weak for 720p. Pick a lower quality.</li>
-      <li><b>A camera shows but no picture in the browser:</b> the venue's network may block video. Try the browser on a phone's mobile data to check.</li>
-      <li><b>The server didn't start:</b> your console says why. Azure sometimes has no graphics-card servers free for a few minutes: try again.</li>
-      <li><b>The internet at the venue fails:</b> nothing reaches the server until it's back. Only Larix keeps its own copy on the phone, so keep one running on an iPhone if you can.</li>
+      <li data-i18n><b>A phone won't connect:</b> check it has signal, and scan its code again from this booking's review page.</li>
+      <li data-i18n><b>The picture stutters on the phone or drops:</b> the signal is too weak for 720p. Pick a lower quality.</li>
+      <li data-i18n><b>A camera shows but no picture in the browser:</b> the venue's network may block video. Try the browser on a phone's mobile data to check.</li>
+      <li data-i18n><b>The server didn't start:</b> your console says why. Azure sometimes has no graphics-card servers free for a few minutes: try again.</li>
+      <li data-i18n><b>The internet at the venue fails:</b> nothing reaches the server until it's back. Only Larix keeps its own copy on the phone, so keep one running on an iPhone if you can.</li>
     </ul>
   </section>
-  <p class="foot">Setting up one phone? <a href="phone.html">The phone's own steps</a></p>
+  <p class="foot" data-i18n>Setting up one phone? <a href="phone.html">The phone's own steps</a></p>
 </main>
 <script type="module" src="api-base.js"></script>
 </body>

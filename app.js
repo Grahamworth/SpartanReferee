@@ -517,11 +517,15 @@ function beep(freq, ms, type = 'sine', gain = 0.25) {
 const nativeSpeech = () => (window.Capacitor?.getPlatform?.() === 'android' ? window.Capacitor.Plugins?.Speech : null);
 function say(text) {
   if (!settings.speech || S.quiet) return;
+  // in the viewer's language (i18n.js): "No rep. Chest to the ground" is the pattern "No rep. {x}" with the reason translated too
+  const L = window.SR_I18N, lang = L ? L.lang : 'en';
+  if (L) text = L.t(text);
   const native = nativeSpeech();
-  if (native) { native.speak({ text, rate: 1.15 }).catch(() => {}); return; }
+  if (native) { native.speak({ text, lang, rate: 1.15 }).catch(() => {}); return; }
   if (!window.speechSynthesis) return;
   speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
+  u.lang = lang;
   u.rate = 1.15;
   speechSynthesis.speak(u);
 }

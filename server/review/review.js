@@ -961,7 +961,8 @@ function proofDraw() {
   const fs = Math.max(15, Math.round(h / 24));
   c.font = `700 ${fs}px Arial, sans-serif`; c.textBaseline = 'middle'; c.textAlign = 'left';
   const tag = (text, x, y, bg) => { const tw = c.measureText(text).width + fs * 0.8; x = Math.max(ox, Math.min(ox + w - tw, x - tw / 2)); y = Math.max(oy, y); c.fillStyle = bg; c.fillRect(x, y, tw, fs * 1.4); c.fillStyle = '#fff'; c.fillText(text, x + fs * 0.4, y + fs * 0.72); };
-  const sum = `Reps ${count}${noReps ? ' · no reps ' + noReps : ''}`;
+  const tr = (s, v) => (window.SR_I18N ? SR_I18N.t(s, v) : s.replace(/\{(\w+)\}/g, (m, k) => v[k]));
+  const sum = noReps ? tr('Reps {count} · no reps {noReps}', { count, noReps }) : tr('Reps {count}', { count });
   if (!counting) tag(sum, ox + (c.measureText(sum).width + fs * 0.8) / 2, oy, 'rgba(0,0,0,.65)');
   if (!$('proofShow').checked || !p.frames.length) return;
   // their skeleton, between the two saved frames either side of now; nothing if they weren't seen around now

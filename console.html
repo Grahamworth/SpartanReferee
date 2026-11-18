@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<script src="i18n.js"></script>
 <title>Book your cameras: SpartanReferee</title>
 <meta name="theme-color" content="#0b0b0b">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,7 +18,7 @@
 <header class="top">
   <span class="brandline"><img id="logo" class="toplogo" alt="" hidden><span id="company" class="mark">Spartan<span>Referee</span></span></span>
   <nav id="appTabs" class="appTabs" aria-label="Your pages" hidden></nav>
-  <span class="topRight"><a id="freeLink" href="review-free/" hidden title="One camera, this computer's own, with the AI judge run in this browser, live or on a minute of video: no server, no cost">Free camera</a><a id="testReviewLink" href="review-test/" hidden title="The video review with no server: camera 1 is this browser's camera, recorded here; the rest is pretend">Test review</a><a id="adminLink" href="customers.html" hidden>Admin</a><span id="who" class="muted"></span></span>
+  <span class="topRight"><select class="langPick" data-lang-picker aria-label="Language"></select><a id="freeLink" href="review-free/" hidden title="One camera, this computer's own, with the AI judge run in this browser, live or on a minute of video: no server, no cost">Free camera</a><a id="testReviewLink" href="review-test/" hidden title="The video review with no server: camera 1 is this browser's camera, recorded here; the rest is pretend">Test review</a><a id="adminLink" href="customers.html" hidden>Admin</a><span id="who" class="muted"></span></span>
 </header>
 <main class="page console">
   <section id="signIn" class="card narrow" hidden>
@@ -26,7 +27,7 @@
     <div id="devBtn"></div>
     <p class="error" id="signInError" role="alert" hidden></p>
     <a class="primary linkbtn" id="registerFirst" href="register.html" hidden>Register my company</a>
-    <p class="muted">New to SpartanReferee? <a href="register.html">Register your company</a> first: you sign in as part of it.</p>
+    <p class="muted" data-i18n>New to SpartanReferee? <a href="register.html">Register your company</a> first: you sign in as part of it.</p>
   </section>
 
   <section id="none" class="card narrow" hidden>
@@ -67,9 +68,9 @@
       <div class="quote" aria-live="polite"><span id="quoteHow"></span><b id="quoteCost"></b></div>
       <p class="note" id="payNote" hidden></p>
       <button class="primary" id="start" type="submit">Start</button>
-      <p class="note" id="nowNote">Your cameras are ready for this time, then the recordings are saved and everything shuts down. You can extend, or stop early and pay only for the time used. Starting takes about 5 minutes, and counts as time used. Recordings are kept for <span class="keepDays">7</span> days.</p>
-      <p class="note" id="timesNote" hidden>Book up to <span id="daysAhead">90</span> days ahead. We start your servers <span class="leadMins">10</span> minutes early at no cost, so the cameras are ready at the start time. At the end the recordings are saved and everything shuts down. You can extend, or cancel before it starts and pay nothing. Recordings are kept for <span class="keepDays">7</span> days.</p>
-      <p class="note" id="freeNote" hidden>Just trying it out? The <a href="review-free/">free camera</a> uses this computer's own camera and runs the AI judge in your browser, live or on a minute of video. No server, no cost.</p>
+      <p class="note" id="nowNote" data-i18n>Your cameras are ready for this time, then the recordings are saved and everything shuts down. You can extend, or stop early and pay only for the time used. Starting takes about 5 minutes, and counts as time used. Recordings are kept for <span class="keepDays">7</span> days.</p>
+      <p class="note" id="timesNote" hidden data-i18n>Book up to <span id="daysAhead">90</span> days ahead. We start your servers <span class="leadMins">10</span> minutes early at no cost, so the cameras are ready at the start time. At the end the recordings are saved and everything shuts down. You can extend, or cancel before it starts and pay nothing. Recordings are kept for <span class="keepDays">7</span> days.</p>
+      <p class="note" id="freeNote" hidden data-i18n>Just trying it out? The <a href="review-free/">free camera</a> uses this computer's own camera and runs the AI judge in your browser, live or on a minute of video. No server, no cost.</p>
     </form>
 
     <div id="running" hidden>
@@ -93,14 +94,14 @@
   <!-- the owner's list of who else signs in as the company -->
   <section id="people" class="card peopleBox" hidden aria-labelledby="peopleHead">
     <h2 id="peopleHead">People</h2>
-    <p class="note">Add the people who should sign in as <span class="coName">your company</span>. They see the cameras and results. Only you book, pay or change the company's details.</p>
+    <p class="note" data-i18n>Add the people who should sign in as <span class="coName">your company</span>. They see the cameras and results. Only you book, pay or change the company's details.</p>
     <ul id="peopleList" class="adminList"></ul>
     <form id="addPerson" class="addAdmin" novalidate>
       <label for="personEmail">Add someone</label>
       <div><input id="personEmail" type="email" autocomplete="off" maxlength="200" placeholder="name@company.com"><button class="small" type="submit">Add</button></div>
     </form>
     <p class="error" id="peopleError" role="alert" hidden></p>
-    <p class="note">They sign in at <a id="consoleUrl" href="console.html">this console</a> with that address, with a Microsoft account (work, school or personal). No email is sent: tell them.</p>
+    <p class="note" data-i18n>They sign in at <a id="consoleUrl" href="console.html">this console</a> with that address, with a Microsoft account (work, school or personal). No email is sent: tell them.</p>
   </section>
 
   <!-- the payment page a customer goes through before a booking is made: pretend for now, so nothing is charged and no card is asked for -->
@@ -118,7 +119,7 @@
       <div class="pcRow pcSplit"><div><span>Expiry</span><b>12 / 34</b></div><div><span>CVC</span><b>123</b></div></div>
       <div class="pcRow"><span>Name on card</span><b>Test Card</b></div>
     </div>
-    <p class="note">This is a pretend payment page, so you can try booking end to end. Nothing is charged, and no card details are asked for or kept. It's held for <span id="payMins">30</span> minutes.</p>
+    <p class="note" data-i18n>This is a pretend payment page, so you can try booking end to end. Nothing is charged, and no card details are asked for or kept. It's held for <span id="payMins">30</span> minutes.</p>
     <p class="error" id="payError" role="alert" hidden></p>
     <button class="primary" id="payBtn" type="button">Pay</button>
     <button class="link payBack" id="payBack" type="button">Back to the booking</button>

@@ -20,7 +20,8 @@ export { tabsFor };
 /** Opens the company's server n on one of the review's tabs, in this browser tab. Throws with a message to show. */
 export async function openServer(tab, n = 1) {
   const { url } = await call('servers/mine/open', { method: 'POST', body: { n, tab } });
-  location.assign(url);
+  const lang = window.SR_I18N ? SR_I18N.lang : 'en'; // the server's review opens in the language picked here
+  location.assign(lang === 'en' ? url : `${url}&lang=${lang}`);
 }
 
 let drawn = '';

@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<script src="i18n.js"></script>
 <title>SpartanReferee for companies</title>
 <meta name="description" content="Register your company for SpartanReferee: AI judging for fitness events, under your own logo and colours.">
 <meta name="theme-color" content="#0b0b0b">
@@ -16,11 +17,11 @@
 <body>
 <header class="top">
   <a class="mark" href="./">Spartan<span>Referee</span></a>
-  <span class="topRight"><span id="who" class="muted"></span></span>
+  <span class="topRight"><select class="langPick" data-lang-picker aria-label="Language"></select><span id="who" class="muted"></span></span>
 </header>
 <main class="page">
   <section class="intro">
-    <h1>Your events, <span>judged under your name</span></h1>
+    <h1 data-i18n>Your events, <span>judged under your name</span></h1>
     <p>Register your company, add your logo and colours, and SpartanReferee's cameras, AI judge and video review all carry your brand.</p>
   </section>
 
@@ -47,9 +48,9 @@
         </div>
         <label for="contact">Your name</label>
         <input id="contact" autocomplete="name" maxlength="60" required>
-        <label for="website">Website <small>(optional)</small></label>
+        <label for="website" data-i18n>Website <small>(optional)</small></label>
         <input id="website" type="url" inputmode="url" autocomplete="url" maxlength="200" placeholder="yourcompany.com">
-        <label for="about">The events you run <small>(optional)</small></label>
+        <label for="about" data-i18n>The events you run <small>(optional)</small></label>
         <textarea id="about" rows="3" maxlength="600" placeholder="What kind, how many a year, and roughly how many cameras"></textarea>
       </fieldset>
 

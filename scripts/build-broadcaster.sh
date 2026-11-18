@@ -25,7 +25,8 @@ cp "$SRC/app/package.json" "$BUILD/"
 
 # the web side: its own page in SpartanReferee's look (broadcaster.html), working as the Spartans camera page does (camera.js)
 rm -rf "$BUILD/www" && mkdir -p "$BUILD/www/vendor" "$BUILD/www/icons"
-cp "$SRC/camera.js" "$SRC/headjudge.css" "$BUILD/www/"
+cp "$SRC/camera.js" "$SRC/headjudge.css" "$SRC/i18n.js" "$BUILD/www/"
+mkdir -p "$BUILD/www/i18n" && cp "$SRC"/i18n/[a-z][a-z].json "$BUILD/www/i18n/" && rm -f "$BUILD/www/i18n/en.json"
 cp "$SRC/broadcaster.html" "$BUILD/www/index.html"
 cp "$SRC/vendor/jsQR.min.js" "$BUILD/www/vendor/"
 cp -r "$SRC/icons/spartanreferee" "$BUILD/www/icons/"

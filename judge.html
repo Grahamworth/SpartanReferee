@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<script src="i18n.js"></script>
 <meta name="theme-color" content="#0b0b0b">
 <title>AI Judge</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,7 +41,7 @@
   <p class="muted" id="setupFlow"></p>
   <div class="setup-pictures">
     <figure class="setup-good">
-      <figcaption><span aria-hidden="true">✓</span> Good setup</figcaption>
+      <figcaption data-i18n><span aria-hidden="true">✓</span> Good setup</figcaption>
       <svg viewBox="0 0 240 170" role="img" aria-label="Good setup: the phone is 2 to 3 metres away, and the whole body is in its view, standing with hands up and lying flat">
         <path d="M24 91 L232 8 L232 140 L110 140 Z" fill="#22c55e" fill-opacity="0.2" stroke="#22c55e" stroke-width="1.5" stroke-dasharray="5 4"/>
         <line x1="4" y1="140" x2="236" y2="140" stroke="#fff" stroke-width="2.5"/>
@@ -61,7 +62,7 @@
       <p>Head to feet in view, standing and lying flat.</p>
     </figure>
     <figure class="setup-bad">
-      <figcaption><span aria-hidden="true">✕</span> Bad setup</figcaption>
+      <figcaption data-i18n><span aria-hidden="true">✕</span> Bad setup</figcaption>
       <svg viewBox="0 0 240 170" role="img" aria-label="Bad setup: the phone is too close, so the head, hands and feet are outside its view">
         <path d="M24 91 L232 8 L232 140 L110 140 Z" fill="#e2231a" fill-opacity="0.2" stroke="#e2231a" stroke-width="1.5" stroke-dasharray="5 4"/>
         <line x1="4" y1="140" x2="236" y2="140" stroke="#fff" stroke-width="2.5"/>
@@ -79,8 +80,8 @@
     </figure>
   </div>
   <ul class="setup-tips">
-    <li>Prop the phone up, or have someone hold it steady, <b>2–3 m away and side-on to you</b>.</li>
-    <li>You need to be <b>fully in view, head to feet</b>, both standing and lying flat.</li>
+    <li data-i18n>Prop the phone up, or have someone hold it steady, <b>2–3 m away and side-on to you</b>.</li>
+    <li data-i18n>You need to be <b>fully in view, head to feet</b>, both standing and lying flat.</li>
     <li>Keep other people out of the picture.</li>
   </ul>
   <div class="setup-cams">
@@ -100,6 +101,7 @@
     <p class="eyebrow">SpartanReferee</p>
     <h1>AI<br>Judge</h1>
     <p class="lede">Counts reps live and checks each one against the exercise's standard. For burpees: chest to ground, both feet off the ground, full hip extension and hands over ears.</p>
+    <select class="langPick" data-lang-picker aria-label="Language"></select>
   </header>
 
   <div class="panel">
@@ -165,7 +167,7 @@
   </div>
   <div class="hud-bottom">
     <canvas id="ocrPeek" class="ocr-peek" aria-hidden="true" hidden></canvas>
-    <p class="reading" aria-live="polite">Reading: <strong id="ocrReading">–</strong></p>
+    <p class="reading" aria-live="polite" data-i18n>Reading: <strong id="ocrReading">–</strong></p>
     <p class="reading-meta" id="ocrMeta"></p>
     <form id="manualForm" class="manual" hidden>
       <label for="manualBib" class="sr">Race number</label>
@@ -225,7 +227,7 @@
       <span id="seekTime" class="seek-time">0:00 / 0:00</span>
     </div>
     <p id="testInfo" class="test-info" hidden></p>
-    <p class="norep-tally">No reps: <strong id="cntNoReps">0</strong></p>
+    <p class="norep-tally" data-i18n>No reps: <strong id="cntNoReps">0</strong></p>
     <button type="button" id="endAttempt" class="btn btn-ghost">End attempt</button>
   </div>
 </section>
@@ -252,7 +254,7 @@
   </div>
   <button type="button" id="nextAthlete" class="btn btn-dark btn-big">Next athlete</button>
   <a id="doneMenu" class="btn btn-ghost btn-big" href="https://mango-glacier-03e711403.4.azurestaticapps.net/scoreboard.html" hidden>Back to menu</a>
-  <p class="done-note" id="doneAutoLine">Ready for the next athlete in <span id="doneAuto">6</span>s</p>
+  <p class="done-note" id="doneAutoLine" data-i18n>Ready for the next athlete in <span id="doneAuto">6</span>s</p>
 </section>
 
 <!-- PER-REP FLASH (whole screen) -->
@@ -381,11 +383,11 @@
         <summary>What this changes</summary>
         <p>One slider for every exercise. The middle is the standard judging for each exercise. Dragging left gives the athlete more benefit of the doubt; dragging right demands a clearer, fuller range. Every rule moves together:</p>
         <ul>
-          <li><b>Burpees:</b> how close the chest must get to the ground, how high the jump, how straight the hips, how high the hands.</li>
-          <li><b>Air squats:</b> how far below the knees the hips must go, and how straight the legs at the top.</li>
-          <li><b>Push-ups:</b> how straight the arms at the start and top, how deep the bend, how straight the body.</li>
-          <li><b>Jumping jacks:</b> how wide the feet go, and how fully they come back together.</li>
-          <li><b>Sit-ups:</b> how flat at the bottom, and how upright at the top.</li>
+          <li data-i18n><b>Burpees:</b> how close the chest must get to the ground, how high the jump, how straight the hips, how high the hands.</li>
+          <li data-i18n><b>Air squats:</b> how far below the knees the hips must go, and how straight the legs at the top.</li>
+          <li data-i18n><b>Push-ups:</b> how straight the arms at the start and top, how deep the bend, how straight the body.</li>
+          <li data-i18n><b>Jumping jacks:</b> how wide the feet go, and how fully they come back together.</li>
+          <li data-i18n><b>Sit-ups:</b> how flat at the bottom, and how upright at the top.</li>
         </ul>
         <p>Each attempt records the strictness it was judged at, and the exact limits used.</p>
       </details>
@@ -481,7 +483,7 @@
     <p id="streamTitle"><strong>Judge a phone's stream</strong></p>
     <label class="field" for="streamUrl"><span>Stream address (from "Streaming - connection details")</span>
       <input id="streamUrl" type="url" inputmode="url" autocomplete="off" spellcheck="false"></label>
-    <p class="status">For the computer running the streaming server: use its <b>localhost</b> address, e.g. http://localhost:8889/live/station1/whep. Start Larix on the phone first. Over the internet, each phone needs the <b>Tailscale</b> app on and connected (same account as this computer) as well as Larix.</p>
+    <p class="status" data-i18n>For the computer running the streaming server: use its <b>localhost</b> address, e.g. http://localhost:8889/live/station1/whep. Start Larix on the phone first. Over the internet, each phone needs the <b>Tailscale</b> app on and connected (same account as this computer) as well as Larix.</p>
     <div class="row">
       <button type="submit" class="btn btn-red">Start judging</button>
       <button type="button" id="streamCancel" class="btn btn-ghost">Cancel</button>

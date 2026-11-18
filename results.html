@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<script src="i18n.js"></script>
 <title>Past results: SpartanReferee</title>
 <meta name="theme-color" content="#0b0b0b">
 <meta name="robots" content="noindex">
@@ -44,10 +45,10 @@
 <header class="top">
   <a class="mark" href="console.html" id="company">Spartan<span>Referee</span></a>
   <nav id="appTabs" class="appTabs" aria-label="Your pages" hidden></nav>
-  <span class="topRight"><span id="who" class="muted"></span></span>
+  <span class="topRight"><select class="langPick" data-lang-picker aria-label="Language"></select><span id="who" class="muted"></span></span>
 </header>
 <main class="page">
-  <section class="intro"><h1>Your <span>results</span></h1><p id="keepNote">Your recordings, athletes and numbers for the last 7 days. Download anything you want to keep: after 7 days it's deleted.</p></section>
+  <section class="intro"><h1 data-i18n>Your <span>results</span></h1><p id="keepNote">Your recordings, athletes and numbers for the last 7 days. Download anything you want to keep: after 7 days it's deleted.</p></section>
 
   <section id="signIn" class="card narrow" hidden>
     <h2>Sign in to your company</h2>
@@ -55,7 +56,7 @@
     <div id="devBtn"></div>
     <p class="error" id="signInError" role="alert" hidden></p>
     <a class="primary linkbtn" id="registerFirst" href="register.html" hidden>Register my company</a>
-    <p class="muted">New to SpartanReferee? <a href="register.html">Register your company</a> first: you sign in as part of it.</p>
+    <p class="muted" data-i18n>New to SpartanReferee? <a href="register.html">Register your company</a> first: you sign in as part of it.</p>
   </section>
   <p class="error" id="error" role="alert" hidden></p>
 

@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<script src="i18n.js"></script>
 <meta name="theme-color" content="#0b0b0b">
 <title>Spartans Cloud Recordings</title>
 <link rel="icon" href="icons/spartanreferee/icon-192.png">
@@ -28,8 +29,8 @@
 <body>
 <main class="hub">
   <div data-account-bar style="display:flex;justify-content:space-between;align-items:center;gap:12px"><a href="./" class="home-link">‹ Home</a></div>
-  <h1 class="brand">Cloud <span>recordings</span></h1>
-  <p id="signInBox" class="empty" hidden>Sign in to see your recordings. <a href="console.html">Sign in</a></p>
+  <h1 class="brand" data-i18n>Cloud <span>recordings</span></h1>
+  <p id="signInBox" class="empty" hidden data-i18n>Sign in to see your recordings. <a href="console.html">Sign in</a></p>
   <p id="error" class="empty" hidden></p>
 
   <div id="main" hidden>
@@ -49,7 +50,7 @@
       <button class="btn btn-red" type="submit">Link a Receiver</button>
     </div></form>
     <div id="newKey" class="empty" hidden>
-      <p style="margin:0"><b>Copy this key now: it won't be shown again.</b> In the Receiver, paste it under <b>Cloud backup</b> on the Setup tab.</p>
+      <p style="margin:0" data-i18n><b>Copy this key now: it won't be shown again.</b> In the Receiver, paste it under <b>Cloud backup</b> on the Setup tab.</p>
       <code id="keyText" class="rec-key"></code>
       <button id="copyKey" class="btn btn-ghost" type="button">Copy key</button>
     </div>

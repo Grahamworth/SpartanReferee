@@ -266,3 +266,7 @@ input[type=datetime-local] { color-scheme: dark; min-height: 44px; }
   .appTabs svg { display: block; }
   body:has(.appTabs:not([hidden])) { padding-bottom: calc(66px + env(safe-area-inset-bottom)); }
 }
+
+/* the language menu (i18n.js fills it), at the top right */
+.langPick { font: inherit; font-size: .9rem; color: var(--text); background: var(--panel); border: 1px solid var(--line); padding: 4px 6px; border-radius: 4px; max-width: 9.5em; }
+html[dir="rtl"] .topRight { margin-left: 0; margin-right: auto; }

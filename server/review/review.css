@@ -372,3 +372,7 @@ header .tabs svg, header .tabs .ts { display: none; }
 }
 .samebox { display: grid; gap: 6px; max-width: 460px; border-top: 1px solid var(--line, #333); padding-top: 10px; }
 .samebox label { display: flex; gap: 8px; align-items: center; }
+
+/* the language menu (i18n.js fills it) */
+.langPick { font: inherit; font-size: .85rem; color: inherit; background: transparent; border: 1px solid currentColor; opacity: .85; padding: 3px 5px; border-radius: 4px; max-width: 9em; }
+.langPick option { color: #000; }

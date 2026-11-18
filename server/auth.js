@@ -33,7 +33,8 @@ function landing(q) {
   const tab = { live: 'live', results: 'results', cameras: 'cameras' }[q.get('tab')] || 'live';
   const num = (v) => { const n = Number(v); return Number.isInteger(n) && n >= 1 && n <= 20 ? n : 1; };
   const n = num(q.get('n')), of = Math.max(n, num(q.get('of')));
-  return `/?tab=${tab}&n=${n}&of=${of}`;
+  const lang = /^[a-z]{2}$/.test(q.get('lang') || '') ? `&lang=${q.get('lang')}` : ''; // the language picked on the website (i18n.js)
+  return `/?tab=${tab}&n=${n}&of=${of}${lang}`;
 }
 /** Sign out: the cookie that replaces this browser's session with nothing */
 const logout = () => `${COOKIE}=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0`;

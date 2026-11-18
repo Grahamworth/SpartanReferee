@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<script src="i18n.js"></script>
 <meta name="theme-color" content="#0b0b0b">
 <title>SpartanReferee Broadcaster</title>
 <link rel="icon" href="icons/spartanreferee/icon-192.png">
@@ -37,15 +38,16 @@
 <header class="top">
   <span class="mark">Spartan<span>Referee</span></span>
   <span class="appName">Broadcaster</span>
-</header>
+  <select class="langPick" data-lang-picker aria-label="Language"></select>
+  </header>
 <main class="page bc">
   <div class="intro">
-    <h1>Film for the <span>judges</span></h1>
+    <h1 data-i18n>Film for the <span>judges</span></h1>
     <p>This phone sends its picture to your SpartanReferee server and, if you like, live to YouTube at the same time.</p>
   </div>
 
   <section class="card" id="notApp" hidden>
-    <p style="margin-top:0"><b>This needs the SpartanReferee Broadcaster app on an Android phone.</b> A web browser can't send video this way.</p>
+    <p style="margin-top:0" data-i18n><b>This needs the SpartanReferee Broadcaster app on an Android phone.</b> A web browser can't send video this way.</p>
     <a class="primary linkbtn" href="https://brave-forest-022879f03.3.azurestaticapps.net/downloads/spartans-broadcaster.apk">Get the Android app</a>
     <p class="note">On an iPhone, use Larix Broadcaster: scan its QR code in the video review.</p>
   </section>
@@ -63,12 +65,12 @@
   </form>
 
   <form class="card" id="ytForm">
-    <h2>YouTube <small>optional</small></h2>
+    <h2 data-i18n>YouTube <small>optional</small></h2>
     <label class="switchline"><input type="checkbox" id="ytOn"> Also stream live to YouTube</label>
     <div id="ytFields">
       <label for="ytKey">YouTube stream key</label>
       <input id="ytKey" type="password" autocomplete="off" placeholder="xxxx-xxxx-xxxx-xxxx-xxxx">
-      <p class="note">In YouTube Studio: <b>Create → Go live → Stream</b>, then copy the <b>Stream key</b>. It's kept only on this phone. Use a different key for each camera. The first time, YouTube can take up to 24 hours to allow live streaming on a channel.</p>
+      <p class="note" data-i18n>In YouTube Studio: <b>Create → Go live → Stream</b>, then copy the <b>Stream key</b>. It's kept only on this phone. Use a different key for each camera. The first time, YouTube can take up to 24 hours to allow live streaming on a channel.</p>
       <a class="ghost guide" style="margin:12px 0 0" href="https://studio.youtube.com/channel/UC/livestreaming" target="_blank" rel="noopener">Open YouTube Studio</a>
     </div>
   </form>
@@ -82,7 +84,7 @@
       <option value="480:1500">480p, 1.5 Mbps (weak signal)</option>
     </select>
     <button class="primary" type="submit" id="goBtn">Open the camera</button>
-    <p class="note">Then tap <b>GO LIVE</b>. Keep the app open with the screen on while filming, with the phone in landscape, on a tripod if you can.</p>
+    <p class="note" data-i18n>Then tap <b>GO LIVE</b>. Keep the app open with the screen on while filming, with the phone in landscape, on a tripod if you can.</p>
   </form>
 </main>
 <div id="scanBox" hidden><p>Point at this camera's QR code</p><video id="scanVideo" playsinline muted></video><button class="ghost" type="button" id="scanClose">Cancel</button></div>
