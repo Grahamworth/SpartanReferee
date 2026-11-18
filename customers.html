@@ -18,7 +18,7 @@
 <body>
 <header class="top">
   <a class="mark" href="./">Spartan<span>Referee</span> admin</a>
-  <span class="topRight"><select class="langPick" data-lang-picker aria-label="Language"></select><a href="console.html">My console</a><a href="review-test/">Test review</a><span id="who" class="muted"></span></span>
+  <span class="topRight"><select class="langPick" data-lang-picker aria-label="Language"></select><a href="home.html">Home</a><a href="console.html">My console</a><a href="review-test/">Test review</a><span id="who" class="muted"></span></span>
 </header>
 <main class="page admin">
   <section id="signIn" class="card narrow" hidden>
@@ -52,6 +52,20 @@
       <p class="error" id="syncError" hidden></p>
       <button class="small" id="syncNow" type="button">Sync now</button>
       <p class="note">Synced from Spartan's race list every 6 hours, when someone opens the console. Referees book an event's cameras from 07:00 to 18:00 local time on its days; admins can book any time.</p>
+    </section>
+
+    <section class="card adminsBox">
+      <h2>Who's refereeing each event</h2>
+      <p class="note">Each referee sees the events they're assigned to on their home page, with the way to book that event's cameras. Being assigned doesn't change who can book: any referee can book any event.</p>
+      <label for="assignEvent">Event</label>
+      <select id="assignEvent"></select>
+      <ul id="assignList" class="adminList"></ul>
+      <form id="addAssign" class="addAdmin">
+        <label for="assignEmail">Assign a referee</label>
+        <div><input id="assignEmail" type="email" list="refereeEmails" autocomplete="off" maxlength="200" placeholder="name@example.com" required><button class="small" type="submit">Assign</button></div>
+        <datalist id="refereeEmails"></datalist>
+      </form>
+      <p class="error" id="assignError" role="alert" hidden></p>
     </section>
 
     <section class="card adminsBox">

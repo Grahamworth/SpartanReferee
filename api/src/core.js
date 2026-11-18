@@ -8,6 +8,7 @@
    POST /api/auth/email {code, verifier} -> { token, user }
    POST /api/auth/microsoft {code, verifier, redirectUri} -> { token, user }
    GET  /api/me                          -> { user, profile, admin, judge }
+   GET  /api/home                        -> a referee's home page: their name and assigned events (assignments.js)
    /api/admin/admins|companies|pricing|customers (admins), /api/companies, /api/servers, /api/recordings: see their files */
 const crypto = require('node:crypto');
 const { createRecordings } = require('./recordings');
@@ -15,6 +16,7 @@ const { createCompanies, createMembership } = require('./companies');
 const { createServers } = require('./servers');
 const { createEvents } = require('./events');
 const { createLearn } = require('./learn');
+const { createAssignments } = require('./assignments');
 
 const CORS = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Authorization, Content-Type, X-Session, X-Device, X-Admin-Key, X-Server-Key', 'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS' };
 
@@ -128,20 +130,28 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
     if (a === 'customers') return adminCustomers(method, b, c, body);
     if (a === 'referees' && !b) return referees(method, body, h);
     if (a === 'events' && b === 'sync') return eventList.adminSync(method);
+    if (a === 'assignments' && !b) return assignments.admin(method, body, h);
     return null;
   }
 
   // who's in the organisation: an admin (as isAdmin decides, by address), or a referee an admin added
   const isAdminEmail = (email) => admins.includes(email) || addedAdmins.has(email) || (!adminKey && !admins.length);
   // the Learning & Competence platform (/api/learn), in its own database; its tables are made or updated on its first request
-  const learn = learnDb ? createLearn({ db: learnDb, session, isAdminEmail, reply }) : null;
-  let learnReady = null;
   const membership = createMembership(store, { isAdminEmail });
+  // who may use it: anyone in the organisation (admins as global admins, referees as learners), with the name they signed in with
+  const learnMember = async (me) => {
+    const m = await membership.companyFor(me); if (!m) return null;
+    return { admin: m.admin, email: m.email, name: String((await store.get('user', me.uid))?.name || '') };
+  };
+  const learn = learnDb ? createLearn({ db: learnDb, session, isAdminEmail, member: learnMember, reply }) : null;
+  let learnReady = null;
   const recordings = createRecordings({ store, signer: blobSigner, now, reply, session, isAdmin, membership });
   // Spartan's events (events.js), synced from Spartan's race list; referees book cameras for one
   // bookingUnits false: one booking for the whole organisation, as before events (older tests)
   const eventList = createEvents({ store, now, reply, ...(eventFetcher ? { fetcher: eventFetcher } : {}) });
   const { servers, adminPricing, adminCustomers, stopCompany } = createServers({ store, now, reply, session, isAdmin, membership, payments, freeBooking: true, events: bookingUnits ? eventList : null, maxRunning: maxRunningServers, hourPrice: serverHourPrice });
+  // which referees are assigned to which events, and each referee's home page
+  const assignments = createAssignments({ store, now, reply, session, isAdmin, isAdminEmail, membership, events: eventList, learnOn: !!learnDb });
   const { companies, adminCompanies, referees } = createCompanies({ store, now, reply, session, isAdmin, putBrand, membership, onBlocked: stopCompany });
 
   async function handle({ method, path, headers = {}, body, query: extraQuery = {} }) {
@@ -171,17 +181,22 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
       if (parts[0] === 'auth' && parts[1] === 'email' && method === 'POST') r = await authEmail(body);
       if (parts[0] === 'auth' && parts[1] === 'microsoft' && method === 'POST') r = await authMicrosoft(body);
       if (parts[0] === 'me' && method === 'GET') r = await me(h);
+      if (parts[0] === 'home' && parts.length === 1) r = await assignments.home(method, h);
       if (parts[0] === 'recordings' && parts.length <= 3) r = await recordings(method, parts[1], parts[2], body, h);
       if (parts[0] === 'servers' && parts.length <= 3) r = await servers(method, parts[1], parts[2], body, h, query);
       // Spartan's events: for anyone in the organisation
       if (parts[0] === 'events' && parts.length === 1) { const me = session(h); r = !me ? reply(401, { error: 'Sign in first' }) : !(await membership.companyFor(me)) ? reply(403, { error: 'Only referees and admins see the events' }) : await eventList.events(method); }
       if (parts[0] === 'learn') {
         if (!learn) r = reply(503, { error: 'The learning platform isn’t set up yet' });
-        else { learnReady = learnReady || learnDb.migrate().catch((e) => { learnReady = null; throw e; }); await learnReady; r = await learn.handle(method, parts, body, h, query); }
+        else {
+          try { learnReady = learnReady || learnDb.migrate().catch((e) => { learnReady = null; throw e; }); await learnReady; r = await learn.handle(method, parts, body, h, query); }
+          catch (e) { if (!e.waking) throw e; r = reply(503, { error: 'The learning platform is waking up after a quiet spell: try again in a minute' }); }
+        }
       }
       if (parts[0] === 'companies' && parts.length <= 3) r = await companies(method, parts[1], parts[2], body, h);
       return r || reply(404, { error: 'not found' });
     } catch (e) {
+      console.error(`${method} /api/${pathOnly}: ${(e && e.stack) || e}`); // into the Functions log, never to the page
       return reply(500, { error: 'Something went wrong – try again' });
     }
   }

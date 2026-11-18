@@ -1098,5 +1098,18 @@
  "That number wasn't seen today. Try another day, or find them in the recording and use Pick athlete.": "Diese Nummer wurde heute nicht gesehen. Versuchen Sie einen anderen Tag oder suchen Sie den Athleten in der Aufnahme und nutzen Sie Athlet wählen.",
  "That number wasn't seen on this day. Try another day, or find them in the recording and use Pick athlete.": "Diese Nummer wurde an diesem Tag nicht gesehen. Versuchen Sie einen anderen Tag oder suchen Sie den Athleten in der Aufnahme und nutzen Sie Athlet wählen.",
  "Booked by {bookedBy}.": "Gebucht von {bookedBy}.",
- "Booked by {bookedBy}, at any time.": "Gebucht von {bookedBy}, jederzeit."
+ "Booked by {bookedBy}, at any time.": "Gebucht von {bookedBy}, jederzeit.",
+ "Your areas": "Ihre Bereiche",
+ "Home: SpartanReferee": "Startseite: SpartanReferee",
+ "Hello,": "Hallo,",
+ "Spartan referee": "Spartan-Schiedsrichter",
+ "Spartan referee and admin": "Spartan-Schiedsrichter und Admin",
+ "Your upcoming events": "Ihre nächsten Events",
+ "No events assigned to you yet. An admin assigns referees to Spartan's events, and they'll show here.": "Ihnen sind noch keine Events zugewiesen. Ein Admin weist Schiedsrichter den Spartan-Events zu, und sie erscheinen dann hier.",
+ "Learning": "Lernen",
+ "Training, the rules and your qualifications.": "Schulung, das Regelwerk und Ihre Qualifikationen.",
+ "Book cameras for an event, practise with training, and see the results.": "Kameras für ein Event buchen, mit dem Training üben und die Ergebnisse ansehen.",
+ "Referees, admins, Spartan's events and who's assigned to each.": "Schiedsrichter, Admins, Spartans Events und wer welchem zugewiesen ist.",
+ "Book cameras": "Kameras buchen",
+ "My home": "Meine Startseite"
 }

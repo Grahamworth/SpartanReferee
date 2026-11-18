@@ -53,7 +53,7 @@ test('SpartanReferee is Microsoft sign-in only: no Google or email buttons on an
   }
 });
 test('every sign-in page offers Sign in with Microsoft, which comes back to the same return page', () => {
-  for (const [html, js] of [['console.html', 'console.js'], ['results.html', 'results.js'], ['customers.html', 'customers.js']]) {
+  for (const [html, js] of [['home.html', 'home.js'], ['console.html', 'console.js'], ['results.html', 'results.js'], ['customers.html', 'customers.js']]) {
     assert.match(read(html), /<div id="msBtn"><\/div>\s*<div id="devBtn">/, html);
     assert.match(read(js), new RegExp(`microsoftButton\\(\\$\\('msBtn'\\), '${html}'`), js);
   }
@@ -67,14 +67,14 @@ test('Sign out is at the top right of every page with an account, from the share
   const base = read('api-base.js');
   assert.ok(base.includes("button.className = 'link signOut'"));
   assert.ok(base.includes("querySelector('header.top, [data-account-bar]')"));
-  for (const f of ['index.html', 'console.html', 'results.html', 'customers.html', 'streaming.html', 'phone.html']) {
+  for (const f of ['index.html', 'home.html', 'console.html', 'results.html', 'customers.html', 'streaming.html', 'phone.html']) {
     const page = read(f);
     assert.match(page, /<header class="top">/, f);
-    const js = { 'console.html': 'console.js', 'results.html': 'results.js', 'customers.html': 'customers.js' }[f];
+    const js = { 'home.html': 'home.js', 'console.html': 'console.js', 'results.html': 'results.js', 'customers.html': 'customers.js' }[f];
     assert.ok(page.includes('src="api-base.js"') || (js && read(js).includes("from './api-base.js'")), `${f} loads api-base.js`);
   }
   assert.match(read('recordings.html'), /data-account-bar/);
-  assert.match(read('index.html'), /data-signin-link>Sign in</, 'the home page\'s Sign in becomes My console');
+  assert.match(read('index.html'), /data-signin-link>Sign in</, 'the home page\'s Sign in becomes My home');
   // and the video review on the server
   assert.match(read('server/review/index.html'), /id="signOut" class="signout" href="logout"/);
 });
@@ -93,7 +93,7 @@ test('the console shows the way to the admin area only to admins', () => {
   assert.ok(read('console.js').includes("show($('adminLink'), !!me.admin)"));
 });
 test('the return page only ever goes back to our own pages', () => {
-  assert.match(read('email-signin-web.js'), /new Set\(\['register\.html', 'console\.html', 'results\.html', 'customers\.html', 'learn\/'\]\)/);
+  assert.match(read('email-signin-web.js'), /new Set\(\['register\.html', 'home\.html', 'console\.html', 'results\.html', 'customers\.html', 'learn\/'\]\)/);
 });
 test('the Broadcaster has no account: it opens straight on its camera page', () => {
   const s = read('scripts/build-broadcaster.sh');

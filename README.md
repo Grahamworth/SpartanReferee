@@ -25,6 +25,14 @@ Referees book cameras for something (`api/src/servers.js`, "units"), and each ha
 
 The events come from Spartan's own race list (`api/src/events.js`): the list its "Find a race" page uses (`api-gate.eks.spartan.com/one/v2/races/upcoming`), with each race's timezone from another of Spartan's services (`api2.spartan.com/api/races/upcoming_past_planned`) where it has it, else from the country (and the longitude in countries with several timezones). Neither is a published API, so the sync can break if Spartan changes them: the last good copy is kept, and the admin page says when it last worked and has **Sync now**. It syncs when the copy is more than 6 hours old and someone opens the console or the event list. An event Spartan stops listing stays until a week after it ends (one of Spartan's lists has been seen to leave out the next few weeks' races). Ask Spartan for permission or an official feed before relying on it.
 
+### Home page, assigned events and learning
+
+Signing in leads to each person's home page (`home.html`, from 19 November 2026; data from `GET /api/home` in `api/src/assignments.js`): their name, the upcoming events they're assigned to (each with **Book cameras**, which opens the console on that event: `console.html?unit=e<event id>`), and the ways to **Learning** (`/learn`) and **Cameras** (the console). Admins also get **Admin**.
+
+Admins assign referees to events on the admin page ("Who's refereeing each event"): anyone on the referees list, or an admin. Being assigned is only for the home page: any referee can still book any event. An assignment stays until it's removed; it stops showing once the event is over.
+
+The learning platform (`/learn`, `api/src/learn`) is open to everyone in the organisation (admins only before 19 November 2026). Someone's first visit makes their record there with just their name and address: an admin's as a global admin, a referee's as a learner with no other role. Anyone taken off the referees list loses it at once too. Apart from those real records, everyone in it is invented. Its database pauses after an hour unused; the first visit after that wakes it, which can take up to a minute (the API tries for about 30 seconds, then asks to try again in a minute).
+
 ### Languages
 
 Every page, the judge, the server's video review and the Broadcaster app come in English, French, German, Dutch, Spanish, Italian, Greek, Croatian, Czech, Polish, Finnish, Swedish, Danish, Arabic (right to left) and Thai, for the World Championships (France, Greece, Croatia, UAE, Finland, Thailand), next year's Euros (Netherlands) and the rest. The language is the browser's, or the one picked in the menu at the top (remembered), and the console opens a server's review in it. The translations were made by Claude, not checked by native speakers yet: check each before an event in that country.

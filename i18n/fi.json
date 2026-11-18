@@ -1118,5 +1118,18 @@
  "That number wasn't seen today. Try another day, or find them in the recording and use Pick athlete.": "Numeroa ei nähty tänään. Kokeile toista päivää tai etsi kilpailija nauhoituksesta ja käytä toimintoa Valitse kilpailija.",
  "That number wasn't seen on this day. Try another day, or find them in the recording and use Pick athlete.": "Numeroa ei nähty tänä päivänä. Kokeile toista päivää tai etsi kilpailija nauhoituksesta ja käytä toimintoa Valitse kilpailija.",
  "Booked by {bookedBy}.": "Varaaja: {bookedBy}.",
- "Booked by {bookedBy}, at any time.": "Varaaja: {bookedBy}, mihin aikaan tahansa."
+ "Booked by {bookedBy}, at any time.": "Varaaja: {bookedBy}, mihin aikaan tahansa.",
+ "Your areas": "Osiosi",
+ "Home: SpartanReferee": "Etusivu: SpartanReferee",
+ "Hello,": "Hei,",
+ "Spartan referee": "Spartan-tuomari",
+ "Spartan referee and admin": "Spartan-tuomari ja ylläpitäjä",
+ "Your upcoming events": "Tulevat tapahtumasi",
+ "No events assigned to you yet. An admin assigns referees to Spartan's events, and they'll show here.": "Sinulle ei ole vielä määritetty tapahtumia. Ylläpitäjä määrittää tuomarit Spartanin tapahtumiin, ja ne näkyvät täällä.",
+ "Learning": "Oppiminen",
+ "Training, the rules and your qualifications.": "Koulutus, säännöt ja pätevyytesi.",
+ "Book cameras for an event, practise with training, and see the results.": "Varaa kamerat tapahtumaan, harjoittele harjoitustilassa ja katso tulokset.",
+ "Referees, admins, Spartan's events and who's assigned to each.": "Tuomarit, ylläpitäjät, Spartanin tapahtumat ja kuka on määritetty mihinkin.",
+ "Book cameras": "Varaa kamerat",
+ "My home": "Oma etusivu"
 }

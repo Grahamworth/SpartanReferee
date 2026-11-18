@@ -9,16 +9,30 @@ const path = require('node:path');
 const MIGRATIONS = path.join(__dirname, 'migrations');
 const SCHEMA = /^[a-z_]{1,32}$/;
 
-function createDb({ server, database, user, password, schema = 'learn', sql = require('mssql') }) {
+/** Azure's "the database isn't available yet" (40613), as it says while a paused database wakes */
+const asleep = (e) => /\b40613\b|not currently available/i.test(`${e && e.number} ${e && e.message} ${e && e.originalError && e.originalError.message}`);
+
+function createDb({ server, database, user, password, schema = 'learn', sql = require('mssql'), wakeTries = 6, wakeEveryMs = 5000 }) {
   if (!SCHEMA.test(schema)) throw new Error('bad schema name');
   const S = `[${schema}]`;
   let pool = null;
-  const connect = () => (pool = pool || new sql.ConnectionPool({
+  const open = () => new sql.ConnectionPool({
     server, database, user, password,
     options: { encrypt: true, trustServerCertificate: false },
     pool: { max: 5, min: 0, idleTimeoutMillis: 30000 },
-    connectionTimeout: 60000, requestTimeout: 30000, // the free database pauses when idle: the first connection wakes it
-  }).connect().catch((e) => { pool = null; throw e; }));
+    connectionTimeout: 60000, requestTimeout: 30000,
+  }).connect();
+  // The free database pauses after an hour unused. The first connection wakes it, and until it's up (usually under a minute)
+  // Azure refuses at once with error 40613: try again every few seconds, for as long as a web request can wait.
+  async function wake() {
+    for (let i = 0; ; i++) {
+      try { return await open(); } catch (e) {
+        if (!asleep(e) || i >= wakeTries) throw asleep(e) ? Object.assign(new Error('The learning platform is waking up'), { waking: true }) : e;
+        await new Promise((r) => setTimeout(r, wakeEveryMs));
+      }
+    }
+  }
+  const connect = () => (pool = pool || wake().catch((e) => { pool = null; throw e; }));
   const text = (q) => q.replace(/\{S\}/g, S);
   const bind = (req, params = {}) => { for (const [k, v] of Object.entries(params)) req.input(k, v === undefined ? null : v); return req; };
   /** rows of a query: query('SELECT * FROM {S}.person WHERE person_id = @id', { id }) */

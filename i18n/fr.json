@@ -1091,5 +1091,18 @@
  "That number wasn't seen today. Try another day, or find them in the recording and use Pick athlete.": "Ce numéro n'a pas été vu aujourd'hui. Essayez un autre jour, ou trouvez l'athlète dans l'enregistrement et utilisez Choisir l'athlète.",
  "That number wasn't seen on this day. Try another day, or find them in the recording and use Pick athlete.": "Ce numéro n'a pas été vu ce jour-là. Essayez un autre jour, ou trouvez l'athlète dans l'enregistrement et utilisez Choisir l'athlète.",
  "Booked by {bookedBy}.": "Réservé par {bookedBy}.",
- "Booked by {bookedBy}, at any time.": "Réservé par {bookedBy}, à n'importe quelle heure."
+ "Booked by {bookedBy}, at any time.": "Réservé par {bookedBy}, à n'importe quelle heure.",
+ "Your areas": "Vos espaces",
+ "Home: SpartanReferee": "Accueil : SpartanReferee",
+ "Hello,": "Bonjour,",
+ "Spartan referee": "Arbitre Spartan",
+ "Spartan referee and admin": "Arbitre Spartan et administrateur",
+ "Your upcoming events": "Vos prochains événements",
+ "No events assigned to you yet. An admin assigns referees to Spartan's events, and they'll show here.": "Aucun événement ne vous est encore attribué. Un administrateur attribue les arbitres aux événements Spartan, et ils apparaîtront ici.",
+ "Learning": "Formation",
+ "Training, the rules and your qualifications.": "La formation, le règlement et vos qualifications.",
+ "Book cameras for an event, practise with training, and see the results.": "Réservez des caméras pour un événement, entraînez-vous et consultez les résultats.",
+ "Referees, admins, Spartan's events and who's assigned to each.": "Les arbitres, les administrateurs, les événements Spartan et qui est attribué à chacun.",
+ "Book cameras": "Réserver des caméras",
+ "My home": "Mon accueil"
 }

@@ -46,3 +46,22 @@ test('a technical admin sees no profiles; a global admin does everything', () =>
   assert.strictEqual(regionsVisible(admin), 'all');
   assert.ok(!can(admin, 'no.such.action'));
 });
+
+test('a paused database: connecting tries again while Azure says it is waking (40613), then says so; other errors go straight through', async () => {
+  const { createDb } = require('../src/learn/db');
+  const fake = (fails, err) => {
+    let tries = 0;
+    class ConnectionPool { connect() { tries++; if (tries <= fails) return Promise.reject(err); return Promise.resolve({ request: () => ({ input() { return this; }, query: async () => ({ recordset: [{ ok: 1 }] }) }), close: async () => {} }); } }
+    return { sql: { ConnectionPool }, tries: () => tries };
+  };
+  const waking = Object.assign(new Error('Database \'learn\' on server is not currently available.'), { number: 40613 });
+  let f = fake(2, waking);
+  assert.deepStrictEqual(await createDb({ sql: f.sql, wakeEveryMs: 1 }).query('SELECT 1'), [{ ok: 1 }]);
+  assert.strictEqual(f.tries(), 3);
+  f = fake(99, waking);
+  await assert.rejects(createDb({ sql: f.sql, wakeEveryMs: 1, wakeTries: 3 }).query('SELECT 1'), (e) => e.waking === true);
+  assert.strictEqual(f.tries(), 4);
+  f = fake(1, new Error('Login failed for user'));
+  await assert.rejects(createDb({ sql: f.sql, wakeEveryMs: 1 }).query('SELECT 1'), /Login failed/);
+  assert.strictEqual(f.tries(), 1);
+});

@@ -1111,5 +1111,18 @@
  "That number wasn't seen today. Try another day, or find them in the recording and use Pick athlete.": "Αυτός ο αριθμός δεν φάνηκε την ημέρα που επιλέξατε. Δοκιμάστε άλλη ημέρα ή βρείτε τον αθλητή στην εγγραφή και πατήστε Επιλογή αθλητή.",
  "That number wasn't seen on this day. Try another day, or find them in the recording and use Pick athlete.": "Αυτός ο αριθμός δεν φάνηκε την ημέρα που επιλέξατε. Δοκιμάστε άλλη ημέρα ή βρείτε τον αθλητή στην εγγραφή και πατήστε Επιλογή αθλητή.",
  "Booked by {bookedBy}.": "Κράτηση από {bookedBy}.",
- "Booked by {bookedBy}, at any time.": "Κράτηση από {bookedBy}, οποιαδήποτε ώρα."
+ "Booked by {bookedBy}, at any time.": "Κράτηση από {bookedBy}, οποιαδήποτε ώρα.",
+ "Your areas": "Οι ενότητές σας",
+ "Home: SpartanReferee": "Αρχική: SpartanReferee",
+ "Hello,": "Γεια σας,",
+ "Spartan referee": "Διαιτητής Spartan",
+ "Spartan referee and admin": "Διαιτητής Spartan και διαχειριστής",
+ "Your upcoming events": "Οι επερχόμενες διοργανώσεις σας",
+ "No events assigned to you yet. An admin assigns referees to Spartan's events, and they'll show here.": "Δεν σας έχουν ανατεθεί ακόμη διοργανώσεις. Ένας διαχειριστής αναθέτει διαιτητές στις διοργανώσεις της Spartan, και θα εμφανίζονται εδώ.",
+ "Learning": "Εκπαίδευση",
+ "Training, the rules and your qualifications.": "Εκπαίδευση, οι κανονισμοί και τα προσόντα σας.",
+ "Book cameras for an event, practise with training, and see the results.": "Κλείστε κάμερες για μια διοργάνωση, εξασκηθείτε με την προπόνηση και δείτε τα αποτελέσματα.",
+ "Referees, admins, Spartan's events and who's assigned to each.": "Διαιτητές, διαχειριστές, οι διοργανώσεις της Spartan και ποιος έχει ανατεθεί στην καθεμία.",
+ "Book cameras": "Κράτηση καμερών",
+ "My home": "Η αρχική μου"
 }

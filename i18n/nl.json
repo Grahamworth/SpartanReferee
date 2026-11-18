@@ -1098,5 +1098,18 @@
  "That number wasn't seen today. Try another day, or find them in the recording and use Pick athlete.": "Dat nummer is vandaag niet gezien. Probeer een andere dag, of zoek de atleet in de opname en gebruik Atleet kiezen.",
  "That number wasn't seen on this day. Try another day, or find them in the recording and use Pick athlete.": "Dat nummer is op deze dag niet gezien. Probeer een andere dag, of zoek de atleet in de opname en gebruik Atleet kiezen.",
  "Booked by {bookedBy}.": "Geboekt door {bookedBy}.",
- "Booked by {bookedBy}, at any time.": "Geboekt door {bookedBy}, op elk moment."
+ "Booked by {bookedBy}, at any time.": "Geboekt door {bookedBy}, op elk moment.",
+ "Your areas": "Jouw onderdelen",
+ "Home: SpartanReferee": "Start: SpartanReferee",
+ "Hello,": "Hallo,",
+ "Spartan referee": "Spartan-scheidsrechter",
+ "Spartan referee and admin": "Spartan-scheidsrechter en beheerder",
+ "Your upcoming events": "Jouw komende evenementen",
+ "No events assigned to you yet. An admin assigns referees to Spartan's events, and they'll show here.": "Er zijn je nog geen evenementen toegewezen. Een beheerder wijst scheidsrechters toe aan Spartan-evenementen, en die verschijnen dan hier.",
+ "Learning": "Leren",
+ "Training, the rules and your qualifications.": "Training, de regels en je kwalificaties.",
+ "Book cameras for an event, practise with training, and see the results.": "Boek camera's voor een evenement, oefen met training en bekijk de resultaten.",
+ "Referees, admins, Spartan's events and who's assigned to each.": "Scheidsrechters, beheerders, de Spartan-evenementen en wie aan elk is toegewezen.",
+ "Book cameras": "Camera's boeken",
+ "My home": "Mijn start"
 }

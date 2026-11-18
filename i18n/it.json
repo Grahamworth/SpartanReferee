@@ -1104,5 +1104,18 @@
  "That number wasn't seen today. Try another day, or find them in the recording and use Pick athlete.": "Questo numero non è stato visto oggi. Prova un altro giorno, oppure trova l'atleta nella registrazione e usa Scegli atleta.",
  "That number wasn't seen on this day. Try another day, or find them in the recording and use Pick athlete.": "Questo numero non è stato visto in questo giorno. Prova un altro giorno, oppure trova l'atleta nella registrazione e usa Scegli atleta.",
  "Booked by {bookedBy}.": "Prenotato da {bookedBy}.",
- "Booked by {bookedBy}, at any time.": "Prenotato da {bookedBy}, a qualsiasi ora."
+ "Booked by {bookedBy}, at any time.": "Prenotato da {bookedBy}, a qualsiasi ora.",
+ "Your areas": "Le tue aree",
+ "Home: SpartanReferee": "Home: SpartanReferee",
+ "Hello,": "Ciao,",
+ "Spartan referee": "Arbitro Spartan",
+ "Spartan referee and admin": "Arbitro Spartan e amministratore",
+ "Your upcoming events": "I tuoi prossimi eventi",
+ "No events assigned to you yet. An admin assigns referees to Spartan's events, and they'll show here.": "Non ti è ancora stato assegnato nessun evento. Un amministratore assegna gli arbitri agli eventi Spartan, e compariranno qui.",
+ "Learning": "Formazione",
+ "Training, the rules and your qualifications.": "La formazione, il regolamento e le tue qualifiche.",
+ "Book cameras for an event, practise with training, and see the results.": "Prenota le telecamere per un evento, esercitati con l'allenamento e guarda i risultati.",
+ "Referees, admins, Spartan's events and who's assigned to each.": "Arbitri, amministratori, gli eventi Spartan e chi è assegnato a ciascuno.",
+ "Book cameras": "Prenota telecamere",
+ "My home": "La mia home"
 }

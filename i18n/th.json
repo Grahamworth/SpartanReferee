@@ -1100,5 +1100,18 @@
  "That number wasn't seen today. Try another day, or find them in the recording and use Pick athlete.": "ไม่พบหมายเลขนั้นวันนี้ ลองวันอื่น หรือหาตัวในวิดีโอแล้วใช้เลือกนักกีฬา",
  "That number wasn't seen on this day. Try another day, or find them in the recording and use Pick athlete.": "ไม่พบหมายเลขนั้นในวันนี้ ลองวันอื่น หรือหาตัวในวิดีโอแล้วใช้เลือกนักกีฬา",
  "Booked by {bookedBy}.": "จองโดย {bookedBy}",
- "Booked by {bookedBy}, at any time.": "จองโดย {bookedBy} (เวลาใดก็ได้)"
+ "Booked by {bookedBy}, at any time.": "จองโดย {bookedBy} (เวลาใดก็ได้)",
+ "Your areas": "ส่วนของคุณ",
+ "Home: SpartanReferee": "หน้าแรก: SpartanReferee",
+ "Hello,": "สวัสดี",
+ "Spartan referee": "กรรมการ Spartan",
+ "Spartan referee and admin": "กรรมการ Spartan และผู้ดูแลระบบ",
+ "Your upcoming events": "งานที่กำลังจะมาถึงของคุณ",
+ "No events assigned to you yet. An admin assigns referees to Spartan's events, and they'll show here.": "ยังไม่มีงานที่มอบหมายให้คุณ ผู้ดูแลระบบจะมอบหมายกรรมการให้กับงานของ Spartan แล้วงานจะแสดงที่นี่",
+ "Learning": "การเรียนรู้",
+ "Training, the rules and your qualifications.": "การฝึกอบรม กติกา และคุณวุฒิของคุณ",
+ "Book cameras for an event, practise with training, and see the results.": "จองกล้องสำหรับงาน ฝึกซ้อมด้วยโหมดฝึก และดูผลลัพธ์",
+ "Referees, admins, Spartan's events and who's assigned to each.": "กรรมการ ผู้ดูแลระบบ งานของ Spartan และผู้ที่ได้รับมอบหมายในแต่ละงาน",
+ "Book cameras": "จองกล้อง",
+ "My home": "หน้าของฉัน"
 }

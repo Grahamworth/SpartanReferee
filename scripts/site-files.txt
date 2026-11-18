@@ -7,6 +7,8 @@ brand.js
 burpee.js
 camera.js
 cones.js
+home.html
+home.js
 console.html
 console.js
 customers.html

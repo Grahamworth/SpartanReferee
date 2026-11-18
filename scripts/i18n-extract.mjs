@@ -15,7 +15,7 @@ export const FILES = [
   'judge.html', 'app.js', 'burpee.js', 'exercises.js', 'multi.js', 'cones.js', 'judge-gate.js', 'readers.js',
   'broadcaster.html', 'camera.js', 'phone.html', 'apptabs.js', 'apptabs-core.js',
   // the website
-  'index.html', 'console.html', 'console.js', 'booking.js', 'results.html', 'results.js',
+  'index.html', 'home.html', 'home.js', 'console.html', 'console.js', 'booking.js', 'results.html', 'results.js',
   'streaming.html', 'email-return.html', 'email-signin-web.js', 'email-signin-core.js', 'api-base.js', 'recordings.html', 'recordings.js',
 ];
 

@@ -1,7 +1,8 @@
 'use strict';
 /* The Learning & Competence platform's API, under /api/learn (the design doc: "Referee Learning Platform: proposed design").
-   Who's asking: the site's own sign-in (a Microsoft account), tied to a person by person_login. For the prototype only admins
-   get in (no real referee data, NFR-04): an admin's first visit makes their own person record and gives them global_admin.
+   Who's asking: the site's own sign-in (a Microsoft account), tied to a person by person_login. Anyone in the organisation gets in
+   (from 19 November 2026; admins only before): their first visit makes their own person record, holding just their name and address,
+   with global_admin for an admin and no role (a learner) for a referee. Everyone else in it is invented (NFR-04).
    An admin can view the platform as any demo person (header X-Learn-As: <person id>): every check then uses that person's
    roles, and the audit log records both.
 
@@ -30,7 +31,12 @@ const personView = (p) => p && ({
 });
 const grantView = (g) => ({ id: g.grant_id, role: g.role, programmeId: g.programme_id || '', regionId: g.region_id || '', grantedAt: g.granted_at });
 
-function createLearn({ db, session, isAdminEmail = () => false, reply }) {
+/**
+ * member(session) -> { admin, email, name } for someone in the organisation (an admin, or a referee an admin added), else null.
+ * Without it (the SQL tests), only admins come in, by their session's address.
+ */
+function createLearn({ db, session, isAdminEmail = () => false, member = null, reply }) {
+  const memberOf = member || (async (me) => { const email = String(me.email || '').toLowerCase(); return email && isAdminEmail(email) ? { admin: true, email, name: String(me.name || '') } : null; });
   // ------------------------------------------------------------------ who's asking
   const loginOf = (me) => ({ provider: String(me.uid).startsWith('m_') ? 'microsoft' : 'dev', subject: String(me.uid) });
   async function grantsOf(personId) { return db.query('SELECT * FROM {S}.role_grant WHERE person_id = @id', { id: personId }); }
@@ -47,17 +53,19 @@ function createLearn({ db, session, isAdminEmail = () => false, reply }) {
     if (!me) return { error: reply(401, { error: 'Sign in first' }) };
     const { provider, subject } = loginOf(me);
     let real = (await db.query('SELECT p.* FROM {S}.person_login l JOIN {S}.person p ON p.person_id = l.person_id WHERE l.provider = @provider AND l.subject = @subject', { provider, subject }))[0];
-    const email = String(me.email || '').toLowerCase();
+    // only the organisation's people, asked every time, so a referee taken off the list loses this too
+    const m = await memberOf(me);
+    if (!m) return { error: reply(403, { error: 'The learning platform is for Spartan\'s referees: ask an admin to add the address you sign in with' }) };
+    const email = m.email;
     if (!real) {
-      // the prototype is for admins: their own record is made the first time they come
-      if (!email || !isAdminEmail(email)) return { error: reply(403, { error: 'The learning platform is a prototype, open to admins only for now' }) };
+      // their own record is made the first time they come: an admin as a global admin, a referee as a learner
       const id = uuid();
       real = await db.tx(async (q) => {
         await q(`INSERT INTO {S}.person (person_id, public_id, legal_name, email, locale, synthetic) VALUES (@id, @pub, @name, @email, 'en', 0)`,
-          { id, pub: await newPublicId(q), name: text(me.name, 120) || email, email });
+          { id, pub: await newPublicId(q), name: text(m.name, 120) || email, email });
         await q('INSERT INTO {S}.person_login (provider, subject, person_id) VALUES (@provider, @subject, @id)', { provider, subject, id });
-        await q(`INSERT INTO {S}.role_grant (grant_id, person_id, role) VALUES (@g, @id, 'global_admin')`, { g: uuid(), id });
-        await audit(q, { realId: id }, 'person.first-sign-in', 'person', id, { email, role: 'global_admin' });
+        if (m.admin) await q(`INSERT INTO {S}.role_grant (grant_id, person_id, role) VALUES (@g, @id, 'global_admin')`, { g: uuid(), id });
+        await audit(q, { realId: id }, 'person.first-sign-in', 'person', id, { email, role: m.admin ? 'global_admin' : 'learner' });
         return (await q('SELECT * FROM {S}.person WHERE person_id = @id', { id }))[0];
       });
     }

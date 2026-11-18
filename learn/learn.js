@@ -145,7 +145,8 @@ async function enter() {
   try { await loadMe(); }
   catch (e) {
     if (e.status === 401) { signOut(); return start(); }
-    $('closedText').textContent = e.message; show($('closed'), true); return;
+    if (e.status === 403) { $('closedText').textContent = e.message; show($('closed'), true); return; }
+    fail(e.message); return; // e.g. the database waking up: try again in a minute
   }
   ({ regions } = await call('regions'));
   addEventListener('hashchange', draw);

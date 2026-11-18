@@ -1154,5 +1154,18 @@
  "That number wasn't seen today. Try another day, or find them in the recording and use Pick athlete.": "Toto číslo nebylo dnes vidět. Zkuste jiný den, nebo závodníka najděte v záznamu a použijte Vybrat závodníka.",
  "That number wasn't seen on this day. Try another day, or find them in the recording and use Pick athlete.": "Toto číslo nebylo v tento den vidět. Zkuste jiný den, nebo závodníka najděte v záznamu a použijte Vybrat závodníka.",
  "Booked by {bookedBy}.": "Rezervace: {bookedBy}.",
- "Booked by {bookedBy}, at any time.": "Rezervace: {bookedBy}, kdykoli."
+ "Booked by {bookedBy}, at any time.": "Rezervace: {bookedBy}, kdykoli.",
+ "Your areas": "Vaše oblasti",
+ "Home: SpartanReferee": "Domů: SpartanReferee",
+ "Hello,": "Dobrý den,",
+ "Spartan referee": "Rozhodčí Spartan",
+ "Spartan referee and admin": "Rozhodčí Spartan a správce",
+ "Your upcoming events": "Vaše nadcházející akce",
+ "No events assigned to you yet. An admin assigns referees to Spartan's events, and they'll show here.": "Zatím vám nebyla přidělena žádná akce. Správce přiděluje rozhodčí k akcím Spartan a zobrazí se zde.",
+ "Learning": "Vzdělávání",
+ "Training, the rules and your qualifications.": "Školení, pravidla a vaše kvalifikace.",
+ "Book cameras for an event, practise with training, and see the results.": "Rezervujte kamery na akci, procvičujte se v tréninku a prohlédněte si výsledky.",
+ "Referees, admins, Spartan's events and who's assigned to each.": "Rozhodčí, správci, akce Spartan a kdo je ke které přidělen.",
+ "Book cameras": "Rezervovat kamery",
+ "My home": "Moje stránka"
 }

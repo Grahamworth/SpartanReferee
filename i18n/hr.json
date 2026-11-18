@@ -1138,5 +1138,18 @@
  "That number wasn't seen today. Try another day, or find them in the recording and use Pick athlete.": "Taj broj nije viđen danas. Pokušajte s drugim danom ili ga pronađite u snimci i upotrijebite Odaberi natjecatelja.",
  "That number wasn't seen on this day. Try another day, or find them in the recording and use Pick athlete.": "Taj broj nije viđen tog dana. Pokušajte s drugim danom ili ga pronađite u snimci i upotrijebite Odaberi natjecatelja.",
  "Booked by {bookedBy}.": "Rezervacija: {bookedBy}.",
- "Booked by {bookedBy}, at any time.": "Rezervacija: {bookedBy}, u bilo koje vrijeme."
+ "Booked by {bookedBy}, at any time.": "Rezervacija: {bookedBy}, u bilo koje vrijeme.",
+ "Your areas": "Vaša područja",
+ "Home: SpartanReferee": "Početna: SpartanReferee",
+ "Hello,": "Pozdrav,",
+ "Spartan referee": "Spartan sudac",
+ "Spartan referee and admin": "Spartan sudac i administrator",
+ "Your upcoming events": "Vaši nadolazeći događaji",
+ "No events assigned to you yet. An admin assigns referees to Spartan's events, and they'll show here.": "Još vam nije dodijeljen nijedan događaj. Administrator dodjeljuje suce Spartanovim događajima i oni će se pojaviti ovdje.",
+ "Learning": "Učenje",
+ "Training, the rules and your qualifications.": "Obuka, pravila i vaše kvalifikacije.",
+ "Book cameras for an event, practise with training, and see the results.": "Rezervirajte kamere za događaj, vježbajte uz trening i pogledajte rezultate.",
+ "Referees, admins, Spartan's events and who's assigned to each.": "Suci, administratori, Spartanovi događaji i tko je dodijeljen kojem.",
+ "Book cameras": "Rezerviraj kamere",
+ "My home": "Moja početna"
 }

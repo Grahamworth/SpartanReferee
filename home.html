@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<script src="i18n.js"></script>
+<title>Home: SpartanReferee</title>
+<meta name="theme-color" content="#0b0b0b">
+<link rel="icon" href="icons/spartanreferee/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;1,800&family=Barlow:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="headjudge.css">
+<style>
+  .hello h1 { font-size: clamp(2.2rem, 7vw, 3.6rem); line-height: 1; font-style: italic; margin: 0; overflow-wrap: anywhere; }
+  .hello h1 span { color: var(--primary-text); }
+  .hello p { margin: 8px 0 26px; }
+  .events { list-style: none; margin: 0; padding: 0; }
+  .events li { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; padding: 14px 0; border-top: 1px solid var(--line); }
+  .events li:first-child { border-top: 0; padding-top: 4px; }
+  .events b { display: block; font-size: 1.1rem; overflow-wrap: anywhere; }
+  .events small { color: var(--muted); }
+  .events .now { display: inline-block; margin-left: 8px; padding: 1px 8px; font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; background: var(--primary); color: var(--on-primary); vertical-align: middle; }
+  .events a.book { flex: none; padding: 9px 16px; font-weight: 700; text-decoration: none; border: 2px solid var(--primary); color: var(--text); }
+  .events a.book:hover { background: var(--primary); color: var(--on-primary); }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin: 0 0 18px; }
+  .tile { display: flex; gap: 16px; align-items: flex-start; background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--primary); padding: 20px; color: var(--text); text-decoration: none; }
+  .tile:hover { border-color: var(--primary-text); }
+  .tile svg { flex: none; width: 34px; height: 34px; fill: none; stroke: var(--primary-text); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .tile h2 { margin: 0 0 4px; font-size: 1.5rem; }
+  .tile p { margin: 0; color: var(--muted); }
+</style>
+<script type="module" src="home.js"></script>
+</head>
+<body>
+<!-- A referee's home page, after signing in: their name, the events they're assigned to, and the ways to the learning platform and the
+     cameras. Admins also get the way to the admin page. Its data is /api/home (api/src/assignments.js). -->
+<header class="top">
+  <a class="mark" href="./">Spartan<span>Referee</span></a>
+  <span class="topRight"><select class="langPick" data-lang-picker aria-label="Language"></select><span id="who" class="muted"></span></span>
+</header>
+<main class="page">
+  <section id="signIn" class="card narrow" hidden>
+    <h2>Sign in</h2>
+    <div id="msBtn"></div>
+    <div id="devBtn"></div>
+    <p class="error" id="signInError" role="alert" hidden></p>
+  </section>
+  <p class="error" id="error" role="alert" hidden></p>
+
+  <div id="content" hidden>
+    <section class="hello">
+      <h1>Hello, <span id="name"></span></h1>
+      <p class="muted" id="roleLine">Spartan referee</p>
+    </section>
+
+    <section class="card">
+      <h2>Your upcoming events</h2>
+      <ul class="events" id="eventList"></ul>
+      <p class="note" id="noEvents" hidden>No events assigned to you yet. An admin assigns referees to Spartan's events, and they'll show here.</p>
+    </section>
+
+    <nav class="tiles" aria-label="Your areas">
+      <a class="tile" id="learnTile" href="learn/" hidden>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M7 9v5c0 1.5 2.2 3 5 3s5-1.5 5-3V9"/><path d="M21 7v6"/></svg>
+        <span><h2>Learning</h2><p>Training, the rules and your qualifications.</p></span>
+      </a>
+      <a class="tile" href="console.html">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="13" height="10" rx="1.5"/><path d="M16 11l5-3v8l-5-3"/></svg>
+        <span><h2>Cameras</h2><p>Book cameras for an event, practise with training, and see the results.</p></span>
+      </a>
+      <a class="tile" id="adminTile" href="customers.html" hidden>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6"/></svg>
+        <span><h2>Admin</h2><p>Referees, admins, Spartan's events and who's assigned to each.</p></span>
+      </a>
+    </nav>
+  </div>
+</main>
+</body>
+</html>

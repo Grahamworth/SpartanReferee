@@ -25,7 +25,7 @@ export async function call(path, { method = 'GET', body, admin } = {}) {
     r = await fetch(`${API}/${path}`, { method, headers, body: body === undefined ? undefined : JSON.stringify(body) });
   }
   let data = null; try { data = await r.json(); } catch { /* empty */ }
-  if (!r.ok) throw new Error((data && data.error) || `Couldn't reach the server (${r.status})`);
+  if (!r.ok) { const e = new Error((data && data.error) || `Couldn't reach the server (${r.status})`); e.status = r.status; throw e; }
   return data;
 }
 
@@ -55,12 +55,12 @@ export async function devSignInButton(el, onDone, onError) {
 }
 
 // ---------------------------------------------------------------- Sign out, at the top right of every page while you're signed in
-// Any page with a SpartanReferee header gets it just by loading this file. A "Sign in" link there (data-signin-link) becomes "My console".
+// Any page with a SpartanReferee header gets it just by loading this file. A "Sign in" link there (data-signin-link) becomes "My home".
 export function drawSignOut() {
   const top = typeof document !== 'undefined' && document.querySelector('header.top, [data-account-bar]');
   if (!top) return;
   const on = signedIn();
-  for (const a of document.querySelectorAll('[data-signin-link]')) a.textContent = on ? 'My console' : 'Sign in';
+  for (const a of document.querySelectorAll('[data-signin-link]')) a.textContent = on ? 'My home' : 'Sign in';
   let right = top.querySelector('.topRight'), button = top.querySelector('.signOut');
   if (!on) { if (button) button.remove(); return; }
   if (button) return;

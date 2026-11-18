@@ -12,7 +12,7 @@ test('the home page is SpartanReferee\'s, and leads to signing in, not registeri
   const home = read('index.html');
   assert.match(home, /<title>SpartanReferee/);
   assert.ok(!hrefs(home).includes('register.html'));
-  assert.ok(hrefs(home).includes('console.html'));
+  assert.ok(hrefs(home).includes('home.html'), 'signing in leads to the referee home page');
   assert.ok(hrefs(home).includes(`${SPARTANS}/`), 'and on to the Spartans site');
   assert.doesNotMatch(home, /hub\.js|manifest/, 'with none of the Spartans app in it');
 });
@@ -47,4 +47,19 @@ test('the Broadcaster has its own SpartanReferee page, with no way back to the S
   assert.match(read('scripts/build-broadcaster.sh'), /cp "\$SRC\/broadcaster\.html" "\$BUILD\/www\/index\.html"/);
   assert.match(page, /headjudge\.css/);
   for (const gone of ['app.html', 'home-link', 'styles.css', 'streaming.html', 'Setup guide']) assert.ok(!page.includes(gone), gone);
+});
+test('a referee\'s home page: their name, their events (each with Book cameras), and the ways to learning, cameras and (admins) admin', () => {
+  const page = read('home.html'), js = read('home.js');
+  assert.match(page, /<h1>Hello, <span id="name"><\/span><\/h1>/);
+  assert.match(page, /<h2>Your upcoming events<\/h2>/);
+  assert.match(page, /id="learnTile" href="learn\/" hidden/);
+  assert.match(page, /<a class="tile" href="console.html">/);
+  assert.match(page, /id="adminTile" href="customers.html" hidden/);
+  assert.ok(js.includes("call('home')"));
+  assert.ok(js.includes('href="console.html?unit=${encodeURIComponent(e.unit)}"'), 'Book cameras opens the console on that event');
+  assert.ok(js.includes("show($('adminTile'), !!h.admin)"));
+  // the console takes the event it's given, and leads back home; so does the learning platform's logo
+  assert.ok(read('console.js').includes("new URLSearchParams(location.search).get('unit')"));
+  assert.match(read('console.html'), /<a href="home.html">Home<\/a>/);
+  assert.match(read('learn/index.html'), /<a class="mark" href="..\/home.html">/);
 });

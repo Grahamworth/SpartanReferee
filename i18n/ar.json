@@ -1180,5 +1180,18 @@
  "That number wasn't seen today. Try another day, or find them in the recording and use Pick athlete.": "لم يُرَ هذا الرقم اليوم. جرّب يومًا آخر، أو ابحث عنه في التسجيل واستخدم اختيار رياضي.",
  "That number wasn't seen on this day. Try another day, or find them in the recording and use Pick athlete.": "لم يُرَ هذا الرقم في هذا اليوم. جرّب يومًا آخر، أو ابحث عنه في التسجيل واستخدم اختيار رياضي.",
  "Booked by {bookedBy}.": "حجزه {bookedBy}.",
- "Booked by {bookedBy}, at any time.": "حجزه {bookedBy}، في أي وقت."
+ "Booked by {bookedBy}, at any time.": "حجزه {bookedBy}، في أي وقت.",
+ "Your areas": "أقسامك",
+ "Home: SpartanReferee": "الرئيسية: SpartanReferee",
+ "Hello,": "مرحبًا،",
+ "Spartan referee": "حكم Spartan",
+ "Spartan referee and admin": "حكم Spartan ومسؤول",
+ "Your upcoming events": "فعالياتك القادمة",
+ "No events assigned to you yet. An admin assigns referees to Spartan's events, and they'll show here.": "لم تُسند إليك أي فعاليات بعد. يُسند المسؤول الحكام إلى فعاليات Spartan، وستظهر هنا.",
+ "Learning": "التعلّم",
+ "Training, the rules and your qualifications.": "التدريب والقواعد ومؤهلاتك.",
+ "Book cameras for an event, practise with training, and see the results.": "احجز الكاميرات لفعالية، وتدرّب، واطّلع على النتائج.",
+ "Referees, admins, Spartan's events and who's assigned to each.": "الحكام والمسؤولون وفعاليات Spartan ومن أُسند إلى كل منها.",
+ "Book cameras": "احجز الكاميرات",
+ "My home": "صفحتي"
 }

@@ -4,7 +4,7 @@ import { call } from './api-base.js';
 import { randomText, challengeFor, signInAddress, readReturn } from './email-signin-core.js';
 
 const PENDING = 'hj_web_signin', TOKEN = 'sp_token';
-const BACK_TO = new Set(['register.html', 'console.html', 'results.html', 'customers.html', 'learn/']);
+const BACK_TO = new Set(['register.html', 'home.html', 'console.html', 'results.html', 'customers.html', 'learn/']);
 const safeBack = (page) => (BACK_TO.has(page) ? page : './');
 
 // Off to Microsoft's page, remembering (in this tab only) what's needed to finish when it comes back.

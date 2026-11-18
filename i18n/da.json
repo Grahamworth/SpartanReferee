@@ -1106,5 +1106,18 @@
  "That number wasn't seen today. Try another day, or find them in the recording and use Pick athlete.": "Det nummer blev ikke set i dag. Prøv en anden dag, eller find atleten i optagelsen, og brug Vælg atlet.",
  "That number wasn't seen on this day. Try another day, or find them in the recording and use Pick athlete.": "Det nummer blev ikke set denne dag. Prøv en anden dag, eller find atleten i optagelsen, og brug Vælg atlet.",
  "Booked by {bookedBy}.": "Booket af {bookedBy}.",
- "Booked by {bookedBy}, at any time.": "Booket af {bookedBy}, når som helst."
+ "Booked by {bookedBy}, at any time.": "Booket af {bookedBy}, når som helst.",
+ "Your areas": "Dine områder",
+ "Home: SpartanReferee": "Forside: SpartanReferee",
+ "Hello,": "Hej,",
+ "Spartan referee": "Spartan-dommer",
+ "Spartan referee and admin": "Spartan-dommer og administrator",
+ "Your upcoming events": "Dine kommende events",
+ "No events assigned to you yet. An admin assigns referees to Spartan's events, and they'll show here.": "Du er ikke tildelt nogen events endnu. En administrator tildeler dommere til Spartans events, og de vises her.",
+ "Learning": "Læring",
+ "Training, the rules and your qualifications.": "Træning, reglerne og dine kvalifikationer.",
+ "Book cameras for an event, practise with training, and see the results.": "Book kameraer til et event, øv dig med træning, og se resultaterne.",
+ "Referees, admins, Spartan's events and who's assigned to each.": "Dommere, administratorer, Spartans events og hvem der er tildelt hvert.",
+ "Book cameras": "Book kameraer",
+ "My home": "Min forside"
 }

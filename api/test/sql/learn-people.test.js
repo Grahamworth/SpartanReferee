@@ -80,5 +80,23 @@ test('a possible duplicate is flagged for review, never merged; the audit log sa
   for (const a of ['person.first-sign-in', 'person.create', 'role.grant', 'person.edit', 'duplicate.decide']) assert.ok(actions.includes(a), a);
   const asLearner = events.find((e) => e.action === 'person.edit' && e.summary.after.locale === 'fr');
   assert.ok(asLearner, 'the learner\'s own edit');
-  assert.strictEqual(asLearner.actingAs, 'Anna Referee'); assert.strictEqual(asLearner.actor, 'boss@example.com', 'the admin who was viewing as them');
+  assert.strictEqual(asLearner.actingAs, 'Anna Referee'); assert.strictEqual(asLearner.actor, 'boss', 'the admin who was viewing as them, by the name they signed in with');
+});
+
+test('a referee on the list gets in as a learner, named as they signed in; taken off the list, they can\'t any more', { skip }, async () => {
+  const boss = await login('boss');
+  assert.strictEqual((await call('POST', 'admin/referees', boss, { email: 'rita@example.com' })).status, 200);
+  const rita = await login('rita');
+  const r = await call('GET', 'learn/me', rita);
+  assert.strictEqual(r.status, 200, JSON.stringify(r.body));
+  assert.strictEqual(r.body.person.legalName, 'rita');
+  assert.strictEqual(r.body.person.synthetic, false);
+  assert.deepStrictEqual(r.body.grants, [], 'a learner: no roles');
+  assert.deepStrictEqual(r.body.viewAs, []);
+  assert.strictEqual((await call('GET', 'learn/people', rita)).status, 403, 'and only their own profile');
+  assert.strictEqual((await call('GET', `learn/people/${r.body.person.id}`, rita)).status, 200);
+  const first = (await call('GET', 'learn/audit', boss)).body.events.find((e) => e.action === 'person.first-sign-in' && e.entityId.toLowerCase() === r.body.person.id.toLowerCase());
+  assert.strictEqual(first.summary.role, 'learner');
+  await call('POST', 'admin/referees', boss, { email: 'rita@example.com', remove: true });
+  assert.strictEqual((await call('GET', 'learn/me', rita)).status, 403);
 });

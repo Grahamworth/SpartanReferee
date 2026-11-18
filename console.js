@@ -373,6 +373,9 @@ async function enter() {
   for (const el of document.querySelectorAll('.coName')) el.textContent = company.name;
   drawTracked($('trackedList'));
   await cameBackFromStripe();
+  // the home page's "Book cameras" for one of your events: console.html?unit=e<event id>
+  const picked = new URLSearchParams(location.search).get('unit');
+  if (picked && /^[a-z][\w-]{1,60}$/.test(picked)) { remember(picked); unit = picked; const q = new URLSearchParams(location.search); q.delete('unit'); history.replaceState(null, '', location.pathname + (q.size ? `?${q}` : '') + location.hash); }
   await loadUnits();
   await refresh();
   // the video review's Live, Results and Cameras tabs, and its server switcher, come through here: ?go=live&n=2

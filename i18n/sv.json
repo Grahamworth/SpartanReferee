@@ -1103,5 +1103,18 @@
  "That number wasn't seen today. Try another day, or find them in the recording and use Pick athlete.": "Det numret syntes inte idag. Prova en annan dag, eller hitta atleten i inspelningen och använd Välj atlet.",
  "That number wasn't seen on this day. Try another day, or find them in the recording and use Pick athlete.": "Det numret syntes inte den här dagen. Prova en annan dag, eller hitta atleten i inspelningen och använd Välj atlet.",
  "Booked by {bookedBy}.": "Bokad av {bookedBy}.",
- "Booked by {bookedBy}, at any time.": "Bokad av {bookedBy}, när som helst."
+ "Booked by {bookedBy}, at any time.": "Bokad av {bookedBy}, när som helst.",
+ "Your areas": "Dina delar",
+ "Home: SpartanReferee": "Start: SpartanReferee",
+ "Hello,": "Hej,",
+ "Spartan referee": "Spartan-domare",
+ "Spartan referee and admin": "Spartan-domare och administratör",
+ "Your upcoming events": "Dina kommande evenemang",
+ "No events assigned to you yet. An admin assigns referees to Spartan's events, and they'll show here.": "Du har inte tilldelats några evenemang än. En administratör tilldelar domare till Spartans evenemang, och de visas här.",
+ "Learning": "Utbildning",
+ "Training, the rules and your qualifications.": "Utbildning, regelverket och dina behörigheter.",
+ "Book cameras for an event, practise with training, and see the results.": "Boka kameror till ett evenemang, öva med träning och se resultaten.",
+ "Referees, admins, Spartan's events and who's assigned to each.": "Domare, administratörer, Spartans evenemang och vem som är tilldelad vilket.",
+ "Book cameras": "Boka kameror",
+ "My home": "Min startsida"
 }
