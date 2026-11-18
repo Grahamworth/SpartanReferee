@@ -35,6 +35,21 @@ test('a whole text is swapped, a text with slots keeps what was in them, and num
   assert.equal(I.translate(null, 'en', 'Reps {count}', { count: 2 }), 'Reps 2', 'English fills its slots too');
 });
 
+test('a slot may be empty, and what a slot holds is translated when it is a text of its own (or matches one)', () => {
+  const c = I.compile({ '{n} athlete{x}': { one: '{n} atleta', other: '{n} atleti' }, 'Camera {n}': 'Telecamera {n}', 'Watching {x}': 'Guardo {x}' });
+  assert.equal(I.translate(c, 'it', '1 athlete'), '1 atleta');
+  assert.equal(I.translate(c, 'it', '4 athletes'), '4 atleti');
+  assert.equal(I.translate(c, 'it', 'Watching Camera 2'), 'Guardo Telecamera 2', 'a slot holding "Camera 2" is itself a pattern');
+});
+
+test('a short text with slots can\'t take over a longer sentence it happens to fit', () => {
+  const c = I.compile({ '{reps} rep{x}{x2}': { one: '{reps} ripetizione', other: '{reps} ripetizioni' }, 'No rep. {x}': 'No rep. {x}', 'Chest to the ground': 'Petto a terra', '· {noReps} no rep{x}': '· no rep: {noReps}', '{noReps} no rep{x}{x2}': 'no rep: {noReps}{x2}' });
+  assert.equal(I.translate(c, 'it', 'No rep. Chest to the ground'), 'No rep. Petto a terra');
+  assert.equal(I.translate(c, 'it', '5 reps'), '5 ripetizioni', 'the "s" goes in the first of two slots side by side');
+  assert.equal(I.translate(c, 'it', '1 rep'), '1 ripetizione');
+  assert.equal(I.translate(c, 'it', '· 2 no reps'), '· no rep: 2', 'the one with more words outside its slots wins');
+});
+
 test('plurals follow the language\'s own rules', () => {
   const c = I.compile({ '{n} reps': { one: '{n} powtórzenie', few: '{n} powtórzenia', many: '{n} powtórzeń', other: '{n} powtórzenia' } });
   assert.equal(I.translate(c, 'pl', '1 reps'), '1 powtórzenie');

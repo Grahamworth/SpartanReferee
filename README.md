@@ -6,6 +6,20 @@ Sign-in is **Microsoft only** (from 18 November 2026): the website offers no Goo
 
 Its look (from 18 November 2026) is Spartan's: the name SpartanReferee on every page, red `#e2231a` on black, and the Spartans helmet (white on a red disc) as its icon, drawn by `node scripts/make-icons.cjs icons/spartanreferee`. A company's own logo and colours still replace it on its pages, as before. The Broadcaster app is "SpartanReferee Broadcaster" (`com.vdaso.spartanreferee.broadcast`), so it installs beside HeadJudge's rather than replacing it. Code names (`headjudge.css`, `HeadJudgeBrand`, `headjudge-server.tar.gz`, the server's `headjudge` services) are unchanged.
 
+### Languages
+
+Every page, the judge, the server's video review and the Broadcaster app come in English, French, German, Dutch, Spanish, Italian, Greek, Croatian, Czech, Polish, Finnish, Swedish, Danish, Arabic (right to left) and Thai, for the World Championships (France, Greece, Croatia, UAE, Finland, Thailand), next year's Euros (Netherlands) and the rest. The language is the browser's, or the one picked in the menu at the top (remembered), and the console opens a server's review in it. The translations were made by Claude, not checked by native speakers yet: check each before an event in that country.
+
+How it works: pages stay written in English, and `i18n.js` translates what's on screen as it appears, from `i18n/<code>.json`, keyed by the English text. Results, no-rep reasons and what the judge sends the server stay English; what's spoken and drawn on the review's video is translated. The recorded evidence video's caption stays English. After changing any text people see:
+
+```bash
+node scripts/i18n-mark.mjs      # a new sentence with a link or bold words in it is marked to translate whole
+node scripts/i18n-extract.mjs   # i18n/en.json, the list to translate (a test fails until it's up to date)
+node scripts/i18n-extract.mjs --check   # what each language is missing; node scripts/i18n-check.mjs <code> for one
+```
+
+A text with no translation shows in English, so nothing breaks while a language catches up.
+
 What follows was written for HeadJudge, before the rename.
 
 ## HeadJudge, as copied

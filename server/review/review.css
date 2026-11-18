@@ -376,3 +376,6 @@ header .tabs svg, header .tabs .ts { display: none; }
 /* the language menu (i18n.js fills it) */
 .langPick { font: inherit; font-size: .85rem; color: inherit; background: transparent; border: 1px solid currentColor; opacity: .85; padding: 3px 5px; border-radius: 4px; max-width: 9em; }
 .langPick option { color: #000; }
+
+/* Arabic and Thai (i18n.js sets <html lang>): no slanted lettering or added letter spacing, which break Arabic's joined letters */
+html[lang="ar"] *, html[lang="th"] * { font-style: normal !important; letter-spacing: 0 !important; }

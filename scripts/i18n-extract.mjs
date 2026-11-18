@@ -32,7 +32,7 @@ export function wordy(s) {
   if (/^[\w.-]+\.(js|css|html|json|png|jpg|svg|onnx|task|wasm|mp4|apk|exe|zip|csv)$/i.test(t)) return false;
   if (/^[a-z][a-zA-Z0-9]*$/.test(t) && !/^[a-z]{2,}$/.test(t)) return false; // camelCase ids
   if (/^[a-z0-9_-]+$/.test(t) && /[_-]/.test(t)) return false; // kebab/snake ids
-  if (/[{};]\s*$|^\s*[.#][\w-]+\s*[{,]|:\s*(var\(|#[0-9a-f]{3}|\d+px)/i.test(t)) return false; // CSS
+  if (/[{;]\s*$|(^|[^\w])\}\s*$|^\s*[.#][\w-]+\s*[{,]|:\s*(var\(|#[0-9a-f]{3}|\d+px)/i.test(t)) return false; // CSS (a text may still end with a {slot})
   if (/^(?:[a-z-]+:[^;]+;\s*)+$/i.test(t)) return false; // inline style
   if (/^[\w.[\]()'"=!&|<>+\-*/%?: ]+$/.test(t) && /[=<>()[\]]/.test(t) && !/ [a-z]{3,} [a-z]{3,}/i.test(t)) return false; // expressions
   if (/^(GET|POST|PUT|DELETE|Content-Type|application\/|text\/|image\/|video\/)/.test(t)) return false;
@@ -41,6 +41,11 @@ export function wordy(s) {
   if (/^[A-Z][a-z]+(?:[A-Z][a-z]*)+$/.test(t) || /^\w+_\w+$/.test(t)) return false; // ArrowLeft, NotFoundError, SpartanReferee, Closed_Fist: names, not words
   if (/^[A-Z_0-9]+$/.test(t) && t.length > 1 && !/^[A-Z]{2,}$/.test(t)) return false; // CONSTANT_NAMES (but NO REP-style words stay)
   if (/^(sans-serif|monospace|serif|bold|italic|normal|none|auto|block|flex|grid|inline|hidden|visible|absolute|relative|fixed|center|left|right|top|bottom|transparent|currentColor|inherit|cover|contain|round|butt|source-over|destination-out|anonymous|use-credentials|same-origin|no-store|no-cache|reload|smooth|instant|nearest|start|end|utf-8|module|text|number|range|checkbox|radio|button|submit|click|change|input|keydown|keyup|load|error|message|resize|scroll|pointerdown|pointerup|pointermove|touchstart|visibilitychange|beforeunload|loadedmetadata|playing|pause|ended|timeupdate|seeked|canplay|webgl|webgl2|webgpu|wasm|cpu|gpu|environment|user|landscape|portrait|video|audio|img|div|span|canvas|option|select|label|li|ul|tr|td|th|table|tbody|thead|section|details|summary|figure|figcaption|a|b|p|i|em|strong|small|code|pre|svg|path|rect|circle|polyline|line|g|use|defs|lighter|darker|multiply|screen|overlay|true|false|null|undefined|object|string|function|boolean|bigint|symbol)$/i.test(t)) return false;
+  if (/^(use strict|autoplay; fullscreen|openid profile email)$/.test(t)) return false;
+  if (/[&?][a-z]+=|^\w+\.\w+\.|^[a-z-]+ \{\w+\}$|^[a-z]+(\{\w+\})+$/.test(t)) return false; // query strings, setting names, "pill {x}", "new{k}"
+  if (!/[A-Z]/.test(t) && /^(btn|link|primary|ghost)\b[a-z -]*$/.test(t)) return false; // class lists: "btn btn-red", "link signOut" is caught above
+  if (!/[A-Z]/.test(t) && /[.#]/.test(t) && /^[a-z]*\s*[.#]?[\w-]+(\s+[.#]?[\w-]+)*$/.test(t)) return false; // selectors: "header .tabs button"
+  if (/^[a-z]+ [a-z]+=\"/.test(t) || /^[a-z-]+ (start|on)$/.test(t) || /^[a-z]+, [a-z]+$/.test(t)) return false; // attributes, class pairs, "a, button"
   return true;
 }
 

@@ -596,3 +596,6 @@ html.practice-mode .of { display: none !important; }
 
 /* the language menu on the judge's home screen (i18n.js fills it) */
 .masthead .langPick { position: relative; z-index: 1; margin-top: 12px; font: inherit; font-size: .9rem; color: var(--white); background: var(--ink); border: 1px solid var(--line); padding: 5px 8px; border-radius: 4px; }
+
+/* Arabic and Thai (i18n.js sets <html lang>): no slanted lettering or added letter spacing, which break Arabic's joined letters */
+html[lang="ar"] *, html[lang="th"] * { font-style: normal !important; letter-spacing: 0 !important; }

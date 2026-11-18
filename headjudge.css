@@ -14,7 +14,7 @@ h1, h2, legend { font-family: var(--display); font-weight: 800; text-transform: 
 .mark { font: italic 800 28px var(--display); text-transform: uppercase; color: var(--text); text-decoration: none; }
 .mark span { color: var(--primary-text); }
 /* the Spartans helmet before the SpartanReferee name (not before a company's own name, which takes its place once signed in) */
-.mark:not(#company)::before { content: ""; display: inline-block; width: 1.15em; height: 1.15em; margin-right: .35em; vertical-align: -.22em; border-radius: 50%; background: url(icons/spartanreferee/icon-192.png) center / 118% no-repeat; }
+.mark:not(#company)::before { content: ""; display: inline-block; width: 1.15em; height: 1.15em; margin-inline-end: .35em; vertical-align: -.22em; border-radius: 50%; background: url(icons/spartanreferee/icon-192.png) center / 118% no-repeat; }
 .topRight { display: flex; align-items: center; justify-content: flex-end; gap: 6px 14px; flex-wrap: wrap; min-width: 0; margin-left: auto; } /* wrapped under the name on a phone, it stays on the right */
 .topRight a { font-weight: 700; }
 .top #who { font-size: 14px; overflow-wrap: anywhere; }
@@ -270,3 +270,6 @@ input[type=datetime-local] { color-scheme: dark; min-height: 44px; }
 /* the language menu (i18n.js fills it), at the top right */
 .langPick { font: inherit; font-size: .9rem; color: var(--text); background: var(--panel); border: 1px solid var(--line); padding: 4px 6px; border-radius: 4px; max-width: 9.5em; }
 html[dir="rtl"] .topRight { margin-left: 0; margin-right: auto; }
+
+/* Arabic and Thai (i18n.js sets <html lang>): no slanted lettering or added letter spacing, which break Arabic's joined letters */
+html[lang="ar"] *, html[lang="th"] * { font-style: normal !important; letter-spacing: 0 !important; }

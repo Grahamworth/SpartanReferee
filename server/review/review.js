@@ -787,7 +787,7 @@ function renderAthletes(force) {
   if (sig === listSig && !force) return; listSig = sig;
   const numbered = list.filter((a) => a.bib && a.bib !== 'No number').length;
   const base = resultsBase();
-  $('athleteSummary').textContent = resMode === 'previous' && !recShown ? '' : base.length ? `${list.length} athlete${list.length === 1 ? '' : 's'}${list.length < base.length ? ` (of ${base.length})` : ''} · ${numbered} with a number read` : resMode === 'previous' ? `Nobody from this recording has been judged ${FREE ? 'yet' : 'on this server'}.` : (FREE ? 'Nobody tracked yet. Start the AI judge on camera 1 (Live tab), analyse a minute of its recording, or upload a video of up to a minute.' :'Nobody tracked on this day yet. Turn the AI judge on for a camera (Live tab) or upload a video.');
+  $('athleteSummary').textContent = resMode === 'previous' && !recShown ? '' : base.length ? (list.length < base.length ? `Athletes: ${list.length} of ${base.length} · with a number read: ${numbered}` : `Athletes: ${list.length} · with a number read: ${numbered}`) : resMode === 'previous' ? (FREE ? 'Nobody from this recording has been judged yet.' : 'Nobody from this recording has been judged on this server.') : (FREE ? 'Nobody tracked yet. Start the AI judge on camera 1 (Live tab), analyse a minute of its recording, or upload a video of up to a minute.' :'Nobody tracked on this day yet. Turn the AI judge on for a camera (Live tab) or upload a video.');
   $('athleteList').innerHTML = list.map((a) => `<div class="ath${a.done ? '' : ' going'}" data-n="${a.n}">
     ${athBody(a, `<span>${whereText(a)}</span>${a.other ? `<span>${bothText(a)}</span>` : ''}<span>${whenText(a)}</span>${a.done ? '' : '<span class="going">Being judged</span>'}`)}
   </div>`).join('');

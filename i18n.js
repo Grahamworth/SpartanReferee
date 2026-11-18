@@ -33,7 +33,11 @@
 
   const norm = (s) => String(s).replace(/\s+/g, ' ').trim();
   const SLOT = /\{(\w+)\}/g;
-  /** a dictionary ready to use: exact keys in a Map, keys with slots as patterns (longest first, so the most specific wins) */
+  // slots that always hold a count: they match only a number, so "{reps} rep{x}" can't take "No rep. Chest to the ground"
+  const COUNT = /^(n\d*|count|reps|noReps|nos|ath|base|numbered|flagged|agree|extra|missed|total|yourReps|aiReps|e\d*|maxCameras|maxHours|maxDaysAhead|keepDays|days|servers)$/;
+  /** a dictionary ready to use: exact keys in a Map, keys with slots as patterns (the most words outside the slots first, so the
+   *  most specific wins). A slot may be empty ("{n} athlete{x}" is "1 athlete" too), and one straight after a word holds only
+   *  that word's ending ("rep{x}{x2}" on "3 reps · 2 no reps": x is "s", x2 the rest, translated on its own). */
   function compile(dict) {
     const exact = new Map(), patterns = [];
     for (const [k, v] of Object.entries(dict || {})) {
@@ -42,11 +46,18 @@
       exact.set(key, v); // asked for by name, with values (SR_I18N.t("Reps {count}", { count }))
       if (!SLOT.test(key)) continue;
       SLOT.lastIndex = 0;
-      const names = [];
-      const re = new RegExp('^' + key.split(SLOT).map((part, i) => (i % 2 ? (names.push(part), '(.+?)') : part.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))).join('') + '$');
-      patterns.push({ re, names, v, len: key.length });
+      const names = [], parts = key.split(SLOT);
+      const re = new RegExp('^' + parts.map((part, i) => {
+        if (i % 2 === 0) return part.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        names.push(part);
+        if (COUNT.test(part)) return '(\\d[\\d.,]*)';
+        if (/\p{L}$/u.test(parts[i - 1])) return '(\\p{L}*)'; // straight after a word ("rep{x}"): only that word's ending ("s")
+        return '(.*?)';
+      }).join('') + '$', 'u');
+      const fixed = key.replace(SLOT, '').replace(/[^\p{L}]/gu, '').length;
+      patterns.push({ re, names, v, fixed, len: key.length });
     }
-    patterns.sort((a, b) => b.len - a.len);
+    patterns.sort((a, b) => b.fixed - a.fixed || b.len - a.len);
     return { exact, patterns };
   }
 
@@ -61,7 +72,7 @@
   }
 
   /** text in the current language, or as it was when there's no translation */
-  function translate(c, lang, text, values) {
+  function translate(c, lang, text, values, depth = 0) {
     if (!c) return values ? fill(text, values, lang) : text;
     const key = norm(text);
     if (!key) return text;
@@ -73,7 +84,7 @@
       if (!m) continue;
       const got = {};
       // what was in a slot is translated too when it's a text of its own ("No rep. {x}" with x a no-rep reason)
-      p.names.forEach((nm, i) => { const s = m[i + 1]; got[nm] = c.exact.has(s) ? fill(c.exact.get(s), null, lang) : s; });
+      p.names.forEach((nm, i) => { const s = m[i + 1]; got[nm] = depth < 2 && /\p{L}/u.test(s) ? s.match(/^\s*/)[0] + translate(c, lang, s, null, depth + 1).trim() + s.match(/\s*$/)[0] : s; }); // keeping the spaces around it
       return fill(p.v, got, lang);
     }
     return text;
@@ -134,8 +145,9 @@
       else if (k.nodeType === 1) { const tx = norm(k.textContent); key += `<${i}>${/\p{L}/u.test(tx) ? tx : '{n}'}</${i}>`; i++; } // a number set by the page stays as it is
     }
     key = norm(key);
-    const v = api.dict && api.dict.exact.get(key); // once translated, it no longer matches: its parts are then looked at on their own
+    let v = api.dict && api.dict.exact.get(key); // once translated, it no longer matches: its parts are then looked at on their own
     if (!v) return false;
+    if (typeof v === 'object') v = v.other || Object.values(v)[0]; // plural forms: a whole sentence has no number to choose by
     const parts = String(v).split(/(<\d+>[\s\S]*?<\/\d+>)/);
     const frag = document.createDocumentFragment();
     for (const part of parts) {

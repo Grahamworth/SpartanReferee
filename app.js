@@ -1576,7 +1576,7 @@ function renderMulti(people = S.multi.athletes.map((k) => ({ label: k.label, bib
   const key = ath.map((k) => `${k.label}:${k.bib || ''}:${k.count}:${k.noReps}:${k.gone ? 1 : 0}`).join(' ');
   // the line under the counts (in the Receiver, who is being recorded): set every time, the strip only on change
   const warn = quietJudge()
-    ? `Recording reps for ${ath.length} athlete${ath.length === 1 ? '' : 's'}${ath.some((k) => k.bib) ? ` · numbers read: ${ath.filter((k) => k.bib).map((k) => k.bib).join(', ')}` : ''}`
+    ? (ath.some((k) => k.bib) ? `Recording reps · athletes: ${ath.length} · numbers read: ${ath.filter((k) => k.bib).map((k) => k.bib).join(', ')}` : `Recording reps · athletes: ${ath.length}`) // whole sentences, so each translates (i18n.js)
     : ath.length ? '' : 'Watching for athletes (grey outline = seen). Each is counted from their first good burpee.';
   // a live camera can't be slowed down: say when reps are likely being missed
   const fps = quietJudge() && !S.testMode ? procFps() : null;
