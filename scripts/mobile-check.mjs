@@ -47,6 +47,34 @@ const PAGES = [
   ['phone-guide', 'phone.html', null, 'true'],
   ['signed-out-home', 'home.html', '', "!document.getElementById('signIn').hidden"],
 ];
+// the learning platform's pages (when it's on: LEARN_FROM_AZ=1), as the demo people who'd see them ("view as")
+const learnApi = async (p, asId = '') => { const r = await fetch(`${SITE}/api/learn/${p}`, { headers: { 'X-Session': boss, ...(asId ? { 'X-Learn-As': asId } : {}) } }); return r.ok ? r.json() : null; };
+const me = await learnApi('me');
+if (me) {
+  const who = (n) => me.viewAs.find((p) => p.legalName === n)?.id || '';
+  const anna = who('Anna Kowalska'), tomas = who('Tomas Novak');
+  const ocr = await learnApi('programmes/ocr-referee', anna);
+  const lesson = ocr?.modules?.flatMap((m) => m.lessons).find((l) => l.code === 'ocr-4-2');
+  const assessment = ocr?.assessments?.[0];
+  const rec = await learnApi(`people/${anna}/record`, anna);
+  const ready = "!!document.querySelector('#view .card, #view .qCard') || !document.getElementById('error').hidden";
+  PAGES.push(
+    ['learn-programmes', 'learn/#/programmes', boss, ready],
+    ['learn-programme-ocr', 'learn/#/programmes/ocr-referee', boss, ready, anna],
+    ['learn-lesson', `learn/#/lesson/${lesson?.id}`, boss, "!!document.getElementById('lpStage')?.children.length || !document.getElementById('error').hidden", anna],
+    ['learn-lesson-spanish', `learn/#/lesson/${lesson?.id}?locale=es`, boss, "!!document.getElementById('lpStage')?.children.length || !document.getElementById('error').hidden", anna],
+    ['learn-assessment', `learn/#/assessment/${assessment?.id}`, boss, ready, anna],
+    ['learn-attempt', `learn/#/attempt/${rec?.attempts?.[0]?.id}`, boss, ready, anna],
+    ['learn-credential', `learn/#/credential/${rec?.credentials?.[0]?.id}`, boss, ready, anna],
+    ['learn-rules', 'learn/#/rules', boss, ready, anna],
+    ['learn-rule', 'learn/#/rules/OCR-2026-4.2.13', boss, ready],
+    ['learn-reviews', 'learn/#/reviews?programme=ocr-referee', boss, ready],
+    ['learn-reports', 'learn/#/reports', boss, ready],
+    ['learn-handbook', 'learn/#/handbook/ocr-referee?locale=es', boss, ready, anna],
+    ['learn-media', 'learn/#/media', boss, ready],
+    ['learn-assessing', 'learn/#/assessing', boss, ready, tomas],
+  );
+}
 
 const prof = fs.mkdtempSync(path.join(os.tmpdir(), 'sr-chrome-'));
 const chrome = spawn(CHROME, ['--headless=new', '--remote-debugging-port=9335', `--user-data-dir=${prof}`, '--no-first-run', '--hide-scrollbars', 'about:blank'], { stdio: 'ignore' });
@@ -65,9 +93,9 @@ try {
   await phone();
   await send('Page.navigate', { url: `${SITE}/index.html` }); await sleep(1000);
 
-  for (const [name, page, token, ready] of PAGES) {
+  for (const [name, page, token, ready, asId = ''] of PAGES) {
     await phone();
-    await js(`localStorage.removeItem('sr_learn_as'); ${token === null ? '' : token ? `localStorage.setItem('sp_token', ${JSON.stringify(token)})` : "localStorage.removeItem('sp_token')"}`);
+    await js(`${asId ? `localStorage.setItem('sr_learn_as', ${JSON.stringify(asId)})` : "localStorage.removeItem('sr_learn_as')"}; ${token === null ? '' : token ? `localStorage.setItem('sp_token', ${JSON.stringify(token)})` : "localStorage.removeItem('sp_token')"}`);
     await send('Page.navigate', { url: `${SITE}/${page}` }); await sleep(150);
     await send('Page.reload', { ignoreCache: true });
     for (let i = 0; i < 40; i++) { await sleep(300); if (await js(ready)) break; }

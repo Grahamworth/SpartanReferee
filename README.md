@@ -35,6 +35,10 @@ Admins assign referees to events on the admin page ("Who's refereeing each event
 
 The learning platform (`/learn`, `api/src/learn`) is open to everyone in the organisation (admins only before 19 November 2026). Someone's first visit makes their record there with just their name and address: an admin's as a global admin, a referee's as a learner with no other role. Anyone taken off the referees list loses it at once too. Apart from those real records, everyone in it is invented. Its database pauses after an hour unused; the first visit after that wakes it, which can take up to a minute (the API tries for about 30 seconds, then asks to try again in a minute).
 
+### The learning platform (/learn)
+
+Spartan's Learning & Competence Platform prototype (from their requirements v0.2): one profile, any number of programmes, lessons with narration and a Spanish pilot, assessments with assessors, demonstration credentials, versioned rule references with review items, a handbook PDF, reports and a read API. It has its own Azure SQL database and its own documentation: [docs/learning/README.md](docs/learning/README.md) (setup, demo people, tests), [architecture](docs/learning/architecture.md), [decisions](docs/learning/decisions.md), [read API](docs/learning/api.md), [acceptance tests](docs/learning/acceptance.md) (all 12 pass) and [backlog](docs/learning/backlog.md).
+
 ### Languages
 
 Every page, the judge, the server's video review and the Broadcaster app come in English, French, German, Dutch, Spanish, Italian, Greek, Croatian, Czech, Polish, Finnish, Swedish, Danish, Arabic (right to left) and Thai, for the World Championships (France, Greece, Croatia, UAE, Finland, Thailand), next year's Euros (Netherlands) and the rest. The language is the browser's, or the one picked in the menu at the top (remembered), and the console opens a server's review in it. The translations were made by Claude, not checked by native speakers yet: check each before an event in that country.

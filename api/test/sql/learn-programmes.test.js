@@ -63,6 +63,10 @@ test('an admin makes a third programme from the screens alone: no code change (A
   const made = await ok('POST', 'learn/programmes', boss, { id: 'kids-marshal', title: 'Spartan Kids Course Marshal', category: 'other', locales: 'en,es,xx', learnerRole: 'Course Marshal', qualification: 'Kids Course Marshal 2027' });
   assert.deepStrictEqual(made.programme.locales, ['en', 'es'], 'only the site\'s languages');
   await ok('POST', `learn/versions/${made.versionId}/modules`, boss, { title: 'Safety first', summary: 'Keeping young athletes safe' });
+  // and a draft assessment, with a question, from the same screens
+  const assessment = (await ok('POST', `learn/versions/${made.versionId}/assessments`, boss, { title: 'Marshal check' })).assessment;
+  const bank = await ok('POST', `learn/assessments/${assessment.id}/questions`, boss, { type: 'single', prompt: 'Who may enter the course?', options: [{ text: 'Only athletes and officials', correct: true }, { text: 'Anyone' }] });
+  assert.strictEqual(bank.questions.length, 1); assert.strictEqual(bank.assessment.versionState, 'draft');
   const p = await ok('GET', 'learn/programmes/kids-marshal', boss);
   assert.strictEqual(p.version.state, 'draft'); assert.strictEqual(p.modules.length, 1); assert.strictEqual(p.version.qualification, 'Kids Course Marshal 2027');
   // a learner doesn't see a programme with nothing published

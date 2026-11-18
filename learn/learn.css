@@ -215,3 +215,26 @@ h3.sub { font-size: 1rem; text-transform: uppercase; letter-spacing: .04em; marg
 .reviewCard h2 { font-size: 1.25rem; }
 .stampList li { padding: 4px 0; }
 .stampList b { display: inline-block; min-width: 90px; color: var(--muted); }
+
+/* ---------------------------------------------------------------- reports (reports.js) */
+.tiles2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; margin: 8px 0; }
+.tile2 { border: 1px solid var(--line); background: var(--bg); padding: 10px 12px; display: grid; gap: 2px; }
+.tile2 b { font: italic 800 1.9rem/1 "Barlow Condensed", sans-serif; }
+.tile2 span { color: var(--muted); font-size: .85rem; }
+.stackBar { display: flex; height: 16px; border: 1px solid var(--line); overflow: hidden; margin: 6px 0; }
+.sb-active { background: var(--accent); } .sb-due { background: #f2b33d; } .sb-expired { background: var(--bad); } .sb-suspended { background: var(--muted); } .sb-revoked { background: #6b1d1d; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: .85rem; color: var(--muted); }
+.legend i { display: inline-block; width: 10px; height: 10px; margin-inline-end: 5px; vertical-align: middle; }
+.tableWrap { overflow-x: auto; }
+.tableWrap table { min-width: 520px; }
+
+/* phones: long option text wraps instead of widening the page */
+.langSwitch { flex-wrap: nowrap; }
+.langSwitch select { flex: 1 1 0; width: 0; min-width: 0; max-width: 320px; }
+.qOptions, .qOpt { min-width: 0; }
+.qOpt span { min-width: 0; overflow-wrap: anywhere; }
+.qCard legend { min-width: 0; overflow-wrap: anywhere; }
+.auditTable td, .auditTable th { overflow-wrap: anywhere; word-break: break-word; }
+@media (max-width: 400px) { .auditTable { table-layout: fixed; } .auditTable th:first-child, .auditTable td:first-child { width: 30%; } }
+/* the site's inputs are full width; a choice's box isn't (as specific as headjudge.css's rule, and later) */
+.qOptions .qOpt input[type] { flex: none; width: 22px; height: 22px; padding: 0; border: 0; }

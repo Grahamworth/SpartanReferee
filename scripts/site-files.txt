@@ -78,4 +78,5 @@ learn/lesson.js
 learn/assess.js
 learn/judgement.js
 learn/govern.js
+learn/reports.js
 learn/learn.css
