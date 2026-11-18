@@ -184,12 +184,12 @@ for (const id of ['find', 'day', 'source']) $(id).addEventListener(id === 'find'
 async function enter() {
   const me = await getMe(true);
   if (!me.user) { signOut(); return start(); }
-  // only a registered company signs in here (admins too): any other account is signed straight back out and pointed at registering
+  // only an admin or a referee an admin added signs in here: anyone else is signed straight back out
   const { company: c } = await call('companies/mine').catch(() => ({}));
   if (!c && !me.admin) {
     signOut(); show($('signIn'), true);
-    $('signInError').textContent = `${me.user.email || 'That account'} isn't registered with SpartanReferee. Register your company first, then sign in here. Added by your company? Check they used this address.`;
-    show($('signInError'), true); show($('registerFirst'), true);
+    $('signInError').textContent = `${me.user.email || 'That account'} isn't on the list of referees. Ask an admin to add the address you sign in with.`;
+    show($('signInError'), true);
     return start();
   }
   $('who').textContent = me.user.email;

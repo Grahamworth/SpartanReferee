@@ -139,17 +139,18 @@ function createRecordings({ store, signer, now, reply, session, isAdmin, members
     }
     if (a === 'links') {
       if (!isAdmin(h)) return reply(403, { error: 'Only admins can link a Receiver for now' });
-      if (!b && method === 'GET') return reply(200, { links: (await store.list(owned(me.uid) + ':links')).map(({ id, name, at }) => ({ id, name, at })) });
+      // a Receiver an admin links saves into the organisation's recordings, which everyone in it sees
+      if (!b && method === 'GET') return reply(200, { links: (await store.list(owned(await ownerOf(me)) + ':links')).map(({ id, name, at }) => ({ id, name, at })) });
       if (!b && method === 'POST') {
         const name = String(body?.name || '').trim().slice(0, 40) || 'Receiver';
         const id = crypto.randomBytes(5).toString('hex'), key = `rk_${crypto.randomBytes(24).toString('base64url')}`, hash = sha(key);
-        await store.put('reckey', hash, { id, name, partition: owned(me.uid) });
-        await store.put(owned(me.uid) + ':links', id, { id, name, at: now(), hash });
+        await store.put('reckey', hash, { id, name, partition: owned(await ownerOf(me)) });
+        await store.put(owned(await ownerOf(me)) + ':links', id, { id, name, at: now(), hash });
         return reply(200, { id, name, key }); // the only time the key is shown
       }
       if (b && method === 'DELETE') {
-        const link = await store.get(owned(me.uid) + ':links', b); if (!link) return reply(404, { error: 'not found' });
-        await store.remove('reckey', link.hash); await store.remove(owned(me.uid) + ':links', b);
+        const link = await store.get(owned(await ownerOf(me)) + ':links', b); if (!link) return reply(404, { error: 'not found' });
+        await store.remove('reckey', link.hash); await store.remove(owned(await ownerOf(me)) + ':links', b);
         return reply(200, { ok: true });
       }
       return reply(405, { error: 'Not allowed' });

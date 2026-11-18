@@ -124,13 +124,16 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
     if (a === 'companies') return adminCompanies(method, b, c, body);
     if (a === 'pricing' && !b) return adminPricing(method, body);
     if (a === 'customers') return adminCustomers(method, b, c, body);
+    if (a === 'referees' && !b) return referees(method, body, h);
     return null;
   }
 
-  const membership = createMembership(store); // which company an account is part of, as owner or one of its people
+  // who's in the organisation: an admin (as isAdmin decides, by address), or a referee an admin added
+  const isAdminEmail = (email) => admins.includes(email) || addedAdmins.has(email) || (!adminKey && !admins.length);
+  const membership = createMembership(store, { isAdminEmail });
   const recordings = createRecordings({ store, signer: blobSigner, now, reply, session, isAdmin, membership });
-  const { servers, adminPricing, adminCustomers, stopCompany } = createServers({ store, now, reply, session, isAdmin, membership, payments, maxRunning: maxRunningServers, hourPrice: serverHourPrice });
-  const { companies, adminCompanies } = createCompanies({ store, now, reply, session, isAdmin, putBrand, membership, onBlocked: stopCompany });
+  const { servers, adminPricing, adminCustomers, stopCompany } = createServers({ store, now, reply, session, isAdmin, membership, payments, freeBooking: true, maxRunning: maxRunningServers, hourPrice: serverHourPrice });
+  const { companies, adminCompanies, referees } = createCompanies({ store, now, reply, session, isAdmin, putBrand, membership, onBlocked: stopCompany });
 
   async function handle({ method, path, headers = {}, body, query: extraQuery = {} }) {
     const h = Object.fromEntries(Object.entries(headers).map(([k, v]) => [k.toLowerCase(), v]));

@@ -65,7 +65,9 @@ const storageCameraHour = GB_PER_CAMERA_HOUR * STORAGE_GB_MONTH * (KEEP_DAYS / 3
 
 const cardView = (p) => (p ? { brand: p.brand, last4: p.last4, expMonth: p.expMonth, expYear: p.expYear } : null);
 
-function createServers({ store, now, reply, session, isAdmin = () => false, membership = null, payments = null, maxRunning = 1, hourPrice = 0.66, region = 'italynorth' }) {
+function createServers({ store, now, reply, session, isAdmin = () => false, membership = null, payments = null, freeBooking = false, maxRunning = 1, hourPrice = 0.66, region = 'italynorth' }) {
+  // freeBooking (SpartanReferee): nobody pays, so everyone books and starts servers as admins do, with no card or payment page
+  const payFree = (h) => freeBooking || isAdmin(h);
   // The default is Azure's cost plus a percentage. A customer can instead have a price of their own, set in the admin area.
   async function pricing(c) {
     const markupPercent = (await store.get('settings', 'pricing'))?.markupPercent || 0;
@@ -108,10 +110,10 @@ function createServers({ store, now, reply, session, isAdmin = () => false, memb
       bookedCost: plan ? pounds(plan.hours * plan.cameras * plan.cameraHour) : 0, bookedCameraHour: plan?.cameraHour || 0,
       used: { cameraHours: u.cameraHours, charge: u.charge }, canStart: c.status === 'approved',
       // once card payments are on, the first booking asks for a card; admins don't need one. Customers pay for each booking first.
-      card: cardView(c.payment), cardsOn: !!payments, adminNoCard: !c.payment && !!h && isAdmin(h), needsCard: !!payments && !c.payment && !(h && isAdmin(h)),
-      paysFirst: !(h && isAdmin(h)),
+      card: cardView(c.payment), cardsOn: !!payments, adminNoCard: !freeBooking && !c.payment && !!h && isAdmin(h), needsCard: !!payments && !c.payment && !(h && payFree(h)),
+      paysFirst: !(h && payFree(h)),
       // until card payments are properly set up, only admins can start servers
-      bookingsOpen: !!payments || !!(h && isAdmin(h)),
+      bookingsOpen: !!payments || !!(h && payFree(h)),
       price: { cameraHour: price.cameraHour, keepDays: KEEP_DAYS, camerasPerServer: CAMERAS_PER_SERVER, maxHours: MAX_HOURS, maxExtendHours: MAX_EXTEND_HOURS, maxCameras: maxRunning * CAMERAS_PER_SERVER, maxDaysAhead: MAX_DAYS_AHEAD, startLeadMinutes: START_LEAD_MS / 60e3 },
     };
   }
@@ -173,8 +175,8 @@ function createServers({ store, now, reply, session, isAdmin = () => false, memb
   // why this booking can't be made now, if it can't
   async function cantBook(c, h, a) {
     if (c.status !== 'approved') return reply(403, { error: c.status === 'pending' ? 'We\'re still checking your application' : 'This company has been blocked from starting servers' });
-    if (!payments && !isAdmin(h)) return reply(503, { error: BOOKINGS_CLOSED });
-    if (payments && !c.payment && !isAdmin(h)) return reply(402, { error: 'Add your payment details first' });
+    if (!payments && !payFree(h)) return reply(503, { error: BOOKINGS_CLOSED });
+    if (payments && !c.payment && !payFree(h)) return reply(402, { error: 'Add your payment details first' });
     const plan = await store.get('serverplan', c.id);
     if (active(plan) && (await view(c, h)).wanted === 'on') return reply(409, { error: plan.from && plan.from > now() ? 'You already have a booking: cancel it first, or extend it' : 'Your servers are already booked: extend them instead' });
     const needed = serversFor(a.cameras), { from, until } = timesOf(a);
@@ -335,12 +337,12 @@ function createServers({ store, now, reply, session, isAdmin = () => false, memb
       return r;
     }
     if (b === 'start') {
-      if (!isAdmin(h)) return reply(402, { error: 'Pay for your booking first' });
+      if (!payFree(h)) return reply(402, { error: 'Pay for your booking first' });
       const a = asked(body); if (a.error) return reply(400, { error: a.error });
       return book(c, me, h, a);
     }
     if (b === 'extend') {
-      if (!payments && !isAdmin(h)) return reply(503, { error: BOOKINGS_CLOSED });
+      if (!payments && !payFree(h)) return reply(503, { error: BOOKINGS_CLOSED });
       const hours = Number(body?.hours), plan = await store.get('serverplan', c.id);
       if (!active(plan) || (await view(c, h)).wanted !== 'on') return reply(409, { error: 'Your servers aren\'t running: start them instead' });
       if (!Number.isInteger(hours) || hours < 1 || hours > MAX_EXTEND_HOURS) return reply(400, { error: `Add between 1 and ${MAX_EXTEND_HOURS} hours at a time` });

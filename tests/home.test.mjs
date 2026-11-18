@@ -8,10 +8,10 @@ const read = (f) => fs.readFileSync(new URL(`../${f}`, import.meta.url), 'utf8')
 const hrefs = (html) => [...html.matchAll(/href="([^"]+)"/g)].map((m) => m[1]);
 const SPARTANS = 'https://mango-glacier-03e711403.4.azurestaticapps.net';
 
-test('the home page is SpartanReferee\'s, and leads to registering a company and the console', () => {
+test('the home page is SpartanReferee\'s, and leads to signing in, not registering', () => {
   const home = read('index.html');
   assert.match(home, /<title>SpartanReferee/);
-  assert.ok(hrefs(home).includes('register.html'));
+  assert.ok(!hrefs(home).includes('register.html'));
   assert.ok(hrefs(home).includes('console.html'));
   assert.ok(hrefs(home).includes(`${SPARTANS}/`), 'and on to the Spartans site');
   assert.doesNotMatch(home, /hub\.js|manifest/, 'with none of the Spartans app in it');
@@ -33,7 +33,7 @@ test('Spartans has left: its pages are gone, and their old addresses go to the S
 });
 test('SpartanReferee\'s pages go back to SpartanReferee\'s home, and what the judge still links to of Spartans is on the Spartans site', () => {
   assert.match(read('recordings.html'), /href="\.\/"[^>]*>‹ Home/);
-  for (const f of ['register', 'customers', 'streaming', 'phone']) assert.match(read(`${f}.html`), /class="mark" href="\.\/"/, f);
+  for (const f of ['customers', 'streaming', 'phone']) assert.match(read(`${f}.html`), /class="mark" href="\.\/"/, f);
   // the camera guides are SpartanReferee's, and up to date
   for (const f of ['streaming', 'phone']) {
     const p = read(`${f}.html`);

@@ -11,7 +11,7 @@ const { quote, timeLeft, money, plural } = window.HeadJudgeBooking;
 const $ = (id) => document.getElementById(id);
 const show = (el, on) => { el.hidden = !on; };
 let poll = null, busy = false, last = null, listKey = '', payMessage = '';
-// owner: books, pays and adds people; member: one of the people the owner added, who sees the servers and results
+// everyone in the organisation (an admin, or a referee an admin added) books and uses the servers: "owner" (members are from when there were companies)
 let role = 'owner', company = null;
 
 const fail = (msg) => { $('error').textContent = msg || ''; show($('error'), !!msg); };
@@ -174,7 +174,6 @@ function showView(v) {
   checkout = null; show($('payArea'), false);
   const booking = view === 'booking';
   show($('server'), booking); show($('tracked'), booking); show($('more'), booking); show($('historyBox'), !booking);
-  show($('people'), booking && role === 'owner');
   if (!booking) drawHistory();
   drawTabs();
 }
@@ -190,7 +189,7 @@ $('changeCard').onclick = addCard;
 // ---------------------------------------------------------------- the payment page: customers pay before a booking is made (pretend for now)
 let checkout = null;
 function showPay(on) {
-  if (on) { show($('server'), false); show($('historyBox'), false); show($('more'), false); show($('tracked'), false); show($('people'), false); show($('payArea'), true); }
+  if (on) { show($('server'), false); show($('historyBox'), false); show($('more'), false); show($('tracked'), false); show($('payArea'), true); }
   else showView('booking');
   window.scrollTo({ top: 0 });
 }
@@ -245,28 +244,6 @@ $('stop').onclick = () => {
   if (confirm(booked ? 'Cancel this booking? Its servers won\'t start, and nothing is charged for it.' : 'Stop now? Any cameras still streaming will stop being recorded. You pay only for the time used.')) act('stop');
 };
 
-// ---------------------------------------------------------------- People: who else signs in as the company (the owner's list)
-const peopleFail = (msg) => { $('peopleError').textContent = msg || ''; show($('peopleError'), !!msg); };
-const onDay = (t) => new Date(t).toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric' });
-function drawPeople(people) {
-  $('peopleList').innerHTML = people.map((p) => `<li><span><b>${esc(p.email)}</b><small>${p.role === 'owner' ? 'Owner' : p.seen ? `Signed in ${esc(onDay(p.seen))}` : 'Not signed in yet'}</small></span>${p.role === 'owner' ? '' : `<button class="small" type="button" data-remove="${esc(p.email)}">Remove</button>`}</li>`).join('');
-  for (const b of $('peopleList').querySelectorAll('button[data-remove]')) b.onclick = () => removePerson(b.dataset.remove);
-}
-async function loadPeople() {
-  try { drawPeople((await call('companies/mine/people')).people); } catch (e) { peopleFail(e.message); }
-}
-async function removePerson(email) {
-  if (!confirm(`Remove ${email}? They can't sign in as ${company.name} any more.`)) return;
-  peopleFail('');
-  try { drawPeople((await call('companies/mine/people', { method: 'POST', body: { email, remove: true } })).people); } catch (e) { peopleFail(e.message); }
-}
-$('addPerson').addEventListener('submit', async (e) => {
-  e.preventDefault(); peopleFail('');
-  const email = $('personEmail').value.trim();
-  if (!email) return peopleFail('Whose email address?');
-  try { drawPeople((await call('companies/mine/people', { method: 'POST', body: { email } })).people); $('personEmail').value = ''; } catch (err) { peopleFail(err.message); }
-});
-$('consoleUrl').textContent = `${location.host}/console.html`; $('consoleUrl').href = `${location.origin}/console.html`;
 
 function enterBrand(c) {
   applyTheme(c.theme);
@@ -291,8 +268,7 @@ async function enter() {
   show($('signIn'), false);
   ({ company } = await call('companies/mine'));
   role = company?.role === 'member' ? 'member' : 'owner';
-  // only a registered company signs in here: any other account is signed straight back out and pointed at registering (admins
-  // still get in, to reach Admin)
+  // only an admin or a referee an admin added signs in here: anyone else is signed straight back out
   if (!company && !me.admin) return notRegistered(me.user.email);
   if (!company) { show($('none'), true); return; }
   // the free camera: anyone with a company that isn't blocked
@@ -300,8 +276,6 @@ async function enter() {
   show($('freeLink'), free); show($('freeNote'), free);
   enterBrand(company);
   for (const el of document.querySelectorAll('.coName')) el.textContent = company.name;
-  show($('detailsLink'), role === 'owner');
-  if (role === 'owner') loadPeople();
   drawTracked($('trackedList'));
   await cameBackFromStripe();
   await refresh();
@@ -319,9 +293,8 @@ function notRegistered(email) {
   signOut();
   $('who').textContent = '';
   show($('signIn'), true);
-  $('signInError').textContent = `${email || 'That account'} isn't registered with SpartanReferee. Register your company first, then sign in here. Added by your company? Check they used this address.`;
+  $('signInError').textContent = `${email || 'That account'} isn't on the list of referees. Ask an admin to add the address you sign in with.`;
   show($('signInError'), true);
-  show($('registerFirst'), true);
   start();
 }
 async function start() {

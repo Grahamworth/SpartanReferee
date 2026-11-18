@@ -6,6 +6,15 @@ Sign-in is **Microsoft only** (from 18 November 2026): the website offers no Goo
 
 Its look (from 18 November 2026) is Spartan's: the name SpartanReferee on every page, red `#e2231a` on black, and the Spartans helmet (white on a red disc) as its icon, drawn by `node scripts/make-icons.cjs icons/spartanreferee`. A company's own logo and colours still replace it on its pages, as before. The Broadcaster app is "SpartanReferee Broadcaster" (`com.vdaso.spartanreferee.broadcast`), so it installs beside HeadJudge's rather than replacing it. Code names (`headjudge.css`, `HeadJudgeBrand`, `headjudge-server.tar.gz`, the server's `headjudge` services) are unchanged.
 
+### One organisation: Spartan's referees
+
+There's no registration, no customers and no card (from 18 November 2026). SpartanReferee is one built-in organisation, `spartan` (`api/src/companies.js`), and who's in it is decided in the admin area (`customers.html`):
+
+- **Referees**: an admin adds the address each referee signs in with (Microsoft has to vouch for it). Anyone else who signs in is told to ask an admin. Taking someone off the list locks them out at once.
+- **Admins**: `ADMIN_EMAILS` (permanent) plus those added in the admin area. Admins are in without being on the referees list; they add and remove referees and admins, and can stop the servers.
+- Everyone in books, starts, extends and stops the servers from the console, with no payment step (`freeBooking` in `api/src/servers.js`), within the shared limit of 5 servers. Recordings and results belong to the organisation, so every referee sees them.
+- `register.html` only sends old links to the console. The admin page shows this month's Azure cost and camera hours, not prices or profit.
+
 ### Languages
 
 Every page, the judge, the server's video review and the Broadcaster app come in English, French, German, Dutch, Spanish, Italian, Greek, Croatian, Czech, Polish, Finnish, Swedish, Danish, Arabic (right to left) and Thai, for the World Championships (France, Greece, Croatia, UAE, Finland, Thailand), next year's Euros (Netherlands) and the rest. The language is the browser's, or the one picked in the menu at the top (remembered), and the console opens a server's review in it. The translations were made by Claude, not checked by native speakers yet: check each before an event in that country.
@@ -54,7 +63,7 @@ The site (Static Web App)  says what's wanted  -->  table  <--  makes it so, eve
 
 ## Who can do what
 
-A company applies at `register.html` and an admin approves it in `admin.html`. Only then can it start a server, so nobody can run up a bill by signing up.
+(As copied from HeadJudge: companies registered and were approved. SpartanReferee replaced that with one organisation, above.)
 What people watch is the camera's picture with what its judge on the server sees drawn over it, so judges carry on when the page is closed.
 A login link from the site is good for 5 minutes and becomes a 14-hour cookie, signed with a secret only that server and the site hold.
 

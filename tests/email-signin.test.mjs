@@ -48,12 +48,12 @@ test('cancelling and Microsoft\'s errors say so, with its code to look up', () =
   assert.match(readReturn(`${RETURN}?error=access_denied&error_description=AADSTS53003%3A+blocked&state=the-state`, pending).message, /AADSTS53003/);
 });
 test('SpartanReferee is Microsoft sign-in only: no Google or email buttons on any page', () => {
-  for (const f of ['register.html', 'register.js', 'console.html', 'console.js', 'results.html', 'results.js', 'customers.html', 'customers.js', 'email-signin-web.js', 'api-base.js']) {
+  for (const f of ['console.html', 'console.js', 'results.html', 'results.js', 'customers.html', 'customers.js', 'email-signin-web.js', 'api-base.js']) {
     assert.doesNotMatch(read(f), /emailBtns|emailButtons|googleBtn|googleButton|accounts\.google\.com/, f);
   }
 });
 test('every sign-in page offers Sign in with Microsoft, which comes back to the same return page', () => {
-  for (const [html, js] of [['register.html', 'register.js'], ['console.html', 'console.js'], ['results.html', 'results.js'], ['customers.html', 'customers.js']]) {
+  for (const [html, js] of [['console.html', 'console.js'], ['results.html', 'results.js'], ['customers.html', 'customers.js']]) {
     assert.match(read(html), /<div id="msBtn"><\/div>\s*<div id="devBtn">/, html);
     assert.match(read(js), new RegExp(`microsoftButton\\(\\$\\('msBtn'\\), '${html}'`), js);
   }
@@ -67,10 +67,10 @@ test('Sign out is at the top right of every page with an account, from the share
   const base = read('api-base.js');
   assert.ok(base.includes("button.className = 'link signOut'"));
   assert.ok(base.includes("querySelector('header.top, [data-account-bar]')"));
-  for (const f of ['index.html', 'register.html', 'console.html', 'results.html', 'customers.html', 'streaming.html', 'phone.html']) {
+  for (const f of ['index.html', 'console.html', 'results.html', 'customers.html', 'streaming.html', 'phone.html']) {
     const page = read(f);
     assert.match(page, /<header class="top">/, f);
-    const js = { 'register.html': 'register.js', 'console.html': 'console.js', 'results.html': 'results.js', 'customers.html': 'customers.js' }[f];
+    const js = { 'console.html': 'console.js', 'results.html': 'results.js', 'customers.html': 'customers.js' }[f];
     assert.ok(page.includes('src="api-base.js"') || (js && read(js).includes("from './api-base.js'")), `${f} loads api-base.js`);
   }
   assert.match(read('recordings.html'), /data-account-bar/);
@@ -83,10 +83,10 @@ test('the site sends its session in a header Azure leaves alone, as Azure replac
   assert.ok(base.includes("headers['X-Session'] = token"));
   assert.ok(!base.includes('headers.Authorization'));
 });
-test('registering goes straight on to the console, with no preview panel', () => {
-  assert.ok(read('register.js').includes("location.assign('console.html')"));
-  assert.doesNotMatch(read('register.html'), /How it will look|pvCam/);
-  assert.ok(!read('headjudge.css').includes('.pvCam'));
+test('there is no registration: its old address goes to the console', () => {
+  assert.ok(!fs.existsSync(new URL('../register.js', import.meta.url)));
+  assert.match(read('register.html'), /location\.replace\('console\.html'\)/);
+  assert.doesNotMatch(read('scripts/site-files.txt'), /^register\.js$/m);
 });
 test('the console shows the way to the admin area only to admins', () => {
   assert.match(read('console.html'), /id="adminLink" href="customers.html" hidden/);

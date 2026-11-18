@@ -58,7 +58,7 @@ test('plurals follow the language\'s own rules', () => {
 });
 
 test('every page loads i18n.js first and has a language menu; the review page loads it from the judge', () => {
-  for (const f of ['index.html', 'register.html', 'console.html', 'results.html', 'streaming.html', 'phone.html', 'customers.html', 'broadcaster.html', 'judge.html']) {
+  for (const f of ['index.html', 'console.html', 'results.html', 'streaming.html', 'phone.html', 'customers.html', 'broadcaster.html', 'judge.html']) {
     const p = read(f);
     assert.match(p, /<meta name="viewport"[^>]*>\n<script src="i18n\.js"><\/script>/, f);
     assert.match(p, /data-lang-picker/, f);

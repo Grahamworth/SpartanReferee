@@ -2,86 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<script src="i18n.js"></script>
-<title>SpartanReferee for companies</title>
-<meta name="description" content="Register your company for SpartanReferee: AI judging for fitness events, under your own logo and colours.">
-<meta name="theme-color" content="#0b0b0b">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;1,800&family=Barlow:wght@400;600;700&display=swap">
-<link rel="stylesheet" href="headjudge.css">
-<script src="brand.js"></script>
-<script type="module" src="register.js"></script>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SpartanReferee</title>
+<meta http-equiv="refresh" content="0; url=console.html">
 </head>
 <body>
-<header class="top">
-  <a class="mark" href="./">Spartan<span>Referee</span></a>
-  <span class="topRight"><select class="langPick" data-lang-picker aria-label="Language"></select><span id="who" class="muted"></span></span>
-</header>
-<main class="page">
-  <section class="intro">
-    <h1 data-i18n>Your events, <span>judged under your name</span></h1>
-    <p>Register your company, add your logo and colours, and SpartanReferee's cameras, AI judge and video review all carry your brand.</p>
-  </section>
-
-  <section id="signIn" class="card narrow" hidden>
-    <h2>Sign in to start</h2>
-    <p class="muted">The account you sign in with will look after your company. A work account is best.</p>
-    <div id="msBtn"></div>
-    <div id="devBtn"></div>
-    <p class="error" id="signInError" role="alert" hidden></p>
-  </section>
-
-  <section id="status" class="card status" role="status" hidden></section>
-
-  <form id="form" class="regForm" novalidate hidden>
-    <div class="fields">
-      <fieldset class="card">
-        <legend>Your company</legend>
-        <label for="name">Company name</label>
-        <input id="name" autocomplete="organization" maxlength="60" required>
-        <div id="idRow">
-          <label for="id">Web address</label>
-          <div class="prefixed"><span>headjudge/</span><input id="id" maxlength="32" spellcheck="false" autocapitalize="off" aria-describedby="idNote" required></div>
-          <p class="note" id="idNote">Letters, numbers and hyphens. It can't be changed later.</p>
-        </div>
-        <label for="contact">Your name</label>
-        <input id="contact" autocomplete="name" maxlength="60" required>
-        <label for="website" data-i18n>Website <small>(optional)</small></label>
-        <input id="website" type="url" inputmode="url" autocomplete="url" maxlength="200" placeholder="yourcompany.com">
-        <label for="about" data-i18n>The events you run <small>(optional)</small></label>
-        <textarea id="about" rows="3" maxlength="600" placeholder="What kind, how many a year, and roughly how many cameras"></textarea>
-      </fieldset>
-
-      <fieldset class="card">
-        <legend>Your brand</legend>
-        <label for="logo">Logo</label>
-        <div class="logoRow">
-          <label class="drop" id="drop" for="logo"><img id="logoPick" alt="" hidden><span id="dropText">Choose a logo, or drop it here</span></label>
-          <input id="logo" class="visuallyHidden" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml">
-          <button type="button" class="link" id="logoRemove" hidden>Remove logo</button>
-        </div>
-        <p class="note">PNG, JPEG, WebP or SVG. One with a see-through background looks best.</p>
-        <p class="error" id="logoError" role="alert" hidden></p>
-        <div class="colours">
-          <div><label for="primary">Main colour</label><div class="colour"><input id="primary" type="color" value="#e2231a"><input id="primaryHex" maxlength="7" spellcheck="false" aria-label="Main colour as a code"></div></div>
-          <div><label for="accent">Second colour</label><div class="colour"><input id="accent" type="color" value="#3ddc97"><input id="accentHex" maxlength="7" spellcheck="false" aria-label="Second colour as a code"></div></div>
-        </div>
-        <span class="labelish" id="modeLabel">Background</span>
-        <div class="segments" role="radiogroup" aria-labelledby="modeLabel">
-          <label><input type="radio" name="mode" value="dark" checked><span>Dark</span></label>
-          <label><input type="radio" name="mode" value="light"><span>Light</span></label>
-        </div>
-        <p class="note" id="readNote" hidden></p>
-      </fieldset>
-
-      <p class="note" id="dataNote">We keep your company's details and this account's email address to run your account, and show only your name, logo and colours to other people.</p>
-      <p class="error" id="formError" role="alert" hidden></p>
-      <button class="primary" id="save" type="submit">Register my company</button>
-    </div>
-  </form>
-</main>
-<div class="toast" id="toast" role="status"></div>
+<!-- SpartanReferee has no registration (from 18 November 2026): an admin adds each referee. Old links land on the console. -->
+<p><a href="console.html">Sign in</a></p>
+<script>location.replace('console.html');</script>
 </body>
 </html>

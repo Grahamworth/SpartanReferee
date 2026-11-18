@@ -59,7 +59,7 @@ test('names that could reach another path are refused', async () => {
   for (const size of [0, -1, 6e9, 'x']) assert.strictEqual((await call(s.api, 'POST', 'recordings/upload', rk, { cam: 1, file: FILE, size })).status, 400);
 });
 
-test('only the account that linked the Receiver sees its recordings, with read-only links', async () => {
+test('everyone in the organisation sees a linked Receiver\'s recordings, with read-only links; nobody else does', async () => {
   const s = setup();
   const { h, rk } = await linked(s);
   await upload(s, rk);
@@ -68,8 +68,10 @@ test('only the account that linked the Receiver sees its recordings, with read-o
   assert.strictEqual(mine.body.recordings[0].receiver, 'Laptop');
   assert.ok(s.signed.slice(-2).every((x) => x.perm === 'r' && x.minutes <= 240));
   assert.strictEqual(mine.body.used, 1000);
-  const other = await s.signIn('other@x.com');
-  assert.strictEqual((await call(s.api, 'GET', 'recordings', other)).body.recordings.length, 0);
+  const other = await s.signIn('other@x.com'); // another admin
+  assert.strictEqual((await call(s.api, 'GET', 'recordings', other)).body.recordings.length, 1);
+  const stranger = await s.signIn('stranger@x.com');
+  assert.strictEqual((await call(s.api, 'GET', 'recordings', stranger)).body.recordings.length, 0);
   assert.strictEqual((await call(s.api, 'GET', 'recordings', {})).status, 401);
 });
 
@@ -98,11 +100,11 @@ test('the key is shown once, isn\'t kept in the clear, and removing the link sto
   assert.strictEqual((await call(s.api, 'POST', 'recordings/upload', rk, { cam: 1, file: FILE, size: 1 })).status, 401);
 });
 
-test('another account can\'t remove your link', async () => {
+test('someone who isn\'t an admin can\'t remove a link', async () => {
   const s = setup();
   const { id, rk } = await linked(s);
-  const other = await s.signIn('other@x.com');
-  assert.strictEqual((await call(s.api, 'DELETE', `recordings/links/${id}`, other)).status, 404);
+  const stranger = await s.signIn('stranger@x.com');
+  assert.strictEqual((await call(s.api, 'DELETE', `recordings/links/${id}`, stranger)).status, 403);
   assert.strictEqual((await upload(s, rk)).status, 200);
 });
 

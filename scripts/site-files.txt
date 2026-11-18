@@ -40,7 +40,6 @@ readers.js
 recordings.html
 recordings.js
 register.html
-register.js
 results.html
 results.js
 rtmo-s.onnx
