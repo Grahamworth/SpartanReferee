@@ -18,6 +18,7 @@
 const crypto = require('node:crypto');
 const P = require('./permissions');
 const { createProgrammes } = require('./programmes');
+const { createLessons } = require('./lessons');
 
 const EMAIL = /^[^\s@/#?\\]+@[^\s@/#?\\]+\.[^\s@/#?\\]+$/;
 const LOCALES = ['en', 'fr', 'de', 'nl', 'es', 'it', 'el', 'hr', 'cs', 'pl', 'fi', 'sv', 'da', 'ar', 'th'];
@@ -36,7 +37,7 @@ const grantView = (g) => ({ id: g.grant_id, role: g.role, programmeId: g.program
  * member(session) -> { admin, email, name } for someone in the organisation (an admin, or a referee an admin added), else null.
  * Without it (the SQL tests), only admins come in, by their session's address.
  */
-function createLearn({ db, session, isAdminEmail = () => false, member = null, reply }) {
+function createLearn({ db, session, isAdminEmail = () => false, member = null, reply, speech = null, mediaSigner = null }) {
   const memberOf = member || (async (me) => { const email = String(me.email || '').toLowerCase(); return email && isAdminEmail(email) ? { admin: true, email, name: String(me.name || '') } : null; });
   // ------------------------------------------------------------------ who's asking
   const loginOf = (me) => ({ provider: String(me.uid).startsWith('m_') ? 'microsoft' : 'dev', subject: String(me.uid) });
@@ -220,7 +221,7 @@ function createLearn({ db, session, isAdminEmail = () => false, member = null, r
   // ------------------------------------------------------------------ the rest of the platform, one module each, sharing this context
   // (each can add hooks to it that the others call: programmes asks for a version's extras, progress and so on)
   const ctx = { db, reply, P, audit, uuid, text, isUuid, personById, personView, LOCALES };
-  const areas = [createProgrammes(ctx)];
+  const areas = [createProgrammes(ctx), createLessons(ctx, { speech, mediaSigner })];
 
   // ------------------------------------------------------------------ routing
   async function handle(method, parts, body, h, query = {}) {

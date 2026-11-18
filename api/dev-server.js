@@ -17,12 +17,19 @@ function learnDatabase() {
     try {
       const out = require('node:child_process').execSync('az staticwebapp appsettings list --name spartanreferee -g rg-spartanreferee-uksouth --subscription 65c0ccca-69f7-43eb-9246-3bd6a6a06b24 -o json --query properties', { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], shell: true });
       Object.assign(env, JSON.parse(out));
+      // narration's storage, for /learn's audio only (never the recordings): the storage account's connection, read the same way
+      try { env.LEARN_STORAGE = require('node:child_process').execSync('az storage account show-connection-string -n spartanreferee -g rg-spartanreferee-uksouth --subscription 65c0ccca-69f7-43eb-9246-3bd6a6a06b24 -o tsv', { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], shell: true }).trim(); } catch { /* no narration here */ }
     } catch { console.log('The learning platform\'s settings couldn\'t be read with az: /learn is off'); }
   }
+  learnSettings = env;
   return dbFromEnv(env, env.LEARN_SCHEMA || 'learn_dev');
 }
+let learnSettings = {};
 const api = createApi({
   learnDb: learnDatabase(),
+  // narration (Azure AI Speech) and where it's kept, when the site's settings were read with az
+  learnSpeech: learnSettings.LEARN_SPEECH_KEY ? { key: learnSettings.LEARN_SPEECH_KEY, region: learnSettings.LEARN_SPEECH_REGION || 'uksouth' } : null,
+  learnMedia: learnSettings.LEARN_STORAGE ? blobSigner(learnSettings.LEARN_STORAGE, 'learn-media') : null,
   blobSigner: process.env.STORAGE_CONNECTION ? blobSigner(process.env.STORAGE_CONNECTION) : null,
   // logos stay in the page's own data link here: nothing is saved
   putBrand: async (_name, buf, type) => `data:${type};base64,${buf.toString('base64')}`,

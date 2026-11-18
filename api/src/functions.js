@@ -27,6 +27,9 @@ const getApi = () => (api = api || createApi({
   microsoftSignIn: createMicrosoftSignIn({ clientId: process.env.MICROSOFT_CLIENT_ID }),
   payments: createPayments({ secretKey: process.env.STRIPE_SECRET_KEY, siteUrl: 'https://brave-forest-022879f03.3.azurestaticapps.net' }),
   learnDb: dbFromEnv(), // LEARN_SQL_* settings: the learning platform's Azure SQL database
+  // its narration: Azure AI Speech (LEARN_SPEECH_*), kept in the storage account's learn-media container
+  learnSpeech: process.env.LEARN_SPEECH_KEY ? { key: process.env.LEARN_SPEECH_KEY, region: process.env.LEARN_SPEECH_REGION || 'uksouth' } : null,
+  learnMedia: blobSigner(process.env.STORAGE_CONNECTION, 'learn-media'),
 }));
 
 app.http('api', {

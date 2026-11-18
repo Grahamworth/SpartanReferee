@@ -5,6 +5,7 @@
 import { createRequire } from 'node:module';
 import crypto from 'node:crypto';
 import { PROGRAMMES, ENROLMENTS } from './learn-content.mjs';
+import { LESSONS } from './learn-lessons.mjs';
 
 const require = createRequire(import.meta.url);
 const { dbFromEnv } = require('../api/src/learn/db.js');
@@ -98,6 +99,30 @@ for (const en of ENROLMENTS) {
     summary.enrolments++;
   }
 }
-if (globalThis.seedMore) await globalThis.seedMore(db, { D, personByEmail, summary });
+// ---------------------------------------------------------------- lesson content (step 3): English published, Spanish in review
+summary.lessons = 0;
+const hash = (t) => crypto.createHash('sha256').update(t).digest('hex');
+const lessonByCode = async (code) => (await db.query(`SELECT TOP 1 l.* FROM {S}.lesson l JOIN {S}.programme_version v ON v.version_id = l.version_id
+  WHERE l.code = @code AND v.state = 'published' ORDER BY v.published_at DESC`, { code }))[0];
+for (const [code, content] of Object.entries(LESSONS)) {
+  const l = await lessonByCode(code); if (!l) continue;
+  if ((await db.query('SELECT 1 AS x FROM {S}.content_version WHERE lesson_id = @l', { l: l.lesson_id })).length) continue;
+  const en = crypto.randomUUID(), enBody = JSON.stringify({ slides: content.en });
+  await db.tx(async (q) => {
+    await q(`INSERT INTO {S}.content_version (content_id, lesson_id, locale, version_no, state, body, source_hash, sources, author_id, approved_by, approved_at)
+             VALUES (@id, @l, 'en', 1, 'published', @body, @hash, @src, @a, @a, SYSUTCDATETIME())`, { id: en, l: l.lesson_id, body: enBody, hash: hash(enBody), src: content.sources, a: owner?.person_id || null });
+    if (content.es) {
+      const esBody = JSON.stringify({ slides: content.es });
+      await q(`INSERT INTO {S}.content_version (content_id, lesson_id, locale, version_no, state, translation_of, body, source_hash, sources, translated_by, submitted_at)
+               VALUES (@id, @l, 'es', 1, 'review', @en, @body, @hash, @src, @by, SYSUTCDATETIME())`, { id: crypto.randomUUID(), l: l.lesson_id, en, body: esBody, hash: hash(esBody), src: content.sources, by: content.esBy });
+    }
+    await q(`INSERT INTO {S}.audit_event (action, entity_type, entity_id, summary) VALUES ('content.seed', 'content_version', @id, @s)`, { id: en, s: JSON.stringify({ lesson: code, locales: content.es ? ['en', 'es (review)'] : ['en'] }) });
+  });
+  summary.lessons++;
+}
+// narration: Azure AI Speech by default, with a British English and a Castilian Spanish voice
+if (!(await db.query("SELECT 1 AS x FROM {S}.media_config WHERE scope = 'default'")).length) {
+  await db.query("INSERT INTO {S}.media_config (scope, provider, voices) VALUES ('default', 'azure-speech', @v)", { v: JSON.stringify({ en: 'en-GB-RyanNeural', es: 'es-ES-ElviraNeural' }) });
+}
 console.log(`Seeded: ${Object.entries(summary).map(([k, n]) => `${n} ${k}`).join(', ')} added (the rest were already there).`);
 await db.close();

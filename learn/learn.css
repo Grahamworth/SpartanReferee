@@ -103,3 +103,65 @@ details.edit > summary { display: flex; align-items: center; min-height: 44px; f
   .inlineForm button { flex: 1 1 100%; min-height: 44px; }
   .btnRow button { flex: 1 1 100%; min-height: 44px; }
 }
+
+/* ---------------------------------------------------------------- the lesson player (lesson.js), phone first */
+.lpHead h1 { margin-bottom: 4px; }
+.langSwitch { display: flex; align-items: center; gap: 8px; font-weight: 600; margin-top: 8px; }
+.langSwitch select { width: auto; min-height: 44px; }
+.previewBanner { background: rgba(242, 179, 61, .12); border: 1px solid #f2b33d; padding: 12px 14px; margin: 0 0 18px; line-height: 1.5; }
+.lpPlayer { padding-bottom: 14px; }
+.lpStage { display: grid; gap: 14px; min-height: 280px; }
+@media (min-width: 760px) { .lpStage { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); align-items: center; } }
+.lpFig { background: var(--bg); border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; padding: 10px; }
+.fig { width: 100%; max-width: 420px; height: auto; }
+.fig line, .fig path, .fig rect, .fig circle { fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.f-ground { stroke: var(--line); }
+.f-person line, .f-person circle, .f-ref line, .f-ref circle { stroke: var(--text); }
+.f-ref circle, .f-ref line { stroke: var(--accent); }
+.f-target rect, .f-target line { stroke: var(--muted); }
+.f-ring { stroke: var(--primary) !important; }
+.f-spear { stroke: var(--primary); stroke-width: 4 !important; }
+.f-flight { stroke-dasharray: 6 6; }
+.f-bad { stroke: var(--bad) !important; }
+.f-barrier, .f-barrier-box { stroke: var(--accent); }
+.f-arrow { stroke: var(--accent); }
+.f-label { fill: var(--muted); font: 600 11px Barlow, sans-serif; }
+.f-label.f-ok { fill: var(--accent); } .f-label.f-bad { fill: var(--bad); }
+.f-big { fill: var(--primary); font: italic 800 34px "Barlow Condensed", sans-serif; }
+.f-check circle, .f-check path { stroke: var(--accent); stroke-width: 5 !important; }
+.lpText h2 { font-size: clamp(1.4rem, 5vw, 1.9rem); margin: 2px 0 10px; }
+.lpCount { margin: 0; color: var(--muted); font-size: .85rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
+.lpPoints { margin: 0 0 10px; padding-inline-start: 1.1em; }
+.lpPoints li { margin: 0 0 8px; line-height: 1.45; font-size: 1.05rem; }
+.reviewNote { border-inline-start: 4px solid #f2b33d; background: rgba(242, 179, 61, .08); padding: 8px 12px; margin: 10px 0; line-height: 1.45; font-size: .95rem; }
+.reviewNote b { display: block; color: #f2b33d; text-transform: uppercase; font-size: .78rem; letter-spacing: .05em; margin-bottom: 2px; }
+.lpRules { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 8px 0 0; font-size: .85rem; color: var(--muted); }
+.ruleChip { display: inline-flex; align-items: center; min-height: 30px; padding: 0 9px; border: 1px solid var(--line); color: var(--text); text-decoration: none; font-weight: 600; }
+.ruleChip.pending { border-color: #f2b33d; }
+.lpCaption { background: #000; color: #fff; padding: 10px 12px; margin: 14px 0 0; line-height: 1.5; font-size: 1rem; border-radius: 2px; }
+.lpDots { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; margin: 14px 0 6px; }
+.lpDots .dot { width: 30px; height: 30px; padding: 0; background: none; border: 0; cursor: pointer; position: relative; }
+.lpDots .dot::after { content: ""; position: absolute; inset: 10px; border-radius: 50%; background: var(--line); }
+.lpDots .dot.seen::after { background: var(--muted); }
+.lpDots .dot.on::after { background: var(--primary); inset: 8px; }
+.lpControls { display: grid; grid-template-columns: 1fr 1.3fr 1fr; gap: 8px; margin-top: 6px; }
+.lpBtn { min-height: 52px; font: 700 1.05rem Barlow, sans-serif; background: var(--panel); color: var(--text); border: 1px solid var(--line); cursor: pointer; }
+.lpBtn:disabled { opacity: .4; cursor: default; }
+.lpBtn.lpMain { background: var(--primary); color: var(--on-primary); border-color: var(--primary); }
+.lpBtn[hidden] { display: none; }
+.lpControls:has(#lpPlay[hidden]) { grid-template-columns: 1fr 1fr; }
+.lpTools { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 16px; margin-top: 10px; }
+.lpTools .link { min-height: 44px; }
+.lpTools .link[aria-pressed="false"] { color: var(--muted); }
+.lpMedia { font-size: .85rem; }
+.lpTranscript { border-top: 1px solid var(--line); margin-top: 10px; padding-top: 10px; }
+.lpTranscript p { line-height: 1.55; }
+@media (max-width: 640px) { .lpKeys { display: none; } }
+.slideEditor fieldset { border: 1px solid var(--line); padding: 10px 12px; margin: 0 0 12px; }
+.slideEditor label { display: grid; gap: 4px; font-weight: 600; margin-bottom: 8px; }
+.slideEditor textarea, .slideEditor input { width: 100%; font: inherit; }
+.mediaForm { border-top: 1px solid var(--line); padding: 12px 0; display: grid; gap: 8px; }
+.mediaForm h2 { font-size: 1.2rem; }
+.mediaForm label { display: grid; gap: 4px; font-weight: 600; }
+.mediaForm select { min-height: 44px; }
+.mediaForm button { justify-self: start; }

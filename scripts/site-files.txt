@@ -74,4 +74,5 @@ learn/core.js
 learn/people.js
 learn/programmes.js
 learn/cameras.js
+learn/lesson.js
 learn/learn.css

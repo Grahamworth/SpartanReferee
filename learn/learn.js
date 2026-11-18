@@ -9,8 +9,9 @@ import { $, S, show, call, esc, fail, store, AS_KEY, ROLE, has, isAdmin } from '
 import * as programmes from './programmes.js';
 import * as people from './people.js';
 import * as cameras from './cameras.js';
+import * as lesson from './lesson.js';
 
-const AREAS = [programmes, people, cameras];
+const AREAS = [programmes, people, cameras, lesson];
 const views = Object.assign({}, ...AREAS.map((a) => a.views));
 
 async function draw() {

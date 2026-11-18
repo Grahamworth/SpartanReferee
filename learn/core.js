@@ -45,5 +45,5 @@ export async function act(fn, btn) {
 }
 /** later areas add sections to pages drawn by earlier ones: each is async (data) -> html. programme: a programme's page (its data);
  *  record: a person's learning record (the record); lesson: the end of a lesson (the lesson) */
-export const hooks = { programme: [], record: [], wire: [] };
+export const hooks = { programme: [], record: [], lesson: [], wire: [] };
 export const runHooks = async (list, data) => (await Promise.all(list.map((f) => f(data)))).join('');
