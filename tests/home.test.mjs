@@ -56,7 +56,8 @@ test('a referee\'s home page: their name, their events (each with Book cameras),
   assert.match(page, /<a class="tile" href="console.html">/);
   assert.match(page, /id="adminTile" href="customers.html" hidden/);
   assert.ok(js.includes("call('home')"));
-  assert.ok(js.includes('href="console.html?unit=${encodeURIComponent(e.unit)}"'), 'Book cameras opens the console on that event');
+  assert.ok(js.includes('href="event.html?id=${encodeURIComponent(e.id)}"'), 'each event opens its own page');
+  assert.ok(js.includes('Head referee'));
   assert.ok(js.includes("show($('adminTile'), !!h.admin)"));
   // the console takes the event it's given, and leads back home; so does the learning platform's logo
   assert.ok(read('console.js').includes("new URLSearchParams(location.search).get('unit')"));
@@ -68,4 +69,20 @@ test('on a phone, every page\'s header is the name and a Menu button, with big r
   assert.ok(base.includes("btn.className = 'menuBtn'") && base.includes("setAttribute('aria-expanded'"));
   assert.match(css, /@media \(max-width: 640px\) \{[\s\S]*\.top:has\(\.menuBtn\) \.topRight \{ display: none; \}[\s\S]*min-height: 48px/);
   assert.ok(fs.existsSync(new URL('../scripts/mobile-check.mjs', import.meta.url)));
+});
+test("an event's page: its cameras (book, open or watch them on the console), its referees and its camera hours", () => {
+  const page = read('event.html'), js = read('event.js');
+  for (const id of ['camGo', 'people', 'days', 'spartanLink']) assert.match(page, new RegExp(`id="${id}"`), id);
+  assert.ok(js.includes("call(`event/${id}`)"));
+  assert.ok(js.includes("consoleUrl = `console.html?unit=${encodeURIComponent(e.unit)}`"));
+  assert.ok(js.includes("b && b.state === 'on' ? `${consoleUrl}&go=live` : consoleUrl"), 'Watch live once its cameras are on');
+  assert.match(read('scripts/site-files.txt'), /^event\.js$/m);
+});
+test("a practice camera is booked only from Learning's cameras guide; the console just says where", () => {
+  const learn = read('learn/learn.js');
+  assert.ok(learn.includes("call('practice-camera', { method: 'POST'"));
+  assert.ok(learn.includes('<h1>Cameras: setup and use</h1>'));
+  assert.match(read('learn/index.html'), /<a href="#\/cameras" data-view="cameras">Cameras<\/a>/);
+  assert.ok(read('console.js').includes("show($('book'), state === 'off' && s.unit?.kind !== 'training')"));
+  assert.match(read('console.html'), /id="trainingFromLearn" hidden data-i18n>Practice cameras are booked from the <a href="learn\/#\/cameras">/);
 });

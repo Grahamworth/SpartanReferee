@@ -56,13 +56,14 @@
 
     <section class="card adminsBox">
       <h2>Who's refereeing each event</h2>
-      <p class="note">Each referee sees the events they're assigned to on their home page, with the way to book that event's cameras. Being assigned doesn't change who can book: any referee can book any event.</p>
+      <p class="note">Each referee sees the events they're assigned to on their home page, as head referee or referee. Being assigned doesn't change who can book: any referee can book any event's cameras.</p>
       <label for="assignEvent">Event</label>
       <select id="assignEvent"><option value="">Loading the events…</option></select>
       <ul id="assignList" class="adminList"></ul>
       <form id="addAssign" class="addAdmin">
         <label for="assignEmail">Assign a referee</label>
-        <div><input id="assignEmail" type="email" list="refereeEmails" autocomplete="off" maxlength="200" placeholder="name@example.com" required><button class="small" type="submit">Assign</button></div>
+        <div><input id="assignEmail" type="email" list="refereeEmails" autocomplete="off" maxlength="200" placeholder="name@example.com" required></div>
+        <div class="assignAs"><select id="assignRole" aria-label="As"><option value="referee">Referee</option><option value="head">Head referee</option></select><button class="small" type="submit">Assign</button></div>
         <datalist id="refereeEmails"></datalist>
       </form>
       <p class="error" id="assignError" role="alert" hidden></p>

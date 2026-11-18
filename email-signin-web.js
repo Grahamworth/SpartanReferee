@@ -5,7 +5,7 @@ import { randomText, challengeFor, signInAddress, readReturn } from './email-sig
 
 const PENDING = 'hj_web_signin', TOKEN = 'sp_token';
 const BACK_TO = new Set(['register.html', 'home.html', 'console.html', 'results.html', 'customers.html', 'learn/']);
-const safeBack = (page) => (BACK_TO.has(page) ? page : './');
+const safeBack = (page) => (BACK_TO.has(page) || /^event\.html\?id=\d{1,12}$/.test(page) ? page : './'); // an event's page too
 
 // Off to Microsoft's page, remembering (in this tab only) what's needed to finish when it comes back.
 async function goSignIn(cfg, provider, back, options, onError) {

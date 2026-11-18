@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<script src="i18n.js"></script>
+<title>Event: SpartanReferee</title>
+<meta name="theme-color" content="#0b0b0b">
+<link rel="icon" href="icons/spartanreferee/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;1,800&family=Barlow:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="headjudge.css">
+<style>
+  .back { display: inline-flex; align-items: center; min-height: 44px; font-weight: 700; text-decoration: none; margin-bottom: 6px; }
+  .evHead h1 { font-size: clamp(1.8rem, 6vw, 2.8rem); line-height: 1.05; margin: 0 0 8px; overflow-wrap: anywhere; }
+  .evHead p { margin: 0 0 6px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 0; padding: 0; list-style: none; }
+  .tags li { padding: 3px 10px; font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; border: 1px solid var(--line); }
+  .tags .head, .tags .now { background: var(--primary); border-color: var(--primary); color: var(--on-primary); }
+  .camState { display: flex; align-items: center; gap: 10px; font-size: 1.15rem; font-weight: 700; margin: 4px 0 6px; }
+  .bigBtn { display: flex; align-items: center; justify-content: center; min-height: 52px; margin-top: 14px; padding: 0 20px; background: var(--primary); color: var(--on-primary); font: italic 800 1.3rem var(--display); text-transform: uppercase; text-decoration: none; }
+  .bigBtn.second { background: none; color: var(--text); border: 2px solid var(--primary); }
+  .days, .people { list-style: none; margin: 0; padding: 0; }
+  .days li, .people li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; padding: 11px 0; border-top: 1px solid var(--line); }
+  .days li:first-child, .people li:first-child { border-top: 0; }
+  .days small, .people small { color: var(--muted); }
+  .people b { overflow-wrap: anywhere; }
+  .role { flex: none; align-self: center; padding: 2px 9px; font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; border: 1px solid var(--line); }
+  .role.head { background: var(--primary); border-color: var(--primary); color: var(--on-primary); }
+  .spartanLink { display: inline-flex; align-items: center; min-height: 44px; font-weight: 700; }
+  @media (min-width: 900px) { .evGrid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0 18px; align-items: start; } }
+</style>
+<script type="module" src="event.js"></script>
+</head>
+<body>
+<!-- One Spartan event: its days and camera hours, who's refereeing it (head referees first) and its cameras, with the way to book
+     or watch them. Anyone in the organisation can open any event. Its data is /api/event/<id> (api/src/assignments.js). -->
+<header class="top">
+  <a class="mark" href="home.html">Spartan<span>Referee</span></a>
+  <span class="topRight"><select class="langPick" data-lang-picker aria-label="Language"></select><a href="home.html">Home</a><span id="who" class="muted"></span></span>
+</header>
+<main class="page">
+  <section id="signIn" class="card narrow" hidden>
+    <h2>Sign in</h2>
+    <div id="msBtn"></div>
+    <div id="devBtn"></div>
+    <p class="error" id="signInError" role="alert" hidden></p>
+  </section>
+  <p class="error" id="error" role="alert" hidden></p>
+
+  <div id="content" hidden>
+    <a class="back" href="home.html">← Home</a>
+    <section class="evHead">
+      <h1 id="evName"></h1>
+      <p class="muted" id="evWhen"></p>
+      <p class="muted" id="evWhere"></p>
+      <ul class="tags" id="evTags"></ul>
+    </section>
+
+    <div class="evGrid">
+      <section class="card" aria-labelledby="camHead">
+        <h2 id="camHead">Cameras</h2>
+        <p class="camState"><span class="light" id="camLight" aria-hidden="true"></span><span id="camState"></span></p>
+        <p class="note" id="camMore"></p>
+        <p class="note" id="camBy" hidden></p>
+        <a class="bigBtn" id="camGo" href="console.html"></a>
+      </section>
+
+      <section class="card" aria-labelledby="refHead">
+        <h2 id="refHead">Referees</h2>
+        <ul class="people" id="people"></ul>
+        <p class="note" id="noPeople" hidden>Nobody assigned yet. An admin assigns referees to each event.</p>
+      </section>
+
+      <section class="card" aria-labelledby="dayHead">
+        <h2 id="dayHead">Camera hours</h2>
+        <p class="note">Cameras for an event run from 07:00 to 18:00 local time on each of its days.</p>
+        <ul class="days" id="days"></ul>
+      </section>
+    </div>
+    <a class="spartanLink" id="spartanLink" href="#" target="_blank" rel="noopener">Spartan's page for this event</a>
+  </div>
+</main>
+</body>
+</html>

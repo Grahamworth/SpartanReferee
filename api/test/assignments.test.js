@@ -43,7 +43,7 @@ test('an admin assigns referees to an event; each sees their own upcoming events
   assert.deepStrictEqual((await call('GET', 'home', ben)).body.events.map((e) => e.name), ['Phuket Super']);
   const all = (await call('GET', 'admin/assignments', boss)).body.assignments;
   assert.strictEqual(all.length, 3);
-  assert.deepStrictEqual(Object.keys(all[0]).sort(), ['at', 'by', 'email', 'eventId']);
+  assert.deepStrictEqual(Object.keys(all[0]).sort(), ['at', 'by', 'email', 'eventId', 'role']);
   assert.strictEqual(all[0].by, 'boss@example.com');
 });
 
@@ -78,4 +78,40 @@ test('the home page: an admin is told so; someone not on the list, or not signed
   pass(20 * 24 * 3600e3); // past Phuket (6 December), and within a session's 30 days
   assert.deepStrictEqual((await call('GET', 'home', ana)).body.events, []);
   assert.deepStrictEqual((await call('GET', 'admin/assignments', boss)).body.assignments, []);
+});
+
+test('head referees: assigned as one, changed either way, listed first; the home page says which each referee is', async () => {
+  const { call, boss, ana, ben } = await ready();
+  assert.strictEqual((await call('POST', 'admin/assignments', boss, { eventId: '30001', email: 'ben@example.com' })).status, 200);
+  assert.strictEqual((await call('POST', 'admin/assignments', boss, { eventId: '30001', email: 'ana@example.com', role: 'head' })).status, 200);
+  assert.strictEqual((await call('POST', 'admin/assignments', boss, { eventId: '30001', email: 'ana@example.com', role: 'head' })).status, 409);
+  assert.strictEqual((await call('POST', 'admin/assignments', boss, { eventId: '30001', email: 'ana@example.com', role: 'boss' })).status, 400);
+  assert.deepStrictEqual((await call('GET', 'admin/assignments', boss)).body.assignments.map((a) => [a.email, a.role]), [['ana@example.com', 'head'], ['ben@example.com', 'referee']]);
+  assert.strictEqual((await call('GET', 'home', ana)).body.events[0].role, 'head');
+  assert.strictEqual((await call('GET', 'home', ben)).body.events[0].role, 'referee');
+  // ben becomes head referee too, ana goes back to referee
+  assert.strictEqual((await call('POST', 'admin/assignments', boss, { eventId: '30001', email: 'ben@example.com', role: 'head' })).status, 200);
+  assert.strictEqual((await call('POST', 'admin/assignments', boss, { eventId: '30001', email: 'ana@example.com', role: 'referee' })).status, 200);
+  assert.deepStrictEqual((await call('GET', 'admin/assignments', boss)).body.assignments.map((a) => [a.email, a.role]), [['ben@example.com', 'head'], ['ana@example.com', 'referee']]);
+});
+
+test('an event\'s page: its days and times, who\'s refereeing it (with the names they signed in with), and its cameras', async () => {
+  const { call, boss, ana, ben, login } = await ready();
+  await call('POST', 'admin/assignments', boss, { eventId: '30002', email: 'ana@example.com', role: 'head' });
+  await call('GET', 'home', ana); // Ana's name is kept as she opens her home page
+  const p = (await call('GET', 'event/30002', ben)).body;
+  assert.strictEqual(p.event.name, 'Phuket Super'); assert.strictEqual(p.event.unit, 'e30002'); assert.strictEqual(p.event.over, false);
+  assert.strictEqual(p.event.windows.length, 2, 'two days');
+  assert.match(p.event.url, /spartan\.com/);
+  assert.strictEqual(p.you, null, 'ben isn\'t assigned, but any referee can see it');
+  assert.deepStrictEqual(p.referees, [{ email: 'ana@example.com', name: 'Ana Popescu', role: 'head', you: false }]);
+  assert.strictEqual(p.booking, null);
+  assert.deepStrictEqual((await call('GET', 'event/e30002', ana)).body.you, { role: 'head' });
+  // booked: the page says so
+  assert.strictEqual((await call('POST', 'servers/mine/start', ben, { unit: 'e30002', cameras: 2, from: Date.parse('2026-12-05T01:00:00Z'), until: Date.parse('2026-12-05T05:00:00Z') })).status, 200);
+  const b = (await call('GET', 'event/30002', ana)).body.booking;
+  assert.strictEqual(b.state, 'booked'); assert.strictEqual(b.cameras, 2); assert.strictEqual(b.by, 'ben@example.com');
+  assert.strictEqual((await call('GET', 'event/99999', ana)).status, 404);
+  assert.strictEqual((await call('GET', 'event/30002', await login('stranger'))).status, 403);
+  assert.strictEqual((await call('GET', 'event/30002', {})).status, 401);
 });

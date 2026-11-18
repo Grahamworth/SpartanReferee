@@ -1,4 +1,4 @@
-// A referee's home page (home.html): hello, the events they're assigned to (each with the way to book its cameras), and the ways to
+// A referee's home page (home.html): hello, the events they're assigned to (each opens its page, where its cameras are booked), and the ways to
 // the learning platform, the cameras and (admins) the admin page. Everything comes from /api/home.
 import { call, devSignInButton, signedIn, signOut, esc } from './api-base.js';
 import { microsoftButton } from './email-signin-web.js';
@@ -18,9 +18,11 @@ function draw(h) {
   $('name').textContent = h.name || h.email;
   $('roleLine').textContent = h.admin ? 'Spartan referee and admin' : 'Spartan referee';
   const now = Date.now();
-  $('eventList').innerHTML = h.events.map((e) => `<li><span><b>${esc(e.name)}${e.from <= now && now < e.until ? ' <span class="now">On now</span>' : ''}</b>
-    <small>${esc([datesOf(e), [e.city, e.country].filter(Boolean).join(', ')].filter(Boolean).join(' · '))}</small></span>
-    <a class="book" href="console.html?unit=${encodeURIComponent(e.unit)}">Book cameras</a></li>`).join('');
+  // each event opens its own page: its times, who's refereeing it, and booking or watching its cameras
+  $('eventList').innerHTML = h.events.map((e) => `<li><a href="event.html?id=${encodeURIComponent(e.id)}"><span><b>${esc(e.name)}</b>
+    <small>${esc([datesOf(e), [e.city, e.country].filter(Boolean).join(', ')].filter(Boolean).join(' · '))}</small>
+    <span class="chips">${e.role === 'head' ? '<span class="chip head">Head referee</span>' : '<span class="chip">Referee</span>'}${e.from <= now && now < e.until ? '<span class="chip now">On now</span>' : ''}</span></span>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></a></li>`).join('');
   show($('noEvents'), !h.events.length);
   show($('learnTile'), !!h.learn);
   show($('adminTile'), !!h.admin);

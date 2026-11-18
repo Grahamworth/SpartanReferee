@@ -16,13 +16,17 @@
   .hello h1 span { color: var(--primary-text); }
   .hello p { margin: 8px 0 26px; }
   .events { list-style: none; margin: 0; padding: 0; }
-  .events li { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; padding: 14px 0; border-top: 1px solid var(--line); }
-  .events li:first-child { border-top: 0; padding-top: 4px; }
+  .events li { border-top: 1px solid var(--line); }
+  .events li:first-child { border-top: 0; }
+  .events a { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 64px; padding: 12px 0; color: var(--text); text-decoration: none; }
+  .events a:hover b { text-decoration: underline; }
   .events b { display: block; font-size: 1.1rem; overflow-wrap: anywhere; }
-  .events small { color: var(--muted); }
-  .events .now { display: inline-block; margin-left: 8px; padding: 1px 8px; font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; background: var(--primary); color: var(--on-primary); vertical-align: middle; }
-  .events a.book { flex: none; padding: 9px 16px; font-weight: 700; text-decoration: none; border: 2px solid var(--primary); color: var(--text); }
-  .events a.book:hover { background: var(--primary); color: var(--on-primary); }
+  .events small { display: block; color: var(--muted); margin-top: 2px; }
+  .events svg { flex: none; width: 24px; height: 24px; fill: none; stroke: var(--primary-text); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+  html[dir="rtl"] .events svg { transform: scaleX(-1); }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .chip { padding: 1px 8px; font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; border: 1px solid var(--line); color: var(--muted); }
+  .chip.head, .chip.now { background: var(--primary); border-color: var(--primary); color: var(--on-primary); }
   .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin: 0 0 18px; }
   .tile { display: flex; gap: 16px; align-items: flex-start; background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--primary); padding: 20px; color: var(--text); text-decoration: none; }
   .tile:hover { border-color: var(--primary-text); }
@@ -38,9 +42,6 @@
     .tile { flex-direction: column; gap: 8px; padding: 14px; min-height: 92px; }
     .tile h2 { font-size: 1.25rem; margin: 0; }
     .tile p { display: none; }
-    .events li { align-items: stretch; }
-    .events li > span { flex: 1 1 100%; }
-    .events a.book { flex: 1 1 100%; display: flex; justify-content: center; align-items: center; min-height: 46px; }
   }
 </style>
 <script type="module" src="home.js"></script>
@@ -70,7 +71,7 @@
     <section class="card">
       <h2>Your upcoming events</h2>
       <ul class="events" id="eventList"></ul>
-      <p class="note" id="noEvents" hidden>No events assigned to you yet. An admin assigns referees to Spartan's events, and they'll show here.</p>
+      <p class="note" id="noEvents" hidden>No events assigned to you yet. An admin assigns referees to Spartan's events, and they'll show here. Tap one to see it and book its cameras.</p>
     </section>
 
     <nav class="tiles" aria-label="Your areas">

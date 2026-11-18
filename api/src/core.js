@@ -9,6 +9,8 @@
    POST /api/auth/microsoft {code, verifier, redirectUri} -> { token, user }
    GET  /api/me                          -> { user, profile, admin, judge }
    GET  /api/home                        -> a referee's home page: their name and assigned events (assignments.js)
+   GET  /api/event/<id>                  -> an event's page: its times, referees and cameras (assignments.js)
+   GET|POST /api/learn/practice-camera {cameras} -> a 30-minute practice camera, booked from Learning only
    /api/admin/admins|companies|pricing|customers (admins), /api/companies, /api/servers, /api/recordings: see their files */
 const crypto = require('node:crypto');
 const { createRecordings } = require('./recordings');
@@ -149,9 +151,9 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
   // Spartan's events (events.js), synced from Spartan's race list; referees book cameras for one
   // bookingUnits false: one booking for the whole organisation, as before events (older tests)
   const eventList = createEvents({ store, now, reply, ...(eventFetcher ? { fetcher: eventFetcher } : {}) });
-  const { servers, adminPricing, adminCustomers, stopCompany } = createServers({ store, now, reply, session, isAdmin, membership, payments, freeBooking: true, events: bookingUnits ? eventList : null, maxRunning: maxRunningServers, hourPrice: serverHourPrice });
+  const { servers, adminPricing, adminCustomers, stopCompany, bookingStatus, trainingUnit } = createServers({ store, now, reply, session, isAdmin, membership, payments, freeBooking: true, events: bookingUnits ? eventList : null, maxRunning: maxRunningServers, hourPrice: serverHourPrice });
   // which referees are assigned to which events, and each referee's home page
-  const assignments = createAssignments({ store, now, reply, session, isAdmin, isAdminEmail, membership, events: eventList, learnOn: !!learnDb });
+  const assignments = createAssignments({ store, now, reply, session, isAdmin, isAdminEmail, membership, events: eventList, bookingStatus, learnOn: !!learnDb });
   const { companies, adminCompanies, referees } = createCompanies({ store, now, reply, session, isAdmin, putBrand, membership, onBlocked: stopCompany });
 
   async function handle({ method, path, headers = {}, body, query: extraQuery = {} }) {
@@ -182,11 +184,23 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
       if (parts[0] === 'auth' && parts[1] === 'microsoft' && method === 'POST') r = await authMicrosoft(body);
       if (parts[0] === 'me' && method === 'GET') r = await me(h);
       if (parts[0] === 'home' && parts.length === 1) r = await assignments.home(method, h);
+      if (parts[0] === 'event' && parts.length === 2) r = await assignments.eventPage(method, parts[1], h);
+      // a 30-minute practice camera, booked only here, from Learning's camera guide (servers.js refuses it anywhere else)
+      if (parts[0] === 'learn' && parts[1] === 'practice-camera' && parts.length === 2) {
+        const me = session(h);
+        if (!me) r = reply(401, { error: 'Sign in first' });
+        else {
+          const unit = trainingUnit(me.uid);
+          r = method === 'GET' ? await servers('GET', 'mine', undefined, null, h, { unit })
+            : method === 'POST' ? await servers('POST', 'mine', 'start', { cameras: Number(body?.cameras), unit }, h, {}, { fromLearn: true }) : reply(405, { error: 'Not allowed' });
+          if (r && r.status === 200) r.body = { ...r.body, unit };
+        }
+      }
       if (parts[0] === 'recordings' && parts.length <= 3) r = await recordings(method, parts[1], parts[2], body, h);
       if (parts[0] === 'servers' && parts.length <= 3) r = await servers(method, parts[1], parts[2], body, h, query);
       // Spartan's events: for anyone in the organisation
       if (parts[0] === 'events' && parts.length === 1) { const me = session(h); r = !me ? reply(401, { error: 'Sign in first' }) : !(await membership.companyFor(me)) ? reply(403, { error: 'Only referees and admins see the events' }) : await eventList.events(method); }
-      if (parts[0] === 'learn') {
+      if (parts[0] === 'learn' && parts[1] !== 'practice-camera') {
         if (!learn) r = reply(503, { error: 'The learning platform isn’t set up yet' });
         else {
           try { learnReady = learnReady || learnDb.migrate().catch((e) => { learnReady = null; throw e; }); await learnReady; r = await learn.handle(method, parts, body, h, query); }

@@ -123,17 +123,23 @@ test('each event has its own booking: two events book at once, and a referee see
   assert.strictEqual((await call('GET', 'servers/mine?unit=e10664', pat)).body.server.wanted, 'on');
 });
 
-test('training: everyone, 30 minutes, any time, not extended, and each referee has their own', async () => {
+test('training: everyone, 30 minutes, started from Learning only, not extended, and each referee has their own', async () => {
   const { call, referee, store } = setup();
   const sam = await referee('sam'), pat = await referee('pat');
-  const later = Date.parse('2026-11-25T23:30:00Z'); // the middle of the night, anywhere
-  const t = await call('POST', 'servers/mine/start', sam, { cameras: 1, from: later, until: later + 8 * HOUR });
+  const refused = await call('POST', 'servers/mine/start', sam, { cameras: 1 });
+  assert.strictEqual(refused.status, 403); assert.match(refused.body.error, /cameras guide in Learning/);
+  assert.ok(!(await call('GET', 'servers/units', sam)).body.units.some((u) => u.kind === 'training'), 'not offered on the console');
+  const t = await call('POST', 'learn/practice-camera', sam, { cameras: 1 });
   assert.strictEqual(t.status, 200, JSON.stringify(t.body));
-  assert.strictEqual(t.body.server.unit.kind, 'training'); assert.strictEqual(t.body.server.until, later + 0.5 * HOUR);
-  assert.strictEqual((await call('POST', 'servers/mine/extend', sam, { unit: t.body.server.unit.id, hours: 1 })).status, 409);
-  assert.strictEqual((await call('GET', `servers/mine?unit=${t.body.server.unit.id}`, pat)).status, 403, 'not someone else\'s');
-  assert.strictEqual((await call('POST', 'servers/mine/start', pat, { cameras: 1 })).status, 200, 'pat\'s own training is separate');
+  assert.strictEqual(t.body.server.unit.kind, 'training'); assert.strictEqual(t.body.unit, t.body.server.unit.id);
+  assert.strictEqual(t.body.server.until - t.body.server.from, 0.5 * HOUR);
+  assert.ok((await call('GET', 'servers/units', sam)).body.units.some((u) => u.id === t.body.unit), 'on the console while it is booked, to watch');
+  assert.strictEqual((await call('GET', 'learn/practice-camera', sam)).body.server.unit.id, t.body.unit);
+  assert.strictEqual((await call('POST', 'servers/mine/extend', sam, { unit: t.body.unit, hours: 1 })).status, 409);
+  assert.strictEqual((await call('GET', `servers/mine?unit=${t.body.unit}`, pat)).status, 403, "not someone else's");
+  assert.strictEqual((await call('POST', 'learn/practice-camera', pat, { cameras: 1 })).status, 200, "pat's own training is separate");
   assert.strictEqual((await store.list('unit')).length, 2);
+  assert.strictEqual((await call('POST', 'learn/practice-camera', {}, { cameras: 1 })).status, 401);
 });
 
 test('admins: a testing booking at any time, and an event booked at any time when they say so; referees can\'t', async () => {

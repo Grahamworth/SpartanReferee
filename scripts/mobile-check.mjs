@@ -23,7 +23,9 @@ const login = async (email) => (await api('POST', 'auth/google', '', { idToken: 
 const boss = await login('boss@example.com');
 await api('POST', 'admin/referees', boss, { email: 'maria.lopez@example.com' });
 const events = (await api('GET', 'events', boss))?.events || [];
-for (const e of events.slice(0, 2)) await api('POST', 'admin/assignments', boss, { eventId: e.id, email: 'maria.lopez@example.com' });
+// Maria: head referee at the first event and referee at the second; the admin referees the first too
+for (const [i, e] of events.slice(0, 2).entries()) await api('POST', 'admin/assignments', boss, { eventId: e.id, email: 'maria.lopez@example.com', role: i ? 'referee' : 'head' });
+if (events[0]) await api('POST', 'admin/assignments', boss, { eventId: events[0].id, email: 'boss@example.com' });
 const maria = await login('maria.lopez@example.com');
 
 // [name, page, who, a script that's true once the page has drawn]
@@ -35,6 +37,8 @@ const PAGES = [
   ['console-history', 'console.html#history', maria, "!document.getElementById('whatFor').hidden"],
   ['results', 'results.html', maria, 'document.readyState === "complete"'],
   ['admin', 'customers.html', boss, "!document.getElementById('content').hidden"],
+  ['event-referee', `event.html?id=${events[0]?.id || ''}`, maria, "!document.getElementById('content').hidden || !document.getElementById('error').hidden"],
+  ['learn-cameras-referee', 'learn/#/cameras', maria, "!!document.querySelector('#practice form, #practice .practiceBtn, #practice .error')"],
   ['learn-referee', 'learn/', maria, "!!document.querySelector('#view .card') || !document.getElementById('error').hidden"],
   ['learn-profile-referee', 'learn/#/profile', maria, "!!document.querySelector('#view .card')"],
   ['learn-people-admin', 'learn/#/people', boss, "!!document.querySelector('#view .card')"],

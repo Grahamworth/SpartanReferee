@@ -62,9 +62,11 @@ function drawAssignments() {
   pick.innerHTML = events.length ? events.map((e) => { const n = count(e.id); return `<option value="${esc(e.id)}">${esc(`${n ? `${n} assigned · ` : ''}${e.name} · ${eventDates(e)}${e.city ? ` · ${e.city}` : ''}`)}</option>`; }).join('') : '<option value="">No upcoming events: sync them first</option>';
   pick.value = events.some((e) => e.id === was) ? was : (events.find((e) => count(e.id))?.id || events[0]?.id || '');
   const here = assigned.filter((a) => a.eventId === pick.value);
-  $('assignList').innerHTML = here.length ? here.map((a) => `<li><span><b>${esc(a.email)}</b><small>Assigned${a.by ? ` by ${esc(a.by)}` : ''} on ${esc(onDay(a.at))}</small></span><button class="small" type="button" data-unassign="${esc(a.email)}">Remove</button></li>`).join('')
+  // head referees first; each can be switched between head referee and referee
+  $('assignList').innerHTML = here.length ? here.map((a) => `<li><span><b>${esc(a.email)}</b><small>${a.role === 'head' ? '<strong>Head referee</strong>' : 'Referee'} · assigned${a.by ? ` by ${esc(a.by)}` : ''} on ${esc(onDay(a.at))}</small></span><span class="rowBtns"><button class="small" type="button" data-role="${a.role === 'head' ? 'referee' : 'head'}" data-email="${esc(a.email)}">${a.role === 'head' ? 'Make referee' : 'Make head referee'}</button><button class="small" type="button" data-unassign="${esc(a.email)}">Remove</button></span></li>`).join('')
     : `<li class="muted">${pick.value ? 'Nobody assigned to this event yet.' : ''}</li>`;
   for (const b of $('assignList').querySelectorAll('button[data-unassign]')) b.onclick = () => unassign(b.dataset.unassign);
+  for (const b of $('assignList').querySelectorAll('button[data-role]')) b.onclick = () => assign(b.dataset.email, b.dataset.role, true);
   // who can be assigned: the referees on the list, and the admins
   $('refereeEmails').innerHTML = [...new Set([...referees.map((p) => p.email), ...admins])].sort().map((e) => `<option value="${esc(e)}"></option>`).join('');
   $('addAssign').querySelector('button').disabled = !pick.value;
@@ -78,12 +80,20 @@ async function unassign(email) {
   catch (e) { assignFail(e.message); }
 }
 $('assignEvent').addEventListener('change', () => { assignFail(''); drawAssignments(); });
+// assigns someone to the chosen event as head referee or referee, or (changing) switches their role there
+async function assign(email, role, changing = false) {
+  const ev = events.find((x) => x.id === $('assignEvent').value); if (!ev) return false;
+  assignFail('');
+  try {
+    await call('admin/assignments', { method: 'POST', body: { eventId: ev.id, email, role } }); await loadAssignments();
+    const as = role === 'head' ? 'head referee' : 'referee';
+    toast(changing ? `${email} is now ${as} for ${ev.name}` : `${email} is assigned to ${ev.name} as ${as}`);
+    return true;
+  } catch (err) { assignFail(err.message); return false; }
+}
 $('addAssign').addEventListener('submit', async (e) => {
   e.preventDefault(); assignFail('');
-  const ev = events.find((x) => x.id === $('assignEvent').value), email = $('assignEmail').value.trim();
-  if (!ev) return;
-  try { await call('admin/assignments', { method: 'POST', body: { eventId: ev.id, email } }); $('assignEmail').value = ''; await loadAssignments(); toast(`${email} is assigned to ${ev.name}`); }
-  catch (err) { assignFail(err.message); }
+  if (await assign($('assignEmail').value.trim(), $('assignRole').value)) { $('assignEmail').value = ''; $('assignRole').value = 'referee'; }
 });
 
 // ---------------------------------------------------------------- referees: who can sign in

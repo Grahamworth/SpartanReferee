@@ -138,7 +138,8 @@ function draw(s) {
         : `${state === 'starting' ? 'This takes about 5 minutes. ' : ''}${s.from > Date.now() ? `Your booking starts at ${dayClock(s.from)}. ` : ''}${many ? 'They shut' : 'It shuts'} down at ${dayClock(s.until)}, ${timeLeft(s.until - Date.now())}.`;
   $('stateMore').classList.toggle('warn', !!ending);
   fail(state === 'off' ? s.error : '');
-  show($('book'), state === 'off'); show($('running'), state === 'on' || state === 'starting' || state === 'booked');
+  // a practice camera (training) is booked from Learning's camera guide, never here
+  show($('book'), state === 'off' && s.unit?.kind !== 'training'); show($('trainingFromLearn'), state === 'off' && s.unit?.kind === 'training'); show($('running'), state === 'on' || state === 'starting' || state === 'booked');
   // booked ahead: nothing to open yet, and Stop cancels it
   show($('serverList'), state !== 'booked');
   $('stop').textContent = state === 'booked' ? 'Cancel booking' : 'Stop now';

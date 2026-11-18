@@ -39,7 +39,9 @@
    the company above: one per Spartan event ("e<event id>"), one per referee for training ("t…") and one per admin for testing ("x…").
    Every /api/servers/mine call says which with ?unit= (GET) or {unit} (POST); without one it's the most relevant running booking.
      event     07:00 to 18:00 local time on the event's days (events.js), extended up to 18:00; an admin can book any time ({anyTime})
-     training  30 minutes, any time, everyone; no extending
+     training  30 minutes, any time, everyone; no extending. Booked only from Learning's camera guide (from 19 November 2026):
+               POST /api/learn/practice-camera (core.js) books it with fromLearn; /api/servers/mine/start refuses it. The console
+               lists your training only while it's booked, so you can watch it there.
      testing   admins only, any time, as bookings always were
    Servers still belong to the organisation (server.company), for its brand and "Our settings"; their slots are the unit's.
    GET  /api/servers/units  -> { units, current } the events (with their bookings), your training, and (admins) your testing
@@ -302,9 +304,17 @@ function createServers({ store, now, reply, session, isAdmin = () => false, memb
     if (events) await events.fresh(); // synced from Spartan when the copy here is old
     const evs = events ? await events.upcoming() : [];
     const units = evs.map((e) => ({ id: `e${e.id}`, kind: 'event', name: e.name, city: e.city, country: e.country, tz: e.tz, startDate: e.startDate, endDate: e.endDate, windows: e.windows, booking: booking(`e${e.id}`) }));
-    units.push({ id: trainingId(me.uid), kind: 'training', name: 'Training', booking: booking(trainingId(me.uid)) });
+    if (booking(trainingId(me.uid))) units.push({ id: trainingId(me.uid), kind: 'training', name: 'Training', booking: booking(trainingId(me.uid)) });
     if (isAdmin(h)) units.push({ id: testingId(me.uid), kind: 'testing', name: 'Testing', booking: booking(testingId(me.uid)) });
-    return { units, current: await currentUnit(me, h) };
+    const current = await currentUnit(me, h);
+    return { units, current: units.some((u) => u.id === current) ? current : (units[0]?.id || current) };
+  }
+  /** an event's (or any unit's) booking as the event page shows it, or null: { state: booked|starting|on|stopping, from, until, cameras, by } */
+  async function bookingStatus(id) {
+    const p = await store.get('serverplan', id); if (!active(p)) return null;
+    const [want, st] = await Promise.all([store.get('serverwant', slotId(id, 1)), store.get('serverstate', slotId(id, 1))]);
+    const state = want?.desired !== 'on' ? 'stopping' : (p.from || 0) - START_LEAD_MS > now() ? 'booked' : st?.state === 'on' ? 'on' : 'starting';
+    return { state, from: p.from || 0, until: p.until, cameras: p.cameras, by: p.by || p.requestedBy || '' };
   }
   async function stopCompany(id) {
     // the organisation blocked: every one of its units stops
@@ -358,7 +368,7 @@ function createServers({ store, now, reply, session, isAdmin = () => false, memb
     return null;
   }
 
-  async function servers(method, a, b, body, h, query = {}) {
+  async function servers(method, a, b, body, h, query = {}, { fromLearn = false } = {}) {
     // a server's settings, kept here as the server itself is deleted when it's shut down
     if (a === 'settings' && (method === 'GET' || method === 'POST')) {
       const k = await store.get('serverkey', sha(h['x-server-key'] || ''));
@@ -426,6 +436,7 @@ function createServers({ store, now, reply, session, isAdmin = () => false, memb
     }
     // Customers go through the payment page: checkout says what the booking comes to and holds it for a while, and paying for it makes it.
     // For now the payment is pretend: nothing is charged, and it's marked so on the booking.
+    if ((b === 'checkout' || b === 'start') && c.kind === 'training' && !fromLearn) return reply(403, { error: 'Practice cameras are booked from the cameras guide in Learning' });
     if (b === 'checkout') {
       const a = asked(body); if (a.error) return reply(400, { error: a.error });
       const no = await cantBook(c, h, a); if (no) return no;
@@ -485,7 +496,7 @@ function createServers({ store, now, reply, session, isAdmin = () => false, memb
     }
     return null;
   }
-  return { servers, adminPricing, adminCustomers, stopCompany };
+  return { servers, adminPricing, adminCustomers, stopCompany, bookingStatus, trainingUnit: trainingId };
 }
 
 module.exports = { createServers, signFor, serversFor };

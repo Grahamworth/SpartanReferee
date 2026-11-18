@@ -307,3 +307,9 @@ html[lang="ar"] *, html[lang="th"] * { font-style: normal !important; letter-spa
   /* typed text 16px or more, so a phone doesn't zoom in on it */
   input:not([type=checkbox]):not([type=radio]), select, textarea { font-size: 16px; }
 }
+
+/* the admin page's assignments: a role to choose beside Assign, and each person's two buttons */
+.assignAs { display: flex; gap: 8px; margin-top: 8px; }
+.assignAs select { flex: 1; min-width: 0; }
+.rowBtns { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
+@media (max-width: 640px) { .adminList li:has(.rowBtns) { flex-wrap: wrap; } .rowBtns { width: 100%; justify-content: stretch; } .rowBtns button { flex: 1; } }
