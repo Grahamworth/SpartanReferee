@@ -4,7 +4,7 @@
 // venue allows it and TCP where it doesn't.
 function mediamtxYaml(s, { recordDir, publicHost, viewBind = '127.0.0.1' }) {
   const rec = recordDir.replace(/\\/g, '/');
-  return `# Written by HeadJudge: changes here are lost when it restarts.
+  return `# Written by SpartanReferee: changes here are lost when it restarts.
 logLevel: info
 logDestinations: [stdout]
 api: true

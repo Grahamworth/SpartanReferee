@@ -26,7 +26,7 @@
         : ((i * 7 + j * 13 + i * j * 3) % 5) < 2;
       if (on) cells += `<rect x="${i + 2}" y="${j + 2}" width="1" height="1"/>`;
     }
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25"><rect width="25" height="25" fill="#fff"/><g fill="#000">${cells}</g><rect x="7" y="10" width="11" height="5" fill="#ffc400"/><text x="12.5" y="13.9" font-size="3.6" font-family="Arial" font-weight="700" text-anchor="middle">TEST</text></svg>`;
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25"><rect width="25" height="25" fill="#fff"/><g fill="#000">${cells}</g><rect x="7" y="10" width="11" height="5" fill="#e2231a"/><text x="12.5" y="13.9" font-size="3.6" font-family="Arial" font-weight="700" text-anchor="middle">TEST</text></svg>`;
     return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
   })();
 
@@ -140,7 +140,7 @@
     now: new Date().toISOString(), cams: cams.map((c) => ({ ...c, judging: c.ai && c.live, fps: c.ai && c.live ? 15 : 0 })),
     marks: [], events, athletesRev, record: true, keepDays: 7, maxJudges: FREE ? 0 : 2, until: FREE ? 0 : T0 + 2 * 3600e3, firstCamera: 1,
     site: new URL('../console.html', location.href).href, // the site's own console: Booking and History go there
-    brand: window.HJ_BRAND || { id: 'test', name: FREE ? 'Free camera' : 'Test company', logo: '', theme: { primary: '#ffc400', accent: '#3ddc97', mode: 'dark' } },
+    brand: window.HJ_BRAND || { id: 'test', name: FREE ? 'Free camera' : 'Test company', logo: '', theme: { primary: '#e2231a', accent: '#3ddc97', mode: 'dark' } },
   });
   // ---- camera 1: this browser's camera, recorded here in 10-second pieces kept for 20 minutes. A stretch of it plays as one video,
   // its pieces put together in the browser (Media Source), starting at the moment asked for, just as a server cuts a clip.
@@ -219,7 +219,7 @@
     const ly = DH - 34; // at the bottom, clear of the review's own camera name and LIVE tag
     x.fillStyle = 'rgba(0,0,0,.55)'; x.fillRect(8, ly, 196, 26); x.fillRect(DW - 70, ly, 62, 26);
     x.fillStyle = '#fff'; x.font = '700 15px Arial'; x.textAlign = 'left'; x.textBaseline = 'middle';
-    x.fillText(`CAMERA 1  ${clock(t)}`, 16, ly + 13); x.fillStyle = '#ffc400'; x.fillText('DEMO', DW - 62, ly + 13);
+    x.fillText(`CAMERA 1  ${clock(t)}`, 16, ly + 13); x.fillStyle = '#e2231a'; x.fillText('DEMO', DW - 62, ly + 13);
   }
   // live: drawn 15 times a second, and given to the page as camera 1 (recorded and shown just as a real camera is)
   function demoStream() {
@@ -239,7 +239,7 @@
   // a WebM file of VP8 frames, one cluster per key frame (times in ms; the segment's size left open, as a browser's recorder does)
   function webm(frames) {
     const head = el([0x1A, 0x45, 0xDF, 0xA3], uint([0x42, 0x86], 1), uint([0x42, 0xF7], 1), uint([0x42, 0xF2], 4), uint([0x42, 0xF3], 8), text([0x42, 0x82], 'webm'), uint([0x42, 0x87], 2), uint([0x42, 0x85], 2));
-    const info = el([0x15, 0x49, 0xA9, 0x66], uint([0x2A, 0xD7, 0xB1], 1e6), text([0x4D, 0x80], 'HeadJudge demo'), text([0x57, 0x41], 'HeadJudge demo'));
+    const info = el([0x15, 0x49, 0xA9, 0x66], uint([0x2A, 0xD7, 0xB1], 1e6), text([0x4D, 0x80], 'SpartanReferee demo'), text([0x57, 0x41], 'SpartanReferee demo'));
     const tracks = el([0x16, 0x54, 0xAE, 0x6B], el([0xAE], uint([0xD7], 1), uint([0x73, 0xC5], 1), uint([0x83], 1), text([0x86], 'V_VP8'), el([0xE0], uint([0xB0], DW), uint([0xBA], DH))));
     const clusters = [];
     let at = 0, blocks = [];

@@ -1,5 +1,5 @@
 'use strict';
-/* HeadJudge's backend, framework-free so it can be tested without Azure: sign-in (Google, and email through email-signin.js), who's an
+/* SpartanReferee's backend, framework-free so it can be tested without Azure: sign-in (Google, and email through email-signin.js), who's an
    admin, and the companies (companies.js), their servers and bookings (servers.js, payments.js) and recordings (recordings.js).
    The Spartans app had its parts here too (chat, groups, profiles, news, scores) until 8 November 2026: it has its own backend now.
 

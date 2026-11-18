@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Builds what goes on a HeadJudge server: the server, the review page and the judge with its engines and models, as one archive.
+# Builds what goes on a SpartanReferee server: the server, the review page and the judge with its engines and models, as one archive.
 # Only named files go in, so nothing else in this folder (test videos, say) can end up on a server.
 set -euo pipefail
 SRC="$(cd "$(dirname "$0")/.." && pwd)"

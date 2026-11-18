@@ -4,7 +4,9 @@ SpartanReferee was copied from HeadJudge (github.com/Grahamworth/HeadJudge, `C:\
 
 Sign-in is **Microsoft only** (from 18 November 2026): the website offers no Google or email buttons, and the site has no `GOOGLE_CLIENT_ID` or `CIAM_*` settings, so the API refuses both (503). Admins need an address Microsoft vouches for. Local testing (`node api/dev-server.js`) has a "Sign in (test account)" button instead. The email directory `spartanreferee.onmicrosoft.com` and `scripts/set-up-email-sign-in.mjs` are still there but unused.
 
-What follows was written for HeadJudge, and the product inside is still called HeadJudge until it's renamed.
+Its look (from 18 November 2026) is Spartan's: the name SpartanReferee on every page, red `#e2231a` on black, and the Spartans helmet (white on a red disc) as its icon, drawn by `node scripts/make-icons.cjs icons/spartanreferee`. A company's own logo and colours still replace it on its pages, as before. The Broadcaster app is "SpartanReferee Broadcaster" (`com.vdaso.spartanreferee.broadcast`), so it installs beside HeadJudge's rather than replacing it. Code names (`headjudge.css`, `HeadJudgeBrand`, `headjudge-server.tar.gz`, the server's `headjudge` services) are unchanged.
+
+What follows was written for HeadJudge, before the rename.
 
 ## HeadJudge, as copied
 

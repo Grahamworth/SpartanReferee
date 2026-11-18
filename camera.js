@@ -37,7 +37,7 @@ export function parseStationLink(text) {
     urls = [];
     for (const [k, v] of new URLSearchParams(s.slice(s.indexOf('?') + 1))) {
       if (/\[url\]$/.test(k) && /^rtmp/i.test(v)) urls.push(v);
-      // a HeadJudge server names its connections by the camera's number in the booking: "Camera 3 to laptop"
+      // a SpartanReferee server names its connections by the camera's number in the booking: "Camera 3 to laptop"
       const named = /\[name\]$/.test(k) && /^Camera (\d+)/.exec(v);
       if (named && !cam) cam = +named[1];
     }

@@ -1,5 +1,5 @@
 'use strict';
-// HeadJudge's Receiver on a server: takes the phones' streams and records them, runs one AI judge per camera on the graphics card,
+// SpartanReferee's Receiver on a server: takes the phones' streams and records them, runs one AI judge per camera on the graphics card,
 // and serves the review page, behind a login, to the company's own browsers. Settings come from a file written when the server was
 // created (see config below); everything it keeps is in its data folder, and finished recordings go to cloud storage as well.
 const http = require('http');
@@ -222,8 +222,8 @@ async function extra(req, res, u, { local }) {
   if (p.startsWith('/whep/')) { proxyWhep(req, res, u.pathname.slice(5) + u.search); return true; }
   return false;
 }
-const NO_ACCESS = (site) => `<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sign in</title><body style="margin:0;display:grid;place-items:center;min-height:100vh;background:#12161c;color:#f4f6f8;font:16px/1.5 system-ui,sans-serif"><main style="max-width:420px;padding:24px"><h1 style="font-size:1.4rem;margin:0 0 8px">Open this from your HeadJudge account</h1><p style="color:#a3acb7;margin:0 0 16px">This page needs a sign-in link from your account. Links run out after a few minutes, so if you followed an old one, get a new one.</p>${site ? `<a style="color:#ffc400;font-weight:600" href="${site}">Go to my account</a>` : ''}</main>`;
-const SIGNED_OUT = (site) => NO_ACCESS(site).replace(/<title>.*?<\/title>/, '<title>Signed out</title>').replace(/<h1([^>]*)>.*?<\/h1><p([^>]*)>.*?<\/p>/, '<h1$1>You’ve signed out of the video review</h1><p$2>This browser can’t see this server’s cameras or results any more. To come back, open the video review from your HeadJudge account.</p>');
+const NO_ACCESS = (site) => `<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sign in</title><body style="margin:0;display:grid;place-items:center;min-height:100vh;background:#0b0b0b;color:#f4f6f8;font:16px/1.5 system-ui,sans-serif"><main style="max-width:420px;padding:24px"><h1 style="font-size:1.4rem;margin:0 0 8px">Open this from your SpartanReferee account</h1><p style="color:#a6a6a6;margin:0 0 16px">This page needs a sign-in link from your account. Links run out after a few minutes, so if you followed an old one, get a new one.</p>${site ? `<a style="color:#e2231a;font-weight:600" href="${site}">Go to my account</a>` : ''}</main>`;
+const SIGNED_OUT = (site) => NO_ACCESS(site).replace(/<title>.*?<\/title>/, '<title>Signed out</title>').replace(/<h1([^>]*)>.*?<\/h1><p([^>]*)>.*?<\/p>/, '<h1$1>You’ve signed out of the video review</h1><p$2>This browser can’t see this server’s cameras or results any more. To come back, open the video review from your SpartanReferee account.</p>');
 
 // what browsers get: everything needs the login, except the login itself, signing out and the health check
 const viewServer = http.createServer(async (req, res) => {
@@ -240,7 +240,7 @@ const viewServer = http.createServer(async (req, res) => {
       return res.end(SIGNED_OUT(C.site));
     }
     if (!auth.session(C.secret, req)) {
-      if (u.pathname.startsWith('/api/') || u.pathname.startsWith('/whep/')) return send(res, 401, { error: 'Sign in again from your HeadJudge account' });
+      if (u.pathname.startsWith('/api/') || u.pathname.startsWith('/whep/')) return send(res, 401, { error: 'Sign in again from your SpartanReferee account' });
       res.writeHead(401, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' }); return res.end(NO_ACCESS(C.site));
     }
     sleeper.seen();

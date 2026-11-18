@@ -22,16 +22,16 @@ const swapper = (what, text) => {
 const gate = (who, admit, refused) => `<script type="module">
   import { getMe, call } from '/api-base.js';
   const cover = document.createElement('div');
-  cover.style.cssText = 'position:fixed;inset:0;z-index:9999;background:#12161c;color:#f4f6f8;display:grid;place-content:center;text-align:center;padding:24px;font:16px/1.5 Barlow,system-ui,sans-serif';
-  cover.innerHTML = '<p style="color:#a3acb7">Checking…</p>';
+  cover.style.cssText = 'position:fixed;inset:0;z-index:9999;background:#0b0b0b;color:#f4f6f8;display:grid;place-content:center;text-align:center;padding:24px;font:16px/1.5 Barlow,system-ui,sans-serif';
+  cover.innerHTML = '<p style="color:#a6a6a6">Checking…</p>';
   document.body.append(cover);
   (async () => {
     const me = await getMe(true);
     ${admit}
-    cover.innerHTML = '<div style="max-width:420px"><p style="font:italic 800 32px Barlow Condensed,sans-serif;text-transform:uppercase;margin:0 0 8px">${who}</p><p>${refused}</p><p><a style="color:#ffc400;font-weight:700" href="/console.html">Go to my console</a></p></div>';
-  })().catch(() => { cover.innerHTML = '<p>Can\\'t check who you are right now. <a style="color:#ffc400" href="/console.html">Go to my console</a></p>'; });
+    cover.innerHTML = '<div style="max-width:420px"><p style="font:italic 800 32px Barlow Condensed,sans-serif;text-transform:uppercase;margin:0 0 8px">${who}</p><p>${refused}</p><p><a style="color:#e2231a;font-weight:700" href="/console.html">Go to my console</a></p></div>';
+  })().catch(() => { cover.innerHTML = '<p>Can\\'t check who you are right now. <a style="color:#e2231a" href="/console.html">Go to my console</a></p>'; });
 </script>`;
-const banner = (text) => `<div id="testBanner" style="position:fixed;left:10px;bottom:10px;z-index:40;background:#ffc400;color:#101010;font:700 14px/1.3 Barlow,system-ui,sans-serif;padding:7px 14px;box-shadow:0 2px 12px rgba(0,0,0,.5);pointer-events:none">${text}</div>
+const banner = (text) => `<div id="testBanner" style="position:fixed;left:10px;bottom:10px;z-index:40;background:#e2231a;color:#ffffff;font:700 14px/1.3 Barlow,system-ui,sans-serif;padding:7px 14px;box-shadow:0 2px 12px rgba(0,0,0,.5);pointer-events:none">${text}</div>
 <style>@media (max-width: 760px) { #testBanner { bottom: calc(72px + env(safe-area-inset-bottom)) !important; font-size: 12px !important; padding: 4px 9px !important; } #testBanner .tmMore { display: none; } }</style>`;
 
 function build(folder, { first, end, more = (s) => s }) {
@@ -55,7 +55,7 @@ build('review-test', {
   first: '',
   end: banner('TEST MODE<span class="tmMore"> · <span id="tmCam">camera 1: starting the demo…</span> · the rest is pretend · nothing leaves this browser</span>')
     + gate('Test review', 'if (me?.admin) { cover.remove(); window.hjTestStart?.(); return; } // camera 1 is this browser\'s camera',
-      'This is for HeadJudge admins. Sign in to your console with your admin account, then open it from there.'),
+      'This is for SpartanReferee admins. Sign in to your console with your admin account, then open it from there.'),
 });
 
 // ---- the free camera: any company that's signed in (and not blocked), in its own colours
@@ -70,8 +70,8 @@ build('review-free', {
         if (company) window.HJ_BRAND = { id: company.id, name: company.name, logo: company.logo || '', theme: company.theme || {} };
         cover.remove(); window.hjTestStart?.(); return;
       }
-    }`, 'The free camera is for companies using HeadJudge. Sign in to your console, then open it from there.'),
-  more: (swap) => swap('This server takes two cameras. Open HeadJudge Broadcaster on the phone and scan a camera\'s code. Any Wi-Fi or mobile signal will do.',
+    }`, 'The free camera is for companies using SpartanReferee. Sign in to your console, then open it from there.'),
+  more: (swap) => swap('This server takes two cameras. Open SpartanReferee Broadcaster on the phone and scan a camera\'s code. Any Wi-Fi or mobile signal will do.',
     'The free camera is this computer\'s own camera, recorded in this browser for 20 minutes. Its AI judge runs in this browser too, live or on a minute of video. Phones as cameras and saving clips need a server: book one from your console.')
     ('<small>From the last 7 days</small>', '<small>A minute of camera 1</small>')
     ('<small>Analysed on the server</small>', '<small>Up to 1 minute, analysed here</small>')

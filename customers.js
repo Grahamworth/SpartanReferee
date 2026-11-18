@@ -1,4 +1,4 @@
-// The admin area for HeadJudge: every customer, what they've used and what you've made from it, and the percentage added to Azure's cost.
+// The admin area for SpartanReferee: every customer, what they've used and what you've made from it, and the percentage added to Azure's cost.
 import { call, devSignInButton, signedIn, getMe, signOut, esc } from './api-base.js';
 import { microsoftButton } from './email-signin-web.js';
 

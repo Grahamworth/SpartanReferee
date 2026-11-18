@@ -1,5 +1,5 @@
 'use strict';
-// Who may use a company's server. The HeadJudge site signs a short-lived link for someone signed in and allowed; following it
+// Who may use a company's server. The SpartanReferee site signs a short-lived link for someone signed in and allowed; following it
 // here swaps it for a cookie. Both are signed with the secret this server was given when it was created, which only it and the site hold.
 const crypto = require('crypto');
 

@@ -1,4 +1,4 @@
-// Registering a company for HeadJudge: sign in, then details, logo and colours, and on to the console. Coming back later, the
+// Registering a company for SpartanReferee: sign in, then details, logo and colours, and on to the console. Coming back later, the
 // same page shows where the application stands and changes the details.
 import { call, devSignInButton, signedIn, getMe, signOut } from './api-base.js';
 import { microsoftButton } from './email-signin-web.js';
@@ -63,7 +63,7 @@ function setLogoPick() {
 const STATUS = {
   pending: ['We\'re checking your application', 'We check each company by hand. You can still change anything below.'],
   approved: ['You\'re all set', 'Your logo and colours are live.'],
-  declined: ['We can\'t offer HeadJudge to this company at the moment', ''],
+  declined: ['We can\'t offer SpartanReferee to this company at the moment', ''],
   suspended: ['This company is blocked', 'Get in touch with us to sort this out.'],
 };
 function drawStatus() {

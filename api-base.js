@@ -55,7 +55,7 @@ export async function devSignInButton(el, onDone, onError) {
 }
 
 // ---------------------------------------------------------------- Sign out, at the top right of every page while you're signed in
-// Any page with a HeadJudge header gets it just by loading this file. A "Sign in" link there (data-signin-link) becomes "My console".
+// Any page with a SpartanReferee header gets it just by loading this file. A "Sign in" link there (data-signin-link) becomes "My console".
 export function drawSignOut() {
   const top = typeof document !== 'undefined' && document.querySelector('header.top, [data-account-bar]');
   if (!top) return;

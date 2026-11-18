@@ -1,5 +1,5 @@
 'use strict';
-/* Companies that run events on HeadJudge (Spartan, say). Someone signed in applies once with their company's details, logo
+/* Companies that run events on SpartanReferee (Spartan, say). Someone signed in applies once with their company's details, logo
    and colours; an admin approves it before it can use anything that costs money. Anyone may read an approved company's
    name, logo and colours (its pages show them); contact details only reach its owner and admins.
 
@@ -23,7 +23,7 @@ const crypto = require('node:crypto');
 const MAX_LOGO = 400e3;
 const ID = /^[a-z0-9][a-z0-9-]{1,30}[a-z0-9]$/;
 const COLOUR = /^#[0-9a-f]{6}$/;
-const DEFAULT_THEME = { primary: '#ffc400', accent: '#3ddc97', mode: 'dark' };
+const DEFAULT_THEME = { primary: '#e2231a', accent: '#3ddc97', mode: 'dark' };
 // addresses the site or its servers use, or that would mislead
 const RESERVED = new Set(['admin', 'administrator', 'api', 'app', 'apps', 'auth', 'billing', 'console', 'dashboard', 'dexys', 'download', 'downloads', 'headjudge', 'head-judge', 'help', 'home', 'login', 'mail', 'people', 'register', 'root', 'server', 'servers', 'signin', 'signup', 'status', 'support', 'test', 'www']);
 const EMAIL = /^[^\s@/#?\\]+@[^\s@/#?\\]+\.[^\s@/#?\\]+$/;
@@ -170,7 +170,7 @@ function createCompanies({ store, now, reply, session, isAdmin, putBrand, member
       return reply(200, { people: await peopleOf(c.id) });
     }
     if (row) return reply(409, { error: 'That address is already on the list' });
-    if (await store.get('personof', email)) return reply(409, { error: 'That address is already part of another company on HeadJudge' });
+    if (await store.get('personof', email)) return reply(409, { error: 'That address is already part of another company on SpartanReferee' });
     if ((await store.list(`people:${c.id}`)).length >= MAX_PEOPLE) return reply(400, { error: `A company can have up to ${MAX_PEOPLE} people` });
     await addPerson(c.id, email, 'member', (await provenEmail(me)) || c.email || '');
     return reply(200, { people: await peopleOf(c.id) });

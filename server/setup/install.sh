@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Prepares a fresh Ubuntu 22.04 graphics-card server (run once, as root): driver, Chrome, Node, streaming server, HTTPS, and the services
-# that start HeadJudge. Everything comes from its maker's own download, with checksums checked where they publish them. Reboots at the end.
+# that start SpartanReferee. Everything comes from its maker's own download, with checksums checked where they publish them. Reboots at the end.
 set -euo pipefail
 export DEBIAN_FRONTEND=noninteractive
 MTX_VERSION="${MTX_VERSION:-v1.21.3}"; NODE_VERSION="${NODE_VERSION:-v22.14.0}"

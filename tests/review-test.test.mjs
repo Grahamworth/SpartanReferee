@@ -68,6 +68,6 @@ test('the judge: the free camera hands its live camera over directly, and frames
   assert.match(app, /if \(q\.get\('clip'\)\) document\.documentElement\.classList\.add\('analysis'\);/);
   assert.match(fs.readFileSync(path.join(ROOT, 'styles.css'), 'utf8'), /html\.analysis #attemptBack, html\.analysis #nextAthlete/);
   const judge = fs.readFileSync(path.join(ROOT, 'judge.html'), 'utf8'), home = judge.slice(judge.indexOf('<!-- HOME -->'));
-  assert.doesNotMatch(home.replace(/<[^>]*>/g, ' '), /Spartan|Penalty station/i, 'in what it shows');
+  assert.doesNotMatch(home.replace(/<[^>]*>/g, ' '), /Spartan(?!Referee)|Penalty station/i, 'in what it shows: SpartanReferee only, nothing of the Spartans app');
   assert.doesNotMatch(fs.readFileSync(path.join(ROOT, 'judge-gate.js'), 'utf8'), /mango-glacier|referees\.<\/p>/);
 });

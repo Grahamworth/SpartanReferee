@@ -150,8 +150,8 @@ async function loadCameras() {
   if (key === camsDrawn) return; camsDrawn = key;
   $('camList').innerHTML = r.cameras.map((c) => `<article class="camcard${c.live ? ' live' : ''}">
     <h3>Camera ${camNo(c.n)} <small>${c.live ? `Live${c.video ? ' · ' + esc(c.video) : ''}` : 'Waiting for its phone'}</small></h3>
-    <img src="${c.phone}" alt="QR code for camera ${camNo(c.n)}, to scan in HeadJudge Broadcaster" width="220" height="220">
-    <p class="small muted">Scan in <b>HeadJudge Broadcaster</b> (Android)</p>
+    <img src="${c.phone}" alt="QR code for camera ${camNo(c.n)}, to scan in SpartanReferee Broadcaster" width="220" height="220">
+    <p class="small muted">Scan in <b>SpartanReferee Broadcaster</b> (Android)</p>
     <details><summary>iPhone (Larix)</summary><img src="${c.larix}" alt="QR code for camera ${camNo(c.n)}, to scan in Larix" width="220" height="220"></details>
   </article>`).join('');
   $('addCam').hidden = r.cameras.length >= r.max;
@@ -191,7 +191,7 @@ async function loadCamInfo() {
 }
 setInterval(() => { if (st?.cams.some((c) => !c.live && !camInfo[c.n])) loadCamInfo(); }, 3000);
 const waitingCard = (c) => `<div class="waitCard"><h4>Camera ${camNo(c.n)}: waiting for its phone</h4>
-  <div class="waitQrs"><figure><img src="${c.phone}" alt="QR code for camera ${camNo(c.n)}, to scan in HeadJudge Broadcaster"><figcaption>Android: scan in HeadJudge Broadcaster</figcaption></figure>
+  <div class="waitQrs"><figure><img src="${c.phone}" alt="QR code for camera ${camNo(c.n)}, to scan in SpartanReferee Broadcaster"><figcaption>Android: scan in SpartanReferee Broadcaster</figcaption></figure>
   <figure><img src="${c.larix}" alt="QR code for camera ${camNo(c.n)}, to scan in Larix"><figcaption>iPhone: scan in Larix</figcaption></figure></div>
   <div class="larixBy">Setting up Larix by hand, use this as its connection URL:<code>${esc(c.larixUrl)}</code></div></div>`;
 function drawWaiting(c, j) {

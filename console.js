@@ -270,7 +270,7 @@ $('consoleUrl').textContent = `${location.host}/console.html`; $('consoleUrl').h
 
 function enterBrand(c) {
   applyTheme(c.theme);
-  document.title = `${c.name}: HeadJudge`;
+  document.title = `${c.name}: SpartanReferee`;
   $('company').textContent = c.name;
   if (c.logo) { $('logo').src = c.logo; show($('logo'), true); }
 }
@@ -319,7 +319,7 @@ function notRegistered(email) {
   signOut();
   $('who').textContent = '';
   show($('signIn'), true);
-  $('signInError').textContent = `${email || 'That account'} isn't registered with HeadJudge. Register your company first, then sign in here. Added by your company? Check they used this address.`;
+  $('signInError').textContent = `${email || 'That account'} isn't registered with SpartanReferee. Register your company first, then sign in here. Added by your company? Check they used this address.`;
   show($('signInError'), true);
   show($('registerFirst'), true);
   start();

@@ -6,7 +6,7 @@ SUB=65c0ccca-69f7-43eb-9246-3bd6a6a06b24; RG=rg-spartanreferee-uksouth; APP=spar
 SRC="$(cd "$(dirname "$0")/.." && pwd)"; BUILD="${TEMP:-/tmp}/spartanreferee-control"
 ARM="https://management.azure.com/subscriptions/$SUB/resourceGroups/$RG/providers/Microsoft.Web/sites/$APP"
 if ! az rest --method get --url "$ARM?api-version=2023-12-01" -o none 2>/dev/null; then
-  az functionapp create -g $RG -n $APP --subscription HeadJudge --storage-account spartanreferee --consumption-plan-location uksouth --os-type Windows --runtime node --runtime-version 24 --functions-version 4 --disable-app-insights true --assign-identity '[system]' -o none --only-show-errors
+  az functionapp create -g $RG -n $APP --subscription 65c0ccca-69f7-43eb-9246-3bd6a6a06b24 --storage-account spartanreferee --consumption-plan-location uksouth --os-type Windows --runtime node --runtime-version 24 --functions-version 4 --disable-app-insights true --assign-identity '[system]' -o none --only-show-errors
 fi
 CONN=$(az storage account show-connection-string -n spartanreferee -g $RG --subscription $SUB -o tsv | tr -d '\r')
 ACCOUNT_KEY=$(az storage account keys list --account-name spartanreferee -g $RG --subscription $SUB --query "[0].value" -o tsv | tr -d '\r')
