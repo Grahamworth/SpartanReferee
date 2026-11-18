@@ -120,7 +120,7 @@ function createServers({ store, now, reply, session, isAdmin = () => false, memb
     let s = await store.get('server', id);
     if (s) return s;
     // the name its address is built on; the hash keeps it unguessable from the company's name
-    const label = `hj-${c.id.slice(0, 18).replace(/-+$/, '')}${n > 1 ? `-${n}` : ''}-${sha(id + random(8)).slice(0, 6)}`;
+    const label = `sr-${c.id.slice(0, 18).replace(/-+$/, '')}${n > 1 ? `-${n}` : ''}-${sha(id + random(8)).slice(0, 6)}`;
     s = { id, company: c.id, n, vm: label, label, host: `${label}.${region}.cloudapp.azure.com`, secret: random(32), password: random(9).replace(/[-_]/g, 'x'), serverKey: `sk_${random(32)}`, receiverKey: `rk_${random(24)}` };
     await store.put('server', id, s);
     await store.put('serverkey', sha(s.serverKey), { id });

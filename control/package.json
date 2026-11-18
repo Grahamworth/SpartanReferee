@@ -1,5 +1,5 @@
 {
-  "name": "headjudge-control",
+  "name": "spartanreferee-control",
   "version": "1.0.0",
   "private": true,
   "main": "src/functions.js",

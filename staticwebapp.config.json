@@ -76,7 +76,7 @@
     },
     {
       "route": "/downloads/spartans-broadcaster.apk",
-      "redirect": "https://headjudge.blob.core.windows.net/downloads/spartans-broadcaster.apk?se=2028-11-02T19%3A58Z&sp=r&spr=https&sv=2026-02-06&sr=b&sig=%2BMYjjUuArfdWdP6heHlKT3vty4tgxI%2B9r%2FhfizXzWZU%3D",
+      "redirect": "https://spartanreferee.blob.core.windows.net/downloads/spartans-broadcaster.apk?se=2028-11-02T19%3A58Z&sp=r&spr=https&sv=2026-02-06&sr=b&sig=zyk8ujm6MZWzoIym0QyCLvVoj%2FgoRuwOofl1rMDo9gE%3D",
       "statusCode": 302
     }
   ]

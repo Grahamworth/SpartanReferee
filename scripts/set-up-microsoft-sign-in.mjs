@@ -9,11 +9,11 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const DIRECTORY = "3f85a2ee-4fb3-4db6-b2a9-c33ea30cb80d"; // VDASO (vdaso.com)
-const SUBSCRIPTION = "65c0ccca-69f7-43eb-9246-3bd6a6a06b24"; // HeadJudge, where the site is. Always named, as the default stays VDASO.
-const RESOURCE_GROUP = "rg-headjudge-uksouth";
-const SITE_NAME = "headjudge";
-const SITE = "https://zealous-island-03d6db503.8.azurestaticapps.net";
-const APP_NAME = "HeadJudge";
+const SUBSCRIPTION = "65c0ccca-69f7-43eb-9246-3bd6a6a06b24"; // the HeadJudge subscription, where the site is (its own groups). Always named, as the default stays VDASO.
+const RESOURCE_GROUP = "rg-spartanreferee-uksouth";
+const SITE_NAME = "spartanreferee";
+const SITE = "https://brave-forest-022879f03.3.azurestaticapps.net";
+const APP_NAME = "SpartanReferee"; // its own registration: HeadJudge has its own, named HeadJudge
 const REDIRECT_URIS = [`${SITE}/email-return.html`]; // api/src/microsoft-signin.js has it too
 const MICROSOFT_GRAPH_APP_ID = "00000003-0000-0000-c000-000000000000";
 const SIGN_IN_PERMISSIONS = { openid: "37f7f235-527c-4136-accd-4a02d197296e", profile: "14dad69e-099b-42c9-810b-d002981feec1", email: "64a6cdd6-aab1-4aaf-94b8-3cc8405e90d0" };

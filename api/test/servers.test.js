@@ -135,7 +135,7 @@ test('start makes its secrets once; none of them ever reach a browser', async ()
   const r = await start(call, h);
   const s = await store.get('server', 'peak');
   assert.ok(s.secret && s.password && s.serverKey && s.receiverKey);
-  assert.match(s.host, /^hj-peak-[0-9a-f]{6}\.italynorth\.cloudapp\.azure\.com$/);
+  assert.match(s.host, /^sr-peak-[0-9a-f]{6}\.italynorth\.cloudapp\.azure\.com$/);
   for (const secret of [s.secret, s.password, s.serverKey, s.receiverKey]) assert.ok(!JSON.stringify(r.body).includes(secret));
   await call('POST', 'servers/mine/stop', h, {});
   await start(call, h);

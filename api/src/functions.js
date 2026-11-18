@@ -24,7 +24,7 @@ const getApi = () => (api = api || createApi({
   verifyGoogle: process.env.GOOGLE_CLIENT_ID ? googleVerifier(process.env.GOOGLE_CLIENT_ID) : null, secret: process.env.SESSION_SECRET || '',
   emailSignIn: createEmailSignIn({ subdomain: process.env.CIAM_SUBDOMAIN, tenantId: process.env.CIAM_TENANT_ID, clientId: process.env.CIAM_CLIENT_ID }),
   microsoftSignIn: createMicrosoftSignIn({ clientId: process.env.MICROSOFT_CLIENT_ID }),
-  payments: createPayments({ secretKey: process.env.STRIPE_SECRET_KEY, siteUrl: 'https://zealous-island-03d6db503.8.azurestaticapps.net' }),
+  payments: createPayments({ secretKey: process.env.STRIPE_SECRET_KEY, siteUrl: 'https://brave-forest-022879f03.3.azurestaticapps.net' }),
 }));
 
 app.http('api', {

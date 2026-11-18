@@ -2,19 +2,19 @@
 # Publishes the control app: the small always-on app that starts, stops and watches customers' servers. It runs on a pay-per-use plan,
 # about a minute's work a minute at most, which falls inside Azure's free allowance. Safe to run again.
 set -euo pipefail
-SUB=65c0ccca-69f7-43eb-9246-3bd6a6a06b24; RG=rg-headjudge-uksouth; APP=headjudge-control; SERVERS=rg-headjudge-servers; SITE=https://zealous-island-03d6db503.8.azurestaticapps.net
-SRC="$(cd "$(dirname "$0")/.." && pwd)"; BUILD="${TEMP:-/tmp}/headjudge-control"
+SUB=65c0ccca-69f7-43eb-9246-3bd6a6a06b24; RG=rg-spartanreferee-uksouth; APP=spartanreferee-control; SERVERS=rg-spartanreferee-servers; SITE=https://brave-forest-022879f03.3.azurestaticapps.net
+SRC="$(cd "$(dirname "$0")/.." && pwd)"; BUILD="${TEMP:-/tmp}/spartanreferee-control"
 ARM="https://management.azure.com/subscriptions/$SUB/resourceGroups/$RG/providers/Microsoft.Web/sites/$APP"
 if ! az rest --method get --url "$ARM?api-version=2023-12-01" -o none 2>/dev/null; then
-  az functionapp create -g $RG -n $APP --subscription HeadJudge --storage-account headjudge --consumption-plan-location uksouth --os-type Windows --runtime node --runtime-version 24 --functions-version 4 --disable-app-insights true --assign-identity '[system]' -o none --only-show-errors
+  az functionapp create -g $RG -n $APP --subscription HeadJudge --storage-account spartanreferee --consumption-plan-location uksouth --os-type Windows --runtime node --runtime-version 24 --functions-version 4 --disable-app-insights true --assign-identity '[system]' -o none --only-show-errors
 fi
-CONN=$(az storage account show-connection-string -n headjudge -g $RG --subscription $SUB -o tsv | tr -d '\r')
-ACCOUNT_KEY=$(az storage account keys list --account-name headjudge -g $RG --subscription $SUB --query "[0].value" -o tsv | tr -d '\r')
+CONN=$(az storage account show-connection-string -n spartanreferee -g $RG --subscription $SUB -o tsv | tr -d '\r')
+ACCOUNT_KEY=$(az storage account keys list --account-name spartanreferee -g $RG --subscription $SUB --query "[0].value" -o tsv | tr -d '\r')
 # a link good for years: servers fetch their software with it each time they start
-BUNDLE=$(az storage blob generate-sas --account-name headjudge --account-key "$ACCOUNT_KEY" -c downloads -n headjudge-server.tar.gz --permissions r --expiry 2028-11-02T19:58Z --https-only --full-uri -o tsv | tr -d '\r')
-IMG=$(az sig image-definition show -g $SERVERS --gallery-name headjudge_gallery --gallery-image-definition receiver --subscription $SUB --query id -o tsv | tr -d '\r')
-SUBNET=$(az network vnet subnet show -g $SERVERS --vnet-name hj-vnet -n servers --subscription $SUB --query id -o tsv | tr -d '\r')
-NSG=$(az network nsg show -g $SERVERS -n hj-nsg --subscription $SUB --query id -o tsv | tr -d '\r')
+BUNDLE=$(az storage blob generate-sas --account-name spartanreferee --account-key "$ACCOUNT_KEY" -c downloads -n headjudge-server.tar.gz --permissions r --expiry 2028-11-02T19:58Z --https-only --full-uri -o tsv | tr -d '\r')
+IMG=$(az sig image-definition show -g $SERVERS --gallery-name spartanreferee_gallery --gallery-image-definition receiver --subscription $SUB --query id -o tsv | tr -d '\r')
+SUBNET=$(az network vnet subnet show -g $SERVERS --vnet-name sr-vnet -n servers --subscription $SUB --query id -o tsv | tr -d '\r')
+NSG=$(az network nsg show -g $SERVERS -n sr-nsg --subscription $SUB --query id -o tsv | tr -d '\r')
 
 # the settings go up through a file so that none of them ever appears on a command line or in a log
 BODY=$(mktemp)
@@ -24,7 +24,7 @@ const e = process.env;
 for (const k of ['IMG', 'SUBNET', 'NSG']) if (!e[k].startsWith('/subscriptions/')) throw new Error(k + ' is not an Azure address: ' + e[k]);
 console.log(JSON.stringify({ properties: {
   FUNCTIONS_EXTENSION_VERSION: '~4', FUNCTIONS_WORKER_RUNTIME: 'node', WEBSITE_NODE_DEFAULT_VERSION: '~24',
-  AzureWebJobsStorage: e.CONN, WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: e.CONN, WEBSITE_CONTENTSHARE: 'headjudge-control',
+  AzureWebJobsStorage: e.CONN, WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: e.CONN, WEBSITE_CONTENTSHARE: 'spartanreferee-control',
   STORAGE_CONNECTION: e.CONN, SITE: e.SITE, BUNDLE_URL: e.BUNDLE,
   SERVERS_SUBSCRIPTION: e.SUB, SERVERS_GROUP: e.SERVERS, SERVERS_REGION: 'italynorth', SERVERS_IMAGE: e.IMG, SERVERS_SUBNET: e.SUBNET, SERVERS_NSG: e.NSG, SERVERS_SSH_KEY: e.KEY.trim(),
 } }));
@@ -38,7 +38,7 @@ cp "$SRC/control/package.json" "$SRC/control/host.json" "$BUILD/"; cp "$SRC"/con
 cp "$SRC/api/src/store.js" "$BUILD/src/store.js"
 cp "$SRC/api/src/cameras.js" "$BUILD/src/cameras.js" # how a booking's cameras are spread over servers, as the site does it
 (cd "$BUILD" && npm install --omit=dev --silent --no-audit --no-fund)
-ZIP="$(dirname "$BUILD")/headjudge-control.zip"
+ZIP="$(dirname "$BUILD")/spartanreferee-control.zip"
 (cd "$BUILD" && powershell.exe -NoProfile -Command "Compress-Archive -Force -Path * -DestinationPath '$(cygpath -w "$ZIP")'")
 TOKEN=$(az account get-access-token --subscription $SUB --query accessToken -o tsv | tr -d '\r')
 for i in 1 2 3 4 5 6; do

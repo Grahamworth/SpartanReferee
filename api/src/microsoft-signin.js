@@ -9,7 +9,7 @@
    account whose email domain its organisation has proved it owns (the xms_edov claim). Anyone running their own Microsoft
    organisation could otherwise type any address into a user's email. */
 const AUTHORITY = 'https://login.microsoftonline.com/common/oauth2/v2.0';
-const WEB_REDIRECT_URI = 'https://zealous-island-03d6db503.8.azurestaticapps.net/email-return.html';
+const WEB_REDIRECT_URI = 'https://brave-forest-022879f03.3.azurestaticapps.net/email-return.html';
 const PERSONAL_ACCOUNTS = '9188040d-6c67-4c5b-b112-36a304b66dad'; // the tenant every personal Microsoft account signs in through
 
 const claimsOf = (idToken) => JSON.parse(Buffer.from(String(idToken).split('.')[1] || '', 'base64url').toString());

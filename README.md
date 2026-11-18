@@ -1,4 +1,10 @@
-# HeadJudge
+# SpartanReferee
+
+SpartanReferee was copied from HeadJudge (github.com/Grahamworth/HeadJudge, `C:\Repo\HeadJudge`) on 18 November 2026, with its history, to be developed separately. It is fully separate: its own website (https://brave-forest-022879f03.3.azurestaticapps.net), API data, storage (`spartanreferee`), control app (`spartanreferee-control`), server network, firewall and image store (`rg-spartanreferee-servers`), Microsoft sign-in app (`SpartanReferee`, VDASO directory) and email sign-in directory (`spartanreferee.onmicrosoft.com`). Its resource groups are `rg-spartanreferee-uksouth` and `rg-spartanreferee-servers`, in the HeadJudge subscription. Servers are named `sr-…`. It shares that subscription's GPU limit with HeadJudge: 40 vCPUs in Italy North, 5 servers at once across both. Nothing here changes HeadJudge, and HeadJudge's changes don't reach here.
+
+What follows was written for HeadJudge, and the product inside is still called HeadJudge until it's renamed.
+
+## HeadJudge, as copied
 
 Online judging for fitness events. Companies register with their own logo and colours, start a server, film with phones, and judge in any browser.
 
@@ -52,9 +58,7 @@ A shut-down server is deleted with its disk and address once it has said everyth
 Tests: `node --test tests/*.mjs`, `cd api && node --test test/*.test.js`, `cd control && node --test test/*.test.js`. The site and API run locally with `node api/dev-server.js 8795`.
 
 ```bash
-SUB=65c0ccca-69f7-43eb-9246-3bd6a6a06b24; RG=rg-headjudge-uksouth
-TOKEN=$(az staticwebapp secrets list --name headjudge -g $RG --subscription $SUB --query properties.apiKey -o tsv)
-swa deploy <site folder> --api-location "$(pwd)/api" --api-language node --api-version 20 --env production --deployment-token "$TOKEN"
+bash scripts/deploy-site.sh   # the files in scripts/site-files.txt, plus the media in site-extras/ (kept on this PC, not in git)
 ```
 
 - Server software: `bash scripts/build-server.sh`, then upload `downloads/headjudge-server.tar.gz` to the `downloads` container. Servers fetch it each time they start.

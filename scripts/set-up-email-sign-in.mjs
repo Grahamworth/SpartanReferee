@@ -15,16 +15,16 @@ import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 import { setTimeout as sleep } from "node:timers/promises";
 
-const SUBSCRIPTION = "65c0ccca-69f7-43eb-9246-3bd6a6a06b24"; // HeadJudge. Always named, as the default stays VDASO.
-const RESOURCE_GROUP = "rg-headjudge-uksouth";
-const SITE = "headjudge";
-const SUBDOMAIN = "headjudge";
-const TENANT_NAME = "HeadJudge";
-const APP_NAME = "HeadJudge Broadcaster"; // the name it was first made under, which is how this finds it; people see "HeadJudge"
-// api/src/email-signin.js has these too. The first is for Broadcaster apps installed while that app had sign-in.
-const REDIRECT_URIS = ["com.vdaso.spartans.broadcast://auth", "https://zealous-island-03d6db503.8.azurestaticapps.net/email-return.html"];
+const SUBSCRIPTION = "65c0ccca-69f7-43eb-9246-3bd6a6a06b24"; // the HeadJudge subscription (SpartanReferee has its own groups). Always named, as the default stays VDASO.
+const RESOURCE_GROUP = "rg-spartanreferee-uksouth";
+const SITE = "spartanreferee";
+const SUBDOMAIN = "spartanreferee";
+const TENANT_NAME = "SpartanReferee";
+const APP_NAME = "SpartanReferee"; // how this finds it in its own directory
+// api/src/email-signin.js has this too
+const REDIRECT_URIS = ["https://brave-forest-022879f03.3.azurestaticapps.net/email-return.html"];
 const USER_FLOW_NAME = "BroadcasterSignUpSignIn";
-const POLICY_NAME = "HeadJudge Broadcaster: require MFA";
+const POLICY_NAME = "SpartanReferee: require MFA";
 
 const ARM = "https://management.azure.com";
 const GRAPH = "https://graph.microsoft.com/v1.0";

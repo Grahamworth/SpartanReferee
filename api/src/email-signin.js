@@ -6,7 +6,7 @@
    Connect Core 3.1.3.7), and the API then issues its own session. The app is a public client, so there's no secret.
    This is done here rather than in the app because Microsoft refuses cross-origin token requests from native clients. */
 const REDIRECT_URI = 'com.vdaso.spartans.broadcast://auth';
-const WEB_REDIRECT_URI = 'https://zealous-island-03d6db503.8.azurestaticapps.net/email-return.html'; // the website's; scripts/set-up-email-sign-in.mjs registers both
+const WEB_REDIRECT_URI = 'https://brave-forest-022879f03.3.azurestaticapps.net/email-return.html'; // the website's; scripts/set-up-email-sign-in.mjs registers both
 
 const claimsOf = (idToken) => JSON.parse(Buffer.from(String(idToken).split('.')[1] || '', 'base64url').toString());
 
