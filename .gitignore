@@ -34,3 +34,6 @@ Thumbs.db
 # copied in when the control app is published
 control/src/store.js
 site-extras/
+
+# Spartan's referee material as supplied: kept on this PC, never committed or deployed as is
+material/
