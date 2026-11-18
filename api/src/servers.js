@@ -33,8 +33,19 @@
    Until card payments are on, though, only admins can start servers at all.
    A booking starts now or at a time chosen ahead (from): its servers are turned on START_LEAD before, so the cameras are ready on time,
    and those minutes aren't charged.
-   A booking keeps the price it started at. The control app adds up the time, cost and charge, by the minute. */
+   A booking keeps the price it started at. The control app adds up the time, cost and charge, by the minute.
+
+   SpartanReferee (with events): the organisation has many bookings at once, each with its own servers, as a "unit" standing in for
+   the company above: one per Spartan event ("e<event id>"), one per referee for training ("t…") and one per admin for testing ("x…").
+   Every /api/servers/mine call says which with ?unit= (GET) or {unit} (POST); without one it's the most relevant running booking.
+     event     07:00 to 18:00 local time on the event's days (events.js), extended up to 18:00; an admin can book any time ({anyTime})
+     training  30 minutes, any time, everyone; no extending
+     testing   admins only, any time, as bookings always were
+   Servers still belong to the organisation (server.company), for its brand and "Our settings"; their slots are the unit's.
+   GET  /api/servers/units  -> { units, current } the events (with their bookings), your training, and (admins) your testing
+     unit:<id>  { id, kind, name, eventId, owner, at }  every unit that's been booked, for the admin area */
 const crypto = require('node:crypto');
+const eventTimes = require('./events');
 const { recordingsPartition, KEEP_DAYS } = require('./recordings');
 const { createMembership, ourSettings } = require('./companies');
 const cameraSplit = require('./cameras');
@@ -65,7 +76,8 @@ const storageCameraHour = GB_PER_CAMERA_HOUR * STORAGE_GB_MONTH * (KEEP_DAYS / 3
 
 const cardView = (p) => (p ? { brand: p.brand, last4: p.last4, expMonth: p.expMonth, expYear: p.expYear } : null);
 
-function createServers({ store, now, reply, session, isAdmin = () => false, membership = null, payments = null, freeBooking = false, maxRunning = 1, hourPrice = 0.66, region = 'italynorth' }) {
+const TRAINING_HOURS = 0.5, MAX_EVENT_DAYS_AHEAD = 400;
+function createServers({ store, now, reply, session, isAdmin = () => false, membership = null, payments = null, freeBooking = false, events = null, maxRunning = 1, hourPrice = 0.66, region = 'italynorth' }) {
   // freeBooking (SpartanReferee): nobody pays, so everyone books and starts servers as admins do, with no card or payment page
   const payFree = (h) => freeBooking || isAdmin(h);
   // The default is Azure's cost plus a percentage. A customer can instead have a price of their own, set in the admin area.
@@ -104,8 +116,11 @@ function createServers({ store, now, reply, session, isAdmin = () => false, memb
     const price = await pricing(c), u = await usage(c.id);
     const scheduled = wanted === 'on' && !!plan?.from && now() < plan.from - START_LEAD_MS;
     const state = slots.some((s) => s.state === 'stopping') ? 'stopping' : slots.some((s) => s.state === 'starting') ? 'starting' : slots.every((s) => s.state === 'on') ? 'on' : slots.some((s) => s.state === 'on') ? 'starting' : 'off';
+    // which unit this is (SpartanReferee): its kind, its event and that event's days, and what the booking was made as
+    const unit = c.kind ? { id: c.id, kind: c.kind, name: c.name, event: c.event ? { id: c.event.id, name: c.event.name, city: c.event.city, country: c.event.country, tz: c.event.tz, startDate: c.event.startDate, endDate: c.event.endDate, windows: eventTimes.windows(c.event) } : null,
+      canAnyTime: !!h && isAdmin(h), canExtend: c.kind !== 'training', bookedAnyTime: !!plan?.anyTime, bookedBy: wanted === 'on' ? plan?.by || plan?.requestedBy || '' : '' } : undefined;
     return {
-      state, wanted, servers: slots, error: slots.map((s) => s.error).find(Boolean) || '',
+      unit, state, wanted, servers: slots, error: slots.map((s) => s.error).find(Boolean) || '',
       cameras: plan?.cameras || 0, serverCount: count, until: wanted === 'on' ? plan.until : 0, from: wanted === 'on' ? plan.from || 0 : 0, scheduled, bookedHours: plan?.hours || 0,
       bookedCost: plan ? pounds(plan.hours * plan.cameras * plan.cameraHour) : 0, bookedCameraHour: plan?.cameraHour || 0,
       used: { cameraHours: u.cameraHours, charge: u.charge }, canStart: c.status === 'approved',
@@ -123,7 +138,8 @@ function createServers({ store, now, reply, session, isAdmin = () => false, memb
     if (s) return s;
     // the name its address is built on; the hash keeps it unguessable from the company's name
     const label = `sr-${c.id.slice(0, 18).replace(/-+$/, '')}${n > 1 ? `-${n}` : ''}-${sha(id + random(8)).slice(0, 6)}`;
-    s = { id, company: c.id, n, vm: label, label, host: `${label}.${region}.cloudapp.azure.com`, secret: random(32), password: random(9).replace(/[-_]/g, 'x'), serverKey: `sk_${random(32)}`, receiverKey: `rk_${random(24)}` };
+    // a unit's servers belong to its organisation (its brand, "Our settings")
+    s = { id, company: c.org || c.id, n, vm: label, label, host: `${label}.${region}.cloudapp.azure.com`, secret: random(32), password: random(9).replace(/[-_]/g, 'x'), serverKey: `sk_${random(32)}`, receiverKey: `rk_${random(24)}` };
     await store.put('server', id, s);
     await store.put('serverkey', sha(s.serverKey), { id });
     // its finished recordings go to the company owner's cloud recordings
@@ -141,7 +157,7 @@ function createServers({ store, now, reply, session, isAdmin = () => false, memb
     return rows.map((b) => {
       const from = b.from || b.at, ended = b.endedAt || Math.min(b.until, now()), hoursRun = Math.max(0, Math.min(b.hours, (ended - from) / HOUR));
       const state = !b.endedAt && from > now() ? 'booked' : !b.endedAt && b.until > now() ? 'running' : b.endedAt && b.endedAt <= from ? 'cancelled' : b.endedAt && b.endedAt < b.until ? 'stopped' : 'finished';
-      return { at: b.at, from, cameras: b.cameras, hours: b.hours, until: b.until, endedAt: b.endedAt || 0, state, hoursRun: Math.round(hoursRun * 100) / 100, cameraHour: b.cameraHour, cost: pounds((state === 'booked' ? b.hours : hoursRun) * b.cameras * b.cameraHour), paid: b.paid || null }; // booked ahead: what it will come to
+      return { at: b.at, from, cameras: b.cameras, hours: b.hours, until: b.until, endedAt: b.endedAt || 0, state, hoursRun: Math.round(hoursRun * 100) / 100, cameraHour: b.cameraHour, cost: pounds((state === 'booked' ? b.hours : hoursRun) * b.cameras * b.cameraHour), paid: b.paid || null, kind: b.kind || '', name: b.name || '', by: b.by || '' }; // booked ahead: what it will come to
     });
   }
   const ofCompany = (slot, company) => slot === company || slot.startsWith(`${company}~`);
@@ -170,8 +186,45 @@ function createServers({ store, now, reply, session, isAdmin = () => false, memb
     if (!(hours >= 1 && hours <= MAX_HOURS)) return { error: `A booking runs between 1 and ${MAX_HOURS} hours: you can extend it later` };
     return { cameras, hours, from, until };
   }
-  // its times, as of now: a booking to start now starts when it's made
-  const timesOf = (a) => (a.startNow ? { from: now(), until: now() + a.hours * HOUR } : { from: Math.max(a.from, now()), until: a.until });
+  // what a unit's booking asks for, by its kind (training, testing, an event: see the top)
+  function askedFor(u, body, h) {
+    if (!u.kind) return asked(body);
+    const cameras = Number(body?.cameras);
+    if (!Number.isInteger(cameras) || cameras < 1 || cameras > 40) return { error: 'How many cameras do you need?' };
+    const startNow = body?.from === undefined && body?.until === undefined, from = Number(body?.from);
+    if (!startNow && !Number.isFinite(from)) return { error: 'Choose a start time' };
+    if (!startNow && from < now() - 5 * 60e3) return { error: 'That start time has passed: choose a later one, or start now' };
+    if (u.kind === 'training') {
+      if (!startNow && from > now() + MAX_DAYS_AHEAD * 24 * HOUR) return { error: `You can book up to ${MAX_DAYS_AHEAD} days ahead` };
+      return startNow ? { cameras, hours: TRAINING_HOURS, startNow: true, kind: 'training' } : { cameras, hours: TRAINING_HOURS, from, until: from + TRAINING_HOURS * HOUR, kind: 'training' };
+    }
+    if (u.kind === 'testing') return { ...asked(body), kind: 'testing' };
+    // an event: its days, 07:00 to 18:00 local, unless an admin says any time
+    const meta = { kind: 'event', eventId: u.event?.id || u.id.slice(1), eventName: u.name };
+    if (body?.anyTime === true) {
+      if (!isAdmin(h)) return { error: 'Only admins can book an event at any time' };
+      const a = asked(startNow ? body : { ...body, from: Math.min(from, now() + MAX_DAYS_AHEAD * 24 * HOUR) });
+      return a.error ? a : { ...a, ...(startNow ? {} : { from, until: Number(body.until) }), ...meta, anyTime: true };
+    }
+    if (!u.event) return { error: 'That event isn\'t on Spartan\'s list any more' };
+    if (startNow) {
+      const hours = Number(body?.hours), w = eventTimes.windowAt(u.event, now());
+      if (!Number.isInteger(hours) || hours < 1 || hours > MAX_HOURS) return { error: `Book between 1 and ${MAX_HOURS} hours` };
+      if (!w) return { error: 'Cameras for an event run from 07:00 to 18:00 local time on its days: book ahead for then' }; // EVENT_DAY in events.js
+      const until = Math.min(now() + hours * HOUR, w.until);
+      if (until - now() < 15 * 60e3) return { error: "Today\'s cameras for this event stop in under 15 minutes" };
+      return { cameras, hours: Math.round(((until - now()) / HOUR) * 100) / 100, startNow: true, until, ...meta };
+    }
+    const until = Number(body?.until);
+    if (!Number.isFinite(until) || until <= from) return { error: 'Choose a start and an end time' };
+    if (from > now() + MAX_EVENT_DAYS_AHEAD * 24 * HOUR) return { error: `You can book up to ${MAX_EVENT_DAYS_AHEAD} days ahead` };
+    if (!eventTimes.windowFor(u.event, from, until)) return { error: "Choose times from 07:00 to 18:00 local time on one of the event's days" };
+    const hours = Math.round(((until - from) / HOUR) * 100) / 100;
+    if (hours < 0.5) return { error: 'Book at least 30 minutes' };
+    return { cameras, hours, from, until, ...meta };
+  }
+  // its times, as of now: a booking to start now starts when it's made (and an event's stops at the end of its day)
+  const timesOf = (a) => (a.startNow ? { from: now(), until: a.until || now() + a.hours * HOUR } : { from: Math.max(a.from, now()), until: a.until });
   // why this booking can't be made now, if it can't
   async function cantBook(c, h, a) {
     if (c.status !== 'approved') return reply(403, { error: c.status === 'pending' ? 'We\'re still checking your application' : 'This company has been blocked from starting servers' });
@@ -191,8 +244,11 @@ function createServers({ store, now, reply, session, isAdmin = () => false, memb
     const price = await pricing(c), { azureServerHour } = price;
     cameraHour = cameraHour ?? price.cameraHour;
     const bookedAt = now(), bookingKey = String(bookedAt).padStart(15, '0');
-    await store.put('serverplan', c.id, { id: c.id, cameras, servers: needed, hours, from, until, cameraHour, requestedAt: bookedAt, requestedBy: me.email || '', bookingKey, paid });
-    await store.put(`booking:${c.id}`, bookingKey, { key: bookingKey, at: bookedAt, from, cameras, hours, until, cameraHour, paid });
+    // what it's for (a unit's kind, its event), so the page and the admin area can say
+    const what = a.kind ? { kind: a.kind, eventId: a.eventId || '', name: c.name || '', anyTime: !!a.anyTime, by: me.email || '' } : {};
+    await store.put('serverplan', c.id, { id: c.id, cameras, servers: needed, hours, from, until, cameraHour, requestedAt: bookedAt, requestedBy: me.email || '', bookingKey, paid, ...what });
+    await store.put(`booking:${c.id}`, bookingKey, { key: bookingKey, at: bookedAt, from, cameras, hours, until, cameraHour, paid, ...what });
+    if (a.kind) await store.put('unit', c.id, { id: c.id, kind: a.kind, name: c.name || '', eventId: a.eventId || '', owner: a.kind === 'event' ? '' : me.uid, at: bookedAt });
     await forEachWant(c.id, needed, { desired: 'on', requestedAt: now(), requestedBy: me.email || '', finished: false, saved: false, stopRequestedAt: 0, from, until, lastReport: 0, cameraHour, azureHour: azureServerHour });
     // each server's own share of the cameras, as that's what its time is charged at
     // and what its time costs us: the server, and keeping what its cameras record
@@ -212,7 +268,47 @@ function createServers({ store, now, reply, session, isAdmin = () => false, memb
     const [server, want] = await Promise.all([store.get('server', slot), store.get('serverwant', slot)]);
     return cameraSplit.bookedOn(server?.n, want?.bookedCameras);
   }
+  // ---------------------------------------------------------------- units (SpartanReferee): which booking a request is about
+  const trainingId = (uid) => `t${sha(String(uid)).slice(0, 10)}`, testingId = (uid) => `x${sha(String(uid)).slice(0, 10)}`;
+  /** the unit standing in for the company: { u } or { error } (an empty id: the most relevant booking that's on, else your training) */
+  async function unitOf(me, c, h, id) {
+    id = String(id || '');
+    if (!id) id = await currentUnit(me, h);
+    const base = { ...c, org: c.id };
+    if (/^e\d{1,12}$/.test(id)) {
+      const ev = events && await events.get(id.slice(1)), plan = !ev && await store.get('serverplan', id);
+      if (!ev && !plan) return { error: reply(404, { error: 'That event isn\'t on Spartan\'s list' }) };
+      return { u: { ...base, id, kind: 'event', name: ev?.name || plan?.name || 'Event', event: ev } };
+    }
+    if (id === trainingId(me.uid)) return { u: { ...base, id, kind: 'training', name: 'Training' } };
+    if (id === testingId(me.uid)) {
+      if (!isAdmin(h)) return { error: reply(403, { error: 'Testing is for admins' }) };
+      return { u: { ...base, id, kind: 'testing', name: 'Testing' } };
+    }
+    return { error: reply(403, { error: "That booking isn\'t one you can use" }) };
+  }
+  // what's mine to see: every event's, and my own training and testing
+  const mineToSee = (row, me) => row.kind === 'event' || row.owner === me.uid;
+  async function currentUnit(me, h) {
+    const plans = new Map((await store.list('serverplan')).map((p) => [p.id, p]));
+    const rows = (await store.list('unit')).filter((r) => mineToSee(r, me) && active(plans.get(r.id)) && (r.kind !== 'testing' || isAdmin(h)));
+    rows.sort((x, y) => (plans.get(x.id).from || 0) - (plans.get(y.id).from || 0));
+    return rows[0]?.id || trainingId(me.uid);
+  }
+  /** GET /api/servers/units: the events (each with whether it's booked), your training and (admins) your testing */
+  async function unitsList(me, h) {
+    const plans = new Map((await store.list('serverplan')).map((p) => [p.id, p]));
+    const booking = (id) => { const p = plans.get(id); return active(p) ? { from: p.from || 0, until: p.until, cameras: p.cameras, by: p.by || p.requestedBy || '' } : null; };
+    if (events) await events.fresh(); // synced from Spartan when the copy here is old
+    const evs = events ? await events.upcoming() : [];
+    const units = evs.map((e) => ({ id: `e${e.id}`, kind: 'event', name: e.name, city: e.city, country: e.country, tz: e.tz, startDate: e.startDate, endDate: e.endDate, windows: e.windows, booking: booking(`e${e.id}`) }));
+    units.push({ id: trainingId(me.uid), kind: 'training', name: 'Training', booking: booking(trainingId(me.uid)) });
+    if (isAdmin(h)) units.push({ id: testingId(me.uid), kind: 'testing', name: 'Testing', booking: booking(testingId(me.uid)) });
+    return { units, current: await currentUnit(me, h) };
+  }
   async function stopCompany(id) {
+    // the organisation blocked: every one of its units stops
+    if (events && !/^[etx][\w]+$/.test(id) && !id.includes('~')) { for (const u of await store.list('unit')) await stopCompany(u.id); }
     const plan = await store.get('serverplan', id);
     if (plan) await forEachWant(id, plan.servers, { desired: 'off', stopRequestedAt: now() });
     if (active(plan)) await changeBooking(id, plan, { endedAt: now() });
@@ -229,14 +325,18 @@ function createServers({ store, now, reply, session, isAdmin = () => false, memb
   async function adminCustomers(method, id, action, body) {
     if (!id && method === 'GET') {
       const out = [], totals = { charge: 0, azure: 0, profit: 0, cameraHours: 0 };
-      for (const c of (await store.list('company')).sort((x, y) => y.at - x.at)) {
+      // SpartanReferee: each unit (event, training, testing) that's been booked, as the organisation
+      const org = events ? (await store.list('company'))[0] : null;
+      const list = events ? (org ? (await store.list('unit')).map((x) => ({ ...org, org: org.id, id: x.id, kind: x.kind, name: x.name, eventId: x.eventId })) : []) : await store.list('company');
+      for (const c of list.sort((x, y) => (y.at || 0) - (x.at || 0))) {
         const v = await view(c), u = await usage(c.id);
         out.push({ id: c.id, name: c.name, status: c.status, note: c.note || '', contact: c.contact, email: c.email, website: c.website, about: c.about, logo: c.logo || '', theme: c.theme, at: c.at, card: cardView(c.payment), price: await pricing(c),
+          kind: c.kind || '', eventId: c.eventId || '', bookedBy: v.unit?.bookedBy || '',
           server: { state: v.state, wanted: v.wanted, scheduled: v.scheduled, from: v.from, until: v.until, cameras: v.cameras, serverCount: v.serverCount, camerasLive: v.servers.reduce((n, s) => n + s.cameras, 0), bookedCameraHour: v.bookedCameraHour, error: v.error }, usage: u });
         for (const k of Object.keys(totals)) totals[k] += u[k];
       }
       for (const k of Object.keys(totals)) totals[k] = Math.round(totals[k] * 100) / 100;
-      return reply(200, { customers: out, totals, month: monthOf(now()), running: out.filter((c) => c.server.wanted === 'on' && !c.server.scheduled).length, maxRunning, pricing: await pricing() });
+      return reply(200, { customers: out, totals, month: monthOf(now()), running: out.filter((c) => c.server.wanted === 'on' && !c.server.scheduled).reduce((n, c) => n + (events ? c.server.serverCount : 1), 0), maxRunning, pricing: await pricing() });
     }
     if (id && action === 'price' && method === 'PUT') {
       const c = await store.get('company', id); if (!c) return reply(404, { error: 'No such company' });
@@ -251,21 +351,21 @@ function createServers({ store, now, reply, session, isAdmin = () => false, memb
       return reply(200, await pricing(c));
     }
     if (id && action === 'stop' && method === 'POST') {
-      if (!(await store.get('company', id))) return reply(404, { error: 'No such company' });
+      if (!(await store.get('company', id)) && !(await store.get('unit', id))) return reply(404, { error: 'No such booking' });
       await stopCompany(id);
       return reply(200, { stopped: true });
     }
     return null;
   }
 
-  async function servers(method, a, b, body, h) {
+  async function servers(method, a, b, body, h, query = {}) {
     // a server's settings, kept here as the server itself is deleted when it's shut down
     if (a === 'settings' && (method === 'GET' || method === 'POST')) {
       const k = await store.get('serverkey', sha(h['x-server-key'] || ''));
-      if (!k) return reply(401, { error: 'That key isn\'t recognised' });
+      if (!k) return reply(401, { error: "That key isn\'t recognised" });
       if (method === 'GET') return reply(200, { settings: (await store.get('servercfg', k.id))?.settings || null, booked: await bookedOn(k.id) });
       const settings = body?.settings;
-      if (!settings || typeof settings !== 'object' || JSON.stringify(settings).length > MAX_SETTINGS) return reply(400, { error: 'Those settings won\'t fit' });
+      if (!settings || typeof settings !== 'object' || JSON.stringify(settings).length > MAX_SETTINGS) return reply(400, { error: "Those settings won\'t fit" });
       await store.put('servercfg', k.id, { id: k.id, settings, at: now() });
       return reply(200, { ok: true });
     }
@@ -278,7 +378,7 @@ function createServers({ store, now, reply, session, isAdmin = () => false, memb
     }
     if (a === 'report' && method === 'POST') {
       const k = await store.get('serverkey', sha(h['x-server-key'] || ''));
-      if (!k) return reply(401, { error: 'That key isn\'t recognised' });
+      if (!k) return reply(401, { error: "That key isn\'t recognised" });
       const want = (await store.get('serverwant', k.id)) || { id: k.id, desired: 'off' };
       want.lastReport = now();
       want.cameras = Math.max(0, Math.min(99, +body?.cams || 0)); want.judges = Math.max(0, Math.min(99, +body?.judges || 0));
@@ -287,8 +387,15 @@ function createServers({ store, now, reply, session, isAdmin = () => false, memb
       await store.put('serverwant', k.id, want);
       return reply(200, { stop: want.desired === 'off' || (!!want.until && want.until <= now()), until: want.until || 0 });
     }
+    if (a === 'units' && !b && method === 'GET') {
+      const { me, error } = await companyOf(h); if (error) return error;
+      return reply(200, await unitsList(me, h));
+    }
     if (a !== 'mine') return null;
-    const { me, c, role, error } = await companyOf(h); if (error) return error;
+    const { me, c: org, role, error } = await companyOf(h); if (error) return error;
+    // SpartanReferee: the unit (event, training, testing) stands in for the company from here on
+    let c = org;
+    if (events) { const U = await unitOf(me, org, h, method === 'GET' ? query.unit : body?.unit ?? query.unit); if (U.error) return U.error; c = U.u; }
     // the company's people see its servers and open them; only its owner books, pays and stops them
     if (!b && method === 'GET') {
       const v = await view(c, h);
@@ -300,19 +407,19 @@ function createServers({ store, now, reply, session, isAdmin = () => false, memb
     if (role !== 'owner' && b !== 'open') return reply(403, { error: `Only ${c.name}'s owner can book or pay` });
     // Saving a card, on Stripe's own page. Coming back proves nothing by itself, so payment-done asks Stripe what happened.
     if (b === 'payment') {
-      if (!payments) return reply(503, { error: 'Card payments aren\'t switched on yet' });
+      if (!payments) return reply(503, { error: "Card payments aren\'t switched on yet" });
       try {
         const email = me.email || (await store.get('user', me.uid))?.email || c.email || '';
         const { url, customerId } = await payments.startSetup({ companyId: c.id, companyName: c.name, email, customerId: c.stripeCustomer });
         if (customerId !== c.stripeCustomer) await store.put('company', c.id, { ...c, stripeCustomer: customerId });
         return reply(200, { url });
-      } catch { return reply(502, { error: 'We couldn\'t reach our card provider: please try again' }); }
+      } catch { return reply(502, { error: "We couldn\'t reach our card provider: please try again" }); }
     }
     if (b === 'payment-done') {
-      if (!payments) return reply(503, { error: 'Card payments aren\'t switched on yet' });
+      if (!payments) return reply(503, { error: "Card payments aren\'t switched on yet" });
       const id = String(body?.session || '');
-      if (!/^cs_[\w-]{1,200}$/.test(id)) return reply(400, { error: 'That card wasn\'t saved: please try again' });
-      let saved; try { saved = await payments.finishSetup(id, c.id); } catch { return reply(400, { error: 'That card wasn\'t saved: please try again' }); }
+      if (!/^cs_[\w-]{1,200}$/.test(id)) return reply(400, { error: "That card wasn\'t saved: please try again" });
+      let saved; try { saved = await payments.finishSetup(id, c.id); } catch { return reply(400, { error: "That card wasn\'t saved: please try again" }); }
       const { customerId, ...card } = saved, next = { ...c, stripeCustomer: customerId, payment: { ...card, at: now() } };
       await store.put('company', c.id, next);
       return reply(200, { server: await view(next, h) });
@@ -329,27 +436,35 @@ function createServers({ store, now, reply, session, isAdmin = () => false, memb
     }
     if (b === 'pay') {
       const co = await store.get('checkout', c.id);
-      if (!co || co.id !== String(body?.checkout || '') || co.by !== me.uid) return reply(404, { error: 'That payment isn\'t open any more: please book again' });
+      if (!co || co.id !== String(body?.checkout || '') || co.by !== me.uid) return reply(404, { error: "That payment isn\'t open any more: please book again" });
       if (co.exp < now()) { await store.remove('checkout', c.id); return reply(410, { error: `That payment ran out after ${CHECKOUT_MINUTES} minutes: please book again` }); }
-      if (!co.startNow && co.until - Math.max(co.from, now()) < HOUR) return reply(410, { error: 'That booking\'s start time has passed: please book again' });
+      if (!co.startNow && co.until - Math.max(co.from, now()) < HOUR) return reply(410, { error: "That booking\'s start time has passed: please book again" });
       const r = await book(c, me, h, co, { cameraHour: co.cameraHour, paid: { pretend: true, amount: co.cost, at: now() } });
       if (r.status === 200) await store.remove('checkout', c.id);
       return r;
     }
     if (b === 'start') {
       if (!payFree(h)) return reply(402, { error: 'Pay for your booking first' });
-      const a = asked(body); if (a.error) return reply(400, { error: a.error });
+      const a = askedFor(c, body, h); if (a.error) return reply(400, { error: a.error });
       return book(c, me, h, a);
     }
     if (b === 'extend') {
       if (!payments && !payFree(h)) return reply(503, { error: BOOKINGS_CLOSED });
       const hours = Number(body?.hours), plan = await store.get('serverplan', c.id);
-      if (!active(plan) || (await view(c, h)).wanted !== 'on') return reply(409, { error: 'Your servers aren\'t running: start them instead' });
+      if (!active(plan) || (await view(c, h)).wanted !== 'on') return reply(409, { error: "Your servers aren\'t running: start them instead" });
+      if (plan.kind === 'training') return reply(409, { error: "Training bookings can't be extended: book another" });
       if (!Number.isInteger(hours) || hours < 1 || hours > MAX_EXTEND_HOURS) return reply(400, { error: `Add between 1 and ${MAX_EXTEND_HOURS} hours at a time` });
-      const until = plan.until + hours * HOUR;
+      let until = plan.until + hours * HOUR;
+      // an event's booking runs to the end of that day's cameras at most (07:00 to 18:00 local), unless an admin booked it for any time
+      if (plan.kind === 'event' && !plan.anyTime && c.event) {
+        const w = eventTimes.windowAt(c.event, plan.until - 1);
+        if (!w || w.until <= plan.until) return reply(409, { error: 'Cameras for an event stop at 18:00 local time: book again for its next day' });
+        until = Math.min(until, w.until);
+      }
       if (until > Math.max(now(), plan.from || 0) + MAX_AHEAD_HOURS * HOUR) return reply(400, { error: `That's more than ${MAX_AHEAD_HOURS} hours ahead: extend it nearer the time` });
-      await store.put('serverplan', c.id, { ...plan, hours: plan.hours + hours, until });
-      await changeBooking(c.id, plan, { hours: plan.hours + hours, until });
+      const added = Math.round(((until - plan.until) / HOUR) * 100) / 100;
+      await store.put('serverplan', c.id, { ...plan, hours: plan.hours + added, until });
+      await changeBooking(c.id, plan, { hours: plan.hours + added, until });
       await forEachWant(c.id, plan.servers, { until });
       return reply(200, { server: await view(c, h) });
     }
@@ -362,7 +477,7 @@ function createServers({ store, now, reply, session, isAdmin = () => false, memb
     if (b === 'open') {
       const n = Math.max(1, Math.floor(Number(body?.n) || 1)), id = slotId(c.id, n);
       const st = await store.get('serverstate', id), s = await store.get('server', id);
-      if (!s || st?.state !== 'on') return reply(409, { error: 'That server isn\'t on yet' });
+      if (!s || st?.state !== 'on') return reply(409, { error: "That server isn\'t on yet" });
       const t = signFor(s.secret, { kind: 'login', who: me.email || me.uid, exp: now() + LOGIN_MINUTES * 60e3 });
       // which of the review's tabs to open on, and how many servers the booking has, so the review can switch to the others
       const tab = OPEN_TABS.includes(body?.tab) ? body.tab : 'live', of = (await store.get('serverplan', c.id))?.servers || 1;

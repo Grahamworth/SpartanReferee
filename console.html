@@ -42,6 +42,12 @@
   </aside>
   <div class="consoleMain">
   <section id="server" class="card serverCard" hidden>
+    <!-- which booking: a Spartan event, your training, or (admins) your testing; each has its own servers -->
+    <div class="whatFor" id="whatFor" hidden>
+      <label for="unitPick">Book cameras for</label>
+      <select id="unitPick"></select>
+      <p class="note" id="unitNote"></p>
+    </div>
     <div class="stateLine"><span class="light" id="light" aria-hidden="true"></span><h1 id="stateText">Your server is off</h1></div>
     <p class="muted" id="stateMore" aria-live="polite"></p>
     <p class="error" id="error" role="alert" hidden></p>
@@ -61,8 +67,10 @@
       </div>
       <div class="bookFields" id="timeFields" hidden>
         <div><label for="fromAt">Start</label><input id="fromAt" type="datetime-local"></div>
-        <div><label for="untilAt">End</label><input id="untilAt" type="datetime-local"></div>
+        <div id="untilBox"><label for="untilAt">End</label><input id="untilAt" type="datetime-local"></div>
       </div>
+      <p class="note" id="trainingNote" hidden>Training runs for 30 minutes, at any time. It can't be extended.</p>
+      <label class="checkLine" id="anyTimeLine" hidden><input type="checkbox" id="anyTime"><span>Any time: ignore the event's hours (admins)</span></label>
       <div class="quote" aria-live="polite"><span id="quoteHow"></span><b id="quoteCost"></b></div>
       <p class="note" id="payNote" hidden></p>
       <button class="primary" id="start" type="submit">Start</button>

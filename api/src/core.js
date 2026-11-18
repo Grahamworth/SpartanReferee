@@ -13,6 +13,7 @@ const crypto = require('node:crypto');
 const { createRecordings } = require('./recordings');
 const { createCompanies, createMembership } = require('./companies');
 const { createServers } = require('./servers');
+const { createEvents } = require('./events');
 
 const CORS = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Authorization, Content-Type, X-Session, X-Device, X-Admin-Key, X-Server-Key', 'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS' };
 
@@ -20,7 +21,7 @@ const CORS = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers
  * verifyGoogle(idToken) -> {sub, email, name, picture} (throws when invalid); secret signs our own session tokens.
  * adminEmails: Google accounts that are admins. While neither adminEmails nor adminKey is set, everyone is (the prototype).
  */
-function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], verifyGoogle = null, emailSignIn = null, microsoftSignIn = null, payments = null, secret = '', googleClientId = '', blobSigner = null, putBrand = null, maxRunningServers = 1, serverHourPrice = 0.66 }) {
+function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], verifyGoogle = null, emailSignIn = null, microsoftSignIn = null, payments = null, secret = '', googleClientId = '', blobSigner = null, putBrand = null, maxRunningServers = 1, serverHourPrice = 0.66, eventFetcher = null, bookingUnits = true }) {
   const reply = (status, body) => ({ status, body, headers: { 'Content-Type': 'application/json', ...CORS } });
   const admins = adminEmails.map((e) => String(e).trim().toLowerCase()).filter(Boolean);
   // session tokens: base64url(payload).HMAC
@@ -125,6 +126,7 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
     if (a === 'pricing' && !b) return adminPricing(method, body);
     if (a === 'customers') return adminCustomers(method, b, c, body);
     if (a === 'referees' && !b) return referees(method, body, h);
+    if (a === 'events' && b === 'sync') return eventList.adminSync(method);
     return null;
   }
 
@@ -132,7 +134,10 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
   const isAdminEmail = (email) => admins.includes(email) || addedAdmins.has(email) || (!adminKey && !admins.length);
   const membership = createMembership(store, { isAdminEmail });
   const recordings = createRecordings({ store, signer: blobSigner, now, reply, session, isAdmin, membership });
-  const { servers, adminPricing, adminCustomers, stopCompany } = createServers({ store, now, reply, session, isAdmin, membership, payments, freeBooking: true, maxRunning: maxRunningServers, hourPrice: serverHourPrice });
+  // Spartan's events (events.js), synced from Spartan's race list; referees book cameras for one
+  // bookingUnits false: one booking for the whole organisation, as before events (older tests)
+  const eventList = createEvents({ store, now, reply, ...(eventFetcher ? { fetcher: eventFetcher } : {}) });
+  const { servers, adminPricing, adminCustomers, stopCompany } = createServers({ store, now, reply, session, isAdmin, membership, payments, freeBooking: true, events: bookingUnits ? eventList : null, maxRunning: maxRunningServers, hourPrice: serverHourPrice });
   const { companies, adminCompanies, referees } = createCompanies({ store, now, reply, session, isAdmin, putBrand, membership, onBlocked: stopCompany });
 
   async function handle({ method, path, headers = {}, body, query: extraQuery = {} }) {
@@ -152,7 +157,7 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
       body = body.b === undefined ? null : body.b;
     }
     const [pathOnly, qs = ''] = String(path || '').split('?');
-    const query = Object.fromEntries(new URLSearchParams(qs));
+    const query = { ...extraQuery, ...Object.fromEntries(new URLSearchParams(qs)) }; // ?unit= arrives either way
     const parts = pathOnly.replace(/^\/+|\/+$/g, '').split('/');
     try {
       let r = null;
@@ -163,7 +168,9 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
       if (parts[0] === 'auth' && parts[1] === 'microsoft' && method === 'POST') r = await authMicrosoft(body);
       if (parts[0] === 'me' && method === 'GET') r = await me(h);
       if (parts[0] === 'recordings' && parts.length <= 3) r = await recordings(method, parts[1], parts[2], body, h);
-      if (parts[0] === 'servers' && parts.length <= 3) r = await servers(method, parts[1], parts[2], body, h);
+      if (parts[0] === 'servers' && parts.length <= 3) r = await servers(method, parts[1], parts[2], body, h, query);
+      // Spartan's events: for anyone in the organisation
+      if (parts[0] === 'events' && parts.length === 1) { const me = session(h); r = !me ? reply(401, { error: 'Sign in first' }) : !(await membership.companyFor(me)) ? reply(403, { error: 'Only referees and admins see the events' }) : await eventList.events(method); }
       if (parts[0] === 'companies' && parts.length <= 3) r = await companies(method, parts[1], parts[2], body, h);
       return r || reply(404, { error: 'not found' });
     } catch (e) {

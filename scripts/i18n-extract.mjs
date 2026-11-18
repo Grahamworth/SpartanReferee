@@ -36,7 +36,9 @@ export function wordy(s) {
   if (/^(?:[a-z-]+:[^;]+;\s*)+$/i.test(t)) return false; // inline style
   if (/^[\w.[\]()'"=!&|<>+\-*/%?: ]+$/.test(t) && /[=<>()[\]]/.test(t) && !/ [a-z]{3,} [a-z]{3,}/i.test(t)) return false; // expressions
   if (/^(GET|POST|PUT|DELETE|Content-Type|application\/|text\/|image\/|video\/)/.test(t)) return false;
-  if (/\}[/.]|\/\{|\.(csv|onnx|txt|mjs|js|json)$|^[\w-]+\/$/.test(t)) return false; // paths and file names built in code
+  if (/\}\/|\/\{|\}\.(csv|onnx|txt|mjs|js|json|wasm|task|mp4|png|jpg)\b|\.(csv|onnx|txt|mjs|js|json)$|^[\w-]+\/$/.test(t)) return false; // paths and file names built in code
+  if (!/\s/.test(t) && /\w\/\w/.test(t)) return false; // an address or path: servers/mine{x}
+  if (/^(UTC|GMT)$/.test(t)) return false;
   if (/\bpx\b.*(Arial|sans-serif|Barlow)|^rgba?\(|^\w+\[|^X-[A-Z]|^(NFKD|SHA-256|localhost)$|@|\.com$/.test(t)) return false; // fonts, colours, selectors, headers
   if (/^[A-Z][a-z]+(?:[A-Z][a-z]*)+$/.test(t) || /^\w+_\w+$/.test(t)) return false; // ArrowLeft, NotFoundError, SpartanReferee, Closed_Fist: names, not words
   if (/^[A-Z_0-9]+$/.test(t) && t.length > 1 && !/^[A-Z]{2,}$/.test(t)) return false; // CONSTANT_NAMES (but NO REP-style words stay)

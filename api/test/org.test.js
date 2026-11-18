@@ -42,8 +42,10 @@ test('an admin adds a referee, who is then in, and books and starts servers with
   assert.strictEqual(c.id, 'spartan'); assert.strictEqual(c.role, 'owner'); assert.strictEqual(c.admin, false);
   const s = (await call('GET', 'servers/mine', h)).body.server;
   assert.strictEqual(s.needsCard, false); assert.strictEqual(s.paysFirst, false); assert.strictEqual(s.bookingsOpen, true);
-  assert.strictEqual((await call('POST', 'servers/mine/start', h, { cameras: 2, hours: 2 })).status, 200);
-  assert.strictEqual((await call('POST', 'servers/mine/extend', h, { hours: 1 })).status, 200);
+  // with no booking chosen it's their own training: 30 minutes, not extended
+  const r = await call('POST', 'servers/mine/start', h, { cameras: 2, hours: 2 });
+  assert.strictEqual(r.status, 200); assert.strictEqual(r.body.server.bookedHours, 0.5); assert.strictEqual(r.body.server.unit.kind, 'training');
+  assert.strictEqual((await call('POST', 'servers/mine/extend', h, { hours: 1 })).status, 409);
 });
 
 test('admins are in without being on the list of referees', async () => {

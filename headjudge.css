@@ -273,3 +273,10 @@ html[dir="rtl"] .topRight { margin-left: 0; margin-right: auto; }
 
 /* Arabic and Thai (i18n.js sets <html lang>): no slanted lettering or added letter spacing, which break Arabic's joined letters */
 html[lang="ar"] *, html[lang="th"] * { font-style: normal !important; letter-spacing: 0 !important; }
+
+/* the console: which booking (an event, training, testing) */
+.whatFor { margin: 0 0 16px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+.whatFor label { display: block; font-weight: 700; margin-bottom: 6px; }
+.whatFor select { font-weight: 600; }
+.checkLine { display: flex; align-items: center; gap: 8px; margin: 10px 0 0; font-size: .95rem; }
+.checkLine input { width: auto; }

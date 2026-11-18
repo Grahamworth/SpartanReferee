@@ -1,4 +1,6 @@
 // A company's own page: say how many cameras and when (now for some hours, or a start and end chosen ahead), see what it costs, book.
+// SpartanReferee: first, what for: a Spartan event (07:00 to 18:00 local on its days, unless an admin says any time), your training
+// (30 minutes, any time) or, for admins, testing. Each has its own booking and servers (api/src/servers.js, "units").
 // Customers go through a payment page first (pretend for now); admins book straight away. The servers run for that long and shut down
 // by themselves, so this page never has to be left open; while they run it opens each one's video review and extends the booking.
 import { call, devSignInButton, signedIn, getMe, signOut, esc } from './api-base.js';
@@ -13,6 +15,13 @@ const show = (el, on) => { el.hidden = !on; };
 let poll = null, busy = false, last = null, listKey = '', payMessage = '';
 // everyone in the organisation (an admin, or a referee an admin added) books and uses the servers: "owner" (members are from when there were companies)
 let role = 'owner', company = null;
+// which booking this page is about (an event, training, testing), remembered so the video review's links come back to it
+const UNIT_KEY = 'sr_unit';
+const remembered = () => { try { return localStorage.getItem(UNIT_KEY) || ''; } catch { return ''; } };
+const remember = (id) => { try { localStorage.setItem(UNIT_KEY, id); } catch { /* private mode */ } };
+let unit = '', units = [];
+const unitQ = () => (unit ? `?unit=${encodeURIComponent(unit)}` : '');
+const inWindow = (ws, from, until) => ws.some((w) => from >= w.from && until <= w.until);
 
 const fail = (msg) => { $('error').textContent = msg || ''; show($('error'), !!msg); };
 const clock = (t) => new Date(t).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -40,7 +49,32 @@ function chosen() {
   const p = last.price, cams = Math.floor(Number($('cameras').value));
   if (!(cams >= 1)) return { error: 'How many cameras do you need?' };
   if (cams > p.maxCameras) return { error: `We can run ${p.maxCameras} cameras at once at the moment` };
-  if (!choosingTimes()) { const hours = +$('hours').value; return { cameras: cams, hours, body: { cameras: cams, hours } }; }
+  const u = last.unit, kind = u?.kind || '', any = kind === 'event' && $('anyTime').checked, ws = u?.event?.windows || [];
+  if (kind === 'training') {
+    if (!choosingTimes()) return { cameras: cams, hours: 0.5, body: { cameras: cams } };
+    const from = fromInput($('fromAt').value);
+    if (!Number.isFinite(from)) return { error: 'Choose a start time' };
+    if (from < Date.now() - 5 * 60e3) return { error: 'That start time has passed' };
+    return { cameras: cams, hours: 0.5, body: { cameras: cams, from, until: from + 0.5 * HOUR } };
+  }
+  if (kind === 'event' && !any) {
+    if (!choosingTimes()) {
+      const t = Date.now(), w = ws.find((x) => t >= x.from && t < x.until);
+      if (!w) return { error: 'Cameras for an event run from 07:00 to 18:00 local time on its days: book ahead for then' };
+      const until = Math.min(t + +$('hours').value * HOUR, w.until);
+      return { cameras: cams, hours: Math.round(((until - t) / HOUR) * 100) / 100, body: { cameras: cams, hours: +$('hours').value } };
+    }
+    const from = fromInput($('fromAt').value), until = fromInput($('untilAt').value);
+    if (!Number.isFinite(from) || !Number.isFinite(until)) return { error: 'Choose a start and an end time' };
+    if (until <= from) return { error: 'The end needs to be after the start' };
+    if (from < Date.now() - 5 * 60e3) return { error: 'That start time has passed' };
+    if (!inWindow(ws, from, until)) return { error: "Choose times from 07:00 to 18:00 local time on one of the event's days" };
+    const hours = Math.round(((until - from) / HOUR) * 100) / 100;
+    if (hours < 0.5) return { error: 'Book at least 30 minutes' };
+    return { cameras: cams, hours, body: { cameras: cams, from, until } };
+  }
+  const anyTime = any ? { anyTime: true } : {};
+  if (!choosingTimes()) { const hours = +$('hours').value; return { cameras: cams, hours, body: { cameras: cams, hours, ...anyTime } }; }
   const from = fromInput($('fromAt').value), until = fromInput($('untilAt').value);
   if (!Number.isFinite(from) || !Number.isFinite(until)) return { error: 'Choose a start and an end time' };
   if (from < Date.now() - 5 * 60e3) return { error: 'That start time has passed' };
@@ -48,7 +82,7 @@ function chosen() {
   const hours = Math.round(((until - from) / HOUR) * 100) / 100;
   if (until <= from) return { error: 'The end needs to be after the start' };
   if (hours < 1 || hours > p.maxHours) return { error: `A booking runs between 1 and ${p.maxHours} hours` };
-  return { cameras: cams, hours, body: { cameras: cams, from, until } };
+  return { cameras: cams, hours, body: { cameras: cams, from, until, ...anyTime } };
 }
 function drawQuote() {
   if (!last) return;
@@ -62,7 +96,7 @@ function drawQuote() {
     : askCard ? (last.cardsOn ? 'Before your first booking, add a card on Stripe\'s secure page. Nothing is charged today.' : 'Card payments aren\'t switched on yet: please try again soon.') : '');
   show($('payNote'), !!$('payNote').textContent);
   $('payNote').classList.toggle('closedNote', closed);
-  show($('nowFields'), !choosingTimes()); show($('timeFields'), choosingTimes());
+  show($('nowFields'), !choosingTimes() && last?.unit?.kind !== 'training'); show($('timeFields'), choosingTimes());
   show($('nowNote'), !choosingTimes()); show($('timesNote'), choosingTimes());
   if (b.error) { $('quoteHow').textContent = b.error; $('quoteCost').textContent = ''; return; }
   const q = quote(b.cameras, b.hours, p);
@@ -126,8 +160,69 @@ function draw(s) {
   show($('changeCard'), !!s.card && s.cardsOn);
   $('hours2').textContent = `${plural(s.used.cameraHours, 'camera hour')} · ${money(s.used.charge)}`;
   if (role !== 'owner') asMember(state);
+  drawUnit(s, state);
   drawTabs(); // Live and Cameras come and go with the servers
 }
+// ---------------------------------------------------------------- what the booking is for: an event, training, testing
+const dayOf = (d) => new Date(`${d}T12:00:00Z`).toLocaleDateString([], { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' });
+const datesOf = (e) => (e.startDate === e.endDate ? dayOf(e.startDate) : `${dayOf(e.startDate)} to ${dayOf(e.endDate)}`);
+function eventNote(ev) {
+  const w = ev.windows[0];
+  const here = w && new Date(w.from).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const yours = w && here !== '07:00' ? ` (${here} to ${clock(w.until)} your time)` : '';
+  return `${datesOf(ev)}${ev.city ? ` · ${ev.city}` : ''}. Cameras run from 07:00 to 18:00 local time on each day${yours}.`;
+}
+function drawUnit(s, state) {
+  const u = s.unit; if (!u) return;
+  if (unit !== u.id) { unit = u.id; remember(unit); }
+  if ($('unitPick').value !== u.id && [...$('unitPick').options].some((o) => o.value === u.id)) $('unitPick').value = u.id;
+  const kind = u.kind, ev = u.event, ws = ev?.windows || [];
+  $('unitNote').textContent = kind === 'event' ? (ev ? eventNote(ev) : 'That event isn\'t on Spartan\'s list any more.') : kind === 'training' ? 'Training: 30 minutes, at any time, for practising.' : 'Testing: any time, for admins.';
+  show($('trainingNote'), kind === 'training');
+  show($('anyTimeLine'), kind === 'event' && !!u.canAnyTime);
+  const any = kind === 'event' && $('anyTime').checked;
+  show($('untilBox'), kind !== 'training');
+  show($('nowFields'), !choosingTimes() && kind !== 'training');
+  // an event's times: only on its days, 07:00 to 18:00 local, unless an admin says any time
+  const nowRadio = document.querySelector('input[name="when"][value="now"]');
+  const open = ws.some((w) => Date.now() >= w.from && Date.now() < w.until);
+  nowRadio.disabled = kind === 'event' && !any && !open;
+  if (nowRadio.disabled && nowRadio.checked) { document.querySelector('input[name="when"][value="times"]').checked = true; drawQuote(); }
+  if (kind === 'event' && !any && ws.length) {
+    const next = ws.find((w) => w.until > Date.now()) || ws[0];
+    $('fromAt').min = localInput(Math.max(Date.now(), ws[0].from)); $('fromAt').max = localInput(ws[ws.length - 1].until);
+    $('untilAt').min = $('fromAt').min; $('untilAt').max = $('fromAt').max;
+    const from = fromInput($('fromAt').value), until = fromInput($('untilAt').value);
+    if (!(Number.isFinite(from) && Number.isFinite(until) && inWindow(ws, from, until))) {
+      const start = Math.max(next.from, Math.ceil(Date.now() / (15 * 60e3)) * 15 * 60e3);
+      $('fromAt').value = localInput(start); $('untilAt').value = localInput(Math.min(start + 4 * HOUR, next.until)); drawQuote();
+    }
+  } else { $('untilAt').max = ''; }
+  show($('extend'), u.canExtend !== false);
+  if (s.wanted === 'on' && u.bookedBy) $('stateMore').textContent += u.bookedAnyTime ? ` Booked by ${u.bookedBy}, at any time.` : ` Booked by ${u.bookedBy}.`; // whole sentences, so each translates
+}
+async function loadUnits() {
+  let r; try { r = await call('servers/units'); } catch { return; }
+  units = r.units;
+  if (!unit || !units.some((u) => u.id === unit)) unit = units.some((u) => u.id === remembered()) ? remembered() : r.current;
+  const mark = (u) => (u.booking ? '● ' : '');
+  const opt = (u, text) => `<option value="${esc(u.id)}">${esc(mark(u) + text)}</option>`;
+  const own = units.filter((u) => u.kind !== 'event').map((u) => opt(u, u.kind === 'training' ? 'Training (30 minutes, any time)' : 'Testing (admins, any time)')).join('');
+  const months = new Map();
+  for (const u of units.filter((x) => x.kind === 'event')) {
+    const m = new Date(`${u.startDate}T12:00:00Z`).toLocaleDateString([], { month: 'long', year: 'numeric', timeZone: 'UTC' });
+    if (!months.has(m)) months.set(m, []);
+    months.get(m).push(opt(u, `${u.name} · ${datesOf(u)}${u.city ? ` · ${u.city}` : ''}`));
+  }
+  $('unitPick').innerHTML = `<optgroup label="Training and testing">${own}</optgroup>` + [...months].map(([m, list]) => `<optgroup label="${esc(m)}">${list.join('')}</optgroup>`).join('');
+  $('unitPick').value = unit; remember(unit);
+  show($('whatFor'), true);
+}
+$('unitPick').addEventListener('change', () => {
+  unit = $('unitPick').value; remember(unit); listKey = ''; $('anyTime').checked = false; fail('');
+  refresh(); drawHistory();
+});
+$('anyTime').addEventListener('change', () => { if (last) draw(last); });
 // one of the company's people: the servers' state and the way into them, but no booking, extending, stopping or costs
 function asMember(state) {
   if (state === 'off') {
@@ -140,7 +235,7 @@ function asMember(state) {
 const STATE_WORD = { booked: 'Booked', running: 'On now', stopped: 'Stopped early', finished: 'Finished', cancelled: 'Cancelled' };
 let hasBookings = false;
 async function drawHistory() {
-  let bookings; try { ({ bookings } = await call('servers/mine/history')); } catch { return; }
+  let bookings; try { ({ bookings } = await call(`servers/mine/history${unitQ()}`)); } catch { return; }
   hasBookings = bookings.length > 0; drawTabs();
   $('history').innerHTML = bookings.length ? `<div class="historyTable" role="table" aria-label="Your bookings">
     <div class="historyRow head" role="row"><span role="columnheader">When</span><span role="columnheader">Cameras</span><span role="columnheader">Hours</span><span role="columnheader">Status</span><span role="columnheader">Cost</span></div>
@@ -152,10 +247,10 @@ async function drawHistory() {
       <span role="cell"><b>${esc(money(b.cost))}</b>${b.paid?.pretend ? `<small class="paidNote">Paid ${esc(money(b.paid.amount))} (pretend)</small>` : ''}</span>
     </div>`).join('')}</div>` : '<p class="muted">Your bookings will show here.</p>';
 }
-async function refresh() { try { draw((await call('servers/mine')).server); } catch { /* the next try */ } }
+async function refresh() { try { draw((await call(`servers/mine${unitQ()}`)).server); } catch { /* the next try */ } }
 async function act(path, body = {}) {
   busy = true; fail('');
-  try { listKey = ''; draw((await call(`servers/mine/${path}`, { method: 'POST', body })).server); drawHistory(); }
+  try { listKey = ''; draw((await call(`servers/mine/${path}`, { method: 'POST', body: { ...body, unit } })).server); drawHistory(); loadUnits(); }
   catch (e) { fail(e.message); }
   busy = false; if (last) draw(last);
 }
@@ -278,6 +373,7 @@ async function enter() {
   for (const el of document.querySelectorAll('.coName')) el.textContent = company.name;
   drawTracked($('trackedList'));
   await cameBackFromStripe();
+  await loadUnits();
   await refresh();
   // the video review's Live, Results and Cameras tabs, and its server switcher, come through here: ?go=live&n=2
   const q = new URLSearchParams(location.search), go = q.get('go');
@@ -288,6 +384,7 @@ async function enter() {
   showView(location.hash.slice(1));
   drawHistory();
   clearInterval(poll); poll = setInterval(refresh, 5000);
+  setInterval(loadUnits, 60000); // which events are booked, as other referees book them
 }
 function notRegistered(email) {
   signOut();

@@ -15,6 +15,16 @@ There's no registration, no customers and no card (from 18 November 2026). Spart
 - Everyone in books, starts, extends and stops the servers from the console, with no payment step (`freeBooking` in `api/src/servers.js`), within the shared limit of 5 servers. Recordings and results belong to the organisation, so every referee sees them.
 - `register.html` only sends old links to the console. The admin page shows this month's Azure cost and camera hours, not prices or profit.
 
+### Events, training and testing
+
+Referees book cameras for something (`api/src/servers.js`, "units"), and each has its own booking and servers, so two events on the same weekend don't block each other (within the shared limit of 5 servers):
+
+- **A Spartan event**: from 07:00 to 18:00 local time on each of its days (`EVENT_DAY` in `api/src/events.js`). Booking now is only possible during those hours, and a booking or extension stops at 18:00. Anyone in the organisation can book an event; whoever books it, every referee sees it. An admin can tick "Any time" to ignore the event's hours.
+- **Training**: everyone, 30 minutes, any time, can't be extended. Each referee has their own.
+- **Testing**: admins only, any time, as bookings always were. Each admin has their own.
+
+The events come from Spartan's own race list (`api/src/events.js`): the list its "Find a race" page uses (`api-gate.eks.spartan.com/one/v2/races/upcoming`), with each race's timezone from another of Spartan's services (`api2.spartan.com/api/races/upcoming_past_planned`) where it has it, else from the country (and the longitude in countries with several timezones). Neither is a published API, so the sync can break if Spartan changes them: the last good copy is kept, and the admin page says when it last worked and has **Sync now**. It syncs when the copy is more than 6 hours old and someone opens the console or the event list. An event Spartan stops listing stays until a week after it ends (one of Spartan's lists has been seen to leave out the next few weeks' races). Ask Spartan for permission or an official feed before relying on it.
+
 ### Languages
 
 Every page, the judge, the server's video review and the Broadcaster app come in English, French, German, Dutch, Spanish, Italian, Greek, Croatian, Czech, Polish, Finnish, Swedish, Danish, Arabic (right to left) and Thai, for the World Championships (France, Greece, Croatia, UAE, Finland, Thailand), next year's Euros (Netherlands) and the rest. The language is the browser's, or the one picked in the menu at the top (remembered), and the console opens a server's review in it. The translations were made by Claude, not checked by native speakers yet: check each before an event in that country.

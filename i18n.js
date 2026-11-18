@@ -51,10 +51,12 @@
         if (i % 2 === 0) return part.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         names.push(part);
         if (COUNT.test(part)) return '(\\d[\\d.,]*)';
-        if (/\p{L}$/u.test(parts[i - 1])) return '(\\p{L}*)'; // straight after a word ("rep{x}"): only that word's ending ("s")
+        // straight after a word ("rep{x}"): that word's ending ("s"), or something after a space ("day{yours}": " (08:00 to 19:00 your time)")
+        if (/\p{L}$/u.test(parts[i - 1])) return '((?:\\p{L}{1,3})?|\\s.*?)';
         return '(.*?)';
       }).join('') + '$', 'u');
       const fixed = key.replace(SLOT, '').replace(/[^\p{L}]/gu, '').length;
+      if (fixed < 3) continue; // too little of its own to recognise ("{x6} at {x7}" would take any sentence with "at" in it)
       patterns.push({ re, names, v, fixed, len: key.length });
     }
     patterns.sort((a, b) => b.fixed - a.fixed || b.len - a.len);

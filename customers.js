@@ -7,7 +7,7 @@ const $ = (id) => document.getElementById(id);
 const show = (el, on) => { el.hidden = !on; };
 const toast = (s) => { const t = $('toast'); t.textContent = s; t.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 2400); };
 const onDay = (t) => new Date(t).toLocaleDateString();
-let org = null, referees = [];
+let referees = [];
 
 // ---------------------------------------------------------------- servers and this month
 function serverLine(s) {
@@ -16,24 +16,38 @@ function serverLine(s) {
   if (s.scheduled) return `Booked · ${plural(s.cameras, 'camera')} · ${when(s.from)} to ${when(s.until)}`;
   return `${s.state === 'on' ? 'On' : 'Starting'} · ${s.camerasLive} of ${plural(s.cameras, 'camera')} live · until ${new Date(s.until).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} (${timeLeft(s.until - Date.now())})`;
 }
+// each booking (an event's, a referee's training, an admin's testing) that's on, booked ahead or stopping
+const KIND = { event: 'Event', training: 'Training', testing: 'Testing' };
 async function load() {
   const data = await call('admin/customers');
-  org = data.customers[0] || null; // the one organisation, once anyone has used it
   const t = data.totals;
   $('monthName').textContent = new Date(`${data.month}-15`).toLocaleDateString([], { month: 'long', year: 'numeric' });
   $('tAzure').textContent = money(t.azure);
   $('tHours').textContent = String(t.cameraHours);
   $('tRunning').textContent = data.running; $('tRunningOf').textContent = `of ${plural(data.maxRunning, 'server')} allowed at once`;
-  const s = org?.server;
-  const state = s?.wanted === 'on' ? (s.scheduled ? 'booked' : s.state === 'on' ? 'on' : 'starting') : s?.state === 'stopping' ? 'stopping' : 'off';
-  $('serverLine').innerHTML = `<span class="light" data-state="${state}" aria-hidden="true"></span><span>${esc(serverLine(s))}</span>`;
-  $('serverError').textContent = s?.error || ''; show($('serverError'), !!s?.error);
-  show($('stopAll'), s?.wanted === 'on');
+  const live = data.customers.filter((b) => b.server.wanted === 'on' || b.server.state === 'stopping' || b.server.state === 'starting');
+  $('bookingList').innerHTML = live.length ? live.map((b) => {
+    const s = b.server, state = s.wanted === 'on' ? (s.scheduled ? 'booked' : s.state === 'on' ? 'on' : 'starting') : 'stopping';
+    return `<li><span><b>${esc(KIND[b.kind] ? `${KIND[b.kind]}: ` : '')}${esc(b.name)}</b><small><span class="light" data-state="${state}" aria-hidden="true"></span> ${esc(serverLine(s))}${b.bookedBy ? ` · ${esc(b.bookedBy)}` : ''}</small>${s.error ? `<small class="error">${esc(s.error)}</small>` : ''}</span>${s.wanted === 'on' ? `<button class="small" type="button" data-stop="${esc(b.id)}" data-name="${esc(b.name)}">${s.scheduled ? 'Cancel' : 'Stop'}</button>` : ''}</li>`;
+  }).join('') : '<li class="muted">Nothing booked or running.</li>';
+  for (const btn of $('bookingList').querySelectorAll('button[data-stop]')) btn.onclick = () => stopBooking(btn.dataset.stop, btn.dataset.name);
 }
-$('stopAll').addEventListener('click', async () => {
-  if (!org || !confirm('Stop the servers now? Their cameras stop being recorded, for every referee using them.')) return;
-  try { await call(`admin/customers/${encodeURIComponent(org.id)}/stop`, { method: 'POST', body: {} }); toast('Stopping the servers'); await load(); }
+async function stopBooking(id, name) {
+  if (!confirm(`Stop ${name}'s servers now? Their cameras stop being recorded.`)) return;
+  try { await call(`admin/customers/${encodeURIComponent(id)}/stop`, { method: 'POST', body: {} }); toast(`Stopping ${name}`); await load(); }
   catch (e) { toast(e.message); }
+}
+
+// ---------------------------------------------------------------- Spartan's events
+function drawSync(r) {
+  $('syncLine').textContent = r.syncedAt ? `${plural(r.events.length, 'upcoming event')}, last synced ${new Date(r.syncedAt).toLocaleString([], { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}.` : 'Not synced yet.';
+  $('syncError').textContent = r.error ? `The last sync didn't work: ${r.error}. The events from the last good one are still used.` : ''; show($('syncError'), !!r.error);
+}
+async function loadSync() { try { drawSync(await call('events')); } catch (e) { $('syncLine').textContent = e.message; } }
+$('syncNow').addEventListener('click', async () => {
+  $('syncNow').disabled = true;
+  try { drawSync(await call('admin/events/sync', { method: 'POST', body: {} })); toast('Events synced'); } catch (e) { toast(e.message); }
+  $('syncNow').disabled = false;
 });
 
 // ---------------------------------------------------------------- referees: who can sign in
@@ -92,6 +106,7 @@ async function enter() {
   if (!me.admin) { show($('refused'), true); return; }
   await load();
   await loadReferees();
+  loadSync();
   drawAdmins(await call('admin/admins'));
   show($('content'), true);
   setInterval(() => load().catch(() => {}), 15000);

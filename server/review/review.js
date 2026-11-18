@@ -1071,7 +1071,7 @@ function numSearch() {
   box.hidden = false;
   if (seenHtml || found.length) box.innerHTML = seenHtml + (found.length ? found.map((a) => `<button data-n="${a.n}">${a.pic ? `<img src="${picUrl(a)}" alt="">` : ''}<span><b>#${esc(a.bib)}</b> ${whereText(a)}<br><small>${whenText(a)} · ${Number(a.reps)} reps</small></span></button>`).join('')
     : '');
-  else box.innerHTML = `<p class="muted">That number wasn't seen ${isToday() ? 'today' : 'on this day'}. Try another day, or find them in the recording and use Pick athlete.</p>`;
+  else box.innerHTML = (isToday() ? '<p class="muted">That number wasn\'t seen today. Try another day, or find them in the recording and use Pick athlete.</p>' : '<p class="muted">That number wasn\'t seen on this day. Try another day, or find them in the recording and use Pick athlete.</p>');
   box.querySelectorAll('button').forEach((b) => b.onmousedown = (e) => { e.preventDefault(); box.hidden = true; if (b.dataset.seen) goToNumber(numbersSeen.find((x) => x.id === b.dataset.seen)); else showAthlete(athList.find((a) => a.n === +b.dataset.n)); });
 }
 $('numSearch').oninput = numSearch;

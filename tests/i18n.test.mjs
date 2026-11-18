@@ -50,6 +50,14 @@ test('a short text with slots can\'t take over a longer sentence it happens to f
   assert.equal(I.translate(c, 'it', '· 2 no reps'), '· no rep: 2', 'the one with more words outside its slots wins');
 });
 
+test('a slot after a word holds its ending or something after a space, and a text with too little of its own never matches', () => {
+  const c = I.compile({ 'Cameras run on each day{yours}.': 'Kameras laufen jeden Tag{yours}.', 'Live{x}': 'En direct{x}', '{x6} at {x7}': '{x6} um {x7}', 'Booked by {who}.': 'Gebucht von {who}.' });
+  assert.equal(I.translate(c, 'de', 'Cameras run on each day (03:00 to 14:00 your time).'), 'Kameras laufen jeden Tag (03:00 to 14:00 your time).');
+  assert.equal(I.translate(c, 'fr', 'Live · video'), 'En direct · video');
+  assert.equal(I.translate(c, 'de', 'Lunch at noon'), 'Lunch at noon', '"{x6} at {x7}" is too general to use');
+  assert.equal(I.translate(c, 'de', 'Booked by ann@x.com.'), 'Gebucht von ann@x.com.');
+});
+
 test('plurals follow the language\'s own rules', () => {
   const c = I.compile({ '{n} reps': { one: '{n} powtórzenie', few: '{n} powtórzenia', many: '{n} powtórzeń', other: '{n} powtórzenia' } });
   assert.equal(I.translate(c, 'pl', '1 reps'), '1 powtórzenie');
