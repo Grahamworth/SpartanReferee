@@ -280,3 +280,30 @@ html[lang="ar"] *, html[lang="th"] * { font-style: normal !important; letter-spa
 .whatFor select { font-weight: 600; }
 .checkLine { display: flex; align-items: center; gap: 8px; margin: 10px 0 0; font-size: .95rem; }
 .checkLine input { width: auto; }
+
+/* ---------------------------------------------------------------- phones (api-base.js drawPhoneMenu)
+   Under 640px the header is the name and a Menu button; its links, language and Sign out open below it, one big row each.
+   Everything people tap is at least 44px tall. */
+.menuBtn { display: none; }
+@media (max-width: 640px) {
+  .top { padding: 10px 16px; gap: 10px; flex-wrap: wrap; }
+  .mark { font-size: 23px; display: inline-flex; align-items: center; min-height: 44px; }
+  .menuBtn { display: inline-flex; align-items: center; gap: 6px; margin-left: auto; min-height: 44px; padding: 0 12px; background: none; color: var(--text); border: 1px solid var(--line); font: 700 15px Barlow, -apple-system, "Segoe UI", system-ui, sans-serif; cursor: pointer; }
+  .menuBtn svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; }
+  .top.menuOpen .menuBtn { background: var(--text); color: var(--bg); border-color: var(--text); }
+  html[dir="rtl"] .menuBtn { margin-left: 0; margin-right: auto; }
+  .top:has(.menuBtn) .topRight { display: none; }
+  .top.menuOpen .topRight { display: flex; flex-direction: column; align-items: stretch; flex-basis: 100%; gap: 0; margin: 4px 0 0; }
+  .top.menuOpen .topRight > * { display: flex; align-items: center; min-height: 48px; padding: 0 4px; border-top: 1px solid var(--line); font-size: 17px; text-decoration: none; }
+  .top.menuOpen .topRight > [hidden] { display: none; }
+  .top.menuOpen .topRight > #who { order: -1; min-height: 40px; font-size: 14px; border-top: 0; }
+  .top.menuOpen .topRight > #who:empty { display: none; }
+  .top.menuOpen .topRight .langPick { order: 99; max-width: none; width: 100%; min-height: 48px; margin: 8px 0 4px; padding: 0 10px; border: 1px solid var(--line); font-size: 16px; }
+  .top.menuOpen .topRight .signOut { width: 100%; text-align: left; text-decoration: none; }
+  html[dir="rtl"] .top.menuOpen .topRight .signOut { text-align: right; }
+  /* links at the foot of a page, and buttons styled as links, are big enough to tap */
+  .moreLinks a, .more a { display: inline-flex; align-items: center; min-height: 44px; }
+  button.small, .btn.small { min-height: 44px; }
+  /* typed text 16px or more, so a phone doesn't zoom in on it */
+  input:not([type=checkbox]):not([type=radio]), select, textarea { font-size: 16px; }
+}

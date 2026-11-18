@@ -63,3 +63,9 @@ test('a referee\'s home page: their name, their events (each with Book cameras),
   assert.match(read('console.html'), /<a href="home.html">Home<\/a>/);
   assert.match(read('learn/index.html'), /<a class="mark" href="..\/home.html">/);
 });
+test('on a phone, every page\'s header is the name and a Menu button, with big rows to tap (check: node scripts/mobile-check.mjs)', () => {
+  const base = read('api-base.js'), css = read('headjudge.css');
+  assert.ok(base.includes("btn.className = 'menuBtn'") && base.includes("setAttribute('aria-expanded'"));
+  assert.match(css, /@media \(max-width: 640px\) \{[\s\S]*\.top:has\(\.menuBtn\) \.topRight \{ display: none; \}[\s\S]*min-height: 48px/);
+  assert.ok(fs.existsSync(new URL('../scripts/mobile-check.mjs', import.meta.url)));
+});

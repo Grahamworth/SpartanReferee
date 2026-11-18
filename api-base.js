@@ -73,8 +73,27 @@ export function drawSignOut() {
   };
   right.appendChild(button);
 }
+// ---------------------------------------------------------------- the header on a phone: the name and a Menu button
+// On a narrow screen (headjudge.css, under 640px) the header's links, language and Sign out fold into a menu that opens below it,
+// one big row each, so the page starts at once and everything is easy to tap. Wider, the button is hidden and nothing changes.
+export function drawPhoneMenu() {
+  const top = typeof document !== 'undefined' && document.querySelector('header.top');
+  const right = top && top.querySelector('.topRight');
+  if (!right || top.querySelector('.menuBtn')) return;
+  right.id = right.id || 'topMenu';
+  const btn = document.createElement('button');
+  btn.type = 'button'; btn.className = 'menuBtn'; btn.setAttribute('aria-controls', right.id); btn.setAttribute('aria-expanded', 'false');
+  btn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span></span>';
+  btn.lastChild.textContent = 'Menu';
+  const set = (open) => { top.classList.toggle('menuOpen', open); btn.setAttribute('aria-expanded', String(open)); };
+  btn.onclick = () => set(!top.classList.contains('menuOpen'));
+  right.addEventListener('click', (e) => { if (e.target.closest('a')) set(false); });
+  addEventListener('keydown', (e) => { if (e.key === 'Escape' && top.classList.contains('menuOpen')) { set(false); btn.focus(); } });
+  top.insertBefore(btn, right);
+}
 if (typeof document !== 'undefined') {
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', drawSignOut); else drawSignOut();
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', drawPhoneMenu); else drawPhoneMenu();
   addEventListener('storage', (e) => { if (e.key === 'sp_token') drawSignOut(); }); // signed in or out in another tab
 }
 

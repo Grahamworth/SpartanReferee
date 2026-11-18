@@ -29,6 +29,19 @@
   .tile svg { flex: none; width: 34px; height: 34px; fill: none; stroke: var(--primary-text); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
   .tile h2 { margin: 0 0 4px; font-size: 1.5rem; }
   .tile p { margin: 0; color: var(--muted); }
+  /* phones: the ways in come first, as compact buttons side by side, then the events; each event's Book cameras is full width */
+  @media (max-width: 640px) {
+    #content:not([hidden]) { display: flex; flex-direction: column; }
+    .hello p { margin-bottom: 16px; }
+    .tiles { order: 1; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
+    #content > .card { order: 2; }
+    .tile { flex-direction: column; gap: 8px; padding: 14px; min-height: 92px; }
+    .tile h2 { font-size: 1.25rem; margin: 0; }
+    .tile p { display: none; }
+    .events li { align-items: stretch; }
+    .events li > span { flex: 1 1 100%; }
+    .events a.book { flex: 1 1 100%; display: flex; justify-content: center; align-items: center; min-height: 46px; }
+  }
 </style>
 <script type="module" src="home.js"></script>
 </head>

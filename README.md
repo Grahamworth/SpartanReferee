@@ -159,6 +159,8 @@ Everything runs on the phone: MediaPipe Pose for body tracking and a choice of n
 
 ## Running it
 
+**Phones first.** Referees use the site on their phones, so every page has to work at phone width. Under 640px wide the header is the name and a **Menu** button (`drawPhoneMenu` in `api-base.js`, styles at the end of `headjudge.css`), and everything people tap is at least 44px tall. With the local dev server running (`ADMIN_EMAILS=boss@example.com node api/dev-server.js`), `node scripts/mobile-check.mjs [folder] [width]` opens every page in Chrome at phone width (360 by default) as a referee and as an admin, lists anything that makes a page scroll sideways or is too small to tap, and saves a screenshot of each. Run it at 320 and 390 too before deploying a change to a page.
+
 Phones only allow camera access on **https://** pages, so host the folder on any static host. Netlify Drop, GitHub Pages and Cloudflare Pages all work, and you just upload the folder.
 
 To try it on a laptop webcam, serve it locally (localhost is allowed without https):
