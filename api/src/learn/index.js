@@ -17,6 +17,7 @@
    GET  /api/learn/audit?entityType=&entityId=  -> { events }       admins */
 const crypto = require('node:crypto');
 const P = require('./permissions');
+const { createProgrammes } = require('./programmes');
 
 const EMAIL = /^[^\s@/#?\\]+@[^\s@/#?\\]+\.[^\s@/#?\\]+$/;
 const LOCALES = ['en', 'fr', 'de', 'nl', 'es', 'it', 'el', 'hr', 'cs', 'pl', 'fi', 'sv', 'da', 'ar', 'th'];
@@ -216,6 +217,11 @@ function createLearn({ db, session, isAdminEmail = () => false, member = null, r
     return reply(200, { events: rows.map((r) => ({ id: Number(r.audit_id), at: r.at, action: r.action, entityType: r.entity_type, entityId: r.entity_id, summary: JSON.parse(r.summary || '{}'), actor: r.actor_name || '', actingAs: r.as_name || '', programmeId: r.programme_id || '', regionId: r.region_id || '' })) });
   }
 
+  // ------------------------------------------------------------------ the rest of the platform, one module each, sharing this context
+  // (each can add hooks to it that the others call: programmes asks for a version's extras, progress and so on)
+  const ctx = { db, reply, P, audit, uuid, text, isUuid, personById, personView, LOCALES };
+  const areas = [createProgrammes(ctx)];
+
   // ------------------------------------------------------------------ routing
   async function handle(method, parts, body, h, query = {}) {
     const [, a, b, c] = parts; // parts[0] === 'learn'
@@ -237,6 +243,7 @@ function createLearn({ db, session, isAdminEmail = () => false, member = null, r
     if (a === 'roles' && b && method === 'DELETE') return removeRole(w, b);
     if (a === 'duplicates') return duplicates(w, method, b, body);
     if (a === 'audit' && method === 'GET') return auditLog(w, query);
+    for (const area of areas) { const r = await area.route(w, method, parts, body, query); if (r) return r; }
     return null;
   }
   return { handle, who };

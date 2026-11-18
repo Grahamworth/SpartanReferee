@@ -79,7 +79,7 @@ test("an event's page: its cameras (book, open or watch them on the console), it
   assert.match(read('scripts/site-files.txt'), /^event\.js$/m);
 });
 test("a practice camera is booked only from Learning's cameras guide; the console just says where", () => {
-  const learn = read('learn/learn.js');
+  const learn = read('learn/cameras.js');
   assert.ok(learn.includes("call('practice-camera', { method: 'POST'"));
   assert.ok(learn.includes('<h1>Cameras: setup and use</h1>'));
   assert.match(read('learn/index.html'), /<a href="#\/cameras" data-view="cameras">Cameras<\/a>/);

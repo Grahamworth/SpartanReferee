@@ -1,8 +1,10 @@
-// The learning platform's demo data: regions and ten invented people with their roles (the design doc's "Demo data").
+// The learning platform's demo data: regions and ten invented people with their roles (the design doc's "Demo data"), and the
+// programmes with their curriculum and enrolments (scripts/learn-content.mjs).
 // Safe to run again: what's already there is left as it is. Nobody real is added (NFR-04).
 //   source scripts/learn-env.sh && node scripts/learn-seed.mjs
 import { createRequire } from 'node:module';
 import crypto from 'node:crypto';
+import { PROGRAMMES, ENROLMENTS } from './learn-content.mjs';
 
 const require = createRequire(import.meta.url);
 const { dbFromEnv } = require('../api/src/learn/db.js');
@@ -52,5 +54,50 @@ for (const p of PEOPLE) {
     if (!had) { await db.query('INSERT INTO {S}.role_grant (grant_id, person_id, role, programme_id, region_id) VALUES (@id, @p, @role, @prog, @region)', { id: crypto.randomUUID(), p: row.person_id, role: g.role, prog: g.programme || null, region: g.region || null }); summary.roles++; }
   }
 }
-console.log(`Seeded: ${summary.regions} regions, ${summary.people} people, ${summary.roles} roles added (the rest were already there).`);
+// ---------------------------------------------------------------- programmes (step 2): published straight away by the seed
+summary.programmes = 0; summary.enrolments = 0;
+const personByEmail = async (local) => (await db.query('SELECT * FROM {S}.person WHERE email = @e AND synthetic = 1', { e: `${local}@${D}` }))[0];
+const owner = await personByEmail('paul.owner');
+for (const prog of PROGRAMMES) {
+  if ((await db.query('SELECT 1 AS x FROM {S}.programme WHERE programme_id = @id', { id: prog.id })).length) continue;
+  const v = prog.version, vid = crypto.randomUUID();
+  await db.tx(async (q) => {
+    await q(`INSERT INTO {S}.programme (programme_id, title, category, description, owner_id, locales, learner_role) VALUES (@id, @title, @cat, @desc, @owner, @loc, @role)`,
+      { id: prog.id, title: prog.title, cat: prog.category, desc: prog.description, owner: prog.id === 'ocr-referee' ? owner?.person_id || null : null, loc: prog.locales, role: prog.learnerRole });
+    await q(`INSERT INTO {S}.programme_version (version_id, programme_id, edition, state, effective_date, completion_rule, pass_mark, max_attempts, retake_wait_hours, validity_months, renewal_due_days, qualification, policy_note, published_at)
+             VALUES (@vid, @id, @ed, 'published', '2027-01-01', @rule, @pass, @max, @wait, @valid, @due, @qual, @note, SYSUTCDATETIME())`,
+      { vid, id: prog.id, ed: v.edition, rule: v.completionRule, pass: v.passMark, max: v.maxAttempts, wait: v.retakeWaitHours, valid: v.validityMonths, due: v.renewalDueDays, qual: v.qualification, note: v.policyNote });
+    let mseq = 0;
+    for (const m of prog.modules) {
+      const mid = crypto.randomUUID(); mseq++;
+      await q('INSERT INTO {S}.module (module_id, lineage_id, version_id, code, seq, title, summary, source_section) VALUES (@id, @id, @v, @code, @seq, @t, @s, @src)',
+        { id: mid, v: vid, code: `${prog.id === 'ocr-referee' ? 'ocr' : 'deka'}-${mseq}`, seq: mseq, t: m.title, s: m.summary, src: m.source });
+      let lseq = 0;
+      for (const l of m.lessons) {
+        const lid = crypto.randomUUID(); lseq++;
+        await q('INSERT INTO {S}.lesson (lesson_id, lineage_id, code, module_id, version_id, seq, title, summary, minutes) VALUES (@id, @id, @code, @m, @v, @seq, @t, @s, @min)',
+          { id: lid, code: l.key, m: mid, v: vid, seq: lseq, t: l.title, s: l.summary, min: l.minutes });
+      }
+    }
+    await q(`INSERT INTO {S}.audit_event (action, entity_type, entity_id, summary, programme_id) VALUES ('programme.seed', 'programme', @id, @s, @id)`, { id: prog.id, s: JSON.stringify({ title: prog.title, edition: v.edition }) });
+  });
+  summary.programmes++;
+}
+for (const en of ENROLMENTS) {
+  const p = await personByEmail(en.email); if (!p) continue;
+  for (const pid of en.programmes) {
+    const v = (await db.query("SELECT TOP 1 * FROM {S}.programme_version WHERE programme_id = @id AND state = 'published' ORDER BY published_at DESC", { id: pid }))[0];
+    if (!v || (await db.query('SELECT 1 AS x FROM {S}.enrolment WHERE person_id = @p AND version_id = @v', { p: p.person_id, v: v.version_id })).length) continue;
+    const role = (await db.query('SELECT learner_role FROM {S}.programme WHERE programme_id = @id', { id: pid }))[0].learner_role;
+    await db.tx(async (q) => {
+      await q('INSERT INTO {S}.enrolment (enrolment_id, person_id, programme_id, version_id, enrolled_at) VALUES (@id, @p, @prog, @v, DATEADD(day, -60, SYSUTCDATETIME()))', { id: crypto.randomUUID(), p: p.person_id, prog: pid, v: v.version_id });
+      if (!(await q('SELECT 1 AS x FROM {S}.programme_role WHERE person_id = @p AND programme_id = @prog', { p: p.person_id, prog: pid })).length) {
+        await q("INSERT INTO {S}.programme_role (person_id, programme_id, role, grade) VALUES (@p, @prog, @role, 'Trainee')", { p: p.person_id, prog: pid, role });
+      }
+    });
+    summary.enrolments++;
+  }
+}
+if (globalThis.seedMore) await globalThis.seedMore(db, { D, personByEmail, summary });
+console.log(`Seeded: ${Object.entries(summary).map(([k, n]) => `${n} ${k}`).join(', ')} added (the rest were already there).`);
 await db.close();
