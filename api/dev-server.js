@@ -8,7 +8,21 @@ const { blobSigner } = require('./src/recordings');
 const { REDIRECT_URI } = require('./src/email-signin');
 
 const root = path.join(__dirname, '..'), port = +process.argv[2] || 8795;
+// The learning platform (/learn) on this computer: the real Azure SQL database, in its own "learn_dev" schema so nothing here
+// touches the live data. LEARN_FROM_AZ=1 reads the database's settings from the site's own (az, signed in), never from a file.
+function learnDatabase() {
+  const { dbFromEnv } = require('./src/learn/db');
+  const env = { ...process.env };
+  if (!env.LEARN_SQL_PASSWORD && env.LEARN_FROM_AZ) {
+    try {
+      const out = require('node:child_process').execSync('az staticwebapp appsettings list --name spartanreferee -g rg-spartanreferee-uksouth --subscription 65c0ccca-69f7-43eb-9246-3bd6a6a06b24 -o json --query properties', { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], shell: true });
+      Object.assign(env, JSON.parse(out));
+    } catch { console.log('The learning platform\'s settings couldn\'t be read with az: /learn is off'); }
+  }
+  return dbFromEnv(env, env.LEARN_SCHEMA || 'learn_dev');
+}
 const api = createApi({
+  learnDb: learnDatabase(),
   blobSigner: process.env.STORAGE_CONNECTION ? blobSigner(process.env.STORAGE_CONNECTION) : null,
   // logos stay in the page's own data link here: nothing is saved
   putBrand: async (_name, buf, type) => `data:${type};base64,${buf.toString('base64')}`,

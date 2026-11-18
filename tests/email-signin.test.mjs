@@ -93,7 +93,7 @@ test('the console shows the way to the admin area only to admins', () => {
   assert.ok(read('console.js').includes("show($('adminLink'), !!me.admin)"));
 });
 test('the return page only ever goes back to our own pages', () => {
-  assert.match(read('email-signin-web.js'), /new Set\(\['register\.html', 'console\.html', 'results\.html', 'customers\.html'\]\)/);
+  assert.match(read('email-signin-web.js'), /new Set\(\['register\.html', 'console\.html', 'results\.html', 'customers\.html', 'learn\/'\]\)/);
 });
 test('the Broadcaster has no account: it opens straight on its camera page', () => {
   const s = read('scripts/build-broadcaster.sh');

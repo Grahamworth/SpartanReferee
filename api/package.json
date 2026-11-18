@@ -2,15 +2,17 @@
   "name": "headjudge-api",
   "version": "0.1.0",
   "private": true,
-  "description": "HeadJudge backend: sign-in, companies, servers and recordings (Azure Functions + Table Storage)",
+  "description": "SpartanReferee backend: sign-in, the organisation, events, servers, recordings (Table Storage) and the learning platform (Azure SQL)",
   "main": "src/functions.js",
   "scripts": {
     "test": "node --test test/*.test.js",
-    "dev": "node dev-server.js"
+    "dev": "node dev-server.js",
+    "test:sql": "node --test --test-concurrency=1 test/sql/*.test.js"
   },
   "dependencies": {
     "@azure/data-tables": "^13.3.0",
     "@azure/functions": "^4.5.0",
-    "google-auth-library": "^9.15.0"
+    "google-auth-library": "^9.15.0",
+    "mssql": "^11.0.2"
   }
 }

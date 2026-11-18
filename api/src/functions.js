@@ -8,6 +8,7 @@ const { blobSigner, brandWriter } = require('./recordings');
 const { createEmailSignIn } = require('./email-signin');
 const { createMicrosoftSignIn } = require('./microsoft-signin');
 const { createPayments } = require('./payments');
+const { dbFromEnv } = require('./learn/db');
 
 // Settings: GOOGLE_CLIENT_ID (the web client for Google sign-in), SESSION_SECRET (signs session tokens), ADMIN_EMAILS (comma separated),
 // CIAM_SUBDOMAIN, CIAM_TENANT_ID, CIAM_CLIENT_ID (email sign-in; none is a secret), MICROSOFT_CLIENT_ID (Sign in with Microsoft; not a secret),
@@ -25,6 +26,7 @@ const getApi = () => (api = api || createApi({
   emailSignIn: createEmailSignIn({ subdomain: process.env.CIAM_SUBDOMAIN, tenantId: process.env.CIAM_TENANT_ID, clientId: process.env.CIAM_CLIENT_ID }),
   microsoftSignIn: createMicrosoftSignIn({ clientId: process.env.MICROSOFT_CLIENT_ID }),
   payments: createPayments({ secretKey: process.env.STRIPE_SECRET_KEY, siteUrl: 'https://brave-forest-022879f03.3.azurestaticapps.net' }),
+  learnDb: dbFromEnv(), // LEARN_SQL_* settings: the learning platform's Azure SQL database
 }));
 
 app.http('api', {

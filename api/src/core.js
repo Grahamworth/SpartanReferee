@@ -14,6 +14,7 @@ const { createRecordings } = require('./recordings');
 const { createCompanies, createMembership } = require('./companies');
 const { createServers } = require('./servers');
 const { createEvents } = require('./events');
+const { createLearn } = require('./learn');
 
 const CORS = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Authorization, Content-Type, X-Session, X-Device, X-Admin-Key, X-Server-Key', 'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS' };
 
@@ -21,7 +22,7 @@ const CORS = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers
  * verifyGoogle(idToken) -> {sub, email, name, picture} (throws when invalid); secret signs our own session tokens.
  * adminEmails: Google accounts that are admins. While neither adminEmails nor adminKey is set, everyone is (the prototype).
  */
-function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], verifyGoogle = null, emailSignIn = null, microsoftSignIn = null, payments = null, secret = '', googleClientId = '', blobSigner = null, putBrand = null, maxRunningServers = 1, serverHourPrice = 0.66, eventFetcher = null, bookingUnits = true }) {
+function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], verifyGoogle = null, emailSignIn = null, microsoftSignIn = null, payments = null, secret = '', googleClientId = '', blobSigner = null, putBrand = null, maxRunningServers = 1, serverHourPrice = 0.66, eventFetcher = null, bookingUnits = true, learnDb = null }) {
   const reply = (status, body) => ({ status, body, headers: { 'Content-Type': 'application/json', ...CORS } });
   const admins = adminEmails.map((e) => String(e).trim().toLowerCase()).filter(Boolean);
   // session tokens: base64url(payload).HMAC
@@ -132,6 +133,9 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
 
   // who's in the organisation: an admin (as isAdmin decides, by address), or a referee an admin added
   const isAdminEmail = (email) => admins.includes(email) || addedAdmins.has(email) || (!adminKey && !admins.length);
+  // the Learning & Competence platform (/api/learn), in its own database; its tables are made or updated on its first request
+  const learn = learnDb ? createLearn({ db: learnDb, session, isAdminEmail, reply }) : null;
+  let learnReady = null;
   const membership = createMembership(store, { isAdminEmail });
   const recordings = createRecordings({ store, signer: blobSigner, now, reply, session, isAdmin, membership });
   // Spartan's events (events.js), synced from Spartan's race list; referees book cameras for one
@@ -171,6 +175,10 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
       if (parts[0] === 'servers' && parts.length <= 3) r = await servers(method, parts[1], parts[2], body, h, query);
       // Spartan's events: for anyone in the organisation
       if (parts[0] === 'events' && parts.length === 1) { const me = session(h); r = !me ? reply(401, { error: 'Sign in first' }) : !(await membership.companyFor(me)) ? reply(403, { error: 'Only referees and admins see the events' }) : await eventList.events(method); }
+      if (parts[0] === 'learn') {
+        if (!learn) r = reply(503, { error: 'The learning platform isn’t set up yet' });
+        else { learnReady = learnReady || learnDb.migrate().catch((e) => { learnReady = null; throw e; }); await learnReady; r = await learn.handle(method, parts, body, h, query); }
+      }
       if (parts[0] === 'companies' && parts.length <= 3) r = await companies(method, parts[1], parts[2], body, h);
       return r || reply(404, { error: 'not found' });
     } catch (e) {
