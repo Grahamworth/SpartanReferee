@@ -204,3 +204,14 @@ h3.sub { font-size: 1rem; text-transform: uppercase; letter-spacing: .04em; marg
 .demoNote { color: var(--primary-text); font-weight: 700; }
 .certificate .btnRow { justify-content: center; }
 .checkLine { display: flex; align-items: center; gap: 8px; min-height: 44px; }
+
+/* ---------------------------------------------------------------- rules, review items and the handbook (govern.js) */
+.excerpt { margin: 10px 0; padding: 10px 14px; border-inline-start: 4px solid var(--primary); background: var(--bg); line-height: 1.55; }
+.docList li { padding: 6px 0; }
+.rowList li > .badge { flex: none; }
+.tabs2 { display: flex; gap: 4px; margin-top: 10px; }
+.tabs2 a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border: 1px solid var(--line); color: var(--muted); text-decoration: none; font-weight: 700; }
+.tabs2 a.on { color: var(--text); border-color: var(--primary); }
+.reviewCard h2 { font-size: 1.25rem; }
+.stampList li { padding: 4px 0; }
+.stampList b { display: inline-block; min-width: 90px; color: var(--muted); }

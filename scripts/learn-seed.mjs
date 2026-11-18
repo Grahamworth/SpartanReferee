@@ -7,6 +7,7 @@ import crypto from 'node:crypto';
 import { PROGRAMMES, ENROLMENTS } from './learn-content.mjs';
 import { LESSONS } from './learn-lessons.mjs';
 import { ASSESSMENTS, OUTCOMES } from './learn-questions.mjs';
+import { DOCUMENTS, RULES, DISPUTES } from './learn-rules.mjs';
 
 const require = createRequire(import.meta.url);
 const { dbFromEnv } = require('../api/src/learn/db.js');
@@ -176,6 +177,37 @@ for (const o of OUTCOMES) {
       { id: cid, s: JSON.stringify({ publicId: pub, note: o.note, demonstration: true }), prog: o.programme, region: p.region_id });
   });
   summary.credentials++;
+}
+// ---------------------------------------------------------------- rule references and open review items (step 5)
+summary.rules = 0; summary.reviews = 0;
+for (const d of DOCUMENTS) {
+  if ((await db.query('SELECT 1 AS x FROM {S}.rule_document WHERE doc_id = @id', { id: d.id })).length) continue;
+  await db.query('INSERT INTO {S}.rule_document (doc_id, programme_id, title, edition, approval, note, effective_date) VALUES (@id, @p, @t, @e, @a, @n, @eff)', { id: d.id, p: d.programme, t: d.title, e: d.edition, a: d.approval, n: d.note, eff: d.effective });
+}
+for (const r of RULES) {
+  if ((await db.query('SELECT 1 AS x FROM {S}.rule_ref WHERE rule_id = @id', { id: r.id })).length) continue;
+  const doc = DOCUMENTS.find((d) => d.id === r.doc);
+  await db.query(`INSERT INTO {S}.rule_ref (rule_key, rule_id, version_no, programme_id, doc_id, section, title, excerpt, citation, effective_date, state, approved_at)
+                  VALUES (@k, @id, 1, @p, @d, @s, @t, @e, @c, @eff, 'approved', SYSUTCDATETIME())`,
+    { k: crypto.randomUUID(), id: r.id, p: doc.programme, d: r.doc, s: r.section, t: r.title, e: r.excerpt, c: `${doc.title} ${doc.edition}, ${r.section}`, eff: doc.effective });
+  summary.rules++;
+}
+// what each disputed rule affects: the lessons and questions that cite it, in published versions
+async function affectedFor(ruleId) {
+  const out = [];
+  for (const c of await db.query("SELECT c.content_id, c.locale, c.version_no, c.state, c.body, l.lesson_id, l.title, v.version_id, v.edition, v.state AS vstate FROM {S}.content_version c JOIN {S}.lesson l ON l.lesson_id = c.lesson_id JOIN {S}.programme_version v ON v.version_id = l.version_id WHERE c.state IN ('published', 'review')")) {
+    if ((JSON.parse(c.body).slides || []).some((sl) => (sl.rules || []).includes(ruleId))) out.push({ type: 'lesson', id: c.lesson_id, contentId: c.content_id, title: `${c.title} (${c.locale} v${c.version_no}, ${c.state})`, edition: c.edition, programmeVersion: c.version_id, versionState: c.vstate });
+  }
+  for (const q of await db.query('SELECT q.question_id, q.prompt, q.rules, a.assessment_id, a.title, v.version_id, v.edition, v.state AS vstate FROM {S}.question q JOIN {S}.assessment a ON a.assessment_id = q.assessment_id JOIN {S}.programme_version v ON v.version_id = a.version_id')) {
+    if (q.rules.split(',').includes(ruleId)) out.push({ type: 'question', id: q.question_id, assessmentId: q.assessment_id, title: `${q.title}: ${q.prompt.slice(0, 90)}`, edition: q.edition, programmeVersion: q.version_id, versionState: q.vstate });
+  }
+  return out;
+}
+for (const d of DISPUTES) {
+  if ((await db.query("SELECT 1 AS x FROM {S}.review_item WHERE kind = 'dispute' AND title = @t", { t: d.title })).length) continue;
+  await db.query(`INSERT INTO {S}.review_item (review_id, programme_id, kind, rule_id, title, detail, affected) VALUES (@id, 'ocr-referee', 'dispute', @r, @t, @d, @a)`,
+    { id: crypto.randomUUID(), r: d.rule, t: d.title, d: d.detail, a: JSON.stringify(await affectedFor(d.rule)) });
+  summary.reviews++;
 }
 console.log(`Seeded: ${Object.entries(summary).map(([k, n]) => `${n} ${k}`).join(', ')} added (the rest were already there).`);
 await db.close();

@@ -129,6 +129,7 @@ async function lessonView(rest) {
   const head = `<section class="card lpHead"><p class="crumbs"><a href="${back}">${esc(L.programme.title)}</a> · ${esc(L.module.title)}</p>
     <h1>${esc(L.lesson.title)}</h1>
     <p class="badges">${L.version.state !== 'published' ? badge(L.version.state, `${L.version.edition} ${L.version.state}`) : ''}${L.programme.demo ? badge('preview', 'Demonstration content') : ''}${done ? badge('completed', 'Completed') : donePreview ? badge('pending', 'Done in a preview translation') : ''}${c && c.state !== 'published' && !c.preview ? badge(c.state) : ''}</p>
+    ${L.extra?.reviews?.length ? `<p class="reviewNote"><b>Under review</b> ${L.extra.reviews.map((i) => esc(i.title)).join('; ')}. <a href="#/reviews?programme=${esc(L.programme.id)}">See the review items</a></p>` : ''}
     ${langSwitch()}</section>`;
   if (!c) return `${head}<section class="card"><h2>Being written</h2><p>This lesson's content hasn't been published yet.</p><p><a class="btnLink" href="${back}">Back to the programme</a></p></section>${editorPanel()}`;
   const preview = c.preview ? `<p class="previewBanner" role="note"><b>Preview translation.</b> ${esc(c.translatedBy || 'Not reviewed yet')}. The English is the approved version. Completing the lesson in this language is recorded, but it counts towards your qualification only in an approved language.</p>` : '';

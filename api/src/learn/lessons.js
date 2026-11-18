@@ -109,7 +109,7 @@ function createLessons(ctx, { speech, mediaSigner }) {
     const forLearners = await learnerContent(l.lesson_id);
     // the best content in each language: published, then a preview translation (and for editors, the newest draft)
     const best = (locale, list) => list.filter((c) => c.locale === locale).sort((a, b) => (a.state === 'published' ? -1 : 0) - (b.state === 'published' ? -1 : 0) || b.version_no - a.version_no)[0];
-    const locales = [...new Set(forLearners.map((c) => c.locale))].map((loc) => { const c = best(loc, forLearners); return { locale: loc, contentId: c.content_id, state: c.state, preview: isPreview(c), versionNo: c.version_no }; });
+    const locales = [...new Set(forLearners.map((c) => c.locale))].sort((a, b) => (a === "en" ? -1 : b === "en" ? 1 : a.localeCompare(b))).map((loc) => { const c = best(loc, forLearners); return { locale: loc, contentId: c.content_id, state: c.state, preview: isPreview(c), versionNo: c.version_no }; });
     const person = w.person, wanted = String(query.locale || '') || (locales.some((x) => x.locale === person.locale) ? person.locale : 'en');
     let c = query.content && canEdit ? visible.find((x) => x.content_id.toLowerCase() === String(query.content).toLowerCase()) : null;
     c = c || best(wanted, forLearners) || best('en', forLearners) || (canEdit ? visible[0] : null);

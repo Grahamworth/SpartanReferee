@@ -47,3 +47,10 @@ export async function act(fn, btn) {
  *  record: a person's learning record (the record); lesson: the end of a lesson (the lesson) */
 export const hooks = { programme: [], record: [], lesson: [], wire: [] };
 export const runHooks = async (list, data) => (await Promise.all(list.map((f) => f(data)))).join('');
+/** jsPDF, loaded the first time a PDF is made (certificates, the handbook) */
+let jspdf = null;
+export const loadPdf = () => (jspdf = jspdf || new Promise((res, rej) => {
+  if (window.jspdf?.jsPDF) { res(window.jspdf.jsPDF); return; } // already here
+  const s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+  s.onload = () => res(window.jspdf.jsPDF); s.onerror = () => { jspdf = null; rej(new Error('The PDF maker couldn\'t load: check the connection')); }; document.head.append(s);
+}));

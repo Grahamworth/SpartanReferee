@@ -77,4 +77,5 @@ learn/cameras.js
 learn/lesson.js
 learn/assess.js
 learn/judgement.js
+learn/govern.js
 learn/learn.css

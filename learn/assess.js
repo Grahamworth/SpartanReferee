@@ -1,6 +1,6 @@
 // Assessments and credentials (step 4): taking an assessment, its result with feedback and rule references, assessors' decisions,
 // the question bank for editors, and demonstration credentials with their history and a PDF (ASM-01..05, AT-04, AT-08, AT-10).
-import { $, S, call, esc, toast, badge, bar, day, when, redraw, act, hooks } from './core.js';
+import { $, S, call, esc, toast, badge, bar, day, when, redraw, act, hooks, loadPdf } from './core.js';
 import { clip } from './judgement.js';
 
 const TYPE = { single: 'Single choice', multiple: 'Multiple choice', video: 'Video judgement' };
@@ -105,8 +105,6 @@ async function assessingView(rest) {
 }
 
 // ---------------------------------------------------------------- a credential
-let jspdf = null;
-const loadPdf = () => (jspdf = jspdf || new Promise((res, rej) => { const s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'; s.onload = () => res(window.jspdf.jsPDF); s.onerror = () => rej(new Error('The PDF maker couldn\'t load: check the connection')); document.head.append(s); }));
 async function credentialPdf(c) {
   const JsPDF = await loadPdf(), doc = new JsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
   doc.setTextColor(232, 232, 232); doc.setFont('helvetica', 'bold'); doc.setFontSize(76); doc.text('DEMONSTRATION', 148, 125, { align: 'center', angle: 22 });
