@@ -16,6 +16,5 @@ test('only a registered company signs in to the console and Results: any other a
     const html = read(f);
     assert.match(html, /id="registerFirst" href="register\.html" hidden>Register my company</, `${f}: a Register button for the refused`);
     assert.match(html, /New to HeadJudge\? <a href="register\.html">Register your company<\/a> first/, `${f}: newcomers pointed at registering`);
-    assert.match(html, /#signIn \.emailCreate \{ display: none; \}/, `${f}: accounts are made while registering, not here`);
   }
 });

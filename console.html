@@ -22,12 +22,10 @@
 <main class="page console">
   <section id="signIn" class="card narrow" hidden>
     <h2>Sign in to your company</h2>
-    <div id="emailBtns"></div>
     <div id="msBtn"></div>
-    <div id="googleBtn"></div>
+    <div id="devBtn"></div>
     <p class="error" id="signInError" role="alert" hidden></p>
     <a class="primary linkbtn" id="registerFirst" href="register.html" hidden>Register my company</a>
-    <style>#signIn .emailCreate { display: none; } /* accounts are made while registering */</style>
     <p class="muted">New to HeadJudge? <a href="register.html">Register your company</a> first: you sign in as part of it.</p>
   </section>
 
@@ -102,7 +100,7 @@
       <div><input id="personEmail" type="email" autocomplete="off" maxlength="200" placeholder="name@company.com"><button class="small" type="submit">Add</button></div>
     </form>
     <p class="error" id="peopleError" role="alert" hidden></p>
-    <p class="note">They sign in at <a id="consoleUrl" href="console.html">this console</a> with that address, using Google, Microsoft or email. No email is sent: tell them.</p>
+    <p class="note">They sign in at <a id="consoleUrl" href="console.html">this console</a> with that address, with a Microsoft account (work, school or personal). No email is sent: tell them.</p>
   </section>
 
   <!-- the payment page a customer goes through before a booking is made: pretend for now, so nothing is charged and no card is asked for -->

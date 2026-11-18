@@ -1,7 +1,7 @@
 // A company's past week, with or without a server running: what each camera recorded, every athlete found with their tracking and
 // reps, and the numbers shown to a camera, to search, watch and download. It only reads: recording and uploading are on the server's page.
-import { call, googleButton, signedIn, getMe, signOut, esc } from './api-base.js';
-import { emailButtons, microsoftButton } from './email-signin-web.js';
+import { call, devSignInButton, signedIn, getMe, signOut, esc } from './api-base.js';
+import { microsoftButton } from './email-signin-web.js';
 import { drawAppTabs } from './apptabs.js';
 
 const { applyTheme } = window.HeadJudgeBrand;
@@ -188,7 +188,7 @@ async function enter() {
   const { company: c } = await call('companies/mine').catch(() => ({}));
   if (!c && !me.admin) {
     signOut(); show($('signIn'), true);
-    $('signInError').textContent = `${me.user.email || 'That account'} isn't registered with HeadJudge. Register your company first, then sign in here. Added by your company? Check they used this address, or sign in with it another way.`;
+    $('signInError').textContent = `${me.user.email || 'That account'} isn't registered with HeadJudge. Register your company first, then sign in here. Added by your company? Check they used this address.`;
     show($('signInError'), true); show($('registerFirst'), true);
     return start();
   }
@@ -211,8 +211,7 @@ async function start() {
   if (signedIn()) return enter();
   show($('signIn'), true);
   const failed = (e) => { $('signInError').textContent = e.message || 'Sign-in didn\'t work: try again'; show($('signInError'), true); };
-  emailButtons($('emailBtns'), 'results.html', failed);
   microsoftButton($('msBtn'), 'results.html', failed);
-  await googleButton($('googleBtn'), () => enter(), failed);
+  await devSignInButton($('devBtn'), () => enter(), failed);
 }
 start();

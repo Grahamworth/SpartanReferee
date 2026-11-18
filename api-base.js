@@ -1,5 +1,5 @@
 // Where the backend is: the site's own /api, or (inside the Android / iPhone app, which runs from files on the
-// phone) the hosted site's. Plus who you are: a random id for this phone, and your Google sign-in once you've signed in.
+// phone) the hosted site's. Plus who you are: a random id for this phone, and your session once you've signed in.
 const HOSTED = 'https://brave-forest-022879f03.3.azurestaticapps.net';
 export const API = location.protocol.startsWith('http') && (location.hostname.endsWith('azurestaticapps.net') || location.port === '8795') ? '/api' : HOSTED + '/api';
 const ls = { get: (k) => { try { return localStorage.getItem(k) || ''; } catch { return ''; } }, set: (k, v) => { try { if (v) localStorage.setItem(k, v); else localStorage.removeItem(k); } catch { /* private mode */ } } };
@@ -29,7 +29,7 @@ export async function call(path, { method = 'GET', body, admin } = {}) {
   return data;
 }
 
-// ---------------------------------------------------------------- signing in (Google, as in SkiTour)
+// ---------------------------------------------------------------- signing in (Microsoft, in email-signin-web.js)
 let meCache = null;
 /** who you are: { user (when signed in), profile, admin, judge } */
 export async function getMe(fresh) {
@@ -38,40 +38,20 @@ export async function getMe(fresh) {
 }
 export const signedIn = () => !!ls.get('sp_token');
 export function signOut() { ls.set('sp_token', ''); meCache = null; drawSignOut(); }
-async function exchange(idToken) {
-  const r = await call('auth/google', { method: 'POST', body: { idToken } });
-  ls.set('sp_token', r.token); meCache = null; drawSignOut();
-  if (r.user && r.user.name && !ls.get('sp_name')) ls.set('sp_name', r.user.name.slice(0, 30));
-  return r.user;
-}
-/** draws Google's sign-in button into el (web); on Android/iPhone the native account picker when the app has it */
-export async function googleButton(el, onDone, onError) {
+/** Local testing only (node api/dev-server.js): a "Sign in (test account)" button. On the real site companies sign in
+ *  with Microsoft (email-signin-web.js), and this draws nothing. */
+export async function devSignInButton(el, onDone, onError) {
+  if (location.port !== '8795') return;
   const cfg = await call('config').catch(() => ({}));
-  if (!cfg.signIn) { el.innerHTML = '<p class="muted">Google sign-in isn’t switched on yet.</p>'; return; }
-  if (location.port === '8795' && cfg.googleClientId === 'dev') { // local testing only
-    el.innerHTML = '<button class="btn btn-ghost" type="button">Sign in (test account)</button>';
-    el.firstChild.onclick = async () => { try { onDone(await exchange('dev:' + (prompt('Test email:', 'me@example.com') || ''))); } catch (e) { onError(e); } };
-    return;
-  }
-  const SL = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.SocialLogin;
-  if (SL) {
-    el.innerHTML = '<button class="btn btn-ghost" type="button">Sign in with Google</button>';
-    el.firstChild.onclick = async () => {
-      try { await SL.initialize({ google: { webClientId: cfg.googleClientId } }); const res = await SL.login({ provider: 'google', options: {} }); onDone(await exchange(res.result.idToken)); }
-      catch (e) { onError(e); }
-    };
-    return;
-  }
-  await new Promise((res, rej) => {
-    if (window.google && window.google.accounts) return res();
-    const s = document.createElement('script'); s.src = 'https://accounts.google.com/gsi/client'; s.async = true;
-    s.onload = res; s.onerror = () => rej(new Error('Couldn’t load Google sign-in (are you online?)'));
-    document.head.appendChild(s);
-  }).catch(onError);
-  if (!window.google || !window.google.accounts) return;
-  window.google.accounts.id.initialize({ client_id: cfg.googleClientId, callback: async (resp) => { try { onDone(await exchange(resp.credential)); } catch (e) { onError(e); } } });
-  el.textContent = '';
-  window.google.accounts.id.renderButton(el, { theme: 'outline', size: 'large', shape: 'pill', text: 'signin_with', width: Math.min(300, el.clientWidth || 300) });
+  if (cfg.googleClientId !== 'dev') return;
+  el.innerHTML = '<button class="btn btn-ghost" type="button">Sign in (test account)</button>';
+  el.firstChild.onclick = async () => {
+    try {
+      const r = await call('auth/google', { method: 'POST', body: { idToken: 'dev:' + (prompt('Test email:', 'me@example.com') || '') } });
+      ls.set('sp_token', r.token); meCache = null; drawSignOut();
+      onDone(r.user);
+    } catch (e) { onError(e); }
+  };
 }
 
 // ---------------------------------------------------------------- Sign out, at the top right of every page while you're signed in
@@ -89,7 +69,6 @@ export function drawSignOut() {
   button.type = 'button'; button.className = 'link signOut'; button.textContent = 'Sign out';
   button.onclick = () => {
     signOut();
-    try { window.google?.accounts?.id?.disableAutoSelect(); } catch { /* Google's button isn't on this page */ }
     location.reload();
   };
   right.appendChild(button);

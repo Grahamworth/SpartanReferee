@@ -47,17 +47,14 @@ test('cancelling and Microsoft\'s errors say so, with its code to look up', () =
   assert.match(readReturn(`${RETURN}?error=access_denied&state=the-state`, pending).message, /cancelled/);
   assert.match(readReturn(`${RETURN}?error=access_denied&error_description=AADSTS53003%3A+blocked&state=the-state`, pending).message, /AADSTS53003/);
 });
-test('companies can use email on the registration page and console, but the admin area stays Google and Microsoft only', () => {
-  for (const [html, js] of [['register.html', 'register.js'], ['console.html', 'console.js']]) {
-    assert.match(read(html), /id="emailBtns"/, html);
-    assert.match(read(js), /emailButtons\(/, js);
+test('SpartanReferee is Microsoft sign-in only: no Google or email buttons on any page', () => {
+  for (const f of ['register.html', 'register.js', 'console.html', 'console.js', 'results.html', 'results.js', 'customers.html', 'customers.js', 'email-signin-web.js', 'api-base.js']) {
+    assert.doesNotMatch(read(f), /emailBtns|emailButtons|googleBtn|googleButton|accounts\.google\.com/, f);
   }
-  assert.doesNotMatch(read('customers.html'), /emailBtns/);
-  assert.doesNotMatch(read('customers.js'), /emailButtons/);
 });
 test('every sign-in page offers Sign in with Microsoft, which comes back to the same return page', () => {
   for (const [html, js] of [['register.html', 'register.js'], ['console.html', 'console.js'], ['results.html', 'results.js'], ['customers.html', 'customers.js']]) {
-    assert.match(read(html), /<div id="msBtn"><\/div>\s*<div id="googleBtn">/, html);
+    assert.match(read(html), /<div id="msBtn"><\/div>\s*<div id="devBtn">/, html);
     assert.match(read(js), new RegExp(`microsoftButton\\(\\$\\('msBtn'\\), '${html}'`), js);
   }
   const web = read('email-signin-web.js');

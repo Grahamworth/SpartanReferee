@@ -2,6 +2,8 @@
 
 SpartanReferee was copied from HeadJudge (github.com/Grahamworth/HeadJudge, `C:\Repo\HeadJudge`) on 18 November 2026, with its history, to be developed separately. It is fully separate: its own website (https://brave-forest-022879f03.3.azurestaticapps.net), API data, storage (`spartanreferee`), control app (`spartanreferee-control`), server network, firewall and image store (`rg-spartanreferee-servers`), Microsoft sign-in app (`SpartanReferee`, VDASO directory) and email sign-in directory (`spartanreferee.onmicrosoft.com`). Its resource groups are `rg-spartanreferee-uksouth` and `rg-spartanreferee-servers`, in the HeadJudge subscription. Servers are named `sr-…`. It shares that subscription's GPU limit with HeadJudge: 40 vCPUs in Italy North, 5 servers at once across both. Nothing here changes HeadJudge, and HeadJudge's changes don't reach here. The code is at github.com/Grahamworth/SpartanReferee (private).
 
+Sign-in is **Microsoft only** (from 18 November 2026): the website offers no Google or email buttons, and the site has no `GOOGLE_CLIENT_ID` or `CIAM_*` settings, so the API refuses both (503). Admins need an address Microsoft vouches for. Local testing (`node api/dev-server.js`) has a "Sign in (test account)" button instead. The email directory `spartanreferee.onmicrosoft.com` and `scripts/set-up-email-sign-in.mjs` are still there but unused.
+
 What follows was written for HeadJudge, and the product inside is still called HeadJudge until it's renamed.
 
 ## HeadJudge, as copied

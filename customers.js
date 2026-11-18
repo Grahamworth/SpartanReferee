@@ -1,5 +1,5 @@
 // The admin area for HeadJudge: every customer, what they've used and what you've made from it, and the percentage added to Azure's cost.
-import { call, googleButton, signedIn, getMe, signOut, esc } from './api-base.js';
+import { call, devSignInButton, signedIn, getMe, signOut, esc } from './api-base.js';
 import { microsoftButton } from './email-signin-web.js';
 
 const { money, plural, timeLeft } = window.HeadJudgeBooking;
@@ -162,6 +162,6 @@ async function start() {
   if (signedIn()) return enter();
   show($('signIn'), true);
   microsoftButton($('msBtn'), 'customers.html', (e) => { $('signInError').textContent = e.message; show($('signInError'), true); });
-  await googleButton($('googleBtn'), () => enter(), (e) => { $('signInError').textContent = e.message || 'Sign-in didn\'t work: try again'; show($('signInError'), true); });
+  await devSignInButton($('devBtn'), () => enter(), (e) => { $('signInError').textContent = e.message || 'Sign-in didn\'t work: try again'; show($('signInError'), true); });
 }
 start();

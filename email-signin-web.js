@@ -1,6 +1,5 @@
-// Email sign-in on the website: the same accounts as the Broadcaster app, and the same emailed code at each sign-in. Microsoft's
-// page opens in this tab and comes back to email-return.html with a one-time code, which the API swaps for a session.
-// "Sign in with Microsoft" (any work, school or personal Microsoft account) comes back the same way, to the same page.
+// "Sign in with Microsoft" (any work, school or personal Microsoft account), the only way to sign in to SpartanReferee's website.
+// Microsoft's page opens in this tab and comes back to email-return.html with a one-time code, which the API swaps for a session.
 import { call } from './api-base.js';
 import { randomText, challengeFor, signInAddress, readReturn } from './email-signin-core.js';
 
@@ -15,17 +14,6 @@ async function goSignIn(cfg, provider, back, options, onError) {
     sessionStorage.setItem(PENDING, JSON.stringify({ provider, verifier, state, redirectUri, back }));
     location.assign(signInAddress({ ...cfg, redirectUri }, { ...options, state, challenge: await challengeFor(verifier) }));
   } catch { onError(new Error('Sign-in couldn’t start here. Check this browser allows this site to store data, then try again.')); }
-}
-
-/** Draws the two email buttons into el. `back` is the page to come back to. Nothing shows if email sign-in isn't switched on. */
-export async function emailButtons(el, back, onError) {
-  const { emailSignIn: cfg } = await call('config').catch(() => ({}));
-  if (!cfg || !cfg.webRedirectUri) return;
-  el.innerHTML = `<button class="primary emailBtn" type="button" data-create="">Sign in with email</button>
-    <button class="link emailCreate" type="button" data-create="1">Create an account with email</button>
-    <p class="note">After your password, we’ll email you a code to confirm it’s you.</p>
-    <p class="orLine"><span>or</span></p>`;
-  for (const button of el.querySelectorAll('button')) button.onclick = () => goSignIn(cfg, 'email', back, { create: !!button.dataset.create }, onError);
 }
 
 const MS_LOGO = '<svg viewBox="0 0 21 21" width="20" height="20" aria-hidden="true"><path fill="#f25022" d="M1 1h9v9H1z"/><path fill="#7fba00" d="M11 1h9v9h-9z"/><path fill="#00a4ef" d="M1 11h9v9H1z"/><path fill="#ffb900" d="M11 11h9v9h-9z"/></svg>';
