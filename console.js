@@ -139,10 +139,14 @@ function draw(s) {
   $('stateMore').classList.toggle('warn', !!ending);
   fail(state === 'off' ? s.error : '');
   // a practice camera (training) is booked from Learning's camera guide, never here
-  show($('book'), state === 'off' && s.unit?.kind !== 'training'); show($('trainingFromLearn'), state === 'off' && s.unit?.kind === 'training'); show($('running'), state === 'on' || state === 'starting' || state === 'booked');
+  // an event's burpee cameras are its head referee's (and admins') to book and run; every referee watches and reviews them
+  const mine = s.unit?.canManage !== false;
+  if (!mine && state === 'off') { $('stateText').textContent = 'Not booked yet'; $('stateMore').textContent = ''; }
+  show($('book'), state === 'off' && s.unit?.kind !== 'training' && mine); show($('trainingFromLearn'), state === 'off' && s.unit?.kind === 'training'); show($('headBooks'), !mine && s.unit?.kind === 'event'); show($('running'), state === 'on' || state === 'starting' || state === 'booked');
   // booked ahead: nothing to open yet, and Stop cancels it
   show($('serverList'), state !== 'booked');
   $('stop').textContent = state === 'booked' ? 'Cancel booking' : 'Stop now';
+  show($('stop').parentElement, mine);
   const p = s.price;
   fillHours($('hours'), p.maxHours, 4); fillHours($('extendHours'), p.maxExtendHours, 1);
   $('cameras').max = p.maxCameras;
@@ -199,7 +203,7 @@ function drawUnit(s, state) {
       $('fromAt').value = localInput(start); $('untilAt').value = localInput(Math.min(start + 4 * HOUR, next.until)); drawQuote();
     }
   } else { $('untilAt').max = ''; }
-  show($('extend'), u.canExtend !== false);
+  show($('extend'), u.canExtend !== false && u.canManage !== false);
   if (s.wanted === 'on' && u.bookedBy) $('stateMore').textContent += u.bookedAnyTime ? ` Booked by ${u.bookedBy}, at any time.` : ` Booked by ${u.bookedBy}.`; // whole sentences, so each translates
 }
 async function loadUnits() {

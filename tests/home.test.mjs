@@ -76,6 +76,9 @@ test("an event's page: its cameras (book, open or watch them on the console), it
   assert.ok(js.includes("call(`event/${id}`)"));
   assert.ok(js.includes("consoleUrl = `console.html?unit=${encodeURIComponent(e.unit)}`"));
   assert.ok(js.includes("b && b.state === 'on' ? `${consoleUrl}&go=live` : consoleUrl"), 'Watch live once its cameras are on');
+  assert.ok(js.includes('show(go, !!b || (!e.over && p.canBook))'), 'Book the burpee cameras only for its head referee or an admin');
+  assert.ok(read('console.js').includes("show($('book'), state === 'off' && s.unit?.kind !== 'training' && mine)"), 'the console books only for them');
+  assert.match(read('console.html'), /id="headBooks" hidden>The event's head referee books and runs its burpee cameras/);
   assert.match(read('scripts/site-files.txt'), /^event\.js$/m);
 });
 test("a practice camera is booked only from Learning's cameras guide; the console just says where", () => {
@@ -83,7 +86,7 @@ test("a practice camera is booked only from Learning's cameras guide; the consol
   assert.ok(learn.includes("call('practice-camera', { method: 'POST'"));
   assert.ok(learn.includes('<h1>Cameras: setup and use</h1>'));
   assert.match(read('learn/index.html'), /<a href="#\/cameras" data-view="cameras">Cameras<\/a>/);
-  assert.ok(read('console.js').includes("show($('book'), state === 'off' && s.unit?.kind !== 'training')"));
+  assert.ok(read('console.js').includes("show($('book'), state === 'off' && s.unit?.kind !== 'training' && mine)"));
   assert.match(read('console.html'), /id="trainingFromLearn" hidden data-i18n>Practice cameras are booked from the <a href="learn\/#\/cameras">/);
 });
 test('nothing on the site\'s file list looks like the personal test videos the deploy refuses (clips/, test.mp4, pub*.html)', () => {

@@ -38,7 +38,9 @@
    SpartanReferee (with events): the organisation has many bookings at once, each with its own servers, as a "unit" standing in for
    the company above: one per Spartan event ("e<event id>"), one per referee for training ("t…") and one per admin for testing ("x…").
    Every /api/servers/mine call says which with ?unit= (GET) or {unit} (POST); without one it's the most relevant running booking.
-     event     07:00 to 18:00 local time on the event's days (events.js), extended up to 18:00; an admin can book any time ({anyTime})
+     event     07:00 to 18:00 local time on the event's days (events.js), extended up to 18:00; an admin can book any time ({anyTime}).
+               The burpee camera station is the event's head referee's to book, extend and stop (assignments.js), and admins';
+               every referee can open its Live, Cameras and Results (from 19 November 2026).
      training  30 minutes, any time, everyone; no extending. Booked only from Learning's camera guide (from 19 November 2026):
                POST /api/learn/practice-camera (core.js) books it with fromLearn; /api/servers/mine/start refuses it. The console
                lists your training only while it's booked, so you can watch it there.
@@ -99,7 +101,14 @@ function createServers({ store, now, reply, session, isAdmin = () => false, memb
     }
     return { serverHours: Math.round(out.serverHours * 10) / 10, cameraHours: Math.round(out.cameraHours * 10) / 10, charge: pounds(out.charge), azure: pounds(out.azure), profit: pounds(out.charge - out.azure) };
   }
-  const { companyFor } = membership || createMembership(store); // owner, or one of its people
+  const { companyFor, provenEmail } = membership || createMembership(store); // owner, or one of its people
+  /** may this person book, extend and stop this unit? An event's: its head referee, or an admin. Your own training: you. Testing: admins */
+  async function manages(me, h, u) {
+    if (isAdmin(h)) return true;
+    if (u.kind !== 'event') return u.kind === 'training';
+    const email = me && provenEmail ? await provenEmail(me) : '', eventId = u.event?.id || String(u.id).slice(1);
+    return !!email && (await store.get('assignment', `${eventId}|${email}`))?.role === 'head';
+  }
   async function companyOf(h) {
     const me = session(h); if (!me) return { error: reply(401, { error: 'Sign in first' }) };
     const m = await companyFor(me);
@@ -119,7 +128,8 @@ function createServers({ store, now, reply, session, isAdmin = () => false, memb
     const scheduled = wanted === 'on' && !!plan?.from && now() < plan.from - START_LEAD_MS;
     const state = slots.some((s) => s.state === 'stopping') ? 'stopping' : slots.some((s) => s.state === 'starting') ? 'starting' : slots.every((s) => s.state === 'on') ? 'on' : slots.some((s) => s.state === 'on') ? 'starting' : 'off';
     // which unit this is (SpartanReferee): its kind, its event and that event's days, and what the booking was made as
-    const unit = c.kind ? { id: c.id, kind: c.kind, name: c.name, event: c.event ? { id: c.event.id, name: c.event.name, city: c.event.city, country: c.event.country, tz: c.event.tz, startDate: c.event.startDate, endDate: c.event.endDate, windows: eventTimes.windows(c.event) } : null,
+    const canManage = c.kind && h ? await manages(session(h), h, c) : !c.kind; // (the admin area asks with no one in particular)
+    const unit = c.kind ? { id: c.id, kind: c.kind, name: c.name, canManage, event: c.event ? { id: c.event.id, name: c.event.name, city: c.event.city, country: c.event.country, tz: c.event.tz, startDate: c.event.startDate, endDate: c.event.endDate, windows: eventTimes.windows(c.event) } : null,
       canAnyTime: !!h && isAdmin(h), canExtend: c.kind !== 'training', bookedAnyTime: !!plan?.anyTime, bookedBy: wanted === 'on' ? plan?.by || plan?.requestedBy || '' : '' } : undefined;
     return {
       unit, state, wanted, servers: slots, error: slots.map((s) => s.error).find(Boolean) || '',
@@ -303,7 +313,9 @@ function createServers({ store, now, reply, session, isAdmin = () => false, memb
     const booking = (id) => { const p = plans.get(id); return active(p) ? { from: p.from || 0, until: p.until, cameras: p.cameras, by: p.by || p.requestedBy || '' } : null; };
     if (events) await events.fresh(); // synced from Spartan when the copy here is old
     const evs = events ? await events.upcoming() : [];
-    const units = evs.map((e) => ({ id: `e${e.id}`, kind: 'event', name: e.name, city: e.city, country: e.country, tz: e.tz, startDate: e.startDate, endDate: e.endDate, windows: e.windows, booking: booking(`e${e.id}`) }));
+    const heads = new Set();
+    if (!isAdmin(h)) { const email = provenEmail ? await provenEmail(me) : ''; for (const a of await store.list('assignment')) if (a.email === email && a.role === 'head') heads.add(a.eventId); }
+    const units = evs.map((e) => ({ id: `e${e.id}`, kind: 'event', canManage: isAdmin(h) || heads.has(e.id), name: e.name, city: e.city, country: e.country, tz: e.tz, startDate: e.startDate, endDate: e.endDate, windows: e.windows, booking: booking(`e${e.id}`) }));
     if (booking(trainingId(me.uid))) units.push({ id: trainingId(me.uid), kind: 'training', name: 'Training', booking: booking(trainingId(me.uid)) });
     if (isAdmin(h)) units.push({ id: testingId(me.uid), kind: 'testing', name: 'Testing', booking: booking(testingId(me.uid)) });
     const current = await currentUnit(me, h);
@@ -436,6 +448,7 @@ function createServers({ store, now, reply, session, isAdmin = () => false, memb
     }
     // Customers go through the payment page: checkout says what the booking comes to and holds it for a while, and paying for it makes it.
     // For now the payment is pretend: nothing is charged, and it's marked so on the booking.
+    if (['checkout', 'pay', 'start', 'extend', 'stop'].includes(b) && c.kind === 'event' && !(await manages(me, h, c))) return reply(403, { error: 'The event\'s head referee books and runs its burpee cameras: you can watch them once they\'re on' });
     if ((b === 'checkout' || b === 'start') && c.kind === 'training' && !fromLearn) return reply(403, { error: 'Practice cameras are booked from the cameras guide in Learning' });
     if (b === 'checkout') {
       const a = asked(body); if (a.error) return reply(400, { error: a.error });

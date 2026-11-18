@@ -2,7 +2,7 @@
 /* Which referees are assigned to which of Spartan's events, as head referee or referee, each referee's home page (home.html) and
    each event's page (event.html), from 19 November 2026. Admins assign referees on the admin page; a referee sees their upcoming
    events on their home page, and an event's page shows its days and times, who's refereeing it and its cameras, with the way to
-   book them. Being assigned doesn't change who can book: any referee can book any event, as before.
+   book them. An event's burpee cameras are booked and run by its head referee (and admins); every referee can watch and review them.
 
    GET  /api/home                          -> { name, email, admin, events, learn }   anyone in the organisation
    GET  /api/event/<id>                    -> { event, you, referees, booking }      anyone in the organisation
@@ -57,6 +57,8 @@ function createAssignments({ store, now, reply, session, isAdmin, isAdminEmail, 
       you: you ? { role: roleOf(you) } : null,
       referees: rows.map((r) => ({ email: r.email, name: names.get(r.email), role: roleOf(r), you: r.email === m.email })),
       booking: await bookingStatus(`e${id}`),
+      // its burpee cameras are booked and run by its head referee (and admins); every referee watches them
+      canBook: m.admin || (you && roleOf(you) === 'head') || false,
     });
   }
 

@@ -9,7 +9,7 @@ const CAMERA_GUIDE = `
     <nav class="toc" aria-label="In this guide"><a href="#g-before">Before the event</a><a href="#g-kit">What you need</a><a href="#g-place">Placing a camera</a><a href="#g-connect">Connecting a phone</a><a href="#g-judge">Judging</a><a href="#g-wrong">If something goes wrong</a><a href="#g-practice">Practise</a></nav>
   </section>
   <section class="card guide" id="g-before"><h2>1. Before the event</h2><ul>
-    <li>Your events are on your home page. Open one to see its camera hours and who's refereeing it, and press <b>Book cameras</b>. Any referee can book, and each event has one booking for everyone.</li>
+    <li>Your events are on your home page. Open one to see its camera hours and who's refereeing it. The event's <b>head referee</b> books the burpee camera station (<b>Book the burpee cameras</b>); each event has one booking, and every referee can watch it live and review the results.</li>
     <li>An event's cameras run from 07:00 to 18:00 local time on each of its days.</li>
     <li>Each server takes 2 cameras. A booking made ahead starts its servers 10 minutes early, so the cameras are ready on time; starting now takes about 5 minutes.</li>
     <li>Check the venue's connection before the day: each camera sends about 3.5 Mbit/s, and the venue has to carry them all.</li></ul></section>

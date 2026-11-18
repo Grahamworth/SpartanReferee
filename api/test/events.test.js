@@ -32,7 +32,9 @@ function setup({ fail = false, start = Date.parse('2026-11-18T12:00:00Z') } = {}
   const login = async (who) => ({ Authorization: `Bearer ${(await api.handle({ method: 'POST', path: 'auth/google', body: { idToken: who } })).body.token}` });
   const call = (method, path, headers, body) => api.handle({ method, path, headers, body });
   const referee = async (who) => { await call('POST', 'admin/referees', await login('boss'), { email: `${who}@example.com` }); return login(who); };
-  return { store, login, call, referee, pass: (ms) => { clock += ms; }, at: (iso) => { clock = Date.parse(iso); }, fetches: () => fetches };
+  // an event's head referee: they book its burpee cameras (the events must be synced first)
+  const head = async (who, eventId) => { const r = await call('POST', 'admin/assignments', await login('boss'), { eventId, email: `${who}@example.com`, role: 'head' }); if (r.status !== 200) throw new Error(JSON.stringify(r.body)); };
+  return { store, login, call, referee, head, pass: (ms) => { clock += ms; }, at: (iso) => { clock = Date.parse(iso); }, fetches: () => fetches };
 }
 
 test('event times are 07:00 to 18:00 local on each day, through clock changes, and from the longitude when there\'s no timezone', () => {
@@ -82,10 +84,11 @@ test('the list is synced again only when it\'s 6 hours old; a failed sync keeps 
 });
 
 test('an event\'s cameras are booked between 07:00 and 18:00 local on its days, and stop at 18:00 however long was asked for', async () => {
-  const { call, referee, at } = setup();
+  const { call, referee, head, at } = setup();
   const h = await referee('sam');
   await call('GET', 'events', h);
   const unit = 'e10664';
+  await head('sam', '10664');
   // ahead, inside a day: fine; across 18:00 or into the night: no
   const ok = await call('POST', 'servers/mine/start', h, { unit, cameras: 2, from: Date.parse('2026-11-20T04:00:00Z'), until: Date.parse('2026-11-20T08:00:00Z') });
   assert.strictEqual(ok.status, 200, JSON.stringify(ok.body));
@@ -106,11 +109,17 @@ test('an event\'s cameras are booked between 07:00 and 18:00 local on its days, 
   assert.strictEqual(more.status, 409); assert.match(more.body.error, /18:00/);
 });
 
-test('each event has its own booking: two events book at once, and a referee sees both', async () => {
-  const { call, referee, at } = setup();
-  const sam = await referee('sam'), pat = await referee('pat');
+test('each event has its own booking, by its head referee: two events book at once, and every referee sees and opens both', async () => {
+  const { call, referee, head, at } = setup();
+  const sam = await referee('sam'), pat = await referee('pat'), kim = await referee('kim');
   at('2026-11-21T05:00:00Z');
   await call('GET', 'events', sam);
+  await head('sam', '10664'); await head('pat', '20002'); await head('pat', '10664');
+  // a referee who isn't the head referee can't book, and is told who does
+  const notHead = await call('POST', 'servers/mine/start', kim, { unit: 'e10664', cameras: 2, hours: 2 });
+  assert.strictEqual(notHead.status, 403); assert.match(notHead.body.error, /head referee/);
+  assert.strictEqual((await call('GET', 'servers/units', kim)).body.units.find((u) => u.id === 'e10664').canManage, false);
+  assert.strictEqual((await call('GET', 'servers/units', sam)).body.units.find((u) => u.id === 'e10664').canManage, true);
   assert.strictEqual((await call('POST', 'servers/mine/start', sam, { unit: 'e10664', cameras: 2, hours: 2 })).status, 200);
   const other = await call('POST', 'servers/mine/start', pat, { unit: 'e20002', cameras: 2, from: Date.parse('2026-12-05T01:00:00Z'), until: Date.parse('2026-12-05T05:00:00Z') });
   assert.strictEqual(other.status, 200, JSON.stringify(other.body));
@@ -121,6 +130,12 @@ test('each event has its own booking: two events book at once, and a referee see
   assert.strictEqual(units.current, 'e10664', 'the one that\'s on comes up first');
   assert.ok(!units.units.some((u) => u.kind === 'testing'), 'testing is for admins');
   assert.strictEqual((await call('GET', 'servers/mine?unit=e10664', pat)).body.server.wanted, 'on');
+  // every referee watches it; only the head referee (or an admin) extends or stops it
+  const watching = await call('GET', 'servers/mine?unit=e10664', kim);
+  assert.strictEqual(watching.status, 200); assert.strictEqual(watching.body.server.wanted, 'on'); assert.strictEqual(watching.body.server.unit.canManage, false);
+  assert.strictEqual((await call('POST', 'servers/mine/stop', kim, { unit: 'e10664' })).status, 403);
+  assert.strictEqual((await call('POST', 'servers/mine/extend', kim, { unit: 'e10664', hours: 1 })).status, 403);
+  assert.notStrictEqual((await call('POST', 'servers/mine/open', kim, { unit: 'e10664', n: 1 })).status, 403, 'opening the review is for everyone');
 });
 
 test('training: everyone, 30 minutes, started from Learning only, not extended, and each referee has their own', async () => {
@@ -143,9 +158,10 @@ test('training: everyone, 30 minutes, started from Learning only, not extended, 
 });
 
 test('admins: a testing booking at any time, and an event booked at any time when they say so; referees can\'t', async () => {
-  const { call, referee, login } = setup();
+  const { call, referee, login, head } = setup();
   const sam = await referee('sam'), boss = await login('boss');
   await call('GET', 'events', boss);
+  await head('sam', '10664');
   const units = (await call('GET', 'servers/units', boss)).body.units;
   const testing = units.find((u) => u.kind === 'testing');
   assert.ok(testing);

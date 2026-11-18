@@ -106,8 +106,12 @@ test('an event\'s page: its days and times, who\'s refereeing it (with the names
   assert.strictEqual(p.you, null, 'ben isn\'t assigned, but any referee can see it');
   assert.deepStrictEqual(p.referees, [{ email: 'ana@example.com', name: 'Ana Popescu', role: 'head', you: false }]);
   assert.strictEqual(p.booking, null);
+  assert.strictEqual(p.canBook, false, 'only the head referee (or an admin) books its burpee cameras');
+  assert.strictEqual((await call('GET', 'event/30002', ana)).body.canBook, true, 'Ana is its head referee');
+  assert.strictEqual((await call('GET', 'event/30002', boss)).body.canBook, true, 'an admin');
   assert.deepStrictEqual((await call('GET', 'event/e30002', ana)).body.you, { role: 'head' });
-  // booked: the page says so
+  // booked (by its head referee): the page says so
+  await call('POST', 'admin/assignments', boss, { eventId: '30002', email: 'ben@example.com', role: 'head' });
   assert.strictEqual((await call('POST', 'servers/mine/start', ben, { unit: 'e30002', cameras: 2, from: Date.parse('2026-12-05T01:00:00Z'), until: Date.parse('2026-12-05T05:00:00Z') })).status, 200);
   const b = (await call('GET', 'event/30002', ana)).body.booking;
   assert.strictEqual(b.state, 'booked'); assert.strictEqual(b.cameras, 2); assert.strictEqual(b.by, 'ben@example.com');

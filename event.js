@@ -32,14 +32,14 @@ function draw(p) {
   $('camLight').dataset.state = b ? b.state : 'off';
   $('camState').textContent = b ? STATE[b.state] : e.over ? 'This event is over' : 'Not booked yet';
   // whole sentences, so each translates
-  $('camMore').textContent = !b ? (e.over ? '' : 'Any referee can book this event\'s cameras.')
+  $('camMore').textContent = !b ? (e.over ? '' : p.canBook ? 'You book them as the head referee: they run from 07:00 to 18:00 local time on each day you choose.' : 'The head referee books them. Once they\'re on, you can watch them live and review the results.')
     : b.state === 'booked' ? `${b.cameras} cameras, ${when(b.from)} to ${clock(b.until)}.`
       : b.state === 'stopping' ? 'Saving the recordings, then shutting down.'
         : `${b.cameras} cameras, until ${clock(b.until)}.`;
   $('camBy').textContent = b && b.by ? `Booked by ${b.by}` : ''; show($('camBy'), !!(b && b.by));
   const go = $('camGo');
-  show(go, !e.over || !!b);
-  go.textContent = !b ? 'Book cameras' : b.state === 'on' ? 'Watch live' : 'Open the booking';
+  show(go, !!b || (!e.over && p.canBook));
+  go.textContent = !b ? 'Book the burpee cameras' : b.state === 'on' ? 'Watch live' : p.canBook ? 'Open the booking' : 'See the booking';
   go.href = b && b.state === 'on' ? `${consoleUrl}&go=live` : consoleUrl;
   go.classList.toggle('second', !!b && b.state !== 'on');
 
