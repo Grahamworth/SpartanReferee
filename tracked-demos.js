@@ -143,3 +143,6 @@ export function drawTracked(holder) {
 
 export const TRACKED = Object.keys(MOVES);
 export const MOVES_FOR_TEST = MOVES;
+// for the learning platform's video judgement items (learn/judgement.js): the poses and the drawing, to show a burpee done wrong
+export const POSES = { STAND, CROUCH, PLANK, CHEST_DOWN, JUMP };
+export { drawFrame };

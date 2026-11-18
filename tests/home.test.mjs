@@ -86,3 +86,8 @@ test("a practice camera is booked only from Learning's cameras guide; the consol
   assert.ok(read('console.js').includes("show($('book'), state === 'off' && s.unit?.kind !== 'training')"));
   assert.match(read('console.html'), /id="trainingFromLearn" hidden data-i18n>Practice cameras are booked from the <a href="learn\/#\/cameras">/);
 });
+test('nothing on the site\'s file list looks like the personal test videos the deploy refuses (clips/, test.mp4, pub*.html)', () => {
+  const files = read('scripts/site-files.txt').split('\n').filter(Boolean);
+  assert.deepStrictEqual(files.filter((f) => /clips|test\.mp4$|(^|\/)pub[^/]*\.html$/i.test(f)), []);
+  for (const f of files) assert.ok(fs.existsSync(new URL(`../${f}`, import.meta.url)), `${f} is listed but missing`);
+});

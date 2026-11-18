@@ -6,6 +6,7 @@ import { createRequire } from 'node:module';
 import crypto from 'node:crypto';
 import { PROGRAMMES, ENROLMENTS } from './learn-content.mjs';
 import { LESSONS } from './learn-lessons.mjs';
+import { ASSESSMENTS, OUTCOMES } from './learn-questions.mjs';
 
 const require = createRequire(import.meta.url);
 const { dbFromEnv } = require('../api/src/learn/db.js');
@@ -123,6 +124,58 @@ for (const [code, content] of Object.entries(LESSONS)) {
 // narration: Azure AI Speech by default, with a British English and a Castilian Spanish voice
 if (!(await db.query("SELECT 1 AS x FROM {S}.media_config WHERE scope = 'default'")).length) {
   await db.query("INSERT INTO {S}.media_config (scope, provider, voices) VALUES ('default', 'azure-speech', @v)", { v: JSON.stringify({ en: 'en-GB-RyanNeural', es: 'es-ES-ElviraNeural' }) });
+}
+// ---------------------------------------------------------------- assessments (step 4), and the demo people's results
+summary.assessments = 0; summary.credentials = 0;
+const currentVersion = async (pid) => (await db.query("SELECT TOP 1 * FROM {S}.programme_version WHERE programme_id = @id AND state = 'published' ORDER BY published_at DESC", { id: pid }))[0];
+for (const [pid, a] of Object.entries(ASSESSMENTS)) {
+  const v = await currentVersion(pid); if (!v) continue;
+  if ((await db.query('SELECT 1 AS x FROM {S}.assessment WHERE version_id = @v', { v: v.version_id })).length) continue;
+  const aid = crypto.randomUUID();
+  await db.tx(async (q) => {
+    await q('INSERT INTO {S}.assessment (assessment_id, lineage_id, version_id, title, description) VALUES (@id, @id, @v, @t, @d)', { id: aid, v: v.version_id, t: a.title, d: a.description });
+    let seq = 0;
+    for (const qu of a.questions) {
+      seq++;
+      const options = qu.options.map((o, i) => ({ id: String.fromCharCode(97 + i), text: o.text, correct: !!o.correct }));
+      await q(`INSERT INTO {S}.question (question_id, lineage_id, assessment_id, seq, type, prompt, options, feedback, clip, rules, review_note, needs_assessor)
+               VALUES (@id, @id, @a, @seq, @type, @prompt, @opt, @fb, @clip, @rules, @rn, @na)`,
+        { id: crypto.randomUUID(), a: aid, seq, type: qu.type, prompt: qu.prompt, opt: JSON.stringify(options), fb: qu.feedback, clip: qu.clip ? JSON.stringify(qu.clip) : null, rules: qu.rules.join(','), rn: qu.review || '', na: qu.needsAssessor ? 1 : 0 });
+    }
+  });
+  summary.assessments++;
+}
+for (const o of OUTCOMES) {
+  const p = await personByEmail(o.email); const v = await currentVersion(o.programme); if (!p || !v) continue;
+  if ((await db.query('SELECT 1 AS x FROM {S}.credential WHERE person_id = @p AND programme_id = @prog', { p: p.person_id, prog: o.programme })).length) continue;
+  const e = (await db.query('SELECT * FROM {S}.enrolment WHERE person_id = @p AND version_id = @v', { p: p.person_id, v: v.version_id }))[0]; if (!e) continue;
+  const a = (await db.query('SELECT * FROM {S}.assessment WHERE version_id = @v', { v: v.version_id }))[0]; if (!a) continue;
+  const qs = await db.query('SELECT * FROM {S}.question WHERE assessment_id = @a ORDER BY seq', { a: a.assessment_id });
+  const days = o.issuedDaysAgo;
+  await db.tx(async (q) => {
+    // every lesson with content, done in English
+    for (const c of await q("SELECT c.* FROM {S}.content_version c JOIN {S}.lesson l ON l.lesson_id = c.lesson_id WHERE l.version_id = @v AND c.locale = 'en' AND c.state = 'published'", { v: v.version_id })) {
+      if ((await q('SELECT 1 AS x FROM {S}.completion WHERE person_id = @p AND lesson_id = @l AND locale = @loc', { p: p.person_id, l: c.lesson_id, loc: 'en' })).length) continue;
+      await q(`INSERT INTO {S}.completion (completion_id, person_id, enrolment_id, programme_id, version_id, lesson_id, content_id, content_version, source_hash, locale, completed_at)
+               VALUES (@id, @p, @e, @prog, @v, @l, @c, @cv, @h, 'en', DATEADD(day, -@d - 1, SYSUTCDATETIME()))`, { id: crypto.randomUUID(), p: p.person_id, e: e.enrolment_id, prog: o.programme, v: v.version_id, l: c.lesson_id, c: c.content_id, cv: c.version_no, h: c.source_hash, d: days });
+    }
+    // a passing attempt: every answer right
+    const answers = qs.map((qu) => ({ questionId: qu.question_id, lineageId: qu.lineage_id, versionNo: qu.version_no, rules: qu.rules.split(',').filter(Boolean), type: qu.type,
+      chosen: JSON.parse(qu.options).filter((x) => x.correct).map((x) => x.id), reason: qu.needs_assessor ? 'No jump with the hands above the ears.' : '', correct: true, decided: !!qu.needs_assessor }));
+    const tid = crypto.randomUUID();
+    await q(`INSERT INTO {S}.attempt (attempt_id, person_id, enrolment_id, assessment_id, version_id, programme_id, started_at, submitted_at, answers, score, max_score, pass_mark, result, decided_at)
+             VALUES (@id, @p, @e, @a, @v, @prog, DATEADD(day, -@d, SYSUTCDATETIME()), DATEADD(day, -@d, SYSUTCDATETIME()), @ans, @n, @n, @pass, 'pass', DATEADD(day, -@d, SYSUTCDATETIME()))`,
+      { id: tid, p: p.person_id, e: e.enrolment_id, a: a.assessment_id, v: v.version_id, prog: o.programme, d: days, ans: JSON.stringify(answers), n: qs.length, pass: v.pass_mark });
+    await q("UPDATE {S}.enrolment SET state = 'completed', completed_at = DATEADD(day, -@d, SYSUTCDATETIME()) WHERE enrolment_id = @e", { e: e.enrolment_id, d: days });
+    const n = (await q('SELECT NEXT VALUE FOR {S}.credential_seq AS n'))[0].n, cid = crypto.randomUUID();
+    const pub = `DEMO-${o.programme.split('-')[0].toUpperCase().slice(0, 6)}-${String(n).padStart(6, '0')}`;
+    await q(`INSERT INTO {S}.credential (credential_id, public_id, person_id, programme_id, version_id, enrolment_id, attempt_id, qualification, issued_at, expires_at)
+             VALUES (@id, @pub, @p, @prog, @v, @e, @t, @qual, DATEADD(day, -@d, SYSUTCDATETIME()), ${v.validity_months ? 'DATEADD(month, @m, DATEADD(day, -@d, SYSUTCDATETIME()))' : 'NULL'})`,
+      { id: cid, pub, p: p.person_id, prog: o.programme, v: v.version_id, e: e.enrolment_id, t: tid, qual: v.qualification, d: days, m: v.validity_months });
+    await q(`INSERT INTO {S}.audit_event (action, entity_type, entity_id, summary, programme_id, region_id) VALUES ('credential.seed', 'credential', @id, @s, @prog, @region)`,
+      { id: cid, s: JSON.stringify({ publicId: pub, note: o.note, demonstration: true }), prog: o.programme, region: p.region_id });
+  });
+  summary.credentials++;
 }
 console.log(`Seeded: ${Object.entries(summary).map(([k, n]) => `${n} ${k}`).join(', ')} added (the rest were already there).`);
 await db.close();

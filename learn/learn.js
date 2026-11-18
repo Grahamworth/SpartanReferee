@@ -10,8 +10,9 @@ import * as programmes from './programmes.js';
 import * as people from './people.js';
 import * as cameras from './cameras.js';
 import * as lesson from './lesson.js';
+import * as assess from './assess.js';
 
-const AREAS = [programmes, people, cameras, lesson];
+const AREAS = [programmes, people, cameras, lesson, assess];
 const views = Object.assign({}, ...AREAS.map((a) => a.views));
 
 async function draw() {

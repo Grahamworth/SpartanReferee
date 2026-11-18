@@ -165,3 +165,42 @@ details.edit > summary { display: flex; align-items: center; min-height: 44px; f
 .mediaForm label { display: grid; gap: 4px; font-weight: 600; }
 .mediaForm select { min-height: 44px; }
 .mediaForm button { justify-self: start; }
+
+/* ---------------------------------------------------------------- assessments and credentials (assess.js) */
+h3.sub { font-size: 1rem; text-transform: uppercase; letter-spacing: .04em; margin: 16px 0 6px; color: var(--muted); }
+.credLine { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: 10px 0; }
+.assessRow a, .credList a { display: grid; gap: 2px; min-height: 48px; padding: 6px 0; color: var(--text); text-decoration: none; }
+.assessRow small, .credList small { color: var(--muted); }
+.credList { list-style: none; margin: 0; padding: 0; }
+.credList li { border-top: 1px solid var(--line); }
+.credList li:first-child { border-top: 0; }
+.qList > li { border-top: 1px solid var(--line); padding: 10px 0; }
+.qCard { border: 1px solid var(--line); background: var(--panel); padding: 16px; margin: 0 0 14px; min-width: 0; }
+.qCard legend { display: flex; gap: 10px; align-items: baseline; font-weight: 700; font-size: 1.08rem; line-height: 1.4; padding: 0; float: left; width: 100%; margin-bottom: 10px; }
+.qCard legend + * { clear: both; }
+.qNo { flex: none; display: inline-grid; place-items: center; width: 28px; height: 28px; background: var(--primary); color: var(--on-primary); font-size: .9rem; }
+.qCard.ok { border-color: var(--accent); } .qCard.bad { border-color: var(--bad); } .qCard.wait { border-color: #f2b33d; }
+.qOptions { display: grid; gap: 8px; clear: both; }
+.qOpt { display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 8px 12px; border: 1px solid var(--line); background: var(--bg); cursor: pointer; line-height: 1.35; }
+.qOpt input { flex: none; width: 22px; height: 22px; accent-color: var(--primary); }
+.qOpt:has(input:checked) { border-color: var(--primary); }
+.qOpt.right { border-color: var(--accent); } .qOpt.wrong { border-color: var(--bad); }
+.qReason { display: grid; gap: 4px; font-weight: 600; margin-top: 10px; }
+.qReason textarea { width: 100%; font: inherit; }
+.qResult { margin: 12px 0 4px; }
+.okText { color: var(--accent); } .badText { color: var(--bad); } .waitText { color: #f2b33d; }
+.bigResult { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; font-size: 1.4rem; margin: 6px 0; }
+.credIssued { border: 1px solid var(--accent); padding: 10px 12px; }
+.clip { display: grid; justify-items: center; gap: 8px; background: var(--bg); border: 1px solid var(--line); padding: 10px; margin: 0 0 10px; clear: both; }
+.clip canvas { width: min(260px, 100%); height: auto; aspect-ratio: 1; }
+.clipBtn { min-height: 44px; padding: 0 16px; font-weight: 700; background: var(--panel); color: var(--text); border: 1px solid var(--line); cursor: pointer; }
+.clipText { margin: 0 0 10px; }
+.decideBox .qOpt { margin-top: 8px; }
+.certificate { position: relative; overflow: hidden; text-align: center; border: 2px solid var(--primary); }
+.certificate .watermark { position: absolute; inset: 0; display: grid; place-items: center; font: italic 800 clamp(2.4rem, 12vw, 6rem) "Barlow Condensed", sans-serif; color: rgba(255, 255, 255, .06); transform: rotate(-18deg); pointer-events: none; }
+.certificate .plain { display: inline-block; text-align: left; }
+.certTop { text-transform: uppercase; letter-spacing: .1em; color: var(--muted); font-size: .8rem; margin: 0 0 6px; }
+.certName { font-size: 1.4rem; font-weight: 700; margin: 4px 0 10px; }
+.demoNote { color: var(--primary-text); font-weight: 700; }
+.certificate .btnRow { justify-content: center; }
+.checkLine { display: flex; align-items: center; gap: 8px; min-height: 44px; }

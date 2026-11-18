@@ -75,4 +75,6 @@ learn/people.js
 learn/programmes.js
 learn/cameras.js
 learn/lesson.js
+learn/assess.js
+learn/judgement.js
 learn/learn.css
