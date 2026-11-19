@@ -2784,5 +2784,8 @@
  "Check": "Vérifier",
  "Badges": "Badges",
  "Refresher": "Révision",
- "Overall": "Général"
+ "Overall": "Général",
+ "No events assigned to you yet. An admin assigns referees to Spartan's events, and they'll show here.": "Aucun événement ne vous est encore attribué. Un administrateur affecte les arbitres aux événements Spartan, et ils apparaîtront ici.",
+ "All your events": "Tous vos événements",
+ "Your events": "Vos événements"
 }

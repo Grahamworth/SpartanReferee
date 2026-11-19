@@ -2799,5 +2799,8 @@
  "Check": "Comprobar",
  "Badges": "Insignias",
  "Refresher": "Repaso",
- "Overall": "General"
+ "Overall": "General",
+ "No events assigned to you yet. An admin assigns referees to Spartan's events, and they'll show here.": "Aún no tienes eventos asignados. Un administrador asigna árbitros a los eventos de Spartan, y aparecerán aquí.",
+ "All your events": "Todos tus eventos",
+ "Your events": "Tus eventos"
 }

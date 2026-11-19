@@ -64,7 +64,7 @@ async function start(why = '') {
   show($('signIn'), true);
   const failed = (e) => { $('signInError').textContent = e.message || 'Sign-in didn\'t work: try again'; show($('signInError'), true); };
   if (why) failed({ message: why });
-  microsoftButton($('msBtn'), 'home.html', failed);
+  microsoftButton($('msBtn'), 'learn/', failed); // everyone lands on Learning's overview
   await devSignInButton($('devBtn'), () => enter(), failed);
 }
 start();

@@ -3,7 +3,7 @@
   "name": "SpartanReferee",
   "short_name": "SpartanReferee",
   "description": "Your events, lessons, rules and handbook as a Spartan referee, also offline.",
-  "start_url": "/home.html",
+  "start_url": "/learn/",
   "scope": "/",
   "display": "standalone",
   "orientation": "any",
@@ -18,7 +18,7 @@
     { "src": "/icons/spartanreferee/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ],
   "shortcuts": [
-    { "name": "Learning", "url": "/learn/", "icons": [{ "src": "/icons/spartanreferee/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Home", "url": "/home.html", "icons": [{ "src": "/icons/spartanreferee/icon-192.png", "sizes": "192x192" }] },
     { "name": "Rules", "url": "/learn/#/rules", "icons": [{ "src": "/icons/spartanreferee/icon-192.png", "sizes": "192x192" }] }
   ]
 }

@@ -2831,5 +2831,8 @@
  "Check": "Provjeri",
  "Badges": "Značke",
  "Refresher": "Obnavljanje",
- "Overall": "Općenito"
+ "Overall": "Općenito",
+ "No events assigned to you yet. An admin assigns referees to Spartan's events, and they'll show here.": "Još vam nije dodijeljeno nijedno događanje. Administrator dodjeljuje suce Spartanovim događanjima i ona će se pojaviti ovdje.",
+ "All your events": "Sva vaša događanja",
+ "Your events": "Vaša događanja"
 }

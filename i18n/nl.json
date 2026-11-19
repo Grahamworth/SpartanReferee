@@ -2790,5 +2790,8 @@
  "Check": "Controleren",
  "Badges": "Badges",
  "Refresher": "Opfrisser",
- "Overall": "Algemeen"
+ "Overall": "Algemeen",
+ "No events assigned to you yet. An admin assigns referees to Spartan's events, and they'll show here.": "Er zijn nog geen evenementen aan je toegewezen. Een beheerder wijst scheidsrechters toe aan Spartan-evenementen, en die verschijnen dan hier.",
+ "All your events": "Al je evenementen",
+ "Your events": "Je evenementen"
 }

@@ -2847,5 +2847,8 @@
  "Check": "Zkontrolovat",
  "Badges": "Odznaky",
  "Refresher": "Opakování",
- "Overall": "Obecné"
+ "Overall": "Obecné",
+ "No events assigned to you yet. An admin assigns referees to Spartan's events, and they'll show here.": "Zatím vám nebyla přidělena žádná akce. Administrátor přiděluje rozhodčí k akcím Spartan a zobrazí se zde.",
+ "All your events": "Všechny vaše akce",
+ "Your events": "Vaše akce"
 }

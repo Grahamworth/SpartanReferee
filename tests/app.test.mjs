@@ -9,7 +9,7 @@ const siteFiles = read('scripts/site-files.txt').split('\n').map((s) => s.trim()
 
 test('the manifest makes an app that opens on the referee\'s home page, with icons that exist', () => {
   const m = JSON.parse(read('manifest.webmanifest'));
-  assert.strictEqual(m.start_url, '/home.html'); assert.strictEqual(m.display, 'standalone'); assert.strictEqual(m.scope, '/');
+  assert.strictEqual(m.start_url, '/learn/', 'it opens on Learning\'s overview'); assert.strictEqual(m.id, '/home.html', 'the same app as before, for phones that installed it then'); assert.strictEqual(m.display, 'standalone'); assert.strictEqual(m.scope, '/');
   for (const i of [...m.icons, ...m.shortcuts.flatMap((s) => s.icons)]) assert.ok(exists(i.src.slice(1)), i.src);
   assert.ok(m.icons.some((i) => i.purpose === 'maskable' && i.sizes === '512x512'));
   assert.ok(m.icons.some((i) => i.sizes === '192x192'));

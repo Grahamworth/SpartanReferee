@@ -28,7 +28,7 @@ The events come from Spartan's own race list (`api/src/events.js`): the list its
 
 ### Home page, assigned events and learning
 
-Signing in leads to each person's home page (`home.html`, from 19 November 2026; data from `GET /api/home` in `api/src/assignments.js`): their name, the upcoming events they're assigned to (each marked head referee or referee), and the ways to **Learning** (`/learn`) and **Cameras** (the console). Admins also get **Admin**.
+**Where people land:** signing in, and opening the installed app, lead to Learning's overview (`/learn/`), from 19 November 2026 at the user's request. The overview also shows the referee's next events, the ways to the cameras and (admins) the admin page, and the Install card (`learn/landing.js`). Signing in from an event's page or the console still returns there. The home page is still there, from the **Home** link in Learning's header. It is each person's home page (`home.html`, from 19 November 2026; data from `GET /api/home` in `api/src/assignments.js`): their name, the upcoming events they're assigned to (each marked head referee or referee), and the ways to **Learning** (`/learn`) and **Cameras** (the console). Admins also get **Admin**.
 
 Tapping an event opens its page (`event.html?id=<event id>`, `GET /api/event/<id>`): its dates and place, its burpee cameras (**Book the burpee cameras** for its head referee and admins, **See the booking**, or once they're on **Watch live** for everyone, all on the console: `console.html?unit=e<event id>`), who's refereeing it (head referees first, by the name they signed in with), each day's camera hours in local time and the viewer's own, and Spartan's page for it. Any referee can open any event's page.
 
@@ -42,7 +42,7 @@ Spartan's Learning & Competence Platform prototype (from their requirements v0.2
 
 ### The installable app (offline)
 
-Added 19 November 2026. Home and Learning install as an app: Android and desktop Chrome or Edge offer **Install** on the home page, and on an iPhone the card explains Share → Add to Home Screen. `manifest.webmanifest` opens the app on `home.html`. The service worker `sw.js` keeps Home and Learning's own files: it takes them from the network when there's signal and from its copy when there isn't, and leaves the API and the camera pages alone. Any other page opened offline shows `offline.html`. `scripts/deploy-site.sh` stamps the commit into `sw.js`, so each deploy refreshes the phone's copy.
+Added 19 November 2026. Home and Learning install as an app: Android and desktop Chrome or Edge offer **Install** on the home page and Learning's overview, and on an iPhone the card explains Share → Add to Home Screen. `manifest.webmanifest` opens the app on Learning's overview (its id stays `/home.html`, so phones that installed it earlier keep the same app). The service worker `sw.js` keeps Home and Learning's own files: it takes them from the network when there's signal and from its copy when there isn't, and leaves the API and the camera pages alone. Any other page opened offline shows `offline.html`. `scripts/deploy-site.sh` stamps the commit into `sw.js`, so each deploy refreshes the phone's copy.
 
 What the server says is kept by the pages, in `offline.js` (Cache Storage `sr-data`):
 - Every Learning answer is kept as it arrives. Copies belong to the signed-in person: another sign-in on the same phone can't read them, and **Sign out** deletes them.

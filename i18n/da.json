@@ -2799,5 +2799,8 @@
  "Check": "Tjek",
  "Badges": "Mærker",
  "Refresher": "Genopfriskning",
- "Overall": "Generelt"
+ "Overall": "Generelt",
+ "No events assigned to you yet. An admin assigns referees to Spartan's events, and they'll show here.": "Du er ikke tildelt nogen stævner endnu. En administrator tildeler dommere til Spartans stævner, og de vises her.",
+ "All your events": "Alle dine stævner",
+ "Your events": "Dine stævner"
 }

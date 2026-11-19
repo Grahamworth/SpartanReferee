@@ -53,7 +53,10 @@ test('SpartanReferee is Microsoft sign-in only: no Google or email buttons on an
   }
 });
 test('every sign-in page offers Sign in with Microsoft, which comes back to the same return page', () => {
-  for (const [html, js] of [['home.html', 'home.js'], ['console.html', 'console.js'], ['results.html', 'results.js'], ['customers.html', 'customers.js']]) {
+  // everyone lands on Learning's overview, whichever of these two they signed in from
+  assert.ok(read('home.js').includes("microsoftButton($('msBtn'), 'learn/'"));
+  assert.ok(read('learn/learn.js').includes("microsoftButton($('msBtn'), 'learn/'"));
+  for (const [html, js] of [['console.html', 'console.js'], ['results.html', 'results.js'], ['customers.html', 'customers.js']]) {
     assert.match(read(html), /<div id="msBtn"><\/div>\s*<div id="devBtn">/, html);
     assert.match(read(js), new RegExp(`microsoftButton\\(\\$\\('msBtn'\\), '${html}'`), js);
   }

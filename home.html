@@ -20,18 +20,6 @@
   .hello h1 { font-size: clamp(2.2rem, 7vw, 3.6rem); line-height: 1; font-style: italic; margin: 0; overflow-wrap: anywhere; }
   .hello h1 span { color: var(--primary-text); }
   .hello p { margin: 8px 0 26px; }
-  .events { list-style: none; margin: 0; padding: 0; }
-  .events li { border-top: 1px solid var(--line); }
-  .events li:first-child { border-top: 0; }
-  .events a { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 64px; padding: 12px 0; color: var(--text); text-decoration: none; }
-  .events a:hover b { text-decoration: underline; }
-  .events b { display: block; font-size: 1.1rem; overflow-wrap: anywhere; }
-  .events small { display: block; color: var(--muted); margin-top: 2px; }
-  .events svg { flex: none; width: 24px; height: 24px; fill: none; stroke: var(--primary-text); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
-  html[dir="rtl"] .events svg { transform: scaleX(-1); }
-  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-  .chip { padding: 1px 8px; font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; border: 1px solid var(--line); color: var(--muted); }
-  .chip.head, .chip.now { background: var(--primary); border-color: var(--primary); color: var(--on-primary); }
   .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin: 0 0 18px; }
   .tile { display: flex; gap: 16px; align-items: flex-start; background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--primary); padding: 20px; color: var(--text); text-decoration: none; }
   .tile:hover { border-color: var(--primary-text); }
@@ -41,10 +29,6 @@
   .sharpHome { border-left: 4px solid var(--primary); }
   .sharpHome p { margin: 6px 0 12px; }
   .sharpGo { display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 10px; background: var(--primary); color: var(--on-primary); font-weight: 700; text-decoration: none; }
-  .installCard:not([hidden]) { display: flex; gap: 16px; align-items: flex-start; border-left: 4px solid var(--primary); }
-  .installCard svg { flex: none; width: 34px; height: 34px; fill: none; stroke: var(--primary-text); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-  .installCard h2 { margin: 0 0 4px; }
-  .installCard .btnRow { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
   /* phones: the ways in come first, as compact buttons side by side, then the events; each event's Book cameras is full width */
   @media (max-width: 640px) {
     #content:not([hidden]) { display: flex; flex-direction: column; }

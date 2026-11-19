@@ -12,7 +12,7 @@ test('the home page is SpartanReferee\'s, and leads to signing in, not registeri
   const home = read('index.html');
   assert.match(home, /<title>SpartanReferee/);
   assert.ok(!hrefs(home).includes('register.html'));
-  assert.ok(hrefs(home).includes('home.html'), 'signing in leads to the referee home page');
+  assert.ok(hrefs(home).includes('learn/') && !hrefs(home).includes('home.html'), 'signing in leads to Learning\'s overview, where everyone lands');
   assert.ok(hrefs(home).includes(`${SPARTANS}/`), 'and on to the Spartans site');
   assert.doesNotMatch(home, /hub\.js/, 'with none of the Spartans app in it');
 });
@@ -57,10 +57,12 @@ test('a referee\'s home page: their name, their events (each with Book cameras),
   assert.ok(js.includes('href="event.html?id=${encodeURIComponent(e.id)}"'), 'each event opens its own page');
   assert.ok(js.includes('Head referee'));
   assert.ok(js.includes("show($('adminTile'), !!h.admin)"));
-  // the console takes the event it's given, and leads back home; so does the learning platform's logo
+  // the console takes the event it's given, and leads back home; the learning platform's logo goes to its overview (where everyone
+  // lands), and its Home link to the home page
   assert.ok(read('console.js').includes("new URLSearchParams(location.search).get('unit')"));
   assert.match(read('console.html'), /<a href="home.html">Home<\/a>/);
-  assert.match(read('learn/index.html'), /<a class="mark" href="..\/home.html">/);
+  assert.match(read('learn/index.html'), /<a class="mark" href="\.\/">/);
+  assert.match(read('learn/index.html'), /<a href="\.\.\/home\.html">Home<\/a>/);
 });
 test('on a phone, every page\'s header is the name and a Menu button, with big rows to tap (check: node scripts/mobile-check.mjs)', () => {
   const base = read('api-base.js'), css = read('headjudge.css');

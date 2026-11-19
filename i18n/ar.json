@@ -2873,5 +2873,8 @@
  "Check": "تحقّق",
  "Badges": "الأوسمة",
  "Refresher": "جلسة تنشيط",
- "Overall": "عام"
+ "Overall": "عام",
+ "No events assigned to you yet. An admin assigns referees to Spartan's events, and they'll show here.": "لم تُسنَد إليك أي فعاليات بعد. يُسند المسؤول الحكام إلى فعاليات Spartan، وستظهر هنا.",
+ "All your events": "كل فعالياتك",
+ "Your events": "فعالياتك"
 }
