@@ -1159,5 +1159,8 @@
  "No head referee yet: an admin assigns one, who books them. Once they're on, you can watch them live and review the results.": "Δεν υπάρχει ακόμη επικεφαλής κριτής: ένας διαχειριστής ορίζει έναν, που τις κλείνει. Μόλις λειτουργούν, μπορείτε να τις παρακολουθείτε ζωντανά και να ελέγχετε τα αποτελέσματα.",
  "Book up to <0>{n}</0> days ahead. The servers start <1>{n}</1> minutes early, so the cameras are ready at the start time. At the end the recordings are saved and everything shuts down. You can extend, or cancel before it starts. Recordings are kept for <2>{n}</2> days.": "Κλείστε έως <0>{n}</0> ημέρες νωρίτερα. Οι διακομιστές ξεκινούν <1>{n}</1> λεπτά νωρίτερα, ώστε οι κάμερες να είναι έτοιμες την ώρα έναρξης. Στο τέλος οι εγγραφές αποθηκεύονται και όλα τερματίζονται. Μπορείτε να παρατείνετε ή να ακυρώσετε πριν ξεκινήσει. Οι εγγραφές διατηρούνται για <2>{n}</2> ημέρες.",
  "Times are local time in {city}.": "Οι ώρες είναι τοπική ώρα: {city}.",
- "Times are the event's local time.": "Οι ώρες είναι η τοπική ώρα του αγώνα."
+ "Times are the event's local time.": "Οι ώρες είναι η τοπική ώρα του αγώνα.",
+ "Choose your language": "Επιλέξτε τη γλώσσα σας",
+ "The site and your lessons will use it. You can change it any time from the menu at the top.": "Ο ιστότοπος και τα μαθήματά σας θα τη χρησιμοποιούν. Μπορείτε να την αλλάξετε οποτεδήποτε από το μενού επάνω.",
+ "Suggested": "Προτείνεται"
 }

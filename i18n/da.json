@@ -1154,5 +1154,8 @@
  "No head referee yet: an admin assigns one, who books them. Once they're on, you can watch them live and review the results.": "Ingen hoveddommer endnu: en administrator udpeger en, som booker dem. Når de kører, kan du følge dem live og gennemgå resultaterne.",
  "Book up to <0>{n}</0> days ahead. The servers start <1>{n}</1> minutes early, so the cameras are ready at the start time. At the end the recordings are saved and everything shuts down. You can extend, or cancel before it starts. Recordings are kept for <2>{n}</2> days.": "Book op til <0>{n}</0> dage i forvejen. Serverne starter <1>{n}</1> minutter før, så kameraerne er klar til starttidspunktet. Til sidst gemmes optagelserne, og alt lukkes ned. Du kan forlænge eller aflyse, før det starter. Optagelser gemmes i <2>{n}</2> dage.",
  "Times are local time in {city}.": "Tiderne er lokal tid i {city}.",
- "Times are the event's local time.": "Tiderne er eventets lokale tid."
+ "Times are the event's local time.": "Tiderne er eventets lokale tid.",
+ "Choose your language": "Vælg dit sprog",
+ "The site and your lessons will use it. You can change it any time from the menu at the top.": "Siden og dine lektioner bruger det. Du kan altid ændre det i menuen øverst.",
+ "Suggested": "Foreslået"
 }

@@ -4,8 +4,9 @@
 // for review, so learners see it as a Preview translation (NFR-06). Rule ids (OCR-2026-4.2.13) are the rule references of step 5.
 
 import { CAMERA_LESSONS } from './learn-camera-course.mjs';
+import { OCR_LESSONS } from './learn-ocr-lessons.mjs';
 
-const SPEAR_SOURCES = 'Spartan OCR Rules of Competition 2026: 3.17.3 to 3.17.5, 4.2 and 4.2.13. Spartan Referee Online Program 2026: slides 23, 24, 29 and 31. Officiating SOP 2026: 4.2.4.';
+const SPEAR_SOURCES = 'Spartan OCR Rules of Competition 2026: 3.17.3 to 3.17.5, 4.2 and 4.2.13. Spartan Referee Online Program 2026: slides 23, 24, 29 and 31. Officiating SOP 2026: 5.2.4.';
 const SPEAR_EN = [
   { heading: 'A single-attempt obstacle', figure: 'lane', rules: ['OCR-2026-4.2', 'OCR-2026-4.2.13'],
     points: ['One throw: a miss is a fail, and a fail means the penalty', 'Your job: see the attempt start, judge the result, send the athlete to the penalty'],
@@ -68,6 +69,7 @@ const DEKA_EN = [
 
 export const LESSONS = {
   ...CAMERA_LESSONS,
+  ...OCR_LESSONS,
   'ocr-4-2': { sources: SPEAR_SOURCES, en: SPEAR_EN, es: SPEAR_ES, esBy: 'Claude (machine translation), not reviewed' },
   'deka-1-1': { sources: 'Placeholder content written for the demonstration, not DEKA material.', en: DEKA_EN },
 };

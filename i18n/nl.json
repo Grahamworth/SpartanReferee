@@ -1146,5 +1146,8 @@
  "No head referee yet: an admin assigns one, who books them. Once they're on, you can watch them live and review the results.": "Nog geen hoofdscheidsrechter: een beheerder wijst er een aan, die ze boekt. Zodra ze aan staan, kun je live meekijken en de resultaten bekijken.",
  "Book up to <0>{n}</0> days ahead. The servers start <1>{n}</1> minutes early, so the cameras are ready at the start time. At the end the recordings are saved and everything shuts down. You can extend, or cancel before it starts. Recordings are kept for <2>{n}</2> days.": "Boek tot <0>{n}</0> dagen vooruit. De servers starten <1>{n}</1> minuten eerder, zodat de camera's klaar zijn op de starttijd. Aan het eind worden de opnames bewaard en wordt alles uitgeschakeld. Je kunt verlengen, of annuleren voordat het begint. Opnames worden <2>{n}</2> dagen bewaard.",
  "Times are local time in {city}.": "Tijden zijn de lokale tijd in {city}.",
- "Times are the event's local time.": "Tijden zijn de lokale tijd van het evenement."
+ "Times are the event's local time.": "Tijden zijn de lokale tijd van het evenement.",
+ "Choose your language": "Kies je taal",
+ "The site and your lessons will use it. You can change it any time from the menu at the top.": "De site en je lessen gebruiken deze taal. Je kunt hem altijd wijzigen via het menu bovenaan.",
+ "Suggested": "Voorgesteld"
 }

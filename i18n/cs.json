@@ -1202,5 +1202,8 @@
  "No head referee yet: an admin assigns one, who books them. Once they're on, you can watch them live and review the results.": "Zatím žádný hlavní rozhodčí: správce nějakého určí a ten je rezervuje. Jakmile poběží, můžete je sledovat živě a procházet výsledky.",
  "Book up to <0>{n}</0> days ahead. The servers start <1>{n}</1> minutes early, so the cameras are ready at the start time. At the end the recordings are saved and everything shuts down. You can extend, or cancel before it starts. Recordings are kept for <2>{n}</2> days.": "Rezervujte až <0>{n}</0> dní předem. Servery se spouštějí o <1>{n}</1> minut dříve, aby byly kamery připravené v čase začátku. Na konci se záznamy uloží a vše se vypne. Můžete prodloužit nebo zrušit před začátkem. Záznamy se uchovávají <2>{n}</2> dní.",
  "Times are local time in {city}.": "Časy jsou v místním čase: {city}.",
- "Times are the event's local time.": "Časy jsou v místním čase akce."
+ "Times are the event's local time.": "Časy jsou v místním čase akce.",
+ "Choose your language": "Vyberte si jazyk",
+ "The site and your lessons will use it. You can change it any time from the menu at the top.": "Web a vaše lekce ho budou používat. Kdykoli ho můžete změnit v nabídce nahoře.",
+ "Suggested": "Doporučeno"
 }

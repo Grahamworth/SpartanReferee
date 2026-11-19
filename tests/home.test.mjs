@@ -102,3 +102,10 @@ test('nothing on the site\'s file list looks like the personal test videos the d
   assert.deepStrictEqual(files.filter((f) => /clips|test\.mp4$|(^|\/)pub[^/]*\.html$/i.test(f)), []);
   for (const f of files) assert.ok(fs.existsSync(new URL(`../${f}`, import.meta.url)), `${f} is listed but missing`);
 });
+test('the first visit asks for a language (the browser\'s own suggested first), saves it with the referee, and a new device uses it', () => {
+  const page = read('home.html'), js = read('home.js');
+  assert.match(page, /id="langCard" hidden>\s*<h2>Choose your language<\/h2>/);
+  assert.ok(js.includes("call('home', { method: 'POST', body: { language: b.dataset.lang } })"));
+  assert.ok(js.includes("if (!saved() && h.language !== I.lang) { keep(h.language); location.reload(); return true; }"), 'a new device');
+  assert.ok(js.includes("if (saved() && saved() !== h.language) call('home', { method: 'POST', body: { language: saved() } })"), 'a change from the menu is saved back');
+});

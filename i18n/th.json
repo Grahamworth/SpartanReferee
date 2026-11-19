@@ -1148,5 +1148,8 @@
  "No head referee yet: an admin assigns one, who books them. Once they're on, you can watch them live and review the results.": "ยังไม่มีหัวหน้ากรรมการ: ผู้ดูแลระบบจะแต่งตั้งคนหนึ่งซึ่งจะเป็นผู้จอง เมื่อกล้องเปิดแล้ว คุณดูสดและตรวจผลได้",
  "Book up to <0>{n}</0> days ahead. The servers start <1>{n}</1> minutes early, so the cameras are ready at the start time. At the end the recordings are saved and everything shuts down. You can extend, or cancel before it starts. Recordings are kept for <2>{n}</2> days.": "จองล่วงหน้าได้สูงสุด <0>{n}</0> วัน เซิร์ฟเวอร์จะเริ่มก่อน <1>{n}</1> นาที เพื่อให้กล้องพร้อมตอนเวลาเริ่ม เมื่อจบ การบันทึกจะถูกเก็บไว้และทุกอย่างจะปิดลง คุณขยายเวลา หรือยกเลิกก่อนเริ่มได้ การบันทึกเก็บไว้ <2>{n}</2> วัน",
  "Times are local time in {city}.": "เวลาเป็นเวลาท้องถิ่นของ {city}",
- "Times are the event's local time.": "เวลาเป็นเวลาท้องถิ่นของงาน"
+ "Times are the event's local time.": "เวลาเป็นเวลาท้องถิ่นของงาน",
+ "Choose your language": "เลือกภาษาของคุณ",
+ "The site and your lessons will use it. You can change it any time from the menu at the top.": "เว็บไซต์และบทเรียนของคุณจะใช้ภาษานี้ คุณเปลี่ยนได้ทุกเมื่อจากเมนูด้านบน",
+ "Suggested": "แนะนำ"
 }

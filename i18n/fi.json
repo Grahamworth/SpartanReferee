@@ -1166,5 +1166,8 @@
  "No head referee yet: an admin assigns one, who books them. Once they're on, you can watch them live and review the results.": "Päätuomaria ei vielä ole: ylläpitäjä nimeää sellaisen, joka varaa ne. Kun ne ovat päällä, voit seurata niitä suorana ja tarkastella tuloksia.",
  "Book up to <0>{n}</0> days ahead. The servers start <1>{n}</1> minutes early, so the cameras are ready at the start time. At the end the recordings are saved and everything shuts down. You can extend, or cancel before it starts. Recordings are kept for <2>{n}</2> days.": "Varaa enintään <0>{n}</0> päivää etukäteen. Palvelimet käynnistyvät <1>{n}</1> minuuttia aikaisemmin, jotta kamerat ovat valmiina aloitusaikana. Lopuksi tallenteet tallennetaan ja kaikki sammutetaan. Voit jatkaa aikaa tai perua ennen alkua. Tallenteita säilytetään <2>{n}</2> päivää.",
  "Times are local time in {city}.": "Ajat ovat paikallista aikaa: {city}.",
- "Times are the event's local time.": "Ajat ovat tapahtuman paikallista aikaa."
+ "Times are the event's local time.": "Ajat ovat tapahtuman paikallista aikaa.",
+ "Choose your language": "Valitse kielesi",
+ "The site and your lessons will use it. You can change it any time from the menu at the top.": "Sivusto ja oppituntisi käyttävät sitä. Voit vaihtaa sen milloin tahansa yläreunan valikosta.",
+ "Suggested": "Ehdotettu"
 }

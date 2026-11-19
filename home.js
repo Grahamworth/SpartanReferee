@@ -13,7 +13,34 @@ function datesOf(e) {
   return e.endDate && e.endDate !== e.startDate && f.formatRange ? f.formatRange(day(e.startDate), day(e.endDate)) : f.format(day(e.startDate));
 }
 
+// the language: asked on the first visit (the browser's own first, marked), then kept with the referee so it follows them to any
+// device and to their lessons; a change made with the menu at the top is saved back on the next visit here
+const LANG_KEY = 'sr_lang';
+const saved = () => { try { return localStorage.getItem(LANG_KEY) || ''; } catch { return ''; } };
+const keep = (c) => { try { localStorage.setItem(LANG_KEY, c); } catch { /* private mode */ } };
+function language(h) {
+  const I = window.SR_I18N; if (!I) return false;
+  if (!h.language) {
+    const guess = I.lang, langs = [...I.LANGS.filter(([c]) => c === guess), ...I.LANGS.filter(([c]) => c !== guess)];
+    $('langChoices').innerHTML = langs.map(([c, n]) => `<button type="button" lang="${c}" data-lang="${c}"${c === guess ? ' class="suggested"' : ''}>${esc(n)}${c === guess ? `<small>${esc(I.t('Suggested'))}</small>` : ''}</button>`).join('');
+    for (const b of $('langChoices').querySelectorAll('[data-lang]')) b.onclick = async () => {
+      for (const x of $('langChoices').querySelectorAll('button')) x.disabled = true;
+      try { await call('home', { method: 'POST', body: { language: b.dataset.lang } }); } catch { /* still use it here */ }
+      keep(b.dataset.lang); location.reload();
+    };
+    show($('langCard'), true);
+    return false;
+  }
+  show($('langCard'), false);
+  // a new device: use theirs
+  if (!saved() && h.language !== I.lang) { keep(h.language); location.reload(); return true; }
+  // changed with the menu since: remember that instead
+  if (saved() && saved() !== h.language) call('home', { method: 'POST', body: { language: saved() } }).catch(() => {});
+  return false;
+}
+
 function draw(h) {
+  if (language(h)) return;
   $('who').textContent = h.email;
   $('name').textContent = h.name || h.email;
   $('roleLine').textContent = h.admin ? 'Spartan referee and admin' : 'Spartan referee';

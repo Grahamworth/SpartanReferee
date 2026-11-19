@@ -1139,5 +1139,8 @@
  "No head referee yet: an admin assigns one, who books them. Once they're on, you can watch them live and review the results.": "Pas encore d'arbitre principal : un administrateur en désigne un, qui les réserve. Une fois en marche, vous pouvez les suivre en direct et revoir les résultats.",
  "Book up to <0>{n}</0> days ahead. The servers start <1>{n}</1> minutes early, so the cameras are ready at the start time. At the end the recordings are saved and everything shuts down. You can extend, or cancel before it starts. Recordings are kept for <2>{n}</2> days.": "Réservez jusqu'à <0>{n}</0> jours à l'avance. Les serveurs démarrent <1>{n}</1> minutes plus tôt, pour que les caméras soient prêtes à l'heure de début. À la fin, les enregistrements sont sauvegardés et tout s'arrête. Vous pouvez prolonger, ou annuler avant le début. Les enregistrements sont conservés <2>{n}</2> jours.",
  "Times are local time in {city}.": "Les heures sont à l'heure locale de {city}.",
- "Times are the event's local time.": "Les heures sont à l'heure locale de l'événement."
+ "Times are the event's local time.": "Les heures sont à l'heure locale de l'événement.",
+ "Choose your language": "Choisissez votre langue",
+ "The site and your lessons will use it. You can change it any time from the menu at the top.": "Le site et vos leçons l'utiliseront. Vous pouvez la changer à tout moment depuis le menu en haut.",
+ "Suggested": "Suggérée"
 }

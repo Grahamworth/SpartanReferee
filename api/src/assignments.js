@@ -17,7 +17,10 @@ const MAX_PER_EVENT = 100;
 const ROLES = ['head', 'referee'];
 const T = 'assignment';
 
-function createAssignments({ store, now, reply, session, isAdmin, isAdminEmail, membership, events, bookingStatus = async () => null, learnOn = false }) {
+// the languages the site speaks (i18n.js), for each referee's preferred one
+const LANGUAGES = ['en', 'fr', 'de', 'nl', 'es', 'it', 'el', 'hr', 'cs', 'pl', 'fi', 'sv', 'da', 'ar', 'th'];
+
+function createAssignments({ store, now, reply, session, isAdmin, isAdminEmail, membership, events, bookingStatus = async () => null, learnOn = false, onLanguage = null }) {
   const all = async () => store.list(T);
   const roleOf = (r) => (r.role === 'head' ? 'head' : 'referee');
   // head referees first, then by address
@@ -31,15 +34,25 @@ function createAssignments({ store, now, reply, session, isAdmin, isAdminEmail, 
     return { me, m };
   }
 
-  async function home(method, h) {
-    if (method !== 'GET') return reply(405, { error: 'Not allowed' });
+  // POST /api/home {language}: the referee's preferred language, asked on their first visit; it follows them to any device and
+  // to the learning platform (kept by address: signing in rewrites the user record)
+  async function home(method, h, body) {
+    if (method !== 'GET' && method !== 'POST') return reply(405, { error: 'Not allowed' });
     const { me, m, error } = await member(h); if (error) return error;
+    if (method === 'POST') {
+      const language = String(body?.language || '');
+      if (!LANGUAGES.includes(language)) return reply(400, { error: 'Choose one of the languages listed' });
+      await store.put('lang', m.email, { id: m.email, lang: language });
+      if (onLanguage) Promise.resolve().then(() => onLanguage(m.email, language)).catch((e) => console.error(`language for learning: ${e.message}`));
+      return reply(200, { language });
+    }
     const user = await store.get('user', me.uid), name = String(user?.name || '').slice(0, 80);
     // so others see this name on an event's page
     if (name && (await store.get('name', m.email))?.name !== name) await store.put('name', m.email, { id: m.email, name });
     const mine = new Map((await all()).filter((r) => r.email === m.email).map((r) => [r.eventId, roleOf(r)]));
     const upcoming = (await events.upcoming()).filter((e) => mine.has(e.id));
-    return reply(200, { name, email: m.email, admin: m.admin, events: upcoming.map((e) => ({ ...eventView(e), role: mine.get(e.id) })), learn: !!learnOn });
+    const language = (await store.get('lang', m.email))?.lang || '';
+    return reply(200, { name, email: m.email, admin: m.admin, language, events: upcoming.map((e) => ({ ...eventView(e), role: mine.get(e.id) })), learn: !!learnOn });
   }
 
   async function eventPage(method, id, h) {
@@ -98,4 +111,4 @@ function createAssignments({ store, now, reply, session, isAdmin, isAdminEmail, 
   return { home, eventPage, admin };
 }
 
-module.exports = { createAssignments };
+module.exports = { LANGUAGES, createAssignments };

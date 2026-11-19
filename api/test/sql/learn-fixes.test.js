@@ -180,3 +180,14 @@ test('only global admins create programmes: a learner, coordinator or technical 
   }
   assert.strictEqual((await ok('GET', 'learn/programmes', boss)).canCreate, true);
 });
+
+test('the language a referee picks on the home page is their learning profile\'s preferred language, at first and when it changes', { skip }, async () => {
+  await ok('POST', 'admin/referees', boss, { email: 'lin@example.com' });
+  const lin = await login('lin');
+  await ok('POST', 'home', lin, { language: 'es' });
+  assert.strictEqual((await ok('GET', 'learn/me', lin)).person.locale, 'es', 'their record starts in it');
+  await ok('POST', 'home', lin, { language: 'fr' });
+  let locale = '';
+  for (let i = 0; i < 20 && locale !== 'fr'; i++) { await new Promise((r) => setTimeout(r, 250)); locale = (await ok('GET', 'learn/me', lin)).person.locale; }
+  assert.strictEqual(locale, 'fr', 'and follows a change');
+});

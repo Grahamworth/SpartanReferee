@@ -3,6 +3,8 @@
 // The 2026 documents are a baseline, not approved for 2027 (RUL-04). Where the 2026 rulebook, Officiating SOP and online programme
 // disagree, an open review item says so (the design doc's "Conflicts in the 2026 material"), until the officiating lead rules.
 
+import { OCR_RULES, OCR_DISPUTES } from './learn-ocr-lessons.mjs';
+
 export const DOCUMENTS = [
   { id: 'ocr-rules-2026', programme: 'ocr-referee', title: 'Spartan OCR Rules of Competition', edition: '2026', approval: 'baseline', effective: '2026-01-01',
     note: 'The 2026 rulebook: the baseline for the 2027 programme, not approved 2027 rules.' },
@@ -25,6 +27,7 @@ export const RULES = [
   { id: 'OCR-2026-3.17.6', doc: R, section: '3.17.6', title: 'Every obstacle must be attempted', excerpt: 'All obstacles must be attempted. An attempt, at a minimum, is touching the obstacle.' },
   { id: 'OCR-2026-4.2', doc: R, section: '4.2', title: 'Single attempt (pass/fail) obstacles', excerpt: 'The section of single-attempt obstacles, each with its competitor instructions, failure modes and notes. The Spear Throw is 4.2.13.' },
   { id: 'OCR-2026-4.2.13', doc: R, section: '4.2.13', title: 'Spear Throw', excerpt: 'Both feet behind the barrier; throw at the target in the same lane; the spear must embed in the indicated target and stay there without touching the ground. Fail: not embedded, or touching the ground once stationary. An attempt once the spear is released in a forward motion. It may touch the ground before it is stationary in the target. Complete once 2 metres from the lane. Penalty: 30 burpees.' },
+  ...OCR_RULES,
 ];
 
 // where the 2026 sources disagree: open review items until the officiating lead rules for 2027
@@ -43,4 +46,5 @@ export const DISPUTES = [
     detail: 'Rules 4.2.13 c1: once the spear is released in a forward motion. Online programme 4.5: commitment starts when the spear is drawn back to throw.' },
   { rule: 'OCR-2026-4.2.13', title: 'A spear touching the ground in flight',
     detail: 'Rules 4.2.13 c4: it may touch the ground during the attempt, as long as it is not touching the ground once stationary in the target. Online programme 4.5: "spear touches ground before target" is a failure.' },
+  ...OCR_DISPUTES,
 ];

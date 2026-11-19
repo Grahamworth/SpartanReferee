@@ -143,7 +143,7 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
   // who may use it: anyone in the organisation (admins as global admins, referees as learners), with the name they signed in with
   const learnMember = async (me) => {
     const m = await membership.companyFor(me); if (!m) return null;
-    return { admin: m.admin, email: m.email, name: String((await store.get('user', me.uid))?.name || '') };
+    return { admin: m.admin, email: m.email, name: String((await store.get('user', me.uid))?.name || ''), language: (await store.get('lang', m.email))?.lang || '' };
   };
   const learn = learnDb ? createLearn({ db: learnDb, session, isAdminEmail, member: learnMember, reply, speech: learnSpeech, mediaSigner: learnMedia }) : null;
   let learnReady = null;
@@ -153,7 +153,8 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
   const eventList = createEvents({ store, now, reply, ...(eventFetcher ? { fetcher: eventFetcher } : {}) });
   const { servers, adminPricing, adminCustomers, stopCompany, bookingStatus, trainingUnit, rehearses } = createServers({ store, now, reply, session, isAdmin, membership, payments, freeBooking: true, events: bookingUnits ? eventList : null, maxRunning: maxRunningServers, hourPrice: serverHourPrice });
   // which referees are assigned to which events, and each referee's home page
-  const assignments = createAssignments({ store, now, reply, session, isAdmin, isAdminEmail, membership, events: eventList, bookingStatus, learnOn: !!learnDb });
+  const assignments = createAssignments({ store, now, reply, session, isAdmin, isAdminEmail, membership, events: eventList, bookingStatus, learnOn: !!learnDb,
+    onLanguage: learn ? async (email, language) => { await (learnReady || learnDb.migrate()); await learn.setLocale(email, language); } : null });
   const { companies, adminCompanies, referees } = createCompanies({ store, now, reply, session, isAdmin, putBrand, membership, onBlocked: stopCompany });
 
   async function handle({ method, path, headers = {}, body, query: extraQuery = {} }) {
@@ -183,7 +184,7 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
       if (parts[0] === 'auth' && parts[1] === 'email' && method === 'POST') r = await authEmail(body);
       if (parts[0] === 'auth' && parts[1] === 'microsoft' && method === 'POST') r = await authMicrosoft(body);
       if (parts[0] === 'me' && method === 'GET') r = await me(h);
-      if (parts[0] === 'home' && parts.length === 1) r = await assignments.home(method, h);
+      if (parts[0] === 'home' && parts.length === 1) r = await assignments.home(method, h, body);
       if (parts[0] === 'event' && parts.length === 2) r = await assignments.eventPage(method, parts[1], h);
       // a 30-minute practice camera, booked only here, from Learning's camera guide (servers.js refuses it anywhere else)
       if (parts[0] === 'learn' && parts[1] === 'practice-camera' && parts.length === 2) {

@@ -1228,5 +1228,8 @@
  "No head referee yet: an admin assigns one, who books them. Once they're on, you can watch them live and review the results.": "لا يوجد حكم رئيسي بعد: يعيّن أحد المسؤولين حكمًا يتولى حجزها. بعد تشغيلها، يمكنك مشاهدتها مباشرة ومراجعة النتائج.",
  "Book up to <0>{n}</0> days ahead. The servers start <1>{n}</1> minutes early, so the cameras are ready at the start time. At the end the recordings are saved and everything shuts down. You can extend, or cancel before it starts. Recordings are kept for <2>{n}</2> days.": "احجز قبل ما يصل إلى <0>{n}</0> يومًا. تبدأ الخوادم قبل الموعد بـ <1>{n}</1> دقيقة، لتكون الكاميرات جاهزة في وقت البدء. في النهاية تُحفظ التسجيلات ويتوقف كل شيء. يمكنك التمديد، أو الإلغاء قبل البدء. تُحفظ التسجيلات لمدة <2>{n}</2> يومًا.",
  "Times are local time in {city}.": "الأوقات بالتوقيت المحلي في {city}.",
- "Times are the event's local time.": "الأوقات بالتوقيت المحلي للفعالية."
+ "Times are the event's local time.": "الأوقات بالتوقيت المحلي للفعالية.",
+ "Choose your language": "اختر لغتك",
+ "The site and your lessons will use it. You can change it any time from the menu at the top.": "سيستخدمها الموقع ودروسك. يمكنك تغييرها في أي وقت من القائمة في الأعلى.",
+ "Suggested": "مقترحة"
 }

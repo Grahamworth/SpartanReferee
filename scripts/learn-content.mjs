@@ -21,8 +21,8 @@ export const OCR = {
       { key: 'ocr-2-2', title: 'Competition categories', minutes: 4, summary: 'Elite, Age Group and Open, and where referees focus.' },
       { key: 'ocr-2-3', title: 'The referee mindset and event timeline', minutes: 5, summary: 'Impartial, professional, safety first; the referee\'s day from briefing to handover.' }] },
     { title: 'Race Day Workflow', source: '2026 programme, section 3', summary: 'Check-in, equipment, obstacle preparation and communication.', lessons: [
-      { key: 'ocr-3-1', title: 'Check-in and equipment', minutes: 5, summary: 'Officiating SOP 4.2.1 and 7.' },
-      { key: 'ocr-3-2', title: 'Preparing your obstacle', minutes: 5, summary: 'Officiating SOP 4.2.2: rules, setup, the penalty loop and where to stand.' },
+      { key: 'ocr-3-1', title: 'Check-in and equipment', minutes: 5, summary: 'Morning check-in, what to bring and wear, and getting your kit (Officiating SOP 5.2.1 and 7).' },
+      { key: 'ocr-3-2', title: 'Preparing your obstacle', minutes: 5, summary: 'Officiating SOP 5.2.2: rules, setup, the penalty loop and where to stand.' },
       { key: 'ocr-3-3', title: 'The communication chain', minutes: 3, summary: 'Referee, Head Referee, Race Director or timing team.' }] },
     { title: 'Obstacle Types', source: '2026 programme, section 4', summary: 'Mandatory, multiple-attempt and single-attempt obstacles, and each one\'s failure conditions.', lessons: [
       { key: 'ocr-4-1', title: 'Understanding obstacle types', minutes: 6, summary: 'Mandatory, multiple-attempt and single-attempt. Which obstacle is which is under review for 2027.' },
@@ -36,7 +36,7 @@ export const OCR = {
       { key: 'ocr-6-2', title: 'Enforcing the standard', minutes: 5, summary: 'Athletes count; referees watch the standard and ask for extra reps.' },
       { key: 'ocr-6-3', title: 'Burpee time penalties', minutes: 4, summary: 'Missed or incorrect burpees and the time they add. Under review: the sources disagree.' }] },
     { title: 'Disputes and Conduct', source: '2026 programme, section 7', summary: 'Athlete interactions, logging and escalation.', lessons: [
-      { key: 'ocr-7-1', title: 'Questions and disputes', minutes: 5, summary: 'Officiating SOP 4.2.4: stay calm, explain, record, refer to the Head Referee.' }] },
+      { key: 'ocr-7-1', title: 'Questions and disputes', minutes: 5, summary: 'Officiating SOP 5.2.4: stay calm, explain, record, refer to the Head Referee.' }] },
     { title: 'Professional Conduct', source: '2026 programme, section 8', summary: 'Focus, authority, consistency and safety.', lessons: [
       { key: 'ocr-8-1', title: 'Conduct and authority', minutes: 5, summary: 'Staying focused and neutral, and what a referee decides.' },
       { key: 'ocr-8-2', title: 'Safety and consistency', minutes: 5, summary: 'Safe movement, hazards, and the same interpretation all race.' }] },

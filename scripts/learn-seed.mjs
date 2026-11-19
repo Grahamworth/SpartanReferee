@@ -205,7 +205,9 @@ async function affectedFor(ruleId) {
   return out;
 }
 for (const d of DISPUTES) {
-  if ((await db.query("SELECT 1 AS x FROM {S}.review_item WHERE kind = 'dispute' AND title = @t", { t: d.title })).length) continue;
+  const had = (await db.query("SELECT review_id, state FROM {S}.review_item WHERE kind = 'dispute' AND title = @t", { t: d.title }))[0];
+  // an open one already there: bring its list of affected lessons and questions up to date (new lessons may cite its rule)
+  if (had) { if (had.state === 'open') await db.query('UPDATE {S}.review_item SET affected = @a WHERE review_id = @id', { id: had.review_id, a: JSON.stringify(await affectedFor(d.rule)) }); continue; }
   await db.query(`INSERT INTO {S}.review_item (review_id, programme_id, kind, rule_id, title, detail, affected) VALUES (@id, 'ocr-referee', 'dispute', @r, @t, @d, @a)`,
     { id: crypto.randomUUID(), r: d.rule, t: d.title, d: d.detail, a: JSON.stringify(await affectedFor(d.rule)) });
   summary.reviews++;

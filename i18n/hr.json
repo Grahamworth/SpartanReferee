@@ -1186,5 +1186,8 @@
  "No head referee yet: an admin assigns one, who books them. Once they're on, you can watch them live and review the results.": "Još nema glavnog suca: administrator ga određuje, a on ih rezervira. Kad budu uključene, možete ih pratiti uživo i pregledati rezultate.",
  "Book up to <0>{n}</0> days ahead. The servers start <1>{n}</1> minutes early, so the cameras are ready at the start time. At the end the recordings are saved and everything shuts down. You can extend, or cancel before it starts. Recordings are kept for <2>{n}</2> days.": "Rezervirajte do <0>{n}</0> dana unaprijed. Poslužitelji se pokreću <1>{n}</1> minuta ranije, kako bi kamere bile spremne u vrijeme početka. Na kraju se snimke spremaju i sve se isključuje. Možete produžiti ili otkazati prije početka. Snimke se čuvaju <2>{n}</2> dana.",
  "Times are local time in {city}.": "Vremena su po lokalnom vremenu: {city}.",
- "Times are the event's local time.": "Vremena su po lokalnom vremenu događaja."
+ "Times are the event's local time.": "Vremena su po lokalnom vremenu događaja.",
+ "Choose your language": "Odaberite jezik",
+ "The site and your lessons will use it. You can change it any time from the menu at the top.": "Stranica i vaše lekcije koristit će ga. Možete ga promijeniti bilo kada u izborniku na vrhu.",
+ "Suggested": "Predloženo"
 }

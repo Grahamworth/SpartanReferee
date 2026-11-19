@@ -119,3 +119,14 @@ test('an event\'s page: its days and times, who\'s refereeing it (with the names
   assert.strictEqual((await call('GET', 'event/30002', await login('stranger'))).status, 403);
   assert.strictEqual((await call('GET', 'event/30002', {})).status, 401);
 });
+
+test('the language: none until the referee picks one, then it stays with them; only the site\'s languages; signing in again keeps it', async () => {
+  const s = await ready();
+  assert.strictEqual((await s.call('GET', 'home', s.ana)).body.language, '');
+  assert.strictEqual((await s.call('POST', 'home', s.ana, { language: 'xx' })).status, 400);
+  assert.strictEqual((await s.call('POST', 'home', s.ana, { language: 'fr' })).body.language, 'fr');
+  assert.strictEqual((await s.call('GET', 'home', s.ana)).body.language, 'fr');
+  assert.strictEqual((await s.call('GET', 'home', await s.login('ana'))).body.language, 'fr', 'kept across sign-ins');
+  assert.strictEqual((await s.call('GET', 'home', s.ben)).body.language, '', 'each their own');
+  assert.strictEqual((await s.call('PUT', 'home', s.ana, { language: 'de' })).status, 405);
+});

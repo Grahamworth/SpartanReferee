@@ -69,8 +69,8 @@ function createLearn({ db, session, isAdminEmail = () => false, member = null, r
       const id = uuid();
       try {
         real = await db.tx(async (q) => {
-          await q(`INSERT INTO {S}.person (person_id, public_id, legal_name, email, locale, synthetic) VALUES (@id, @pub, @name, @email, 'en', 0)`,
-            { id, pub: await newPublicId(q), name: text(m.name, 120) || email, email });
+          await q(`INSERT INTO {S}.person (person_id, public_id, legal_name, email, locale, synthetic) VALUES (@id, @pub, @name, @email, @loc, 0)`,
+            { id, pub: await newPublicId(q), name: text(m.name, 120) || email, email, loc: LOCALES.includes(m.language) ? m.language : 'en' });
           await q('INSERT INTO {S}.person_login (provider, subject, person_id) VALUES (@provider, @subject, @id)', { provider, subject, id });
           await audit(q, { realId: id }, 'person.first-sign-in', 'person', id, { role: m.admin ? 'global_admin' : 'learner' });
           return (await q('SELECT * FROM {S}.person WHERE person_id = @id', { id }))[0];
@@ -280,7 +280,12 @@ function createLearn({ db, session, isAdminEmail = () => false, member = null, r
     }
     return null;
   }
-  return { handle, who, noteError: (...a) => ctx.noteError?.(...a), noteWaking: () => ctx.noteWaking?.() };
+  /** the language a referee chose on the home page becomes their learning profile's preferred language */
+  async function setLocale(email, locale) {
+    if (!LOCALES.includes(locale)) return;
+    await db.query("UPDATE {S}.person SET locale = @l, updated_at = SYSUTCDATETIME() WHERE email = @e AND synthetic = 0 AND status = 'active' AND locale <> @l", { l: locale, e: String(email).toLowerCase() });
+  }
+  return { handle, who, setLocale, noteError: (...a) => ctx.noteError?.(...a), noteWaking: () => ctx.noteWaking?.() };
 }
 
 module.exports = { createLearn, LOCALES };

@@ -251,3 +251,5 @@ h3.sub { font-size: 1rem; text-transform: uppercase; letter-spacing: .04em; marg
   .learnNav::-webkit-scrollbar { display: none; }
   .learnNav a { flex: none; }
 }
+.f-loop { stroke: var(--accent); stroke-dasharray: 8 6; fill: none; stroke-width: 3; }
+.f-warn { stroke: #f2b33d; fill: none; stroke-width: 4 !important; }
