@@ -463,11 +463,30 @@ h3.sub { font-size: 1rem; text-transform: uppercase; letter-spacing: .04em; marg
 .obChips { display: flex; flex-wrap: wrap; gap: 6px; }
 .obChips button { border-radius: 999px; }
 .obChips button.on { background: var(--primary); border-color: var(--primary); color: var(--on-primary); }
-.obWorld .fLimb { fill: none; stroke: var(--text); stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
-.obWorld .fFar { opacity: .45; }
-.obWorld .fTorso { stroke: var(--brand); stroke-width: 8; stroke-linecap: round; }
-.obWorld .fHead { fill: var(--text); }
-.obWorld .hlFig .fLimb, .obWorld .hlFig .fHead { stroke: var(--bad); }
+/* the athlete: skin, a red top, navy shorts, dark shoes, a white headband; the far arm and leg are in shadow */
+.obWorld .fig line { stroke-linecap: round; }
+.obWorld .fSkin { stroke: #d6a079; }
+.obWorld .fSkinF { fill: #d6a079; }
+.obWorld .fThigh { stroke-width: 8; }
+.obWorld .fShin { stroke-width: 6; }
+.obWorld .fUpper { stroke-width: 5.4; }
+.obWorld .fFore { stroke-width: 4.6; }
+.obWorld .fNeck { stroke-width: 4.6; }
+.obWorld .fChest, .obWorld .fSleeve { stroke: var(--brand); }
+.obWorld .fChest { stroke-width: 12.5; }
+.obWorld .fSleeve { stroke-width: 7; }
+.obWorld .fPelvis, .obWorld .fThighS { stroke: #3a5274; }
+.obWorld .fPelvis { stroke-width: 12.5; }
+.obWorld .fThighS { stroke-width: 9.5; }
+.obWorld .fShoe { fill: #262a31; stroke: #d9dde3; stroke-width: .8; }
+.obWorld .fHair { fill: #3b2a1e; }
+.obWorld .fEye { fill: #1a1a1a; }
+.obWorld .fBand { stroke: #f2f2f2; stroke-width: 2.4; }
+.obWorld .fTail { stroke-width: 1.8; }
+.obWorld .fFar { filter: brightness(.7); }
+.obWorld .fOfficial .fChest, .obWorld .fOfficial .fSleeve { stroke: #e8c21b; }
+.obWorld .hlFig .fSkin { stroke: #ff6b5e; }
+.obWorld .hlFig .fSkinF { fill: #ff6b5e; }
 .obWorld .gnd { fill: var(--panel); }
 .obWorld .gndLine { stroke: var(--line); stroke-width: 2; }
 .obWorld .pr { fill: none; stroke: var(--muted); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }

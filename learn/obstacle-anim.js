@@ -1,24 +1,24 @@
-// The obstacle animations' engine (#/obstacles/<id>): a jointed athlete drawn in SVG, posed by keyframes. A keyframe gives where the hips are,
-// the lean, which way they face, and where each hand and foot goes; the elbows and knees are worked out (two-bone IK). Each obstacle's scene
-// (obstacle-scenes.js) draws its structure and builds timelines: a good run, and one or more fails. The player loops: the good run at real
-// speed, the same slowed down stopping on what counts (✓, green), then each fail slowed down stopping on the moment it goes wrong (✗, red).
+// The obstacle animations' engine (#/obstacles/<id>): an athlete drawn in SVG, posed by keyframes. A keyframe gives where the hips are,
+// the lean, which way they face, and where each hand (its grip) and foot (its sole) goes; elbows and knees are worked out (two-bone IK),
+// and the feet turn with the shins. Between keyframes everything moves on smooth curves that never overshoot (monotone cubic: a hand stops
+// on its grip, a foot doesn't dip through the ground), and a flight or a fall follows gravity. Each obstacle's scene (obstacle-scenes.js)
+// draws its structure and builds timelines: a good run, and one or more fails. The player loops: the good run at real speed, the same
+// slowed down stopping on what counts (✓, green), then each fail slowed down stopping on the moment it goes wrong (✗, red).
 import { esc, t } from './core.js';
 
-export const G = 200; // the ground, in a 400 × 225 picture (about 52 px to a metre)
-const L = { T: 32, U: 17, F: 16, TH: 21, SH: 21 };
+export const G = 200; // the ground, in a 400 × 225 picture
+export const PX = 52; // pixels to a metre: the athlete is 1.78 m
+export const GRAV = 9.81 * PX; // gravity, in pixels a second a second
+export const HIP = 44; // the hips' height standing
+// body proportions (pixels): hip to shoulder, neck, head radius, upper arm, forearm to the grip, thigh, shin to the ankle, ankle to sole
+const L = { T: 29, NECK: 4, HEAD: 6.6, U: 17, F: 17.5, TH: 22, SH: 21.5, ANK: 3.5 };
 const D = Math.PI / 180;
 export const lerp = (a, b, k) => a + (b - a) * k;
-const ease = (k) => k * k * (3 - 2 * k);
-function mix(a, b, k) {
-  if (typeof a === 'number' && typeof b === 'number') return lerp(a, b, k);
-  if (Array.isArray(a) && Array.isArray(b)) return a.map((v, i) => mix(v, b[i], k));
-  return k < 1 ? a : b;
-}
 
 /** standing at x on the ground (or on gy), facing f (1 right, -1 left, 0 towards the obstacle, back to us) */
 export const stand = (x, f = 1, gy = G) => {
   const w = f ? 0 : 6;
-  return { x, y: gy - 41, a: 4, f, lf: [x - 4 * f - w, gy], rf: [x + 5 * f + w, gy], lh: [x - 3 * f - w * 1.6, gy - 39], rh: [x + 4 * f + w * 1.6, gy - 39] };
+  return { x, y: gy - HIP, a: 4, f, lf: [x - 4 * f - w, gy], rf: [x + 5 * f + w, gy], lh: [x - 3 * f - w * 1.6, gy - 41], rh: [x + 4 * f + w * 1.6, gy - 41] };
 };
 
 /** a timeline: keyframes, each the whole state (what a keyframe doesn't say carries on), and the moments to point at */
@@ -28,31 +28,61 @@ export function timeline(start) {
     keys, marks: [],
     get s() { return keys[keys.length - 1][1]; },
     get end() { return keys[keys.length - 1][0]; },
-    /** move to a new state over dt seconds ('lin' keeps an even pace, for walking) */
+    /** move to a new state over dt seconds. ez 'g': the hips fly under gravity (and x at a steady speed); { g: { w: -1 } }: w falls (up is +) */
     to(dt, p, ez = 'e') { const [t0, s] = keys[keys.length - 1]; keys.push([t0 + dt, { ...s, ...(typeof p === 'function' ? p(s) : p) }, ez]); return o; },
     hold(dt) { return o.to(dt, {}); },
-    /** point at something now: text (a Good or Bad line), at = 'lh' | 'rh' | 'lf' | 'rf' | 'hip' | 'head' | 'sh' | [x, y], hl = parts to show red */
+    /** point at something now: text (a Good or Bad line), at = 'lh' | 'rh' | 'lf' | 'rf' | 'hip' | 'head' | 'sh' | [x, y] | (s, P) => [x, y], hl = parts to show red */
     mark(text, at, opt = {}) { o.marks.push({ t: o.end + (opt.dt || 0), text, at, ...opt }); return o; },
   };
   return o;
 }
+
+// ------------------------------------------------------------------------------------------------ smooth, physical motion
+/** the slope at a keyframe that keeps the curve from overshooting (Fritsch–Butland); a missing neighbour gives a one-sided slope */
+function tangent(vp, v, vn, hp, hn) {
+  const dp = hp > 0 ? (v - vp) / hp : null, dn = hn > 0 ? (vn - v) / hn : null;
+  if (dp === null) return dn ?? 0;
+  if (dn === null) return dp;
+  if (dp * dn <= 0) return 0;
+  return (3 * (hp + hn)) / ((2 * hn + hp) / dp + (hn + 2 * hp) / dn);
+}
+const herm = (v1, v2, m1, m2, h, x) => { const x2 = x * x, x3 = x2 * x; return (2 * x3 - 3 * x2 + 1) * v1 + (x3 - 2 * x2 + x) * h * m1 + (-2 * x3 + 3 * x2) * v2 + (x3 - x2) * h * m2; };
+const num = (v) => typeof v === 'number';
+function interp(a, b, ap, bn, hp, h, hn, x) {
+  if (num(a) && num(b)) return herm(a, b, tangent(num(ap) ? ap : a, a, b, num(ap) ? hp : 0, h), tangent(a, b, num(bn) ? bn : b, h, num(bn) ? hn : 0), h, x);
+  if (Array.isArray(a) && Array.isArray(b)) return a.map((v, i) => interp(v, b[i], ap?.[i], bn?.[i], hp, h, hn, x));
+  return x < 1 ? a : b;
+}
+/** a value thrown from v0 that lands on v1 after T seconds, at time tau, with gravity of sign sg (+1: pulled towards larger values) */
+const ballistic = (v0, v1, T, tau, sg) => { const vel = (v1 - v0) / T - (sg * GRAV * T) / 2; return v0 + vel * tau + (sg * GRAV * tau * tau) / 2; };
 export function sample(tl, time) {
   const k = tl.keys;
   if (time <= 0) return k[0][1];
   for (let i = 1; i < k.length; i++) {
-    if (time <= k[i][0]) {
-      const span = k[i][0] - k[i - 1][0], x = span ? (time - k[i - 1][0]) / span : 1;
-      return mix(k[i - 1][1], k[i][1], k[i][2] === 'lin' ? x : ease(x));
-    }
+    if (time > k[i][0]) continue;
+    const [t1, a] = k[i - 1], [t2, b, ez] = k[i], h = t2 - t1, x = h > 0 ? (time - t1) / h : 1;
+    const p = k[i - 2], q = k[i + 1];
+    const s = interp(a, b, p?.[1], q?.[1], p ? t1 - p[0] : 0, h, q ? q[0] - t2 : 0, x);
+    if (ez === 'lin') for (const f of Object.keys(b)) { if (num(a[f]) && num(b[f])) s[f] = lerp(a[f], b[f], x); }
+    if (ez === 'g') { s.y = ballistic(a.y, b.y, h, x * h, 1); s.x = lerp(a.x, b.x, x); }
+    else if (ez && ez.g) for (const [f, sg] of Object.entries(ez.g)) s[f] = ballistic(a[f], b[f], h, x * h, sg);
+    return s;
   }
   return k[k.length - 1][1];
 }
+/** the time to fall (or fly) from y0 to y1 rising first by rise: gravity decides how long a jump or a drop takes */
+export const flightTime = (y0, y1, rise = 0) => Math.sqrt((2 * rise) / GRAV) + Math.sqrt((2 * Math.max(0, y1 - (y0 - rise))) / GRAV);
+/** a jump or a drop to p (its hips at p.y), rising rise pixels first; the hips follow gravity */
+export function fly(o, p, rise = 0, extra = 0) {
+  const s = o.s, y1 = (typeof p === 'function' ? p(s) : p).y ?? s.y;
+  return o.to(Math.max(0.12, flightTime(s.y, y1, rise) + extra), p, 'g');
+}
 
 // ------------------------------------------------------------------------------------------------ moving about
-const shoulderAt = (x, y, a, f) => [x + Math.sin(a * D) * f * (L.T - 3), y - Math.cos(a * D) * (L.T - 3)];
-/** walk or run to x1. hands(s) gives the hands (and anything carried) for a carry; otherwise the arms swing */
+const shoulderAt = (x, y, a, f) => [x + Math.sin(a * D) * Math.max(-1, Math.min(1, f * 1.5)) * L.T, y - Math.cos(a * D) * L.T];
+/** walk or run to x1. hands(s) gives the hands (and anything carried) for a carry; otherwise the arms swing against the legs */
 export function walk(o, x1, opt = {}) {
-  const base = opt.run ? { v: 150, stride: 40, lift: 14, lean: 14, bob: 3 } : { v: 75, stride: 26, lift: 6, lean: 5, bob: 2 };
+  const base = opt.run ? { v: 160, stride: 44, lift: 16, lean: 12, bob: 3 } : { v: 75, stride: 27, lift: 6, lean: 4, bob: 1.6 };
   const { v, stride, lift, lean, bob, hands, run, gy = G } = { ...base, ...opt };
   let s = o.s;
   const f = Math.sign(x1 - s.x) || s.f, n = Math.max(1, Math.round(Math.abs(x1 - s.x) / stride)), dx = (x1 - s.x) / n, dt = Math.abs(dx) / v;
@@ -61,11 +91,12 @@ export function walk(o, x1, opt = {}) {
     const x = s.x + dx, xm = s.x + dx / 2, sw = back, land = [x + f * stride * 0.42, gy], from = s[sw];
     const arms = (hx, hy, swing) => {
       if (hands) return hands({ ...o.s, x: hx, y: hy, a: lean, f });
-      const sh = shoulderAt(hx, hy, lean, f), fw = run ? [sh[0] + f * 15, sh[1] + 17] : [sh[0] + f * 11, sh[1] + 29], bk = run ? [sh[0] - f * 11, sh[1] + 22] : [sh[0] - f * 9, sh[1] + 30];
+      const sh = shoulderAt(hx, hy, lean, f), fw = run ? [sh[0] + f * 17, sh[1] + 16] : [sh[0] + f * 12, sh[1] + 31], bk = run ? [sh[0] - f * 13, sh[1] + 22] : [sh[0] - f * 10, sh[1] + 32];
       return swing === 'lf' ? { rh: fw, lh: bk } : { lh: fw, rh: bk };
     };
-    o.to(dt / 2, { x: xm, y: gy - 41 - bob, a: lean, f, [sw]: [(from[0] + land[0]) / 2, gy - lift], ...arms(xm, gy - 41 - bob, sw) }, 'lin');
-    o.to(dt / 2, { x, y: gy - 41, [sw]: land, ...arms(x, gy - 41, sw) }, 'lin');
+    // mid-stride: the swinging foot passes under the hips, knee up; the hips are at their highest (in a run, both feet are off the ground)
+    o.to(dt / 2, { x: xm, y: gy - HIP - bob, a: lean, f, [sw]: [(from[0] + land[0]) / 2, gy - lift], ...arms(xm, gy - HIP - bob, sw) });
+    o.to(dt / 2, { x, y: gy - HIP + (run ? 1.5 : 0), [sw]: land, ...arms(x, gy - HIP, sw) });
     back = sw === 'lf' ? 'rf' : 'lf'; s = o.s;
   }
   return o;
@@ -83,30 +114,64 @@ function ik(root, target, a, b, pref) {
   const c = [(root[0] + end[0]) / 2, (root[1] + end[1]) / 2], dot = (m) => (m[0] - c[0]) * pref[0] + (m[1] - c[1]) * pref[1];
   return [root, dot(m1) >= dot(m2) ? m1 : m2, end];
 }
-/** where everything is: hips, shoulders, head, and each limb's three points */
+const unit = (v) => { const l = Math.hypot(v[0], v[1]) || 1; return [v[0] / l, v[1] / l]; };
+const add = (p, v, k = 1) => [p[0] + v[0] * k, p[1] + v[1] * k];
+/** where everything is: hips, shoulders, head, each limb's points, and which way each foot points */
 export function solve(s) {
   const f = s.f, side = 1 - Math.min(1, Math.abs(f)), a = s.a * D, d = [Math.sin(a) * Math.max(-1, Math.min(1, f * 1.5)), -Math.cos(a)];
-  const hip = [s.x, s.y], sh = [hip[0] + d[0] * (L.T - 3), hip[1] + d[1] * (L.T - 3)], head = [hip[0] + d[0] * (L.T + 8), hip[1] + d[1] * (L.T + 8)];
+  const hip = [s.x, s.y], sh = add(hip, d, L.T), head = add(hip, d, L.T + L.NECK + L.HEAD);
   const fs = Math.sign(f) || 1;
   const kn = (lr) => s.kp || [lerp(fs, lr, side), lerp(0.15, 0.2, side)], el = (lr) => s.ep || [lerp(-fs * 0.8, lr, side), lerp(0.6, 0.3, side)];
   const o = (p, k) => [p[0] + k * side, p[1]];
+  const leg = (root, sole, pref) => {
+    const l = ik(root, [sole[0], sole[1] - L.ANK], L.TH, L.SH, pref), shin = unit([l[2][0] - l[1][0], l[2][1] - l[1][1]]);
+    // the foot: flat when the shin is near upright, at a right angle to the shin when it's far from it (on a wall, a rung, in the air)
+    const tilt = Math.abs(Math.atan2(shin[0], shin[1])) / D, k = Math.max(0, Math.min(1, (tilt - 35) / 40));
+    const perp = [shin[1] * fs, -shin[0] * fs], toe = unit([lerp(fs, perp[0], k), lerp(0, perp[1], k)]);
+    return [...l, toe];
+  };
   return {
-    hip, sh, head, d, side,
-    ll: ik(o(hip, -5), s.lf, L.TH, L.SH, kn(-1)), rl: ik(o(hip, 5), s.rf, L.TH, L.SH, kn(1)),
+    hip, sh, head, d, side, f: fs,
+    ll: leg(o(hip, -5), s.lf, kn(-1)), rl: leg(o(hip, 5), s.rf, kn(1)),
     la: ik(o(sh, -8), s.lh, L.U, L.F, el(-1)), ra: ik(o(sh, 8), s.rh, L.U, L.F, el(1)),
   };
 }
-const pts = (p) => p.map((q) => `${q[0].toFixed(1)},${q[1].toFixed(1)}`).join(' ');
+const n1 = (v) => v.toFixed(1);
+const pts = (p) => p.map((q) => `${n1(q[0])},${n1(q[1])}`).join(' ');
+const seg = (p, q, c) => `<line class="${c}" x1="${n1(p[0])}" y1="${n1(p[1])}" x2="${n1(q[0])}" y2="${n1(q[1])}"/>`;
+const dot = (p, r, c) => `<circle class="${c}" cx="${n1(p[0])}" cy="${n1(p[1])}" r="${r}"/>`;
+const poly = (ps, c) => `<polygon class="${c}" points="${ps.map((q) => `${n1(q[0])},${n1(q[1])}`).join(' ')}"/>`;
+/** a leg: thigh (shorts over its top), knee, shin, and a shoe pointing along the foot */
+function legSvg(l, far, front) {
+  const [hip, knee, ank, u] = l;
+  // n points from the ankle to the sole: at a right angle to the toes, on the side away from the knee
+  const shin = unit([ank[0] - knee[0], ank[1] - knee[1]]), c = [-u[1], u[0]], n = c[0] * shin[0] + c[1] * shin[1] >= 0 ? c : [u[1], -u[0]];
+  const shoe = front ? dot(add(ank, [0, 2.5]), 3.4, 'fShoe') : poly([add(add(ank, u, -3.6), n, -0.8), add(add(ank, u, 4.5), n, -1.6), add(add(ank, u, 10), n, 1.2), add(add(ank, u, 10.5), n, 3.4), add(add(ank, u, -4.2), n, 3.4)], 'fShoe');
+  return `<g class="fLeg${far}">${seg(hip, knee, 'fSkin fThigh')}${seg(hip, add(hip, [knee[0] - hip[0], knee[1] - hip[1]], 0.55), 'fShorts fThighS')}${seg(knee, ank, 'fSkin fShin')}${dot(knee, 3.3, 'fSkinF')}${shoe}</g>`;
+}
+/** an arm: sleeve, upper arm, forearm, and a fist on the grip */
+function armSvg(l, far) {
+  const [sh, el, hand] = l;
+  return `<g class="fArm${far}">${seg(sh, el, 'fSkin fUpper')}${seg(sh, add(sh, [el[0] - sh[0], el[1] - sh[1]], 0.42), 'fShirt fSleeve')}${seg(el, hand, 'fSkin fFore')}${dot(hand, 3.1, 'fSkinF')}</g>`;
+}
 export function figure(P, cls = '') {
-  const far = P.side > 0.5 ? '' : ' fFar', limb = (p, c) => `<polyline class="fLimb${c}" points="${pts(p)}"/>`;
-  return `<g class="fig ${cls}">${limb(P.ll, far)}${limb(P.la, far)}<line class="fTorso" x1="${P.hip[0].toFixed(1)}" y1="${P.hip[1].toFixed(1)}" x2="${P.sh[0].toFixed(1)}" y2="${P.sh[1].toFixed(1)}"/>
-    <circle class="fHead" cx="${P.head[0].toFixed(1)}" cy="${P.head[1].toFixed(1)}" r="7.5"/>${limb(P.rl, '')}${limb(P.ra, '')}</g>`;
+  const front = P.side > 0.5, far = front ? '' : ' fFar', up = P.d, fwd = [-up[1] * P.f, up[0] * P.f], h = P.head;
+  const waist = add(P.hip, up, 9);
+  // the head: hair at the back, the face forward, a red headband, from behind all hair
+  const head = front
+    ? `${dot(h, 7, 'fHair')}${seg(add(h, [-7, -1.5]), add(h, [7, -1.5]), 'fBand')}${seg(add(h, [0, -1.5]), add(h, [-2, 6]), 'fBand fTail')}`
+    : `${dot(add(add(h, fwd, -1.3), up, 0.6), 7, 'fHair')}${dot(add(h, fwd, 0.7), 6.3, 'fSkinF')}${poly([add(add(h, fwd, 6.6), up, 1), add(add(h, fwd, 8.6), up, -1.2), add(add(h, fwd, 6.4), up, -2)], 'fSkinF')}
+       ${dot(add(add(h, fwd, 3.8), up, 1), 0.9, 'fEye')}${seg(add(add(h, fwd, -7.2), up, 2.6), add(add(h, fwd, 6.9), up, 3.2), 'fBand')}${seg(add(add(h, fwd, -6.8), up, 2.6), add(add(h, fwd, -10.5), up, 0.2), 'fBand fTail')}`;
+  const body = `${seg(P.sh, add(P.sh, up, L.NECK + 1), 'fSkin fNeck')}${seg(waist, P.sh, 'fShirt fChest')}${seg(P.hip, add(waist, up, 1), 'fShorts fPelvis')}`;
+  const [lA, rA, lL, rL] = [armSvg(P.la, far), armSvg(P.ra, ''), legSvg(P.ll, far, front), legSvg(P.rl, '', front)];
+  return `<g class="fig ${cls}">${front ? `${body}${lL}${rL}${lA}${rA}${head}` : `${lL}${lA}${body}${head}${rL}${rA}`}</g>`;
 }
 /** a point on the figure, by name */
 export function pointOf(P, at) {
   if (Array.isArray(at)) return at;
   return { lh: P.la[2], rh: P.ra[2], lf: P.ll[2], rf: P.rl[2], hip: P.hip, head: P.head, sh: P.sh, lk: P.ll[1], rk: P.rl[1] }[at] || P.hip;
 }
+
 
 // ------------------------------------------------------------------------------------------------ drawing helpers for the scenes
 const n = (v) => (+v).toFixed(1);
