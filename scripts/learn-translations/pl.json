@@ -1,0 +1,1538 @@
+{
+ "cam-1-1": [
+  {
+   "heading": "Kamery na stanowisku kar",
+   "points": [
+    "Telefony filmują strefę karnych burpees",
+    "Serwer SpartanReferee nagrywa je i uruchamia sędziego AI na każdej kamerze",
+    "Każde powtórzenie jest liczone i sprawdzane według standardu"
+   ],
+   "narration": "SpartanReferee filmuje stanowisko kar telefonami. Każdy telefon wysyła obraz na serwer SpartanReferee przez Wi-Fi lub internet mobilny. Serwer go nagrywa i uruchamia sędziego AI na każdej kamerze, dzięki czemu każde powtórzenie jest liczone i sprawdzane według standardu ruchu."
+  },
+  {
+   "heading": "Kto za co odpowiada",
+   "points": [
+    "Sędzia główny wydarzenia rezerwuje stanowisko i nim zarządza",
+    "Każdy sędzia przypisany do wydarzenia może oglądać je na żywo i przeglądać wyniki",
+    "Administratorzy mogą rezerwować, przedłużać i zatrzymywać kamery każdego wydarzenia"
+   ],
+   "narration": "Każde wydarzenie ma jedną rezerwację kamer. Sędzia główny rezerwuje ją na stronie wydarzenia i zarządza nią w dniu zawodów. Każdy sędzia przypisany do wydarzenia może ją otworzyć, żeby oglądać kamery na żywo i przeglądać wyniki. Administratorzy mogą wkroczyć i zarezerwować, przedłużyć lub zatrzymać kamery dowolnego wydarzenia."
+  },
+  {
+   "heading": "W skrócie",
+   "points": [
+    "Telefony filmują, serwer sędziuje, wszyscy oglądają w przeglądarce",
+    "Sędzia główny rezerwuje i prowadzi stanowisko"
+   ],
+   "narration": "W skrócie: telefony filmują, serwer sędziuje, a każdy sędzia ogląda w przeglądarce. Sędzia główny rezerwuje stanowisko i nim zarządza."
+  }
+ ],
+ "cam-1-2": [
+  {
+   "heading": "Twoje wydarzenia",
+   "points": [
+    "Twoje wydarzenia są na twojej stronie głównej",
+    "Otwórz jedno, aby zobaczyć godziny pracy kamer i kto sędziuje",
+    "Sędzia główny widzi tam Zarezerwuj kamery burpees"
+   ],
+   "narration": "Twoje wydarzenia są na twojej stronie głównej SpartanReferee. Otwórz jedno z nich, aby zobaczyć godziny pracy kamer i to, kto na nim sędziuje. Jeśli jesteś jego sędzią głównym, właśnie tam rezerwujesz kamery burpees."
+  },
+  {
+   "heading": "Godziny",
+   "points": [
+    "Kamery działają od 07:00 do 18:00 czasu lokalnego w każdym dniu wydarzenia",
+    "Godziny podaje się w czasie lokalnym wydarzenia",
+    "Rezerwacja z wyprzedzeniem uruchamia serwery 10 minut wcześniej; uruchomienie od razu trwa około 5 minut"
+   ],
+   "narration": "Kamery wydarzenia działają od siódmej rano do osiemnastej, czasu lokalnego, w każdym dniu wydarzenia. Godziny rezerwacji podaje się w czasie lokalnym wydarzenia, niezależnie od tego, skąd rezerwujesz. Rezerwacja z wyprzedzeniem uruchamia serwery dziesięć minut wcześniej, żeby kamery były gotowe na czas. Uruchomienie serwera od razu trwa około pięciu minut."
+  },
+  {
+   "heading": "Serwery i łącze",
+   "points": [
+    "Każdy serwer obsługuje 2 kamery",
+    "Każda kamera wysyła około 3,5 Mbit/s",
+    "Sprawdź łącze na miejscu przed dniem zawodów: musi udźwignąć wszystkie kamery"
+   ],
+   "narration": "Każdy serwer obsługuje dwie kamery, więc liczba kamer wyznacza liczbę serwerów. Każda kamera wysyła około trzech i pół megabita na sekundę, a łącze na miejscu musi udźwignąć je wszystkie. Sprawdź je przed dniem zawodów."
+  }
+ ],
+ "cam-1-3": [
+  {
+   "heading": "Do każdej kamery",
+   "points": [
+    "Telefon na statywie lub podstawce",
+    "Powerbank",
+    "Internet mobilny lub Wi-Fi na miejscu"
+   ],
+   "narration": "Do każdej kamery potrzebujesz telefonu na statywie lub podstawce, powerbanku, który zasili go przez cały dzień, oraz internetu mobilnego lub Wi-Fi na miejscu."
+  },
+  {
+   "heading": "Aplikacje",
+   "points": [
+    "Android: aplikacja SpartanReferee Broadcaster",
+    "iPhone: Larix Broadcaster z App Store",
+    "Do oglądania i sędziowania: dowolny telefon, tablet lub komputer z przeglądarką, bez instalowania czegokolwiek"
+   ],
+   "narration": "Telefony z Androidem używają aplikacji SpartanReferee Broadcaster. iPhone'y używają Larix Broadcaster z App Store. Do oglądania kamer i sędziowania wystarczy dowolny telefon, tablet lub komputer z przeglądarką: nic na nim nie trzeba instalować."
+  }
+ ],
+ "cam-2-1": [
+  {
+   "heading": "Gdzie ustawić telefon",
+   "points": [
+    "Poziomo, na podstawce",
+    "3 do 4 metrów od zawodników",
+    "Całe ciało każdego zawodnika w kadrze, także w leżeniu"
+   ],
+   "narration": "Ustaw telefon poziomo na podstawce, trzy do czterech metrów od zawodników. Całe ciało każdego zawodnika musi być w kadrze, także wtedy, gdy leży płasko na ziemi."
+  },
+  {
+   "heading": "Kąt ustawienia",
+   "points": [
+    "Lekko pod kątem lub z boku lepiej oceni klatkę piersiową przy ziemi niż ujęcie na wprost",
+    "Pompki i brzuszki wymagają telefonu z boku, na wysokości podłogi"
+   ],
+   "narration": "Ujęcie lekko pod kątem lub z boku lepiej ocenia, czy klatka piersiowa dotyka ziemi, niż kamera ustawiona na wprost. Przy pompkach i brzuszkach ustaw telefon z boku, na wysokości podłogi."
+  },
+  {
+   "heading": "Zadbaj o wolne tory",
+   "points": [
+    "Osoby z obsługi w żółtych koszulkach odblaskowych nigdy nie są liczone jako zawodnicy",
+    "Każdy inny, kto stoi przed kamerą, przeszkadza",
+    "Stój tak, żebyś widział zawodników, nie zasłaniając kadru"
+   ],
+   "narration": "Osoby z obsługi w żółtych koszulkach odblaskowych nigdy nie są liczone jako zawodnicy. Każdy inny, kto stoi przed kamerą, przeszkadza, więc zadbaj o wolne tory i stój tak, żeby widzieć zawodników, nie zasłaniając kamer."
+  }
+ ],
+ "cam-2-2": [
+  {
+   "heading": "Kody QR",
+   "points": [
+    "Gdy rezerwacja jest włączona, otwórz ją w konsoli",
+    "Każda kamera czekająca na swój telefon pokazuje kody QR na kartach Na żywo i Kamery",
+    "Kody zmieniają się przy każdej rezerwacji: skanuj je za każdym razem od nowa"
+   ],
+   "narration": "Gdy rezerwacja jest włączona, otwórz ją w konsoli. Każda kamera czekająca na swój telefon pokazuje kody QR na kartach Na żywo i Kamery. Kody zmieniają się przy każdej rezerwacji, więc skanuj je za każdym razem od nowa."
+  },
+  {
+   "heading": "Android: SpartanReferee Broadcaster",
+   "points": [
+    "Zainstaluj aplikację; gdy telefon zapyta, zezwól na instalację z tego źródła",
+    "Dotknij Zeskanuj kod QR kamery i zeskanuj kod tej kamery",
+    "Zostaw jakość 720p, chyba że sygnał jest słaby, potem Otwórz aparat i NADAWAJ NA ŻYWO"
+   ],
+   "narration": "Na Androidzie zainstaluj SpartanReferee Broadcaster. Telefon ostrzeże cię, bo aplikacja nie pochodzi ze sklepu Play: dotknij Ustawienia, zezwól na instalację z tego źródła, wróć i zainstaluj. Dotknij Zeskanuj kod QR kamery i zeskanuj kod tej kamery. Zostaw jakość 720p, chyba że sygnał jest słaby, a potem dotknij Otwórz aparat i Nadawaj na żywo."
+  },
+  {
+   "heading": "iPhone: Larix Broadcaster",
+   "points": [
+    "Zainstaluj Larix i otwórz go raz, zezwalając na aparat i mikrofon",
+    "Zeskanuj kod kamery dla iPhone'a (Larix) aparatem telefonu, otwórz link w Larix i dotknij Import",
+    "W Larix: Settings, Connections, zaznacz kamerę, potem naciśnij czerwony przycisk"
+   ],
+   "narration": "Na iPhonie zainstaluj Larix Broadcaster i otwórz go raz, zezwalając na aparat i mikrofon. Zeskanuj kod kamery dla iPhone'a własnym aparatem telefonu, otwórz link w Larix i dotknij Import. Następnie w Larix wejdź w Settings, Connections, zaznacz kamerę i naciśnij czerwony przycisk."
+  }
+ ],
+ "cam-3-1": [
+  {
+   "heading": "Uruchom sędziego",
+   "points": [
+    "Obraz z każdego telefonu pojawia się na karcie Na żywo w ciągu kilku sekund",
+    "Naciśnij Uruchom sędziego AI przy kamerze, nazwij ją i wybierz ćwiczenie",
+    "Potem Zacznij sędziować: działa na serwerze, więc trwa dalej po zamknięciu strony"
+   ],
+   "narration": "Obraz z każdego telefonu pojawia się na karcie Na żywo w ciągu kilku sekund od rozpoczęcia nadawania. Naciśnij Uruchom sędziego AI przy kamerze, nadaj jej nazwę, wybierz, co ma oceniać, i naciśnij Zacznij sędziować. Sędzia działa na serwerze, więc pracuje dalej po zamknięciu strony."
+  },
+  {
+   "heading": "Co sprawdza przy burpee",
+   "points": [
+    "Klatka piersiowa przy ziemi",
+    "Pełne wyprostowanie bioder",
+    "Wyskok, obie stopy w górze",
+    "Ręce nad uszami"
+   ],
+   "narration": "Przy burpee sędzia sprawdza cztery rzeczy: klatkę piersiową przy ziemi, pełne wyprostowanie bioder, wyskok z oderwaniem obu stóp od ziemi i ręce nad uszami. Powtórzenie, w którym brakuje jednego z tych elementów, to no rep."
+  },
+  {
+   "heading": "Przetestuj",
+   "points": [
+    "Zrób kilka próbnych powtórzeń przed każdą kamerą",
+    "Sprawdź, czy każde jest liczone, a złe nie",
+    "Przesuń telefon, jeśli zawodnik wychodzi z kadru"
+   ],
+   "narration": "Zanim pojawią się zawodnicy, zrób kilka próbnych powtórzeń przed każdą kamerą i sprawdź, czy są liczone, a celowo złe powtórzenie nie jest. Jeśli zawodnik wychodzi z kadru, przesuń telefon."
+  }
+ ],
+ "cam-3-2": [
+  {
+   "heading": "Wyniki",
+   "points": [
+    "Wyniki wymieniają wszystkich ocenionych",
+    "Znajdź numer zawodnika przeszukuje każdą kamerę",
+    "Oglądaj odtwarza zawodnika z zaznaczonym każdym powtórzeniem i no repem"
+   ],
+   "narration": "Karta Wyniki wymienia wszystkich ocenionych. Znajdź numer zawodnika przeszukuje wszystkie kamery pod kątem jednego zawodnika. Oglądaj odtwarza tego zawodnika z zaznaczonym każdym powtórzeniem i każdym no repem."
+  },
+  {
+   "heading": "Jak długo to jest przechowywane",
+   "points": [
+    "Nagrania i wyniki są przechowywane przez 7 dni",
+    "Po zakończeniu rezerwacji nagrania są zapisywane, a serwery wyłączane",
+    "Każdy sędzia wydarzenia może je przeglądać"
+   ],
+   "narration": "Nagrania i wyniki są przechowywane przez siedem dni. Gdy rezerwacja się kończy, nagrania są zapisywane, a serwery wyłączane. W tym czasie każdy sędzia wydarzenia może je przeglądać."
+  }
+ ],
+ "cam-3-3": [
+  {
+   "heading": "Telefony i obraz",
+   "points": [
+    "Nie łączy się: sprawdź zasięg i zeskanuj kod jeszcze raz z tej rezerwacji",
+    "Tnie się lub zrywa: sygnał jest za słaby na 720p, wybierz niższą jakość",
+    "Jest kamera, ale brak obrazu: sieć na miejscu może blokować wideo, spróbuj internetu mobilnego z telefonu"
+   ],
+   "narration": "Jeśli telefon się nie łączy, sprawdź jego zasięg i zeskanuj kod jeszcze raz z tej rezerwacji. Jeśli obraz się tnie lub zrywa, sygnał jest za słaby na 720p: wybierz niższą jakość. Jeśli kamera jest widoczna, ale bez obrazu, sieć na miejscu może blokować wideo: spróbuj zamiast tego internetu mobilnego z telefonu."
+  },
+  {
+   "heading": "Serwery i internet",
+   "points": [
+    "Serwer się nie uruchomił: konsola podaje powód; czasem Azure przez kilka minut nie ma wolnego serwera, więc spróbuj ponownie",
+    "Internet na miejscu zawodzi: nic nie dociera do serwera, dopóki nie wróci",
+    "Tylko Larix zachowuje własną kopię na telefonie"
+   ],
+   "narration": "Jeśli serwer się nie uruchomił, konsola podaje powód. Czasem przez kilka minut nie ma wolnego serwera: spróbuj ponownie. Jeśli zawodzi internet na miejscu, nic nie dociera do serwera, dopóki nie wróci, a tylko Larix zachowuje własną kopię wideo na telefonie."
+  }
+ ],
+ "cam-4-1": [
+  {
+   "heading": "Darmowa kamera",
+   "points": [
+    "Sędzia AI działa w twojej przeglądarce, na kamerze twojego telefonu lub komputera",
+    "Bez serwera i bez kosztów, w dowolnej chwili",
+    "Oprzyj telefon, zrób kilka burpees i zobacz, jak każde jest oceniane"
+   ],
+   "narration": "Darmowa kamera uruchamia sędziego AI w twojej przeglądarce, na kamerze twojego telefonu lub komputera, na żywo albo na minucie nagrania. Nie ma serwera ani kosztów i możesz z niej korzystać w każdej chwili. Oprzyj telefon, zrób kilka burpees i obserwuj, jak każde jest oceniane."
+  },
+  {
+   "heading": "Przećwicz prawdziwe stanowisko",
+   "points": [
+    "Sędziowie główni mogą zarezerwować 30-minutowy serwer treningowy",
+    "Telefony skanują kody, a do tego konsola, sędzia i przegląd, jak na wydarzeniu",
+    "Zajmuje jeden z serwerów potrzebnych wydarzeniom, więc jest dla sędziów głównych i administratorów"
+   ],
+   "narration": "Sędziowie główni mogą też zarezerwować trzydziestominutowy serwer treningowy, aby przećwiczyć całe stanowisko: telefony skanujące swoje kody, konsolę, sędziego i przegląd, dokładnie jak na wydarzeniu. Zajmuje on jeden z serwerów potrzebnych wydarzeniom, więc jest dla sędziów głównych i administratorów."
+  }
+ ],
+ "ocr-1-1": [
+  {
+   "heading": "Po co istnieje Spartan",
+   "points": [
+    "Spartan istnieje, by pomagać ludziom przekraczać własne granice",
+    "Cel: ludzie silniejsi fizycznie i psychicznie",
+    "Misja: pomagać ludziom żyć bez ograniczeń"
+   ],
+   "narration": "Spartan istnieje, by pomagać ludziom przekraczać własne granice i stawać się silniejszymi, fizycznie i psychicznie. Jego misją jest pomagać ludziom żyć bez ograniczeń, budując siłę, dyscyplinę i odporność potrzebne do stawiania czoła wyzwaniom życia. Każdy Spartan Race jest tak pomyślany, by zawodnicy zrobili coś trudnego, niewygodnego i przemieniającego. W takich warunkach pracujesz jako sędzia. Zawodnicy przed tobą wybrali coś trudnego, a zasady istnieją po to, by wszyscy stawiali czoła temu samemu sprawdzianowi."
+  },
+  {
+   "heading": "Wyzwanie dla każdego",
+   "points": [
+    "Wydarzenia Spartan są dla wszystkich poziomów, od debiutantów po zawodników elity",
+    "W zawodach na całym świecie uczestniczą miliony ludzi",
+    "Liczy się gotowość, by się pojawić, a nie punkt wyjścia"
+   ],
+   "narration": "Wydarzenia Spartan są zaprojektowane dla zawodników na każdym poziomie. Biorą w nich udział miliony ludzi na całym świecie, od debiutantów po zawodników elity. Zdaniem Spartan liczy się nie to, skąd zaczynasz, ale gotowość, by się pojawić, odrzucić wymówki i stawić czoła wyzwaniu. Każdy, kto wchodzi na trasę, uczestniczy w tym samym sprawdzianie hartu ducha i determinacji. Dlatego w dniu zawodów zobaczysz bardzo różnych zawodników. Dalej w tym kursie dowiesz się, których z nich sędziujesz najuważniej."
+  },
+  {
+   "heading": "Jeden regulamin wszędzie",
+   "points": [
+    "Regulamin zawodów obowiązuje na wszystkich wydarzeniach i zawodach Spartan na świecie",
+    "Wiąże każdego zawodnika na każdym wydarzeniu Spartan",
+    "Jego cele: uczciwe i spójne zawody, globalne standardy, bezpieczeństwo zawodników"
+   ],
+   "narration": "Regulamin zawodów Spartan obowiązuje na wszystkich wydarzeniach i zawodach Spartan na całym świecie i wiąże każdego uczestniczącego zawodnika. Regulamin mówi, że przepisy wyjaśniają, jak powinny być sędziowane zawody. Ich celem jest sprawiedliwy i spójny przebieg każdego wydarzenia, prowadzonego w duchu fair play i uczciwości. Dają jasne wytyczne, dzięki którym rywalizacja jest ujednolicona na całym świecie. Chronią też zdrowie, bezpieczeństwo i dobrostan zawodników, w stopniu, w jakim da się to rozsądnie osiągnąć w biegach z przeszkodami."
+  },
+  {
+   "heading": "Twoja rola",
+   "points": [
+    "Stosuj przepisy zawodów i procedury sędziowania konsekwentnie",
+    "Chroń uczciwość i integralność wydarzeń Spartan na całym świecie",
+    "Na koniec kursu: stosujesz zasady konsekwentnie i pewnie"
+   ],
+   "narration": "Ten program przedstawia rolę, obowiązki i standardy oczekiwane od sędziów Spartan. Jego celem jest, by każdy sędzia stosował przepisy zawodów i procedury sędziowania w taki sam sposób, chroniąc uczciwość i integralność wydarzeń Spartan na całym świecie. Zawodnik powinien dostać taką samą decyzję na twojej przeszkodzie, jaką dostałby na tej samej przeszkodzie na dowolnym innym wydarzeniu Spartan. Na koniec kursu powinieneś umieć stosować zasady Spartan konsekwentnie i pewnie."
+  },
+  {
+   "heading": "W skrócie",
+   "points": [
+    "Spartan istnieje, by pomagać ludziom przekraczać własne granice",
+    "Jego wydarzenia są dla wszystkich, od debiutantów po zawodników elity",
+    "Jeden regulamin obowiązuje na każdym wydarzeniu Spartan na świecie",
+    "Twoje zadanie: stosować go konsekwentnie, by chronić uczciwość i integralność"
+   ],
+   "narration": "W skrócie. Spartan istnieje, by pomagać ludziom przekraczać własne granice i stawać się silniejszymi na ciele i umyśle. Jego wydarzenia są dla wszystkich, od debiutantów po zawodników elity. Jeden zestaw zasad obowiązuje na każdym wydarzeniu Spartan na świecie i ma zapewniać zawody uczciwe, spójne i bezpieczne. Twoje zadanie jako sędziego to stosować te zasady konsekwentnie, aby chronić uczciwość i integralność każdego biegu."
+  }
+ ],
+ "ocr-1-2": [
+  {
+   "heading": "Bieg w terenie z przeszkodami",
+   "points": [
+    "Spartan Race to bieg z przeszkodami (OCR)",
+    "Łączy bieg w terenie z fizycznymi przeszkodami",
+    "Przeszkody testują siłę psychiczną i fizyczną"
+   ],
+   "narration": "Spartan Race to bieg z przeszkodami: bieg w terenie połączony z fizycznymi przeszkodami na trasie. Przeszkody mają testować zarówno siłę psychiczną, jak i fizyczną oraz pchać zawodników poza to, co uważali za możliwe. Między przeszkodami zawodnicy biegną. Na każdej przeszkodzie muszą pokonać konkretne wyzwanie, a regulamin dokładnie określa, na czym ono polega. Jako sędzia zwykle jesteś ustawiony przy przeszkodzie, więc ta przeszkoda i jej zasady są twoim zadaniem na ten dzień."
+  },
+  {
+   "heading": "Pięć rodzajów wyzwań",
+   "points": [
+    "Wspinanie: na przykład ściany i Rope Climb",
+    "Noszenie: na przykład Bucket Carry i Sandbag Carry",
+    "Czołganie: na przykład Barbed Wire Crawl",
+    "Skoki oraz ciągnięcie i podnoszenie: na przykład Fire Jump i Hercules Hoist"
+   ],
+   "narration": "Program dzieli wyzwania na pięć rodzajów ruchu: wspinanie, noszenie, czołganie, skoki oraz ciągnięcie i podnoszenie. Do wspinania należą ściany i Rope Climb. Do noszenia należą Bucket Carry i Sandbag Carry. Do czołgania należy Barbed Wire Crawl. Do skoków należy Fire Jump, a do ciągnięcia i podnoszenia Hercules Hoist, gdzie zawodnik ciągnie linę, by unieść ciężar. Każda przeszkoda ma w regulaminie własną część, która określa, co zawodnik musi zrobić i jak może polec."
+  },
+  {
+   "heading": "Dwa rodzaje przeszkód w regulaminie",
+   "points": [
+    "Przeszkody obowiązkowe: trzeba je ukończyć, zanim pójdzie się dalej po trasie",
+    "Przeszkody zaliczeniowe: porażka oznacza karę, pętlę karną lub burpees",
+    "Każdą przeszkodę trzeba podjąć: co najmniej jej dotknąć"
+   ],
+   "narration": "Regulamin dzieli przeszkody na dwie kategorie. Przeszkody obowiązkowe trzeba ukończyć, zanim zawodnik pójdzie dalej po trasie. Niezaliczenie takiej przeszkody oznacza dyskwalifikację, choć Race Director może zastąpić ją karą czasową, zależnie od wagi sprawy. Przeszkody zaliczeniowe można oblać, a oblanie oznacza karę: pętlę karną lub burpees. Przeszkody zaliczeniowe są albo jednopodejściowe, albo wielopodejściowe. Każdą przeszkodę trzeba podjąć, a podejściem jest co najmniej jej dotknięcie. Rodzajom przeszkód poświęcona jest osobna część dalej w tym kursie.",
+   "review": "W trakcie przeglądu na 2027: regulamin (3.17.3) mówi, że karą jest pętla karna lub 30 burpees, zgodnie z tym, co Spartan wyznacza dla każdego wydarzenia, kategorii lub serii. Procedura sędziowania (Officiating SOP) mówi: pętla przy większości przeszkód i burpees przy Spear Throw; program z 2026 mówi, że burpees stosuje się tylko przy Spear Throw. Na razie stosuj karę potwierdzoną na odprawie, a wszelkie wątpliwości kieruj do sędziego głównego."
+  },
+  {
+   "heading": "Formaty biegów",
+   "points": [
+    "Źródła z 2026 wymieniają formaty Sprint, Super, Beast, Ultra i Stadion",
+    "Jeden regulamin obejmuje wszystkie, ale niektóre zasady różnią się w zależności od formatu",
+    "Stadion: karą za oblanie dowolnej przeszkody jest zawsze 15 burpees",
+    "Minimalna liczba sędziów: 10 na Sprincie lub Stadionie, 15 na Super, 20 na Beast lub Ultra"
+   ],
+   "narration": "Biegi Spartan występują w kilku formatach. Regulamin z 2026 i procedura sędziowania wymieniają Sprint, Super, Beast, Ultra i Stadion. Ten sam regulamin obejmuje je wszystkie, ale niektóre zasady różnią się w zależności od formatu. Na przykład na wydarzeniach Stadion karą za oblanie przeszkody jest zawsze piętnaście burpees, na każdej przeszkodzie i w każdej serii. Procedura sędziowania Spartan określa też minimalną liczbę sędziów dla każdego formatu: dziesięciu na Sprint lub Stadion, piętnastu na Super i dwudziestu na Beast lub Ultra."
+  },
+  {
+   "heading": "W skrócie",
+   "points": [
+    "Bieg z przeszkodami: bieg w terenie połączony z fizycznymi przeszkodami",
+    "Pięć rodzajów wyzwań: wspinanie, noszenie, czołganie, skoki, ciągnięcie i podnoszenie",
+    "Przeszkody obowiązkowe trzeba ukończyć; oblanie przeszkody zaliczeniowej oznacza karę",
+    "Formaty: Sprint, Super, Beast, Ultra i Stadion"
+   ],
+   "narration": "W skrócie. Spartan Race to bieg z przeszkodami: bieg w terenie połączony z fizycznymi przeszkodami, które testują siłę psychiczną i fizyczną. Wyzwania to wspinanie, noszenie, czołganie, skoki oraz ciągnięcie i podnoszenie. Regulamin dzieli przeszkody na obowiązkowe, które trzeba ukończyć, i zaliczeniowe, gdzie oblanie oznacza karę. Każdą przeszkodę trzeba podjąć. Biegi występują w kilku formatach, w tym Sprint, Super, Beast, Ultra i Stadion."
+  }
+ ],
+ "ocr-2-1": [
+  {
+   "heading": "Co chronią sędziowie",
+   "points": [
+    "Uczciwość i integralność biegu",
+    "Zawodników przestrzegających oficjalnych przepisów zawodów",
+    "Konsekwentnie stosowane kary",
+    "Wiarygodność biegów Elite i rywalizacji sportowej"
+   ],
+   "narration": "Sędziowie są ważni, bo chronią uczciwość i integralność biegu. Pilnują, by zawodnicy przestrzegali oficjalnych przepisów zawodów, i stosują kary tak samo wobec wszystkich. Ta konsekwencja daje wiarygodność biegom Elite i rywalizacji sportowej. Procedura sędziowania Spartan ujmuje to tak: sędziowanie w Spartan ustanawia i utrzymuje integralność biegu przez konsekwentne egzekwowanie przepisów i standardową praktykę sędziowską, tak aby wynik był sprawiedliwy i równy dla wszystkich zawodników."
+  },
+  {
+   "heading": "Kim jest sędzia",
+   "points": [
+    "Oficjel wyznaczony przez Spartan, który dba o przestrzeganie wszystkich zasad",
+    "Zwykle ustawiony przy przeszkodzie lub w namiocie przeglądu wideo",
+    "Przy swojej przeszkodzie: egzekwujesz jej zasady i monitorujesz niepowodzenia",
+    "Podlegasz sędziemu głównemu"
+   ],
+   "narration": "Regulamin definiuje sędziego jako oficjela wyznaczonego przez Spartan, którego zadaniem jest dbać o przestrzeganie wszystkich zasad. Sędziowie są zwykle ustawieni przy przeszkodach i w namiocie przeglądu wideo i podlegają głównemu oficjelowi (Head Official). Procedura sędziowania Spartan opisuje sędziego jako osobę przydzieloną do przeszkody, by egzekwować jej zasady i monitorować niepowodzenia. W regulaminie oficjelami są wszyscy, których Spartan wyznacza do pełnienia obowiązków na wydarzeniu na stanowisku z uprawnieniami: personel, sędziowie i wolontariusze. Jako sędzia jesteś jednym z nich."
+  },
+  {
+   "heading": "Komu odpowiadasz",
+   "points": [
+    "Sędzia główny: główny decydent w sprawach zasad na wydarzeniu",
+    "Regulamin nazywa tę rolę Head Official",
+    "Race Director: odpowiada za całość organizacji wydarzenia",
+    "Niepewne lub sporne decyzje trafiają do sędziego głównego"
+   ],
+   "narration": "Na każdym wydarzeniu jedna osoba jest głównym decydentem we wszystkich sprawach zasad i ostatecznym autorytetem w ich egzekwowaniu i interpretacji. Regulamin nazywa ją Head Official. Procedura sędziowania Spartan i ten program nazywają ją sędzią głównym. To jemu podlegasz. Race Director odpowiada za całość organizacji i przebiegu wydarzenia. Gdy nie jesteś pewien decyzji albo zawodnik ją kwestionuje, sprawa trafia do sędziego głównego."
+  },
+  {
+   "heading": "Twoje decyzje trafiają do wyników",
+   "points": [
+    "Łańcuch: sędzia, sędzia główny, potem Race Director lub zespół pomiaru czasu",
+    "Sędzia główny potwierdza kary i przekazuje je dalej",
+    "Wyniki są ostateczne dopiero po oficjalnym przeglądzie wideo",
+    "Kary czasowe są doliczane do czasu mety zawodnika"
+   ],
+   "narration": "To, co widzisz i zapisujesz przy swojej przeszkodzie, może zmienić wyniki. Łańcuch biegnie od ciebie do sędziego głównego, a stamtąd do Race Directora lub zespołu pomiaru czasu. Sędzia główny zarządza przeglądem wideo i przekazuje potwierdzone kary i dyskwalifikacje Race Directorowi i zespołowi pomiaru czasu. Regulamin mówi, że przed ogłoszeniem wyników ostatecznych powinien się odbyć oficjalny przegląd wideo, więc wyniki mogą nie pojawić się od razu. Kary czasowe są doliczane do czasu mety zawodnika, dlatego tak ważna jest dokładna i wyraźnie zapisana decyzja."
+  },
+  {
+   "heading": "Jak jesteś szkolony",
+   "points": [
+    "Na podstawie regulaminu Spartan, Officiating SOP i Global Officiating Guidelines",
+    "Nacisk: egzekwowanie zasad na przeszkodach, kary, kontakt z zawodnikami i integralność biegu",
+    "Ukończenie szkolenia online jest obowiązkowe do certyfikacji sędziego"
+   ],
+   "narration": "To szkolenie istnieje po to, by sędziowie egzekwowali przepisy zawodów Spartan uczciwie i konsekwentnie. Opiera się na trzech dokumentach: regulaminie Spartan, standardowej procedurze operacyjnej sędziowania (Officiating SOP) i Global Officiating Guidelines. Skupia się na egzekwowaniu zasad na przeszkodach, karach, kontakcie z zawodnikami i integralności rywalizacji. Zgodnie z procedurą sędziowania ukończenie modułu szkolenia online jest obowiązkowe do certyfikacji sędziego. Przed każdym wydarzeniem sędzia główny upewnia się też, że każdy sędzia ukończył szkolenie przed wydarzeniem."
+  },
+  {
+   "heading": "W skrócie",
+   "points": [
+    "Sędziowie chronią uczciwość, integralność biegu i konsekwentne kary",
+    "Egzekwujesz zasady na swojej przeszkodzie i monitorujesz niepowodzenia",
+    "Podlegasz sędziemu głównemu, ostatecznemu autorytetowi w sprawach zasad",
+    "Twoje decyzje zasilają przegląd wideo i wyniki"
+   ],
+   "narration": "W skrócie. Sędziowie chronią uczciwość i integralność biegu oraz dbają o konsekwentne stosowanie kar, co daje wiarygodność rywalizacji sportowej. Jesteś oficjelem wyznaczonym przez Spartan, zwykle ustawionym przy przeszkodzie, by egzekwować jej zasady i monitorować niepowodzenia. Podlegasz sędziemu głównemu, którego regulamin nazywa Head Official i który ma ostatnie słowo w sprawach zasad. To, co zapiszesz, przechodzi przez przegląd wideo i może zmienić czas mety zawodnika."
+  }
+ ],
+ "ocr-2-2": [
+  {
+   "heading": "Kategorie Competitive i Open",
+   "points": [
+    "Competitive: zawodnicy Elite i Age Group",
+    "Open: otwarta dla wszystkich, kategoria nastawiona na uczestnictwo",
+    "Każda kategoria startuje w seriach lub falach, rozdzielonych godziną startu lub grupą tempa"
+   ],
+   "narration": "Regulamin definiuje dwa rodzaje kategorii. Competitive, która obejmuje Elite i Age Group, oraz Open, otwartą dla wszystkich. Ten program opisuje Open jako kategorię nastawioną na uczestnictwo. W każdej kategorii zawodnicy startują w seriach i falach: grupach rozdzielonych godzinami startu lub grupą tempa. Wiedza, która kategoria przechodzi przez twoją przeszkodę, mówi ci, jak uważnie musisz ją sędziować."
+  },
+  {
+   "heading": "Na czym skupiają się sędziowie",
+   "points": [
+    "Sędziowie skupiają się przede wszystkim na kategoriach Competitive",
+    "Od zawodników Competitive oczekuje się przestrzegania wszystkich zasad co do joty",
+    "Egzekwuj zasady tak samo wobec każdego zawodnika Competitive",
+    "Bądź na stanowisku przed pierwszym startem Elite"
+   ],
+   "narration": "Sędziowie skupiają się przede wszystkim na kategoriach Competitive: Elite i Age Group. Regulamin oczekuje od każdego zawodnika Competitive przestrzegania wszystkich zasad co do joty oraz rywalizowania w duchu walki i sportowo. Dlatego twoje egzekwowanie musi być takie samo wobec każdego zawodnika Competitive, w każdej fali Elite i Age Group. Procedura sędziowania Spartan mówi, że sędzia główny potwierdza, iż sędziowie są na stanowiskach przed pierwszym startem Elite, a sędziowanie, przegląd wideo i ocena kar dotyczą kategorii Elite i Age Group."
+  },
+  {
+   "heading": "Zawodnicy Open",
+   "points": [
+    "Zawodników Open też zachęca się do przestrzegania zasad",
+    "Atmosfera jest luźniejsza: fair play i osobista odpowiedzialność",
+    "Od zawodników Open oczekuje się honoru Spartan przy karnych burpees",
+    "Sędziowie mogą zwinąć stanowisko lub przekazać je wolontariuszom na fale Open"
+   ],
+   "narration": "Zawodników Open także zachęca się do przestrzegania zasad, w duchu fair play i osobistej odpowiedzialności, choć atmosfera w kategorii Open jest luźniejsza. Regulamin oczekuje, że zawodnicy kategorii Open będą kierować się honorem Spartan przy wykonywaniu karnych burpees. W tym programie harmonogram dnia sędziego kończy się zwinięciem trasy albo przekazaniem jej wolontariuszom na fale Open. Odprawa twojego sędziego głównego powie ci, co obowiązuje na twoim wydarzeniu."
+  },
+  {
+   "heading": "Serie, fale i pomiar czasu",
+   "points": [
+    "Zawodnicy muszą startować w przydzielonej serii, fali lub grupie",
+    "Zawodnik Elite, który wystartuje w złej serii, zostaje przeniesiony do Open",
+    "Serie Elite: wygrywa pierwszy na mecie (czas brutto, gun time)",
+    "Serie Age Group, Open i Elite na Stadionie: czas netto (chip time). Oba doliczają kary czasowe"
+   ],
+   "narration": "Każdy zawodnik musi wystartować w przydzielonej serii, fali lub grupie i razem z nią. Zawodnik, który wystartuje w złej serii, nie kwalifikuje się do nagród, a zawodnik Elite, który wystartuje w złej serii, zostaje przeniesiony do kategorii Open. Pomiar czasu różni się w zależności od kategorii. W serii Elite wygrywa ten, kto jako pierwszy przekroczy linię mety, co nazywa się czasem brutto (gun time). Serie Age Group i Open oraz serie Elite na Stadionie używają czasu netto (chip time): od przekroczenia linii startu do przekroczenia mety. W obu przypadkach doliczane są kary czasowe."
+  },
+  {
+   "heading": "W skrócie",
+   "points": [
+    "Competitive to Elite i Age Group; Open jest otwarta dla wszystkich",
+    "Sędziowie skupiają się przede wszystkim na zawodnikach Competitive",
+    "Każdy zawodnik Competitive podlega takiemu samemu egzekwowaniu zasad",
+    "Zawodników Open zachęca się do przestrzegania zasad, na honor Spartan"
+   ],
+   "narration": "W skrócie. Są dwa rodzaje kategorii: Competitive, czyli Elite i Age Group, oraz Open, otwarta dla wszystkich. Sędziowie skupiają się przede wszystkim na kategoriach Competitive, gdzie od zawodników oczekuje się przestrzegania każdej zasady, a twoje egzekwowanie musi być takie samo wobec każdego z nich. Zawodników Open także zachęca się do przestrzegania zasad, w luźniejszej atmosferze i na honor Spartan. Serie Elite wygrywa się na czasie brutto, pozostałe na czasie netto, z doliczonymi karami czasowymi."
+  }
+ ],
+ "ocr-2-3": [
+  {
+   "heading": "Bezstronnie i profesjonalnie",
+   "points": [
+    "Bądź bezstronny: stosuj zasady tak samo wobec każdego zawodnika",
+    "Bądź profesjonalny: spokojny, neutralny i uprzejmy",
+    "Znaj przepisy zawodów i Officiating SOP"
+   ],
+   "narration": "Nastawienie sędziego zaczyna się od bezstronności i profesjonalizmu. Procedura sędziowania Spartan wymaga od ciebie, byś stosował zasady przeszkód konsekwentnie i bezstronnie, bez względu na to, kim jest zawodnik. Zachowaj spokój, neutralność i uprzejmość oraz reprezentuj Spartan profesjonalnie. Twoje dwa kluczowe dokumenty to przepisy zawodów Spartan i standardowa procedura operacyjna sędziowania (Officiating SOP). Zapoznaj się z obydwoma przed wydarzeniem i upewnij się, że znasz i rozumiesz zasady swojej przeszkody."
+  },
+  {
+   "heading": "Cel zasady, uczciwość i bezpieczeństwo",
+   "points": [
+    "Skup się na celu zasady, a nie na drobnym przypadkowym kontakcie",
+    "Zapytaj, czy zawodnik zyskał przewagę",
+    "Uczciwość i bezpieczeństwo zawodnika są najważniejsze"
+   ],
+   "narration": "Skup się na tym, po co istnieje zasada, a nie na drobnym przypadkowym kontakcie. Jeden ze scenariuszy w programie to zawodnik, który na chwilę dotyka szczytu przeszkody, ale nie zyskuje żadnej przewagi. Pytanie, które trzeba rozważyć, brzmi: czy powstała przewaga. Stawiaj na pierwszym miejscu uczciwość i bezpieczeństwo zawodnika. Ochrona zdrowia, bezpieczeństwa i dobrostanu zawodników to jeden z celów wskazanych w regulaminie. Jeśli zauważysz problem z bezpieczeństwem przy swojej przeszkodzie, zgłoś go natychmiast sędziemu głównemu lub Race Directorowi."
+  },
+  {
+   "heading": "Gdy nie jesteś pewien, eskaluj",
+   "points": [
+    "Eskaluj każdą sytuację, której nie jesteś pewien",
+    "Nie wiesz, jaka jest kara lub jak ją egzekwować: natychmiast skontaktuj się z sędzią głównym",
+    "Wątpliwości, problemy z bezpieczeństwem lub niespójności: zgłaszaj od razu"
+   ],
+   "narration": "Nie oczekuje się od ciebie, że sam rozstrzygniesz każdą sytuację. Gdy nie jesteś pewien, eskaluj. Procedura sędziowania Spartan mówi, że jeśli jest jakakolwiek niepewność co do rodzaju kary lub sposobu jej egzekwowania, natychmiast kontaktujesz się z sędzią głównym. Gdy dotrzesz do swojej przeszkody, zgłoś od razu Race Directorowi lub sędziemu głównemu wszelkie wątpliwości, problemy z bezpieczeństwem lub niespójności. Sędzia główny jest ostatecznym autorytetem w sprawach zasad na wydarzeniu, więc eskalowanie jest częścią dobrze wykonanej pracy."
+  },
+  {
+   "heading": "Przed dniem zawodów",
+   "points": [
+    "Ukończ szkolenie przed wydarzeniem, zanim weźmiesz udział",
+    "Obejmuje regulamin, z naciskiem na przeszkody o dużej liczbie niepowodzeń",
+    "Obejmuje też przebieg pracy sędziego, standardy burpee i wideo przy Spear Throw",
+    "Dostajesz pakiet odprawowy i dostęp do filmów instruktażowych"
+   ],
+   "narration": "Twój harmonogram zaczyna się przed dniem zawodów. Sędzia główny dba o to, by każdy sędzia ukończył standardowe szkolenie przed wydarzeniem, zanim weźmie w nim udział. Obejmuje ono regulamin Spartan, z naciskiem na przeszkody o dużej liczbie niepowodzeń, czyli te, które zawodnicy oblewają najczęściej. Obejmuje też proces i przebieg pracy sędziego, standardy burpee i sposób ich egzekwowania oraz nagrywanie i przegląd wideo, stosowane tylko przy Spear Throw. Dostajesz również pakiet odprawowy przed wydarzeniem i dostęp do oficjalnych filmów instruktażowych."
+  },
+  {
+   "heading": "Rano w dniu biegu",
+   "points": [
+    "Zamelduj się, potwierdź swoją przeszkodę i odbierz sprzęt",
+    "Weź udział w obowiązkowej odprawie sędziego głównego na miejscu",
+    "Dotrzyj do swojej przeszkody z dużym wyprzedzeniem przed pierwszą falą competitive",
+    "Obejrzyj przeszkodę, przejdź pętlę karną i wybierz, gdzie staniesz"
+   ],
+   "narration": "Rano w dniu biegu zgłoś się do namiotu, który ci wskazano, zamelduj się, potwierdź przydział do przeszkody i odbierz sprzęt. Dołącz do kanału komunikacji, jeśli taki jest używany. Weź udział w obowiązkowej odprawie sędziego głównego na miejscu. Potem idź do swojej przeszkody z zapasem czasu przed pierwszą falą competitive. Na miejscu obejrzyj konfigurację, sprawdź, z której strony podchodzą zawodnicy, przejdź całą pętlę karną i zdecyduj, gdzie staniesz, aby wyraźnie widzieć podejścia, ukończenia i niepowodzenia."
+  },
+  {
+   "heading": "W trakcie biegu i po nim",
+   "points": [
+    "Sędziuj fale Elite i competitive",
+    "Potem zwiń trasę lub przekaż ją wolontariuszom na fale Open",
+    "Po powrocie: nagrania trafiają do przeglądu wideo, pisemne decyzje do sędziego głównego",
+    "Zawodnicy zgłaszają protest sędziemu głównemu w okresie na protesty"
+   ],
+   "narration": "W trakcie biegu sędziujesz fale Elite i competitive na swojej przeszkodzie. Potem, zależnie od wydarzenia, zwijasz trasę albo przekazujesz ją wolontariuszom na fale Open. Gdy sędziowie wracają, sędzia główny zarządza przeglądem wideo nagrań. Tam, gdzie nie ma wideo, twoje decyzje zapadają na miejscu, są spisywane i przekazywane sędziemu głównemu po twoim powrocie. Wyniki są ostateczne dopiero po oficjalnym przeglądzie. Zawodnik, który chce zaprotestować przeciw karze, kieruje się do sędziego głównego w okresie na protesty.",
+   "review": "W trakcie przeglądu na 2027: regulamin (3.19.1) mówi, że okres na protesty kończy się 15 minut przed ceremonią wręczenia nagród w danej kategorii. Officiating SOP (4.2) podaje jako przykładowy termin graniczny pół godziny przed ceremonią. Na razie stosuj regulamin, trzymaj się godzin protestów ogłaszanych przez sędziego głównego i kieruj każdego zawodnika z protestem do sędziego głównego."
+  },
+  {
+   "heading": "W skrócie",
+   "points": [
+    "Bądź bezstronny, profesjonalny i konsekwentny",
+    "Myśl o celu zasady; uczciwość i bezpieczeństwo są najważniejsze",
+    "Gdy nie jesteś pewien, eskaluj do sędziego głównego",
+    "Twój dzień: szkolenie, odprawa, meldunek, ustawienie, sędziowanie, przekazanie"
+   ],
+   "narration": "W skrócie. Bądź bezstronny i profesjonalny oraz stosuj zasady tak samo wobec każdego zawodnika. Skup się na celu zasady, a nie na drobnym przypadkowym kontakcie, i stawiaj na pierwszym miejscu uczciwość i bezpieczeństwo zawodnika. Gdy nie jesteś pewien, eskaluj do sędziego głównego. Twój harmonogram biegnie od szkolenia przed wydarzeniem i odprawy, przez meldunek i odbiór sprzętu, obejrzenie i przygotowanie przeszkody, po sędziowanie fal competitive i na końcu zwinięcie trasy lub przekazanie jej wolontariuszom na fale Open."
+  }
+ ],
+ "ocr-3-1": [
+  {
+   "heading": "Zgłoszenie się do pracy",
+   "points": [
+    "Zgłoś się do Volunteer Tent lub namiotu sędziów o wyznaczonej godzinie",
+    "Zamelduj się u koordynatora wolontariuszy lub sędziego głównego",
+    "Potwierdź przydział do przeszkody",
+    "Daj się poznać sędziemu głównemu"
+   ],
+   "narration": "Twój dzień zawodów zaczyna się od meldunku. Idź do Volunteer Tent albo do namiotu sędziów, jeśli wydarzenie go używa, o wyznaczonej ci godzinie. Zamelduj się u koordynatora wolontariuszy lub sędziego głównego i potwierdź, do której przeszkody zostałeś przydzielony. Nawet jeśli melduje cię ktoś inny, upewnij się, że sędzia główny wie, że jesteś. Przed pierwszym startem Elite sędzia główny musi potwierdzić, że każdy sędzia jest na stanowisku."
+  },
+  {
+   "heading": "Co odbierasz przy meldunku",
+   "points": [
+    "Oficjalne materiały: koszulka sędziego, czapka, identyfikator lub inny przydzielony sprzęt",
+    "Tabliczka z kodem QR do twojej przeszkody, o ile nie jest już na miejscu",
+    "Miejsce w oficjalnym kanale komunikacji, na przykład w grupie WhatsApp"
+   ],
+   "narration": "Przy meldunku dostajesz oficjalne materiały do sędziowania. To koszulka sędziego, czapka i identyfikator oraz inny przydzielony ci sprzęt. Odbierz też tabliczkę z kodem QR do swojej przeszkody, chyba że jest już ustawiona na miejscu. Prowadzi ona do filmu instruktażowego o tej przeszkodzie. Na koniec upewnij się, że zostałeś dodany do oficjalnego kanału komunikacji. Może to być grupa WhatsApp, inny komunikator albo bezpośredni kontakt do sędziego głównego."
+  },
+  {
+   "heading": "Twój sprzęt sędziego",
+   "points": [
+    "Koszulka lub kamizelka sędziego",
+    "Podkładka do pisania lub notes, najlepiej wodoodporny",
+    "Wydrukowane arkusze zasad do twojej przeszkody",
+    "Kamera wideo i statyw, tylko gdy je dostajesz"
+   ],
+   "narration": "Program z 2026 wymienia, czego sędzia potrzebuje przy przeszkodzie. Noś koszulkę lub kamizelkę sędziego. Miej podkładkę do pisania lub notes, najlepiej wodoodporny, bo będziesz zapisywać numery z opasek i notatki, czasem w mokrych warunkach. Zabierz wydrukowane arkusze zasad do swojej przeszkody, żeby móc sprawdzić zasadę na miejscu. Jeśli dostajesz kamerę, będziesz mieć też kamerę wideo i statyw."
+  },
+  {
+   "heading": "Zabierz własne niezbędne rzeczy",
+   "points": [
+    "Telefon komórkowy",
+    "Odzież dopasowaną do warunków",
+    "Długopisy lub ołówki, jedzenie i wodę",
+    "Wszystko osobiste, czego potrzebujesz, na przykład leki"
+   ],
+   "narration": "Zabierz też własne niezbędne rzeczy. Potrzebujesz telefonu komórkowego, bo dzięki niemu pozostajesz w kontakcie z sędzią głównym przez kanał komunikacji. Ubierz się stosownie do warunków danego dnia. Spakuj długopisy lub ołówki, jedzenie i wodę oraz wszystko osobiste, czego potrzebujesz, na przykład leki. Gdy ruszą fale competitive, twoja uwaga należy do twojej przeszkody, więc przyjdź przygotowany."
+  },
+  {
+   "heading": "Sprzęt wideo",
+   "points": [
+    "Sędzia główny przygotowuje, testuje i wydaje sprzęt do sędziowania",
+    "Kamery z baterią na co najmniej 2,5 godziny, a w razie potrzeby zapasowe baterie",
+    "Regulowane statywy 7 stóp i karty SD o pojemności co najmniej 32 GB do full HD",
+    "Wideo na przeszkodach dotyczy tylko Spear Throw"
+   ],
+   "narration": "Sprzęt do sędziowania jest w gestii sędziego głównego. Przygotowuje go i testuje w piątek przed wydarzeniem, a w dniu zawodów wydaje z ostatecznymi instrukcjami. Procedura określa minimum dla sprzętu: kamery wideo z baterią na co najmniej dwie i pół godziny, zapasowe baterie, regulowane statywy siedmiostopowe i karty pamięci o pojemności co najmniej trzydziestu dwóch gigabajtów, wystarczająco szybkie do pełnego high definition. Nagrywanie wideo na przeszkodach dotyczy tylko Spear Throw. Jeśli tam dostajesz kamerę, ustawiasz ją i sprawdzasz, czy nagrywa, przed pierwszą falą Elite."
+  },
+  {
+   "heading": "W skrócie",
+   "points": [
+    "Zgłoś się do namiotu na czas, zamelduj się i potwierdź przeszkodę",
+    "Odbierz materiały i tabliczkę QR oraz dołącz do kanału komunikacji",
+    "Zabierz wodoodporną podkładkę, arkusze zasad, telefon, jedzenie i wodę",
+    "Kamera i statyw tylko wtedy, gdy masz filmować Spear Throw"
+   ],
+   "narration": "W skrócie. Zgłoś się do namiotu o wyznaczonej godzinie, zamelduj się, potwierdź przeszkodę i daj znać sędziemu głównemu, że jesteś. Odbierz materiały i tabliczkę z kodem QR do swojej przeszkody oraz dołącz do kanału komunikacji. Zabierz wodoodporną podkładkę lub notes, arkusze zasad, telefon, jedzenie i wodę. Kamerę i statyw nosisz tylko wtedy, gdy masz filmować Spear Throw."
+  }
+ ],
+ "ocr-3-2": [
+  {
+   "heading": "Najpierw odprawa",
+   "points": [
+    "Odprawa sędziego głównego na miejscu jest obowiązkowa, przed wyjściem na stanowiska",
+    "Obejmuje przydziały, klasyfikacje przeszkód, pętle karne i standard burpee",
+    "Obejmuje też procedury wydarzenia i sposób zgłaszania kar",
+    "Potem dotrzyj do swojej przeszkody z zapasem czasu przed pierwszą falą competitive"
+   ],
+   "narration": "Zanim wyjdziesz na trasę, bierzesz udział w odprawie sędziego głównego na miejscu. Jest obowiązkowa. Obejmuje procedury danego wydarzenia, położenie każdej przeszkody i to, kto do niej jest przydzielony, które przeszkody są obowiązkowe, a które pozwalają na wiele podejść, pętle karne, standard burpee, ustawienie kamery przy Spear Throw oraz sposób, w jaki kary są identyfikowane, zgłaszane i przekazywane. Po odprawie idź do swojej przeszkody z zapasem czasu na przygotowanie, zanim nadejdzie pierwsza fala competitive."
+  },
+  {
+   "heading": "Znaj zasady swojej przeszkody",
+   "points": [
+    "Przeczytaj instrukcje przeszkody, rodzaje niepowodzeń i dodatkowe uwagi",
+    "Korzystaj z arkusza zasad, arkusza misji i filmu z kodu QR do swojej przeszkody",
+    "Sprawdź opcje dla mężczyzn i kobiet: na ścianach czerwony stopień jest tylko dla zawodniczek"
+   ],
+   "narration": "Przejrzyj i zrozum zasady swojej przeszkody, zanim pojawi się pierwszy zawodnik. W regulaminie każda przeszkoda ma instrukcje dla zawodników, rodzaje niepowodzeń i dodatkowe uwagi. Przeczytaj wszystkie trzy. Pomocny jest też twój arkusz zasad, arkusz misji przeszkody i film instruktażowy z kodu QR. Zwróć uwagę na różne opcje dla mężczyzn i kobiet. Na przykład na ścianach o wysokości od sześciu do dziewięciu stóp czerwony stopień mogą wykorzystywać tylko zawodniczki, a mężczyzna, który z niego skorzysta, oblewa przeszkodę."
+  },
+  {
+   "heading": "Obejrzyj konfigurację",
+   "points": [
+    "Obejrzyj konfigurację przeszkody i sprawdź, czy jest sprawna",
+    "Sprawdź przebieg biegu i kierunek, z którego podchodzą zawodnicy",
+    "Wątpliwości, problemy z bezpieczeństwem lub niespójności zgłaszaj od razu Race Directorowi lub sędziemu głównemu"
+   ],
+   "narration": "Gdy dotrzesz na miejsce, obejrzyj przeszkodę. Sprawdź, czy jest prawidłowo ustawiona i w sprawnym stanie. Zobacz, jak przez nią przebiega bieg i z której strony będą podchodzić zawodnicy, żebyś wiedział, gdzie się pojawią i którędy odejdą. Jeśli cokolwiek cię niepokoi, czy to wątpliwość co do ustawienia, problem z bezpieczeństwem, czy coś niespójnego, zgłoś to natychmiast Race Directorowi lub sędziemu głównemu. Nie czekaj, aż przybędą zawodnicy."
+  },
+  {
+   "heading": "Przejdź pętlę karną",
+   "points": [
+    "Przejdź całą pętlę karną, jeśli jest",
+    "Poznaj trasę i dokładnie miejsce, w którym zawodnicy wracają na trasę",
+    "Pętle bywają różne: bieg, noszenie, czołganie lub oparte na dystansie, zgodnie z potwierdzeniem dla twojej przeszkody",
+    "Ta sama kara obowiązuje wszystkich w kategorii lub serii"
+   ],
+   "narration": "Jeśli twoja przeszkoda ma pętlę karną, przejdź całą pętlę samodzielnie. Musisz zrozumieć trasę i punkt powrotu, żeby wyraźnie skierować zawodnika i zobaczyć, czy ją ukończył. Pętle nie są jednakowe. Regulamin mówi, że ich dystans może zależeć od terenu, a mogą zawierać noszenie, czołganie lub inne elementy. Sędzia główny potwierdza z Race Directorem format kary dla każdej przeszkody. Jakikolwiek by był, stosuje się go konsekwentnie w ramach kategorii lub serii.",
+   "review": "W trakcie przeglądu na 2027: regulamin (3.17.3) mówi, że karą jest pętla lub 30 burpees, zgodnie z tym, co Spartan wyznacza dla każdej przeszkody i wydarzenia. Officiating SOP mówi: pętla przy większości przeszkód i burpees przy Spear Throw, a program z 2026 mówi, że burpees tylko przy Spear Throw. Na razie stosuj karę, którą sędzia główny potwierdza dla twojej przeszkody, a gdy nie jesteś pewien, skontaktuj się z sędzią głównym."
+  },
+  {
+   "heading": "Gdzie stanąć",
+   "points": [
+    "Wybierz miejsce, z którego wyraźnie widać podejścia, ukończenia i niepowodzenia",
+    "Utrzymuj niezasłonięty widok na przeszkodę",
+    "Tylko przy Spear Throw: ustaw kamerę tak, jak opisuje procedura Spear Throw",
+    "Potwierdź, że kamera nagrywa, przed pierwszą falą Elite"
+   ],
+   "narration": "Zdecyduj, gdzie staniesz, zanim zacznie się bieg. Potrzebujesz miejsca, z którego wyraźnie widać każde podejście, każde ukończenie i każde niepowodzenie, przy czym nic nie może zasłaniać widoku. Pomyśl, gdzie zwykle zdarzają się niepowodzenia na twojej przeszkodzie, i bądź na tyle blisko, by porozmawiać z zawodnikiem, gdy się zdarzy. Tylko przy Spear Throw ustawiasz też kamerę wideo, zgodnie z procedurą sędziowania Spear Throw, i potwierdzasz, że nagrywa, zanim wystartuje pierwsza fala Elite. Sędzia główny może wpaść, by sprawdzić egzekwowanie zasad i położenie kamery."
+  },
+  {
+   "heading": "W skrócie",
+   "points": [
+    "Weź udział w obowiązkowej odprawie, potem dotrzyj do przeszkody z zapasem czasu",
+    "Znaj jej instrukcje, rodzaje niepowodzeń i uwagi",
+    "Obejrzyj konfigurację, przejdź pętlę karną, każdą wątpliwość zgłoś od razu",
+    "Stań tam, skąd widzisz każde podejście; przy Spear Throw sprawdź, czy kamera nagrywa"
+   ],
+   "narration": "W skrócie. Weź udział w odprawie sędziego głównego, a potem dotrzyj do swojej przeszkody z zapasem czasu przed pierwszą falą competitive. Znaj jej instrukcje, rodzaje niepowodzeń i dodatkowe uwagi, w tym opcje dla mężczyzn i kobiet. Obejrzyj konfigurację, przejdź pętlę karną i zgłaszaj każdą wątpliwość lub problem z bezpieczeństwem od razu. Potem wybierz miejsce, z którego widzisz każde podejście, a przy Spear Throw potwierdź, że kamera nagrywa, przed pierwszą falą Elite."
+  }
+ ],
+ "ocr-3-3": [
+  {
+   "heading": "Komu składasz meldunki",
+   "points": [
+    "Sędzia, potem sędzia główny, potem Race Director lub zespół pomiaru czasu",
+    "Podlegasz sędziemu głównemu: regulamin nazywa tę rolę Head Official",
+    "Sędzia główny jest ostatecznym autorytetem w egzekwowaniu i interpretacji zasad"
+   ],
+   "narration": "Program z 2026 podsumowuje łańcuch komunikacji w jednym zdaniu: sędzia, potem sędzia główny, potem Race Director lub zespół pomiaru czasu. Jako sędzia podlegasz sędziemu głównemu. Regulamin nazywa tę osobę Head Official i czyni ją głównym decydentem we wszystkich sprawach zasad na wydarzeniu oraz ostatecznym autorytetem w egzekwowaniu i interpretacji zasad. Twoje zgłoszenia trafiają do sędziego głównego, który przekazuje je dalej."
+  },
+  {
+   "heading": "Co przekazuje sędzia główny",
+   "points": [
+    "Incydenty biegu trafiają do Race Directora, który prowadzi całość organizacji wydarzenia",
+    "Incydenty z udziałem zawodników, takie jak oszustwo lub skróty, trafiają do pomiaru czasu",
+    "Potwierdzone kary i dyskwalifikacje trafiają do Race Directora i pomiaru czasu",
+    "Ostateczne decyzje o karach mogą potwierdzać sędzia główny i zespół pomiaru czasu"
+   ],
+   "narration": "Sędzia główny łączy cię z resztą wydarzenia. Informuje Race Directora, który odpowiada za całość organizacji wydarzenia, o incydentach biegu. Informuje zespół pomiaru czasu o incydentach z udziałem zawodników, takich jak oszustwo lub skróty. Po przeglądzie wideo przekazuje potwierdzone kary i dyskwalifikacje Race Directorowi oraz zespołowi Timing and Tech. Twoje zadanie to egzekwować zasady przeszkody, kierować zawodników do kar i zapisywać, co się wydarzyło. Ostateczne decyzje o karach mogą potwierdzać sędzia główny i zespół pomiaru czasu."
+  },
+  {
+   "heading": "Kiedy dzwonić",
+   "points": [
+    "Dołącz do oficjalnego kanału przy meldunku: grupa czatu, komunikator lub bezpośredni kontakt z sędzią głównym",
+    "Nie jesteś pewien rodzaju kary lub sposobu jej egzekwowania: natychmiast skontaktuj się z sędzią głównym",
+    "Wątpliwości lub problemy z bezpieczeństwem na przeszkodzie: Race Director lub sędzia główny",
+    "Zagrożenia: zgłaszaj natychmiast sędziemu głównemu, Race Directorowi lub personelowi Spartan"
+   ],
+   "narration": "Przy meldunku dołączasz do oficjalnego kanału komunikacji. Może to być grupa WhatsApp, inny komunikator albo bezpośrednia linia do sędziego głównego. Korzystaj z niego. Jeśli nie jesteś pewien, jaka kara obowiązuje lub jak ją egzekwować, skontaktuj się natychmiast z sędzią głównym zamiast zgadywać. Wątpliwości, problemy z bezpieczeństwem lub niespójności przy swojej przeszkodzie zgłaszaj Race Directorowi lub sędziemu głównemu. A każde zagrożenie zgłaszaj natychmiast, sędziemu głównemu, Race Directorowi lub personelowi Spartan."
+  },
+  {
+   "heading": "Zgłaszanie sporu lub ucieczki",
+   "points": [
+    "Spór: zapisz numer z opaski i powód oraz zgłoś go możliwie szybko",
+    "Brak numeru: zgłoś od razu z wyraźnym opisem, na przykład ubiór i kategoria",
+    "Pomóż później rozpoznać zawodnika na trasie, jeśli cię poproszą",
+    "Brak wideo: zapisz swoje decyzje o karach i przekaż je sędziemu głównemu"
+   ],
+   "narration": "Większość zgłoszeń dotyczy zawodników. Jeśli zawodnik kwestionuje decyzję, zapisz numer z jego opaski, zapisz powód, na przykład oblana przeszkoda bez kary, i zgłoś to sędziemu głównemu najszybciej, jak możesz. Jeśli zawodnik odchodzi bez wykonania kary, a nie możesz zdobyć jego numeru, zgłoś to od razu z wyraźnym opisem: kolor ubrania, cechy szczególne i kategoria biegu. Tam, gdzie nie ma wideo, decyzje o karach podejmujesz na miejscu, zapisujesz je i przekazujesz sędziemu głównemu po powrocie."
+  },
+  {
+   "heading": "W skrócie",
+   "points": [
+    "Twoja linia prowadzi do sędziego głównego, który informuje Race Directora i pomiar czasu",
+    "Dołącz do kanału przy meldunku i korzystaj z niego",
+    "Pytaj sędziego głównego, gdy nie jesteś pewien, a zagrożenia zgłaszaj natychmiast",
+    "Zapisuj numery z opasek i powody oraz zgłaszaj spory i ucieczki"
+   ],
+   "narration": "W skrócie. Podlegasz sędziemu głównemu, a sędzia główny informuje Race Directora i zespół pomiaru czasu. Dołącz do kanału komunikacji przy meldunku i korzystaj z niego. Gdy nie jesteś pewien kary, pytaj od razu sędziego głównego, a zagrożenia zgłaszaj natychmiast. W przypadku sporów i ucieczek zapisz numer z opaski lub wyraźny opis, odnotuj powód i zgłoś sprawę."
+  }
+ ],
+ "ocr-4-1": [
+  {
+   "heading": "Trzy rodzaje przeszkód",
+   "points": [
+    "Obowiązkowe: trzeba je ukończyć, zanim zawodnik pójdzie dalej",
+    "Wielopodejściowe (zaliczeniowe): próbuj do skutku lub do kary",
+    "Jednopodejściowe (zaliczeniowe): po zaangażowaniu się trzeba ją ukończyć albo przyjąć karę",
+    "Część D regulaminu wymienia każdą przeszkodę w jednym z trzech rodzajów"
+   ],
+   "narration": "Regulamin dzieli przeszkody na obowiązkowe i zaliczeniowe. Przeszkody zaliczeniowe są dwojakiego rodzaju, wielopodejściowe i jednopodejściowe, więc w praktyce masz do czynienia z trzema rodzajami. Przeszkodę obowiązkową trzeba ukończyć, zanim zawodnik pójdzie dalej. Przeszkodę wielopodejściową można próbować tyle razy, ile trzeba, aż do ukończenia lub nałożenia kary. Przeszkodę jednopodejściową trzeba ukończyć, gdy zawodnik się zaangażował, inaczej obowiązuje kara. Regulamin wymienia każdą przeszkodę w jednym rodzaju, a odprawa obejmuje klasyfikacje.",
+   "review": "W trakcie przeglądu na 2027: regulamin i program z 2026 klasyfikują kilka przeszkód inaczej. Regulamin ma Monkey Bars, Multi-Rig, Twister, Olympus, Z Wall, Beater i Helix jako jednopodejściowe, Atlas Carry, Tire Flip i Stairway to Sparta jako wielopodejściowe, a A-Frame Cargo jako obowiązkową. Program wymienia pierwszą grupę jako wielopodejściową, drugą jako obowiązkową, a A-Frame Cargo jako wielopodejściową. Na razie stosuj część regulaminu dotyczącą danej przeszkody, a sporną decyzję kieruj do sędziego głównego."
+  },
+  {
+   "heading": "Każdą przeszkodę trzeba podjąć",
+   "points": [
+    "Podejście to co najmniej dotknięcie przeszkody",
+    "Może obejmować wejście do wody lub trudnego terenu, by do niej dotrzeć",
+    "Tego terenu nie można ominąć za karę, chyba że pozwoli na to odprawa lub obsługa biegu",
+    "Niepodjęcie przeszkody to częste naruszenie, na które trzeba uważać"
+   ],
+   "narration": "Każdą przeszkodę trzeba podjąć. Regulamin ustala minimum: podejściem jest dotknięcie przeszkody. Czasem podejście obejmuje też dotarcie do przeszkody, na przykład wejście do wody lub pokonanie innego trudnego terenu. Tego terenu nie można pominąć, przyjmując karę, chyba że odprawy przed biegiem lub obsługa w dniu biegu powiedziały, że jest to dopuszczalne. Program z 2026 wymienia niepodjęcie przeszkody wśród częstych naruszeń zasad, więc uważaj na zawodników, którzy kierują się do kary, nie próbując przeszkody."
+  },
+  {
+   "heading": "Przeszkody obowiązkowe",
+   "points": [
+    "Ukończone w całości: bez omijania i bez kary w zamian, chyba że oficjel tak zdecyduje",
+    "Niezaliczenie oznacza dyskwalifikację; Race Director może zastąpić ją karą czasową",
+    "Przykłady: Bucket Carry, Sandbag Carry, Log Carry, Barbed Wire Crawl",
+    "Bucket Carry: utracony materiał oznacza powtórzenie całej trasy z pełnym wiadrem"
+   ],
+   "narration": "Przeszkodę obowiązkową trzeba ukończyć w całości, zanim zawodnik pójdzie dalej. Zawodnik nie może jej ominąć ani zamienić na karę, chyba że poleci mu to oficjel biegu. Zgodnie z regulaminem niezaliczenie przeszkody obowiązkowej oznacza dyskwalifikację, choć Race Director może zastąpić ją karą czasową, zależnie od wagi naruszenia. Typowe są noszenie i czołganie. Przy Bucket Carry na przykład nie ma opcji burpees, a wiadro, które wraca z brakującym materiałem, oznacza, że zawodnik powtarza całą trasę z prawidłowo napełnionym wiadrem."
+  },
+  {
+   "heading": "Przeszkody wielopodejściowe",
+   "points": [
+    "Zawodnik może próbować tyle razy, ile trzeba",
+    "Kończy się ukończeniem albo rezygnacją i przyjęciem kary",
+    "Przykłady: Rope Climb, Bender, Inverted Wall",
+    "Rope Climb: zmiana liny dopiero po powrocie na ziemię; jedna lina na podejście"
+   ],
+   "narration": "Przeszkodę wielopodejściową można próbować raz za razem. Zawodnik robi to, aż ją ukończy albo zdecyduje się zrezygnować i przyjąć karę. Zasady każdej przeszkody mówią, na czym polega ponowna próba. Przy Rope Climb na przykład zawodnik może zmienić linę po powrocie na ziemię i spróbować jeszcze raz, ale użycie więcej niż jednej liny podczas jednego podejścia to niepowodzenie. Zawodnicy, którzy próbują ponownie, powinni ustąpić miejsca tym, którzy próbują po raz pierwszy, choć regulamin mówi, że nie jest to obowiązkowe."
+  },
+  {
+   "heading": "Przeszkody jednopodejściowe: kiedy zaczyna się zaangażowanie",
+   "points": [
+    "Po zaangażowaniu się zawodnik ukończy przeszkodę albo przyjmie karę: bez ponownej próby",
+    "Zasady każdej przeszkody określają, kiedy zaczyna się zaangażowanie",
+    "Spear Throw: gdy włócznia zostaje wypuszczona ruchem do przodu",
+    "Ape Hanger: gdy zawodnik dotknie dowolnego z górnych drążków"
+   ],
+   "narration": "Przeszkoda jednopodejściowa daje zawodnikowi jedną próbę, gdy się zaangażował. Potem albo ją ukończy, albo przyjmie karę. Kluczowe pytanie brzmi, kiedy zaczyna się zaangażowanie, a regulamin odpowiada na nie przeszkoda po przeszkodzie. Przy Spear Throw podejście zaczyna się, gdy włócznia zostaje wypuszczona ruchem do przodu. Przy Ape Hanger zawodnik jest zaangażowany, gdy dotknie któregokolwiek z górnych drążków. Znaj punkt zaangażowania dla swojej przeszkody: decyduje on, czy zawodnik może jeszcze zacząć od nowa.",
+   "review": "W trakcie przeglądu na 2027: program z 2026 mówi, że zaangażowanie zaczyna się, gdy rozpoczyna się ruch podejścia, a przy Spear Throw, gdy włócznia jest odciągana do rzutu. Regulamin określa zaangażowanie przeszkoda po przeszkodzie, a przy Spear Throw jest to moment wypuszczenia. Na razie stosuj zasadę każdej przeszkody, a sporną decyzję kieruj do sędziego głównego."
+  },
+  {
+   "heading": "Co jest niepowodzeniem",
+   "points": [
+    "Oceniaj według rodzajów niepowodzeń z zasad twojej przeszkody",
+    "Kopnięcie dzwonu stopami, nogami lub kolanami to niepowodzenie, bez ponownej próby",
+    "Niepowodzenie przez istotne zakłócenie ze strony innego zawodnika: oficjel może zezwolić na ponowny start",
+    "Częste niepowodzenia to użycie konstrukcji pomocniczej i niezadzwonienie w dzwon"
+   ],
+   "narration": "Niepowodzenie jest zdefiniowane w zasadach każdej przeszkody, na liście rodzajów niepowodzeń. Oceniaj według tej listy, a nie własnego wyobrażenia, jak przeszkoda powinna być pokonana. Dwie ogólne zasady obowiązują na wszystkich przeszkodach. Kopnięcie dzwonu stopami, nogami lub kolanami jest niepowodzeniem: zawodnik nie może próbować ponownie i musi wykonać karę. A jeśli niepowodzenie spowodowało istotne fizyczne zakłócenie ze strony innego zawodnika, zawodnik może wystartować od nowa bez dodatkowej kary, gdy oficjel na to pozwoli."
+  },
+  {
+   "heading": "W skrócie",
+   "points": [
+    "Każdą przeszkodę trzeba podjąć: przynajmniej jej dotknąć",
+    "Obowiązkowa: ukończ w całości albo grozi dyskwalifikacja",
+    "Wielopodejściowa: próbuj do skutku albo przyjmij karę; jednopodejściowa: jedna próba po zaangażowaniu",
+    "Oceniaj rodzaje niepowodzeń każdej przeszkody; klasyfikacja jest w trakcie przeglądu"
+   ],
+   "narration": "W skrócie. Każdą przeszkodę trzeba podjąć, a dotknięcie jej to minimum. Przeszkodę obowiązkową trzeba ukończyć w całości, a jej niezaliczenie oznacza dyskwalifikację, chyba że Race Director zastąpi ją karą czasową. Przeszkodę wielopodejściową można próbować, aż się ją ukończy lub zawodnik przyjmie karę. Przeszkoda jednopodejściowa daje jedną próbę, gdy zawodnik się zaangażuje, w punkcie określonym przez zasady tej przeszkody. Oceniaj każdą przeszkodę według jej własnych rodzajów niepowodzeń i pamiętaj, że to, która przeszkoda jest jakiego rodzaju, jest w trakcie przeglądu na 2027."
+  }
+ ],
+ "ocr-5-1": [
+  {
+   "heading": "Dwa rodzaje przeszkód, dwa rodzaje skutków",
+   "points": [
+    "Przeszkody obowiązkowe trzeba ukończyć: niezaliczenie oznacza dyskwalifikację",
+    "Race Director może zastąpić ją karą czasową, zależnie od wagi sprawy",
+    "Oblanie przeszkody zaliczeniowej oznacza karę: pętlę karną lub burpees"
+   ],
+   "narration": "Regulamin dzieli przeszkody na dwie kategorie. Przeszkody obowiązkowe trzeba ukończyć. Niezaliczenie takiej przeszkody oznacza dyskwalifikację z wydarzenia, choć Race Director może zastąpić ją karą czasową, zależnie od wagi naruszenia. Przeszkody zaliczeniowe są inne. Zawodnik, który ją oblewa, zostaje w biegu i zamiast tego przyjmuje karę. Tą karą jest pętla karna albo burpees, a Spartan ustala, która obowiązuje dla każdej przeszkody, wydarzenia, kategorii lub serii.",
+   "review": "W trakcie przeglądu na 2027: zasada 3.17.3 mówi, że karą jest pętla karna lub 30 burpees, zgodnie z tym, co Spartan wyznacza dla każdej przeszkody, wydarzenia, kategorii lub serii, a na Stadionie zawsze 15 burpees. Officiating SOP mówi: pętla przy większości przeszkód i burpees przy Spear Throw; program z 2026 mówi, że burpees tylko przy Spear Throw. Na razie stosuj karę potwierdzoną przez sędziego głównego dla twojej przeszkody, a gdy nie jesteś pewien, zapytaj sędziego głównego."
+  },
+  {
+   "heading": "Pętla karna",
+   "points": [
+    "Wyznaczony odcinek trasy, który zawodnik pokonuje po oblaniu przeszkody",
+    "Jej długość bywa różna i może obejmować noszenie, czołganie lub inne wyzwania",
+    "Stosuje się ją tak samo wobec wszystkich w kategorii lub serii",
+    "Przejdź całą pętlę przed startem: poznaj trasę i punkt powrotu"
+   ],
+   "narration": "Pętla karna to wyznaczony odcinek trasy, który zawodnik pokonuje po oblaniu przeszkody. Jej dystans może zależeć od terenu i może obejmować dodatkowe wyzwania, takie jak noszenie lub czołganie. Niezależnie od konstrukcji stosuje się ją konsekwentnie wobec wszystkich w tej samej kategorii lub serii. Przed pierwszą falą competitive przejdź całą pętlę samodzielnie. Musisz znać trasę i punkt powrotu, żeby poprawnie kierować zawodników i zauważyć każdego, kto ją skraca."
+  },
+  {
+   "heading": "Niedobór burpees",
+   "points": [
+    "Zawodnikom, którzy nie wykonają wymaganych burpees, dolicza się czas do wyniku",
+    "Duży niedobór może oznaczać poważną karę czasową",
+    "Niedobór można wykryć na trasie lub w przeglądzie wideo, przed ceremonią nagród",
+    "Ile czasu dodaje każde niewykonane burpee, jest w trakcie przeglądu na 2027"
+   ],
+   "narration": "Tam, gdzie karą są burpees, zawodnikowi, który nie wykona wymaganej liczby, dolicza się czas do całkowitego czasu mety. Program z 2026 ujmuje to prosto: duży niedobór burpees może skutkować poważną karą czasową. Niedobór można wykryć w trakcie biegu albo w oficjalnym przeglądzie wideo przed ceremonią nagród, dlatego wyniki mogą nie być ostateczne od razu. Dokładnie ile czasu dodaje niewykonane burpee, jest w trakcie przeglądu, więc ta lekcja nie podaje żadnej wartości.",
+   "review": "W trakcie przeglądu na 2027: zasada 3.4.2 dolicza 30 sekund za każde z pierwszych 10 niewykonanych burpees i łącznie 10 minut, jeśli niewykonanych jest więcej niż 10. Officiating SOP dolicza po 30 sekund za każde i 10 minut, jeśli wykonano mniej niż 20; program z 2026 mówi, że 11 lub więcej nieprawidłowych to 10 minut, a mniej niż 20 to dyskwalifikacja. Ta lekcja nie podaje żadnej wartości, dopóki nie rozstrzygnie tego osoba odpowiedzialna za sędziowanie: kary potwierdza sędzia główny."
+  },
+  {
+   "heading": "Niewykonanie kary",
+   "points": [
+    "Pętle karne trzeba ukończyć w całości",
+    "Pominięcie kary skutkuje dalszą karą: doliczeniem czasu lub dyskwalifikacją",
+    "Ile kosztuje pominięcie pętli, jest w trakcie przeglądu na 2027",
+    "Twoja rola: zapisz numer z opaski i zgłoś sędziemu głównemu"
+   ],
+   "narration": "Pętle karne trzeba ukończyć w całości. Zawodnik, który oblewa przeszkodę zaliczeniową i nie wykonuje kary, złamał zasady i będzie go to kosztować. Podczas oficjalnego przeglądu wideo oficjele biegu mogą doliczyć karę czasową lub zdyskwalifikować. Źródła z 2026 nie zgadzają się co do dokładnej kary za pominięcie pętli, więc jest to w trakcie przeglądu. Twoja rola się nie zmienia: zapisz numer z opaski zawodnika, odnotuj, co się stało, i zgłoś to sędziemu głównemu.",
+   "review": "W trakcie przeglądu na 2027: zasada 3.4.1 dolicza 10 minut kary czasowej, gdy zawodnik oblewa przeszkodę zaliczeniową i nie kończy pętli karnej. Program z 2026 mówi, że niewykonanie kary może skutkować dyskwalifikacją, a Officiating SOP nie podaje żadnej wartości. Dopóki nie rozstrzygnie tego osoba odpowiedzialna za sędziowanie, stosuj regulamin: zapisz, zgłoś i pozostaw karę sędziemu głównemu."
+  },
+  {
+   "heading": "Gdy zawodnik odchodzi bez kary",
+   "points": [
+    "Zapisz numer z opaski i powód, na przykład oblana przeszkoda bez kary",
+    "Brak numeru? Podaj sędziemu głównemu wyraźny opis: ubiór, cechy, kategoria",
+    "Zgłoś to możliwie szybko i pomóż później rozpoznać zawodnika, jeśli cię poproszą"
+   ],
+   "narration": "Procedura sędziowania mówi, co robić, gdy zawodnik odchodzi od twojej przeszkody bez wykonania kary. Zapisz numer z jego opaski i powód. Zgłoś to sędziemu głównemu, gdy tylko pozwolą na to warunki pracy. Jeśli nie udało ci się zdobyć numeru, i tak zgłoś to od razu, z wyraźnym opisem wyglądu zawodnika: kolor ubrania, cechy szczególne i kategoria biegu. Możesz zostać poproszony o pomoc w jego rozpoznaniu później na trasie."
+  },
+  {
+   "heading": "W skrócie",
+   "points": [
+    "Obowiązkowa oblana: dyskwalifikacja, chyba że Race Director zastąpi ją karą czasową",
+    "Zaliczeniowa oblana: pętla karna, ukończona w całości, lub burpees",
+    "Niewykonane burpees i pominięte pętle skutkują dalszymi karami: wartości są w trakcie przeglądu",
+    "Zapisz numer z opaski i zgłoś sędziemu głównemu"
+   ],
+   "narration": "W skrócie. Oblanie przeszkody obowiązkowej oznacza dyskwalifikację, chyba że Race Director zastąpi ją karą czasową. Oblanie przeszkody zaliczeniowej oznacza wyznaczoną karę: pętlę karną, ukończoną w całości, lub burpees. Niewykonane burpees i pominięte pętle skutkują dalszymi karami, a dokładne wartości są w trakcie przeglądu na 2027. Cokolwiek się stanie, zapisz numer z opaski i zgłoś to sędziemu głównemu.",
+   "review": "W trakcie przeglądu na 2027: tam, gdzie karą są burpees (zasada 3.17.3), czas doliczany za niewykonane burpees (3.4.2) i kara za pominięcie pętli (3.4.1) różnią się między regulaminem, Officiating SOP i programem z 2026. Dopóki nie rozstrzygnie tego osoba odpowiedzialna za sędziowanie, stosuj karę potwierdzoną przez sędziego głównego dla twojej przeszkody, nie podawaj żadnej wartości czasowej, a sporne decyzje kieruj do sędziego głównego."
+  }
+ ],
+ "ocr-5-2": [
+  {
+   "heading": "Twoje zadanie przy przeszkodzie",
+   "points": [
+    "Dopilnuj, by zawodnicy przestrzegali instrukcji przeszkody",
+    "Obserwuj naruszenia zasad i znaj warunki niepowodzenia przeszkody",
+    "Kieruj każdego zawodnika, który oblewa, do właściwej kary",
+    "Zgłaszaj problemy i niestosowanie się do zasad sędziemu głównemu"
+   ],
+   "narration": "Regulamin definiuje sędziego jako oficjela wyznaczonego, by dbać o przestrzeganie zasad, zwykle ustawionego przy przeszkodzie lub w namiocie przeglądu wideo i podlegającego głównemu oficjelowi (Head Official), którego ten program nazywa sędzią głównym. Przy twojej przeszkodzie oznacza to cztery rzeczy. Dopilnuj, by zawodnicy przestrzegali instrukcji. Obserwuj naruszenia, wiedząc dokładnie, co jest niepowodzeniem. Kieruj każdego, kto oblewa, do właściwej kary. I zgłaszaj problemy sędziemu głównemu."
+  },
+  {
+   "heading": "Każdą przeszkodę trzeba podjąć",
+   "points": [
+    "Podejście to co najmniej dotknięcie przeszkody",
+    "Może obejmować wejście do wody lub trudnego terenu, by do niej dotrzeć",
+    "Tego terenu nie można ominąć za karę, chyba że pozwoli na to odprawa lub obsługa biegu"
+   ],
+   "narration": "Każdą przeszkodę trzeba podjąć. Podejściem jest co najmniej dotknięcie przeszkody. Tam, gdzie przeszkoda znajduje się w wodzie lub na innym trudnym terenie, podejście może obejmować pokonanie tego terenu, by do niej dotrzeć. Zawodnicy nie mogą ominąć tego terenu, przyjmując karę, chyba że odprawa przed biegiem lub obsługa w dniu biegu powiedziały, że jest to dopuszczalne. Zawodnik, który idzie prosto do kary, nie dotknąwszy przeszkody, nie spełnił więc zasady."
+  },
+  {
+   "heading": "Dzwony i zakłócenia",
+   "points": [
+    "W dzwon można uderzać tylko rękami, dłońmi lub ciałem powyżej klatki piersiowej",
+    "Kopnięcie dzwonu to niepowodzenie: bez ponownej próby, prosto do kary",
+    "Niepowodzenie z powodu istotnego zakłócenia ze strony innego zawodnika? Oficjel może zezwolić na ponowny start"
+   ],
+   "narration": "Dwie ogólne zasady obowiązują na wielu przeszkodach. W dzwon można uderzać tylko rękami, dłońmi lub inną częścią ciała powyżej klatki piersiowej. Zawodnik, który kopnie dzwon stopą, nogą lub kolanem, oblał przeszkodę: nie może próbować ponownie i musi wykonać karę. A jeśli zawodnik oblewa, bo inny zawodnik fizycznie mu w istotny sposób przeszkodził, oficjel może pozwolić mu zacząć przeszkodę od nowa bez dodatkowej kary. Jeśli nie jesteś pewien, zapytaj sędziego głównego."
+  },
+  {
+   "heading": "Kierowanie do kary",
+   "points": [
+    "Skieruj każdego zawodnika, który oblewa, do kary ustalonej dla twojej przeszkody",
+    "Format kary każdej przeszkody jest potwierdzany przed wydarzeniem i omawiany na odprawie",
+    "Nie wiesz, jaka kara obowiązuje? Natychmiast skontaktuj się z sędzią głównym"
+   ],
+   "narration": "Gdy zawodnik oblewa, wyraźnie skieruj go do właściwej kary. Przed wydarzeniem sędzia główny potwierdza z Race Directorem format kary dla każdej przeszkody, czy to pętla biegowa, pętla z noszeniem, pętla z czołganiem czy burpees, a odprawa na miejscu omawia to, co dotyczy twojej. Procedura sędziowania mówi, że większość przeszkód ma pętlę karną, a Spear Throw burpees. Jeśli kiedykolwiek nie jesteś pewien, jaka kara obowiązuje, natychmiast skontaktuj się z sędzią głównym.",
+   "review": "W trakcie przeglądu na 2027: zasada 3.17.3 mówi, że karą jest pętla karna lub 30 burpees, zgodnie z tym, co Spartan wyznacza dla każdej przeszkody, wydarzenia, kategorii lub serii, a na Stadionie zawsze 15 burpees. Officiating SOP mówi: pętla przy większości przeszkód i burpees przy Spear Throw; program z 2026 mówi, że burpees tylko przy Spear Throw. Na razie stosuj karę potwierdzoną przez sędziego głównego dla twojej przeszkody, a gdy nie jesteś pewien, zapytaj sędziego głównego."
+  },
+  {
+   "heading": "Zachowanie zawodników na trasie",
+   "points": [
+    "Zawodnicy muszą pokonać całą oficjalną trasę: trzymanie się jej to ich odpowiedzialność",
+    "Żadnej fizycznej pomocy od nikogo poza oficjelem Spartan i żadnego pacingu",
+    "Informowanie o postępach lub czasach innych zawodników nie jest pomocą",
+    "Numer na opasce musi być widoczny i czytelny przez cały czas"
+   ],
+   "narration": "Zawodnicy muszą pokonać oficjalną trasę w całości, a prawidłowe jej przestrzeganie jest ich własną odpowiedzialnością. Nie mogą przyjmować fizycznej pomocy od nikogo poza oficjelem Spartan. Dotyczy to jedzenia i picia poza oficjalnymi punktami odżywczymi, sprzętu, fizycznego wsparcia oraz pacingu, czyli sytuacji, gdy ktoś biegnie z zawodnikiem, by go trenować lub narzucać mu tempo. Informowanie o postępach lub czasach innych zawodników nie jest pomocą. Numer startowy na opasce musi być wyraźnie wyeksponowany i czytelny przez cały czas."
+  },
+  {
+   "heading": "Niesportowe zachowanie i zgłaszanie",
+   "points": [
+    "Zawodnicy muszą traktować wszystkich z szacunkiem: żadnych obraźliwych, grożących ani lżących zachowań",
+    "Karę za zachowanie ustala sędzia główny: twoim zadaniem jest to zgłosić",
+    "Zapisz numer z opaski i co się stało, i zgłoś sędziemu głównemu",
+    "Spokojnie wyjaśnij zasadę i nie zaostrzaj konfliktu na przeszkodzie"
+   ],
+   "narration": "Zawodnicy muszą traktować innych zawodników, personel Spartan, wolontariuszy, kibiców i publiczność uczciwie, z szacunkiem i uprzejmością oraz nie mogą używać obraźliwego, grożącego ani lżącego języka czy zachowania. Niesportowe zachowanie może prowadzić do kary, o której decyduje Head Official, czyli sędzia główny. Niezależnie od sprawy, zapisz numer z opaski i co się stało, i zgłoś to możliwie szybko. Zgłoszenia idą od ciebie do sędziego głównego, a dalej do Race Directora lub zespołu pomiaru czasu. Jeśli zawodnik kwestionuje twoją decyzję, spokojnie wyjaśnij zasadę i unikaj kłótni."
+  },
+  {
+   "heading": "W skrócie",
+   "points": [
+    "Każdą przeszkodę trzeba podjąć: co najmniej dotknięcie",
+    "Znaj warunki niepowodzenia: kopnięty dzwon to niepowodzenie",
+    "Każdego, kto oblewa, skieruj do kary twojej przeszkody; gdy nie wiesz, zapytaj sędziego głównego",
+    "Zapisz numer, zgłoś sędziemu głównemu i nie kłóć się"
+   ],
+   "narration": "W skrócie. Każdą przeszkodę trzeba podjąć, a minimum to jej dotknięcie. Znaj instrukcje i warunki niepowodzenia swojej przeszkody, a także ogólne, takie jak to, że kopnięty dzwon jest niepowodzeniem. Każdego, kto oblewa, skieruj do kary ustalonej dla twojej przeszkody, a jeśli nie jesteś pewien, zapytaj sędziego głównego. Zawodnicy muszą trzymać się trasy, nie korzystać z pomocy z zewnątrz i mieć widoczny numer. Gdy coś pójdzie nie tak, zapisz numer, zgłoś to i nie kłóć się na przeszkodzie."
+  }
+ ],
+ "ocr-5-3": [
+  {
+   "heading": "Gdzie karą są burpees",
+   "points": [
+    "Spartan wyznacza pętlę lub burpees dla każdej przeszkody, wydarzenia, kategorii lub serii",
+    "Tam, gdzie wyznaczono burpees, karą jest 30 burpees",
+    "Wydarzenia Stadion: zawsze 15 burpees",
+    "Karą za Spear Throw jest 30 burpees"
+   ],
+   "narration": "Zgodnie z zasadą 3.17.3 karą za przeszkodę zaliczeniową jest pętla karna lub burpees, zgodnie z tym, co Spartan wyznacza dla każdej przeszkody, wydarzenia, kategorii lub serii. Tam, gdzie wyznaczono burpees, jest to trzydzieści burpees. Na wydarzeniach Stadion karą za każdą przeszkodę jest piętnaście burpees. Karą za Spear Throw jest trzydzieści burpees. Przed wydarzeniem sędzia główny potwierdza z Race Directorem format kary dla każdej przeszkody, więc odprawa mówi ci, czy twoja przeszkoda używa burpees.",
+   "review": "W trakcie przeglądu na 2027: zasada 3.17.3 mówi, że karą jest pętla karna lub 30 burpees, zgodnie z tym, co Spartan wyznacza dla każdej przeszkody, wydarzenia, kategorii lub serii, a na Stadionie zawsze 15 burpees. Officiating SOP mówi: pętla przy większości przeszkód i burpees przy Spear Throw; program z 2026 mówi, że burpees tylko przy Spear Throw. Na razie stosuj karę potwierdzoną przez sędziego głównego dla twojej przeszkody, a gdy nie jesteś pewien, zapytaj sędziego głównego."
+  },
+  {
+   "heading": "Strefa burpees",
+   "points": [
+    "Burpees trzeba wykonać w wyznaczonej strefie burpees",
+    "Burpees poza strefą nie liczą się do kary",
+    "Oficjele mogą dodawać strefy, gdy jedna jest pełna, lub by rozdzielić kategorie",
+    "Twoje zadanie: dopilnować, by burpees były wykonywane w prawidłowej strefie"
+   ],
+   "narration": "Burpees trzeba wykonać w wyznaczonej strefie burpees. Te wykonane poza nią nie liczą się do kary, więc zawodnik, który wychodzi poza strefę, robi powtórzenia, które nie zostaną zaliczone. Oficjele biegu mogą wyznaczyć dodatkowe strefy burpees, gdy w jednej brakuje miejsca, albo by rozdzielić kategorie zawodników. Częścią twojego zadania jest dopilnować, by burpees były wykonywane w prawidłowej strefie, gdzie widzisz je ty i kamera."
+  },
+  {
+   "heading": "Opaska leży na ziemi",
+   "points": [
+    "Zawodnik kładzie opaskę na ziemi bezpośrednio przed sobą",
+    "Zgubiona opaska: zapisz imię i nazwisko zawodnika lub powiedz je do dźwięku kamery",
+    "Poinformuj sędziego głównego o każdym zawodniku nagranym bez opaski"
+   ],
+   "narration": "Podczas robienia burpees zawodnik kładzie swoją opaskę na ziemi bezpośrednio przed sobą. Obwieszczenia sędziego głównego na linii startu to obejmują, więc zawodnicy powinni to wiedzieć, zanim dotrą do ciebie. Jeśli zawodnik zgubił opaskę, zapisz jego imię i nazwisko albo użyj dźwięku kamery, by powiedzieć, kim jest. Tak czy inaczej poinformuj sędziego głównego o każdym zawodniku nagranym bez opaski, aby nagranie dało się przypisać właściwej osobie."
+  },
+  {
+   "heading": "Pokazanie zawodnika kamerze",
+   "points": [
+    "Trzymaj opaskę około dwóch stóp od obiektywu przez około dwie sekundy",
+    "Od razu oddaj ją zawodnikowi",
+    "Nigdy nie trzymaj dwóch opasek naraz i nie pozwalaj, by zawodnicy podawali ci swoje",
+    "Nigdy nie przesuwaj ciała ani twarzy zawodnika pod kamerę"
+   ],
+   "narration": "Przy Spear Throw wideo identyfikuje każdego zawodnika. Trzymaj opaskę około dwóch stóp od obiektywu kamery przez około dwie sekundy, aby numer był wyraźny w przeglądzie. Potem natychmiast oddaj ją zawodnikowi. Nigdy nie trzymaj dwóch opasek jednocześnie i nie pozwalaj, by zawodnicy podawali ci swoje opaski. I nigdy nie przesuwaj fizycznie ciała ani twarzy zawodnika, żeby wszedł w kadr: identyfikacja opiera się na opasce, wyraźnie uniesionej."
+  },
+  {
+   "heading": "Przegląd wideo ustala niewykonane burpees",
+   "points": [
+    "Niewykonane burpees ustala się w przeglądzie wideo",
+    "Wyniki mogą nie być ostateczne, dopóki nie zakończy się oficjalny przegląd wideo",
+    "Nagrania zostają u sędziego głównego i nigdy nie są dawane zawodnikom",
+    "Twoje trzy zadania: standard ruchu, strefa, wyraźna identyfikacja"
+   ],
+   "narration": "Program z 2026 mówi, że przegląd wideo ustala niewykonane burpees. Dlatego wyniki mogą nie pojawić się od razu: oficjalny przegląd odbywa się, zanim staną się ostateczne. Sędzia główny zarządza przeglądem, gdy sędziowie wracają ze swoich przeszkód, przechowuje nagrania do końca dnia wydarzenia i nigdy nie daje ich zawodnikom. Twoja część na trasie umożliwia przegląd: egzekwuj standard ruchu, pilnuj, by burpees były w strefie, i wyraźnie identyfikuj każdego zawodnika dla kamery.",
+   "review": "W trakcie przeglądu na 2027: czas doliczany za niewykonane burpees różni się między zasadą 3.4.2, Officiating SOP i programem z 2026, a SOP pozwala sędziemu na miejscu zdecydować na piśmie tam, gdzie nie ma wideo. Lekcja o karach czasowych za burpees przedstawia każdą wersję. Ta lekcja nie podaje żadnej wartości: kary potwierdza sędzia główny po przeglądzie."
+  },
+  {
+   "heading": "W skrócie",
+   "points": [
+    "Burpees są karą tam, gdzie Spartan je wyznaczy: 30, a na Stadionie 15",
+    "Liczą się tylko burpees w strefie",
+    "Opaska na ziemi przed zawodnikiem; pokazana kamerze, potem od razu oddana",
+    "Przegląd wideo ustala niewykonane burpees"
+   ],
+   "narration": "W skrócie. Burpees są karą tam, gdzie Spartan je wyznaczy: trzydzieści burpees, na wydarzeniach Stadion piętnaście, a przy Spear Throw zawsze. Liczą się tylko burpees w wyznaczonej strefie. Opaska zawodnika leży na ziemi przed nim, a ty pokazujesz ją kamerze przez kilka sekund, po czym od razu oddajesz. Przegląd wideo ustala potem niewykonane burpees, więc twoje zadanie to standard, strefa i wyraźna identyfikacja.",
+   "review": "W trakcie przeglądu na 2027: zasada 3.17.3 mówi, że karą jest pętla karna lub 30 burpees, zgodnie z tym, co Spartan wyznacza dla każdej przeszkody, wydarzenia, kategorii lub serii, a na Stadionie zawsze 15 burpees. Officiating SOP mówi: pętla przy większości przeszkód i burpees przy Spear Throw; program z 2026 mówi, że burpees tylko przy Spear Throw. Na razie stosuj karę potwierdzoną przez sędziego głównego dla twojej przeszkody, a gdy nie jesteś pewien, zapytaj sędziego głównego."
+  }
+ ],
+ "ocr-6-1": [
+  {
+   "heading": "Jedno pełne burpee",
+   "points": [
+    "Jeden cykl między dwiema pozycjami: dolną i górną",
+    "Z pozycji dolnej do górnej, potem wyskok",
+    "Powtórzenie, w którym brakuje części standardu, nie jest pełnym burpee"
+   ],
+   "narration": "Zasada 3.17.4 definiuje jedno pełne burpee. To jeden cykl między dwiema pozycjami ciała, nazywanymi górną i dolną. Zawodnik przechodzi z pozycji dolnej do pozycji górnej, a potem wyskakuje. Każde powtórzenie w karze burpees musi spełniać ten standard. Powtórzenie, w którym brakuje części standardu, nie jest pełnym burpee i możesz wymagać od zawodnika wykonania kolejnego. Kolejne slajdy omawiają każdą część po kolei."
+  },
+  {
+   "heading": "Pozycja dolna i górna",
+   "points": [
+    "Dolna: leżenie przodem na ziemi, z klatką piersiową dotykającą ziemi",
+    "Górna: zrównoważona i wyprostowana, postawa, w której każdy utrzyma się bez przewracania",
+    "W pozycji górnej biodra i kolana są wyprostowane, a nie zgięte"
+   ],
+   "narration": "Pozycja dolna to leżenie przodem na ziemi, z klatką piersiową dotykającą ziemi. Pozycja górna to zrównoważona, wyprostowana postawa stojąca: taka, w której każdy mógłby długo wytrwać, nie przewracając się do przodu ani do tyłu. W pozycji górnej biodra i kolana zawodnika powinny być wyprostowane, a nie zgięte. Obserwuj oba końce każdego powtórzenia. Klatka piersiowa, która zatrzymuje się przed ziemią, albo biodra nadal zgięte w pozycji górnej oznaczają, że powtórzenie nie spełniło standardu."
+  },
+  {
+   "heading": "Wyskok",
+   "points": [
+    "Po powrocie do pozycji górnej zawodnik wyskakuje",
+    "Ręce są wyciągnięte do góry, nad uszami",
+    "Brak wyskoku lub ręce nie nad uszami: powtórzenie jest niepełne"
+   ],
+   "narration": "Gdy zawodnik wróci z pozycji dolnej do górnej, wyskakuje z rękami wyciągniętymi do góry, nad uszami. Zasada umieszcza wyskok po osiągnięciu pozycji górnej, więc zawodnik musi najpierw stanąć prosto. Obserwuj ręce tak samo jak stopy. Ręce, które sięgają tylko do ramion lub twarzy, nie spełniają standardu, podobnie jak powtórzenie bez żadnego wyskoku."
+  },
+  {
+   "heading": "Jeden ciągły ruch",
+   "points": [
+    "Program z 2026: ruch musi być ciągły w każdym powtórzeniu",
+    "Szybkie powtórzenia nadal muszą spełniać każdą część standardu",
+    "Typowy błąd: szybkie burpees z niepełnym wyprostem w pozycji górnej"
+   ],
+   "narration": "Program z 2026 dodaje, że ruch musi być ciągły w każdym powtórzeniu: w dół do ziemi, w górę do pozycji stojącej i wyskok, jako jeden ruch. Podaje też typowy scenariusz, na który trzeba uważać: zawodnik robi szybkie burpees bez pełnego wyprostu w pozycji górnej. Pytanie jest zawsze to samo. Czy powtórzenie spełniło standard? Klatka piersiowa na ziemi, biodra i kolana wyprostowane w pozycji górnej, potem wyskok z rękami nad uszami. Jeśli nie, nie jest to pełne burpee."
+  },
+  {
+   "heading": "W skrócie",
+   "points": [
+    "Dolna: leżenie przodem, klatka piersiowa dotyka ziemi",
+    "Górna: zrównoważona i wyprostowana, biodra i kolana wyprostowane",
+    "Potem wyskok z rękami nad uszami",
+    "Jeden ciągły ruch i każde powtórzenie według standardu, jak szybko by nie było"
+   ],
+   "narration": "W skrócie. Jedno pełne burpee prowadzi z pozycji dolnej do górnej, po czym następuje wyskok. W pozycji dolnej zawodnik leży przodem z klatką piersiową dotykającą ziemi. W pozycji górnej stoi zrównoważony i wyprostowany, z wyprostowanymi biodrami i kolanami. Potem wyskakuje z rękami nad uszami. Każde powtórzenie to jeden ciągły ruch i każde musi spełniać standard, jak szybko by go nie wykonano."
+  }
+ ],
+ "ocr-6-2": [
+  {
+   "heading": "Zawodnicy liczą, ty nie",
+   "points": [
+    "Zawodnicy liczą swoje burpees sami",
+    "Sędziowie nie liczą za nich",
+    "Twoje zadanie to standard: obserwuj każde powtórzenie",
+    "Przypominaj zawodnikom, że ruch i liczba powtórzeń są monitorowane"
+   ],
+   "narration": "Za liczenie swoich burpees odpowiadają sami zawodnicy. Sędziowie nie liczą za nich. Dzięki temu możesz zająć się tym, co ważne: obserwowaniem, czy każde powtórzenie spełnia standard ruchu. Program z 2026 sugeruje przypominanie zawodnikom, że monitorowany jest zarówno standard ruchu, jak i liczba powtórzeń. Tam, gdzie jest wideo, liczba i jakość burpees są sprawdzane jeszcze raz w przeglądzie wideo."
+  },
+  {
+   "heading": "Obserwowanie standardu",
+   "points": [
+    "Stań tak, by twój widok na zawodnika był niczym nieprzesłonięty",
+    "Sprawdzaj klatkę piersiową w dole, biodra i kolana w górze, ręce w wyskoku",
+    "Dbaj, by burpees były w strefie, a opaska leżała na ziemi przed zawodnikiem",
+    "Nie dotykaj ani nie przesuwaj zawodnika pod kamerę"
+   ],
+   "narration": "Ustaw się tak, by twój widok nie był niczym zasłonięty. Musisz widzieć, jak klatka piersiowa sięga ziemi, jak biodra i kolana prostują się w górze i jak ręce unoszą się nad uszy w wyskoku. Pilnuj też strefy, bo burpees poza nią się nie liczą, oraz opaski, która leży na ziemi przed zawodnikiem. Nigdy nie przesuwaj fizycznie ciała ani twarzy zawodnika pod kamerę."
+  },
+  {
+   "heading": "Żądanie dodatkowych burpees",
+   "points": [
+    "Powtórzenie poniżej standardu: wymagaj dodatkowego burpee",
+    "Wyjaśnij jasno i spokojnie, czego zabrakło",
+    "Wyczerpani zawodnicy mogą kontynuować, jeśli ich wysiłek jest szczery"
+   ],
+   "narration": "Gdy powtórzenie nie spełnia standardu, wymagaj od zawodnika dodatkowych burpees, aby kara składała się z pełnych burpees. Wyjaśnij jasno i spokojnie, czego zabrakło, na przykład klatka piersiowa nie dotknęła ziemi albo biodra w górze były nadal zgięte. Niektórzy zawodnicy będą wyczerpani. Program z 2026 mówi, by pozwolić im kontynuować, jeśli ich wysiłek jest szczery. Mogą dalej robić, ale każde powtórzenie nadal musi spełniać standard."
+  },
+  {
+   "heading": "Gdy zawodnik kwestionuje twoją decyzję",
+   "points": [
+    "Zachowaj spokój, wyjaśnij zasadę i unikaj kłótni",
+    "Zapisz numer z opaski i to, co było przedmiotem sporu",
+    "Skieruj spór do sędziego głównego",
+    "Nie zaostrzaj konfliktu na przeszkodzie"
+   ],
+   "narration": "Niektórzy zawodnicy nie zgodzą się, gdy poprosisz o dodatkowe burpees. Zachowaj spokój i profesjonalizm, jasno wyjaśnij zasadę i nie daj się wciągnąć w kłótnię. Zapisz numer z opaski zawodnika i to, co było przedmiotem sporu, i zgłoś to sędziemu głównemu możliwie szybko. Spory rozstrzyga sędzia główny, a nie ty masz je wygrywać na przeszkodzie. Podczas załatwiania sprawy dalej obserwuj pozostałych zawodników w strefie."
+  },
+  {
+   "heading": "W skrócie",
+   "points": [
+    "Zawodnicy liczą; ty obserwujesz standard",
+    "Wyraźny widok na klatkę piersiową, biodra i kolana oraz ręce",
+    "Poniżej standardu: wymagaj dodatkowych burpees, wyjaśnione spokojnie",
+    "Wyczerpani, ale szczerzy: pozwól kontynuować; spory idą do sędziego głównego"
+   ],
+   "narration": "W skrócie. Zawodnicy liczą swoje burpees, a ty obserwujesz standard. Stań tak, byś wyraźnie widział klatkę piersiową w dole, biodra i kolana w górze oraz ręce w wyskoku, i dbaj, by burpees były w strefie. Jeśli powtórzenie jest poniżej standardu, wymagaj dodatkowych burpees i spokojnie wyjaśnij dlaczego. Pozwól wyczerpanym zawodnikom kontynuować, jeśli ich wysiłek jest szczery. A jeśli zawodnik kwestionuje twoją decyzję, zapisz numer i skieruj sprawę do sędziego głównego."
+  }
+ ],
+ "ocr-6-3": [
+  {
+   "heading": "Niewykonane burpees zamieniają się w czas",
+   "points": [
+    "Zawodnikom, którzy nie wykonają wymaganych burpees, dolicza się czas do wyniku",
+    "Niedobory wykrywa się na trasie lub w przeglądzie przed ceremonią nagród",
+    "Ile czasu się dolicza, jest w trakcie przeglądu na 2027"
+   ],
+   "narration": "Tam, gdzie karą są burpees, a zawodnik nie wykona wymaganej liczby, dolicza się czas do jego całkowitego czasu mety. Niewykonane burpees można stwierdzić w trakcie biegu albo w przeglądzie po biegu, przed ceremonią nagród. Wszystkie trzy źródła z 2026 zgadzają się, że niewykonane burpees kosztują czas. Nie zgadzają się co do tego, ile, więc ta lekcja nie podaje żadnej wartości. Kwoty są w trakcie przeglądu na 2027, dopóki nie rozstrzygnie tego osoba odpowiedzialna za sędziowanie.",
+   "review": "W trakcie przeglądu na 2027: zasada 3.4.2 dolicza 30 sekund za każde z pierwszych 10 niewykonanych burpees i łącznie 10 minut, jeśli niewykonanych jest więcej niż 10. Officiating SOP dolicza po 30 sekund za każde i 10 minut, jeśli wykonano mniej niż 20; program z 2026 mówi, że 11 lub więcej nieprawidłowych to 10 minut, a mniej niż 20 to dyskwalifikacja. Ta lekcja nie podaje żadnej wartości, dopóki nie rozstrzygnie tego osoba odpowiedzialna za sędziowanie: kary potwierdza sędzia główny."
+  },
+  {
+   "heading": "Gdzie źródła z 2026 się różnią",
+   "points": [
+    "Ile czasu dodaje każde niewykonane burpee i czy jest limit",
+    "Gdzie leży próg: w burpees niewykonanych czy wykonanych",
+    "Czy duży niedobór oznacza karę czasową, czy dyskwalifikację",
+    "Stadion, z karą 15 burpees, też jest sporny"
+   ],
+   "narration": "Regulamin, procedura sędziowania i program z 2026 opisują kary czasowe za burpees każde inaczej. Różnią się tym, ile czasu dodaje niewykonane burpee i czy jest limit. Różnią się tym, gdzie leży próg, liczony w burpees niewykonanych czy w burpees wykonanych. I różnią się tym, czy duży niedobór oznacza długą karę czasową, czy dyskwalifikację. Stadion, gdzie karą jest piętnaście burpees, ma ten sam problem. Dopóki nie rozstrzygnie tego osoba odpowiedzialna za sędziowanie, traktuj każdą wartość jako będącą w trakcie przeglądu.",
+   "review": "W trakcie przeglądu na 2027: zasada 3.4.2 dolicza 30 sekund za każde z pierwszych 10 niewykonanych burpees i łącznie 10 minut za więcej niż 10 (Stadion: po 30 sekund za każde z pierwszych 5, 5 minut za więcej niż 5). Officiating SOP dolicza 30 sekund za każde niewykonane burpee i 10 minut, jeśli wykonano mniej niż 20 (Stadion: mniej niż 10). Program z 2026 mówi: po 30 sekund za każde, 10 minut za 11 lub więcej nieprawidłowych i dyskwalifikacja za mniej niż 20. Na razie nie podawaj zawodnikom żadnych wartości: pytania o kary czasowe kieruj do sędziego głównego."
+  },
+  {
+   "heading": "Co jest niewykonanym burpee",
+   "points": [
+    "Burpee, które nie zostało wykonane",
+    "Burpee poza wyznaczoną strefą: nie liczy się do kary",
+    "Powtórzenie poniżej standardu ruchu: nie jest pełnym burpee",
+    "Przegląd bierze pod uwagę zarówno liczbę, jak i jakość burpees"
+   ],
+   "narration": "Niedobór to nie tylko burpees, których w ogóle nie wykonano. Burpees wykonane poza wyznaczoną strefą nie liczą się do kary. Powtórzenie, które nie spełnia standardu ruchu, nie jest pełnym burpee, a program z 2026 traktuje burpees niewykonane i nieprawidłowe tak samo. Zgodnie z procedurą sędziowania przegląd rozstrzyga zarówno o ilości, jak i o jakości burpees. Dlatego tak ważne jest egzekwowanie standardu na miejscu i żądanie dodatkowych powtórzeń.",
+   "review": "W trakcie przeglądu na 2027: ile czasu dodają niewykonane lub nieprawidłowe burpees, różni się między zasadą 3.4.2, Officiating SOP i programem z 2026. To, co jest pełnym burpee, się nie różni: stosuj zasady 3.17.4 i 3.17.5, a karę czasową pozostaw sędziemu głównemu."
+  },
+  {
+   "heading": "Kto decyduje o karze",
+   "points": [
+    "Z wideo: decyzje o liczbie i jakości burpees zapadają w przeglądzie wideo",
+    "Bez wideo: decydujesz na miejscu, zapisujesz i przekazujesz sędziemu głównemu",
+    "Sędzia główny przekazuje potwierdzone kary Race Directorowi i zespołowi pomiaru czasu",
+    "Kary są pokazywane w namiocie wyników w trakcie przeglądu"
+   ],
+   "narration": "Tam, gdzie jest wideo, decyzje o tym, ile burpees wykonano i jak dobrze, zapadają w przeglądzie wideo. Sędzia główny zarządza tym przeglądem, gdy sędziowie wracają ze swoich przeszkód, i przekazuje potwierdzone kary i dyskwalifikacje Race Directorowi i zespołowi pomiaru czasu. Tam, gdzie nie ma wideo, procedura sędziowania mówi, że decyduje sędzia na miejscu, dokumentuje decyzję na piśmie i przekazuje ją sędziemu głównemu po powrocie z przeszkody. Kary są pokazywane w namiocie wyników w trakcie przeglądu.",
+   "review": "W trakcie przeglądu na 2027: Officiating SOP (6.iii) mówi, że decyzje o karach za burpees zapadają w przeglądzie wideo tam, gdzie jest wideo, a tam, gdzie go nie ma, podejmuje je na piśmie sędzia na miejscu. Program z 2026 mówi, że decyzje o karach podejmuje zespół przeglądu wideo. Na razie stosuj Officiating SOP: gdy nie ma kamery, zapisz swoją decyzję i przekaż ją sędziemu głównemu."
+  },
+  {
+   "heading": "W skrócie",
+   "points": [
+    "Niewykonane lub nieprawidłowe burpees dodają czas do wyniku zawodnika",
+    "Ile czasu, jest w trakcie przeglądu na 2027: pytania kieruj do sędziego głównego",
+    "Egzekwuj standard i strefę na miejscu",
+    "Z wideo decyduje przegląd; bez niego zapisz swoją decyzję"
+   ],
+   "narration": "W skrócie. Niewykonane lub nieprawidłowe burpees dodają czas do wyniku zawodnika, ale ile czasu, jest w trakcie przeglądu na 2027, bo regulamin, procedura sędziowania i program z 2026 się różnią. Nie podawaj żadnej wartości: pytania kieruj do sędziego głównego. To, nad czym masz kontrolę, jest na trasie: standard ruchu i strefa. Tam, gdzie jest wideo, decyduje przegląd. Tam, gdzie go nie ma, zapisz swoją decyzję i przekaż ją sędziemu głównemu.",
+   "review": "W trakcie przeglądu na 2027: czas doliczany za niewykonane burpees różni się między zasadą 3.4.2, Officiating SOP i programem z 2026 (każda wersja jest na drugim slajdzie), a SOP i program różnią się co do tego, kto decyduje, gdy nie ma wideo. Dopóki nie rozstrzygnie tego osoba odpowiedzialna za sędziowanie, nie podawaj żadnej wartości, trzymaj się Officiating SOP w sprawie pisemnych decyzji, a sporne decyzje kieruj do sędziego głównego."
+  }
+ ],
+ "ocr-7-1": [
+  {
+   "heading": "Odpowiadanie na pytanie zawodnika",
+   "points": [
+    "Zachowaj spokój i profesjonalizm, bez względu na ton pytania",
+    "Jasno wyjaśnij zasadę: czego wymagała przeszkoda i czego zabrakło",
+    "Unikaj kłótni: pytanie to nie debata"
+   ],
+   "narration": "Zawodnicy będą pytać o twoje decyzje, często zmęczeni i sfrustrowani. Zachowaj spokój i profesjonalizm. Odpowiadaj, jasno wyjaśniając zasadę: czego przeszkoda od nich wymagała i której części nie spełnili. Mów krótko, bo przy twojej przeszkodzie wciąż pojawiają się inni zawodnicy. Jeśli zawodnik przyjmie wyjaśnienie, skieruj go do kary. Jeśli nie, zrobił się z tego spór. Sporu nie rozstrzyga się kłótnią na przeszkodzie. Kieruje się go do sędziego głównego."
+  },
+  {
+   "heading": "Gdy robi się z tego spór",
+   "points": [
+    "Zapisz numer z opaski zawodnika",
+    "Zapisz powód, na przykład oblana przeszkoda bez wykonanej kary",
+    "Zgłoś to sędziemu głównemu możliwie szybko",
+    "Nie zaostrzaj konfliktu na przeszkodzie"
+   ],
+   "narration": "Jeśli zawodnik kwestionuje twoją decyzję, masz trzy zadania. Po pierwsze zapisz numer z jego opaski. Zasady czynią każdego zawodnika odpowiedzialnym za to, by jego numer startowy był na opasce i czytelny przez cały czas. Po drugie zapisz powód sporu, na przykład że zawodnik oblał przeszkodę i nie wykonał kary. Po trzecie zgłoś to sędziemu głównemu, gdy tylko pozwolą na to warunki pracy. Decyzja nie zapada przy twojej przeszkodzie, więc nic nie zyskasz na zaostrzaniu konfliktu. Pisz notatki rzeczowo: sędzia główny będzie na nich polegał."
+  },
+  {
+   "heading": "Gdy nie możesz zdobyć numeru z opaski",
+   "points": [
+    "Zgłoś to sędziemu głównemu od razu",
+    "Podaj wyraźny opis: kolor ubrania, cechy szczególne, kategoria",
+    "Pomóż później rozpoznać zawodnika na trasie, jeśli cię poproszą"
+   ],
+   "narration": "Czasem zawodnik opuszcza okolice przeszkody bez wykonania kary, a ty nie możesz odczytać jego numeru. Procedura sędziowania to obejmuje. Zgłoś to natychmiast sędziemu głównemu, zamiast czekać do powrotu z przeszkody. Podaj wyraźny opis wyglądu: kolor ubrania, wszystko, co ułatwia rozpoznanie, oraz kategorię biegu, jeśli potrafisz ją określić. Możesz zostać poproszony o pomoc w rozpoznaniu zawodnika później na trasie. Tymczasem pozostań skupiony na swojej przeszkodzie i zawodnikach, którzy wciąż nadchodzą."
+  },
+  {
+   "heading": "Zachowanie zawodników",
+   "points": [
+    "Zawodnicy muszą traktować oficjeli uczciwie, z szacunkiem i uprzejmością",
+    "Obraźliwy, grożący lub lżący język czy zachowanie łamie zasady",
+    "Karę za naruszenie zasad zachowania ustala Head Official",
+    "Twoja rola: zapisz numer, odnotuj, co się stało, zgłoś"
+   ],
+   "narration": "Zasady oczekują, że zawodnicy będą traktować wszystkich na wydarzeniu, także oficjeli, uczciwie, z szacunkiem i uprzejmością oraz nie będą używać obraźliwego, grożącego ani lżącego języka czy zachowania. Naruszenie zasad zachowania może prowadzić do kary, zależnej od jego wagi. W regulaminie ta decyzja należy do Head Official, a nie do ciebie. Rażące niesportowe zachowanie lub przemoc fizyczna wobec oficjela mogą być podstawą zawieszenia. Twoja rola jest taka sama jak w każdym sporze: zachowaj spokój, zapisz numer z opaski, odnotuj, co powiedziano lub zrobiono, i zgłoś to sędziemu głównemu."
+  },
+  {
+   "heading": "Po biegu: protesty i przegląd wideo",
+   "points": [
+    "Wyniki nie są ostateczne, dopóki nie odbędzie się oficjalny przegląd wideo",
+    "Zawodnicy zgłaszają protesty do Head Official w okresie na protesty",
+    "Oficjele nie muszą rozpatrywać nagrań zrobionych przez zawodników ani kibiców",
+    "Oficjalnych nagrań wideo nigdy nie przekazuje się zawodnikom"
+   ],
+   "narration": "Sporna decyzja nie kończy się przy twojej przeszkodzie. Zanim wyniki staną się ostateczne, odbywa się oficjalny przegląd wideo. Zawodnik, który chce zakwestionować karę, składa protest do Head Official w okresie na protesty, który zaczyna się, gdy tylko przekroczy linię mety. Oficjele nie mają obowiązku rozpatrywać filmów ani zdjęć zrobionych przez zawodników czy kibiców. Procedura sędziowania mówi też, że oficjalne nagrania nigdy nie są przekazywane zawodnikom. Jeśli więc zawodnik oferuje ci nagranie z telefonu albo prosi o pokazanie twojego, skieruj go do sędziego głównego i procesu protestów.",
+   "review": "W trakcie przeglądu na 2027: zasada 3.19.1 kończy okres na protesty 15 minut przed ceremonią nagród dla kategorii zawodnika. Officiating SOP podaje jako przykład pół godziny przed ceremonią i pozwala korygować błędy sędziów dotyczące zawodników spoza podium do dwóch godzin po ostatecznej ceremonii nagród. Na razie stosuj regulamin, a pytania o czas kieruj do sędziego głównego."
+  },
+  {
+   "heading": "W skrócie",
+   "points": [
+    "Zachowaj spokój, jasno wyjaśnij zasadę, nie kłóć się",
+    "Spór: numer z opaski, co się stało, zgłoszenie do sędziego głównego",
+    "Brak numeru: zgłoś od razu, z wyraźnym opisem",
+    "Protesty i przegląd wideo odbywają się po biegu, nie przy twojej przeszkodzie"
+   ],
+   "narration": "W skrócie. Odpowiadaj na pytania spokojnie i jasno wyjaśniaj zasadę, nie kłócąc się. Jeśli robi się z tego spór, zapisz numer z opaski, zapisz, co się stało, i zgłoś to sędziemu głównemu możliwie szybko. Jeśli nie możesz zdobyć numeru, zgłoś to od razu z wyraźnym opisem zawodnika. Obraźliwe zachowanie zapisuje się i zgłasza w ten sam sposób. Ostateczna decyzja zapada później, przez przegląd wideo i okres na protesty, a nie przy twojej przeszkodzie."
+  }
+ ],
+ "ocr-8-1": [
+  {
+   "heading": "Profesjonalne zachowanie przy przeszkodzie",
+   "points": [
+    "Pozostań skupiony na swojej przeszkodzie",
+    "Unikaj rozproszeń i długich rozmów",
+    "Bądź neutralny i uprzejmy wobec każdego zawodnika",
+    "Reprezentuj Spartan profesjonalnie"
+   ],
+   "narration": "Zasady istnieją po to, by każde wydarzenie Spartan było prowadzone uczciwie i konsekwentnie, w duchu fair play i uczciwości. Przy swojej przeszkodzie to ty sprawiasz, że tak jest. Pozostań skupiony na przeszkodzie i zawodnikach, którzy ją podejmują. Unikaj rozproszeń i długich rozmów, bo niepowodzenia, którego nie zobaczyłeś, nie możesz ocenić. Pozostań neutralny i uprzejmy wobec wszystkich, kimkolwiek są. Dla zawodników i kibiców jesteś Spartan, więc reprezentuj Spartan profesjonalnie."
+  },
+  {
+   "heading": "Miejsce sędziego w zasadach",
+   "points": [
+    "Sędzia to oficjel wyznaczony przez Spartan, który dba o przestrzeganie zasad",
+    "Zwykle ustawiony przy przeszkodzie lub w namiocie przeglądu wideo",
+    "Head Official jest głównym decydentem i ostatecznym autorytetem w sprawach zasad",
+    "Twój łańcuch: ty, sędzia główny, potem Race Director lub zespół pomiaru czasu"
+   ],
+   "narration": "Regulamin definiuje sędziego jako oficjela wyznaczonego przez Spartan, którego zadaniem jest dbać o przestrzeganie zasad, zwykle ustawionego przy przeszkodach lub w namiocie przeglądu wideo. Sędziowie podlegają Head Official, który jest głównym decydentem we wszystkich sprawach zasad na wydarzeniu i ostatecznym autorytetem w ich egzekwowaniu i interpretacji. W procedurze sędziowania i w tym programie podlegasz sędziemu głównemu. Sędzia główny zgłasza następnie incydenty biegu Race Directorowi, a kary zespołowi pomiaru czasu."
+  },
+  {
+   "heading": "O czym decydujesz",
+   "points": [
+    "Egzekwujesz zasady przeszkody",
+    "Kierujesz zawodników, którzy oblewają, do właściwej kary",
+    "Dokumentujesz naruszenia",
+    "Nie jesteś pewien kary lub sposobu jej egzekwowania? Natychmiast skontaktuj się z sędzią głównym"
+   ],
+   "narration": "Przy swojej przeszkodzie odpowiadasz za trzy rzeczy. Egzekwujesz zasady przeszkody. Kierujesz zawodnika, który oblewa, do właściwej kary dla tej przeszkody. I dokumentujesz naruszenia. Tam, gdzie nie ma wideo z burpees, procedura sędziowania czyni decyzję o ilości i jakości burpees twoją: podejmujesz ją na miejscu, zapisujesz i przekazujesz sędziemu głównemu po powrocie. Jeśli nie jesteś pewien rodzaju kary lub sposobu jej egzekwowania, natychmiast skontaktuj się z sędzią głównym."
+  },
+  {
+   "heading": "Kto potwierdza karę",
+   "points": [
+    "Ostateczne decyzje o karach mogą potwierdzać sędzia główny i zespół pomiaru czasu",
+    "W przeglądzie wideo oficjele nadal mogą oceniać kary, aż po dyskwalifikację",
+    "Sędzia główny przekazuje potwierdzone kary Race Directorowi i pomiarowi czasu",
+    "Twoje notatki są dowodem, na którym opierają się te decyzje"
+   ],
+   "narration": "Twoja decyzja rozpoczyna proces, ale nie zawsze jest ostatnim słowem. Program mówi, że ostateczne decyzje o karach mogą potwierdzać sędzia główny i zespół pomiaru czasu. Zgodnie z regulaminem Head Official odpowiada ostatecznie za przestrzeganie zasad, a podczas oficjalnego przeglądu wideo oficjele biegu nadal mogą oceniać kary, łącznie z dyskwalifikacją. Sędzia główny zarządza tym przeglądem i przekazuje potwierdzone kary i dyskwalifikacje Race Directorowi i zespołowi pomiaru czasu. Dlatego twoje notatki mają znaczenie: jasne, rzeczowe zapisy pozwalają potwierdzić właściwą decyzję."
+  },
+  {
+   "heading": "W skrócie",
+   "points": [
+    "Skupiony, neutralny, uprzejmy i profesjonalny",
+    "Egzekwujesz zasady, kierujesz zawodników do kar i dokumentujesz naruszenia",
+    "Sędzia główny potwierdza kary i zajmuje się tym, co mu przekażesz",
+    "Nie jesteś pewien? Natychmiast skontaktuj się z sędzią głównym"
+   ],
+   "narration": "W skrócie. Pozostań skupiony na swojej przeszkodzie, neutralny i uprzejmy oraz reprezentuj Spartan profesjonalnie. Egzekwujesz zasady przeszkody, kierujesz zawodników, którzy oblewają, do właściwej kary i dokumentujesz naruszenia. Head Official ma ostateczną władzę w sprawach zasad, a sędzia główny potwierdza kary, zajmuje się tym, co mu przekażesz, i przekazuje je dalej Race Directorowi i pomiarowi czasu. Jeśli kiedykolwiek nie jesteś pewien, natychmiast skontaktuj się z sędzią głównym."
+  }
+ ],
+ "ocr-8-2": [
+  {
+   "heading": "Bezpieczeństwo jest częścią pracy",
+   "points": [
+    "Zasady mają chronić zdrowie, bezpieczeństwo i dobrostan zawodników",
+    "Monitoruj bezpieczeństwo swojej przeszkody i dbaj, by zawodnicy poruszali się bezpiecznie",
+    "Nie dopuszczaj niebezpiecznych skrótów: zawodnicy muszą pokonać całą oficjalną trasę"
+   ],
+   "narration": "Jednym z celów zasad jest ochrona zdrowia, bezpieczeństwa i dobrostanu zawodników, w stopniu, w jakim da się to rozsądnie osiągnąć w biegach z przeszkodami. Program stawia bezpieczeństwo zawodnika obok uczciwości jako twój priorytet. Oznacza to monitorowanie bezpieczeństwa twojej przeszkody, dbanie, by zawodnicy poruszali się bezpiecznie, i niedopuszczanie niebezpiecznych skrótów. Skrót nigdy nie jest czymś, na co możesz pozwolić: zasady wymagają, by zawodnicy pokonali oficjalną trasę w całości."
+  },
+  {
+   "heading": "Obejrzyj i zgłaszaj zagrożenia od razu",
+   "points": [
+    "Przed pierwszą falą obejrzyj konfigurację i sprawdź, czy jest sprawna",
+    "Przejdź pętlę karną i poznaj kierunek podejścia zawodników",
+    "Zagrożenia zgłaszaj natychmiast: sędzia główny, Race Director lub personel Spartan"
+   ],
+   "narration": "Bezpieczeństwo zaczyna się przed pierwszą falą competitive. Gdy dotrzesz do swojej przeszkody, obejrzyj konfigurację i sprawdź, czy jest sprawna. Zobacz przebieg biegu i kierunek, z którego będą podchodzić zawodnicy, oraz przejdź całą pętlę karną, aby znać jej trasę i punkt powrotu. Jeśli cokolwiek cię niepokoi, wątpliwość, problem z bezpieczeństwem lub niespójność, zgłoś to natychmiast sędziemu głównemu lub Race Directorowi. W trakcie biegu każde zagrożenie zgłaszaj od razu sędziemu głównemu, Race Directorowi lub personelowi Spartan."
+  },
+  {
+   "heading": "Bezpieczny ruch w zasadach przeszkód",
+   "points": [
+    "Rope Climb: schodź bezpiecznie i pod kontrolą, z co najmniej jedną ręką na linie",
+    "Hercules Hoist: opuszczaj ciężar pod kontrolą; upuszczenie go to niepowodzenie",
+    "Pływanie lub przeprawa przez wodę: bez skoków na główkę; skok na główkę to niepowodzenie"
+   ],
+   "narration": "Niektóre zasady przeszkód wprost zawierają bezpieczeństwo i egzekwujesz je jak każdą inną zasadę. Przy Rope Climb zawodnicy muszą wrócić na ziemię w sposób bezpieczny i kontrolowany, z co najmniej jedną ręką stale dotykającą liny. Przy Hercules Hoist ciężar trzeba opuszczać pod kontrolą, a nie w swobodnym spadku, a upuszczenie go w niekontrolowany sposób jest niepowodzeniem. Przy pływaniu lub przeprawie przez wodę skoki na główkę są zabronione i stanowią niepowodzenie. Poznaj zasady bezpieczeństwa swojej przeszkody, zanim pojawi się pierwszy zawodnik."
+  },
+  {
+   "heading": "Ta sama interpretacja przez cały bieg",
+   "points": [
+    "Stosuj zasady jednakowo wobec wszystkich zawodników",
+    "Używaj tej samej interpretacji od pierwszej fali do ostatniej",
+    "Każda kara obowiązuje konsekwentnie w ramach swojej kategorii lub serii",
+    "Twój nacisk: kategorie Competitive, Elite i Age Group"
+   ],
+   "narration": "Konsekwencja sprawia, że wyniki są uczciwe. Stosuj zasady jednakowo wobec każdego zawodnika i używaj tej samej interpretacji od pierwszej fali do ostatniej. Decyzja, którą podejmujesz wobec pierwszego zawodnika Elite, jest standardem dla wszystkich po nim. Regulamin mówi, że każda kara jest stosowana konsekwentnie w ramach wyznaczonej kategorii lub serii. Twój nacisk to kategorie Competitive, Elite i Age Group, od których oczekuje się przestrzegania każdej zasady. Zawodników Open także zachęca się do przestrzegania zasad, w luźniejszej atmosferze."
+  },
+  {
+   "heading": "Trzymaj się zasady i eskaluj, gdy nie jesteś pewien",
+   "points": [
+    "Oceniaj według spisanych rodzajów niepowodzeń przeszkody",
+    "Unikaj osobistych ocen wykraczających poza zasadę",
+    "Gdy nie jesteś pewien, przekaż decyzję do sędziego głównego"
+   ],
+   "narration": "Konsekwencja oznacza też niedodawanie własnych zasad. Oceniaj każde podejście według spisanych rodzajów niepowodzeń przeszkody, a nie według tego, co sam uważasz za sprawiedliwe, i unikaj ocen wykraczających poza to, co mówi zasada. Jeśli sytuacja nie jest jasno uregulowana albo nie jesteś pewien, jaka kara obowiązuje lub jak ją egzekwować, natychmiast skontaktuj się z sędzią głównym. Decyzję przekazaną wyżej i podjętą raz można potem zastosować tak samo wobec wszystkich."
+  },
+  {
+   "heading": "W skrócie",
+   "points": [
+    "Monitoruj bezpieczeństwo, wymagaj bezpiecznego ruchu, nie dopuszczaj skrótów",
+    "Obejrzyj przeszkodę wcześniej i zgłaszaj zagrożenia od razu",
+    "Te same zasady, ta sama interpretacja, każdy zawodnik, cały bieg",
+    "Nie jesteś pewien? Eskaluj do sędziego głównego"
+   ],
+   "narration": "W skrócie. Bezpieczeństwo zawodnika jest obok uczciwości twoim priorytetem. Monitoruj swoją przeszkodę, dbaj, by zawodnicy poruszali się bezpiecznie, i nie dopuszczaj skrótów. Obejrzyj przeszkodę i przejdź pętlę karną przed pierwszą falą, a zagrożenia zgłaszaj od razu sędziemu głównemu, Race Directorowi lub personelowi Spartan. Stosuj te same zasady, z tą samą interpretacją, wobec każdego zawodnika przez cały bieg. A gdy nie jesteś pewien, eskaluj do sędziego głównego."
+  }
+ ],
+ "ocr-9-1": [
+  {
+   "heading": "Obserwuj ręce i stopy",
+   "points": [
+    "Większość rodzajów niepowodzeń dotyczy tego, czego dotykają ręce i stopy",
+    "Monkey Bars: tylko ręce i ramiona; stopy lub nogi na drążkach to niepowodzenie",
+    "Olympus: stopy mogą opierać się o ścianę, ale stopa na chwycie lub w otworze to niepowodzenie"
+   ],
+   "narration": "Większość niepowodzeń na przeszkodach sprowadza się do tego, czego dotykają ręce i stopy zawodnika, więc tam kierujesz wzrok. Na Monkey Bars zawodnik przemieszcza się, używając tylko rąk i ramion. Dotknięcie drążków stopami lub nogami to niepowodzenie, podobnie jak dotknięcie ziemi w celu uzyskania przewagi. Na Olympus zawodnicy mogą opierać stopy i kolana o ścianę dla podparcia, ale dotknięcie stopami jakiegokolwiek chwytu lub otworu to niepowodzenie. Wiedz dokładnie, jakie kontakty dopuszcza twoja przeszkoda."
+  },
+  {
+   "heading": "Skup się na dokładnej zasadzie",
+   "points": [
+    "Znaj instrukcje przeszkody, rodzaje niepowodzeń i uwagi przed pierwszą falą",
+    "Helix i Z Wall: podejście zaczyna się przy czterech punktach kontaktu",
+    "Monkey Bars, Multi-Rig, Olympus: gdy obie stopy opuszczą stopień startowy"
+   ],
+   "narration": "Każda przeszkoda ma własną zasadę, z instrukcjami dla zawodników, rodzajami niepowodzeń i dodatkowymi uwagami. Obserwuj tę zasadę, a nie ogólne wyobrażenie dobrego podejścia. Wiedz, kiedy zaczyna się podejście, bo od tej chwili zawodnik jest zaangażowany. Na Helix i Z Wall zaczyna się, gdy zawodnik ma cztery punkty kontaktu. Na Monkey Bars, Multi-Rig i Olympus zaczyna się, gdy obie stopy opuściły stopień startowy. Jeśli przegapisz początek, nie możesz być pewien, co się liczy."
+  },
+  {
+   "heading": "Gdzie stanąć",
+   "points": [
+    "Miejsce z niezasłoniętym widokiem na podejścia, ukończenia i niepowodzenia",
+    "Sprawdź przebieg biegu i kierunek podejścia zawodników",
+    "Przewiduj, gdzie zwykle zdarzają się niepowodzenia, i miej te miejsca w polu widzenia"
+   ],
+   "narration": "Przed pierwszą falą ustal najlepsze miejsce do stania. Potrzebujesz niezasłoniętego widoku na podejścia, ukończenia i niepowodzenia. Zobacz przebieg biegu i kierunek, z którego podchodzą zawodnicy. Pomyśl, gdzie zwykle zdarzają się niepowodzenia na twojej przeszkodzie, i upewnij się, że te miejsca są wyraźnie widoczne. Procedura sędziowania nazywa przeszkody o historii częstych niepowodzeń przeszkodami o dużej liczbie niepowodzeń (high-failure). Wymagają aktywnego egzekwowania, więc twoja pozycja tam ma jeszcze większe znaczenie."
+  },
+  {
+   "heading": "Gotowy do reakcji na niepowodzenie",
+   "points": [
+    "Stań tam, skąd możesz zwrócić się do zawodnika, który oblewa, i skierować go do kary",
+    "Znaj trasę pętli karnej i punkt powrotu",
+    "Miej dzwon w polu widzenia: kopnięcie go to niepowodzenie"
+   ],
+   "narration": "Zauważenie niepowodzenia to połowa zadania. Druga połowa to zareagowanie wobec zawodnika, więc ustaw się tak, by móc się do niego zwrócić, gdy tylko oblewa, i wskazać mu karę. Przejdź wcześniej pętlę karną, żebyś znał jej trasę i miejsce, w którym wraca na trasę biegu. Miej też dzwon w polu widzenia. Zgodnie z zasadą ogólną w dzwon można uderzać tylko rękami, dłońmi lub inną częścią ciała powyżej klatki piersiowej. Kopnięcie dzwonu to niepowodzenie. Sprawdź też zasadę swojej przeszkody."
+  },
+  {
+   "heading": "W skrócie",
+   "points": [
+    "Obserwuj ręce i stopy",
+    "Znaj dokładną zasadę i moment, w którym zaczyna się podejście",
+    "Stań tak, by wyraźnie widzieć miejsca niepowodzeń",
+    "Bądź gotowy skierować zawodnika do kary"
+   ],
+   "narration": "W skrócie. Obserwuj ręce i stopy zawodnika, bo tam zdarza się większość niepowodzeń. Znaj dokładną zasadę swojej przeszkody, w tym moment rozpoczęcia podejścia. Stań tam, skąd widok jest niezasłonięty, a zwykłe miejsca niepowodzeń są w polu widzenia. I ustaw się tak, by móc zareagować wobec zawodnika, gdy tylko oblewa, i skierować go do właściwej kary."
+  }
+ ],
+ "ocr-9-2": [
+  {
+   "heading": "Korzystanie z konstrukcji nośnej",
+   "points": [
+    "Ściany: korzystanie z konstrukcji nośnej, boków lub pasów to niepowodzenie",
+    "Rigi: używanie pionowej kratownicy jak drabiny to niepowodzenie",
+    "Pozioma kratownica może być użyta do startu lub przejścia, jeśli zasada na to pozwala"
+   ],
+   "narration": "Kratownica to główna konstrukcja nośna przeszkody: metalowe belki ukośne, pionowe i poziome. Wiele przeszkód zabrania z niej korzystać. Na ścianach korzystanie z konstrukcji nośnej, boków ściany lub pasów, by utrzymać równowagę, wspiąć się lub zejść, to niepowodzenie. Na Monkey Bars i innych rigach używanie pionowej kratownicy jak drabiny do startu, przejścia lub zakończenia to niepowodzenie. Ale wiele rigów pozwala używać poziomej kratownicy do startu albo do przejścia w trakcie trawersu. Sprawdź, co obowiązuje na twojej przeszkodzie."
+  },
+  {
+   "heading": "Chwytanie poza dozwolonym obszarem",
+   "points": [
+    "Multi-Rig: chwytanie lin, zawiesi lub łańcuchów, na których wisi element, to niepowodzenie",
+    "Helix: używanie drążków z innego toru to niepowodzenie",
+    "Olympus: dotknięcie chwytu lub otworu stopami to niepowodzenie"
+   ],
+   "narration": "Chwytanie poza dozwolonym obszarem oznacza używanie części przeszkody, której zasada nie dopuszcza. Na Multi-Rig zawodnicy mogą używać tylko elementów do chwytania. Chwytanie lin, zawiesi lub łańcuchów, które mocują je do konstrukcji, to niepowodzenie, podobnie jak korzystanie z więcej niż jednego toru. Na Helix używanie drążków z innego toru to niepowodzenie. Na Olympus ręce pracują na chwytach, a stopa na chwycie lub w otworze to niepowodzenie. Znaj dokładnie dozwolony obszar swojej przeszkody."
+  },
+  {
+   "heading": "Niepodjęcie przeszkody i pominięcie pętli",
+   "points": [
+    "Każdą przeszkodę trzeba podjąć: zawodnik musi ją co najmniej dotknąć",
+    "Zawodnik, który oblewa, musi ukończyć pętlę karną w całości",
+    "Pominięcie pętli jest karane: kara jest w trakcie przeglądu na 2027"
+   ],
+   "narration": "Każdą przeszkodę trzeba podjąć. Podejściem jest co najmniej dotknięcie przeszkody. Czasem oznacza to pokonanie wody lub trudnego terenu, by do niej dotrzeć, i nie można tego ominąć za karę, chyba że odprawa lub obsługa biegu na to pozwolą. Zawodnik, który podejmuje próbę i oblewa, musi ukończyć pętlę karną w całości. Pominięcie jej to naruszenie, które zapisujesz i zgłaszasz sędziemu głównemu. Źródła różnią się co do kary za to, więc jest w trakcie przeglądu.",
+   "review": "W trakcie przeglądu na 2027: zasada 3.4.1 dolicza 10 minut kary czasowej, gdy zawodnik nie ukończy pętli karnej. Program online z 2026 mówi, że może to skutkować dyskwalifikacją. Na razie stosuj regulamin i kieruj sprawę do sędziego głównego."
+  },
+  {
+   "heading": "Burpees niespełniające standardu",
+   "points": [
+    "Klatka piersiowa przy ziemi, wyprost z wyprostowanymi biodrami i kolanami, potem wyskok, ręce nad uszami",
+    "Burpees poza wyznaczoną strefą burpees się nie liczą",
+    "Zawodnicy liczą swoje burpees sami: ty nie liczysz za nich"
+   ],
+   "narration": "Nieprawidłowe burpees to jedno z najczęstszych naruszeń. Jedno pełne burpee prowadzi z pozycji dolnej, z klatką piersiową na ziemi, do zrównoważonej pozycji stojącej z wyprostowanymi biodrami i kolanami, po czym następuje wyskok z rękami nad uszami. Burpees wykonane poza wyznaczoną strefą się nie liczą. Zawodnicy liczą swoje burpees sami, a ty nie liczysz za nich. Gdy standard nie jest spełniony, program mówi, by wymagać dodatkowych burpees i przypomnieć zawodnikowi, że jego ruch i jego powtórzenia są monitorowane."
+  },
+  {
+   "heading": "Dzwon",
+   "points": [
+    "Na rigach takich jak Monkey Bars niezadzwonienie w dzwon to niepowodzenie",
+    "W dzwon można uderzać rękami, dłońmi lub ciałem powyżej klatki piersiowej",
+    "Kopnięcie dzwonu to niepowodzenie: bez ponownej próby, zawodnik przyjmuje karę"
+   ],
+   "narration": "Wiele przeszkód kończy się dzwonem, a na rigach takich jak Monkey Bars niezadzwonienie w niego jest rodzajem niepowodzenia. Zawodnik, który odpadnie przed zadzwonieniem w dzwon, oblał przeszkodę, choćby dotarł jak najdalej. Zgodnie z zasadą ogólną w dzwon można uderzać tylko rękami i dłońmi lub inną częścią ciała powyżej klatki piersiowej. Kopnięcie dzwonu stopami, nogami lub kolanami liczy się jako niepowodzenie przeszkody. Zawodnik nie może próbować ponownie i musi wykonać karę za tę przeszkodę."
+  },
+  {
+   "heading": "W skrócie",
+   "points": [
+    "Bez konstrukcji nośnej i pionowej kratownicy, chyba że zasada na to pozwala",
+    "Tylko dozwolone części przeszkody, na jednym torze",
+    "Podejmij każdą przeszkodę i ukończ każdą pętlę karną w całości",
+    "Burpees według standardu, w strefie; w dzwon się dzwoni, nigdy się go nie kopie"
+   ],
+   "narration": "W skrócie. Obserwuj zawodników korzystających z konstrukcji nośnej lub pionowej kratownicy jak drabiny tam, gdzie zasada tego zabrania. Obserwuj chwytanie poza dozwolonym obszarem, na przykład lin lub łańcuchów na rigu, albo korzystanie z innego toru. Każdą przeszkodę trzeba podjąć, a każdą pętlę karną ukończyć w całości. Burpees muszą spełniać standard i być wykonane w strefie. A w dzwon trzeba zadzwonić, a nigdy go nie kopać."
+  }
+ ],
+ "ocr-9-3": [
+  {
+   "heading": "Jak zdecydować",
+   "points": [
+    "Znajdź dokładną zasadę: instrukcje, rodzaje niepowodzeń i uwagi",
+    "Sprawdź, czy to, co zobaczyłeś, pasuje do wymienionego rodzaju niepowodzenia",
+    "Podejmij decyzję, skieruj zawodnika, zapisz i eskaluj, gdy nie jesteś pewien"
+   ],
+   "narration": "Ta lekcja przedstawia trzy sytuacje z programu z 2026. W każdej zdecyduj, co byś zrobił, zanim usłyszysz odpowiedź. Metoda jest za każdym razem ta sama. Znajdź dokładną zasadę przeszkody. Sprawdź, czy to, co zobaczyłeś, pasuje do jednego z jej wymienionych rodzajów niepowodzeń. Potem podejmij decyzję, skieruj zawodnika i zapisz, co się stało. Jeśli zasada tego nie rozstrzyga albo nie jesteś pewien, eskaluj do sędziego głównego."
+  },
+  {
+   "heading": "Scenariusz 1: krótki dotyk szczytu",
+   "points": [
+    "Zawodnik na Helix na chwilę dotyka jedną ręką szczytu przeszkody",
+    "Dotyk trwa moment i nie daje mu żadnej przewagi",
+    "Biegnie dalej i dzwoni w dzwon"
+   ],
+   "narration": "Zasada 4.2.6 wymienia dotknięcie szczytu Helix jako rodzaj niepowodzenia, bez warunku dotyczącego przewagi. Olympus i Z Wall są takie same. Decyzją popieraną przez regulamin jest więc niepowodzenie, a zawodnik przyjmuje karę, mimo że dotyk nic mu nie dał. Przewaga ma znaczenie tam, gdzie mówi o tym zasada. Na Monkey Bars, zgodnie z zasadą 4.2.7, dotknięcie ziemi stopami to niepowodzenie, gdy daje przewagę. Zawsze sprawdź brzmienie rodzaju niepowodzenia, zanim zdecydujesz.",
+   "review": "W trakcie przeglądu na 2027: program online z 2026 prosi sędziów o rozważenie, czy dotyk dał przewagę, i o skupienie się na celu zasady, a nie na drobnym przypadkowym kontakcie. Zasady 4.2.6, 4.2.10 i 4.2.17 wymieniają dotknięcie szczytu jako niepowodzenie bez testu przewagi. Na razie stosuj regulamin, a sporną decyzję kieruj do sędziego głównego."
+  },
+  {
+   "heading": "Scenariusz 2: szybkie burpees, biodra niewyprostowane",
+   "points": [
+    "Zawodnik wykonuje karne burpees po oblaniu Spear Throw",
+    "Porusza się szybko, a w górnej pozycji wielu powtórzeń jego biodra są nadal zgięte"
+   ],
+   "narration": "Te powtórzenia nie spełniają standardu. Zasada 3.17.4 definiuje pozycję górną jako zrównoważoną i wyprostowaną, z wyprostowanymi, a nie zgiętymi biodrami i kolanami, przed wyskokiem. Powtórzenie bez tego nie jest pełnym burpee. Program mówi, by wymagać dodatkowych burpees, gdy standard nie jest spełniony, i przypomnieć zawodnikowi, że jego ruch i powtórzenia są monitorowane. Nie licz za niego. Przy Spear Throw o niewykonanych burpees decyduje zespół przeglądu wideo. Bez wideo decydujesz na miejscu, zapisujesz i przekazujesz sędziemu głównemu.",
+   "review": "W trakcie przeglądu na 2027: czas doliczany za niewykonane lub nieprawidłowe burpees różni się między regulaminem (3.4.2), Officiating SOP i programem z 2026. Ta lekcja nie podaje żadnej wartości, dopóki nie rozstrzygnie tego osoba odpowiedzialna za sędziowanie."
+  },
+  {
+   "heading": "Scenariusz 3: przebiegnięcie obok pętli karnej",
+   "points": [
+    "Zawodnik oblewa przeszkodę zaliczeniową na twoim stanowisku",
+    "Kierujesz go do pętli karnej, ale on przebiega obok niej i biegnie dalej"
+   ],
+   "narration": "To wyraźne naruszenie. Zgodnie z zasadą 3.4.1 zawodnik, który podejmuje próbę i oblewa przeszkodę zaliczeniową, musi ukończyć pętlę karną, a ten tego nie zrobił. Nie goń go i nie kłóć się. Zapisz numer z opaski, udokumentuj, co się stało, i zgłoś to sędziemu głównemu możliwie szybko. Jeśli nie udało ci się odczytać numeru, zgłoś to natychmiast z wyraźnym opisem: kolor ubrania, cechy szczególne i kategoria biegu. Samą karę ustala się przez sędziego głównego, a nie przy twojej przeszkodzie.",
+   "review": "W trakcie przeglądu na 2027: zasada 3.4.1 dolicza 10 minut kary czasowej, gdy pętla karna nie zostanie ukończona. Program online z 2026 mówi, że może to skutkować dyskwalifikacją. Na razie stosuj regulamin i kieruj sprawę do sędziego głównego."
+  },
+  {
+   "heading": "W skrócie",
+   "points": [
+    "Czytaj dokładne brzmienie rodzaju niepowodzenia: przewaga liczy się tylko tam, gdzie tak jest napisane",
+    "Burpee bez pełnego wyprostu w górze się nie liczy",
+    "Pominięta kara: zapisz numer, udokumentuj, zgłoś",
+    "Nie jesteś pewien? Eskaluj do sędziego głównego"
+   ],
+   "narration": "W skrócie. Krótki dotyk szczytu Helix, Olympus lub Z Wall jest według regulaminu niepowodzeniem, bo rodzaj niepowodzenia nie ma testu przewagi, podczas gdy niektóre inne rodzaje niepowodzeń go mają. Burpee bez wyprostowanych bioder i kolan w górze nie jest pełnym burpee, więc wymaga się dodatkowych burpees. Zawodnik, który przebiega obok pętli karnej, złamał zasady: zapisz numer z opaski, udokumentuj to i zgłoś sędziemu głównemu."
+  }
+ ],
+ "ocr-4-2": [
+  {
+   "heading": "Przeszkoda jednopodejściowa",
+   "points": [
+    "Jeden rzut: pudło to niepowodzenie, a niepowodzenie oznacza karę",
+    "Twoje zadanie: zobaczyć początek podejścia, ocenić wynik, skierować zawodnika do kary"
+   ],
+   "narration": "Spear Throw to przeszkoda jednopodejściowa, zaliczeniowa. Każdy zawodnik ma jeden rzut. Jeśli się nie uda, nie ma drugiej próby: zawodnik idzie prosto do kary. Twoje zadanie przy Spear Throw to dokładnie zobaczyć, kiedy zaczyna się podejście, ocenić wynik i skierować zawodnika do właściwej kary."
+  },
+  {
+   "heading": "Co musi zrobić zawodnik",
+   "points": [
+    "Stanąć obiema stopami za barierką",
+    "Rzucić włócznią w cel na swoim torze",
+    "Włócznia wbija się we wskazany cel i tkwi w nim, bez żadnej części dotykającej ziemi"
+   ],
+   "narration": "Zgodnie z zasadą 4.2.13 zawodnik staje obiema stopami za barierką i rzuca w cel na swoim torze. Aby zaliczyć, włócznia musi wbić się we wskazany cel i w nim pozostać, bez żadnej części włóczni dotykającej ziemi."
+  },
+  {
+   "heading": "Kiedy zaczyna się podejście",
+   "points": [
+    "Podejściem jest wypuszczenie włóczni ruchem do przodu",
+    "Zmiana toru jest dozwolona, ale tylko przed podejściem",
+    "Splątana linka, która psuje rzut, nadal liczy się jako podejście"
+   ],
+   "narration": "Regulamin mówi, że podejście zaczyna się, gdy zawodnik wypuszcza włócznię ruchem do przodu. Wcześniej może zmienić tor. Potem nie może zacząć od nowa. A jeśli linka się splącze i zepsuje rzut, to nadal się liczy: pilnowanie linki jest zadaniem zawodnika.",
+   "review": "W trakcie przeglądu na 2027: program online z 2026 mówi, że zaangażowanie zaczyna się wcześniej, gdy włócznia jest odciągana do rzutu. Regulamin mówi: w momencie wypuszczenia. Dopóki nie rozstrzygnie tego osoba odpowiedzialna za sędziowanie, stosuj regulamin, a sporną decyzję kieruj do sędziego głównego."
+  },
+  {
+   "heading": "Zaliczenie lub niepowodzenie",
+   "points": [
+    "Niepowodzenie: włócznia nie wbija się we wskazany cel",
+    "Niepowodzenie: jakakolwiek część włóczni dotyka ziemi, gdy już się nie porusza",
+    "Samo w sobie nie jest niepowodzeniem: muśnięcie ziemi w locie, jeśli włócznia kończy w celu, z dala od ziemi"
+   ],
+   "narration": "Są dwa sposoby na niepowodzenie. Włócznia nie wbija się we wskazany cel albo jakakolwiek jej część dotyka ziemi, gdy już się zatrzymała. Włócznia może muskać ziemię po drodze i samo to nie jest niepowodzeniem, o ile kończy w celu i z dala od ziemi.",
+   "review": "W trakcie przeglądu na 2027: program online z 2026 wymienia „włócznia dotyka ziemi przed celem” jako niepowodzenie. Zasada 4.2.13 na to pozwala. Stosuj regulamin, dopóki nie rozstrzygnie tego osoba odpowiedzialna za sędziowanie."
+  },
+  {
+   "heading": "Kiedy przeszkoda jest ukończona",
+   "points": [
+    "Ukończona, gdy zawodnik oddalił się od toru co najmniej o 2 metry",
+    "Nie może odejść, dopóki włócznia nie trafi w cel, konstrukcję lub ziemię",
+    "Upadek lub niepowodzenie, zanim zawodnik oddali się na 2 metry, to niepełne podejście: kara"
+   ],
+   "narration": "Przeszkoda jest ukończona, gdy zawodnik oddalił się od swojego toru co najmniej o dwa metry. Nie może odejść, zanim włócznia nie uderzy w cel, konstrukcję lub ziemię. Jeśli włócznia wypadnie, zanim zawodnik oddali się na dwa metry, jest to niepełne podejście i obowiązuje kara."
+  },
+  {
+   "heading": "Kara",
+   "points": [
+    "30 burpees (15 na wydarzeniach Stadion)",
+    "W wyznaczonej strefie burpees: burpees poza nią się nie liczą",
+    "Każde według standardu: klatka piersiowa przy ziemi, wyprost, potem wyskok z rękami nad uszami"
+   ],
+   "narration": "Karą za oblanie Spear Throw jest trzydzieści burpees, a na wydarzeniach Stadion piętnaście. Trzeba je wykonać w wyznaczonej strefie burpees, bo burpees poza nią się nie liczą. Każde musi spełniać standard: klatka piersiowa przy ziemi, powrót do zrównoważonej pozycji stojącej, potem wyskok z rękami nad uszami.",
+   "review": "W trakcie przeglądu na 2027: czas doliczany za niewykonane burpees różni się między regulaminem (3.4.2), Officiating SOP i programem z 2026. Ta lekcja nie podaje żadnej wartości, dopóki nie rozstrzygnie tego osoba odpowiedzialna za sędziowanie."
+  },
+  {
+   "heading": "Co robisz",
+   "points": [
+    "Stań tak, byś widział wypuszczenie włóczni, barierkę i cel",
+    "Ogłoś wynik wyraźnie i spokojnie",
+    "Skieruj zawodnika do strefy burpees, gdzie kamera widzi numer z jego opaski",
+    "Każdy spór kieruj do sędziego głównego: nie kłóć się na przeszkodzie"
+   ],
+   "narration": "Stań tak, byś jednocześnie widział wypuszczenie włóczni, barierkę i cel. Ogłoś wynik wyraźnie i spokojnie. Skieruj zawodnika do strefy burpees i upewnij się, że kamera widzi numer z jego opaski. Jeśli zawodnik kwestionuje decyzję, zanotuj numer i skieruj sprawę do sędziego głównego. Nie kłóć się na przeszkodzie."
+  },
+  {
+   "heading": "W skrócie",
+   "points": [
+    "Jeden rzut: podejście zaczyna się, gdy włócznia jest wypuszczona do przodu",
+    "Zaliczenie: w celu, nic nie dotyka ziemi, gdy włócznia już się nie porusza",
+    "Ukończenie: 2 metry od toru",
+    "Niepowodzenie: 30 burpees w strefie, każde według standardu"
+   ],
+   "narration": "W skrócie. Jeden rzut, a podejście zaczyna się, gdy włócznia jest wypuszczona do przodu. Zaliczenie to włócznia w celu, przy czym nic nie dotyka ziemi, gdy włócznia już się nie porusza. Zawodnik kończy, gdy jest dwa metry od toru. Niepowodzenie to trzydzieści burpees w strefie burpees, każde według standardu."
+  }
+ ],
+ "deka-1-1": [
+  {
+   "heading": "Przykładowa lekcja",
+   "points": [
+    "Ten program to zastępcza zawartość",
+    "Jego lekcja i quiz pokazują, jak działa drugi program",
+    "Nic z tego nie jest zasadami DEKA"
+   ],
+   "narration": "To przykładowa lekcja w programie zastępczym. Pokazuje, jak drugi program działa obok programu OCR, z własnymi lekcjami, quizem, progiem zaliczenia i kwalifikacją. Nic tutaj nie jest prawdziwymi zasadami DEKA: te pochodzą od właścicieli programu DEKA."
+  },
+  {
+   "heading": "Liczenie powtórzeń (przykład)",
+   "points": [
+    "Sędzia liczy każde powtórzenie, które spełnia standard",
+    "Powtórzenie, które go nie spełnia, to no rep, ogłoszony wyraźnie"
+   ],
+   "narration": "W tym przykładzie sędzia liczy każde powtórzenie, które spełnia standard ruchu, a gdy któreś go nie spełnia, wyraźnie ogłasza no rep. Prawdziwe standardy i decyzje pojawią się wraz z własnymi materiałami DEKA."
+  },
+  {
+   "heading": "W skrócie (przykład)",
+   "points": [
+    "Tylko zawartość zastępcza",
+    "Quiz, który następuje, też jest przykładowy"
+   ],
+   "narration": "To koniec przykładowej lekcji. Quiz, który następuje, też jest przykładowy i pokazuje, jak każdy program ma własny egzamin i własną kwalifikację."
+  }
+ ]
+}

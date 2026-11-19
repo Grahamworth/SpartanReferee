@@ -9,6 +9,7 @@ camera.js
 cones.js
 home.html
 home.js
+language.js
 event.html
 event.js
 console.html

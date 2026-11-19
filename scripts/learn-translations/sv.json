@@ -1,0 +1,1538 @@
+{
+ "cam-1-1": [
+  {
+   "heading": "Kameror vid straffstationen",
+   "points": [
+    "Telefoner filmar burpeezonen för straff",
+    "En SpartanReferee-server spelar in dem och kör en AI-domare på varje kamera",
+    "Varje rep räknas och kontrolleras mot standarden"
+   ],
+   "narration": "SpartanReferee filmar straffstationen med telefoner. Varje telefon skickar sin bild till en SpartanReferee-server via Wi-Fi eller mobildata. Servern spelar in bilden och kör en AI-domare på varje kamera, så att varje rep räknas och kontrolleras mot rörelsestandarden."
+  },
+  {
+   "heading": "Vem gör vad",
+   "points": [
+    "Evenemangets huvuddomare bokar stationen och sköter den",
+    "Varje domare som är tilldelad evenemanget kan titta live och granska resultaten",
+    "Administratörer kan boka, förlänga eller stoppa kamerorna för vilket evenemang som helst"
+   ],
+   "narration": "Varje evenemang har en kamerabokning. Huvuddomaren bokar den från evenemangssidan och sköter den på dagen. Varje domare som är tilldelad evenemanget kan öppna den för att titta på kamerorna live och granska resultaten. Administratörer kan gå in och boka, förlänga eller stoppa kamerorna för vilket evenemang som helst."
+  },
+  {
+   "heading": "Kort sagt",
+   "points": [
+    "Telefonerna filmar, servern dömer, alla tittar i en webbläsare",
+    "Huvuddomaren bokar och sköter det"
+   ],
+   "narration": "Kort sagt: telefonerna filmar, servern dömer och varje domare tittar i en webbläsare. Huvuddomaren bokar och sköter det."
+  }
+ ],
+ "cam-1-2": [
+  {
+   "heading": "Dina evenemang",
+   "points": [
+    "Dina evenemang finns på din startsida",
+    "Öppna ett för att se dess kameratider och vilka som dömer där",
+    "Huvuddomaren ser Boka burpeekamerorna där"
+   ],
+   "narration": "Dina evenemang finns på din SpartanReferee-startsida. Öppna ett för att se dess kameratider och vilka som dömer där. Om du är huvuddomare för det är det där du bokar burpeekamerorna."
+  },
+  {
+   "heading": "Tiderna",
+   "points": [
+    "Kamerorna är igång 07:00–18:00 lokal tid varje dag under evenemanget",
+    "Tider anges i evenemangets egen lokala tid",
+    "En bokning som görs i förväg startar sina servrar 10 minuter tidigare; att starta nu tar cirka 5 minuter"
+   ],
+   "narration": "Ett evenemangs kameror är igång från sju på morgonen till sex på kvällen, lokal tid, varje dag under evenemanget. Bokningstider anges i evenemangets egen lokala tid, varifrån du än bokar. En bokning som görs i förväg startar sina servrar tio minuter tidigare, så att kamerorna är redo i tid. Att starta en direkt tar cirka fem minuter."
+  },
+  {
+   "heading": "Servrar och anslutningen",
+   "points": [
+    "Varje server tar 2 kameror",
+    "Varje kamera skickar cirka 3,5 Mbit/s",
+    "Kontrollera arenans uppkoppling före dagen: den måste klara alla kameror"
+   ],
+   "narration": "Varje server tar två kameror, så antalet kameror avgör antalet servrar. Varje kamera skickar cirka tre och en halv megabit i sekunden, och arenans uppkoppling måste klara alla. Kontrollera den före dagen."
+  }
+ ],
+ "cam-1-3": [
+  {
+   "heading": "För varje kamera",
+   "points": [
+    "En telefon på stativ eller hållare",
+    "Ett extrabatteri",
+    "Mobildata eller arenans Wi-Fi"
+   ],
+   "narration": "För varje kamera behöver du en telefon på stativ eller hållare, ett extrabatteri som håller den igång hela dagen, och mobildata eller arenans Wi-Fi."
+  },
+  {
+   "heading": "Apparna",
+   "points": [
+    "Android: appen SpartanReferee Broadcaster",
+    "iPhone: Larix Broadcaster, från App Store",
+    "För att titta och döma: valfri telefon, surfplatta eller dator med en webbläsare, utan att något behöver installeras"
+   ],
+   "narration": "Android-telefoner använder appen SpartanReferee Broadcaster. iPhones använder Larix Broadcaster, från App Store. För att titta på kamerorna och döma räcker det med valfri telefon, surfplatta eller dator med en webbläsare: inget behöver installeras på den."
+  }
+ ],
+ "cam-2-1": [
+  {
+   "heading": "Var telefonen ska stå",
+   "points": [
+    "Liggande, i sin hållare",
+    "3 till 4 meter från atleterna",
+    "Varje atlets hela kropp i bild, även när de ligger raka"
+   ],
+   "narration": "Sätt telefonen liggande i sin hållare, tre till fyra meter från atleterna. Ha varje atlets hela kropp i bild, även när de ligger raka på marken."
+  },
+  {
+   "heading": "Vinkeln",
+   "points": [
+    "Lätt vinklat eller från sidan bedömer bröstet mot marken bättre än rakt framifrån",
+    "Armhävningar och sit-ups kräver att telefonen står från sidan i golvhöjd"
+   ],
+   "narration": "En lätt vinklad vy eller en vy från sidan bedömer bröstet mot marken bättre än en kamera rakt framifrån. För armhävningar och sit-ups ska du ställa telefonen från sidan i golvhöjd."
+  },
+  {
+   "heading": "Håll banorna fria",
+   "points": [
+    "Funktionärer i gula reflexjackor räknas aldrig som atleter",
+    "Alla andra som står framför en kamera är i vägen",
+    "Stå där du ser atleterna utan att skymma sikten"
+   ],
+   "narration": "Funktionärer i gula reflexjackor räknas aldrig som atleter. Alla andra som står framför en kamera är i vägen, så håll banorna fria och stå där du ser atleterna utan att skymma kamerorna."
+  }
+ ],
+ "cam-2-2": [
+  {
+   "heading": "QR-koderna",
+   "points": [
+    "Öppna bokningen på konsolen när den är igång",
+    "Varje kamera som väntar på sin telefon visar QR-koder på flikarna Live och Kameror",
+    "Koderna ändras med varje bokning: skanna dem igen varje gång"
+   ],
+   "narration": "När bokningen är igång öppnar du den på konsolen. Varje kamera som väntar på sin telefon visar QR-koder på flikarna Live och Kameror. Koderna ändras med varje bokning, så skanna dem igen varje gång."
+  },
+  {
+   "heading": "Android: SpartanReferee Broadcaster",
+   "points": [
+    "Installera appen; tillåt installation från den här källan när telefonen frågar",
+    "Tryck på Skanna kamerans QR-kod och skanna den kamerans kod",
+    "Låt kvaliteten stå på 720p om inte signalen är svag, tryck sedan på Öppna kameran och SÄND LIVE"
+   ],
+   "narration": "På Android installerar du SpartanReferee Broadcaster. Telefonen varnar dig eftersom appen inte kommer från Play Butik: tryck på Inställningar, tillåt installation från den här källan, gå tillbaka och installera. Tryck på Skanna kamerans QR-kod och skanna den kamerans kod. Låt kvaliteten stå på 720p om inte signalen är svag, tryck sedan på Öppna kameran och Sänd live."
+  },
+  {
+   "heading": "iPhone: Larix Broadcaster",
+   "points": [
+    "Installera Larix och öppna den en gång, och tillåt kameran och mikrofonen",
+    "Skanna kamerans iPhone (Larix)-kod med telefonens kamera, öppna länken i Larix och tryck på Import",
+    "I Larix: Settings, Connections, kryssa för kameran och tryck sedan på den röda knappen"
+   ],
+   "narration": "På en iPhone installerar du Larix Broadcaster och öppnar den en gång, och tillåter kameran och mikrofonen. Skanna kamerans iPhone-kod med telefonens egen kamera, öppna länken i Larix och tryck på Import. Gå sedan i Larix till Settings, Connections, kryssa för kameran och tryck på den röda knappen."
+  }
+ ],
+ "cam-3-1": [
+  {
+   "heading": "Starta domaren",
+   "points": [
+    "Varje telefons bild visas på fliken Live inom några sekunder",
+    "Tryck på Starta AI-domaren på en kamera, namnge den och välj övning",
+    "Tryck sedan på Börja döma: den körs på servern, så den fortsätter när du stänger sidan"
+   ],
+   "narration": "Varje telefons bild visas på fliken Live inom några sekunder efter att den gått live. Tryck på Starta AI-domaren på en kamera, ge den ett namn, välj vad den ska döma och tryck på Börja döma. Domaren körs på servern, så den fortsätter när du stänger sidan."
+  },
+  {
+   "heading": "Vad den kontrollerar på en burpee",
+   "points": [
+    "Bröstet mot marken",
+    "Full höftsträckning",
+    "Ett hopp, båda fötterna från marken",
+    "Händerna över öronen"
+   ],
+   "narration": "På en burpee kontrollerar domaren fyra saker: bröstet mot marken, full höftsträckning, ett hopp med båda fötterna från marken och händerna över öronen. En rep som missar en av dem är en no rep."
+  },
+  {
+   "heading": "Testa den",
+   "points": [
+    "Gör några testreps framför varje kamera",
+    "Kontrollera att varje rep räknas och att en dålig inte gör det",
+    "Flytta telefonen om en atlet lämnar bilden"
+   ],
+   "narration": "Innan atleterna kommer gör du några testreps framför varje kamera och kontrollerar att de räknas, och att en medvetet dålig inte räknas. Om atleten lämnar bilden flyttar du telefonen."
+  }
+ ],
+ "cam-3-2": [
+  {
+   "heading": "Resultat",
+   "points": [
+    "Resultat listar alla som dömts",
+    "Sök startnummer söker igenom alla kameror",
+    "Titta spelar upp en atlet med varje rep och no rep markerad"
+   ],
+   "narration": "Fliken Resultat listar alla som dömts. Sök startnummer söker igenom alla kameror efter en atlet. Titta spelar upp den atleten med varje rep och varje no rep markerad."
+  },
+  {
+   "heading": "Hur länge det sparas",
+   "points": [
+    "Inspelningar och resultat sparas i 7 dagar",
+    "När bokningen tar slut sparas inspelningarna och servrarna stängs av",
+    "Varje domare på evenemanget kan granska dem"
+   ],
+   "narration": "Inspelningar och resultat sparas i sju dagar. När bokningen tar slut sparas inspelningarna och servrarna stängs av. Varje domare på evenemanget kan granska dem under den tiden."
+  }
+ ],
+ "cam-3-3": [
+  {
+   "heading": "Telefoner och bilder",
+   "points": [
+    "Ansluter inte: kontrollera dess signal och skanna dess kod igen från den här bokningen",
+    "Hackar eller tappar: signalen är för svag för 720p, så välj lägre kvalitet",
+    "En kamera men ingen bild: arenans nätverk kan blockera video, så prova telefonens mobildata"
+   ],
+   "narration": "Om en telefon inte ansluter, kontrollera dess signal och skanna dess kod igen från den här bokningen. Om bilden hackar eller tappar är signalen för svag för 720p: välj lägre kvalitet. Om en kamera visas men utan bild kan arenans nätverk blockera video: prova telefonens mobildata i stället."
+  },
+  {
+   "heading": "Servrar och internet",
+   "points": [
+    "Servern startade inte: konsolen säger varför; ibland har Azure ingen server ledig på några minuter, så försök igen",
+    "Arenans internet går ner: inget når servern förrän det är tillbaka",
+    "Bara Larix sparar en egen kopia på telefonen"
+   ],
+   "narration": "Om servern inte startade säger konsolen varför. Ibland finns ingen server ledig på några minuter: försök igen. Om arenans internet går ner når inget servern förrän det är tillbaka, och bara Larix sparar en egen kopia av videon på telefonen."
+  }
+ ],
+ "cam-4-1": [
+  {
+   "heading": "Gratiskameran",
+   "points": [
+    "AI-domaren körs i din egen webbläsare, på den här telefonens eller datorns kamera",
+    "Ingen server och ingen kostnad, när som helst",
+    "Ställ upp telefonen, gör några burpees och se varje rep dömas"
+   ],
+   "narration": "Gratiskameran kör AI-domaren direkt i din webbläsare, på din egen telefons eller dators kamera, live eller på en minut video. Det finns ingen server och ingen kostnad, och du kan använda den när som helst. Ställ upp telefonen, gör några burpees och se varje rep dömas."
+  },
+  {
+   "heading": "Öva på den riktiga stationen",
+   "points": [
+    "Huvuddomare kan boka en 30-minuters övningsserver",
+    "Telefonerna skannar sina koder, konsolen, domaren och granskningen, som på ett evenemang",
+    "Den använder en av de servrar evenemang behöver, så den är för huvuddomare och administratörer"
+   ],
+   "narration": "Huvuddomare kan också boka en trettio minuters övningsserver för att öva hela stationen: telefonerna som skannar sina koder, konsolen, domaren och granskningen, precis som på ett evenemang. Den använder en av de servrar evenemang behöver, så den är för huvuddomare och administratörer."
+  }
+ ],
+ "ocr-1-1": [
+  {
+   "heading": "Varför Spartan finns",
+   "points": [
+    "Spartan finns för att hjälpa människor att tänja på sina gränser",
+    "Målet: människor som är starkare, fysiskt och mentalt",
+    "Uppdraget: att hjälpa människor att leva utan gränser"
+   ],
+   "narration": "Spartan finns för att hjälpa människor att tänja på sina gränser och bli starkare, fysiskt och mentalt. Uppdraget är att hjälpa människor att leva utan gränser, genom att bygga den styrka, disciplin och uthållighet de behöver för att möta livets utmaningar. Varje Spartan Race är utformat för att få atleterna att göra något svårt, obekvämt och förvandlande. Det är miljön du arbetar i som domare. Atleterna framför dig har valt att göra något svårt, och reglerna finns för att alla ska möta samma prov."
+  },
+  {
+   "heading": "En utmaning för alla",
+   "points": [
+    "Spartan-evenemang är till för alla nivåer, från förstagångslöpare till elitatleter",
+    "Miljontals människor runt om i världen deltar",
+    "Det som räknas är viljan att ställa upp, inte var man börjar"
+   ],
+   "narration": "Spartan-evenemang är utformade för atleter på alla nivåer. Miljontals människor runt om i världen deltar, från förstagångslöpare till elitatleter. Spartans syn är att det som räknas inte är var man börjar, utan viljan att ställa upp, ta sig förbi ursäkterna och möta utmaningen. Alla som går ut på banan deltar i samma prov av ihärdighet och beslutsamhet. På tävlingsdagen kommer du därför att se en stor bredd av atleter. Längre fram i den här kursen får du lära dig vilka av dem du dömer närmast."
+  },
+  {
+   "heading": "Ett regelverk, överallt",
+   "points": [
+    "Tävlingsreglerna (Rules of Competition) gäller för alla Spartan-evenemang och tävlingar globalt",
+    "De är bindande för varje deltagare vid varje Spartan-evenemang",
+    "Deras syfte: rättvist och enhetligt lopp, globala standarder, deltagarnas säkerhet"
+   ],
+   "narration": "Spartans tävlingsregler (Rules of Competition) gäller för alla Spartan-evenemang och tävlingar runt om i världen, och de är bindande för varje deltagare. Regelboken säger att reglerna förklarar hur ett lopp ska dömas. De syftar till att göra varje evenemang rättvist och enhetligt, genomfört med sportsmanship och integritet. De ger tydliga riktlinjer, så att tävlandet standardiseras globalt. Och de skyddar deltagarnas hälsa, säkerhet och välbefinnande, så långt det rimligen går i hinderbanelöpning."
+  },
+  {
+   "heading": "Din del i det",
+   "points": [
+    "Tillämpa tävlingsreglerna och domarprocedurerna konsekvent",
+    "Skydda rättvisan och integriteten i Spartan-evenemang över hela världen",
+    "I slutet av kursen: tillämpa reglerna konsekvent och med säkerhet"
+   ],
+   "narration": "Det här programmet beskriver den roll, de ansvarsområden och de standarder som förväntas av Spartan-domare. Målet är att varje domare tillämpar tävlingsreglerna och domarprocedurerna på samma sätt och därmed skyddar rättvisan och integriteten i Spartan-evenemang över hela världen. En atlet ska få samma beslut vid ditt hinder som vid samma hinder på vilket annat Spartan-evenemang som helst. I slutet av kursen ska du kunna tillämpa Spartans regler konsekvent och med säkerhet."
+  },
+  {
+   "heading": "Kort sagt",
+   "points": [
+    "Spartan finns för att hjälpa människor att tänja på sina gränser",
+    "Evenemangen är till för alla, från förstagångslöpare till elitatleter",
+    "Ett regelverk gäller för varje Spartan-evenemang i världen",
+    "Ditt jobb: tillämpa det konsekvent, för att skydda rättvisa och integritet"
+   ],
+   "narration": "Kort sagt. Spartan finns för att hjälpa människor att tänja på sina gränser och bli starkare i kropp och själ. Evenemangen är till för alla, från förstagångslöpare till elitatleter. Ett enda regelverk gäller för varje Spartan-evenemang i världen, och det syftar till ett lopp som är rättvist, enhetligt och säkert. Ditt jobb som domare är att tillämpa reglerna konsekvent, så att rättvisan och integriteten i varje lopp skyddas."
+  }
+ ],
+ "ocr-1-2": [
+  {
+   "heading": "Terränglöpning med hinder",
+   "points": [
+    "Ett Spartan Race är ett hinderbanelopp (OCR)",
+    "Det kombinerar terränglöpning med fysiska hinder",
+    "Hindren testar både mental och fysisk styrka"
+   ],
+   "narration": "Ett Spartan Race är ett hinderbanelopp: terränglöpning kombinerad med fysiska hinder längs banan. Hindren är utformade för att testa både mental och fysisk styrka och för att få deltagarna att ta sig bortom vad de trodde var möjligt. Mellan hindren springer atleterna. Vid varje hinder måste de klara en särskild utmaning, och regelboken anger exakt vad det innebär. Som domare är du oftast placerad vid ett hinder, så det hindret och dess regler är ditt fokus under dagen."
+  },
+  {
+   "heading": "Fem sorters utmaning",
+   "points": [
+    "Klättring: till exempel väggarna och Rope Climb",
+    "Bärande: till exempel Bucket Carry och Sandbag Carry",
+    "Krypande: till exempel Barbed Wire Crawl",
+    "Hopp samt drag och lyft: till exempel Fire Jump och Hercules Hoist"
+   ],
+   "narration": "Programmet delar in utmaningarna i fem sorters rörelse: klättring, bärande, kryp, hopp samt drag och lyft. Klättring omfattar väggarna och Rope Climb. Bärande omfattar Bucket Carry och Sandbag Carry. Kryp omfattar Barbed Wire Crawl. Hopp omfattar Fire Jump, och drag och lyft omfattar Hercules Hoist, där atleten drar i ett rep för att lyfta en vikt. Varje hinder har ett eget avsnitt i regelboken som anger vad atleten måste göra och hur hen kan misslyckas."
+  },
+  {
+   "heading": "Två sorters hinder i regelboken",
+   "points": [
+    "Obligatoriska hinder: måste klaras innan man går vidare på banan",
+    "Godkänt/underkänt-hinder: ett misslyckande ger ett straff, en straffslinga eller burpees",
+    "Varje hinder måste försökas: som minimum beröras"
+   ],
+   "narration": "Regelboken delar in hinder i två kategorier. Obligatoriska hinder måste klaras innan atleten går vidare på banan. Att misslyckas med ett ger diskvalificering, även om tävlingsledaren kan ersätta det med ett tidstillägg, beroende på hur allvarligt det är. Godkänt/underkänt-hinder kan misslyckas, och ett misslyckande ger ett straff: en straffslinga eller burpees. Godkänt/underkänt-hinder är antingen enförsöks- eller flerförsökshinder. Varje hinder måste försökas, och ett försök är som minimum att röra vid det. Hindertyperna har ett eget avsnitt längre fram i den här kursen.",
+   "review": "Under översyn inför 2027: regelboken (3.17.3) säger att straffet är en straffslinga eller 30 burpees, som Spartan bestämmer för varje evenemang, kategori eller heat. Officiating SOP säger en slinga för de flesta hinder och burpees vid Spear Throw; programmet för 2026 säger att burpees bara används vid Spear Throw. Tills vidare: använd det straff som bekräftades vid genomgången och hänvisa alla tvivel till huvuddomaren."
+  },
+  {
+   "heading": "Tävlingsformat",
+   "points": [
+    "Källorna för 2026 nämner formaten Sprint, Super, Beast, Ultra och Stadion",
+    "En regelbok gäller för alla, men vissa regler skiljer sig mellan formaten",
+    "Stadion: straffet för att misslyckas med ett hinder är alltid 15 burpees",
+    "Minsta antal domare: 10 vid Sprint eller Stadion, 15 vid Super, 20 vid Beast eller Ultra"
+   ],
+   "narration": "Spartan-lopp finns i flera format. Regelboken och domarproceduren för 2026 nämner Sprint, Super, Beast, Ultra och Stadion. Samma regelbok gäller för dem alla, men vissa regler skiljer sig mellan formaten. Vid Stadion-evenemang är till exempel straffet för att misslyckas med ett hinder alltid femton burpees, för varje hinder och varje heat. Spartans domarprocedur anger också ett minsta antal domare för varje format: tio för en Sprint eller en Stadion, femton för en Super och tjugo för en Beast eller en Ultra."
+  },
+  {
+   "heading": "Kort sagt",
+   "points": [
+    "Ett hinderbanelopp: terränglöpning kombinerad med fysiska hinder",
+    "Fem sorters utmaning: klättring, bärande, kryp, hopp, drag och lyft",
+    "Obligatoriska hinder måste klaras; att misslyckas med ett godkänt/underkänt-hinder ger ett straff",
+    "Format: Sprint, Super, Beast, Ultra och Stadion"
+   ],
+   "narration": "Kort sagt. Ett Spartan Race är ett hinderbanelopp: terränglöpning kombinerad med fysiska hinder som testar mental och fysisk styrka. Utmaningarna är klättring, bärande, kryp, hopp samt drag och lyft. Regelboken delar in hinder i obligatoriska hinder, som måste klaras, och godkänt/underkänt-hinder, där ett misslyckande ger ett straff. Varje hinder måste försökas. Lopp finns i flera format, bland annat Sprint, Super, Beast, Ultra och Stadion."
+  }
+ ],
+ "ocr-2-1": [
+  {
+   "heading": "Vad domare skyddar",
+   "points": [
+    "Rättvisan och loppets integritet",
+    "Att atleterna följer de officiella tävlingsreglerna",
+    "Att straff tillämpas konsekvent",
+    "Trovärdighet för Elite och tävlingsinriktade lopp"
+   ],
+   "narration": "Domare spelar roll eftersom de skyddar loppets rättvisa och integritet. De ser till att atleterna följer de officiella tävlingsreglerna, och de tillämpar straff på samma sätt för alla. Den konsekvensen är det som ger Elite och tävlingsinriktade lopp deras trovärdighet. Spartans domarprocedur uttrycker det så här: Spartans domargärning etablerar och upprätthåller loppets integritet genom konsekvent tillämpning av reglerna och vedertagen domarpraxis, så att utfallet blir rättvist och likvärdigt för alla atleter."
+  },
+  {
+   "heading": "Vad en domare är",
+   "points": [
+    "En av Spartan utsedd funktionär som ser till att alla regler följs",
+    "Oftast placerad vid ett hinder, eller i videogranskningstältet",
+    "Vid ditt hinder: tillämpa dess regler och bevaka misslyckanden",
+    "Du rapporterar till huvuddomaren"
+   ],
+   "narration": "Regelboken definierar en domare som en av Spartan utsedd funktionär vars uppgift är att se till att alla regler följs. Domare är oftast placerade vid hinder och i videogranskningstältet, och de rapporterar till huvudfunktionären (Head Official). Spartans domarprocedur beskriver domaren som den person som tilldelats ett hinder för att tillämpa dess regler och bevaka misslyckanden. I regelboken är funktionärer alla som Spartan utser för att utföra evenemangets uppgifter i en auktoritetsposition: personal, domare och volontärer. Som domare är du en av dem."
+  },
+  {
+   "heading": "Vem du svarar inför",
+   "points": [
+    "Huvuddomaren: den som fattar de avgörande besluten om reglerna vid evenemanget",
+    "Regelboken kallar den rollen Head Official",
+    "Tävlingsledaren: ansvarar för evenemangets övergripande drift",
+    "Osäkra eller omstridda avgöranden går till huvuddomaren"
+   ],
+   "narration": "Vid varje evenemang är en person den som fattar de avgörande besluten i alla regelfrågor, och den yttersta auktoriteten för att tillämpa och tolka dem. Regelboken kallar den personen Head Official. Spartans domarprocedur och det här programmet kallar den huvuddomaren (Head Referee). Det är dit du rapporterar. Tävlingsledaren ansvarar för evenemangets övergripande drift och genomförande. När du är osäker på ett avgörande, eller en atlet bestrider ett, går det till huvuddomaren."
+  },
+  {
+   "heading": "Dina avgöranden når resultaten",
+   "points": [
+    "Kedjan: domare, huvuddomare, sedan tävlingsledare eller tidtagningsteam",
+    "Huvuddomaren bekräftar straff och för dem vidare",
+    "Resultaten är slutgiltiga först efter den officiella videogranskningen",
+    "Tidstillägg läggs till atletens måltid"
+   ],
+   "narration": "Det du ser och noterar vid ditt hinder kan förändra resultaten. Kedjan går från dig, till huvuddomaren, till tävlingsledaren eller tidtagningsteamet. Huvuddomaren hanterar videogranskningen och för bekräftade straff och diskvalificeringar vidare till tävlingsledaren och tidtagningsteamet. Regelboken säger att en officiell videogranskning ska göras innan resultaten är slutgiltiga, så resultaten kanske inte publiceras direkt. Tidstillägg läggs till atletens måltid, så ett korrekt och tydligt noterat avgörande är viktigt."
+  },
+  {
+   "heading": "Hur du utbildas",
+   "points": [
+    "Baserad på Spartans regelbok, Officiating SOP och Global Officiating Guidelines",
+    "Fokus: tillämpning vid hinder, straff, kontakt med atleter och loppets integritet",
+    "Att genomföra webbutbildningen är obligatoriskt för domarcertifiering"
+   ],
+   "narration": "Den här utbildningen finns för att domare ska tillämpa Spartans tävlingsregler rättvist och konsekvent. Den bygger på tre dokument: Spartans regelbok, Officiating Standard Operating Procedure och Global Officiating Guidelines. Den fokuserar på tillämpning vid hinder, straff, hur du hanterar atleter och tävlingens integritet. Enligt domarproceduren är det obligatoriskt att genomföra webbutbildningen för domarcertifiering. Före varje evenemang ser huvuddomaren också till att varje domare har genomfört förberedande utbildning."
+  },
+  {
+   "heading": "Kort sagt",
+   "points": [
+    "Domare skyddar rättvisa, loppets integritet och konsekventa straff",
+    "Du tillämpar reglerna vid ditt hinder och bevakar misslyckanden",
+    "Du rapporterar till huvuddomaren, som har sista ordet om reglerna",
+    "Dina avgöranden går in i videogranskningen och resultaten"
+   ],
+   "narration": "Kort sagt. Domare skyddar loppets rättvisa och integritet och ser till att straff tillämpas konsekvent, vilket ger tävlingsinriktade lopp deras trovärdighet. Du är en av Spartan utsedd funktionär, oftast placerad vid ett hinder, för att tillämpa dess regler och bevaka misslyckanden. Du rapporterar till huvuddomaren, som regelboken kallar Head Official, och som har sista ordet om reglerna. Det du noterar går genom videogranskningen och kan ändra en atlets måltid."
+  }
+ ],
+ "ocr-2-2": [
+  {
+   "heading": "Tävlingsinriktade och Open",
+   "points": [
+    "Tävlingsinriktade (Competitive): Elite- och Age Group-löpare",
+    "Open: öppen för alla, kategorin med fokus på deltagande",
+    "Varje kategori startar i heats eller vågor, åtskilda efter starttid eller tempogrupp"
+   ],
+   "narration": "Regelboken definierar två sorters kategorier. Competitive, som omfattar Elite och Age Group, och Open, som är öppen för alla. Det här programmet beskriver Open som kategorin med fokus på deltagande. Inom varje kategori startar atleterna i heats och vågor: grupper som skiljs åt av starttid eller tempogrupp. Att veta vilken kategori som kommer genom ditt hinder visar hur noggrant du behöver döma den."
+  },
+  {
+   "heading": "Där domare lägger fokus",
+   "points": [
+    "Domare fokuserar främst på de tävlingsinriktade kategorierna",
+    "Tävlingsinriktade löpare förväntas följa varje regel uttryckligen",
+    "Tillämpa reglerna på samma sätt för varje tävlingsinriktad löpare",
+    "Var på plats före den första Elite-starten"
+   ],
+   "narration": "Domare fokuserar främst på de tävlingsinriktade kategorierna: Elite och Age Group. Regelboken förväntar sig att varje tävlingsinriktad löpare följer alla regler uttryckligen och springer på ett kämpande och tävlingsinriktat sätt. Din tillämpning måste därför vara densamma för varje tävlingsinriktad löpare, i varje Elite- och Age Group-våg. Spartans domarprocedur säger att huvuddomaren bekräftar att domarna är på plats före den första Elite-starten, och att domargärning, videogranskning och straffbedömning gäller kategorierna Elite och Age Group."
+  },
+  {
+   "heading": "Open-löpare",
+   "points": [
+    "Open-löpare uppmanas också att följa reglerna",
+    "Stämningen är mer avslappnad: sportsmanship och personligt ansvar",
+    "Open-löpare förväntas gå på hedersord för burpeestraff",
+    "Domare kan städa banan, eller lämna över till volontärer, för Open-vågorna"
+   ],
+   "narration": "Open-löpare uppmanas också att följa reglerna, i anda av sportsmanship och personligt ansvar, även om stämningen i Open-kategorin är mer avslappnad. Regelboken förväntar sig att deltagare i Open-kategorin går på Spartan-hedersord när de gör sina burpeestraff. I det här programmet slutar domarens evenemangsschema med att banan städas, eller att man lämnar över till volontärer för Open-vågorna. Din huvuddomares genomgång talar om vilket som gäller vid ditt evenemang."
+  },
+  {
+   "heading": "Heats, vågor och tidtagning",
+   "points": [
+    "Löpare måste starta i sitt tilldelade heat, sin tilldelade våg eller grupp",
+    "En Elite-löpare som startar i fel heat flyttas till Open",
+    "Elite-heats: den som först passerar mållinjen vinner (gun time)",
+    "Age Group, Open och Elite Stadion-heats: chiptid. Båda lägger till eventuella tidstillägg"
+   ],
+   "narration": "Varje löpare måste starta i och med sitt tilldelade heat, sin våg eller grupp. En löpare som startar i fel heat är inte berättigad till priser, och en Elite-löpare som startar i fel heat flyttas till Open-kategorin. Tidtagningen skiljer sig mellan kategorierna. I ett Elite-heat vinner den som först passerar mållinjen, vilket kallas gun time. Age Group- och Open-heats, och Elite-heats vid Stadion, använder chiptid: från att man passerar startlinjen till att man passerar mållinjen. I båda fallen läggs eventuella tidstillägg till."
+  },
+  {
+   "heading": "Kort sagt",
+   "points": [
+    "Competitive betyder Elite och Age Group; Open är öppen för alla",
+    "Domare fokuserar främst på tävlingsinriktade löpare",
+    "Varje tävlingsinriktad löpare får samma tillämpning",
+    "Open-löpare uppmanas att följa reglerna, på hedersord"
+   ],
+   "narration": "Kort sagt. Det finns två sorters kategorier: Competitive, alltså Elite och Age Group, och Open, som är öppen för alla. Domare fokuserar främst på de tävlingsinriktade kategorierna, där löpare förväntas följa varje regel, och din tillämpning måste vara densamma för var och en av dem. Open-löpare uppmanas också att följa reglerna, i en mer avslappnad stämning och på hedersord. Elite-heats avgörs på gun time, de andra på chiptid, med eventuella tidstillägg."
+  }
+ ],
+ "ocr-2-3": [
+  {
+   "heading": "Opartisk och professionell",
+   "points": [
+    "Var opartisk: tillämpa reglerna på samma sätt för varje atlet",
+    "Var professionell: lugn, neutral och respektfull",
+    "Kunna tävlingsreglerna och Officiating SOP"
+   ],
+   "narration": "Domarens förhållningssätt börjar med att vara opartisk och professionell. Spartans domarprocedur ber dig tillämpa hinderreglerna konsekvent och opartiskt, vem atleten än är. Var lugn, neutral och respektfull, och representera Spartan professionellt. Dina två viktigaste dokument är Spartans tävlingsregler och Officiating Standard Operating Procedure. Läs in dig på båda före evenemanget, och se till att du kan och förstår reglerna för ditt eget hinder."
+  },
+  {
+   "heading": "Regelns syfte, rättvisa och säkerhet",
+   "points": [
+    "Fokusera på regelns syfte, inte på små oavsiktliga beröringar",
+    "Fråga om atleten fick en fördel",
+    "Sätt rättvisa och atletens säkerhet först"
+   ],
+   "narration": "Fokusera på vad en regel är till för, inte på små oavsiktliga beröringar. Ett av programmets scenarier är en atlet som kort rör vid toppen av ett hinder men inte får någon fördel. Frågan att ställa är om en fördel skapades. Sätt rättvisa och atletens säkerhet först. Att skydda deltagarnas hälsa, säkerhet och välbefinnande är ett av regelbokens uttalade syften. Om du ser ett säkerhetsproblem vid ditt hinder, rapportera det direkt till huvuddomaren eller tävlingsledaren."
+  },
+  {
+   "heading": "När du är osäker, eskalera",
+   "points": [
+    "Eskalera varje situation du är osäker på",
+    "Osäker på straffet eller hur det ska tillämpas: kontakta huvuddomaren direkt",
+    "Tvivel, säkerhetsproblem eller inkonsekvenser: rapportera dem direkt"
+   ],
+   "narration": "Du förväntas inte lösa varje situation på egen hand. När du är osäker, eskalera. Spartans domarprocedur säger att om det finns någon osäkerhet om typen av straff eller hur det ska tillämpas kontaktar du huvuddomaren omedelbart. När du kommer till ditt hinder rapporterar du eventuella tvivel, säkerhetsproblem eller inkonsekvenser direkt till tävlingsledaren eller huvuddomaren. Huvuddomaren är den yttersta auktoriteten för reglerna vid evenemanget, så att eskalera är en del av att göra jobbet bra."
+  },
+  {
+   "heading": "Före tävlingsdagen",
+   "points": [
+    "Genomför den förberedande utbildningen innan du deltar",
+    "Den omfattar regelboken, med tonvikt på hinder där många misslyckas",
+    "Den omfattar också domararbetets rutiner, burpeestandarder och video vid Spear Throw",
+    "Du får ett genomgångspaket och tillgång till videohandledningar"
+   ],
+   "narration": "Ditt schema börjar före tävlingsdagen. Huvuddomaren ser till att varje domare genomför den förberedande standardutbildningen innan de deltar. Den omfattar Spartans regelbok, med tonvikt på hinder där många misslyckas, alltså de som atleter oftast misslyckas med. Den omfattar också domarens process och arbetsflöde, burpeestandarder och hur de tillämpas, samt videoinspelning och granskning, som endast används vid Spear Throw. Du får också ett genomgångspaket före evenemanget och tillgång till de officiella videohandledningarna."
+  },
+  {
+   "heading": "Tävlingsmorgonen",
+   "points": [
+    "Checka in, bekräfta ditt hinder och hämta din utrustning",
+    "Delta i huvuddomarens obligatoriska genomgång på plats",
+    "Var vid ditt hinder i god tid före den första tävlingsinriktade vågen",
+    "Inspektera hindret, gå straffslingan och välj var du ska stå"
+   ],
+   "narration": "På tävlingsmorgonen anmäler du dig i tältet du blivit hänvisad till, skriver in dig, bekräftar ditt hinder och hämtar din utrustning. Gå med i kommunikationskanalen om en sådan används. Delta i huvuddomarens obligatoriska genomgång på plats. Ta dig sedan till ditt hinder med god marginal före den första tävlingsinriktade vågen. Där inspekterar du uppställningen, kontrollerar från vilket håll atleterna kommer, går hela straffslingan och bestämmer var du ska stå för att tydligt kunna se försök, genomföranden och misslyckanden."
+  },
+  {
+   "heading": "Under loppet och efteråt",
+   "points": [
+    "Döm Elite- och de tävlingsinriktade vågorna",
+    "Städa sedan banan, eller lämna över till volontärer för Open-vågorna",
+    "När du kommer tillbaka: filmerna går till videogranskning, skriftliga beslut till huvuddomaren",
+    "Atleter tar sina protester till huvuddomaren, inom protesttiden"
+   ],
+   "narration": "Under loppet dömer du Elite- och de tävlingsinriktade vågorna vid ditt hinder. Därefter, beroende på evenemanget, städar du banan eller lämnar över till volontärer för Open-vågorna. När domarna kommer tillbaka hanterar huvuddomaren videogranskningen av filmerna. Där det inte finns någon video fattas dina beslut på plats, skrivs ner och lämnas till huvuddomaren när du kommer tillbaka. Resultaten är slutgiltiga först efter den officiella granskningen. En atlet som vill protestera mot ett straff tar det till huvuddomaren under protesttiden.",
+   "review": "Under översyn inför 2027: regelboken (3.19.1) säger att protesttiden slutar 15 minuter före kategorins prisceremoni. Officiating SOP (4.2) anger en halvtimme före ceremonin som exempel på sista tid. Tills vidare: tillämpa regelboken, följ de protesttider som huvuddomaren meddelar och hänvisa varje atlet med en protest till huvuddomaren."
+  },
+  {
+   "heading": "Kort sagt",
+   "points": [
+    "Var opartisk, professionell och konsekvent",
+    "Tänk på regelns syfte; sätt rättvisa och säkerhet först",
+    "När du är osäker, eskalera till huvuddomaren",
+    "Din dag: utbildning, incheckning, genomgång, uppställning, domararbete, överlämning"
+   ],
+   "narration": "Kort sagt. Var opartisk och professionell, och tillämpa reglerna på samma sätt för varje atlet. Fokusera på regelns syfte snarare än små oavsiktliga beröringar, och sätt rättvisa och atletens säkerhet först. När du är osäker, eskalera till huvuddomaren. Ditt evenemangsschema går från förberedande utbildning och genomgång, via incheckning och utrustning, hinderinspektion och uppställning, till att döma de tävlingsinriktade vågorna, och till sist att städa banan eller lämna över till volontärer för Open-vågorna."
+  }
+ ],
+ "ocr-3-1": [
+  {
+   "heading": "Anmälan för tjänstgöring",
+   "points": [
+    "Anmäl dig i Volontärtältet, eller domartältet, vid din tilldelade anmälningstid",
+    "Skriv in dig hos volontärkoordinatorn eller huvuddomaren",
+    "Bekräfta ditt tilldelade hinder",
+    "Gör dig känd för huvuddomaren"
+   ],
+   "narration": "Din tävlingsdag börjar vid incheckningen. Gå till Volontärtältet, eller domartältet om ditt evenemang har ett, vid den anmälningstid du fått. Skriv in dig hos volontärkoordinatorn eller huvuddomaren och bekräfta vilket hinder du har tilldelats. Även om någon annan skriver in dig ska du se till att huvuddomaren vet att du är där. Före den första Elite-starten måste huvuddomaren bekräfta att varje domare är på plats."
+  },
+  {
+   "heading": "Vad du hämtar vid incheckningen",
+   "points": [
+    "Officiellt material: domartröja, keps, ackreditering eller annan tilldelad utrustning",
+    "QR-kodskylten för ditt hinder, om den inte redan är uppsatt",
+    "En plats i den officiella kommunikationskanalen, till exempel en WhatsApp-grupp"
+   ],
+   "narration": "Vid incheckningen får du ditt officiella domarmaterial. Det betyder din domartröja, keps och ackreditering, och all annan utrustning du har tilldelats. Hämta också QR-kodskylten för ditt hinder, om den inte redan är uppsatt på plats. Den länkar till videohandledningen för just det hindret. Se slutligen till att du läggs till i den officiella kommunikationskanalen. Det kan vara en WhatsApp-grupp, en annan meddelandeplattform eller en direktkontakt med huvuddomaren."
+  },
+  {
+   "heading": "Din domarutrustning",
+   "points": [
+    "Domartröja eller väst",
+    "En skrivplatta eller anteckningsbok, helst vattentät",
+    "Utskrivna regelblad för ditt hinder",
+    "En videokamera och ett stativ, bara när du har tilldelats en"
+   ],
+   "narration": "Programmet för 2026 listar vad en domare behöver vid hindret. Bär din domartröja eller väst. Ha med en skrivplatta eller anteckningsbok, helst vattentät, eftersom du kommer att notera pannbandsnummer och anteckningar, ibland i blöta förhållanden. Ta med utskrivna regelblad för ditt hinder, så att du kan kontrollera en regel på plats. Om du har tilldelats en kamera har du också en videokamera och ett stativ."
+  },
+  {
+   "heading": "Ta med egna förnödenheter",
+   "points": [
+    "En mobiltelefon",
+    "Kläder som passar förhållandena",
+    "Pennor, mat och vatten",
+    "Allt personligt du behöver, till exempel medicin"
+   ],
+   "narration": "Ta också med egna förnödenheter. Du behöver en mobiltelefon, eftersom det är så du håller kontakt med huvuddomaren via kommunikationskanalen. Bär kläder som passar förhållandena på dagen. Packa pennor, mat och vatten, och allt personligt du behöver, till exempel medicin. När de tävlingsinriktade vågorna startar hör din uppmärksamhet till ditt hinder, så kom förberedd."
+  },
+  {
+   "heading": "Videoutrustningen",
+   "points": [
+    "Huvuddomaren förbereder, testar och delar ut domarutrustningen",
+    "Kameror med minst 2,5 timmars batteri, och reservbatterier vid behov",
+    "Justerbara 7-fots stativ och SD-kort på minst 32 GB för full HD",
+    "Video vid hindren gäller bara Spear Throw"
+   ],
+   "narration": "Domarutrustningen är huvuddomarens ansvar. Hen förbereder och testar den på fredagen före evenemanget och delar ut den på tävlingsdagen med slutliga instruktioner. Proceduren sätter ett minimum för utrustningen: videokameror med minst två och en halv timmes batteri, reservbatterier, justerbara sju fot höga stativ och minneskort på minst trettiotvå gigabyte, tillräckligt snabba för full high definition. Videoinspelning vid hinder gäller bara Spear Throw. Om du får en kamera där ställer du upp den och kontrollerar att den spelar in före den första Elite-vågen."
+  },
+  {
+   "heading": "Kort sagt",
+   "points": [
+    "Anmäl dig i tältet i tid, skriv in dig och bekräfta ditt hinder",
+    "Hämta ditt material och din QR-skylt och gå med i kommunikationskanalen",
+    "Ta med en vattentät skrivplatta, regelblad, telefon, mat och vatten",
+    "Kamera och stativ bara om du är tilldelad att filma Spear Throw"
+   ],
+   "narration": "Kort sagt. Anmäl dig i tältet vid din anmälningstid, skriv in dig, bekräfta ditt hinder och låt huvuddomaren veta att du är där. Hämta ditt material och QR-kodskylten för ditt hinder, och gå med i kommunikationskanalen. Ta med en vattentät skrivplatta eller anteckningsbok, dina regelblad, din telefon, mat och vatten. Du bär bara en kamera och ett stativ om du är tilldelad att filma Spear Throw."
+  }
+ ],
+ "ocr-3-2": [
+  {
+   "heading": "Genomgången kommer först",
+   "points": [
+    "Huvuddomarens genomgång på plats är obligatorisk, innan du går ut",
+    "Den omfattar tilldelningar, hinderklassificeringar, straffslingor och burpeestandarden",
+    "Den omfattar också evenemangets rutiner och hur straff rapporteras",
+    "Ta dig sedan till ditt hinder i god tid före den första tävlingsinriktade vågen"
+   ],
+   "narration": "Innan du går ut på banan deltar du i huvuddomarens genomgång på plats. Den är obligatorisk. Den omfattar evenemangets egna rutiner, var varje hinder finns och vem som är tilldelad det, vilka hinder som är obligatoriska och vilka som tillåter flera försök, straffslingorna, burpeestandarden, kamerans placering vid Spear Throw och hur straff identifieras, rapporteras och kommuniceras. Efter genomgången tar du dig till ditt hinder med gott om tid att förbereda dig innan den första tävlingsinriktade vågen kommer."
+  },
+  {
+   "heading": "Kunna ditt hinders regler",
+   "points": [
+    "Läs ditt hinders instruktioner, misslyckandeformer och tilläggsanmärkningar",
+    "Använd regelbladet, uppdragsbladet och QR-kodvideon för ditt hinder",
+    "Kontrollera alternativ för kvinnor och män: på väggarna är det röda steget bara för kvinnliga atleter"
+   ],
+   "narration": "Gå igenom och förstå reglerna för ditt hinder innan den första atleten kommer. I regelboken har varje hinder instruktioner till deltagarna, misslyckandeformer och tilläggsanmärkningar. Läs alla tre. Ditt regelblad, hinderuppdragsbladet och QR-kodens videohandledning hjälper också. Håll utkik efter olika alternativ för kvinnor och män. På de sex till nio fot höga väggarna får till exempel det röda steget kanske bara användas av kvinnliga atleter, och en manlig atlet som använder det misslyckas med hindret."
+  },
+  {
+   "heading": "Inspektera uppställningen",
+   "points": [
+    "Inspektera hinderuppställningen och kontrollera att den är användbar",
+    "Gå igenom loppets flöde och från vilket håll atleterna kommer",
+    "Rapportera tvivel, säkerhetsproblem eller inkonsekvenser direkt till tävlingsledaren eller huvuddomaren"
+   ],
+   "narration": "När du kommer fram inspekterar du hindret. Kontrollera att det är rätt uppställt och i användbart skick. Titta på hur loppet flyter genom det och från vilket håll atleterna kommer, så att du vet var de anländer och var de lämnar det. Om något oroar dig, vare sig det är tvivel om uppställningen, ett säkerhetsproblem eller något inkonsekvent, rapportera det direkt till tävlingsledaren eller huvuddomaren. Vänta inte tills atleterna kommer."
+  },
+  {
+   "heading": "Gå straffslingan",
+   "points": [
+    "Gå hela straffslingan, där det finns en",
+    "Känn till rutten och exakt var atleterna kommer tillbaka till banan",
+    "Slingor varierar: löpning, bärande, kryp eller distansbaserade, som bekräftats för ditt hinder",
+    "Samma straff gäller för alla i kategorin eller heatet"
+   ],
+   "narration": "Om ditt hinder har en straffslinga ska du gå hela slingan själv. Du måste förstå rutten och återkomstpunkten, så att du tydligt kan visa en atlet vägen och se om hen genomför den. Slingor är inte alla likadana. Regelboken säger att deras längd kan variera med terrängen, och de kan innehålla bärande, kryp eller andra moment. Huvuddomaren bekräftar varje hinders straffformat med tävlingsledaren. Vad det än är tillämpas det konsekvent inom kategorin eller heatet.",
+   "review": "Under översyn inför 2027: regelboken (3.17.3) säger att straffet är en slinga eller 30 burpees, som Spartan bestämmer för varje hinder och evenemang. Officiating SOP säger en slinga för de flesta hinder och burpees vid Spear Throw, och programmet för 2026 säger burpees bara vid Spear Throw. Tills vidare: tillämpa det straff som huvuddomaren bekräftar för ditt hinder, och kontakta huvuddomaren om du är osäker."
+  },
+  {
+   "heading": "Var du ska stå",
+   "points": [
+    "Välj en plats där du tydligt ser försök, genomföranden och misslyckanden",
+    "Håll sikten mot hindret fri",
+    "Bara vid Spear Throw: ställ upp kameran som Spear Throw-proceduren beskriver",
+    "Bekräfta att kameran spelar in före den första Elite-vågen"
+   ],
+   "narration": "Bestäm var du ska stå innan loppet börjar. Du behöver en position där du tydligt ser varje försök, varje genomförande och varje misslyckande, utan att något skymmer sikten. Fundera på var misslyckanden brukar ske vid ditt hinder, och var nära nog för att kunna tala med en atlet när det sker. Bara vid Spear Throw ställer du också upp videokameran, enligt domarproceduren för Spear Throw, och bekräftar att den spelar in innan den första Elite-vågen startar. Huvuddomaren kan komma förbi för att kontrollera tillämpningen och kamerans placering."
+  },
+  {
+   "heading": "Kort sagt",
+   "points": [
+    "Delta i den obligatoriska genomgången och ta dig sedan till ditt hinder i god tid",
+    "Kunna dess instruktioner, misslyckandeformer och anmärkningar",
+    "Inspektera uppställningen, gå straffslingan, rapportera varje oro direkt",
+    "Stå där du ser varje försök; vid Spear Throw, kontrollera att kameran spelar in"
+   ],
+   "narration": "Kort sagt. Delta i huvuddomarens genomgång och ta dig sedan till ditt hinder i god tid före den första tävlingsinriktade vågen. Kunna dess instruktioner, misslyckandeformer och tilläggsanmärkningar, inklusive alternativ för kvinnor och män. Inspektera uppställningen, gå straffslingan och rapportera varje tvivel eller säkerhetsproblem direkt. Välj sedan en position där du ser varje försök, och vid Spear Throw, bekräfta att kameran spelar in före den första Elite-vågen."
+  }
+ ],
+ "ocr-3-3": [
+  {
+   "heading": "Vem du rapporterar till",
+   "points": [
+    "Domare, sedan huvuddomare, sedan tävlingsledare eller tidtagningsteam",
+    "Du rapporterar till huvuddomaren: regelboken kallar den rollen Head Official",
+    "Huvuddomaren är den yttersta auktoriteten för att tillämpa och tolka reglerna"
+   ],
+   "narration": "Programmet för 2026 sammanfattar kommunikationskedjan på en rad: domare, sedan huvuddomare, sedan tävlingsledaren eller tidtagningsteamet. Som domare rapporterar du till huvuddomaren. Regelboken kallar den personen Head Official, och gör hen till den som fattar de avgörande besluten i alla regelfrågor vid evenemanget, och den yttersta auktoriteten för att tillämpa och tolka reglerna. Dina rapporter går till huvuddomaren, som för dem vidare."
+  },
+  {
+   "heading": "Vad huvuddomaren för vidare",
+   "points": [
+    "Händelser under loppet går till tävlingsledaren, som leder evenemangets övergripande drift",
+    "Händelser rörande deltagare, som fusk eller genvägar, går till tidtagningen",
+    "Bekräftade straff och diskvalificeringar går till tävlingsledaren och tidtagningen",
+    "Slutgiltiga straffbeslut kan bekräftas av huvuddomaren och tidtagningsteamet"
+   ],
+   "narration": "Huvuddomaren kopplar dig till resten av evenemanget. Hen håller tävlingsledaren, som ansvarar för evenemangets övergripande drift, informerad om händelser under loppet. Hen berättar för tidtagningsteamet om händelser rörande deltagare, som fusk eller genvägar. Efter videogranskningen meddelar hen bekräftade straff och diskvalificeringar till tävlingsledaren och tidtagnings- och teknikteamet. Ditt jobb är att tillämpa hinderreglerna, visa atleter till straff och notera vad som hände. Slutgiltiga straffbeslut kan bekräftas av huvuddomaren och tidtagningsteamet."
+  },
+  {
+   "heading": "När du ska höra av dig",
+   "points": [
+    "Gå med i den officiella kanalen vid incheckningen: en gruppchatt, en plattform eller huvuddomaren direkt",
+    "Osäker på straffets typ eller hur det tillämpas: kontakta huvuddomaren direkt",
+    "Tvivel eller säkerhetsproblem vid hindret: tävlingsledaren eller huvuddomaren",
+    "Faror: rapportera direkt till huvuddomaren, tävlingsledaren eller Spartans personal"
+   ],
+   "narration": "Vid incheckningen går du med i den officiella kommunikationskanalen. Det kan vara en WhatsApp-grupp, en annan meddelandeplattform eller en direktlinje till huvuddomaren. Använd den. Om du är osäker på vilket straff som gäller eller hur det ska tillämpas, kontakta huvuddomaren omedelbart i stället för att gissa. Rapportera tvivel, säkerhetsproblem eller inkonsekvenser vid ditt hinder till tävlingsledaren eller huvuddomaren. Och rapportera varje fara direkt, till huvuddomaren, tävlingsledaren eller Spartans personal."
+  },
+  {
+   "heading": "Rapportera en tvist eller en avvikare",
+   "points": [
+    "Tvist: notera pannbandsnumret och skälet, och rapportera så fort du kan",
+    "Inget nummer: rapportera direkt med en tydlig beskrivning, till exempel kläder och kategori",
+    "Hjälp till att identifiera atleten senare på banan om du blir ombedd",
+    "Ingen video: skriv ner dina straffbeslut och lämna dem till huvuddomaren"
+   ],
+   "narration": "De flesta rapporter gäller atleter. Om en atlet bestrider ett avgörande, notera pannbandsnumret, skriv ner skälet, till exempel ett underkänt hinder utan straff, och rapportera det till huvuddomaren så fort du kan. Om en atlet går utan att göra straffet och du inte får tag på numret, rapportera direkt med en tydlig beskrivning: klädernas färg, kännetecken och tävlingskategori. Där det inte finns någon video fattar du straffbesluten på plats, skriver ner dem och lämnar dem till huvuddomaren när du kommer tillbaka."
+  },
+  {
+   "heading": "Kort sagt",
+   "points": [
+    "Din linje går till huvuddomaren, som informerar tävlingsledaren och tidtagningen",
+    "Gå med i kanalen vid incheckningen och använd den",
+    "Fråga huvuddomaren när du är osäker, och rapportera faror direkt",
+    "Notera pannbandsnummer och skäl, och rapportera tvister och avvikare"
+   ],
+   "narration": "Kort sagt. Du rapporterar till huvuddomaren, och huvuddomaren informerar tävlingsledaren och tidtagningsteamet. Gå med i kommunikationskanalen vid incheckningen och använd den. När du är osäker på ett straff, fråga huvuddomaren direkt, och rapportera faror omedelbart. Vid tvister och avvikare noterar du pannbandsnumret eller en tydlig beskrivning, skriver ner skälet och rapporterar det."
+  }
+ ],
+ "ocr-4-1": [
+  {
+   "heading": "Tre typer av hinder",
+   "points": [
+    "Obligatoriska: måste klaras innan atleten går vidare",
+    "Flerförsök (godkänt/underkänt): försök igen tills det lyckas eller straffet",
+    "Enförsök (godkänt/underkänt): när atleten väl har bestämt sig klarar hen det eller tar straffet",
+    "Regelbokens del D listar varje hinder under en av de tre"
+   ],
+   "narration": "Regelboken delar in hinder i obligatoriska och godkänt/underkänt. Godkänt/underkänt-hinder finns i två sorter, flerförsök och enförsök, så i praktiken arbetar du med tre typer. Ett obligatoriskt hinder måste klaras innan atleten går vidare. Ett flerförsökshinder kan provas så många gånger som behövs, tills det är klarat eller ett straff ges. Ett enförsökshinder måste klaras när atleten väl har bestämt sig, annars gäller straffet. Regelboken listar varje hinder under en typ, och genomgången tar upp klassificeringarna.",
+   "review": "Under översyn inför 2027: regelboken och programmet för 2026 sorterar flera hinder olika. Regelboken har Monkey Bars, Multi-Rig, Twister, Olympus, Z Wall, Beater och Helix som enförsök, Atlas Carry, Tire Flip och Stairway to Sparta som flerförsök, och A-Frame Cargo som obligatoriskt. Programmet listar den första gruppen som flerförsök, den andra som obligatoriska och A-Frame Cargo som flerförsök. Tills vidare: tillämpa regelbokens avsnitt för hindret och hänvisa ett omstritt avgörande till huvuddomaren."
+  },
+  {
+   "heading": "Varje hinder måste försökas",
+   "points": [
+    "Som minimum innebär ett försök att röra vid hindret",
+    "Det kan omfatta att gå in i vatten eller svår terräng för att nå hindret",
+    "Den terrängen kan inte kringgås med ett straff om inte genomgången eller tävlingspersonalen tillåter det",
+    "Att inte försöka ett hinder är en vanlig överträdelse att hålla utkik efter"
+   ],
+   "narration": "Varje hinder måste försökas. Regelboken sätter minimikravet: ett försök är att röra vid hindret. Ibland omfattar försöket också att ta sig fram till hindret, till exempel att gå ut i vatten eller korsa annan svår terräng. Den terrängen kan inte hoppas över genom att ta ett straff, om inte genomgångarna före loppet eller tävlingsdagens personal har sagt att det är acceptabelt. Programmet för 2026 listar att inte försöka ett hinder bland de vanliga regelbrotten, så håll utkik efter atleter som går mot straffet utan att försöka."
+  },
+  {
+   "heading": "Obligatoriska hinder",
+   "points": [
+    "Klaras fullt ut: ingen förbigång och inget straff i stället, om inte en funktionär säger det",
+    "Att misslyckas med ett ger diskvalificering; tävlingsledaren kan ersätta det med ett tidstillägg",
+    "Exempel: Bucket Carry, Sandbag Carry, Log Carry, Barbed Wire Crawl",
+    "Bucket Carry: förlorat material betyder att hela banan görs om med en full hink"
+   ],
+   "narration": "Ett obligatoriskt hinder måste klaras fullt ut innan atleten går vidare. Atleten kan inte gå förbi det eller byta ut det mot ett straff, om inte en tävlingsfunktionär instruerar hen att göra det. Enligt regelboken ger ett misslyckande med ett obligatoriskt hinder diskvalificering, även om tävlingsledaren kan ersätta det med ett tidstillägg beroende på överträdelsens allvar. Bärande och kryp är typiska. Vid Bucket Carry finns till exempel inget burpeealternativ, och en hink som kommer tillbaka med material saknat betyder att atleten gör om hela banan med en korrekt fylld hink."
+  },
+  {
+   "heading": "Flerförsökshinder",
+   "points": [
+    "Atleten får försöka igen så många gånger som behövs",
+    "Det slutar med ett genomförande, eller att atleten ger upp och tar straffet",
+    "Exempel: Rope Climb, Bender, Inverted Wall",
+    "Rope Climb: byt rep först efter att ha kommit ner på marken; ett rep per försök"
+   ],
+   "narration": "Ett flerförsökshinder kan provas om och om igen. Atleten fortsätter tills hen antingen klarar det eller väljer att ge upp det och ta straffet. Varje hinders regler anger vad ett nytt försök innebär. Vid Rope Climb får en atlet till exempel byta rep efter att ha kommit ner på marken och försöka igen, men att använda mer än ett rep under ett enda försök är ett misslyckande. Atleter som gör upprepade försök bör ge företräde åt dem som försöker för första gången, men regelboken säger att det inte är obligatoriskt."
+  },
+  {
+   "heading": "Enförsökshinder: när åtagandet börjar",
+   "points": [
+    "När atleten väl har bestämt sig klarar hen hindret eller tar straffet: inget nytt försök",
+    "Varje hinders egna regler definierar när åtagandet börjar",
+    "Spear Throw: när spjutet släpps i en framåtriktad rörelse",
+    "Ape Hanger: när atleten rör vid någon av de övre stängerna"
+   ],
+   "narration": "Ett enförsökshinder ger atleten ett enda försök när hen väl har bestämt sig. Efter det klarar hen det eller tar straffet. Nyckelfrågan är när åtagandet börjar, och regelboken svarar på det hinder för hinder. Vid Spear Throw börjar försöket när spjutet släpps i en framåtriktad rörelse. Vid Ape Hanger har atleten bestämt sig när hen rör vid någon av de övre stängerna. Känn till åtagandepunkten för ditt hinder: den avgör om atleten fortfarande kan börja om.",
+   "review": "Under översyn inför 2027: programmet för 2026 säger att åtagandet börjar när försöksrörelsen startar, och vid Spear Throw när spjutet dras tillbaka för att kastas. Regelboken definierar åtagandet hinder för hinder, och vid Spear Throw är det vid utkastet. Tills vidare: tillämpa varje hinders regel och hänvisa ett omstritt avgörande till huvuddomaren."
+  },
+  {
+   "heading": "Vad som räknas som ett misslyckande",
+   "points": [
+    "Döm mot misslyckandeformerna i ditt hinders regler",
+    "Att sparka på en klocka med fötterna, benen eller knäna är ett misslyckande, utan nytt försök",
+    "Misslyckande genom betydande störning från en annan atlet: en funktionär kan tillåta en omstart",
+    "Vanliga misslyckanden är att använda stödkonstruktionen och att inte ringa i klockan"
+   ],
+   "narration": "Misslyckande definieras i varje hinders regler, i dess lista över misslyckandeformer. Döm mot den listan, inte mot din egen idé om hur hindret ska klaras. Två allmänna regler gäller för alla hinder. Att sparka på en klocka med fötterna, benen eller knäna räknas som ett misslyckande: atleten kan inte försöka igen och måste göra straffet. Och om betydande fysisk störning från en annan deltagare orsakar misslyckandet får atleten starta om utan extra straff, när en funktionär ger tillstånd."
+  },
+  {
+   "heading": "Kort sagt",
+   "points": [
+    "Varje hinder måste försökas: åtminstone röra vid det",
+    "Obligatoriska: klara det fullt ut, annars diskvalificering",
+    "Flerförsök: försök igen tills det är klart eller ta straffet; enförsök: ett försök när man bestämt sig",
+    "Döm mot varje hinders egna misslyckandeformer; vilken typ som är vilken är under översyn"
+   ],
+   "narration": "Kort sagt. Varje hinder måste försökas, och att röra vid det är minimum. Ett obligatoriskt hinder måste klaras fullt ut, och att misslyckas med det ger diskvalificering om inte tävlingsledaren ersätter det med ett tidstillägg. Ett flerförsökshinder kan provas om tills det är klarat eller atleten tar straffet. Ett enförsökshinder ger ett försök när atleten har bestämt sig, vid den punkt som hindrets regler definierar. Döm varje hinder mot dess egna misslyckandeformer, och kom ihåg att vilket hinder som är vilken typ är under översyn inför 2027."
+  }
+ ],
+ "ocr-5-1": [
+  {
+   "heading": "Två sorters hinder, två sorters utfall",
+   "points": [
+    "Obligatoriska hinder måste klaras: att misslyckas med ett ger diskvalificering",
+    "Tävlingsledaren kan ersätta det med ett tidstillägg, beroende på hur allvarligt det var",
+    "Att misslyckas med ett godkänt/underkänt-hinder ger ett straff: en straffslinga eller burpees"
+   ],
+   "narration": "Regelboken delar in hinder i två kategorier. Obligatoriska hinder måste klaras. Att misslyckas med ett ger diskvalificering från evenemanget, även om tävlingsledaren kan ersätta det med ett tidstillägg, beroende på hur allvarlig överträdelsen var. Godkänt/underkänt-hinder är annorlunda. En atlet som misslyckas med ett stannar kvar i loppet och tar ett straff i stället. Det straffet är antingen en straffslinga eller burpees, och Spartan bestämmer vilket som gäller för varje hinder, evenemang, kategori eller heat.",
+   "review": "Under översyn inför 2027: regel 3.17.3 säger att straffet är en straffslinga eller 30 burpees, som Spartan bestämmer för varje hinder, evenemang, kategori eller heat, och alltid 15 burpees vid Stadion. Officiating SOP säger en slinga för de flesta hinder och burpees vid Spear Throw; programmet för 2026 säger burpees bara vid Spear Throw. Tills vidare: använd det straff som huvuddomaren bekräftar för ditt hinder, och fråga huvuddomaren om du är osäker."
+  },
+  {
+   "heading": "Straffslingan",
+   "points": [
+    "En utpekad sträcka av banan som atleten genomför efter att ha misslyckats med ett hinder",
+    "Dess längd varierar, och den kan innehålla bärande, kryp eller andra utmaningar",
+    "Den tillämpas på samma sätt för alla i kategorin eller heatet",
+    "Gå hela slingan innan loppet startar: känn till rutten och återkomstpunkten"
+   ],
+   "narration": "En straffslinga är en utpekad del av banan som atleten genomför efter att ha misslyckats med ett hinder. Dess längd kan variera med terrängen, och den kan innehålla extra utmaningar som bärande eller kryp. Hur den än är utformad tillämpas den konsekvent för alla i samma kategori eller heat. Före den första tävlingsinriktade vågen går du hela slingan själv. Du behöver känna till rutten och återkomstpunkten, så att du kan visa atleterna rätt och se den som genar."
+  },
+  {
+   "heading": "Burpeeunderskott",
+   "points": [
+    "Atleter som inte gör de burpees som krävs får tid tillagd på sin måltid",
+    "Ett stort underskott kan betyda ett stort tidstillägg",
+    "Ett underskott kan upptäckas på banan eller i videogranskningen, före prisutdelningen",
+    "Hur mycket tid varje missad burpee lägger till är under översyn inför 2027"
+   ],
+   "narration": "Där burpees är straffet får en atlet som inte gör det antal som krävs tid tillagd på sin sammanlagda måltid. Programmet för 2026 uttrycker det enkelt: ett stort burpeeunderskott kan ge ett stort tidstillägg. Ett underskott kan upptäckas under loppet, eller i den officiella videogranskningen före prisutdelningen, vilket är anledningen till att resultaten kanske inte är slutgiltiga direkt. Exakt hur mycket tid en missad burpee lägger till är under översyn, så den här lektionen lär inte ut någon siffra.",
+   "review": "Under översyn inför 2027: regel 3.4.2 lägger till 30 sekunder för var och en av de första 10 missade burpees och totalt 10 minuter om fler än 10 missas. Officiating SOP lägger till 30 sekunder per styck och 10 minuter om färre än 20 görs; programmet för 2026 säger att 11 eller fler felaktiga ger 10 minuter och färre än 20 ger diskvalificering. Den här lektionen lär inte ut någon siffra förrän domaransvarig avgör: huvuddomaren bekräftar straffen."
+  },
+  {
+   "heading": "Att inte göra straffet",
+   "points": [
+    "Straffslingor måste genomföras fullt ut",
+    "Att hoppa över straffet ger ett ytterligare straff: tillagd tid eller diskvalificering",
+    "Vad det kostar att hoppa över en slinga är under översyn inför 2027",
+    "Din del: notera pannbandsnumret och rapportera det till huvuddomaren"
+   ],
+   "narration": "Straffslingor måste genomföras fullt ut. En atlet som misslyckas med ett godkänt/underkänt-hinder och inte gör straffet har brutit mot reglerna, och det kommer att kosta. Under den officiella videogranskningen kan tävlingsfunktionärer lägga till ett tidstillägg eller diskvalificera. Källorna för 2026 är oeniga om det exakta straffet för att hoppa över en slinga, så det är under översyn. Din del ändras inte: notera atletens pannbandsnummer, anteckna vad som hände och rapportera det till huvuddomaren.",
+   "review": "Under översyn inför 2027: regel 3.4.1 lägger till ett tidstillägg på 10 minuter när en atlet misslyckas med ett godkänt/underkänt-hinder och inte genomför straffslingan. Programmet för 2026 säger att att inte göra ett straff kan ge diskvalificering, och Officiating SOP anger ingen siffra. Tills domaransvarig avgör: tillämpa regelboken, notera det, rapportera det och överlåt straffet åt huvuddomaren."
+  },
+  {
+   "heading": "När en atlet lämnar utan straffet",
+   "points": [
+    "Notera pannbandsnumret och skälet, till exempel ett underkänt hinder utan straff",
+    "Inget nummer? Ge huvuddomaren en tydlig beskrivning: kläder, kännetecken, kategori",
+    "Rapportera så fort du kan, och hjälp till att identifiera atleten senare om du blir ombedd"
+   ],
+   "narration": "Domarproceduren (Officiating) säger vad du ska göra när en atlet lämnar ditt hinder utan att ha gjort straffet. Skriv ner pannbandsnumret och skälet. Rapportera det till huvuddomaren så snart du praktiskt kan. Om du inte fick tag på numret, rapportera det ändå direkt, med en tydlig fysisk beskrivning av atleten: färgen på kläderna, eventuella kännetecken och tävlingskategori. Du kan bli ombedd att hjälpa till att identifiera hen senare på banan."
+  },
+  {
+   "heading": "Kort sagt",
+   "points": [
+    "Obligatoriskt hinder misslyckat: diskvalificering, om inte tävlingsledaren ersätter det med ett tidstillägg",
+    "Godkänt/underkänt-hinder misslyckat: en straffslinga, genomförd fullt ut, eller burpees",
+    "Missade burpees och överhoppade slingor ger ytterligare straff: beloppen är under översyn",
+    "Notera pannbandsnumret och rapportera till huvuddomaren"
+   ],
+   "narration": "Kort sagt. Misslyckas du med ett obligatoriskt hinder är straffet diskvalificering, om inte tävlingsledaren ersätter det med ett tidstillägg. Misslyckas en atlet med ett godkänt/underkänt-hinder tar hen det utpekade straffet: en straffslinga, genomförd fullt ut, eller burpees. Missade burpees och överhoppade slingor ger ytterligare straff, och de exakta beloppen är under översyn inför 2027. Vad som än händer: notera pannbandsnumret och rapportera det till huvuddomaren.",
+   "review": "Under översyn inför 2027: där burpees är straffet (regel 3.17.3), tiden som läggs till för missade burpees (3.4.2) och straffet för att hoppa över en slinga (3.4.1) skiljer sig alla mellan regelboken, Officiating SOP och programmet för 2026. Tills domaransvarig avgör: använd det straff som huvuddomaren bekräftar för ditt hinder, lär inte ut någon tidssiffra och hänvisa omstridda avgöranden till huvuddomaren."
+  }
+ ],
+ "ocr-5-2": [
+  {
+   "heading": "Ditt jobb vid hindret",
+   "points": [
+    "Se till att atleterna följer hindrets instruktioner",
+    "Håll utkik efter regelbrott och känn till hindrets misslyckandevillkor",
+    "Visa varje atlet som misslyckas till rätt straff",
+    "Rapportera problem och bristande efterlevnad till huvuddomaren"
+   ],
+   "narration": "Regelboken definierar en domare som en funktionär som utsetts för att se till att reglerna följs, oftast placerad vid ett hinder eller i videogranskningstältet, och som rapporterar till huvudfunktionären (Head Official), som det här programmet kallar huvuddomaren. Vid ditt hinder innebär det fyra saker. Se till att atleterna följer instruktionerna. Håll utkik efter regelbrott, och veta exakt vad som räknas som ett misslyckande. Skicka alla som misslyckas till rätt straff. Och rapportera problem till huvuddomaren."
+  },
+  {
+   "heading": "Varje hinder måste försökas",
+   "points": [
+    "Som minimum innebär ett försök att röra vid hindret",
+    "Det kan omfatta att gå in i vatten eller svår terräng för att nå hindret",
+    "Den terrängen kan inte kringgås med ett straff, om inte genomgången eller tävlingspersonalen tillåter det"
+   ],
+   "narration": "Varje hinder måste försökas. Som absolut minimum innebär ett försök att röra vid hindret. Där hindret ligger i vatten eller annan svår terräng kan försöket omfatta att ta sig genom den terrängen för att nå det. Atleter kan inte gå förbi den terrängen genom att ta ett straff, om inte genomgången före loppet eller tävlingsdagens personal har sagt att det är acceptabelt. En atlet som går direkt till straffet utan att röra vid hindret har alltså inte uppfyllt regeln."
+  },
+  {
+   "heading": "Klockor och störning",
+   "points": [
+    "Klockor får bara slås med armarna, händerna eller kroppen ovanför bröstet",
+    "Att sparka på en klocka är ett misslyckande: inget nytt försök, direkt till straffet",
+    "Misslyckades atleten på grund av betydande störning från en annan atlet? En funktionär kan tillåta en omstart"
+   ],
+   "narration": "Två allmänna regler gäller vid många hinder. Klockor får bara slås med armarna, händerna eller en annan kroppsdel ovanför bröstet. En atlet som sparkar på klockan med en fot, ett ben eller ett knä har misslyckats med hindret: hen kan inte försöka igen och måste göra straffet. Och om en atlet misslyckas för att en annan deltagare störde fysiskt på ett betydande sätt kan en funktionär ge tillstånd att starta om hindret utan extra straff. Om du är osäker, fråga huvuddomaren."
+  },
+  {
+   "heading": "Att visa vägen till straffet",
+   "points": [
+    "Skicka varje atlet som misslyckas till det straff som gäller för ditt hinder",
+    "Varje hinders straffformat bekräftas före evenemanget och tas upp vid genomgången",
+    "Osäker på vilket straff som gäller? Kontakta huvuddomaren direkt"
+   ],
+   "narration": "När en atlet misslyckas visar du tydligt vägen till rätt straff. Före evenemanget bekräftar huvuddomaren straffformatet för varje hinder med tävlingsledaren, vare sig det är en löpslinga, en bärslinga, en krypslinga eller burpees, och genomgången på plats tar upp vad som gäller för ditt. Domarproceduren (Officiating) säger att de flesta hinder har en straffslinga, och Spear Throw har burpees. Om du någon gång är osäker på vilket straff som gäller, kontakta huvuddomaren omedelbart.",
+   "review": "Under översyn inför 2027: regel 3.17.3 säger att straffet är en straffslinga eller 30 burpees, som Spartan bestämmer för varje hinder, evenemang, kategori eller heat, och alltid 15 burpees vid Stadion. Officiating SOP säger en slinga för de flesta hinder och burpees vid Spear Throw; programmet för 2026 säger burpees bara vid Spear Throw. Tills vidare: använd det straff som huvuddomaren bekräftar för ditt hinder, och fråga huvuddomaren om du är osäker."
+  },
+  {
+   "heading": "Atletens uppförande på banan",
+   "points": [
+    "Atleter måste täcka hela den officiella banan: att följa den är deras ansvar",
+    "Ingen fysisk hjälp från någon annan än en Spartan-funktionär, och ingen farthållning",
+    "Att få veta andra atleters framsteg eller tider är inte hjälp",
+    "Pannbandsnumret måste vara synligt och läsbart hela tiden"
+   ],
+   "narration": "Atleter måste täcka den officiella banan i sin helhet, och att följa den korrekt är deras eget ansvar. De får inte ta emot fysisk hjälp från någon annan än en Spartan-funktionär. Det omfattar mat och dryck utanför officiella vätskestationer, utrustning, fysiskt stöd och farthållning, alltså att någon springer med dem för att coacha dem eller sätta tempot. Att få veta andra atleters framsteg eller tider är inte hjälp. Startnumret på pannbandet måste vara tydligt synligt och läsbart hela tiden."
+  },
+  {
+   "heading": "Osportsligt uppförande och rapportering",
+   "points": [
+    "Atleter måste behandla alla med respekt: inget kränkande, hotfullt eller förolämpande uppförande",
+    "Huvuddomaren avgör eventuellt straff för uppförande: ditt jobb är att rapportera det",
+    "Notera pannbandsnumret och vad som hände, och rapportera till huvuddomaren",
+    "Förklara regeln lugnt, och trappa inte upp en konflikt vid hindret"
+   ],
+   "narration": "Atleter måste behandla andra deltagare, Spartans personal, volontärer, åskådare och allmänheten med rättvisa, respekt och hövlighet, och får inte använda kränkande, hotfullt eller förolämpande språk eller beteende. Osportsligt uppförande kan leda till ett straff, som avgörs av huvudfunktionären (Head Official), alltså huvuddomaren. Vad det än gäller: skriv ner pannbandsnumret och vad som hände, och rapportera det så fort du kan. Rapporter går från dig till huvuddomaren, och vidare till tävlingsledaren eller tidtagningsteamet. Om en atlet bestrider ditt avgörande, förklara regeln lugnt och undvik ett gräl."
+  },
+  {
+   "heading": "Kort sagt",
+   "points": [
+    "Varje hinder måste försökas: som minimum en beröring",
+    "Känn till misslyckandevillkoren: en sparkad klocka är ett misslyckande",
+    "Skicka varje atlet som misslyckas till ditt hinders straff; om du är osäker, fråga huvuddomaren",
+    "Notera numret, rapportera till huvuddomaren och gräl inte"
+   ],
+   "narration": "Kort sagt. Varje hinder måste försökas, och som minimum innebär det att röra vid det. Känn till instruktionerna och misslyckandevillkoren för ditt hinder, och de allmänna också, till exempel att en sparkad klocka är ett misslyckande. Skicka varje atlet som misslyckas till det straff som gäller för ditt hinder, och fråga huvuddomaren om du är osäker. Atleter måste följa banan, inte ta emot utomstående hjälp och hålla sitt nummer synligt. När något går fel: notera numret, rapportera det och gräl inte vid hindret."
+  }
+ ],
+ "ocr-5-3": [
+  {
+   "heading": "Där burpees är straffet",
+   "points": [
+    "Spartan bestämmer en slinga eller burpees för varje hinder, evenemang, kategori eller heat",
+    "Där burpees är utpekade är straffet 30 burpees",
+    "Stadion-evenemang: alltid 15 burpees",
+    "Straffet vid Spear Throw är 30 burpees"
+   ],
+   "narration": "Enligt regel 3.17.3 är straffet för ett godkänt/underkänt-hinder antingen en straffslinga eller burpees, som Spartan bestämmer för varje hinder, evenemang, kategori eller heat. Där burpees är utpekade är det trettio burpees. Vid Stadion-evenemang är straffet för varje hinder femton burpees. Straffet vid Spear Throw är trettio burpees. Före evenemanget bekräftar huvuddomaren straffformatet för varje hinder med tävlingsledaren, så genomgången talar om för dig om ditt hinder använder burpees.",
+   "review": "Under översyn inför 2027: regel 3.17.3 säger att straffet är en straffslinga eller 30 burpees, som Spartan bestämmer för varje hinder, evenemang, kategori eller heat, och alltid 15 burpees vid Stadion. Officiating SOP säger en slinga för de flesta hinder och burpees vid Spear Throw; programmet för 2026 säger burpees bara vid Spear Throw. Tills vidare: använd det straff som huvuddomaren bekräftar för ditt hinder, och fråga huvuddomaren om du är osäker."
+  },
+  {
+   "heading": "Burpeezonen",
+   "points": [
+    "Burpees måste göras inom den utpekade burpeezonen",
+    "Burpees utanför zonen räknas inte mot straffet",
+    "Funktionärer kan lägga till zoner när en är full, eller för att hålla kategorier isär",
+    "Ditt jobb: se till att burpees görs i rätt zon"
+   ],
+   "narration": "Burpees måste göras inom den utpekade burpeezonen. Alla som görs utanför den räknas inte mot straffet, så en atlet som glider ut ur zonen gör reps som inte kommer att godkännas. Tävlingsfunktionärer kan peka ut extra burpeezoner när en får slut på plats, eller för att hålla kategorier av atleter isär. En del av ditt jobb är att se till att burpees görs i rätt zon, där du och kameran kan se dem."
+  },
+  {
+   "heading": "Pannbandet läggs på marken",
+   "points": [
+    "Atleten lägger sitt pannband på marken direkt framför sig",
+    "Förlorat pannband: notera atletens namn, eller säg det i kamerans ljud",
+    "Berätta för huvuddomaren om varje atlet som filmats utan pannband"
+   ],
+   "narration": "Medan atleten gör burpees lägger hen sitt pannband på marken direkt framför sig. Huvuddomarens utrop vid startlinjen tar upp detta, så atleterna bör känna till det innan de kommer till dig. Om en atlet har tappat sitt pannband, notera hens namn eller använd kamerans ljud för att säga vem det är. Hur som helst, berätta för huvuddomaren om varje atlet som filmats utan pannband, så att filmen kan kopplas till rätt person."
+  },
+  {
+   "heading": "Att visa atleten för kameran",
+   "points": [
+    "Håll pannbandet cirka två fot från linsen i cirka två sekunder",
+    "Ge det direkt tillbaka till atleten",
+    "Håll aldrig två pannband samtidigt, och låt inte atleter ge dem till dig",
+    "Flytta aldrig en atlets kropp eller ansikte för kamerans skull"
+   ],
+   "narration": "Vid Spear Throw identifierar videon varje atlet. Håll pannbandet cirka två fot från kameralinsen i cirka två sekunder, så att numret syns tydligt vid granskningen. Lämna sedan tillbaka det till atleten direkt. Håll aldrig två pannband samtidigt, och låt inte atleter ge sina pannband till dig. Och flytta aldrig en atlets kropp eller ansikte för att få hen i bild: identifieringen sker via pannbandet, hållet tydligt framför kameran."
+  },
+  {
+   "heading": "Videogranskningen avgör missade burpees",
+   "points": [
+    "Missade burpees fastställs i videogranskningen",
+    "Resultaten är kanske inte slutgiltiga förrän den officiella videogranskningen är klar",
+    "Filmen stannar hos huvuddomaren och ges aldrig till atleter",
+    "Dina tre uppgifter: rörelsestandarden, zonen, en tydlig identifiering"
+   ],
+   "narration": "Programmet för 2026 säger att videogranskningen avgör missade burpees. Därför kanske resultaten inte publiceras direkt: den officiella granskningen sker innan de är slutgiltiga. Huvuddomaren sköter granskningen när domarna kommer tillbaka från sina hinder, behåller filmen till slutet av evenemangsdagen och ger den aldrig till atleter. Din del på banan är det som gör granskningen möjlig: tillämpa rörelsestandarden, håll burpees i zonen och identifiera varje atlet tydligt för kameran.",
+   "review": "Under översyn inför 2027: tiden som läggs till för missade burpees skiljer sig mellan regel 3.4.2, Officiating SOP och programmet för 2026, och SOP låter domaren på plats avgöra, skriftligt, där det inte finns någon video. Lektionen om burpeetidstillägg redovisar varje version. Den här lektionen lär inte ut någon siffra: huvuddomaren bekräftar straffen efter granskningen."
+  },
+  {
+   "heading": "Kort sagt",
+   "points": [
+    "Burpees är straffet där Spartan pekar ut dem: 30, eller 15 vid Stadion",
+    "Bara burpees inom zonen räknas",
+    "Pannbandet på marken framför; visas för kameran, sedan direkt tillbaka",
+    "Videogranskningen avgör missade burpees"
+   ],
+   "narration": "Kort sagt. Burpees är straffet där Spartan pekar ut dem: trettio burpees, eller femton vid Stadion-evenemang, och alltid vid Spear Throw. Bara burpees inom den utpekade zonen räknas. Atletens pannband läggs på marken framför hen, och du visar det för kameran i ett par sekunder och ger det sedan direkt tillbaka. Videogranskningen avgör sedan eventuella missade burpees, så ditt jobb är standarden, zonen och en tydlig identifiering.",
+   "review": "Under översyn inför 2027: regel 3.17.3 säger att straffet är en straffslinga eller 30 burpees, som Spartan bestämmer för varje hinder, evenemang, kategori eller heat, och alltid 15 burpees vid Stadion. Officiating SOP säger en slinga för de flesta hinder och burpees vid Spear Throw; programmet för 2026 säger burpees bara vid Spear Throw. Tills vidare: använd det straff som huvuddomaren bekräftar för ditt hinder, och fråga huvuddomaren om du är osäker."
+  }
+ ],
+ "ocr-6-1": [
+  {
+   "heading": "En komplett burpee",
+   "points": [
+    "En cykel mellan två lägen: nedre och övre",
+    "Från det nedre läget upp till det övre, sedan ett hopp",
+    "En rep som missar en del av standarden är ingen komplett burpee"
+   ],
+   "narration": "Regel 3.17.4 definierar en komplett burpee. Det är en cykel mellan två kroppslägen, kallade det övre och det nedre. Atleten rör sig från det nedre läget upp till det övre läget och hoppar sedan. Varje rep i ett burpeestraff måste uppfylla den här standarden. En rep som missar en del av den är ingen komplett burpee, och du kan kräva att atleten gör en till. De följande bilderna tar varje del i tur och ordning."
+  },
+  {
+   "heading": "Det nedre och det övre läget",
+   "points": [
+    "Nedre: liggande på mage på marken, med bröstet i marken",
+    "Övre: balanserad och upprätt, en ställning som vem som helst kunde hålla utan att ramla",
+    "I det övre läget är höfterna och knäna sträckta, inte böjda"
+   ],
+   "narration": "Det nedre läget är att ligga på mage, med ansiktet nedåt på marken, med bröstet i marken. Det övre läget är ett balanserat, upprätt ståläge: ett som vem som helst kunde hålla länge utan att falla framåt eller bakåt. I det övre läget ska atletens höfter och knän vara sträckta, inte böjda. Titta på båda ändarna av varje rep. Ett bröst som stannar före marken, eller höfter som fortfarande är böjda i det övre läget, betyder att repen inte har uppfyllt standarden."
+  },
+  {
+   "heading": "Hoppet",
+   "points": [
+    "När atleten är tillbaka i det övre läget hoppar hen",
+    "Händerna sträcks uppåt, ovanför öronen",
+    "Inget hopp, eller händer som inte är ovanför öronen: repen är inte komplett"
+   ],
+   "narration": "När atleten har kommit tillbaka till det övre läget från det nedre hoppar hen, med händerna sträckta uppåt ovanför öronen. Regeln placerar hoppet efter att det övre läget är nått, så atleten måste först stå upprätt. Titta på händerna såväl som fötterna. Händer som bara når axlarna eller ansiktet uppfyller inte standarden, och det gör inte heller en rep utan något hopp alls."
+  },
+  {
+   "heading": "En sammanhängande rörelse",
+   "points": [
+    "Programmet för 2026: rörelsen måste vara sammanhängande för varje rep",
+    "Snabba reps måste ändå uppfylla varje del av standarden",
+    "Ett typiskt fel: snabba burpees med ofullständig sträckning i det övre läget"
+   ],
+   "narration": "Programmet för 2026 lägger till att rörelsen måste vara sammanhängande för varje rep: ner till marken, upp till stående och hoppet, som en enda rörelse. Det ger också ett typiskt scenario att hålla utkik efter: en atlet som gör snabba burpees utan att sträcka ut helt i det övre läget. Frågan är alltid densamma. Uppfyllde repen standarden? Bröstet i marken, höfter och knän sträckta i det övre läget, sedan ett hopp med händerna ovanför öronen. Om inte är det ingen komplett burpee."
+  },
+  {
+   "heading": "Kort sagt",
+   "points": [
+    "Nedre: liggande på mage, bröstet i marken",
+    "Övre: balanserad och upprätt, höfter och knän sträckta",
+    "Sedan ett hopp med händerna ovanför öronen",
+    "En sammanhängande rörelse, och varje rep enligt standarden, hur snabb den än är"
+   ],
+   "narration": "Kort sagt. En komplett burpee går från det nedre läget till det övre läget, följt av ett hopp. I det nedre läget ligger atleten på mage med bröstet i marken. I det övre läget står hen balanserad och upprätt, med höfter och knän sträckta. Sedan hoppar hen med händerna ovanför öronen. Varje rep är en sammanhängande rörelse, och varje rep måste uppfylla standarden, hur snabbt den än görs."
+  }
+ ],
+ "ocr-6-2": [
+  {
+   "heading": "Atleterna räknar, inte du",
+   "points": [
+    "Atleter räknar sina egna burpees",
+    "Domare räknar inte åt dem",
+    "Ditt jobb är standarden: titta på varje rep",
+    "Påminn atleterna om att rörelsen och antalet reps övervakas"
+   ],
+   "narration": "Atleter ansvarar för att räkna sina egna burpees. Domare räknar inte åt dem. Det lämnar dig fri för det jobb som räknas: att se om varje rep uppfyller rörelsestandarden. Programmet för 2026 föreslår att du påminner atleterna om att både rörelsestandarden och antalet reps övervakas. Där det finns video kontrolleras antalet och kvaliteten på burpeesen igen i videogranskningen."
+  },
+  {
+   "heading": "Att bevaka standarden",
+   "points": [
+    "Stå där din sikt mot atleten är fri",
+    "Kontrollera bröstet i det nedre läget, höfterna och knäna i det övre, händerna i hoppet",
+    "Håll burpeesen inom zonen, med pannbandet på marken framför",
+    "Rör inte vid eller flytta atleten för kamerans skull"
+   ],
+   "narration": "Placera dig så att din sikt är fri. Du måste se bröstet nå marken, höfterna och knäna sträckas i det övre läget och händerna gå ovanför öronen i hoppet. Håll också ett öga på zonen, eftersom burpees utanför den inte räknas, och på pannbandet, som ligger kvar på marken framför atleten. Flytta aldrig en atlets kropp eller ansikte för kamerans skull."
+  },
+  {
+   "heading": "Att be om extra burpees",
+   "points": [
+    "En rep under standarden: kräv en extra burpee",
+    "Förklara tydligt och lugnt vad som saknades",
+    "Utmattade atleter får fortsätta om deras ansträngning är uppriktig"
+   ],
+   "narration": "När en rep inte uppfyller standarden kräver du att atleten gör extra burpees, så att straffet består av kompletta burpees. Förklara tydligt och lugnt vad som saknades, till exempel att bröstet inte nådde marken, eller att höfterna fortfarande var böjda i det övre läget. Vissa atleter kommer att vara utmattade. Programmet för 2026 säger att du ska låta dem fortsätta om deras ansträngning är uppriktig. De kan fortsätta, men varje rep måste ändå uppfylla standarden."
+  },
+  {
+   "heading": "När en atlet bestrider ditt avgörande",
+   "points": [
+    "Var lugn, förklara regeln och undvik ett gräl",
+    "Notera pannbandsnumret och vad som bestreds",
+    "Hänvisa tvisten till huvuddomaren",
+    "Trappa inte upp en konflikt vid hindret"
+   ],
+   "narration": "Vissa atleter kommer att vara oeniga när du ber om extra burpees. Var lugn och professionell, förklara regeln tydligt och dras inte in i ett gräl. Notera atletens pannbandsnummer och vad som bestreds, och rapportera det till huvuddomaren så fort du kan. Tvister är huvuddomarens att lösa, inte din att vinna vid hindret. Fortsätt titta på de andra atleterna i zonen medan du hanterar det."
+  },
+  {
+   "heading": "Kort sagt",
+   "points": [
+    "Atleterna räknar; du bevakar standarden",
+    "Fri sikt mot bröstet, höfterna och knäna samt händerna",
+    "Under standarden: kräv extra burpees, förklarat lugnt",
+    "Utmattad men uppriktig: låt dem fortsätta; tvister går till huvuddomaren"
+   ],
+   "narration": "Kort sagt. Atleterna räknar sina egna burpees, och du bevakar standarden. Stå där du tydligt ser bröstet i det nedre läget, höfterna och knäna i det övre och händerna i hoppet, och håll burpeesen inom zonen. Om en rep inte håller måttet, kräv extra burpees och förklara varför, lugnt. Låt utmattade atleter fortsätta om deras ansträngning är uppriktig. Och om en atlet bestrider ditt avgörande, notera numret och hänvisa det till huvuddomaren."
+  }
+ ],
+ "ocr-6-3": [
+  {
+   "heading": "Missade burpees blir tid",
+   "points": [
+    "Atleter som inte gör de burpees som krävs får tid tillagd på sin måltid",
+    "Underskott upptäcks på banan eller i granskningen före prisutdelningen",
+    "Hur mycket tid som läggs till är under översyn inför 2027"
+   ],
+   "narration": "Där burpees är straffet och en atlet inte gör det antal som krävs läggs tid till på hens sammanlagda måltid. Missade burpees kan identifieras under loppet, eller i granskningen efter loppet före prisutdelningen. Alla tre källorna för 2026 är överens om att missade burpees kostar tid. De är inte överens om hur mycket, så den här lektionen lär inte ut någon siffra. Beloppen är under översyn inför 2027, tills domaransvarig avgör.",
+   "review": "Under översyn inför 2027: regel 3.4.2 lägger till 30 sekunder för var och en av de första 10 missade burpees och totalt 10 minuter om fler än 10 missas. Officiating SOP lägger till 30 sekunder per styck och 10 minuter om färre än 20 görs; programmet för 2026 säger att 11 eller fler felaktiga ger 10 minuter och färre än 20 ger diskvalificering. Den här lektionen lär inte ut någon siffra förrän domaransvarig avgör: huvuddomaren bekräftar straffen."
+  },
+  {
+   "heading": "Där källorna för 2026 är oeniga",
+   "points": [
+    "Hur mycket tid varje missad burpee lägger till, och om det finns ett tak",
+    "Var tröskeln ligger: missade burpees eller genomförda burpees",
+    "Om ett stort underskott ger ett tidstillägg eller diskvalificering",
+    "Stadion, med sitt straff på 15 burpees, är också omstritt"
+   ],
+   "narration": "Regelboken, domarproceduren (Officiating) och programmet för 2026 beskriver var och en burpeetidstillägg på olika sätt. De skiljer sig i hur mycket tid en missad burpee lägger till, och om det finns ett tak. De skiljer sig i var tröskeln ligger, räknad i missade burpees eller i genomförda burpees. Och de skiljer sig i om ett stort underskott ger ett långt tidstillägg eller diskvalificering. Stadion, där straffet är femton burpees, har samma problem. Tills domaransvarig avgör: behandla varje siffra som under översyn.",
+   "review": "Under översyn inför 2027: regel 3.4.2 lägger till 30 sekunder för var och en av de första 10 missade burpees och totalt 10 minuter om fler än 10 missas (Stadion: 30 sekunder var för de första 5, 5 minuter om fler än 5). Officiating SOP lägger till 30 sekunder per missad burpee och 10 minuter om färre än 20 görs (Stadion: färre än 10). Programmet för 2026 säger 30 sekunder var, 10 minuter för 11 eller fler felaktiga och diskvalificering för färre än 20. Tills vidare: ange ingen siffra för atleter, hänvisa frågor om tidstillägg till huvuddomaren."
+  },
+  {
+   "heading": "Vad som räknas som en missad burpee",
+   "points": [
+    "En burpee som inte gjordes",
+    "En burpee utanför den utpekade zonen: den räknas inte mot straffet",
+    "En rep under rörelsestandarden: den är ingen komplett burpee",
+    "Granskningen tittar på både antalet och kvaliteten på burpeesen"
+   ],
+   "narration": "Ett underskott är inte bara burpees som aldrig gjordes. Burpees som görs utanför den utpekade zonen räknas inte mot straffet. En rep som inte uppfyller rörelsestandarden är ingen komplett burpee, och programmet för 2026 behandlar missade och felaktiga burpees lika. Enligt domarproceduren avgör granskningen både antalet och kvaliteten på burpeesen. Därför är det viktigt att tillämpa standarden på plats och be om extra reps.",
+   "review": "Under översyn inför 2027: hur mycket tid missade eller felaktiga burpees lägger till skiljer sig mellan regel 3.4.2, Officiating SOP och programmet för 2026. Vad som räknas som en komplett burpee gör det inte: tillämpa reglerna 3.17.4 och 3.17.5, och överlåt tidstillägget åt huvuddomaren."
+  },
+  {
+   "heading": "Vem som avgör straffet",
+   "points": [
+    "Med video: burpeebeslut om antal och kvalitet fattas i videogranskningen",
+    "Utan video: du avgör på plats, skriver ner det och ger det till huvuddomaren",
+    "Huvuddomaren skickar bekräftade straff till tävlingsledaren och tidtagningsteamet",
+    "Straff visas i resultattältet under granskningen"
+   ],
+   "narration": "Där det finns video fattas besluten om hur många burpees som gjordes, och hur väl, i videogranskningen. Huvuddomaren sköter den granskningen när domarna kommer tillbaka från sina hinder, och skickar bekräftade straff och diskvalificeringar till tävlingsledaren och tidtagningsteamet. Där det inte finns någon video säger domarproceduren att domaren på plats avgör, dokumenterar beslutet skriftligt och ger det till huvuddomaren när hen kommer tillbaka från hindret. Straff visas i resultattältet under granskningen.",
+   "review": "Under översyn inför 2027: Officiating SOP (6.iii) säger att beslut om burpeestraff fattas i videogranskningen där det finns video, och av domaren på plats, skriftligt, där det inte finns. Programmet för 2026 säger att straffbeslut fattas av videogranskningsteamet. Tills vidare: följ Officiating SOP: utan kamera, skriv ner ditt beslut och ge det till huvuddomaren."
+  },
+  {
+   "heading": "Kort sagt",
+   "points": [
+    "Missade eller felaktiga burpees lägger tid på atletens måltid",
+    "Hur mycket tid är under översyn inför 2027: hänvisa frågor till huvuddomaren",
+    "Tillämpa standarden och zonen på plats",
+    "Med video avgör granskningen; utan den, skriv ner ditt beslut"
+   ],
+   "narration": "Kort sagt. Missade eller felaktiga burpees lägger tid på atletens måltid, men hur mycket tid är under översyn inför 2027, eftersom regelboken, domarproceduren och programmet för 2026 är oeniga. Ange ingen siffra: hänvisa frågor till huvuddomaren. Det du kontrollerar finns på banan: rörelsestandarden och zonen. Där det finns video avgör granskningen. Där det inte finns det skriver du ner ditt beslut och ger det till huvuddomaren.",
+   "review": "Under översyn inför 2027: tiden som läggs till för missade burpees skiljer sig mellan regel 3.4.2, Officiating SOP och programmet för 2026 (varje version finns på den andra bilden), och SOP och programmet skiljer sig i vem som avgör när det inte finns någon video. Tills domaransvarig avgör: lär inte ut någon siffra, följ Officiating SOP om skriftliga beslut och hänvisa omstridda avgöranden till huvuddomaren."
+  }
+ ],
+ "ocr-7-1": [
+  {
+   "heading": "Att svara på en atlets fråga",
+   "points": [
+    "Var lugn och professionell, oavsett frågans ton",
+    "Förklara regeln tydligt: vad hindret krävde, och vad som missades",
+    "Undvik gräl: en fråga är ingen debatt"
+   ],
+   "narration": "Atleter kommer att fråga om dina avgöranden, ofta när de är trötta och frustrerade. Var lugn och professionell. Svara genom att förklara regeln tydligt: vad hindret krävde av dem, och vilken del de inte uppfyllde. Håll det kort, eftersom andra atleter fortfarande kommer till ditt hinder. Om atleten accepterar förklaringen skickar du hen till straffet. Om inte har det blivit en tvist. Du löser inte en tvist genom att gräla vid hindret. Du hänvisar den till huvuddomaren."
+  },
+  {
+   "heading": "När det blir en tvist",
+   "points": [
+    "Notera atletens pannbandsnummer",
+    "Skriv ner skälet, till exempel ett underkänt hinder utan genomfört straff",
+    "Rapportera det till huvuddomaren så fort du kan",
+    "Trappa inte upp konflikten vid hindret"
+   ],
+   "narration": "Om en atlet bestrider ditt avgörande har du tre uppgifter. Först noterar du pannbandsnumret. Reglerna gör varje deltagare ansvarig för att hålla sitt startnummer på pannbandet, läsbart, hela tiden. Sedan skriver du ner skälet till tvisten, till exempel att atleten misslyckades med hindret och inte gjorde straffet. Tredje rapporterar du det till huvuddomaren så snart du praktiskt kan. Beslutet fattas inte vid ditt hinder, så det finns inget att vinna på att trappa upp. Håll dina anteckningar sakliga: huvuddomaren kommer att förlita sig på dem."
+  },
+  {
+   "heading": "När du inte får tag på pannbandsnumret",
+   "points": [
+    "Rapportera det till huvuddomaren direkt",
+    "Ge en tydlig beskrivning: klädernas färg, kännetecken, tävlingskategori",
+    "Hjälp till att identifiera atleten senare på banan om du blir ombedd"
+   ],
+   "narration": "Ibland lämnar en atlet hinderområdet utan att ha gjort straffet, och du kan inte läsa hens nummer. Domarproceduren tar upp detta. Rapportera det till huvuddomaren omedelbart, i stället för att vänta tills du kommer tillbaka från hindret. Ge en tydlig fysisk beskrivning: färgen på kläderna, allt som gör hen lätt att känna igen och tävlingskategori om du kan se den. Du kan bli ombedd att hjälpa till att identifiera atleten senare på banan. Under tiden: håll fokus på ditt hinder och de atleter som fortfarande kommer."
+  },
+  {
+   "heading": "Atletens uppförande",
+   "points": [
+    "Atleter måste behandla funktionärer med rättvisa, respekt och hövlighet",
+    "Kränkande, hotfullt eller förolämpande språk eller uppförande bryter mot reglerna",
+    "Huvudfunktionären (Head Official) avgör eventuellt straff för en överträdelse av uppförandet",
+    "Din del: notera numret, anteckna vad som hände, rapportera det"
+   ],
+   "narration": "Reglerna förväntar sig att atleter behandlar alla vid evenemanget, funktionärer inkluderade, med rättvisa, respekt och hövlighet, och inte använder kränkande, hotfullt eller förolämpande språk eller uppförande. En överträdelse av uppförandet kan leda till ett straff som beror på hur allvarlig den var. I regelboken är det beslutet huvudfunktionärens (Head Official), inte ditt. Grovt osportsligt uppförande, eller fysiskt våld mot en funktionär, kan vara grund för avstängning. Din del är densamma som i varje tvist: var lugn, notera pannbandsnumret, anteckna vad som sades eller gjordes och rapportera det till huvuddomaren."
+  },
+  {
+   "heading": "Efter loppet: protester och videogranskning",
+   "points": [
+    "Resultaten är inte slutgiltiga förrän den officiella videogranskningen har ägt rum",
+    "Atleter lämnar protester till huvudfunktionären (Head Official) under protesttiden",
+    "Funktionärer behöver inte beakta film som tagits av atleter eller åskådare",
+    "Officiell videofilm ges aldrig till deltagare"
+   ],
+   "narration": "Ett omstritt avgörande slutar inte vid ditt hinder. Innan resultaten är slutgiltiga görs en officiell videogranskning. En atlet som vill utmana ett straff lämnar in en protest till huvudfunktionären (Head Official) under protesttiden, som börjar så fort hen passerar mållinjen. Funktionärer är inte skyldiga att beakta videor eller foton som tagits av deltagare eller åskådare. Domarproceduren säger också att officiell film aldrig ges till deltagare. Så om en atlet erbjuder dig sin telefonfilm, eller ber att få se din, hänvisa hen till huvuddomaren och protestprocessen.",
+   "review": "Under översyn inför 2027: regel 3.19.1 avslutar protesttiden 15 minuter före prisceremonin för atletens kategori. Officiating SOP anger en halvtimme före prisutdelningen som exempel, och låter domarfel för atleter utanför prispallen rättas upp till två timmar efter den sista prisutdelningen. Tills vidare: tillämpa regelboken och hänvisa tidsfrågor till huvuddomaren."
+  },
+  {
+   "heading": "Kort sagt",
+   "points": [
+    "Var lugn, förklara regeln tydligt, gräl inte",
+    "Tvist: pannbandsnummer, vad som hände, rapportera till huvuddomaren",
+    "Inget nummer: rapportera direkt, med en tydlig beskrivning",
+    "Protester och videogranskning sker efter loppet, inte vid ditt hinder"
+   ],
+   "narration": "Kort sagt. Svara på frågor lugnt och förklara regeln tydligt, utan att gräla. Om det blir en tvist, notera pannbandsnumret, skriv ner vad som hände och rapportera det till huvuddomaren så fort du kan. Om du inte får tag på numret, rapportera det direkt med en tydlig beskrivning av atleten. Kränkande uppförande noteras och rapporteras på samma sätt. Det slutgiltiga beslutet kommer senare, genom videogranskningen och protesttiden, inte vid ditt hinder."
+  }
+ ],
+ "ocr-8-1": [
+  {
+   "heading": "Professionellt uppförande vid ditt hinder",
+   "points": [
+    "Håll fokus på ditt hinder",
+    "Undvik distraktioner och långa samtal",
+    "Var neutral och respektfull mot varje atlet",
+    "Representera Spartan professionellt"
+   ],
+   "narration": "Reglerna finns för att varje Spartan-evenemang ska genomföras rättvist och enhetligt, i en anda av sportsmanship och integritet. Vid ditt hinder är det du som gör det möjligt. Håll fokus på hindret och de atleter som försöker klara det. Undvik distraktioner och långa samtal, eftersom ett misslyckande du inte såg är ett misslyckande du inte kan döma. Var neutral och respektfull mot alla, vem de än är. För atleter och åskådare är du Spartan, så representera Spartan professionellt."
+  },
+  {
+   "heading": "Var en domare står i reglerna",
+   "points": [
+    "En domare är en av Spartan utsedd funktionär som ser till att reglerna följs",
+    "Oftast placerad vid ett hinder eller i videogranskningstältet",
+    "Huvudfunktionären (Head Official) fattar de avgörande besluten och har sista ordet om reglerna",
+    "Din kedja: du, huvuddomaren, sedan tävlingsledaren eller tidtagningsteamet"
+   ],
+   "narration": "Regelboken definierar en domare som en av Spartan utsedd funktionär vars uppgift är att se till att reglerna följs, oftast placerad vid hinder eller i videogranskningstältet. Domare rapporterar till huvudfunktionären (Head Official), som fattar de avgörande besluten i alla regelfrågor vid ett evenemang och är den yttersta auktoriteten för att tillämpa och tolka dem. I domarproceduren och det här programmet rapporterar du till huvuddomaren. Huvuddomaren rapporterar sedan händelser under loppet till tävlingsledaren, och straff till tidtagningsteamet."
+  },
+  {
+   "heading": "Vad du avgör",
+   "points": [
+    "Tillämpa hinderreglerna",
+    "Visa atleter som misslyckas till rätt straff",
+    "Dokumentera överträdelser",
+    "Osäker på straffet eller hur det tillämpas? Kontakta huvuddomaren direkt"
+   ],
+   "narration": "Vid ditt hinder ansvarar du för tre saker. Du tillämpar hindrets regler. Du visar en atlet som misslyckas till rätt straff för det hindret. Och du dokumenterar överträdelser. Där det inte finns några videobevis för burpees ger domarproceduren dig beslutet om burpeesens antal och kvalitet: du fattar det på plats, skriver ner det och lämnar det till huvuddomaren när du kommer tillbaka. Om du är osäker på typen av straff eller hur det tillämpas, kontakta huvuddomaren direkt."
+  },
+  {
+   "heading": "Vem som bekräftar ett straff",
+   "points": [
+    "Slutgiltiga straffbeslut kan bekräftas av huvuddomaren och tidtagningsteamet",
+    "I videogranskningen kan funktionärer fortfarande bedöma straff, upp till diskvalificering",
+    "Huvuddomaren för bekräftade straff vidare till tävlingsledaren och tidtagningen",
+    "Dina anteckningar är det underlag som besluten vilar på"
+   ],
+   "narration": "Ditt avgörande startar processen, men det är inte alltid sista ordet. Programmet säger att slutgiltiga straffbeslut kan bekräftas av huvuddomaren och tidtagningsteamet. Enligt regelboken är huvudfunktionären (Head Official) i slutänden ansvarig för att upprätthålla reglerna, och under den officiella videogranskningen kan tävlingsfunktionärer fortfarande bedöma straff, inklusive diskvalificering. Huvuddomaren sköter den granskningen och för bekräftade straff och diskvalificeringar vidare till tävlingsledaren och tidtagningsteamet. Därför spelar dina anteckningar roll: tydliga, sakliga uppgifter gör att rätt beslut kan bekräftas."
+  },
+  {
+   "heading": "Kort sagt",
+   "points": [
+    "Fokuserad, neutral, respektfull och professionell",
+    "Du tillämpar reglerna, visar atleter till straff och dokumenterar överträdelser",
+    "Huvuddomaren bekräftar straff och tar hand om det du hänvisar",
+    "Osäker? Kontakta huvuddomaren direkt"
+   ],
+   "narration": "Kort sagt. Håll fokus på ditt hinder, var neutral och respektfull, och representera Spartan professionellt. Du tillämpar hinderreglerna, visar atleter som misslyckas till rätt straff och dokumenterar överträdelser. Huvudfunktionären har sista ordet om reglerna, och huvuddomaren bekräftar straff, tar hand om det du hänvisar och för dem vidare till tävlingsledaren och tidtagningen. Om du någon gång är osäker, kontakta huvuddomaren direkt."
+  }
+ ],
+ "ocr-8-2": [
+  {
+   "heading": "Säkerhet är en del av jobbet",
+   "points": [
+    "Reglerna syftar till att skydda atleternas hälsa, säkerhet och välbefinnande",
+    "Bevaka hindrets säkerhet och se till att atleterna rör sig säkert",
+    "Tillåt inga farliga genvägar: atleter måste täcka hela den officiella banan"
+   ],
+   "narration": "Ett syfte med reglerna är att skydda deltagarnas hälsa, säkerhet och välbefinnande, så långt det rimligen går i hinderbanelöpning. Programmet sätter atletens säkerhet vid sidan av rättvisa som din prioritet. Det innebär att bevaka hindrets säkerhet, se till att atleterna rör sig säkert och inte tillåta farliga genvägar. En genväg är aldrig din att tillåta: reglerna kräver att atleter täcker den officiella banan i sin helhet."
+  },
+  {
+   "heading": "Inspektera, och rapportera faror direkt",
+   "points": [
+    "Före den första vågen: inspektera uppställningen och kontrollera att den är användbar",
+    "Gå straffslingan och lär dig från vilket håll atleterna kommer",
+    "Rapportera faror direkt: huvuddomaren, tävlingsledaren eller Spartans personal"
+   ],
+   "narration": "Säkerheten börjar före den första tävlingsinriktade vågen. När du kommer till ditt hinder inspekterar du uppställningen och kontrollerar att den är användbar. Gå igenom loppets flöde och från vilket håll atleterna kommer, och gå hela straffslingan så att du känner till dess rutt och återkomstpunkt. Om något oroar dig, ett tvivel, ett säkerhetsproblem eller en inkonsekvens, rapportera det direkt till huvuddomaren eller tävlingsledaren. Under loppet rapporterar du varje fara direkt till huvuddomaren, tävlingsledaren eller Spartans personal."
+  },
+  {
+   "heading": "Säker rörelse i hinderreglerna",
+   "points": [
+    "Rope Climb: kom ner säkert och under kontroll, minst en hand på repet",
+    "Hercules Hoist: sänk vikten under kontroll; att tappa den är ett misslyckande",
+    "Simning eller vattenpassage: inget dyk; att dyka är ett misslyckande"
+   ],
+   "narration": "Vissa hinderregler har säkerheten inbyggd, och du tillämpar dem som vilken annan regel som helst. Vid Rope Climb måste atleterna ta sig ner till marken på ett säkert och kontrollerat sätt, med minst en hand på repet hela tiden. Vid Hercules Hoist måste vikten sänkas under kontroll, inte i fritt fall, och att tappa den okontrollerat är ett misslyckande. Vid en simning eller vattenpassage är det inte tillåtet att dyka, och det är en misslyckandeform. Känn till ditt hinders säkerhetsregler innan den första atleten kommer."
+  },
+  {
+   "heading": "Samma tolkning hela loppet",
+   "points": [
+    "Tillämpa reglerna lika för alla atleter",
+    "Använd samma tolkning från den första vågen till den sista",
+    "Varje straff tillämpas konsekvent inom sin kategori eller sitt heat",
+    "Ditt fokus: de tävlingsinriktade kategorierna, Elite och Age Group"
+   ],
+   "narration": "Konsekvens är det som gör resultaten rättvisa. Tillämpa reglerna lika för varje atlet och använd samma tolkning från den första vågen till den sista. Avgörandet du gör för den första Elite-atleten är standarden för alla efter hen. Regelboken säger att varje straff tillämpas konsekvent inom den utpekade kategorin eller det utpekade heatet. Ditt fokus är de tävlingsinriktade kategorierna, Elite och Age Group, som förväntas följa varje regel. Open-löpare uppmanas också att följa reglerna, i en mer avslappnad stämning."
+  },
+  {
+   "heading": "Håll dig till regeln, och eskalera när du är osäker",
+   "points": [
+    "Döm mot hindrets nedskrivna misslyckandeformer",
+    "Undvik personlig bedömning utöver regeln",
+    "När du är osäker, eskalera beslutet till huvuddomaren"
+   ],
+   "narration": "Konsekvens betyder också att inte lägga till egna regler. Döm varje försök mot hindrets nedskrivna misslyckandeformer, inte mot vad du personligen tycker är rättvist, och undvik bedömning utöver vad regeln säger. Om en situation inte tydligt omfattas, eller du är osäker på vilket straff som gäller eller hur det ska tillämpas, kontakta huvuddomaren direkt. Ett beslut som eskalerats och fattats en gång kan sedan tillämpas på samma sätt för alla."
+  },
+  {
+   "heading": "Kort sagt",
+   "points": [
+    "Bevaka säkerheten, kräv säker rörelse, tillåt inga genvägar",
+    "Inspektera tidigt och rapportera faror direkt",
+    "Samma regler, samma tolkning, varje atlet, hela loppet",
+    "Osäker? Eskalera till huvuddomaren"
+   ],
+   "narration": "Kort sagt. Atletens säkerhet står vid sidan av rättvisa som din prioritet. Bevaka ditt hinder, se till att atleterna rör sig säkert och tillåt inga genvägar. Inspektera hindret och gå straffslingan före den första vågen, och rapportera faror direkt till huvuddomaren, tävlingsledaren eller Spartans personal. Tillämpa samma regler, med samma tolkning, på varje atlet hela loppet. Och när du är osäker, eskalera till huvuddomaren."
+  }
+ ],
+ "ocr-9-1": [
+  {
+   "heading": "Titta på händer och fötter",
+   "points": [
+    "De flesta misslyckandeformer handlar om vad händerna och fötterna rör vid",
+    "Monkey Bars: bara händer och armar; fötter eller ben på stängerna är ett misslyckande",
+    "Olympus: fötterna får vila mot väggen, men en fot på ett grepp eller hål är ett misslyckande"
+   ],
+   "narration": "De flesta hindermisslyckanden handlar om vad en atlets händer och fötter rör vid, så det är dit dina ögon går. Vid Monkey Bars tar sig atleten fram med bara händer och armar. Att fötter eller ben rör vid stängerna är ett misslyckande, och det är också att röra vid marken för att skapa en fördel. Vid Olympus får atleterna sätta fötter och knän mot väggen för stöd, men att röra vid något grepp eller hål med fötterna är ett misslyckande. Känn till exakt vilka beröringar ditt hinder tillåter."
+  },
+  {
+   "heading": "Fokusera på den exakta regeln",
+   "points": [
+    "Känn till ditt hinders instruktioner, misslyckandeformer och anmärkningar före den första vågen",
+    "Helix och Z Wall: försöket börjar vid fyra kontaktpunkter",
+    "Monkey Bars, Multi-Rig, Olympus: när båda fötterna har lämnat startsteget"
+   ],
+   "narration": "Varje hinder har sin egen regel, med instruktioner till deltagarna, misslyckandeformer och tilläggsanmärkningar. Titta efter den regeln, inte efter en allmän idé om ett bra försök. Känn till när försöket börjar, för från och med då har atleten bestämt sig. Vid Helix och Z Wall börjar det när fyra kontaktpunkter är gjorda. Vid Monkey Bars, Multi-Rig och Olympus börjar det när båda fötterna har lämnat startsteget. Om du missar starten kan du inte vara säker på vad som räknas."
+  },
+  {
+   "heading": "Var du ska stå",
+   "points": [
+    "En plats med fri sikt över försök, genomföranden och misslyckanden",
+    "Kontrollera loppets flöde och från vilket håll atleterna kommer",
+    "Förutse var misslyckanden brukar ske, och ha de punkterna i sikte"
+   ],
+   "narration": "Före den första vågen räknar du ut den bästa platsen att stå på. Du behöver fri sikt över försöken, genomförandena och misslyckandena. Gå igenom loppets flöde och från vilket håll atleterna kommer. Fundera på var misslyckanden brukar ske vid ditt hinder, och se till att de punkterna ligger i tydlig sikt. Domarproceduren kallar hinder med en historia av täta misslyckanden för hinder där många misslyckas (high-failure obstacles). De kräver aktiv tillämpning, så din position där betyder ännu mer."
+  },
+  {
+   "heading": "Redo att ingripa vid ett misslyckande",
+   "points": [
+    "Stå där du kan tala med en atlet som misslyckas och visa hen till straffet",
+    "Känn till straffslingans rutt och återkomstpunkt",
+    "Ha klockan i sikte: att sparka på den är ett misslyckande"
+   ],
+   "narration": "Att se ett misslyckande är halva jobbet. Den andra halvan är att ta kontakt med atleten, så placera dig där du kan tala med hen så fort hen misslyckas och visa vägen till straffet. Gå straffslingan i förväg, så att du känner till dess rutt och var den kommer tillbaka till banan. Ha också klockan i sikte. Enligt den allmänna regeln får klockor bara slås med armarna, händerna eller en annan kroppsdel ovanför bröstet. Att sparka på klockan är ett misslyckande. Kontrollera också ditt hinders egen regel."
+  },
+  {
+   "heading": "Kort sagt",
+   "points": [
+    "Titta på händer och fötter",
+    "Känn till den exakta regeln och när försöket börjar",
+    "Stå med fri sikt över var misslyckanden sker",
+    "Var redo att visa atleten till straffet"
+   ],
+   "narration": "Kort sagt. Titta på atletens händer och fötter, eftersom det är där de flesta misslyckanden sker. Känn till den exakta regeln för ditt hinder, inklusive ögonblicket då försöket börjar. Stå där din sikt är fri och de vanliga misslyckandepunkterna är i sikte. Och placera dig så att du kan ta kontakt med atleten så fort hen misslyckas, och skicka hen till rätt straff."
+  }
+ ],
+ "ocr-9-2": [
+  {
+   "heading": "Att använda stödkonstruktionen",
+   "points": [
+    "Väggar: att använda stödkonstruktionen, väggens sidor eller remmarna är ett misslyckande",
+    "Riggar: att använda lodräta fackverk som en stege är ett misslyckande",
+    "Vågräta fackverk får användas för att starta eller byta, där regeln tillåter det"
+   ],
+   "narration": "Fackverket är hindrets huvudsakliga stödkonstruktion: de diagonala, lodräta och vågräta balkarna av metall. Många hinder förbjuder att använda det. Vid väggarna är det ett misslyckande att använda stödkonstruktionen, väggens sidor eller remmarna för att få hjälp med balansen, klättra upp eller komma ner. På Monkey Bars och andra riggar är det ett misslyckande att använda lodräta fackverk som en stege för att starta, ta sig fram eller avsluta. Men många riggar låter atleter använda vågräta fackverk för att starta, eller för att byta under färden. Kontrollera vad som gäller för ditt hinder."
+  },
+  {
+   "heading": "Att ta i utanför det tillåtna området",
+   "points": [
+    "Multi-Rig: att ta tag i repen, remmarna eller kedjorna som håller ett grepp är ett misslyckande",
+    "Helix: att använda stänger från en annan bana är ett misslyckande",
+    "Olympus: att röra vid ett grepp eller hål med fötterna är ett misslyckande"
+   ],
+   "narration": "Att ta i utanför det tillåtna området betyder att använda en del av hindret som regeln inte tillåter. Vid Multi-Rig får atleterna bara använda greppen. Att ta tag i repen, remmarna eller kedjorna som fäster dem vid konstruktionen är ett misslyckande, och det är också att använda mer än en bana. Vid Helix är det ett misslyckande att använda stänger från en annan bana. Vid Olympus arbetar händerna med greppen, och en fot på ett grepp eller hål är ett misslyckande. Känn till ditt hinders tillåtna område exakt."
+  },
+  {
+   "heading": "Att inte försöka, och att hoppa över slingan",
+   "points": [
+    "Varje hinder måste försökas: som minimum rör atleten vid det",
+    "En atlet som misslyckas måste genomföra straffslingan fullt ut",
+    "Att hoppa över slingan straffas: straffet är under översyn inför 2027"
+   ],
+   "narration": "Varje hinder måste försökas. Som minimum innebär ett försök att röra vid hindret. Ibland innebär det att ta sig genom vatten eller svår terräng för att nå det, och det kan inte kringgås med ett straff om inte genomgången eller tävlingspersonalen säger det. En atlet som försöker och misslyckas måste genomföra straffslingan fullt ut. Att hoppa över den är en överträdelse som du noterar och rapporterar till huvuddomaren. Källorna skiljer sig om straffet för det, så det är under översyn.",
+   "review": "Under översyn inför 2027: regel 3.4.1 lägger till ett tidstillägg på 10 minuter när en atlet inte genomför straffslingan. Webbprogrammet för 2026 säger att det kan ge diskvalificering. Tills vidare: tillämpa regelboken och hänvisa fallet till huvuddomaren."
+  },
+  {
+   "heading": "Burpees som inte uppfyller standarden",
+   "points": [
+    "Bröstet mot marken, upprätt med höfter och knän sträckta, sedan ett hopp, händerna ovanför öronen",
+    "Burpees utanför den utpekade burpeezonen räknas inte",
+    "Atleter räknar sina egna burpees: du räknar inte åt dem"
+   ],
+   "narration": "Felaktiga burpees är ett av de vanligaste regelbrotten. En komplett burpee går från det nedre läget, liggande med bröstet i marken, till ett balanserat upprätt läge med höfter och knän sträckta, följt av ett hopp med händerna ovanför öronen. Burpees som görs utanför den utpekade zonen räknas inte. Atleter räknar sina egna burpees, och du räknar inte åt dem. Där standarden inte uppfylls säger programmet att du ska kräva extra burpees, och påminna atleten om att hens rörelse och hens reps övervakas."
+  },
+  {
+   "heading": "Klockan",
+   "points": [
+    "På riggar som Monkey Bars är det ett misslyckande att inte ringa i klockan",
+    "Klockor får slås med armarna, händerna eller kroppen ovanför bröstet",
+    "Att sparka på klockan är ett misslyckande: inget nytt försök, atleten tar straffet"
+   ],
+   "narration": "Många hinder slutar vid en klocka, och på riggar som Monkey Bars är det en misslyckandeform att inte ringa i den. En atlet som släpper taget innan hen ringt i klockan har misslyckats, hur långt hen än kom. Enligt den allmänna regeln får klockor bara slås med armarna och händerna, eller en annan kroppsdel ovanför bröstet. Att använda fötterna, benen eller knäna för att sparka på klockan räknas som ett hindermisslyckande. Atleten får inte försöka igen, och måste göra straffet för det hindret."
+  },
+  {
+   "heading": "Kort sagt",
+   "points": [
+    "Ingen stödkonstruktion eller lodrätt fackverk om inte regeln tillåter det",
+    "Bara de tillåtna delarna av hindret, i en bana",
+    "Försök varje hinder, och genomför varje straffslinga fullt ut",
+    "Burpees enligt standarden, i zonen; klockor ringda, aldrig sparkade"
+   ],
+   "narration": "Kort sagt. Håll utkik efter atleter som använder stödkonstruktionen, eller lodrätt fackverk som en stege, där regeln förbjuder det. Håll utkik efter att ta i utanför det tillåtna området, till exempel att ta tag i repen eller kedjorna på en rigg, eller att använda en annan bana. Varje hinder måste försökas, och varje straffslinga genomföras fullt ut. Burpees måste uppfylla standarden och göras i zonen. Och klockan måste ringas, aldrig sparkas."
+  }
+ ],
+ "ocr-9-3": [
+  {
+   "heading": "Så avgör du",
+   "points": [
+    "Hitta den exakta regeln: instruktioner, misslyckandeformer och anmärkningar",
+    "Kontrollera om det du såg motsvarar en listad misslyckandeform",
+    "Fatta beslutet, visa atleten vägen, notera det och eskalera när du är osäker"
+   ],
+   "narration": "Den här lektionen ger dig tre situationer från programmet för 2026. För var och en avgör du vad du skulle göra innan du hör svaret. Metoden är densamma varje gång. Hitta den exakta regeln för hindret. Kontrollera om det du såg motsvarar en av dess listade misslyckandeformer. Fatta sedan beslutet, visa atleten vägen och notera vad som hände. Om regeln inte avgör det, eller du är osäker, eskalera till huvuddomaren."
+  },
+  {
+   "heading": "Scenario 1: en kort beröring av toppen",
+   "points": [
+    "En atlet vid Helix rör kort vid hindrets topp med en hand",
+    "Beröringen varar ett ögonblick och ger ingen fördel",
+    "Hen fortsätter och ringer i klockan"
+   ],
+   "narration": "Regel 4.2.6 listar att röra vid Helix topp som en misslyckandeform, utan något villkor om fördel. Olympus och Z Wall är likadana. Avgörandet som regelboken stöder är alltså ett misslyckande, och atleten tar straffet, trots att beröringen inte gav något. Fördel spelar roll där regeln säger det. Vid Monkey Bars, enligt regel 4.2.7, är det ett misslyckande att fötterna rör marken när det skapar en fördel. Kontrollera alltid misslyckandeformens ordalydelse innan du avgör.",
+   "review": "Under översyn inför 2027: webbprogrammet för 2026 ber domare överväga om beröringen skapade en fördel, och fokusera på regelns syfte, inte på små oavsiktliga beröringar. Reglerna 4.2.6, 4.2.10 och 4.2.17 listar att röra vid toppen som ett misslyckande utan fördelstest. Tills vidare: tillämpa regelboken och hänvisa ett omstritt avgörande till huvuddomaren."
+  },
+  {
+   "heading": "Scenario 2: snabba burpees, höfterna inte sträckta",
+   "points": [
+    "En atlet gör sina straffburpees efter att ha misslyckats med Spear Throw",
+    "Hen rör sig snabbt, och i det övre läget på många reps är höfterna fortfarande böjda"
+   ],
+   "narration": "De repsen uppfyller inte standarden. Regel 3.17.4 definierar det övre läget som balanserat och upprätt, med höfterna och knäna sträckta, inte böjda, före hoppet. En rep utan det är ingen komplett burpee. Programmet säger att du ska kräva extra burpees när standarden inte uppfylls, och påminna atleten om att hens rörelse och reps övervakas. Räkna inte åt hen. Vid Spear Throw avgör videogranskningsteamet missade burpees. Utan video avgör du på plats, skriver ner det och ger det till huvuddomaren.",
+   "review": "Under översyn inför 2027: tiden som läggs till för missade eller felaktiga burpees skiljer sig mellan regelboken (3.4.2), Officiating SOP och programmet för 2026. Den här lektionen lär inte ut någon siffra förrän domaransvarig avgör."
+  },
+  {
+   "heading": "Scenario 3: att springa förbi straffslingan",
+   "points": [
+    "En atlet misslyckas med ett godkänt/underkänt-hinder vid din station",
+    "Du visar hen vägen till straffslingan, men hen springer rakt förbi den och fortsätter"
+   ],
+   "narration": "Det här är en tydlig överträdelse. Enligt regel 3.4.1 måste en atlet som försöker och misslyckas med ett godkänt/underkänt-hinder genomföra straffslingan, och den här gjorde det inte. Jaga inte hen och gräl inte. Notera pannbandsnumret, dokumentera vad som hände och rapportera det till huvuddomaren så fort du kan. Om du inte kunde läsa numret, rapportera det direkt med en tydlig beskrivning: klädernas färg, kännetecken och tävlingskategori. Själva straffet avgörs via huvuddomaren, inte vid ditt hinder.",
+   "review": "Under översyn inför 2027: regel 3.4.1 lägger till ett tidstillägg på 10 minuter när straffslingan inte genomförs. Webbprogrammet för 2026 säger att det kan ge diskvalificering. Tills vidare: tillämpa regelboken och hänvisa fallet till huvuddomaren."
+  },
+  {
+   "heading": "Kort sagt",
+   "points": [
+    "Läs misslyckandeformens exakta ordalydelse: fördel räknas bara där det står",
+    "En burpee utan full sträckning i det övre läget räknas inte",
+    "En överhoppad straffslinga: notera numret, dokumentera, rapportera",
+    "Osäker? Eskalera till huvuddomaren"
+   ],
+   "narration": "Kort sagt. En kort beröring av toppen på Helix, Olympus eller Z Wall är ett misslyckande enligt regelboken, eftersom misslyckandeformen inte har något fördelstest, medan vissa andra misslyckandeformer har det. En burpee utan sträckta höfter och knän i det övre läget är ingen komplett burpee, så extra burpees krävs. En atlet som springer förbi straffslingan har brutit mot reglerna: notera pannbandsnumret, dokumentera det och rapportera det till huvuddomaren."
+  }
+ ],
+ "ocr-4-2": [
+  {
+   "heading": "Ett enförsökshinder",
+   "points": [
+    "Ett kast: en miss är ett misslyckande, och ett misslyckande ger straffet",
+    "Ditt jobb: se när försöket börjar, döm resultatet, skicka atleten till straffet"
+   ],
+   "narration": "Spear Throw är ett enförsökshinder av typen godkänt/underkänt. Varje atlet får ett kast. Om det misslyckas finns inget andra försök: hen går direkt till straffet. Ditt jobb vid Spear Throw är att se exakt när försöket börjar, döma resultatet och visa atleten till rätt straff."
+  },
+  {
+   "heading": "Vad atleten måste göra",
+   "points": [
+    "Stå med båda fötterna bakom barriären",
+    "Kasta spjutet mot målet i samma bana",
+    "Spjutet fastnar i det utpekade målet och stannar där, utan att någon del rör marken"
+   ],
+   "narration": "Enligt regel 4.2.13 står atleten med båda fötterna bakom barriären och kastar mot målet i sin egen bana. För att klara det måste spjutet fastna i det utpekade målet och stanna där, utan att någon del av spjutet rör marken."
+  },
+  {
+   "heading": "När försöket börjar",
+   "points": [
+    "Det är ett försök när spjutet släpps i en framåtriktad rörelse",
+    "Att byta bana är tillåtet, men bara före försöket",
+    "En trasslig lina som förstör kastet räknas ändå som ett försök"
+   ],
+   "narration": "Regelboken säger att försöket börjar när atleten släpper spjutet i en framåtriktad rörelse. Före det får hen byta bana. Efter det kan hen inte börja om. Och om linan trasslar och förstör kastet räknas det ändå: att hålla linan fri är atletens jobb.",
+   "review": "Under översyn inför 2027: webbprogrammet för 2026 säger att åtagandet börjar tidigare, när spjutet dras tillbaka för att kastas. Regelboken säger vid utkastet. Tills domaransvarig avgör: tillämpa regelboken och hänvisa ett omstritt avgörande till huvuddomaren."
+  },
+  {
+   "heading": "Godkänt eller underkänt",
+   "points": [
+    "Underkänt: spjutet fastnar inte i det utpekade målet",
+    "Underkänt: någon del av spjutet rör marken när det väl är stilla",
+    "Inte underkänt i sig: att snudda marken under flykten, om det hamnar i målet fritt från marken"
+   ],
+   "narration": "Det finns två sätt att misslyckas. Spjutet fastnar inte i det utpekade målet, eller någon del av det rör marken när det har stannat. Ett spjut får snudda marken på vägen, och det är inte i sig ett misslyckande, så länge det hamnar i målet och fritt från marken.",
+   "review": "Under översyn inför 2027: webbprogrammet för 2026 listar ”spjutet rör marken före målet” som ett misslyckande. Regel 4.2.13 tillåter det. Tillämpa regelboken tills domaransvarig avgör."
+  },
+  {
+   "heading": "När det är klart",
+   "points": [
+    "Klart när atleten har rört sig minst 2 meter bort från banan",
+    "Hen får inte gå förrän spjutet har träffat målet, konstruktionen eller marken",
+    "Ett fall eller misslyckande innan hen är 2 meter bort är ett ofullständigt försök: straff"
+   ],
+   "narration": "Hindret är klart när atleten har rört sig minst två meter bort från sin bana. Hen får inte gå innan spjutet har träffat målet, konstruktionen eller marken. Om spjutet ramlar ur innan hen är två meter bort är det ett ofullständigt försök, och straffet gäller."
+  },
+  {
+   "heading": "Straffet",
+   "points": [
+    "30 burpees (15 vid Stadion-evenemang)",
+    "I den utpekade burpeezonen: burpees utanför den räknas inte",
+    "Var och en enligt standarden: bröstet mot marken, rak, sedan ett hopp med händerna ovanför öronen"
+   ],
+   "narration": "Straffet för att misslyckas med Spear Throw är trettio burpees, eller femton vid Stadion-evenemang. De måste göras i den utpekade burpeezonen, eftersom burpees utanför den inte räknas. Var och en måste uppfylla standarden: bröstet mot marken, tillbaka till ett balanserat upprätt läge, sedan ett hopp med händerna ovanför öronen.",
+   "review": "Under översyn inför 2027: tiden som läggs till för missade burpees skiljer sig mellan regelboken (3.4.2), Officiating SOP och programmet för 2026. Den här lektionen lär inte ut någon siffra förrän domaransvarig avgör."
+  },
+  {
+   "heading": "Vad du gör",
+   "points": [
+    "Stå där du ser utkastet, barriären och målet",
+    "Utropa resultatet tydligt och lugnt",
+    "Skicka atleten till burpeezonen, där kameran kan se hens pannbandsnummer",
+    "Hänvisa varje tvist till huvuddomaren: gräl inte vid hindret"
+   ],
+   "narration": "Stå där du ser utkastet, barriären och målet samtidigt. Utropa resultatet tydligt och lugnt. Skicka atleten till burpeezonen och se till att kameran kan se hens pannbandsnummer. Om atleten bestrider avgörandet, notera numret och hänvisa det till huvuddomaren. Gräl inte vid hindret."
+  },
+  {
+   "heading": "Kort sagt",
+   "points": [
+    "Ett kast: försöket börjar när spjutet släpps framåt",
+    "Godkänt: i målet, ingenting rör marken när det väl är stilla",
+    "Klart: 2 meter bort från banan",
+    "Underkänt: 30 burpees i zonen, var och en enligt standarden"
+   ],
+   "narration": "Kort sagt. Ett kast, och försöket börjar när spjutet släpps framåt. Godkänt är ett spjut i målet utan att något rör marken när det väl är stilla. Atleten är klar när hen är två meter bort från banan. Underkänt är trettio burpees i burpeezonen, var och en enligt standarden."
+  }
+ ],
+ "deka-1-1": [
+  {
+   "heading": "En exempellektion",
+   "points": [
+    "Det här programmet är en platshållare",
+    "Dess lektion och quiz visar hur ett andra program fungerar",
+    "Inget av det är DEKA:s regler"
+   ],
+   "narration": "Det här är en exempellektion i ett platshållarprogram. Den visar hur ett andra program sitter bredvid OCR-programmet, med egna lektioner, eget quiz, egen godkäntgräns och eget intyg. Inget här är DEKA:s faktiska regler: de kommer från DEKA:s programägare."
+  },
+  {
+   "heading": "Räkna reps (exempel)",
+   "points": [
+    "En domare räknar varje rep som uppfyller standarden",
+    "En rep som inte gör det är en no-rep, som utropas tydligt"
+   ],
+   "narration": "I det här exemplet räknar en domare varje repetition som uppfyller rörelsestandarden, och utropar tydligt en no-rep när en inte gör det. De verkliga standarderna och bedömningarna kommer med DEKA:s eget material."
+  },
+  {
+   "heading": "Kort sagt (exempel)",
+   "points": [
+    "Bara platshållarinnehåll",
+    "Quizet som följer är också ett exempel"
+   ],
+   "narration": "Det var slutet på exempellektionen. Quizet som följer är också ett exempel, för att visa hur varje program har sin egen bedömning och sitt eget intyg."
+  }
+ ]
+}

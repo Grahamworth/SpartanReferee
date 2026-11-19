@@ -5,7 +5,7 @@
 import { createRequire } from 'node:module';
 import crypto from 'node:crypto';
 import { PROGRAMMES, ENROLMENTS } from './learn-content.mjs';
-import { LESSONS } from './learn-lessons.mjs';
+import { LESSONS, TRANSLATIONS } from './learn-lessons.mjs';
 import { ASSESSMENTS, OUTCOMES } from './learn-questions.mjs';
 import { DOCUMENTS, RULES, DISPUTES } from './learn-rules.mjs';
 
@@ -127,6 +127,35 @@ for (const [code, content] of Object.entries(LESSONS)) {
 if (!(await db.query("SELECT 1 AS x FROM {S}.media_config WHERE scope = 'default'")).length) {
   await db.query("INSERT INTO {S}.media_config (scope, provider, voices) VALUES ('default', 'azure-speech', @v)", { v: JSON.stringify({ en: 'en-GB-RyanNeural', es: 'es-ES-ElviraNeural' }) });
 }
+// ---------------------------------------------------------------- every language (19 November 2026)
+// the programmes offered in more languages since they were made
+for (const prog of PROGRAMMES) {
+  await db.query('UPDATE {S}.programme SET locales = @l WHERE programme_id = @id AND locales <> @l', { id: prog.id, l: prog.locales });
+}
+// each lesson's translations (scripts/learn-translations/<code>.json), published for the demo: machine translations of the published
+// English, saying so, keeping the English slides' drawings, rule links and actions. A language that already has content is left alone.
+summary.translations = 0;
+for (const [locale, lessons] of Object.entries(TRANSLATIONS)) {
+  for (const [code, slides] of Object.entries(lessons)) {
+    const l = await lessonByCode(code); if (!l) continue;
+    if (!String((await db.query('SELECT locales FROM {S}.programme p JOIN {S}.programme_version v ON v.programme_id = p.programme_id WHERE v.version_id = @v', { v: l.version_id }))[0]?.locales || '').split(',').includes(locale)) continue;
+    if ((await db.query('SELECT 1 AS x FROM {S}.content_version WHERE lesson_id = @l AND locale = @loc', { l: l.lesson_id, loc: locale })).length) continue;
+    const en = (await db.query("SELECT TOP 1 * FROM {S}.content_version WHERE lesson_id = @l AND locale = 'en' AND state = 'published' ORDER BY version_no DESC", { l: l.lesson_id }))[0];
+    if (!en) continue;
+    const enSlides = JSON.parse(en.body).slides;
+    if (enSlides.length !== slides.length) { console.log(`skipped ${locale} ${code}: ${slides.length} slides, the English has ${enSlides.length}`); continue; }
+    const body = JSON.stringify({ slides: slides.map((s, i) => ({ ...enSlides[i], heading: s.heading, points: s.points, narration: s.narration, ...(enSlides[i].review ? { review: s.review } : {}) })) });
+    await db.tx(async (q) => {
+      const id = crypto.randomUUID();
+      await q(`INSERT INTO {S}.content_version (content_id, lesson_id, locale, version_no, state, translation_of, body, source_hash, sources, translated_by, author_id, approved_by, approved_at)
+               VALUES (@id, @l, @loc, 1, 'published', @en, @body, @hash, @src, @by, @a, @a, SYSUTCDATETIME())`,
+        { id, l: l.lesson_id, loc: locale, en: en.content_id, body, hash: hash(body), src: en.sources, by: 'Claude (machine translation), not yet reviewed', a: owner?.person_id || null });
+      await q(`INSERT INTO {S}.audit_event (action, entity_type, entity_id, summary) VALUES ('content.seed', 'content_version', @id, @s)`, { id, s: JSON.stringify({ lesson: code, locale, translation: 'machine, published for the demo' }) });
+    });
+    summary.translations++;
+  }
+}
+
 // ---------------------------------------------------------------- assessments (step 4), and the demo people's results
 summary.assessments = 0; summary.credentials = 0;
 const currentVersion = async (pid) => (await db.query("SELECT TOP 1 * FROM {S}.programme_version WHERE programme_id = @id AND state = 'published' ORDER BY published_at DESC", { id: pid }))[0];

@@ -15,8 +15,15 @@ export const FILES = [
   'judge.html', 'app.js', 'burpee.js', 'exercises.js', 'multi.js', 'cones.js', 'judge-gate.js', 'readers.js',
   'broadcaster.html', 'camera.js', 'phone.html', 'apptabs.js', 'apptabs-core.js',
   // the website
-  'index.html', 'home.html', 'home.js', 'event.html', 'event.js', 'console.html', 'console.js', 'booking.js', 'results.html', 'results.js',
+  'index.html', 'home.html', 'home.js', 'language.js', 'event.html', 'event.js', 'console.html', 'console.js', 'booking.js', 'results.html', 'results.js',
   'streaming.html', 'email-return.html', 'email-signin-web.js', 'email-signin-core.js', 'api-base.js', 'recordings.html', 'recordings.js',
+  // the learning platform
+  'learn/index.html', 'learn/learn.js', 'learn/core.js', 'learn/people.js', 'learn/programmes.js', 'learn/lesson.js', 'learn/assess.js', 'learn/judgement.js',
+  'learn/govern.js', 'learn/reports.js', 'learn/diagnostics.js', 'learn/practice.js',
+  // what the server says that people see: its error messages and labels (shown in the page, so translated there like the rest)
+  'api/src/core.js', 'api/src/assignments.js', 'api/src/servers.js', 'api/src/events.js', 'api/src/companies.js', 'api/src/recordings.js',
+  'api/src/learn/index.js', 'api/src/learn/programmes.js', 'api/src/learn/lessons.js', 'api/src/learn/media.js', 'api/src/learn/assess.js',
+  'api/src/learn/govern.js', 'api/src/learn/reports.js', 'api/src/learn/privacy.js', 'api/src/learn/diagnostics.js', 'api/src/learn/permissions.js',
 ];
 
 const norm = (s) => String(s).replace(/\s+/g, ' ').trim();
@@ -36,6 +43,7 @@ export function wordy(s) {
   if (/^(?:[a-z-]+:[^;]+;\s*)+$/i.test(t)) return false; // inline style
   if (/^[\w.[\]()'"=!&|<>+\-*/%?: ]+$/.test(t) && /[=<>()[\]]/.test(t) && !/ [a-z]{3,} [a-z]{3,}/i.test(t)) return false; // expressions
   if (/^(GET|POST|PUT|DELETE|Content-Type|application\/|text\/|image\/|video\/)/.test(t)) return false;
+  if (/^\(?\s*(SELECT|INSERT|UPDATE|DELETE|MERGE|IF|WITH|CREATE|ALTER|DROP|DECLARE|EXEC|BEGIN|WHEN|AND|OR|ORDER BY|GROUP BY|FROM|JOIN|LEFT JOIN|WHERE|VALUES|OUTPUT|SET)\b/.test(t) || /\{S\}\./.test(t)) return false; // SQL
   if (/\}\/|\/\{|\}\.(csv|onnx|txt|mjs|js|json|wasm|task|mp4|png|jpg)\b|\.(csv|onnx|txt|mjs|js|json)$|^[\w-]+\/$/.test(t)) return false; // paths and file names built in code
   if (!/\s/.test(t) && /\w\/\w/.test(t)) return false; // an address or path: servers/mine{x}
   if (/^(UTC|GMT)$/.test(t)) return false;
@@ -78,6 +86,28 @@ export function fromHtml(src) {
 }
 
 // ------------------------------------------------------------------------------------------------ scripts
+/** the index just after the template literal starting at src[k] (a backtick), its ${…} and the templates inside them included */
+function skipTemplate(src, k) {
+  const n = src.length;
+  let j = k + 1;
+  while (j < n && src[j] !== '`') {
+    if (src[j] === '\\') { j += 2; continue; }
+    if (src[j] === '$' && src[j + 1] === '{') {
+      let depth = 1;
+      j += 2;
+      while (j < n && depth) {
+        const ch = src[j];
+        if (ch === '`') { j = skipTemplate(src, j); continue; }
+        if (ch === '"' || ch === "'") { let q = j + 1; while (q < n && src[q] !== ch) { if (src[q] === '\\') q++; q++; } j = q + 1; continue; }
+        if (ch === '{') depth++; else if (ch === '}') depth--;
+        j++;
+      }
+      continue;
+    }
+    j++;
+  }
+  return j + 1;
+}
 /** the string literals in a script: ['text', isTemplate] (templates with ${…} turned into {slots}) */
 export function literals(src) {
   const out = [];
@@ -119,7 +149,7 @@ export function literals(src) {
           // nested templates and strings inside ${…}
           while (k < n && depth) {
             const ch = src[k];
-            if (ch === '`') { const sub = literals(src.slice(k)); void sub; let q = k + 1; while (q < n && src[q] !== '`') { if (src[q] === '\\') q++; q++; } k = q + 1; continue; }
+            if (ch === '`') { k = skipTemplate(src, k); continue; } // a whole nested template, its own ${…} included
             if (ch === '"' || ch === "'") { let q = k + 1; while (q < n && src[q] !== ch) { if (src[q] === '\\') q++; q++; } k = q + 1; continue; }
             if (ch === '{') depth++; else if (ch === '}') depth--;
             k++;
@@ -156,8 +186,29 @@ export function fromScript(src) {
   return out;
 }
 
+// the learning platform's seeded content that pages show as it is (the lesson slides themselves are translated as their own content
+// versions, scripts/learn-translations): programme, module and lesson titles and summaries, and the assessments' questions
+const { PROGRAMMES } = await import('./learn-content.mjs');
+const { ASSESSMENTS } = await import('./learn-questions.mjs');
+const { DISPUTES } = await import('./learn-rules.mjs');
+export function contentTexts() {
+  const out = [];
+  const add = (s) => { const t = norm(s || ''); if (t && wordy(t)) out.push(t); };
+  for (const p of PROGRAMMES) {
+    [p.title, p.description, p.learnerRole, p.version.qualification, p.version.policyNote].forEach(add);
+    for (const m of p.modules) { [m.title, m.summary, m.source].forEach(add); for (const l of m.lessons) [l.title, l.summary].forEach(add); }
+  }
+  for (const d of DISPUTES) add(d.title); // the open review items' titles (their details quote the sources, in English)
+  for (const a of Object.values(ASSESSMENTS)) {
+    [a.title, a.description].forEach(add);
+    for (const q of a.questions) { [q.prompt, q.feedback, q.review].forEach(add); q.options.forEach((o) => add(o.text)); }
+  }
+  return out;
+}
+
 export function extract(files = FILES) {
   const where = new Map();
+  if (files === FILES) for (const t of contentTexts()) { if (!where.has(t)) where.set(t, new Set()); where.get(t).add('learn content'); }
   for (const f of files) {
     const src = fs.readFileSync(path.join(ROOT, f), 'utf8');
     const texts = f.endsWith('.html') ? [...fromHtml(src), ...fromScript((src.match(/<script\b(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/gi) || []).join('\n').replace(/<\/?script[^>]*>/gi, ''))] : fromScript(src);

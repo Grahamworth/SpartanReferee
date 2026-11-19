@@ -1,0 +1,1538 @@
+{
+ "cam-1-1": [
+  {
+   "heading": "Kameras an der Strafstation",
+   "points": [
+    "Handys filmen die Burpee-Strafzone",
+    "Ein SpartanReferee-Server zeichnet sie auf und lässt auf jeder Kamera einen KI-Kampfrichter laufen",
+    "Jede Rep wird gezählt und am Standard geprüft"
+   ],
+   "narration": "SpartanReferee filmt die Strafstation mit Handys. Jedes Handy sendet sein Bild über WLAN oder Mobilfunk an einen SpartanReferee-Server. Der Server zeichnet es auf und lässt auf jeder Kamera einen KI-Kampfrichter laufen, sodass jede Wiederholung gezählt und am Bewegungsstandard geprüft wird."
+  },
+  {
+   "heading": "Wer macht was",
+   "points": [
+    "Der Hauptschiedsrichter des Events bucht die Station und betreibt sie",
+    "Jeder dem Event zugewiesene Schiedsrichter kann live zuschauen und die Ergebnisse auswerten",
+    "Admins können die Kameras jedes Events buchen, verlängern oder stoppen"
+   ],
+   "narration": "Jedes Event hat genau eine Kamerabuchung. Der Hauptschiedsrichter bucht sie von der Eventseite aus und betreibt sie am Tag selbst. Jeder dem Event zugewiesene Schiedsrichter kann sie öffnen, um die Kameras live zu sehen und die Ergebnisse auszuwerten. Admins können einspringen und die Kameras jedes Events buchen, verlängern oder stoppen."
+  },
+  {
+   "heading": "Kurz gesagt",
+   "points": [
+    "Handys filmen, der Server bewertet, alle schauen im Browser zu",
+    "Der Hauptschiedsrichter bucht und betreibt sie"
+   ],
+   "narration": "Kurz gesagt: Handys filmen, der Server bewertet, und jeder Schiedsrichter schaut in einem Browser zu. Der Hauptschiedsrichter bucht und betreibt die Station."
+  }
+ ],
+ "cam-1-2": [
+  {
+   "heading": "Ihre Events",
+   "points": [
+    "Ihre Events stehen auf Ihrer Startseite",
+    "Öffnen Sie eines, um seine Kamerazeiten zu sehen und wer dort Schiedsrichter ist",
+    "Der Hauptschiedsrichter sieht dort Burpee-Kameras buchen"
+   ],
+   "narration": "Ihre Events stehen auf Ihrer SpartanReferee-Startseite. Öffnen Sie eines, um seine Kamerazeiten zu sehen und wer dort Schiedsrichter ist. Wenn Sie sein Hauptschiedsrichter sind, buchen Sie dort die Burpee-Kameras."
+  },
+  {
+   "heading": "Die Zeiten",
+   "points": [
+    "Die Kameras laufen an jedem Tag des Events von 07:00 bis 18:00 Ortszeit",
+    "Die Zeiten werden in der Ortszeit des Events eingegeben",
+    "Eine im Voraus gemachte Buchung startet ihre Server 10 Minuten früher; ein sofortiger Start dauert etwa 5 Minuten"
+   ],
+   "narration": "Die Kameras eines Events laufen an jedem seiner Tage von sieben Uhr morgens bis sechs Uhr abends Ortszeit. Buchungszeiten werden in der Ortszeit des Events angegeben, egal von wo aus Sie buchen. Eine im Voraus gemachte Buchung startet ihre Server zehn Minuten früher, damit die Kameras pünktlich bereit sind. Ein sofortiger Start dauert etwa fünf Minuten."
+  },
+  {
+   "heading": "Server und die Verbindung",
+   "points": [
+    "Jeder Server nimmt 2 Kameras",
+    "Jede Kamera sendet etwa 3,5 Mbit/s",
+    "Prüfen Sie die Verbindung des Veranstaltungsorts vor dem Tag: Sie muss jede Kamera tragen"
+   ],
+   "narration": "Jeder Server nimmt zwei Kameras, die Zahl der Kameras bestimmt also die Zahl der Server. Jede Kamera sendet etwa dreieinhalb Megabit pro Sekunde, und die Verbindung des Veranstaltungsorts muss alle tragen. Prüfen Sie sie vor dem Tag."
+  }
+ ],
+ "cam-1-3": [
+  {
+   "heading": "Für jede Kamera",
+   "points": [
+    "Ein Handy auf einem Stativ oder Ständer",
+    "Eine Powerbank",
+    "Mobilfunkdaten oder das WLAN des Veranstaltungsorts"
+   ],
+   "narration": "Für jede Kamera brauchen Sie ein Handy auf einem Stativ oder Ständer, eine Powerbank, die es den ganzen Tag durchhält, und Mobilfunkdaten oder das WLAN des Veranstaltungsorts."
+  },
+  {
+   "heading": "Die Apps",
+   "points": [
+    "Android: die App SpartanReferee Broadcaster",
+    "iPhone: Larix Broadcaster, aus dem App Store",
+    "Zum Zuschauen und Bewerten: jedes Handy, Tablet oder jeder Computer mit Browser, ohne etwas zu installieren"
+   ],
+   "narration": "Android-Handys nutzen die App SpartanReferee Broadcaster. iPhones nutzen Larix Broadcaster, aus dem App Store. Zum Zuschauen und Bewerten genügt jedes Handy, Tablet oder jeder Computer mit Browser: Darauf muss nichts installiert werden."
+  }
+ ],
+ "cam-2-1": [
+  {
+   "heading": "Wohin das Handy kommt",
+   "points": [
+    "Im Querformat, auf seinem Ständer",
+    "3 bis 4 Meter von den Athleten entfernt",
+    "Der ganze Körper jedes Athleten im Bild, auch flach liegend"
+   ],
+   "narration": "Stellen Sie das Handy im Querformat auf seinen Ständer, drei bis vier Meter von den Athleten entfernt. Halten Sie den ganzen Körper jedes Athleten im Bild, auch wenn er flach auf dem Boden liegt."
+  },
+  {
+   "heading": "Der Winkel",
+   "points": [
+    "Leicht schräg oder seitlich beurteilt „Brust zum Boden“ besser als direkt von vorn",
+    "Für Push-ups und Sit-ups braucht das Handy eine Seitenansicht in Bodenhöhe"
+   ],
+   "narration": "Eine leicht schräge oder seitliche Ansicht beurteilt „Brust zum Boden“ besser als eine Kamera direkt von vorn. Für Push-ups und Sit-ups stellen Sie das Handy seitlich in Bodenhöhe auf."
+  },
+  {
+   "heading": "Die Bahnen freihalten",
+   "points": [
+    "Offizielle in gelben Warnwesten werden nie als Athleten gezählt",
+    "Jeder andere, der vor einer Kamera steht, stört",
+    "Stehen Sie dort, wo Sie die Athleten sehen, ohne die Sicht zu versperren"
+   ],
+   "narration": "Offizielle in gelben Warnwesten werden nie als Athleten gezählt. Jeder andere, der vor einer Kamera steht, stört, halten Sie die Bahnen also frei und stehen Sie dort, wo Sie die Athleten sehen, ohne die Kameras zu verdecken."
+  }
+ ],
+ "cam-2-2": [
+  {
+   "heading": "Die QR-Codes",
+   "points": [
+    "Öffnen Sie die Buchung in der Konsole, sobald sie läuft",
+    "Jede Kamera, die auf ihr Handy wartet, zeigt QR-Codes in den Tabs Live und Kameras",
+    "Die Codes ändern sich mit jeder Buchung: Scannen Sie sie jedes Mal neu"
+   ],
+   "narration": "Sobald die Buchung läuft, öffnen Sie sie in der Konsole. Jede Kamera, die auf ihr Handy wartet, zeigt QR-Codes in den Tabs Live und Kameras. Die Codes ändern sich mit jeder Buchung, scannen Sie sie also jedes Mal neu."
+  },
+  {
+   "heading": "Android: SpartanReferee Broadcaster",
+   "points": [
+    "Installieren Sie die App; erlauben Sie die Installation aus dieser Quelle, wenn das Handy fragt",
+    "Tippen Sie auf QR-Code der Kamera scannen und scannen Sie den Code dieser Kamera",
+    "Lassen Sie die Qualität auf 720p, außer das Signal ist schwach, dann Kamera öffnen und GO LIVE"
+   ],
+   "narration": "Installieren Sie auf Android SpartanReferee Broadcaster. Das Handy warnt Sie, weil die App nicht aus dem Play Store stammt: Tippen Sie auf Einstellungen, erlauben Sie die Installation aus dieser Quelle, gehen Sie zurück und installieren Sie. Tippen Sie auf QR-Code der Kamera scannen und scannen Sie den Code dieser Kamera. Lassen Sie die Qualität auf 720p, außer das Signal ist schwach, und tippen Sie dann auf Kamera öffnen und auf GO LIVE."
+  },
+  {
+   "heading": "iPhone: Larix Broadcaster",
+   "points": [
+    "Installieren Sie Larix und öffnen Sie es einmal; erlauben Sie Kamera und Mikrofon",
+    "Scannen Sie den Code iPhone (Larix) der Kamera mit der Handykamera, öffnen Sie den Link in Larix und tippen Sie auf Import",
+    "In Larix: Settings, Connections, die Kamera anhaken, dann den roten Knopf drücken"
+   ],
+   "narration": "Installieren Sie auf einem iPhone Larix Broadcaster und öffnen Sie es einmal; erlauben Sie dabei Kamera und Mikrofon. Scannen Sie den iPhone-Code der Kamera mit der eigenen Kamera des Handys, öffnen Sie den Link in Larix und tippen Sie auf Import. Gehen Sie dann in Larix zu Settings, Connections, haken Sie die Kamera an und drücken Sie den roten Knopf."
+  }
+ ],
+ "cam-3-1": [
+  {
+   "heading": "Den Kampfrichter starten",
+   "points": [
+    "Das Bild jedes Handys erscheint innerhalb weniger Sekunden im Tab Live",
+    "Drücken Sie bei einer Kamera auf KI-Kampfrichter starten, benennen Sie sie und wählen Sie die Übung",
+    "Dann Bewertung starten: Er läuft auf dem Server und macht also weiter, wenn Sie die Seite schließen"
+   ],
+   "narration": "Das Bild jedes Handys erscheint im Tab Live innerhalb weniger Sekunden, nachdem es live gegangen ist. Drücken Sie bei einer Kamera auf KI-Kampfrichter starten, geben Sie ihr einen Namen, wählen Sie, was bewertet wird, und drücken Sie auf Bewertung starten. Der Kampfrichter läuft auf dem Server und macht also weiter, wenn Sie die Seite schließen."
+  },
+  {
+   "heading": "Was er bei einem Burpee prüft",
+   "points": [
+    "Brust zum Boden",
+    "Vollständige Hüftstreckung",
+    "Ein Sprung, beide Füße vom Boden",
+    "Hände über den Ohren"
+   ],
+   "narration": "Bei einem Burpee prüft der Kampfrichter vier Dinge: Brust zum Boden, vollständige Hüftstreckung, ein Sprung mit beiden Füßen vom Boden und Hände über den Ohren. Eine Rep, bei der eines fehlt, ist eine No Rep."
+  },
+  {
+   "heading": "Testen",
+   "points": [
+    "Machen Sie vor jeder Kamera ein paar Testwiederholungen",
+    "Prüfen Sie, dass jede gezählt wird und eine schlechte nicht",
+    "Bewegen Sie das Handy, wenn ein Athlet das Bild verlässt"
+   ],
+   "narration": "Machen Sie, bevor die Athleten kommen, ein paar Testwiederholungen vor jeder Kamera und prüfen Sie, dass sie gezählt werden und dass eine absichtlich schlechte nicht gezählt wird. Wenn der Athlet das Bild verlässt, bewegen Sie das Handy."
+  }
+ ],
+ "cam-3-2": [
+  {
+   "heading": "Ergebnisse",
+   "points": [
+    "Ergebnisse listet alle Bewerteten auf",
+    "Startnummer suchen durchsucht jede Kamera",
+    "Ansehen spielt einen Athleten mit jeder markierten Rep und No Rep ab"
+   ],
+   "narration": "Der Tab Ergebnisse listet alle Bewerteten auf. Startnummer suchen durchsucht jede Kamera nach einem Athleten. Ansehen spielt diesen Athleten ab, mit jeder Rep und jeder No Rep markiert."
+  },
+  {
+   "heading": "Wie lange es aufbewahrt wird",
+   "points": [
+    "Aufnahmen und Ergebnisse werden 7 Tage aufbewahrt",
+    "Am Ende der Buchung werden die Aufnahmen gespeichert und die Server heruntergefahren",
+    "Jeder Schiedsrichter des Events kann sie auswerten"
+   ],
+   "narration": "Aufnahmen und Ergebnisse werden sieben Tage aufbewahrt. Wenn die Buchung endet, werden die Aufnahmen gespeichert und die Server heruntergefahren. Jeder Schiedsrichter des Events kann sie in dieser Zeit auswerten."
+  }
+ ],
+ "cam-3-3": [
+  {
+   "heading": "Handys und Bilder",
+   "points": [
+    "Verbindet sich nicht: Prüfen Sie den Empfang und scannen Sie den Code erneut aus dieser Buchung",
+    "Ruckelt oder bricht ab: Das Signal ist für 720p zu schwach, wählen Sie also eine niedrigere Qualität",
+    "Eine Kamera, aber kein Bild: Das Netzwerk des Veranstaltungsorts blockiert womöglich Video, versuchen Sie die Mobilfunkdaten des Handys"
+   ],
+   "narration": "Wenn sich ein Handy nicht verbindet, prüfen Sie seinen Empfang und scannen Sie seinen Code erneut aus dieser Buchung. Wenn das Bild ruckelt oder abbricht, ist das Signal für 720p zu schwach: Wählen Sie eine niedrigere Qualität. Wenn eine Kamera angezeigt wird, aber ohne Bild, blockiert das Netzwerk des Veranstaltungsorts womöglich Video: Versuchen Sie stattdessen die Mobilfunkdaten des Handys."
+  },
+  {
+   "heading": "Server und Internet",
+   "points": [
+    "Der Server ist nicht gestartet: Die Konsole sagt, warum; manchmal ist ein paar Minuten lang bei Azure kein Server frei, versuchen Sie es also erneut",
+    "Das Internet des Veranstaltungsorts fällt aus: Nichts erreicht den Server, bis es wieder da ist",
+    "Nur Larix behält eine eigene Kopie auf dem Handy"
+   ],
+   "narration": "Wenn der Server nicht gestartet ist, sagt die Konsole, warum. Manchmal ist ein paar Minuten lang kein Server frei: Versuchen Sie es erneut. Wenn das Internet des Veranstaltungsorts ausfällt, erreicht nichts den Server, bis es wieder da ist, und nur Larix behält eine eigene Kopie des Videos auf dem Handy."
+  }
+ ],
+ "cam-4-1": [
+  {
+   "heading": "Die kostenlose Kamera",
+   "points": [
+    "Der KI-Kampfrichter läuft in Ihrem eigenen Browser, auf der Kamera Ihres Handys oder Computers",
+    "Kein Server und keine Kosten, jederzeit",
+    "Stellen Sie das Handy auf, machen Sie ein paar Burpees und sehen Sie, wie jeder bewertet wird"
+   ],
+   "narration": "Die kostenlose Kamera lässt den KI-Kampfrichter direkt in Ihrem Browser laufen, auf der Kamera Ihres eigenen Handys oder Computers, live oder mit einer Minute Video. Es gibt keinen Server und keine Kosten, und Sie können sie jederzeit nutzen. Stellen Sie das Handy auf, machen Sie ein paar Burpees und sehen Sie zu, wie jeder bewertet wird."
+  },
+  {
+   "heading": "Die echte Station proben",
+   "points": [
+    "Hauptschiedsrichter können einen 30-Minuten-Übungsserver buchen",
+    "Handys scannen ihre Codes, die Konsole, der Kampfrichter und die Auswertung, wie bei einem Event",
+    "Er nutzt einen der Server, die Events brauchen, und ist daher für Hauptschiedsrichter und Admins"
+   ],
+   "narration": "Hauptschiedsrichter können außerdem einen dreißigminütigen Übungsserver buchen, um die ganze Station zu proben: die Handys, die ihre Codes scannen, die Konsole, den Kampfrichter und die Auswertung, genau wie bei einem Event. Er nutzt einen der Server, die Events brauchen, und ist daher für Hauptschiedsrichter und Admins."
+  }
+ ],
+ "ocr-1-1": [
+  {
+   "heading": "Warum es Spartan gibt",
+   "points": [
+    "Spartan hilft Menschen, über ihre Grenzen hinauszugehen",
+    "Das Ziel: Menschen, die körperlich und geistig stärker sind",
+    "Die Mission: Menschen zu helfen, ohne Grenzen zu leben"
+   ],
+   "narration": "Spartan hilft Menschen, über ihre Grenzen hinauszugehen und körperlich wie geistig stärker zu werden. Seine Mission ist es, Menschen zu helfen, ohne Grenzen zu leben, indem es die Kraft, die Disziplin und die Widerstandsfähigkeit aufbaut, die sie brauchen, um die Herausforderungen des Lebens zu meistern. Jedes Spartan Race ist so angelegt, dass Athleten etwas Hartes, Unbequemes und Verwandelndes tun. Das ist das Umfeld, in dem Sie als Schiedsrichter arbeiten. Die Athleten vor Ihnen haben sich für etwas Schwieriges entschieden, und die Regeln sorgen dafür, dass sie alle vor derselben Prüfung stehen."
+  },
+  {
+   "heading": "Eine Herausforderung für alle",
+   "points": [
+    "Spartan-Events sind für jedes Niveau, vom Erststarter bis zum Elite-Wettkämpfer",
+    "Millionen Menschen weltweit nehmen teil",
+    "Entscheidend ist die Bereitschaft, anzutreten, nicht wo man anfängt"
+   ],
+   "narration": "Spartan-Events sind für Athleten jedes Niveaus gedacht. Millionen Menschen weltweit nehmen teil, vom Erststarter bis zum Elite-Wettkämpfer. Spartans Sicht ist, dass es nicht darauf ankommt, wo man anfängt, sondern auf die Bereitschaft, anzutreten, Ausreden zu überwinden und sich der Herausforderung zu stellen. Jeder, der auf die Strecke geht, nimmt an derselben Prüfung von Biss und Entschlossenheit teil. Am Renntag werden Sie also ein breites Spektrum an Athleten sehen. Später in diesem Kurs erfahren Sie, bei welchen Sie am genauesten hinsehen."
+  },
+  {
+   "heading": "Ein Regelwerk, überall",
+   "points": [
+    "Die Wettkampfregeln gelten für alle Spartan-Events und -Wettkämpfe weltweit",
+    "Sie sind für jeden Teilnehmer bei jedem Spartan-Event verbindlich",
+    "Ihre Ziele: faires und einheitliches Racing, globale Standards, Sicherheit der Teilnehmer"
+   ],
+   "narration": "Die Spartan-Wettkampfregeln gelten für alle Spartan-Events und -Wettkämpfe auf der ganzen Welt und sind für jeden teilnehmenden Wettkämpfer verbindlich. Das Regelwerk sagt, die Regeln erklären, wie ein Rennen zu beurteilen ist. Sie sollen jedes Event fair und einheitlich machen, mit Sportsgeist und Integrität. Sie geben klare Richtlinien, damit der Wettkampf weltweit standardisiert ist. Und sie schützen die Gesundheit, die Sicherheit und das Wohlbefinden der Teilnehmer, soweit das im Hindernislauf vernünftigerweise erreichbar ist."
+  },
+  {
+   "heading": "Ihr Beitrag",
+   "points": [
+    "Wenden Sie die Wettkampfregeln und die Verfahren des Schiedsrichterwesens einheitlich an",
+    "Schützen Sie die Fairness und Integrität der Spartan-Events weltweit",
+    "Am Ende dieses Kurses: die Regeln einheitlich und sicher anwenden"
+   ],
+   "narration": "Dieses Programm führt in die Rolle, die Verantwortung und die Standards ein, die von Spartan-Schiedsrichtern erwartet werden. Sein Ziel ist, dass jeder Schiedsrichter die Wettkampfregeln und die Verfahren des Schiedsrichterwesens auf dieselbe Weise anwendet und so die Fairness und Integrität der Spartan-Events weltweit schützt. Ein Athlet soll an Ihrem Hindernis dieselbe Entscheidung bekommen wie am selben Hindernis bei jedem anderen Spartan-Event. Am Ende des Kurses sollen Sie die Spartan-Regeln einheitlich und sicher anwenden können."
+  },
+  {
+   "heading": "Kurz gesagt",
+   "points": [
+    "Spartan hilft Menschen, über ihre Grenzen hinauszugehen",
+    "Seine Events sind für alle, vom Erststarter bis zum Elite-Wettkämpfer",
+    "Ein Regelwerk gilt für jedes Spartan-Event weltweit",
+    "Ihre Aufgabe: es einheitlich anwenden, um Fairness und Integrität zu schützen"
+   ],
+   "narration": "Kurz gesagt. Spartan hilft Menschen, über ihre Grenzen hinauszugehen und an Körper und Geist stärker zu werden. Seine Events sind für alle da, vom Erststarter bis zum Elite-Wettkämpfer. Ein Regelwerk gilt für jedes Spartan-Event der Welt, und es zielt auf Racing, das fair, einheitlich und sicher ist. Ihre Aufgabe als Schiedsrichter ist es, diese Regeln einheitlich anzuwenden, damit die Fairness und Integrität jedes Rennens geschützt wird."
+  }
+ ],
+ "ocr-1-2": [
+  {
+   "heading": "Trailrunning mit Hindernissen",
+   "points": [
+    "Ein Spartan Race ist ein Hindernislauf (OCR)",
+    "Es verbindet Trailrunning mit körperlichen Hindernissen",
+    "Die Hindernisse testen geistige und körperliche Stärke"
+   ],
+   "narration": "Ein Spartan Race ist ein Hindernislauf: Trailrunning, verbunden mit körperlichen Hindernissen entlang der Strecke. Die Hindernisse sollen sowohl geistige als auch körperliche Stärke testen und Läufer über das hinausbringen, was sie für möglich hielten. Zwischen den Hindernissen laufen die Athleten. An jedem Hindernis müssen sie eine bestimmte Herausforderung meistern, und das Regelwerk legt genau fest, was das bedeutet. Als Schiedsrichter sind Sie meist an einem Hindernis eingesetzt, sodass dieses Hindernis und seine Regeln Ihr Schwerpunkt für den Tag sind."
+  },
+  {
+   "heading": "Fünf Arten von Herausforderungen",
+   "points": [
+    "Klettern: zum Beispiel die Wände und der Rope Climb",
+    "Tragen: zum Beispiel der Bucket Carry und der Sandbag Carry",
+    "Kriechen: zum Beispiel der Barbed Wire Crawl",
+    "Springen sowie Ziehen und Heben: zum Beispiel der Fire Jump und der Hercules Hoist"
+   ],
+   "narration": "Das Programm ordnet die Herausforderungen fünf Bewegungsarten zu: Klettern, Tragen, Kriechen, Springen sowie Ziehen und Heben. Zum Klettern gehören die Wände und der Rope Climb. Zum Tragen gehören der Bucket Carry und der Sandbag Carry. Zum Kriechen gehört der Barbed Wire Crawl. Zum Springen gehört der Fire Jump, und zum Ziehen und Heben gehört der Hercules Hoist, bei dem der Athlet an einem Seil zieht, um ein Gewicht anzuheben. Jedes Hindernis hat im Regelwerk einen eigenen Abschnitt, der festlegt, was der Athlet tun muss und wie er scheitern kann."
+  },
+  {
+   "heading": "Zwei Arten von Hindernissen im Regelwerk",
+   "points": [
+    "Pflicht-Hindernisse: müssen abgeschlossen werden, bevor es auf der Strecke weitergeht",
+    "Bestanden/Nicht-bestanden-Hindernisse: Ein Fehlversuch bedeutet eine Strafe, eine Strafschleife oder Burpees",
+    "Jedes Hindernis muss versucht werden: mindestens berührt"
+   ],
+   "narration": "Das Regelwerk teilt Hindernisse in zwei Kategorien ein. Pflicht-Hindernisse müssen abgeschlossen werden, bevor der Athlet auf der Strecke weitergeht. Scheitert er an einem, bedeutet das Disqualifikation, wobei der Rennleiter je nach Schwere eine Zeitstrafe an deren Stelle setzen kann. Bei Bestanden-oder-nicht-bestanden-Hindernissen kann man scheitern, und ein Fehlversuch bedeutet eine Strafe: eine Strafschleife oder Burpees. Diese Hindernisse haben entweder einen Versuch oder mehrere Versuche. Jedes Hindernis muss versucht werden, und ein Versuch ist mindestens das Berühren. Die Hindernisarten haben später in diesem Kurs einen eigenen Abschnitt.",
+   "review": "In Überprüfung für 2027: Das Regelwerk (3.17.3) sagt, die Strafe sei eine Strafschleife oder 30 Burpees, wie Spartan es für jedes Event, jede Kategorie oder jeden Lauf festlegt. Die Officiating SOP sagt, bei den meisten Hindernissen gelte eine Schleife und beim Spear Throw Burpees; das Programm 2026 sagt, Burpees gälten nur beim Spear Throw. Verwenden Sie bis dahin die bei Ihrer Einweisung bestätigte Strafe und verweisen Sie jeden Zweifel an den Hauptschiedsrichter."
+  },
+  {
+   "heading": "Rennformate",
+   "points": [
+    "Die Quellen von 2026 nennen die Formate Sprint, Super, Beast, Ultra und Stadion",
+    "Ein Regelwerk deckt alle ab, aber einige Regeln unterscheiden sich je nach Format",
+    "Stadion: Die Strafe für das Scheitern an jedem Hindernis sind immer 15 Burpees",
+    "Mindestzahl an Schiedsrichtern: 10 bei einem Sprint oder Stadion, 15 bei einem Super, 20 bei einem Beast oder Ultra"
+   ],
+   "narration": "Spartan-Rennen gibt es in mehreren Formaten. Das Regelwerk und das Verfahren des Schiedsrichterwesens von 2026 nennen den Sprint, den Super, den Beast, den Ultra und das Stadion. Dasselbe Regelwerk deckt sie alle ab, aber einige Regeln unterscheiden sich je nach Format. Bei Stadion-Events etwa sind die Strafe für das Scheitern an einem Hindernis immer fünfzehn Burpees, bei jedem Hindernis und in jedem Lauf. Spartans Verfahren des Schiedsrichterwesens legt außerdem für jedes Format eine Mindestzahl an Schiedsrichtern fest: zehn bei einem Sprint oder einem Stadion, fünfzehn bei einem Super und zwanzig bei einem Beast oder einem Ultra."
+  },
+  {
+   "heading": "Kurz gesagt",
+   "points": [
+    "Ein Hindernislauf: Trailrunning, verbunden mit körperlichen Hindernissen",
+    "Fünf Arten von Herausforderungen: Klettern, Tragen, Kriechen, Springen, Ziehen und Heben",
+    "Pflicht-Hindernisse müssen abgeschlossen werden; das Scheitern an einem Bestanden/Nicht-bestanden-Hindernis bedeutet eine Strafe",
+    "Formate: Sprint, Super, Beast, Ultra und Stadion"
+   ],
+   "narration": "Kurz gesagt. Ein Spartan Race ist ein Hindernislauf: Trailrunning, verbunden mit körperlichen Hindernissen, die geistige und körperliche Stärke testen. Die Herausforderungen sind Klettern, Tragen, Kriechen, Springen sowie Ziehen und Heben. Das Regelwerk teilt die Hindernisse in Pflicht-Hindernisse, die abgeschlossen werden müssen, und Bestanden-oder-nicht-bestanden-Hindernisse, bei denen ein Fehlversuch eine Strafe bedeutet. Jedes Hindernis muss versucht werden. Rennen gibt es in mehreren Formaten, darunter Sprint, Super, Beast, Ultra und Stadion."
+  }
+ ],
+ "ocr-2-1": [
+  {
+   "heading": "Was Schiedsrichter schützen",
+   "points": [
+    "Fairness und die Integrität des Rennens",
+    "Athleten, die die offiziellen Wettkampfregeln befolgen",
+    "Einheitlich angewendete Strafen",
+    "Glaubwürdigkeit für Elite- und Wettkampf-Racing"
+   ],
+   "narration": "Schiedsrichter sind wichtig, weil sie die Fairness und Integrität des Rennens schützen. Sie sorgen dafür, dass Athleten die offiziellen Wettkampfregeln befolgen, und sie wenden Strafen für alle auf dieselbe Weise an. Diese Einheitlichkeit gibt dem Elite- und Wettkampf-Racing seine Glaubwürdigkeit. Spartans Verfahren des Schiedsrichterwesens sagt es so: Das Spartan-Schiedsrichterwesen schafft und wahrt die Integrität des Rennens durch einheitliche Durchsetzung der Regeln und eine standardisierte Praxis, damit das Ergebnis für alle Athleten fair und gerecht ist."
+  },
+  {
+   "heading": "Was ein Schiedsrichter ist",
+   "points": [
+    "Ein von Spartan ernannter Offizieller, der sicherstellt, dass alle Regeln eingehalten werden",
+    "Meist an einem Hindernis oder im Videoauswertungszelt eingesetzt",
+    "An Ihrem Hindernis: seine Regeln durchsetzen und Fehlversuche überwachen",
+    "Sie berichten an den Hauptschiedsrichter"
+   ],
+   "narration": "Das Regelwerk definiert einen Schiedsrichter als einen von Spartan ernannten Offiziellen, dessen Aufgabe es ist, sicherzustellen, dass alle Regeln eingehalten werden. Schiedsrichter sind meist an Hindernissen und im Videoauswertungszelt eingesetzt, und sie berichten an den Hauptoffiziellen. Spartans Verfahren des Schiedsrichterwesens beschreibt den Schiedsrichter als die Person, die einem Hindernis zugewiesen ist, um seine Regeln durchzusetzen und Fehlversuche zu überwachen. Im Regelwerk sind Offizielle alle, die Spartan bestimmt, um Aufgaben des Events in einer Position mit Autorität zu übernehmen: Mitarbeiter, Schiedsrichter und Freiwillige. Als Schiedsrichter gehören Sie dazu."
+  },
+  {
+   "heading": "Wem Sie Rechenschaft schulden",
+   "points": [
+    "Der Hauptschiedsrichter: die oberste Entscheidungsinstanz zu den Regeln beim Event",
+    "Das Regelwerk nennt diese Rolle den Hauptoffiziellen",
+    "Der Rennleiter: verantwortlich für den gesamten Betrieb des Events",
+    "Unsichere oder bestrittene Entscheidungen gehen an den Hauptschiedsrichter"
+   ],
+   "narration": "Bei jedem Event ist eine Person die oberste Entscheidungsinstanz in allen Regelfragen und die letzte Autorität für ihre Durchsetzung und Auslegung. Das Regelwerk nennt diese Person den Hauptoffiziellen. Spartans Verfahren des Schiedsrichterwesens und dieses Programm nennen sie den Hauptschiedsrichter. Ihm berichten Sie. Der Rennleiter ist verantwortlich für den gesamten Betrieb und die Durchführung des Events. Wenn Sie bei einer Entscheidung unsicher sind oder ein Athlet sie bestreitet, geht sie an den Hauptschiedsrichter."
+  },
+  {
+   "heading": "Ihre Entscheidungen erreichen die Ergebnisse",
+   "points": [
+    "Die Kette: Schiedsrichter, Hauptschiedsrichter, dann Rennleiter oder Zeitnahme-Team",
+    "Der Hauptschiedsrichter bestätigt Strafen und gibt sie weiter",
+    "Ergebnisse sind erst nach der offiziellen Videoauswertung endgültig",
+    "Zeitstrafen werden zur Zielzeit des Athleten addiert"
+   ],
+   "narration": "Was Sie an Ihrem Hindernis sehen und festhalten, kann die Ergebnisse verändern. Die Kette läuft von Ihnen zum Hauptschiedsrichter und dann zum Rennleiter oder zum Zeitnahme-Team. Der Hauptschiedsrichter leitet die Videoauswertung und gibt bestätigte Strafen und Disqualifikationen an den Rennleiter und das Zeitnahme-Team weiter. Das Regelwerk sagt, dass vor der Endgültigkeit der Ergebnisse eine offizielle Videoauswertung stattfinden soll, die Ergebnisse werden also womöglich nicht sofort veröffentlicht. Zeitstrafen werden zur Zielzeit des Athleten addiert, daher ist eine genaue, klar festgehaltene Entscheidung wichtig."
+  },
+  {
+   "heading": "Wie Sie geschult werden",
+   "points": [
+    "Basiert auf dem Spartan-Regelwerk, der Officiating SOP und den Global Officiating Guidelines",
+    "Schwerpunkt: Durchsetzung an Hindernissen, Strafen, Umgang mit Athleten und Integrität des Rennens",
+    "Das Online-Training abzuschließen ist für die Zertifizierung als Schiedsrichter verpflichtend"
+   ],
+   "narration": "Dieses Training soll sicherstellen, dass Schiedsrichter Spartans Wettkampfregeln fair und einheitlich durchsetzen. Es basiert auf drei Dokumenten: dem Spartan-Regelwerk, dem Standardverfahren des Schiedsrichterwesens und den Globalen Richtlinien des Schiedsrichterwesens. Es konzentriert sich auf die Durchsetzung an Hindernissen, Strafen, den Umgang mit Athleten und die Integrität des Wettkampfs. Nach dem Verfahren des Schiedsrichterwesens ist der Abschluss des Online-Trainingsmoduls für die Zertifizierung als Schiedsrichter verpflichtend. Vor jedem Event stellt der Hauptschiedsrichter außerdem sicher, dass jeder Schiedsrichter das Training vor dem Event absolviert hat."
+  },
+  {
+   "heading": "Kurz gesagt",
+   "points": [
+    "Schiedsrichter schützen Fairness, Integrität des Rennens und einheitliche Strafen",
+    "Sie setzen an Ihrem Hindernis die Regeln durch und überwachen Fehlversuche",
+    "Sie berichten an den Hauptschiedsrichter, die letzte Autorität zu den Regeln",
+    "Ihre Entscheidungen fließen in die Videoauswertung und die Ergebnisse ein"
+   ],
+   "narration": "Kurz gesagt. Schiedsrichter schützen die Fairness und Integrität des Rennens und sorgen dafür, dass Strafen einheitlich angewendet werden, was dem Wettkampf-Racing seine Glaubwürdigkeit gibt. Sie sind ein von Spartan ernannter Offizieller, meist an einem Hindernis eingesetzt, um seine Regeln durchzusetzen und Fehlversuche zu überwachen. Sie berichten an den Hauptschiedsrichter, den das Regelwerk Hauptoffiziellen nennt und der in den Regeln das letzte Wort hat. Was Sie festhalten, geht durch die Videoauswertung und kann die Zielzeit eines Athleten verändern."
+  }
+ ],
+ "ocr-2-2": [
+  {
+   "heading": "Wettkampf und Open",
+   "points": [
+    "Wettkampf: Elite- und Age-Group-Läufer",
+    "Open: offen für alle, die auf Teilnahme ausgerichtete Kategorie",
+    "Jede Kategorie startet in Läufen oder Wellen, getrennt nach Startzeit oder Tempogruppe"
+   ],
+   "narration": "Das Regelwerk definiert zwei Arten von Kategorien. Wettkampf, wozu Elite und Age Group gehören, und Open, die für alle offen ist. Dieses Programm beschreibt Open als die auf Teilnahme ausgerichtete Kategorie. Innerhalb jeder Kategorie starten die Athleten in Läufen und Wellen: Gruppen, die nach ihren Startzeiten oder nach Tempogruppe getrennt sind. Zu wissen, welche Kategorie gerade durch Ihr Hindernis kommt, sagt Ihnen, wie genau Sie hinsehen müssen."
+  },
+  {
+   "heading": "Worauf sich Schiedsrichter konzentrieren",
+   "points": [
+    "Schiedsrichter konzentrieren sich vor allem auf die Wettkampf-Kategorien",
+    "Von Wettkampf-Läufern wird erwartet, dass sie jede Regel ausdrücklich befolgen",
+    "Setzen Sie die Regeln für jeden Wettkampf-Läufer auf dieselbe Weise durch",
+    "Seien Sie vor dem ersten Elite-Start in Position"
+   ],
+   "narration": "Schiedsrichter konzentrieren sich vor allem auf die Wettkampf-Kategorien: Elite und Age Group. Das Regelwerk erwartet von jedem Wettkampf-Läufer, dass er alle Regeln ausdrücklich befolgt und mit Einsatz und Wettkampfgeist läuft. Ihre Durchsetzung muss also für jeden Wettkampf-Läufer in jeder Elite- und Age-Group-Welle dieselbe sein. Spartans Verfahren des Schiedsrichterwesens sagt, der Hauptschiedsrichter bestätigt, dass die Schiedsrichter vor dem ersten Elite-Start in Position sind, und dass Beurteilung, Videoauswertung und Strafbewertung für die Kategorien Elite und Age Group gelten."
+  },
+  {
+   "heading": "Open-Läufer",
+   "points": [
+    "Auch Open-Läufer werden ermutigt, die Regeln zu befolgen",
+    "Die Atmosphäre ist lockerer: Sportsgeist und persönliche Verantwortung",
+    "Von Open-Läufern wird erwartet, bei Burpee-Strafen auf Spartan-Ehrenwort zu handeln",
+    "Für die Open-Wellen können Schiedsrichter abbauen oder an Freiwillige übergeben"
+   ],
+   "narration": "Auch Open-Läufer werden ermutigt, die Regeln zu befolgen, im Geist von Sportsgeist und persönlicher Verantwortung, auch wenn die Atmosphäre in der Open-Kategorie lockerer ist. Das Regelwerk erwartet von Teilnehmern der Open-Kategorie, dass sie bei Burpee-Strafen auf Spartan-Ehrenwort handeln. In diesem Programm endet der Ablauf des Schiedsrichters damit, die Strecke abzubauen oder für die Open-Wellen an Freiwillige zu übergeben. Die Einweisung Ihres Hauptschiedsrichters sagt Ihnen, was bei Ihrem Event gilt."
+  },
+  {
+   "heading": "Läufe, Wellen und Zeitnahme",
+   "points": [
+    "Läufer müssen in ihrem zugewiesenen Lauf, ihrer Welle oder Gruppe starten",
+    "Ein Elite-Läufer, der im falschen Lauf startet, wird zu Open versetzt",
+    "Elite-Läufe: Wer zuerst die Ziellinie überquert, gewinnt (Gun Time)",
+    "Age Group, Open und Elite-Stadion-Läufe: Chip-Zeit. Beide addieren etwaige Zeitstrafen"
+   ],
+   "narration": "Jeder Läufer muss in und mit seinem zugewiesenen Lauf, seiner Welle oder Gruppe starten. Ein Läufer, der im falschen Lauf startet, hat keinen Anspruch auf Auszeichnungen, und ein Elite-Läufer, der im falschen Lauf startet, wird in die Open-Kategorie versetzt. Die Zeitnahme unterscheidet sich nach Kategorie. In einem Elite-Lauf gewinnt, wer als Erster die Ziellinie überquert, was Gun Time heißt. Age-Group- und Open-Läufe sowie Elite-Läufe beim Stadion nutzen die Chip-Zeit: vom Überqueren der Startlinie bis zum Überqueren des Ziels. In beiden Fällen werden etwaige Zeitstrafen addiert."
+  },
+  {
+   "heading": "Kurz gesagt",
+   "points": [
+    "Wettkampf heißt Elite und Age Group; Open ist offen für alle",
+    "Schiedsrichter konzentrieren sich vor allem auf Wettkampf-Läufer",
+    "Jeder Wettkampf-Läufer erfährt dieselbe Durchsetzung",
+    "Open-Läufer werden ermutigt, die Regeln zu befolgen, auf Spartan-Ehrenwort"
+   ],
+   "narration": "Kurz gesagt. Es gibt zwei Arten von Kategorien: Wettkampf, das sind Elite und Age Group, und Open, die für alle offen ist. Schiedsrichter konzentrieren sich vor allem auf die Wettkampf-Kategorien, in denen von den Läufern erwartet wird, jede Regel zu befolgen, und Ihre Durchsetzung muss für jeden von ihnen dieselbe sein. Auch Open-Läufer werden ermutigt, die Regeln zu befolgen, in lockerer Atmosphäre und auf Spartan-Ehrenwort. Elite-Läufe werden nach Gun Time entschieden, die anderen nach Chip-Zeit, wobei etwaige Zeitstrafen addiert werden."
+  }
+ ],
+ "ocr-2-3": [
+  {
+   "heading": "Unparteiisch und professionell",
+   "points": [
+    "Seien Sie unparteiisch: Wenden Sie die Regeln bei jedem Athleten auf dieselbe Weise an",
+    "Seien Sie professionell: ruhig, neutral und respektvoll",
+    "Kennen Sie die Wettkampfregeln und die Officiating SOP"
+   ],
+   "narration": "Die Einstellung des Schiedsrichters beginnt damit, unparteiisch und professionell zu sein. Spartans Verfahren des Schiedsrichterwesens bittet Sie, die Hindernisregeln einheitlich und unparteiisch anzuwenden, wer auch immer der Athlet ist. Bleiben Sie ruhig, neutral und respektvoll und vertreten Sie Spartan professionell. Ihre beiden wichtigsten Dokumente sind die Spartan-Wettkampfregeln und das Standardverfahren des Schiedsrichterwesens. Machen Sie sich vor dem Event mit beiden vertraut und stellen Sie sicher, dass Sie die Regeln für Ihr eigenes Hindernis kennen und verstehen."
+  },
+  {
+   "heading": "Sinn der Regel, Fairness und Sicherheit",
+   "points": [
+    "Achten Sie auf den Sinn der Regel, nicht auf geringfügigen versehentlichen Kontakt",
+    "Fragen Sie, ob der Athlet einen Vorteil erlangt hat",
+    "Stellen Sie Fairness und Sicherheit der Athleten an die erste Stelle"
+   ],
+   "narration": "Achten Sie darauf, wofür eine Regel da ist, nicht auf geringfügigen versehentlichen Kontakt. Eines der Szenarien des Programms ist ein Athlet, der kurz die Oberkante eines Hindernisses berührt, aber keinen Vorteil erlangt. Die Frage ist, ob ein Vorteil entstanden ist. Stellen Sie Fairness und Sicherheit der Athleten an die erste Stelle. Gesundheit, Sicherheit und Wohlbefinden der Teilnehmer zu schützen, ist eines der erklärten Ziele des Regelwerks. Wenn Sie an Ihrem Hindernis ein Sicherheitsproblem sehen, melden Sie es sofort dem Hauptschiedsrichter oder dem Rennleiter."
+  },
+  {
+   "heading": "Im Zweifel eskalieren",
+   "points": [
+    "Eskalieren Sie jede Situation, bei der Sie unsicher sind",
+    "Unsicher bei der Strafe oder ihrer Durchsetzung: Kontaktieren Sie sofort den Hauptschiedsrichter",
+    "Zweifel, Sicherheitsbedenken oder Unstimmigkeiten: sofort melden"
+   ],
+   "narration": "Von Ihnen wird nicht erwartet, jede Situation allein zu entscheiden. Wenn Sie unsicher sind, eskalieren Sie. Spartans Verfahren des Schiedsrichterwesens sagt, dass Sie bei jeder Unsicherheit über die Art der Strafe oder ihre Durchsetzung sofort den Hauptschiedsrichter kontaktieren. Wenn Sie an Ihrem Hindernis ankommen, melden Sie Zweifel, Sicherheitsbedenken oder Unstimmigkeiten sofort dem Rennleiter oder dem Hauptschiedsrichter. Der Hauptschiedsrichter ist die letzte Autorität in den Regeln beim Event, daher gehört das Eskalieren dazu, die Arbeit gut zu machen."
+  },
+  {
+   "heading": "Vor dem Renntag",
+   "points": [
+    "Absolvieren Sie das Training vor dem Event, bevor Sie teilnehmen",
+    "Es deckt das Regelwerk ab, mit Schwerpunkt auf Hindernissen mit vielen Fehlversuchen",
+    "Es deckt auch den Ablauf der Schiedsrichter, Burpee-Standards und Video beim Spear Throw ab",
+    "Sie erhalten ein Einweisungspaket und Zugang zu Video-Tutorials"
+   ],
+   "narration": "Ihr Ablauf beginnt vor dem Renntag. Der Hauptschiedsrichter stellt sicher, dass jeder Schiedsrichter das übliche Training vor dem Event absolviert, bevor er teilnimmt. Es deckt das Spartan-Regelwerk ab, mit Schwerpunkt auf Hindernissen mit vielen Fehlversuchen, also denen, an denen Athleten am häufigsten scheitern. Es deckt außerdem den Prozess und Ablauf der Schiedsrichter ab, Burpee-Standards und wie sie durchgesetzt werden, sowie Videoaufzeichnung und -auswertung, die nur beim Spear Throw verwendet wird. Sie erhalten außerdem ein Einweisungspaket vor dem Event und Zugang zu den offiziellen Video-Tutorials."
+  },
+  {
+   "heading": "Der Morgen des Rennens",
+   "points": [
+    "Einchecken, Ihr Hindernis bestätigen und Ihre Ausrüstung abholen",
+    "An der verpflichtenden Einweisung des Hauptschiedsrichters vor Ort teilnehmen",
+    "Rechtzeitig vor der ersten Wettkampf-Welle an Ihrem Hindernis sein",
+    "Das Hindernis prüfen, die Strafschleife ablaufen und Ihren Standort wählen"
+   ],
+   "narration": "Melden Sie sich am Morgen des Rennens im Zelt, das man Ihnen genannt hat, tragen Sie sich ein, bestätigen Sie Ihre Hindernis-Zuweisung und holen Sie Ihre Ausrüstung ab. Treten Sie dem Kommunikationskanal bei, falls einer genutzt wird. Nehmen Sie an der verpflichtenden Einweisung des Hauptschiedsrichters vor Ort teil. Gehen Sie dann mit genügend Zeit vor der ersten Wettkampf-Welle zu Ihrem Hindernis. Prüfen Sie dort den Aufbau, achten Sie darauf, aus welcher Richtung die Athleten kommen, laufen Sie die ganze Strafschleife ab und entscheiden Sie, wo Sie stehen, um Versuche, Abschlüsse und Fehlversuche klar zu sehen."
+  },
+  {
+   "heading": "Während des Rennens und danach",
+   "points": [
+    "Beurteilen Sie die Elite- und Wettkampf-Wellen",
+    "Dann die Strecke abbauen oder für die Open-Wellen an Freiwillige übergeben",
+    "Bei Ihrer Rückkehr: Aufnahmen gehen in die Videoauswertung, schriftliche Entscheidungen an den Hauptschiedsrichter",
+    "Athleten bringen einen Protest innerhalb der Protestfrist zum Hauptschiedsrichter"
+   ],
+   "narration": "Während des Rennens beurteilen Sie an Ihrem Hindernis die Elite- und Wettkampf-Wellen. Danach bauen Sie je nach Event die Strecke ab oder übergeben für die Open-Wellen an Freiwillige. Wenn die Schiedsrichter zurückkehren, leitet der Hauptschiedsrichter die Videoauswertung der Aufnahmen. Wo es kein Video gibt, werden Ihre Entscheidungen vor Ort getroffen, aufgeschrieben und bei Ihrer Rückkehr dem Hauptschiedsrichter übergeben. Ergebnisse sind erst nach der offiziellen Auswertung endgültig. Ein Athlet, der eine Strafe anfechten will, bringt das während der Protestfrist zum Hauptschiedsrichter.",
+   "review": "In Überprüfung für 2027: Das Regelwerk (3.19.1) sagt, die Protestfrist ende 15 Minuten vor der Siegerehrung der Kategorie. Die Officiating SOP (4.2) nennt als Beispiel für den Stichtag eine halbe Stunde vor der Siegerehrung. Wenden Sie bis dahin das Regelwerk an, folgen Sie den vom Hauptschiedsrichter angesagten Protestzeiten und schicken Sie jeden Athleten mit einem Protest zum Hauptschiedsrichter."
+  },
+  {
+   "heading": "Kurz gesagt",
+   "points": [
+    "Seien Sie unparteiisch, professionell und einheitlich",
+    "Denken Sie an den Sinn der Regel; Fairness und Sicherheit zuerst",
+    "Im Zweifel an den Hauptschiedsrichter eskalieren",
+    "Ihr Tag: Training, Check-in, Einweisung, Aufbau, Beurteilung, Übergabe"
+   ],
+   "narration": "Kurz gesagt. Seien Sie unparteiisch und professionell und wenden Sie die Regeln bei jedem Athleten auf dieselbe Weise an. Achten Sie auf den Sinn der Regel statt auf geringfügigen versehentlichen Kontakt und stellen Sie Fairness und Sicherheit der Athleten an die erste Stelle. Wenn Sie unsicher sind, eskalieren Sie an den Hauptschiedsrichter. Ihr Ablauf beim Event reicht vom Training und der Einweisung vor dem Event über Check-in und Ausrüstung, Prüfung und Aufbau des Hindernisses bis zur Beurteilung der Wettkampf-Wellen und schließlich dem Abbau oder der Übergabe an Freiwillige für die Open-Wellen."
+  }
+ ],
+ "ocr-3-1": [
+  {
+   "heading": "Dienstantritt",
+   "points": [
+    "Melden Sie sich zur zugewiesenen Zeit im Volunteer Tent oder im Schiedsrichterzelt",
+    "Tragen Sie sich beim Volunteer Coordinator oder beim Hauptschiedsrichter ein",
+    "Bestätigen Sie Ihre Hindernis-Zuweisung",
+    "Machen Sie sich dem Hauptschiedsrichter bekannt"
+   ],
+   "narration": "Ihr Renntag beginnt beim Check-in. Gehen Sie zur genannten Meldezeit ins Volunteer Tent oder, falls Ihr Event eines hat, ins Schiedsrichterzelt. Tragen Sie sich beim Volunteer Coordinator oder beim Hauptschiedsrichter ein und bestätigen Sie, welchem Hindernis Sie zugewiesen sind. Auch wenn jemand anderes Sie einträgt, stellen Sie sicher, dass der Hauptschiedsrichter weiß, dass Sie da sind. Vor dem ersten Elite-Start muss der Hauptschiedsrichter bestätigen, dass jeder Schiedsrichter in Position ist."
+  },
+  {
+   "heading": "Was Sie beim Check-in abholen",
+   "points": [
+    "Offizielle Materialien: Schiedsrichter-T-Shirt, Mütze, Ausweise oder andere zugewiesene Ausrüstung",
+    "Das Schild mit dem QR-Code für Ihr Hindernis, falls es nicht schon angebracht ist",
+    "Einen Platz im offiziellen Kommunikationskanal, etwa einer WhatsApp-Gruppe"
+   ],
+   "narration": "Beim Check-in erhalten Sie Ihre offiziellen Materialien für die Beurteilung. Das sind Ihr Schiedsrichter-T-Shirt, Ihre Mütze und Ihre Ausweise sowie jede andere zugewiesene Ausrüstung. Holen Sie auch das Schild mit dem QR-Code für Ihr Hindernis ab, sofern es nicht schon vor Ort angebracht ist. Es führt zum Video-Tutorial für dieses Hindernis. Stellen Sie schließlich sicher, dass Sie dem offiziellen Kommunikationskanal hinzugefügt werden. Das kann eine WhatsApp-Gruppe sein, eine andere Messaging-Plattform oder ein direkter Kontakt zum Hauptschiedsrichter."
+  },
+  {
+   "heading": "Ihre Schiedsrichter-Ausrüstung",
+   "points": [
+    "Schiedsrichter-Shirt oder -Weste",
+    "Ein Schreibbrett oder Notizbuch, möglichst wasserfest",
+    "Gedruckte Regelblätter für Ihr Hindernis",
+    "Eine Videokamera und ein Stativ, nur wenn Ihnen eine zugewiesen wird"
+   ],
+   "narration": "Das Programm 2026 listet auf, was ein Schiedsrichter am Hindernis braucht. Tragen Sie Ihr Schiedsrichter-Shirt oder Ihre Weste. Führen Sie ein Schreibbrett oder Notizbuch mit, möglichst wasserfest, denn Sie halten Stirnband-Nummern und Notizen fest, manchmal bei Nässe. Bringen Sie gedruckte Regelblätter für Ihr Hindernis mit, damit Sie eine Regel vor Ort nachschlagen können. Wenn Ihnen eine Kamera zugewiesen wird, haben Sie außerdem eine Videokamera und ein Stativ."
+  },
+  {
+   "heading": "Bringen Sie Ihr Nötigstes selbst mit",
+   "points": [
+    "Ein Mobiltelefon",
+    "Der Witterung angepasste Kleidung",
+    "Stifte oder Bleistifte, Essen und Wasser",
+    "Alles Persönliche, was Sie brauchen, etwa Medikamente"
+   ],
+   "narration": "Bringen Sie auch Ihr Nötigstes selbst mit. Sie brauchen ein Mobiltelefon, denn so bleiben Sie über den Kommunikationskanal mit dem Hauptschiedsrichter verbunden. Tragen Sie Kleidung, die zu den Bedingungen am Tag passt. Packen Sie Stifte oder Bleistifte, Essen und Wasser ein und alles Persönliche, was Sie brauchen, etwa Medikamente. Sobald die Wettkampf-Wellen starten, gehört Ihre Aufmerksamkeit Ihrem Hindernis, kommen Sie also vorbereitet."
+  },
+  {
+   "heading": "Die Video-Ausrüstung",
+   "points": [
+    "Der Hauptschiedsrichter bereitet die Ausrüstung für das Schiedsrichterwesen vor, testet sie und gibt sie aus",
+    "Kameras mit mindestens 2,5 Stunden Akku und bei Bedarf Ersatzakkus",
+    "Verstellbare 7-Fuß-Stative und SD-Karten mit mindestens 32 GB für Full HD",
+    "Video an den Hindernissen gibt es nur beim Spear Throw"
+   ],
+   "narration": "Die Ausrüstung für das Schiedsrichterwesen liegt in der Verantwortung des Hauptschiedsrichters. Er bereitet sie am Freitag vor dem Event vor, testet sie und gibt sie am Renntag mit letzten Anweisungen aus. Das Verfahren setzt ein Minimum für die Ausrüstung: Videokameras mit mindestens zweieinhalb Stunden Akku, Ersatzakkus, verstellbare Stative von sieben Fuß und Speicherkarten mit mindestens zweiunddreißig Gigabyte, schnell genug für volles High Definition. Videoaufzeichnung an Hindernissen gibt es nur beim Spear Throw. Wenn Sie dort eine Kamera bekommen, bauen Sie sie auf und prüfen, dass sie vor der ersten Elite-Welle aufzeichnet."
+  },
+  {
+   "heading": "Kurz gesagt",
+   "points": [
+    "Melden Sie sich pünktlich im Zelt, tragen Sie sich ein und bestätigen Sie Ihr Hindernis",
+    "Holen Sie Ihre Materialien und das QR-Schild ab und treten Sie dem Kommunikationskanal bei",
+    "Bringen Sie ein wasserfestes Brett, Regelblätter, Handy, Essen und Wasser mit",
+    "Kamera und Stativ nur, wenn Ihnen das Filmen des Spear Throw zugewiesen ist"
+   ],
+   "narration": "Kurz gesagt. Melden Sie sich zur Meldezeit im Zelt, tragen Sie sich ein, bestätigen Sie Ihr Hindernis und lassen Sie den Hauptschiedsrichter wissen, dass Sie da sind. Holen Sie Ihre Materialien und das QR-Schild für Ihr Hindernis ab und treten Sie dem Kommunikationskanal bei. Bringen Sie ein wasserfestes Brett oder Notizbuch, Ihre Regelblätter, Ihr Handy, Essen und Wasser mit. Eine Kamera und ein Stativ tragen Sie nur, wenn Ihnen das Filmen des Spear Throw zugewiesen ist."
+  }
+ ],
+ "ocr-3-2": [
+  {
+   "heading": "Zuerst die Einweisung",
+   "points": [
+    "Die Einweisung des Hauptschiedsrichters vor Ort ist verpflichtend, bevor Sie sich verteilen",
+    "Sie behandelt Zuweisungen, Hindernis-Einstufungen, Strafschleifen und den Burpee-Standard",
+    "Sie behandelt außerdem Verfahren des Events und wie Strafen gemeldet werden",
+    "Dann rechtzeitig vor der ersten Wettkampf-Welle zu Ihrem Hindernis gehen"
+   ],
+   "narration": "Bevor Sie auf die Strecke gehen, nehmen Sie an der Einweisung des Hauptschiedsrichters vor Ort teil. Sie ist verpflichtend. Sie behandelt die Verfahren des Events, wo jedes Hindernis ist und wer ihm zugewiesen ist, welche Hindernisse Pflicht sind und welche mehrere Versuche erlauben, die Strafschleifen, den Burpee-Standard, die Kamerapositionierung beim Spear Throw und wie Strafen erkannt, gemeldet und kommuniziert werden. Gehen Sie nach der Einweisung mit genügend Zeit zur Vorbereitung zu Ihrem Hindernis, bevor die erste Wettkampf-Welle eintrifft."
+  },
+  {
+   "heading": "Kennen Sie die Regeln Ihres Hindernisses",
+   "points": [
+    "Lesen Sie die Anweisungen, Fehlerarten und zusätzlichen Hinweise Ihres Hindernisses",
+    "Nutzen Sie das Regelblatt, das Aufgabenblatt und das QR-Code-Video für Ihr Hindernis",
+    "Achten Sie auf Optionen für Männer und Frauen: An Wänden ist die rote Stufe nur für Athletinnen"
+   ],
+   "narration": "Sehen Sie sich die Regeln für Ihr Hindernis an und verstehen Sie sie, bevor der erste Athlet eintrifft. Im Regelwerk hat jedes Hindernis Anweisungen für die Teilnehmer, Fehlerarten und zusätzliche Hinweise. Lesen Sie alle drei. Auch Ihr Regelblatt, das Aufgabenblatt des Hindernisses und das QR-Code-Video-Tutorial helfen. Achten Sie auf unterschiedliche Optionen für Männer und Frauen. An den Wänden von sechs bis neun Fuß etwa darf die rote Stufe nur von Athletinnen genutzt werden, und ein männlicher Athlet, der sie nutzt, scheitert am Hindernis."
+  },
+  {
+   "heading": "Den Aufbau prüfen",
+   "points": [
+    "Prüfen Sie den Aufbau des Hindernisses und ob er einsatzbereit ist",
+    "Sehen Sie sich den Rennfluss und die Richtung an, aus der die Athleten kommen",
+    "Melden Sie Zweifel, Sicherheitsbedenken oder Unstimmigkeiten sofort dem Rennleiter oder Hauptschiedsrichter"
+   ],
+   "narration": "Wenn Sie ankommen, prüfen Sie das Hindernis. Kontrollieren Sie, dass es richtig aufgebaut und in einsatzbereitem Zustand ist. Sehen Sie sich an, wie das Rennen hindurchfließt und aus welcher Richtung die Athleten kommen, damit Sie wissen, wo sie ankommen und wo sie weggehen. Wenn Sie etwas beunruhigt, sei es ein Zweifel am Aufbau, ein Sicherheitsbedenken oder etwas Unstimmiges, melden Sie es sofort dem Rennleiter oder dem Hauptschiedsrichter. Warten Sie nicht, bis die Athleten eintreffen."
+  },
+  {
+   "heading": "Die Strafschleife ablaufen",
+   "points": [
+    "Laufen Sie die ganze Strafschleife ab, wo es eine gibt",
+    "Kennen Sie die Route und genau, wo Athleten auf die Strecke zurückkehren",
+    "Schleifen unterscheiden sich: Laufen, Tragen, Kriechen oder distanzbasiert, wie für Ihr Hindernis bestätigt",
+    "Dieselbe Strafe gilt für alle in der Kategorie oder im Lauf"
+   ],
+   "narration": "Wenn Ihr Hindernis eine Strafschleife hat, laufen Sie die gesamte Schleife selbst ab. Sie müssen die Route und den Rückkehrpunkt verstehen, damit Sie einen Athleten klar einweisen und sehen können, ob er sie absolviert. Schleifen sind nicht alle gleich. Das Regelwerk sagt, ihre Länge könne je nach Gelände variieren, und sie könnten Tragen, Kriechen oder andere Elemente enthalten. Der Hauptschiedsrichter bestätigt das Strafformat jedes Hindernisses mit dem Rennleiter. Was auch immer es ist, es wird innerhalb der Kategorie oder des Laufs einheitlich angewendet.",
+   "review": "In Überprüfung für 2027: Das Regelwerk (3.17.3) sagt, die Strafe sei eine Schleife oder 30 Burpees, wie Spartan es für jedes Hindernis und Event festlegt. Die Officiating SOP sagt, bei den meisten Hindernissen gelte eine Schleife und beim Spear Throw Burpees, und das Programm 2026 sagt, Burpees nur beim Spear Throw. Wenden Sie bis dahin die Strafe an, die der Hauptschiedsrichter für Ihr Hindernis bestätigt, und kontaktieren Sie den Hauptschiedsrichter, wenn Sie unsicher sind."
+  },
+  {
+   "heading": "Wo Sie stehen",
+   "points": [
+    "Wählen Sie einen Platz, von dem aus Sie Versuche, Abschlüsse und Fehlversuche klar sehen",
+    "Halten Sie Ihre Sicht auf das Hindernis frei",
+    "Nur beim Spear Throw: die Kamera so aufbauen, wie das Verfahren zum Spear Throw es beschreibt",
+    "Bestätigen Sie vor der ersten Elite-Welle, dass die Kamera aufzeichnet"
+   ],
+   "narration": "Entscheiden Sie, wo Sie stehen, bevor das Rennen beginnt. Sie brauchen eine Position, von der aus Sie jeden Versuch, jeden Abschluss und jeden Fehlversuch klar sehen, ohne dass etwas die Sicht versperrt. Überlegen Sie, wo an Ihrem Hindernis Fehlversuche meist passieren, und seien Sie nah genug, um einen Athleten anzusprechen, wenn einer passiert. Nur beim Spear Throw bauen Sie außerdem die Videokamera auf, nach dem Verfahren des Schiedsrichterwesens zum Spear Throw, und bestätigen, dass sie aufzeichnet, bevor die erste Elite-Welle startet. Der Hauptschiedsrichter kann vorbeikommen, um Durchsetzung und Kameraposition zu prüfen."
+  },
+  {
+   "heading": "Kurz gesagt",
+   "points": [
+    "Nehmen Sie an der verpflichtenden Einweisung teil und gehen Sie dann rechtzeitig zu Ihrem Hindernis",
+    "Kennen Sie seine Anweisungen, Fehlerarten und Hinweise",
+    "Prüfen Sie den Aufbau, laufen Sie die Strafschleife ab, melden Sie jedes Bedenken sofort",
+    "Stehen Sie dort, wo Sie jeden Versuch sehen; beim Spear Throw prüfen, dass die Kamera aufzeichnet"
+   ],
+   "narration": "Kurz gesagt. Nehmen Sie an der Einweisung des Hauptschiedsrichters teil und kommen Sie dann rechtzeitig vor der ersten Wettkampf-Welle zu Ihrem Hindernis. Kennen Sie seine Anweisungen, Fehlerarten und zusätzlichen Hinweise, einschließlich aller Optionen für Männer und Frauen. Prüfen Sie den Aufbau, laufen Sie die Strafschleife ab und melden Sie jeden Zweifel oder jedes Sicherheitsbedenken sofort. Wählen Sie dann eine Position, von der aus Sie jeden Versuch sehen, und bestätigen Sie beim Spear Throw, dass die Kamera vor der ersten Elite-Welle aufzeichnet."
+  }
+ ],
+ "ocr-3-3": [
+  {
+   "heading": "Wem Sie berichten",
+   "points": [
+    "Schiedsrichter, dann Hauptschiedsrichter, dann Rennleiter oder Zeitnahme-Team",
+    "Sie berichten an den Hauptschiedsrichter: Das Regelwerk nennt diese Rolle den Hauptoffiziellen",
+    "Der Hauptschiedsrichter ist die letzte Autorität bei Durchsetzung und Auslegung der Regeln"
+   ],
+   "narration": "Das Programm 2026 fasst die Kommunikationskette in einer Zeile zusammen: Schiedsrichter, dann Hauptschiedsrichter, dann Rennleiter oder Zeitnahme-Team. Als Schiedsrichter berichten Sie an den Hauptschiedsrichter. Das Regelwerk nennt diese Person den Hauptoffiziellen und macht sie zur obersten Entscheidungsinstanz in allen Regelfragen beim Event und zur letzten Autorität bei Durchsetzung und Auslegung der Regeln. Ihre Meldungen gehen an den Hauptschiedsrichter, der sie weitergibt."
+  },
+  {
+   "heading": "Was der Hauptschiedsrichter weitergibt",
+   "points": [
+    "Rennvorfälle gehen an den Rennleiter, der den gesamten Betrieb des Events leitet",
+    "Vorfälle bei Teilnehmern, etwa Betrug oder Abkürzungen, gehen an die Zeitnahme",
+    "Bestätigte Strafen und Disqualifikationen gehen an den Rennleiter und die Zeitnahme",
+    "Endgültige Strafentscheidungen können vom Hauptschiedsrichter und dem Zeitnahme-Team bestätigt werden"
+   ],
+   "narration": "Der Hauptschiedsrichter verbindet Sie mit dem Rest des Events. Er hält den Rennleiter, der für den gesamten Betrieb des Events verantwortlich ist, über Rennvorfälle auf dem Laufenden. Er informiert das Zeitnahme-Team über Vorfälle bei Teilnehmern wie Betrug oder Abkürzungen. Nach der Videoauswertung gibt er bestätigte Strafen und Disqualifikationen an den Rennleiter und das Zeitnahme- und Technik-Team weiter. Ihre Aufgabe ist es, die Hindernisregeln durchzusetzen, Athleten zu Strafen zu schicken und festzuhalten, was passiert ist. Endgültige Strafentscheidungen können vom Hauptschiedsrichter und dem Zeitnahme-Team bestätigt werden."
+  },
+  {
+   "heading": "Wann Sie sich melden",
+   "points": [
+    "Treten Sie beim Check-in dem offiziellen Kanal bei: einem Gruppenchat, einer Plattform oder direkt dem Hauptschiedsrichter",
+    "Unsicher bei einer Strafart oder ihrer Durchsetzung: sofort den Hauptschiedsrichter kontaktieren",
+    "Zweifel oder Sicherheitsbedenken am Hindernis: der Rennleiter oder der Hauptschiedsrichter",
+    "Gefahren: sofort dem Hauptschiedsrichter, dem Rennleiter oder dem Spartan-Personal melden"
+   ],
+   "narration": "Beim Check-in treten Sie dem offiziellen Kommunikationskanal bei. Das kann eine WhatsApp-Gruppe sein, eine andere Messaging-Plattform oder eine direkte Leitung zum Hauptschiedsrichter. Nutzen Sie ihn. Wenn Sie unsicher sind, welche Strafe gilt oder wie sie durchzusetzen ist, kontaktieren Sie sofort den Hauptschiedsrichter, statt zu raten. Melden Sie Zweifel, Sicherheitsbedenken oder Unstimmigkeiten an Ihrem Hindernis dem Rennleiter oder dem Hauptschiedsrichter. Und melden Sie jede Gefahr sofort, dem Hauptschiedsrichter, dem Rennleiter oder dem Spartan-Personal."
+  },
+  {
+   "heading": "Einen Streitfall oder eine Flucht melden",
+   "points": [
+    "Streitfall: Halten Sie Stirnband-Nummer und Grund fest und melden Sie ihn so bald wie möglich",
+    "Keine Nummer: sofort mit klarer Beschreibung melden, etwa Kleidung und Kategorie",
+    "Helfen Sie später auf der Strecke, den Athleten zu identifizieren, wenn Sie darum gebeten werden",
+    "Kein Video: Schreiben Sie Ihre Strafentscheidungen auf und übergeben Sie sie dem Hauptschiedsrichter"
+   ],
+   "narration": "Die meisten Meldungen betreffen Athleten. Wenn ein Athlet eine Entscheidung bestreitet, halten Sie seine Stirnband-Nummer fest, schreiben Sie den Grund auf, etwa ein gescheitertes Hindernis ohne die Strafe, und melden Sie es dem Hauptschiedsrichter, sobald Sie können. Wenn ein Athlet geht, ohne die Strafe zu absolvieren, und Sie seine Nummer nicht bekommen, melden Sie es sofort mit einer klaren Beschreibung: Farbe der Kleidung, besondere Merkmale und Rennkategorie. Wo es kein Video gibt, treffen Sie Strafentscheidungen vor Ort, schreiben sie auf und übergeben sie bei Ihrer Rückkehr dem Hauptschiedsrichter."
+  },
+  {
+   "heading": "Kurz gesagt",
+   "points": [
+    "Ihre Linie führt zum Hauptschiedsrichter, der den Rennleiter und die Zeitnahme informiert",
+    "Treten Sie beim Check-in dem Kanal bei und nutzen Sie ihn",
+    "Fragen Sie bei Unsicherheit den Hauptschiedsrichter und melden Sie Gefahren sofort",
+    "Halten Sie Stirnband-Nummern und Gründe fest und melden Sie Streitfälle und Fluchten"
+   ],
+   "narration": "Kurz gesagt. Sie berichten an den Hauptschiedsrichter, und der Hauptschiedsrichter informiert den Rennleiter und das Zeitnahme-Team. Treten Sie beim Check-in dem Kommunikationskanal bei und nutzen Sie ihn. Wenn Sie bei einer Strafe unsicher sind, fragen Sie sofort den Hauptschiedsrichter und melden Sie Gefahren sofort. Bei Streitfällen und Fluchten halten Sie die Stirnband-Nummer oder eine klare Beschreibung fest, notieren den Grund und melden es."
+  }
+ ],
+ "ocr-4-1": [
+  {
+   "heading": "Drei Arten von Hindernissen",
+   "points": [
+    "Pflicht: muss abgeschlossen werden, bevor der Athlet weitergeht",
+    "Mehrere Versuche (bestanden/nicht bestanden): erneut versuchen bis zum Erfolg oder zur Strafe",
+    "Ein Versuch (bestanden/nicht bestanden): Wer sich festgelegt hat, schließt es ab oder nimmt die Strafe",
+    "Teil D des Regelwerks führt jedes Hindernis unter einer der drei Arten auf"
+   ],
+   "narration": "Das Regelwerk teilt Hindernisse in Pflicht und Bestanden-oder-nicht-bestanden. Bestanden-oder-nicht-bestanden-Hindernisse gibt es in zwei Arten, mit mehreren Versuchen und mit einem Versuch, sodass Sie in der Praxis mit drei Arten arbeiten. Ein Pflicht-Hindernis muss abgeschlossen werden, bevor der Athlet weitergeht. Ein Hindernis mit mehreren Versuchen kann so oft versucht werden wie nötig, bis es geschafft ist oder eine Strafe verhängt wird. Ein Hindernis mit einem Versuch muss abgeschlossen werden, sobald sich der Athlet festgelegt hat, sonst gilt die Strafe. Das Regelwerk führt jedes Hindernis unter einer Art auf, und die Einweisung behandelt die Einstufungen.",
+   "review": "In Überprüfung für 2027: Regelwerk und Programm 2026 ordnen mehrere Hindernisse unterschiedlich ein. Das Regelwerk führt Monkey Bars, Multi-Rig, Twister, Olympus, Z Wall, Beater und Helix als Einzelversuch, Atlas Carry, Tire Flip und Stairway to Sparta als Mehrfachversuch und A-Frame Cargo als Pflicht. Das Programm führt die erste Gruppe als Mehrfachversuch, die zweite als Pflicht und A-Frame Cargo als Mehrfachversuch. Wenden Sie bis dahin den Abschnitt des Regelwerks für das Hindernis an und verweisen Sie eine strittige Entscheidung an den Hauptschiedsrichter."
+  },
+  {
+   "heading": "Jedes Hindernis muss versucht werden",
+   "points": [
+    "Ein Versuch bedeutet mindestens, das Hindernis zu berühren",
+    "Er kann einschließen, Wasser oder schwieriges Gelände zu betreten, um das Hindernis zu erreichen",
+    "Dieses Gelände kann nicht mit einer Strafe umgangen werden, außer die Einweisung oder das Rennpersonal erlauben es",
+    "Das Nichtversuchen eines Hindernisses ist ein häufiger Verstoß, auf den man achten muss"
+   ],
+   "narration": "Jedes Hindernis muss versucht werden. Das Regelwerk legt das Minimum fest: Ein Versuch ist das Berühren des Hindernisses. Manchmal gehört zum Versuch auch, zum Hindernis zu gelangen, zum Beispiel Wasser zu betreten oder anderes schwieriges Gelände zu durchqueren. Dieses Gelände kann nicht übersprungen werden, indem man eine Strafe nimmt, außer Einweisungen vor dem Rennen oder das Personal am Renntag haben gesagt, dass es in Ordnung ist. Das Programm 2026 führt das Nichtversuchen eines Hindernisses unter den häufigen Regelverstößen auf, achten Sie also auf Athleten, die direkt zur Strafe gehen, ohne es zu versuchen."
+  },
+  {
+   "heading": "Pflicht-Hindernisse",
+   "points": [
+    "Vollständig abgeschlossen: keine Umgehung und keine Strafe stattdessen, außer ein Offizieller sagt es",
+    "Das Scheitern an einem bedeutet Disqualifikation; der Rennleiter kann eine Zeitstrafe an deren Stelle setzen",
+    "Beispiele: Bucket Carry, Sandbag Carry, Log Carry, Barbed Wire Crawl",
+    "Bucket Carry: Geht Material verloren, muss die ganze Strecke mit vollem Eimer wiederholt werden"
+   ],
+   "narration": "Ein Pflicht-Hindernis muss vollständig abgeschlossen werden, bevor der Athlet weitergeht. Der Athlet kann es nicht umgehen oder durch eine Strafe ersetzen, außer ein Rennoffizieller weist ihn dazu an. Nach dem Regelwerk bedeutet das Scheitern an einem Pflicht-Hindernis Disqualifikation, auch wenn der Rennleiter je nach Schwere des Verstoßes eine Zeitstrafe an deren Stelle setzen kann. Typisch sind Tragen und Kriechen. Beim Bucket Carry etwa gibt es keine Burpee-Option, und ein Eimer, der mit fehlendem Material zurückkommt, bedeutet, dass der Athlet die ganze Strecke mit einem richtig gefüllten Eimer wiederholt."
+  },
+  {
+   "heading": "Hindernisse mit mehreren Versuchen",
+   "points": [
+    "Der Athlet darf so oft erneut versuchen wie nötig",
+    "Es endet mit einem Abschluss, oder der Athlet gibt auf und nimmt die Strafe",
+    "Beispiele: Rope Climb, Bender, Inverted Wall",
+    "Rope Climb: Seile nur wechseln, nachdem man wieder am Boden ist; ein Seil pro Versuch"
+   ],
+   "narration": "Ein Hindernis mit mehreren Versuchen kann immer wieder versucht werden. Der Athlet macht weiter, bis er es entweder abschließt oder sich entscheidet, es aufzugeben und die Strafe zu nehmen. Die Regeln jedes Hindernisses sagen, was ein erneuter Versuch beinhaltet. Beim Rope Climb etwa darf ein Athlet Seile wechseln, nachdem er wieder am Boden ist, und es erneut versuchen, aber mehr als ein Seil während eines einzigen Versuchs zu nutzen, ist ein Fehlversuch. Athleten bei wiederholten Versuchen sollten denen den Vortritt lassen, die es zum ersten Mal versuchen, auch wenn das Regelwerk sagt, dass das nicht verpflichtend ist."
+  },
+  {
+   "heading": "Hindernisse mit einem Versuch: wann die Festlegung beginnt",
+   "points": [
+    "Wer sich festgelegt hat, schließt das Hindernis ab oder nimmt die Strafe: kein erneuter Versuch",
+    "Die eigenen Regeln jedes Hindernisses legen fest, wann die Festlegung beginnt",
+    "Spear Throw: wenn der Speer in einer Vorwärtsbewegung losgelassen wird",
+    "Ape Hanger: wenn der Athlet eine der Stangen über Kopf berührt"
+   ],
+   "narration": "Ein Hindernis mit einem Versuch gibt dem Athleten nur einen Anlauf, sobald er sich festgelegt hat. Danach schließt er es entweder ab oder nimmt die Strafe. Die entscheidende Frage ist, wann die Festlegung beginnt, und das Regelwerk beantwortet sie Hindernis für Hindernis. Beim Spear Throw beginnt der Versuch, wenn der Speer in einer Vorwärtsbewegung losgelassen wird. Beim Ape Hanger ist der Athlet festgelegt, sobald er eine der Stangen über Kopf berührt. Kennen Sie den Festlegungspunkt Ihres Hindernisses: Er entscheidet, ob der Athlet noch neu ansetzen kann.",
+   "review": "In Überprüfung für 2027: Das Programm 2026 sagt, die Festlegung beginne, sobald die Bewegung des Versuchs startet, und beim Spear Throw, wenn der Speer zum Wurf nach hinten geführt wird. Das Regelwerk definiert die Festlegung Hindernis für Hindernis, und beim Spear Throw ist es das Loslassen. Wenden Sie bis dahin die Regel jedes Hindernisses an und verweisen Sie eine strittige Entscheidung an den Hauptschiedsrichter."
+  },
+  {
+   "heading": "Was als Fehlversuch zählt",
+   "points": [
+    "Beurteilen Sie anhand der Fehlerarten in den Regeln Ihres Hindernisses",
+    "Eine Glocke mit Füßen, Beinen oder Knien zu treten, ist ein Fehlversuch, ohne erneuten Versuch",
+    "Gescheitert durch erhebliche Behinderung durch einen anderen Athleten: Ein Offizieller kann einen Neustart erlauben",
+    "Häufige Fehlversuche sind das Nutzen der Stützkonstruktion und das Nichtläuten der Glocke"
+   ],
+   "narration": "Ein Fehlversuch ist in den Regeln jedes Hindernisses definiert, in seiner Liste von Fehlerarten. Beurteilen Sie anhand dieser Liste, nicht nach Ihrer eigenen Vorstellung, wie das Hindernis zu bewältigen ist. Zwei allgemeine Regeln gelten für alle Hindernisse. Eine Glocke mit Füßen, Beinen oder Knien zu treten, zählt als Fehlversuch: Der Athlet kann es nicht erneut versuchen und muss die Strafe absolvieren. Und wenn erhebliche körperliche Behinderung durch einen anderen Teilnehmer den Fehlversuch verursacht, darf der Athlet ohne zusätzliche Strafe neu starten, sobald ein Offizieller die Erlaubnis gibt."
+  },
+  {
+   "heading": "Kurz gesagt",
+   "points": [
+    "Jedes Hindernis muss versucht werden: mindestens berührt",
+    "Pflicht: vollständig abschließen, sonst droht Disqualifikation",
+    "Mehrere Versuche: erneut versuchen, bis es geschafft ist, oder die Strafe nehmen; ein Versuch: ein Anlauf nach der Festlegung",
+    "Beurteilen Sie die Fehlerarten jedes Hindernisses; welches Hindernis welcher Art ist, wird überprüft"
+   ],
+   "narration": "Kurz gesagt. Jedes Hindernis muss versucht werden, und das Berühren ist das Minimum. Ein Pflicht-Hindernis muss vollständig abgeschlossen werden, und das Scheitern daran bedeutet Disqualifikation, außer der Rennleiter setzt eine Zeitstrafe an deren Stelle. Ein Hindernis mit mehreren Versuchen kann wiederholt werden, bis es geschafft ist oder der Athlet die Strafe nimmt. Ein Hindernis mit einem Versuch erlaubt einen Anlauf, sobald sich der Athlet festlegt, an dem Punkt, den die Regeln dieses Hindernisses definieren. Beurteilen Sie jedes Hindernis anhand seiner eigenen Fehlerarten und denken Sie daran, dass für 2027 überprüft wird, welches Hindernis welcher Art ist."
+  }
+ ],
+ "ocr-5-1": [
+  {
+   "heading": "Zwei Arten von Hindernissen, zwei Arten von Ergebnissen",
+   "points": [
+    "Pflicht-Hindernisse müssen abgeschlossen werden: Das Scheitern an einem bedeutet Disqualifikation",
+    "Der Rennleiter kann je nach Schwere eine Zeitstrafe an deren Stelle setzen",
+    "Das Scheitern an einem Bestanden/Nicht-bestanden-Hindernis bedeutet eine Strafe: eine Strafschleife oder Burpees"
+   ],
+   "narration": "Das Regelwerk teilt Hindernisse in zwei Kategorien. Pflicht-Hindernisse müssen abgeschlossen werden. Das Scheitern an einem bedeutet Disqualifikation vom Event, auch wenn der Rennleiter je nach Schwere des Verstoßes eine Zeitstrafe an deren Stelle setzen kann. Bei Bestanden-oder-nicht-bestanden-Hindernissen ist es anders. Ein Athlet, der an einem scheitert, bleibt im Rennen und nimmt stattdessen eine Strafe. Diese Strafe ist entweder eine Strafschleife oder Burpees, und Spartan legt fest, welche für jedes Hindernis, Event, jede Kategorie oder jeden Lauf gilt.",
+   "review": "In Überprüfung für 2027: Regel 3.17.3 sagt, die Strafe sei eine Strafschleife oder 30 Burpees, wie Spartan es für jedes Hindernis, Event, jede Kategorie oder jeden Lauf festlegt, und beim Stadion immer 15 Burpees. Die Officiating SOP sagt, bei den meisten Hindernissen gelte eine Schleife und beim Spear Throw Burpees; das Programm 2026 sagt, Burpees nur beim Spear Throw. Verwenden Sie bis dahin die Strafe, die der Hauptschiedsrichter für Ihr Hindernis bestätigt, und fragen Sie den Hauptschiedsrichter, wenn Sie unsicher sind."
+  },
+  {
+   "heading": "Die Strafschleife",
+   "points": [
+    "Ein festgelegter Streckenabschnitt, den der Athlet nach dem Scheitern an einem Hindernis absolviert",
+    "Seine Länge variiert, und er kann Tragen, Kriechen oder andere Herausforderungen enthalten",
+    "Er wird für alle in der Kategorie oder im Lauf gleich angewendet",
+    "Laufen Sie die ganze Schleife ab, bevor das Rennen beginnt: Kennen Sie die Route und den Rückkehrpunkt"
+   ],
+   "narration": "Eine Strafschleife ist ein festgelegter Streckenabschnitt, den der Athlet nach dem Scheitern an einem Hindernis absolviert. Ihre Länge kann je nach Gelände variieren, und sie kann zusätzliche Herausforderungen wie Tragen oder Kriechen enthalten. Wie sie auch gestaltet ist, sie wird für alle in derselben Kategorie oder im selben Lauf einheitlich angewendet. Laufen Sie vor der ersten Wettkampf-Welle die gesamte Schleife selbst ab. Sie müssen die Route und den Rückkehrpunkt kennen, damit Sie Athleten richtig einweisen und jeden sehen können, der sie abkürzt."
+  },
+  {
+   "heading": "Burpee-Rückstände",
+   "points": [
+    "Athleten, die die geforderten Burpees nicht absolvieren, bekommen Zeit auf ihre Zielzeit addiert",
+    "Ein großer Rückstand kann eine hohe Zeitstrafe bedeuten",
+    "Ein Fehlbetrag kann auf der Strecke oder in der Videoauswertung vor den Auszeichnungen festgestellt werden",
+    "Wie viel Zeit jeder ausgelassene Burpee hinzufügt, wird für 2027 überprüft"
+   ],
+   "narration": "Wo Burpees die Strafe sind, bekommt ein Athlet, der die geforderte Zahl nicht absolviert, Zeit auf seine Gesamtzielzeit addiert. Das Programm 2026 sagt es einfach: Ein großer Burpee-Rückstand kann eine hohe Zeitstrafe zur Folge haben. Ein Fehlbetrag kann während des Rennens oder in der offiziellen Videoauswertung vor den Auszeichnungen festgestellt werden, weshalb die Ergebnisse womöglich nicht sofort endgültig sind. Wie viel Zeit ein ausgelassener Burpee genau hinzufügt, wird überprüft, daher vermittelt diese Lektion keine Zahl.",
+   "review": "In Überprüfung für 2027: Regel 3.4.2 addiert 30 Sekunden für jeden der ersten 10 ausgelassenen Burpees und insgesamt 10 Minuten, wenn mehr als 10 ausgelassen werden. Die Officiating SOP addiert je 30 Sekunden und 10 Minuten, wenn weniger als 20 absolviert werden; das Programm 2026 sagt, 11 oder mehr fehlerhafte seien 10 Minuten und weniger als 20 eine Disqualifikation. Diese Lektion vermittelt keine Zahl, bis die Leitung des Schiedsrichterwesens entscheidet: Der Hauptschiedsrichter bestätigt Strafen."
+  },
+  {
+   "heading": "Die Strafe nicht absolvieren",
+   "points": [
+    "Strafschleifen müssen vollständig absolviert werden",
+    "Das Auslassen der Strafe bringt eine weitere Strafe: addierte Zeit oder Disqualifikation",
+    "Was das Auslassen einer Schleife kostet, wird für 2027 überprüft",
+    "Ihr Teil: Halten Sie die Stirnband-Nummer fest und melden Sie sie dem Hauptschiedsrichter"
+   ],
+   "narration": "Strafschleifen müssen vollständig absolviert werden. Ein Athlet, der an einem Bestanden-oder-nicht-bestanden-Hindernis scheitert und die Strafe nicht absolviert, hat gegen die Regeln verstoßen, und das wird ihn etwas kosten. Während der offiziellen Videoauswertung können Rennoffizielle eine Zeitstrafe addieren oder disqualifizieren. Die Quellen von 2026 widersprechen sich bei der genauen Strafe für das Auslassen einer Schleife, daher wird sie überprüft. Ihr Teil ändert sich nicht: Halten Sie die Stirnband-Nummer des Athleten fest, notieren Sie, was passiert ist, und melden Sie es dem Hauptschiedsrichter.",
+   "review": "In Überprüfung für 2027: Regel 3.4.1 addiert eine Zeitstrafe von 10 Minuten, wenn ein Athlet an einem Bestanden/Nicht-bestanden-Hindernis scheitert und die Strafschleife nicht absolviert. Das Programm 2026 sagt, das Nichtabsolvieren einer Strafe könne zur Disqualifikation führen, und die Officiating SOP nennt keine Zahl. Wenden Sie bis zur Entscheidung der Leitung des Schiedsrichterwesens das Regelwerk an: festhalten, melden und die Strafe dem Hauptschiedsrichter überlassen."
+  },
+  {
+   "heading": "Wenn ein Athlet ohne die Strafe geht",
+   "points": [
+    "Halten Sie Stirnband-Nummer und Grund fest, etwa ein gescheitertes Hindernis ohne Strafe",
+    "Keine Nummer? Geben Sie dem Hauptschiedsrichter eine klare Beschreibung: Kleidung, Merkmale, Kategorie",
+    "Melden Sie es so bald wie möglich und helfen Sie später bei der Identifizierung des Athleten, wenn Sie darum gebeten werden"
+   ],
+   "narration": "Das Verfahren des Schiedsrichterwesens sagt, was zu tun ist, wenn ein Athlet Ihr Hindernis verlässt, ohne die Strafe zu absolvieren. Schreiben Sie seine Stirnband-Nummer und den Grund auf. Melden Sie es dem Hauptschiedsrichter, sobald es betrieblich möglich ist. Wenn Sie die Nummer nicht bekommen konnten, melden Sie es trotzdem sofort, mit einer klaren körperlichen Beschreibung des Athleten: der Farbe seiner Kleidung, besonderen Merkmalen und seiner Rennkategorie. Sie werden womöglich gebeten, ihn später auf der Strecke zu identifizieren."
+  },
+  {
+   "heading": "Kurz gesagt",
+   "points": [
+    "Pflicht-Hindernis nicht geschafft: Disqualifikation, außer der Rennleiter setzt eine Zeitstrafe an deren Stelle",
+    "Bestanden/Nicht-bestanden-Hindernis nicht geschafft: eine vollständig absolvierte Strafschleife oder Burpees",
+    "Ausgelassene Burpees und übersprungene Schleifen bringen weitere Strafen: Die Beträge werden überprüft",
+    "Halten Sie die Stirnband-Nummer fest und melden Sie an den Hauptschiedsrichter"
+   ],
+   "narration": "Kurz gesagt. Scheitert ein Athlet an einem Pflicht-Hindernis, ist die Strafe Disqualifikation, außer der Rennleiter setzt eine Zeitstrafe an deren Stelle. Scheitert er an einem Bestanden-oder-nicht-bestanden-Hindernis, nimmt er die festgelegte Strafe: eine vollständig absolvierte Strafschleife oder Burpees. Ausgelassene Burpees und übersprungene Schleifen bringen weitere Strafen, und die genauen Beträge werden für 2027 überprüft. Was auch geschieht, halten Sie die Stirnband-Nummer fest und melden Sie es dem Hauptschiedsrichter.",
+   "review": "In Überprüfung für 2027: Wo Burpees die Strafe sind (Regel 3.17.3), die für ausgelassene Burpees addierte Zeit (3.4.2) und die Strafe für das Überspringen einer Schleife (3.4.1) unterscheiden sich alle zwischen dem Regelwerk, der Officiating SOP und dem Programm 2026. Verwenden Sie bis zur Entscheidung der Leitung des Schiedsrichterwesens die Strafe, die der Hauptschiedsrichter für Ihr Hindernis bestätigt, vermitteln Sie keine Zeitangabe und verweisen Sie strittige Entscheidungen an den Hauptschiedsrichter."
+  }
+ ],
+ "ocr-5-2": [
+  {
+   "heading": "Ihre Aufgabe am Hindernis",
+   "points": [
+    "Stellen Sie sicher, dass Athleten die Anweisungen des Hindernisses befolgen",
+    "Achten Sie auf Regelverstöße und kennen Sie die Fehlerbedingungen des Hindernisses",
+    "Weisen Sie jeden gescheiterten Athleten zur richtigen Strafe",
+    "Melden Sie Probleme und Verstöße dem Hauptschiedsrichter"
+   ],
+   "narration": "Das Regelwerk definiert einen Schiedsrichter als einen Offiziellen, der ernannt wird, um sicherzustellen, dass die Regeln befolgt werden, meist an einem Hindernis oder im Videoauswertungszelt eingesetzt, und der dem Hauptoffiziellen berichtet, den dieses Programm den Hauptschiedsrichter nennt. An Ihrem Hindernis heißt das vier Dinge. Sorgen Sie dafür, dass Athleten die Anweisungen befolgen. Achten Sie auf Verstöße und wissen Sie genau, was als Fehlversuch zählt. Schicken Sie jeden, der scheitert, zur richtigen Strafe. Und melden Sie Probleme dem Hauptschiedsrichter."
+  },
+  {
+   "heading": "Jedes Hindernis muss versucht werden",
+   "points": [
+    "Ein Versuch bedeutet mindestens, das Hindernis zu berühren",
+    "Er kann einschließen, Wasser oder schwieriges Gelände zu betreten, um das Hindernis zu erreichen",
+    "Dieses Gelände kann nicht mit einer Strafe umgangen werden, außer die Einweisung oder das Rennpersonal erlauben es"
+   ],
+   "narration": "Jedes Hindernis muss versucht werden. Ein Versuch bedeutet mindestens, das Hindernis zu berühren. Liegt das Hindernis im Wasser oder in anderem schwierigem Gelände, kann der Versuch einschließen, dieses Gelände zu durchqueren, um es zu erreichen. Athleten können dieses Gelände nicht umgehen, indem sie eine Strafe nehmen, außer die Einweisung vor dem Rennen oder das Personal am Renntag haben gesagt, dass es in Ordnung ist. Ein Athlet, der direkt zur Strafe geht, ohne das Hindernis zu berühren, hat die Regel also nicht erfüllt."
+  },
+  {
+   "heading": "Glocken und Behinderung",
+   "points": [
+    "Glocken dürfen nur mit Armen, Händen oder dem Körper oberhalb der Brust angeschlagen werden",
+    "Eine Glocke zu treten ist ein Fehlversuch: kein erneuter Versuch, direkt zur Strafe",
+    "Gescheitert wegen erheblicher Behinderung durch einen anderen Athleten? Ein Offizieller kann einen Neustart erlauben"
+   ],
+   "narration": "Zwei allgemeine Regeln gelten an vielen Hindernissen. Glocken dürfen nur mit den Armen, den Händen oder einem anderen Körperteil oberhalb der Brust angeschlagen werden. Ein Athlet, der die Glocke mit einem Fuß, Bein oder Knie tritt, ist am Hindernis gescheitert: Er kann es nicht erneut versuchen und muss die Strafe absolvieren. Und wenn ein Athlet scheitert, weil ein anderer Teilnehmer ihn in erheblicher Weise körperlich behindert hat, kann ein Offizieller ihm die Erlaubnis geben, das Hindernis ohne zusätzliche Strafe neu zu starten. Wenn Sie unsicher sind, fragen Sie den Hauptschiedsrichter."
+  },
+  {
+   "heading": "Zur Strafe weisen",
+   "points": [
+    "Schicken Sie jeden gescheiterten Athleten zu der für Ihr Hindernis festgelegten Strafe",
+    "Das Strafformat jedes Hindernisses wird vor dem Event bestätigt und in der Einweisung behandelt",
+    "Unsicher, welche Strafe gilt? Kontaktieren Sie sofort den Hauptschiedsrichter"
+   ],
+   "narration": "Wenn ein Athlet scheitert, weisen Sie ihn klar zur richtigen Strafe. Vor dem Event bestätigt der Hauptschiedsrichter das Strafformat für jedes Hindernis mit dem Rennleiter, sei es eine Laufschleife, eine Tragschleife, eine Kriechschleife oder Burpees, und die Einweisung vor Ort behandelt, was für Ihres gilt. Das Verfahren des Schiedsrichterwesens sagt, die meisten Hindernisse nutzten eine Strafschleife, und der Spear Throw nutze Burpees. Wenn Sie je unsicher sind, welche Strafe gilt, kontaktieren Sie sofort den Hauptschiedsrichter.",
+   "review": "In Überprüfung für 2027: Regel 3.17.3 sagt, die Strafe sei eine Strafschleife oder 30 Burpees, wie Spartan es für jedes Hindernis, Event, jede Kategorie oder jeden Lauf festlegt, und beim Stadion immer 15 Burpees. Die Officiating SOP sagt, bei den meisten Hindernissen gelte eine Schleife und beim Spear Throw Burpees; das Programm 2026 sagt, Burpees nur beim Spear Throw. Verwenden Sie bis dahin die Strafe, die der Hauptschiedsrichter für Ihr Hindernis bestätigt, und fragen Sie den Hauptschiedsrichter, wenn Sie unsicher sind."
+  },
+  {
+   "heading": "Verhalten der Athleten auf der Strecke",
+   "points": [
+    "Athleten müssen die gesamte offizielle Strecke zurücklegen: ihr zu folgen, liegt in ihrer Verantwortung",
+    "Keine körperliche Hilfe von jemand anderem als einem Spartan-Offiziellen, und kein Pacing",
+    "Informationen über den Fortschritt oder die Zeiten anderer Athleten sind keine Unterstützung",
+    "Die Stirnband-Nummer muss jederzeit sichtbar und lesbar sein"
+   ],
+   "narration": "Athleten müssen die offizielle Strecke vollständig zurücklegen, und ihr korrekt zu folgen, liegt in ihrer eigenen Verantwortung. Sie dürfen keine körperliche Unterstützung von jemand anderem als einem Spartan-Offiziellen annehmen. Dazu gehören Essen und Getränke außerhalb der offiziellen Verpflegungsstellen, Ausrüstung, körperliche Stütze und Pacing, also dass jemand mit ihnen läuft, um sie zu coachen oder das Tempo vorzugeben. Informationen über den Fortschritt oder die Zeiten anderer Athleten sind keine Unterstützung. Die Startnummer am Stirnband muss jederzeit deutlich sichtbar und lesbar sein."
+  },
+  {
+   "heading": "Unsportliches Verhalten und Meldung",
+   "points": [
+    "Athleten müssen alle mit Respekt behandeln: kein beleidigendes, drohendes oder herabsetzendes Verhalten",
+    "Der Hauptschiedsrichter entscheidet über jede Strafe für Verhalten: Ihre Aufgabe ist, es zu melden",
+    "Halten Sie Stirnband-Nummer und Vorfall fest und melden Sie an den Hauptschiedsrichter",
+    "Erklären Sie die Regel ruhig und eskalieren Sie keinen Konflikt am Hindernis"
+   ],
+   "narration": "Athleten müssen Mitbewerber, Spartan-Personal, Freiwillige, Zuschauer und die Öffentlichkeit mit Fairness, Respekt und Höflichkeit behandeln und dürfen keine beleidigende, drohende oder herabsetzende Sprache oder kein solches Verhalten zeigen. Unsportliches Verhalten kann zu einer Strafe führen, über die der Hauptoffizielle, der Hauptschiedsrichter, entscheidet. Was auch immer das Problem ist, schreiben Sie die Stirnband-Nummer und das Vorgefallene auf und melden Sie es so bald wie möglich. Meldungen gehen von Ihnen an den Hauptschiedsrichter und weiter an den Rennleiter oder das Zeitnahme-Team. Wenn ein Athlet Ihre Entscheidung bestreitet, erklären Sie die Regel ruhig und vermeiden Sie einen Streit."
+  },
+  {
+   "heading": "Kurz gesagt",
+   "points": [
+    "Jedes Hindernis muss versucht werden: mindestens eine Berührung",
+    "Kennen Sie die Fehlerbedingungen: Eine getretene Glocke ist ein Fehlversuch",
+    "Schicken Sie jeden gescheiterten Athleten zur Strafe Ihres Hindernisses; bei Unsicherheit fragen Sie den Hauptschiedsrichter",
+    "Halten Sie die Nummer fest, melden Sie dem Hauptschiedsrichter und streiten Sie nicht"
+   ],
+   "narration": "Kurz gesagt. Jedes Hindernis muss versucht werden, und das heißt mindestens, es zu berühren. Kennen Sie die Anweisungen und Fehlerbedingungen Ihres Hindernisses und auch die allgemeinen, etwa dass eine getretene Glocke ein Fehlversuch ist. Schicken Sie jeden Athleten, der scheitert, zur Strafe, die für Ihr Hindernis festgelegt ist, und fragen Sie den Hauptschiedsrichter, wenn Sie unsicher sind. Athleten müssen der Strecke folgen, dürfen keine fremde Hilfe annehmen und müssen ihre Nummer sichtbar halten. Wenn etwas schiefgeht, halten Sie die Nummer fest, melden Sie es und streiten Sie nicht am Hindernis."
+  }
+ ],
+ "ocr-5-3": [
+  {
+   "heading": "Wo Burpees die Strafe sind",
+   "points": [
+    "Spartan legt für jedes Hindernis, Event, jede Kategorie oder jeden Lauf eine Schleife oder Burpees fest",
+    "Wo Burpees festgelegt sind, ist die Strafe 30 Burpees",
+    "Stadion-Events: immer 15 Burpees",
+    "Die Strafe beim Spear Throw sind 30 Burpees"
+   ],
+   "narration": "Nach Regel 3.17.3 ist die Strafe für ein Bestanden-oder-nicht-bestanden-Hindernis entweder eine Strafschleife oder Burpees, wie Spartan es für jedes Hindernis, Event, jede Kategorie oder jeden Lauf festlegt. Wo Burpees festgelegt sind, sind es dreißig Burpees. Bei Stadion-Events ist die Strafe bei jedem Hindernis fünfzehn Burpees. Die Strafe beim Spear Throw sind dreißig Burpees. Vor dem Event bestätigt der Hauptschiedsrichter das Strafformat für jedes Hindernis mit dem Rennleiter, die Einweisung sagt Ihnen also, ob Ihr Hindernis Burpees nutzt.",
+   "review": "In Überprüfung für 2027: Regel 3.17.3 sagt, die Strafe sei eine Strafschleife oder 30 Burpees, wie Spartan es für jedes Hindernis, Event, jede Kategorie oder jeden Lauf festlegt, und beim Stadion immer 15 Burpees. Die Officiating SOP sagt, bei den meisten Hindernissen gelte eine Schleife und beim Spear Throw Burpees; das Programm 2026 sagt, Burpees nur beim Spear Throw. Verwenden Sie bis dahin die Strafe, die der Hauptschiedsrichter für Ihr Hindernis bestätigt, und fragen Sie den Hauptschiedsrichter, wenn Sie unsicher sind."
+  },
+  {
+   "heading": "Die Burpee-Zone",
+   "points": [
+    "Burpees müssen in der vorgesehenen Burpee-Zone ausgeführt werden",
+    "Burpees außerhalb der Zone zählen nicht für die Strafe",
+    "Offizielle können Zonen hinzufügen, wenn eine voll ist oder um Kategorien zu trennen",
+    "Ihre Aufgabe: sicherstellen, dass Burpees in der richtigen Zone stattfinden"
+   ],
+   "narration": "Burpees müssen innerhalb der vorgesehenen Burpee-Zone absolviert werden. Alle außerhalb zählen nicht für die Strafe, ein Athlet, der aus der Zone driftet, macht also Wiederholungen, die nicht angerechnet werden. Rennoffizielle können zusätzliche Burpee-Zonen festlegen, wenn eine zu voll wird oder um Kategorien von Athleten getrennt zu halten. Teil Ihrer Aufgabe ist es, sicherzustellen, dass Burpees in der richtigen Zone stattfinden, wo Sie und die Kamera sie sehen können."
+  },
+  {
+   "heading": "Das Stirnband kommt auf den Boden",
+   "points": [
+    "Der Athlet legt sein Stirnband direkt vor sich auf den Boden",
+    "Stirnband verloren: den Namen des Athleten festhalten oder ihn über den Ton der Kamera sagen",
+    "Informieren Sie den Hauptschiedsrichter über jeden Athleten, der ohne Stirnband aufgenommen wurde"
+   ],
+   "narration": "Beim Ausführen der Burpees legt der Athlet sein Stirnband direkt vor sich auf den Boden. Die Ansagen des Hauptschiedsrichters an der Startlinie behandeln das, Athleten sollten es also wissen, bevor sie zu Ihnen kommen. Wenn ein Athlet sein Stirnband verloren hat, halten Sie seinen Namen fest oder sagen Sie über den Ton der Kamera, wer er ist. In jedem Fall informieren Sie den Hauptschiedsrichter über jeden Athleten, der ohne Stirnband aufgenommen wurde, damit das Material der richtigen Person zugeordnet werden kann."
+  },
+  {
+   "heading": "Den Athleten der Kamera zeigen",
+   "points": [
+    "Halten Sie das Stirnband etwa zwei Fuß vom Objektiv entfernt für etwa zwei Sekunden",
+    "Geben Sie es dem Athleten sofort zurück",
+    "Halten Sie nie zwei Stirnbänder gleichzeitig, und lassen Sie sich keine reichen",
+    "Bewegen Sie nie Körper oder Gesicht eines Athleten, um der Kamera zu passen"
+   ],
+   "narration": "Beim Spear Throw identifiziert das Video jeden Athleten. Halten Sie das Stirnband etwa zwei Fuß vom Kameraobjektiv entfernt für etwa zwei Sekunden, damit die Nummer bei der Auswertung klar zu lesen ist. Geben Sie es dann sofort dem Athleten zurück. Halten Sie nie zwei Stirnbänder gleichzeitig und lassen Sie sich von Athleten ihre Stirnbänder nicht reichen. Und bewegen Sie nie körperlich den Körper oder das Gesicht eines Athleten, um ihn ins Bild zu bekommen: Die Identifizierung erfolgt über das Stirnband, das klar hochgehalten wird."
+  },
+  {
+   "heading": "Die Videoauswertung bestimmt ausgelassene Burpees",
+   "points": [
+    "Ausgelassene Burpees werden in der Videoauswertung bestimmt",
+    "Ergebnisse sind womöglich erst endgültig, wenn die offizielle Videoauswertung erfolgt ist",
+    "Das Material bleibt beim Hauptschiedsrichter und wird nie an Athleten gegeben",
+    "Ihre drei Aufgaben: der Bewegungsstandard, die Zone, eine klare Identifizierung"
+   ],
+   "narration": "Das Programm 2026 sagt, die Videoauswertung bestimme ausgelassene Burpees. Deshalb werden Ergebnisse womöglich nicht sofort veröffentlicht: Die offizielle Auswertung findet statt, bevor sie endgültig sind. Der Hauptschiedsrichter leitet die Auswertung, während die Schiedsrichter von ihren Hindernissen zurückkehren, bewahrt das Material bis zum Ende des Eventtags auf und gibt es nie an Athleten. Ihr Teil auf der Strecke macht die Auswertung erst möglich: den Bewegungsstandard durchsetzen, Burpees in der Zone halten und jeden Athleten für die Kamera klar identifizieren.",
+   "review": "In Überprüfung für 2027: Die für ausgelassene Burpees addierte Zeit unterscheidet sich zwischen Regel 3.4.2, der Officiating SOP und dem Programm 2026, und die SOP lässt den Schiedsrichter vor Ort schriftlich entscheiden, wo es kein Video gibt. Die Lektion zu Zeitstrafen für Burpees legt jede Fassung dar. Diese Lektion vermittelt keine Zahl: Der Hauptschiedsrichter bestätigt Strafen nach der Auswertung."
+  },
+  {
+   "heading": "Kurz gesagt",
+   "points": [
+    "Burpees sind die Strafe, wo Spartan sie festlegt: 30, beim Stadion 15",
+    "Nur Burpees innerhalb der Zone zählen",
+    "Stirnband auf dem Boden davor; der Kamera gezeigt, dann sofort zurück",
+    "Die Videoauswertung bestimmt ausgelassene Burpees"
+   ],
+   "narration": "Kurz gesagt. Burpees sind die Strafe, wo Spartan sie festlegt: dreißig Burpees, bei Stadion-Events fünfzehn, und beim Spear Throw immer. Nur Burpees innerhalb der vorgesehenen Zone zählen. Das Stirnband des Athleten kommt auf den Boden vor ihm, und Sie zeigen es ein paar Sekunden der Kamera und geben es dann sofort zurück. Die Videoauswertung bestimmt dann alle ausgelassenen Burpees, Ihre Aufgabe sind also der Standard, die Zone und eine klare Identifizierung.",
+   "review": "In Überprüfung für 2027: Regel 3.17.3 sagt, die Strafe sei eine Strafschleife oder 30 Burpees, wie Spartan es für jedes Hindernis, Event, jede Kategorie oder jeden Lauf festlegt, und beim Stadion immer 15 Burpees. Die Officiating SOP sagt, bei den meisten Hindernissen gelte eine Schleife und beim Spear Throw Burpees; das Programm 2026 sagt, Burpees nur beim Spear Throw. Verwenden Sie bis dahin die Strafe, die der Hauptschiedsrichter für Ihr Hindernis bestätigt, und fragen Sie den Hauptschiedsrichter, wenn Sie unsicher sind."
+  }
+ ],
+ "ocr-6-1": [
+  {
+   "heading": "Ein vollständiger Burpee",
+   "points": [
+    "Ein Zyklus zwischen zwei Positionen: der unteren und der oberen",
+    "Von der unteren Position nach oben in die obere, dann ein Sprung",
+    "Eine Rep, bei der ein Teil des Standards fehlt, ist kein vollständiger Burpee"
+   ],
+   "narration": "Regel 3.17.4 definiert einen vollständigen Burpee. Es ist ein Zyklus zwischen zwei Körperpositionen, der oberen und der unteren. Der Athlet bewegt sich von der unteren Position nach oben in die obere Position und springt dann. Jede Rep einer Burpee-Strafe muss diesen Standard erfüllen. Eine Rep, bei der ein Teil fehlt, ist kein vollständiger Burpee, und Sie können vom Athleten verlangen, einen weiteren zu machen. Die nächsten Folien behandeln jeden Teil nacheinander."
+  },
+  {
+   "heading": "Das Unten und das Oben",
+   "points": [
+    "Unten: auf dem Bauch auf dem Boden liegend, die Brust berührt den Boden",
+    "Oben: ausbalanciert und aufrecht, eine Haltung, die jeder halten könnte, ohne umzufallen",
+    "Oben sind Hüfte und Knie gestreckt, nicht gebeugt"
+   ],
+   "narration": "Die untere Position ist auf dem Bauch liegend, mit dem Gesicht nach unten auf dem Boden, wobei die Brust den Boden berührt. Die obere Position ist eine ausbalancierte, aufrechte Standposition: eine, die jeder lange halten könnte, ohne nach vorn oder hinten zu fallen. Oben sollen Hüfte und Knie des Athleten gestreckt sein, nicht gebeugt. Achten Sie bei jeder Rep auf beide Enden. Eine Brust, die vor dem Boden stoppt, oder eine Hüfte, die oben noch gebeugt ist, bedeutet, dass die Rep den Standard nicht erfüllt."
+  },
+  {
+   "heading": "Der Sprung",
+   "points": [
+    "Zurück oben, springt der Athlet",
+    "Die Hände sind nach oben gestreckt, über den Ohren",
+    "Kein Sprung oder Hände nicht über den Ohren: Die Rep ist nicht vollständig"
+   ],
+   "narration": "Sobald der Athlet von unten in die obere Position zurückgekehrt ist, springt er, mit den Händen nach oben gestreckt über den Ohren. Die Regel setzt den Sprung nach dem Erreichen der oberen Position, der Athlet muss sich also zuerst aufrecht aufstellen. Achten Sie auf die Hände ebenso wie auf die Füße. Hände, die nur die Schultern oder das Gesicht erreichen, erfüllen den Standard nicht, ebenso wenig eine Rep ganz ohne Sprung."
+  },
+  {
+   "heading": "Eine durchgehende Bewegung",
+   "points": [
+    "Das Programm 2026: Die Bewegung muss bei jeder Rep durchgehend sein",
+    "Schnelle Reps müssen trotzdem jeden Teil des Standards erfüllen",
+    "Ein typischer Fehler: schnelle Burpees mit unvollständiger Streckung oben"
+   ],
+   "narration": "Das Programm 2026 ergänzt, dass die Bewegung bei jeder Rep durchgehend sein muss: runter zum Boden, hoch ins Stehen und der Sprung, als eine Bewegung. Es nennt auch ein typisches Szenario, auf das man achten muss: ein Athlet, der schnelle Burpees macht, ohne sich oben vollständig zu strecken. Die Frage ist immer dieselbe. Hat die Rep den Standard erfüllt? Brust am Boden, Hüfte und Knie oben gestreckt, dann ein Sprung mit den Händen über den Ohren. Wenn nicht, ist es kein vollständiger Burpee."
+  },
+  {
+   "heading": "Kurz gesagt",
+   "points": [
+    "Unten: auf dem Bauch liegend, die Brust berührt den Boden",
+    "Oben: ausbalanciert und aufrecht, Hüfte und Knie gestreckt",
+    "Dann ein Sprung mit den Händen über den Ohren",
+    "Eine durchgehende Bewegung, und jede Rep nach Standard, egal wie schnell"
+   ],
+   "narration": "Kurz gesagt. Ein vollständiger Burpee geht von der unteren in die obere Position, gefolgt von einem Sprung. Unten liegt der Athlet auf dem Bauch, und die Brust berührt den Boden. Oben steht er ausbalanciert und aufrecht, mit gestreckter Hüfte und gestreckten Knien. Dann springt er mit den Händen über den Ohren. Jede Rep ist eine durchgehende Bewegung, und jede Rep muss den Standard erfüllen, egal wie schnell sie gemacht wird."
+  }
+ ],
+ "ocr-6-2": [
+  {
+   "heading": "Athleten zählen, Sie nicht",
+   "points": [
+    "Athleten zählen ihre eigenen Burpees",
+    "Schiedsrichter zählen nicht für sie",
+    "Ihre Aufgabe ist der Standard: Beobachten Sie jede Rep",
+    "Erinnern Sie Athleten daran, dass Bewegung und Reps überwacht werden"
+   ],
+   "narration": "Athleten sind selbst dafür verantwortlich, ihre Burpees zu zählen. Schiedsrichter zählen nicht für sie. Das lässt Sie frei für die Aufgabe, auf die es ankommt: zu beobachten, ob jede Rep den Bewegungsstandard erfüllt. Das Programm 2026 schlägt vor, Athleten daran zu erinnern, dass sowohl der Bewegungsstandard als auch die Zahl der Reps überwacht werden. Wo es Video gibt, werden Zahl und Qualität der Burpees in der Videoauswertung erneut geprüft."
+  },
+  {
+   "heading": "Den Standard beobachten",
+   "points": [
+    "Stehen Sie dort, wo Ihre Sicht auf den Athleten frei ist",
+    "Prüfen Sie die Brust unten, Hüfte und Knie oben, die Hände beim Sprung",
+    "Halten Sie die Burpees in der Zone, mit dem Stirnband auf dem Boden davor",
+    "Berühren oder bewegen Sie den Athleten nicht für die Kamera"
+   ],
+   "narration": "Positionieren Sie sich so, dass Ihre Sicht frei ist. Sie müssen sehen, wie die Brust den Boden erreicht, wie sich Hüfte und Knie oben strecken und wie die Hände beim Sprung über die Ohren gehen. Behalten Sie auch die Zone im Blick, denn Burpees außerhalb zählen nicht, und das Stirnband, das auf dem Boden vor dem Athleten bleibt. Bewegen Sie nie körperlich Körper oder Gesicht eines Athleten, um der Kamera zu passen."
+  },
+  {
+   "heading": "Zusätzliche Burpees verlangen",
+   "points": [
+    "Eine Rep unter dem Standard: einen zusätzlichen Burpee verlangen",
+    "Erklären Sie klar und ruhig, was gefehlt hat",
+    "Erschöpfte Athleten dürfen weitermachen, wenn ihr Einsatz echt ist"
+   ],
+   "narration": "Wenn eine Rep den Standard nicht erfüllt, verlangen Sie vom Athleten zusätzliche Burpees, damit die Strafe aus vollständigen Burpees besteht. Erklären Sie klar und ruhig, was gefehlt hat, zum Beispiel dass die Brust den Boden nicht berührt hat oder die Hüfte oben noch gebeugt war. Manche Athleten werden erschöpft sein. Das Programm 2026 sagt, man solle sie weitermachen lassen, wenn ihr Einsatz echt ist. Sie können weitermachen, aber jede Rep muss trotzdem den Standard erfüllen."
+  },
+  {
+   "heading": "Wenn ein Athlet Ihre Entscheidung bestreitet",
+   "points": [
+    "Bleiben Sie ruhig, erklären Sie die Regel und vermeiden Sie einen Streit",
+    "Halten Sie die Stirnband-Nummer und das Bestrittene fest",
+    "Verweisen Sie den Streitfall an den Hauptschiedsrichter",
+    "Eskalieren Sie keinen Konflikt am Hindernis"
+   ],
+   "narration": "Manche Athleten werden widersprechen, wenn Sie zusätzliche Burpees verlangen. Bleiben Sie ruhig und professionell, erklären Sie die Regel klar und lassen Sie sich nicht in einen Streit ziehen. Halten Sie die Stirnband-Nummer des Athleten und das Bestrittene fest und melden Sie es dem Hauptschiedsrichter, sobald Sie können. Streitfälle muss der Hauptschiedsrichter lösen, Sie müssen sie nicht am Hindernis gewinnen. Behalten Sie die anderen Athleten in der Zone im Blick, während Sie sich darum kümmern."
+  },
+  {
+   "heading": "Kurz gesagt",
+   "points": [
+    "Athleten zählen; Sie beobachten den Standard",
+    "Freie Sicht auf Brust, Hüfte und Knie sowie Hände",
+    "Unter dem Standard: zusätzliche Burpees verlangen, ruhig erklärt",
+    "Erschöpft, aber echt: weitermachen lassen; Streitfälle gehen an den Hauptschiedsrichter"
+   ],
+   "narration": "Kurz gesagt. Athleten zählen ihre eigenen Burpees, und Sie beobachten den Standard. Stehen Sie dort, wo Sie die Brust unten, Hüfte und Knie oben und die Hände beim Sprung klar sehen, und halten Sie die Burpees in der Zone. Wenn eine Rep nicht reicht, verlangen Sie zusätzliche Burpees und erklären Sie ruhig, warum. Lassen Sie erschöpfte Athleten weitermachen, wenn ihr Einsatz echt ist. Und wenn ein Athlet Ihre Entscheidung bestreitet, halten Sie die Nummer fest und verweisen Sie an den Hauptschiedsrichter."
+  }
+ ],
+ "ocr-6-3": [
+  {
+   "heading": "Ausgelassene Burpees werden zu Zeit",
+   "points": [
+    "Athleten, die die geforderten Burpees nicht absolvieren, bekommen Zeit auf ihre Zielzeit addiert",
+    "Fehlbeträge werden auf der Strecke oder in der Auswertung vor den Auszeichnungen gefunden",
+    "Wie viel Zeit addiert wird, wird für 2027 überprüft"
+   ],
+   "narration": "Wo Burpees die Strafe sind und ein Athlet die geforderte Zahl nicht absolviert, wird Zeit auf seine Gesamtzielzeit addiert. Ausgelassene Burpees können während des Rennens oder in der Auswertung nach dem Rennen vor den Auszeichnungen festgestellt werden. Alle drei Quellen von 2026 sind sich einig, dass ausgelassene Burpees Zeit kosten. Sie sind sich nicht einig, wie viel, deshalb vermittelt diese Lektion keine Zahl. Die Beträge werden für 2027 überprüft, bis die Leitung des Schiedsrichterwesens entscheidet.",
+   "review": "In Überprüfung für 2027: Regel 3.4.2 addiert 30 Sekunden für jeden der ersten 10 ausgelassenen Burpees und insgesamt 10 Minuten, wenn mehr als 10 ausgelassen werden. Die Officiating SOP addiert je 30 Sekunden und 10 Minuten, wenn weniger als 20 absolviert werden; das Programm 2026 sagt, 11 oder mehr fehlerhafte seien 10 Minuten und weniger als 20 eine Disqualifikation. Diese Lektion vermittelt keine Zahl, bis die Leitung des Schiedsrichterwesens entscheidet: Der Hauptschiedsrichter bestätigt Strafen."
+  },
+  {
+   "heading": "Wo sich die Quellen von 2026 widersprechen",
+   "points": [
+    "Wie viel Zeit jeder ausgelassene Burpee addiert und ob es eine Obergrenze gibt",
+    "Wo die Schwelle liegt: ausgelassene Burpees oder absolvierte Burpees",
+    "Ob ein großer Fehlbetrag eine Zeitstrafe oder Disqualifikation bedeutet",
+    "Auch das Stadion mit seiner Strafe von 15 Burpees ist umstritten"
+   ],
+   "narration": "Das Regelwerk, das Verfahren des Schiedsrichterwesens und das Programm 2026 beschreiben Zeitstrafen für Burpees jeweils anders. Sie unterscheiden sich darin, wie viel Zeit ein ausgelassener Burpee addiert und ob es eine Obergrenze gibt. Sie unterscheiden sich darin, wo die Schwelle liegt, gezählt in ausgelassenen oder in absolvierten Burpees. Und sie unterscheiden sich darin, ob ein großer Fehlbetrag eine lange Zeitstrafe oder Disqualifikation bedeutet. Das Stadion, wo die Strafe fünfzehn Burpees sind, hat dasselbe Problem. Behandeln Sie bis zur Entscheidung der Leitung des Schiedsrichterwesens jede Zahl als in Überprüfung.",
+   "review": "In Überprüfung für 2027: Regel 3.4.2 addiert 30 Sekunden für jeden der ersten 10 ausgelassenen Burpees und insgesamt 10 Minuten bei mehr als 10 (Stadion: je 30 Sekunden für die ersten 5, 5 Minuten bei mehr als 5). Die Officiating SOP addiert 30 Sekunden je ausgelassenem Burpee und 10 Minuten, wenn weniger als 20 absolviert werden (Stadion: weniger als 10). Das Programm 2026 sagt je 30 Sekunden, 10 Minuten bei 11 oder mehr fehlerhaften und Disqualifikation bei weniger als 20. Nennen Sie Athleten bis dahin keine Zahl: Verweisen Sie Fragen zu Zeitstrafen an den Hauptschiedsrichter."
+  },
+  {
+   "heading": "Was als ausgelassener Burpee zählt",
+   "points": [
+    "Ein Burpee, der nicht gemacht wurde",
+    "Ein Burpee außerhalb der vorgesehenen Zone: Er zählt nicht für die Strafe",
+    "Eine Rep unter dem Bewegungsstandard: Sie ist kein vollständiger Burpee",
+    "Die Auswertung betrachtet sowohl die Zahl als auch die Qualität der Burpees"
+   ],
+   "narration": "Ein Fehlbetrag sind nicht nur Burpees, die nie gemacht wurden. Burpees außerhalb der vorgesehenen Zone zählen nicht für die Strafe. Eine Rep, die den Bewegungsstandard nicht erfüllt, ist kein vollständiger Burpee, und das Programm 2026 behandelt ausgelassene und fehlerhafte Burpees gleich. Nach dem Verfahren des Schiedsrichterwesens entscheidet die Auswertung sowohl über die Menge als auch über die Qualität der Burpees. Deshalb ist es wichtig, den Standard sofort durchzusetzen und zusätzliche Reps zu verlangen.",
+   "review": "In Überprüfung für 2027: Wie viel Zeit ausgelassene oder fehlerhafte Burpees addieren, unterscheidet sich zwischen Regel 3.4.2, der Officiating SOP und dem Programm 2026. Was ein vollständiger Burpee ist, unterscheidet sich nicht: Wenden Sie die Regeln 3.17.4 und 3.17.5 an und überlassen Sie die Zeitstrafe dem Hauptschiedsrichter."
+  },
+  {
+   "heading": "Wer die Strafe festlegt",
+   "points": [
+    "Mit Video: Burpee-Entscheidungen zu Zahl und Qualität fallen in der Videoauswertung",
+    "Ohne Video: Sie entscheiden vor Ort, schreiben es auf und geben es dem Hauptschiedsrichter",
+    "Der Hauptschiedsrichter schickt bestätigte Strafen an den Rennleiter und das Zeitnahme-Team",
+    "Strafen werden während der Auswertung im Ergebniszelt angezeigt"
+   ],
+   "narration": "Wo es Video gibt, fallen Entscheidungen darüber, wie viele Burpees gemacht wurden und wie gut, in der Videoauswertung. Der Hauptschiedsrichter leitet diese Auswertung, während die Schiedsrichter von ihren Hindernissen zurückkehren, und schickt bestätigte Strafen und Disqualifikationen an den Rennleiter und das Zeitnahme-Team. Wo es kein Video gibt, sagt das Verfahren des Schiedsrichterwesens, dass der Schiedsrichter vor Ort entscheidet, die Entscheidung schriftlich festhält und sie bei der Rückkehr vom Hindernis dem Hauptschiedsrichter gibt. Strafen werden während der Auswertung im Ergebniszelt angezeigt.",
+   "review": "In Überprüfung für 2027: Die Officiating SOP (6.iii) sagt, Entscheidungen zu Burpee-Strafen fielen in der Videoauswertung, wo es Video gibt, und beim Schiedsrichter vor Ort, schriftlich, wo es keines gibt. Das Programm 2026 sagt, Strafentscheidungen träfe das Videoauswertungs-Team. Folgen Sie bis dahin der Officiating SOP: Schreiben Sie ohne Kamera Ihre Entscheidung auf und geben Sie sie dem Hauptschiedsrichter."
+  },
+  {
+   "heading": "Kurz gesagt",
+   "points": [
+    "Ausgelassene oder fehlerhafte Burpees addieren Zeit zur Zielzeit des Athleten",
+    "Wie viel Zeit, wird für 2027 überprüft: Verweisen Sie Fragen an den Hauptschiedsrichter",
+    "Setzen Sie den Standard und die Zone sofort durch",
+    "Mit Video entscheidet die Auswertung; ohne schreiben Sie Ihre Entscheidung auf"
+   ],
+   "narration": "Kurz gesagt. Ausgelassene oder fehlerhafte Burpees addieren Zeit zur Zielzeit des Athleten, aber wie viel Zeit, wird für 2027 überprüft, weil das Regelwerk, das Verfahren des Schiedsrichterwesens und das Programm 2026 sich widersprechen. Nennen Sie keine Zahl: Verweisen Sie Fragen an den Hauptschiedsrichter. Was Sie steuern, liegt auf der Strecke: der Bewegungsstandard und die Zone. Wo es Video gibt, entscheidet die Auswertung. Wo nicht, schreiben Sie Ihre Entscheidung auf und geben sie dem Hauptschiedsrichter.",
+   "review": "In Überprüfung für 2027: Die für ausgelassene Burpees addierte Zeit unterscheidet sich zwischen Regel 3.4.2, der Officiating SOP und dem Programm 2026 (jede Fassung steht auf der zweiten Folie), und die SOP und das Programm unterscheiden sich darin, wer entscheidet, wenn es kein Video gibt. Vermitteln Sie bis zur Entscheidung der Leitung des Schiedsrichterwesens keine Zahl, folgen Sie der Officiating SOP bei schriftlichen Entscheidungen und verweisen Sie strittige Entscheidungen an den Hauptschiedsrichter."
+  }
+ ],
+ "ocr-7-1": [
+  {
+   "heading": "Die Frage eines Athleten beantworten",
+   "points": [
+    "Bleiben Sie ruhig und professionell, egal in welchem Ton gefragt wird",
+    "Erklären Sie die Regel klar: was das Hindernis verlangt hat und was gefehlt hat",
+    "Vermeiden Sie Streit: Eine Frage ist keine Debatte"
+   ],
+   "narration": "Athleten werden Sie zu Ihren Entscheidungen fragen, oft müde und frustriert. Bleiben Sie ruhig und professionell. Antworten Sie, indem Sie die Regel klar erklären: was das Hindernis von ihnen verlangt hat und welchen Teil sie nicht erfüllt haben. Fassen Sie sich kurz, denn an Ihrem Hindernis kommen weiter andere Athleten an. Wenn der Athlet die Erklärung akzeptiert, schicken Sie ihn zur Strafe. Wenn nicht, ist es ein Streitfall geworden. Einen Streitfall löst man nicht durch Streiten am Hindernis. Man verweist ihn an den Hauptschiedsrichter."
+  },
+  {
+   "heading": "Wenn es ein Streitfall wird",
+   "points": [
+    "Halten Sie die Stirnband-Nummer des Athleten fest",
+    "Schreiben Sie den Grund auf, zum Beispiel ein gescheitertes Hindernis ohne absolvierte Strafe",
+    "Melden Sie es dem Hauptschiedsrichter, sobald Sie können",
+    "Eskalieren Sie den Konflikt nicht am Hindernis"
+   ],
+   "narration": "Wenn ein Athlet Ihre Entscheidung bestreitet, haben Sie drei Aufgaben. Erstens: Halten Sie seine Stirnband-Nummer fest. Die Regeln machen jeden Teilnehmer dafür verantwortlich, seine Startnummer jederzeit lesbar am Stirnband zu halten. Zweitens: Schreiben Sie den Grund des Streits auf, zum Beispiel dass der Athlet am Hindernis gescheitert ist und die Strafe nicht absolviert hat. Drittens: Melden Sie es dem Hauptschiedsrichter, sobald es betrieblich möglich ist. Die Entscheidung fällt nicht an Ihrem Hindernis, es bringt also nichts, zu eskalieren. Halten Sie Ihre Notizen sachlich: Der Hauptschiedsrichter wird sich darauf stützen."
+  },
+  {
+   "heading": "Wenn Sie die Stirnband-Nummer nicht bekommen",
+   "points": [
+    "Melden Sie es sofort dem Hauptschiedsrichter",
+    "Geben Sie eine klare Beschreibung: Farbe der Kleidung, besondere Merkmale, Rennkategorie",
+    "Helfen Sie später auf der Strecke bei der Identifizierung des Athleten, wenn Sie darum gebeten werden"
+   ],
+   "narration": "Manchmal verlässt ein Athlet den Hindernisbereich, ohne die Strafe zu absolvieren, und Sie können seine Nummer nicht lesen. Das Verfahren des Schiedsrichterwesens regelt das. Melden Sie es sofort dem Hauptschiedsrichter, statt zu warten, bis Sie vom Hindernis zurückkommen. Geben Sie eine klare körperliche Beschreibung: die Farbe seiner Kleidung, alles, woran man ihn leicht erkennt, und wenn Sie es erkennen können, seine Rennkategorie. Sie werden womöglich gebeten, den Athleten später auf der Strecke zu identifizieren. Bleiben Sie unterdessen konzentriert auf Ihr Hindernis und die weiter eintreffenden Athleten."
+  },
+  {
+   "heading": "Verhalten der Athleten",
+   "points": [
+    "Athleten müssen Offizielle mit Fairness, Respekt und Höflichkeit behandeln",
+    "Beleidigende, drohende oder herabsetzende Sprache oder ebensolches Verhalten verstößt gegen die Regeln",
+    "Der Hauptoffizielle entscheidet über jede Strafe für einen Verhaltensverstoß",
+    "Ihr Teil: die Nummer festhalten, das Vorgefallene notieren, es melden"
+   ],
+   "narration": "Die Regeln erwarten von Athleten, dass sie alle beim Event, Offizielle eingeschlossen, mit Fairness, Respekt und Höflichkeit behandeln und keine beleidigende, drohende oder herabsetzende Sprache oder ebensolches Verhalten zeigen. Ein Verhaltensverstoß kann zu einer Strafe führen, die davon abhängt, wie schwer er war. Im Regelwerk liegt diese Entscheidung beim Hauptoffiziellen, nicht bei Ihnen. Grob unsportliches Verhalten oder körperliche Gewalt gegen einen Offiziellen kann Grund für eine Sperre sein. Ihr Teil ist derselbe wie bei jedem Streitfall: ruhig bleiben, die Stirnband-Nummer festhalten, notieren, was gesagt oder getan wurde, und es dem Hauptschiedsrichter melden."
+  },
+  {
+   "heading": "Nach dem Rennen: Proteste und Videoauswertung",
+   "points": [
+    "Ergebnisse sind erst endgültig, wenn die offizielle Videoauswertung stattgefunden hat",
+    "Athleten bringen Proteste während der Protestfrist zum Hauptoffiziellen",
+    "Offizielle müssen Aufnahmen von Athleten oder Zuschauern nicht berücksichtigen",
+    "Offizielles Videomaterial wird nie an Teilnehmer gegeben"
+   ],
+   "narration": "Eine strittige Entscheidung endet nicht an Ihrem Hindernis. Bevor Ergebnisse endgültig sind, gibt es eine offizielle Videoauswertung. Ein Athlet, der eine Strafe anfechten will, bringt während der Protestfrist, die beginnt, sobald er die Ziellinie überquert, einen Protest zum Hauptoffiziellen. Offizielle sind nicht verpflichtet, Videos oder Fotos von Teilnehmern oder Zuschauern zu berücksichtigen. Das Verfahren des Schiedsrichterwesens sagt außerdem, offizielles Material werde nie an Teilnehmer gegeben. Wenn ein Athlet Ihnen also sein Handy-Material anbietet oder Ihres sehen will, verweisen Sie ihn an den Hauptschiedsrichter und das Protestverfahren.",
+   "review": "In Überprüfung für 2027: Regel 3.19.1 beendet die Protestfrist 15 Minuten vor der Siegerehrung der Kategorie des Athleten. Die Officiating SOP nennt als Beispiel eine halbe Stunde vor den Siegerehrungen und lässt Schiedsrichterfehler bei Athleten ohne Podiumsplatz bis zu zwei Stunden nach den letzten Siegerehrungen korrigieren. Wenden Sie bis dahin das Regelwerk an und verweisen Sie Fragen zur Zeit an den Hauptschiedsrichter."
+  },
+  {
+   "heading": "Kurz gesagt",
+   "points": [
+    "Bleiben Sie ruhig, erklären Sie die Regel klar, streiten Sie nicht",
+    "Streitfall: Stirnband-Nummer, was passiert ist, an den Hauptschiedsrichter melden",
+    "Keine Nummer: sofort melden, mit klarer Beschreibung",
+    "Proteste und Videoauswertung finden nach dem Rennen statt, nicht an Ihrem Hindernis"
+   ],
+   "narration": "Kurz gesagt. Beantworten Sie Fragen ruhig und erklären Sie die Regel klar, ohne zu streiten. Wenn es ein Streitfall wird, halten Sie die Stirnband-Nummer fest, schreiben Sie auf, was passiert ist, und melden Sie es dem Hauptschiedsrichter, sobald Sie können. Wenn Sie die Nummer nicht bekommen, melden Sie es sofort mit einer klaren Beschreibung des Athleten. Beleidigendes Verhalten wird auf dieselbe Weise festgehalten und gemeldet. Die endgültige Entscheidung kommt später, durch die Videoauswertung und die Protestfrist, nicht an Ihrem Hindernis."
+  }
+ ],
+ "ocr-8-1": [
+  {
+   "heading": "Professionelles Verhalten an Ihrem Hindernis",
+   "points": [
+    "Bleiben Sie auf Ihr Hindernis konzentriert",
+    "Vermeiden Sie Ablenkungen und lange Gespräche",
+    "Bleiben Sie gegenüber jedem Athleten neutral und respektvoll",
+    "Vertreten Sie Spartan professionell"
+   ],
+   "narration": "Die Regeln gibt es, damit jedes Spartan-Event fair und einheitlich abläuft, im Geist von Sportsgeist und Integrität. An Ihrem Hindernis sind Sie derjenige, durch den das geschieht. Bleiben Sie auf das Hindernis und die Athleten konzentriert, die es versuchen. Vermeiden Sie Ablenkungen und lange Gespräche, denn einen Fehlversuch, den Sie nicht gesehen haben, können Sie nicht ahnden. Bleiben Sie gegenüber allen neutral und respektvoll, wer auch immer sie sind. Für Athleten und Zuschauer sind Sie Spartan, vertreten Sie Spartan also professionell."
+  },
+  {
+   "heading": "Wo ein Schiedsrichter in den Regeln steht",
+   "points": [
+    "Ein Schiedsrichter ist ein von Spartan ernannter Offizieller, der sicherstellt, dass die Regeln befolgt werden",
+    "Meist an einem Hindernis oder im Videoauswertungszelt eingesetzt",
+    "Der Hauptoffizielle ist die oberste Entscheidungsinstanz und letzte Autorität zu den Regeln",
+    "Ihre Kette: Sie, der Hauptschiedsrichter, dann der Rennleiter oder das Zeitnahme-Team"
+   ],
+   "narration": "Das Regelwerk definiert einen Schiedsrichter als einen von Spartan ernannten Offiziellen, dessen Aufgabe es ist, sicherzustellen, dass die Regeln befolgt werden, meist an Hindernissen oder im Videoauswertungszelt eingesetzt. Schiedsrichter berichten an den Hauptoffiziellen, der in allen Regelfragen bei einem Event die oberste Entscheidungsinstanz und die letzte Autorität für ihre Durchsetzung und Auslegung ist. Im Verfahren des Schiedsrichterwesens und in diesem Programm berichten Sie an den Hauptschiedsrichter. Der Hauptschiedsrichter meldet dann Rennvorfälle an den Rennleiter und Strafen an das Zeitnahme-Team."
+  },
+  {
+   "heading": "Was Sie entscheiden",
+   "points": [
+    "Setzen Sie die Hindernisregeln durch",
+    "Weisen Sie gescheiterte Athleten zur richtigen Strafe",
+    "Dokumentieren Sie Verstöße",
+    "Unsicher bei der Strafe oder ihrer Durchsetzung? Kontaktieren Sie sofort den Hauptschiedsrichter"
+   ],
+   "narration": "An Ihrem Hindernis sind Sie für drei Dinge verantwortlich. Sie setzen die Regeln des Hindernisses durch. Sie weisen einen gescheiterten Athleten zur richtigen Strafe für dieses Hindernis. Und Sie dokumentieren Verstöße. Wo es keinen Videobeweis für Burpees gibt, legt das Verfahren des Schiedsrichterwesens die Entscheidung über Zahl und Qualität der Burpees in Ihre Hand: Sie treffen sie vor Ort, schreiben sie auf und geben sie bei Ihrer Rückkehr dem Hauptschiedsrichter. Wenn Sie bei der Strafart oder ihrer Durchsetzung unsicher sind, kontaktieren Sie sofort den Hauptschiedsrichter."
+  },
+  {
+   "heading": "Wer eine Strafe bestätigt",
+   "points": [
+    "Endgültige Strafentscheidungen können vom Hauptschiedsrichter und dem Zeitnahme-Team bestätigt werden",
+    "In der Videoauswertung können Offizielle weiterhin Strafen bewerten, bis hin zur Disqualifikation",
+    "Der Hauptschiedsrichter gibt bestätigte Strafen an den Rennleiter und die Zeitnahme weiter",
+    "Ihre Notizen sind der Beleg, auf dem diese Entscheidungen beruhen"
+   ],
+   "narration": "Ihre Entscheidung setzt den Prozess in Gang, aber sie ist nicht immer das letzte Wort. Das Programm sagt, endgültige Strafentscheidungen könnten vom Hauptschiedsrichter und dem Zeitnahme-Team bestätigt werden. Nach dem Regelwerk ist der Hauptoffizielle letztlich dafür verantwortlich, die Regeln aufrechtzuerhalten, und während der offiziellen Videoauswertung können Rennoffizielle weiterhin Strafen bewerten, einschließlich Disqualifikation. Der Hauptschiedsrichter leitet diese Auswertung und gibt bestätigte Strafen und Disqualifikationen an den Rennleiter und das Zeitnahme-Team weiter. Deshalb sind Ihre Notizen wichtig: Klare, sachliche Aufzeichnungen lassen die richtige Entscheidung bestätigen."
+  },
+  {
+   "heading": "Kurz gesagt",
+   "points": [
+    "Konzentriert, neutral, respektvoll und professionell",
+    "Sie setzen die Regeln durch, weisen Athleten zu Strafen und dokumentieren Verstöße",
+    "Der Hauptschiedsrichter bestätigt Strafen und behandelt, was Sie verweisen",
+    "Unsicher? Kontaktieren Sie sofort den Hauptschiedsrichter"
+   ],
+   "narration": "Kurz gesagt. Bleiben Sie auf Ihr Hindernis konzentriert, neutral und respektvoll und vertreten Sie Spartan professionell. Sie setzen die Hindernisregeln durch, weisen gescheiterte Athleten zur richtigen Strafe und dokumentieren Verstöße. Der Hauptoffizielle hat die letzte Autorität zu den Regeln, und der Hauptschiedsrichter bestätigt Strafen, behandelt, was Sie verweisen, und gibt sie an den Rennleiter und die Zeitnahme weiter. Wenn Sie je unsicher sind, kontaktieren Sie sofort den Hauptschiedsrichter."
+  }
+ ],
+ "ocr-8-2": [
+  {
+   "heading": "Sicherheit gehört zur Aufgabe",
+   "points": [
+    "Die Regeln sollen Gesundheit, Sicherheit und Wohlbefinden der Athleten schützen",
+    "Überwachen Sie die Sicherheit Ihres Hindernisses und sorgen Sie dafür, dass sich Athleten sicher bewegen",
+    "Erlauben Sie keine gefährlichen Abkürzungen: Athleten müssen die ganze offizielle Strecke zurücklegen"
+   ],
+   "narration": "Ein Zweck der Regeln ist es, Gesundheit, Sicherheit und Wohlbefinden der Teilnehmer zu schützen, soweit das im Hindernislauf vernünftigerweise erreichbar ist. Das Programm stellt die Sicherheit der Athleten neben die Fairness als Ihre Priorität. Das heißt, die Sicherheit Ihres Hindernisses zu überwachen, dafür zu sorgen, dass sich Athleten sicher bewegen, und keine gefährlichen Abkürzungen zuzulassen. Eine Abkürzung zu erlauben, steht nie bei Ihnen: Die Regeln verlangen, dass Athleten die offizielle Strecke vollständig zurücklegen."
+  },
+  {
+   "heading": "Prüfen und Gefahren sofort melden",
+   "points": [
+    "Prüfen Sie vor der ersten Welle den Aufbau und ob er einsatzbereit ist",
+    "Laufen Sie die Strafschleife ab und lernen Sie die Anlaufrichtung der Athleten kennen",
+    "Melden Sie Gefahren sofort: Hauptschiedsrichter, Rennleiter oder Spartan-Personal"
+   ],
+   "narration": "Sicherheit beginnt vor der ersten Wettkampf-Welle. Wenn Sie an Ihrem Hindernis ankommen, prüfen Sie den Aufbau und kontrollieren Sie, dass er einsatzbereit ist. Sehen Sie sich den Rennfluss und die Richtung an, aus der die Athleten kommen, und laufen Sie die ganze Strafschleife ab, damit Sie ihre Route und ihren Rückkehrpunkt kennen. Wenn Sie etwas beunruhigt, ein Zweifel, ein Sicherheitsbedenken oder eine Unstimmigkeit, melden Sie es sofort dem Hauptschiedsrichter oder dem Rennleiter. Melden Sie während des Rennens jede Gefahr sofort dem Hauptschiedsrichter, dem Rennleiter oder dem Spartan-Personal."
+  },
+  {
+   "heading": "Sichere Bewegung in den Hindernisregeln",
+   "points": [
+    "Rope Climb: sicher und kontrolliert herunterkommen, mindestens eine Hand am Seil",
+    "Hercules Hoist: das Gewicht kontrolliert absenken; es fallen zu lassen ist ein Fehlversuch",
+    "Schwimmen oder Wasserüberquerung: kein Kopfsprung; ein Kopfsprung ist ein Fehlversuch"
+   ],
+   "narration": "Manche Hindernisregeln bauen Sicherheit direkt ein, und Sie setzen sie wie jede andere Regel durch. Beim Rope Climb müssen Athleten sicher und kontrolliert zum Boden zurückkehren, mit mindestens einer Hand jederzeit am Seil. Beim Hercules Hoist muss das Gewicht kontrolliert abgesenkt werden, nicht im freien Fall, und es unkontrolliert fallen zu lassen, ist ein Fehlversuch. Bei einer Schwimmstrecke oder Wasserüberquerung ist ein Kopfsprung nicht erlaubt, und er ist eine Fehlerart. Kennen Sie die Sicherheitsregeln Ihres Hindernisses, bevor der erste Athlet eintrifft."
+  },
+  {
+   "heading": "Dieselbe Auslegung während des gesamten Rennens",
+   "points": [
+    "Wenden Sie die Regeln auf alle Athleten gleich an",
+    "Nutzen Sie von der ersten bis zur letzten Welle dieselbe Auslegung",
+    "Jede Strafe gilt innerhalb ihrer Kategorie oder ihres Laufs einheitlich",
+    "Ihr Schwerpunkt: die Wettkampf-Kategorien, Elite und Age Group"
+   ],
+   "narration": "Einheitlichkeit macht Ergebnisse fair. Wenden Sie die Regeln auf jeden Athleten gleich an und nutzen Sie von der ersten bis zur letzten Welle dieselbe Auslegung. Die Entscheidung, die Sie für den ersten Elite-Athleten treffen, ist der Maßstab für alle nach ihm. Das Regelwerk sagt, jede Strafe werde innerhalb der festgelegten Kategorie oder des Laufs einheitlich angewendet. Ihr Schwerpunkt sind die Wettkampf-Kategorien, Elite und Age Group, von denen erwartet wird, dass sie jede Regel befolgen. Auch Open-Läufer werden ermutigt, die Regeln zu befolgen, in lockererer Atmosphäre."
+  },
+  {
+   "heading": "Bei der Regel bleiben und bei Unsicherheit eskalieren",
+   "points": [
+    "Beurteilen Sie anhand der schriftlichen Fehlerarten des Hindernisses",
+    "Vermeiden Sie persönliche Wertungen über die Regel hinaus",
+    "Eskalieren Sie die Entscheidung bei Unsicherheit an den Hauptschiedsrichter"
+   ],
+   "narration": "Einheitlichkeit heißt auch, keine eigenen Regeln hinzuzufügen. Beurteilen Sie jeden Versuch anhand der schriftlichen Fehlerarten des Hindernisses, nicht danach, was Sie persönlich für fair halten, und vermeiden Sie Wertungen über das hinaus, was die Regel sagt. Wenn eine Situation nicht klar geregelt ist oder Sie unsicher sind, welche Strafe gilt oder wie sie durchzusetzen ist, kontaktieren Sie sofort den Hauptschiedsrichter. Eine eskalierte und einmal getroffene Entscheidung kann dann für alle gleich angewendet werden."
+  },
+  {
+   "heading": "Kurz gesagt",
+   "points": [
+    "Überwachen Sie die Sicherheit, bestehen Sie auf sicherer Bewegung, erlauben Sie keine Abkürzungen",
+    "Früh prüfen und Gefahren sofort melden",
+    "Dieselben Regeln, dieselbe Auslegung, jeder Athlet, das ganze Rennen",
+    "Unsicher? An den Hauptschiedsrichter eskalieren"
+   ],
+   "narration": "Kurz gesagt. Die Sicherheit der Athleten steht neben der Fairness als Ihre Priorität. Überwachen Sie Ihr Hindernis, sorgen Sie dafür, dass sich Athleten sicher bewegen, und lassen Sie keine Abkürzungen zu. Prüfen Sie das Hindernis und laufen Sie die Strafschleife vor der ersten Welle ab, und melden Sie Gefahren sofort dem Hauptschiedsrichter, dem Rennleiter oder dem Spartan-Personal. Wenden Sie dieselben Regeln mit derselben Auslegung auf jeden Athleten das ganze Rennen über an. Und wenn Sie unsicher sind, eskalieren Sie an den Hauptschiedsrichter."
+  }
+ ],
+ "ocr-9-1": [
+  {
+   "heading": "Auf Hände und Füße achten",
+   "points": [
+    "Die meisten Fehlerarten betreffen, was Hände und Füße berühren",
+    "Monkey Bars: nur Hände und Arme; Füße oder Beine an den Stangen sind ein Fehlversuch",
+    "Olympus: Füße dürfen an der Wand ruhen, aber ein Fuß auf einem Griff oder Loch ist ein Fehlversuch"
+   ],
+   "narration": "Die meisten Fehlversuche an Hindernissen hängen davon ab, was die Hände und Füße eines Athleten berühren, dorthin gehen also Ihre Augen. Bei den Monkey Bars hangelt sich der Athlet nur mit Händen und Armen. Füße oder Beine, die die Stangen berühren, sind ein Fehlversuch, ebenso den Boden zu berühren, um einen Vorteil zu erlangen. Bei Olympus dürfen Athleten Füße und Knie zur Stütze gegen die Wand setzen, aber einen Griff oder ein Loch mit den Füßen zu berühren, ist ein Fehlversuch. Wissen Sie genau, welche Kontakte Ihr Hindernis erlaubt."
+  },
+  {
+   "heading": "Auf die genaue Regel achten",
+   "points": [
+    "Kennen Sie die Anweisungen, Fehlerarten und Hinweise Ihres Hindernisses vor der ersten Welle",
+    "Helix und Z Wall: Der Versuch beginnt bei vier Kontaktpunkten",
+    "Monkey Bars, Multi-Rig, Olympus: sobald beide Füße die Startstufe verlassen haben"
+   ],
+   "narration": "Jedes Hindernis hat seine eigene Regel, mit Anweisungen für die Teilnehmer, Fehlerarten und zusätzlichen Hinweisen. Achten Sie auf diese Regel, nicht auf eine allgemeine Vorstellung von einem guten Versuch. Wissen Sie, wann der Versuch beginnt, denn von da an ist der Athlet festgelegt. Bei der Helix und der Z Wall beginnt er, sobald vier Kontaktpunkte hergestellt sind. Bei den Monkey Bars, dem Multi-Rig und Olympus beginnt er, sobald beide Füße die Startstufe verlassen haben. Wenn Sie den Start verpassen, können Sie nicht sicher sein, was zählt."
+  },
+  {
+   "heading": "Wo Sie stehen",
+   "points": [
+    "Ein Platz mit freier Sicht auf Versuche, Abschlüsse und Fehlversuche",
+    "Prüfen Sie den Rennfluss und die Anlaufrichtung der Athleten",
+    "Sehen Sie voraus, wo Fehlversuche meist passieren, und behalten Sie diese Stellen im Blick"
+   ],
+   "narration": "Überlegen Sie vor der ersten Welle, wo Sie am besten stehen. Sie brauchen freie Sicht auf Versuche, Abschlüsse und Fehlversuche. Sehen Sie sich den Rennfluss und die Richtung an, aus der die Athleten kommen. Überlegen Sie, wo an Ihrem Hindernis Fehlversuche meist passieren, und sorgen Sie dafür, dass diese Stellen klar im Blick sind. Das Verfahren des Schiedsrichterwesens nennt Hindernisse mit einer Geschichte häufiger Fehlversuche Hindernisse mit vielen Fehlversuchen. Sie brauchen aktive Durchsetzung, Ihre Position dort ist also noch wichtiger."
+  },
+  {
+   "heading": "Bereit zum Eingreifen bei einem Fehlversuch",
+   "points": [
+    "Stehen Sie dort, wo Sie einen gescheiterten Athleten ansprechen und zur Strafe weisen können",
+    "Kennen Sie Route und Rückkehrpunkt der Strafschleife",
+    "Behalten Sie die Glocke im Blick: Sie zu treten ist ein Fehlversuch"
+   ],
+   "narration": "Einen Fehlversuch zu sehen, ist die halbe Aufgabe. Die andere Hälfte ist, den Athleten anzusprechen, positionieren Sie sich also dort, wo Sie ihn ansprechen können, sobald er scheitert, und ihn zur Strafe weisen. Laufen Sie die Strafschleife vorher ab, damit Sie ihre Route kennen und wo sie auf die Strecke zurückführt. Behalten Sie auch die Glocke im Blick. Nach der allgemeinen Regel dürfen Glocken nur mit den Armen, den Händen oder einem anderen Körperteil oberhalb der Brust angeschlagen werden. Die Glocke zu treten ist ein Fehlversuch. Prüfen Sie auch die eigene Regel Ihres Hindernisses."
+  },
+  {
+   "heading": "Kurz gesagt",
+   "points": [
+    "Auf Hände und Füße achten",
+    "Die genaue Regel kennen und wissen, wann der Versuch beginnt",
+    "Mit klarer Sicht auf die Stellen stehen, wo Fehlversuche passieren",
+    "Bereit sein, den Athleten zur Strafe zu weisen"
+   ],
+   "narration": "Kurz gesagt. Achten Sie auf Hände und Füße des Athleten, denn dort passieren die meisten Fehlversuche. Kennen Sie die genaue Regel Ihres Hindernisses, einschließlich des Moments, in dem der Versuch beginnt. Stehen Sie dort, wo Ihre Sicht frei ist und die üblichen Stellen für Fehlversuche im Blick sind. Und positionieren Sie sich so, dass Sie den Athleten ansprechen können, sobald er scheitert, und ihn zur richtigen Strafe schicken."
+  }
+ ],
+ "ocr-9-2": [
+  {
+   "heading": "Die Stützkonstruktion nutzen",
+   "points": [
+    "Wände: die Stützkonstruktion, die Seiten oder Gurte zu nutzen ist ein Fehlversuch",
+    "Rigs: vertikale Traversen als Leiter zu nutzen ist ein Fehlversuch",
+    "Horizontale Traversen dürfen zum Start oder zum Wechsel genutzt werden, wo die Regel es erlaubt"
+   ],
+   "narration": "Die Traverse ist die tragende Hauptstruktur des Hindernisses: die diagonalen, vertikalen und horizontalen Metallträger. Viele Hindernisse verbieten, sie zu nutzen. An den Wänden ist es ein Fehlversuch, die Stützkonstruktion, die Seiten der Wand oder die Gurte zu nutzen, um das Gleichgewicht zu halten, hinaufzuklettern oder herunterzukommen. An den Monkey Bars und anderen Rigs ist es ein Fehlversuch, vertikale Traversen als Leiter zu nutzen, um zu starten, zu queren oder zu enden. Aber viele Rigs lassen Athleten horizontale Traversen zum Start oder zum Wechsel während der Querung nutzen. Prüfen Sie, was für Ihr Hindernis gilt."
+  },
+  {
+   "heading": "Anfassen außerhalb des erlaubten Bereichs",
+   "points": [
+    "Multi-Rig: die Seile, Schlingen oder Ketten zu greifen, die ein Element halten, ist ein Fehlversuch",
+    "Helix: Stangen einer anderen Bahn zu nutzen ist ein Fehlversuch",
+    "Olympus: einen Griff oder ein Loch mit den Füßen zu berühren ist ein Fehlversuch"
+   ],
+   "narration": "Anfassen außerhalb des erlaubten Bereichs heißt, einen Teil des Hindernisses zu nutzen, den die Regel nicht erlaubt. Beim Multi-Rig dürfen Athleten nur die Elemente nutzen. Die Seile, Schlingen oder Ketten zu greifen, die sie an der Konstruktion befestigen, ist ein Fehlversuch, ebenso mehr als eine Bahn zu nutzen. Bei der Helix ist es ein Fehlversuch, Stangen einer anderen Bahn zu nutzen. Bei Olympus arbeiten die Hände an den Griffen, und ein Fuß auf einem Griff oder Loch ist ein Fehlversuch. Kennen Sie den erlaubten Bereich Ihres Hindernisses genau."
+  },
+  {
+   "heading": "Nicht versuchen und die Schleife überspringen",
+   "points": [
+    "Jedes Hindernis muss versucht werden: Mindestens berührt der Athlet es",
+    "Ein Athlet, der scheitert, muss die Strafschleife vollständig absolvieren",
+    "Das Überspringen der Schleife wird bestraft: Die Strafe wird für 2027 überprüft"
+   ],
+   "narration": "Jedes Hindernis muss versucht werden. Ein Versuch bedeutet mindestens, das Hindernis zu berühren. Manchmal heißt es, durch Wasser oder schwieriges Gelände zu kommen, um es zu erreichen, und das kann nicht mit einer Strafe umgangen werden, außer die Einweisung oder das Rennpersonal sagen es. Ein Athlet, der es versucht und scheitert, muss die Strafschleife vollständig absolvieren. Sie zu überspringen ist ein Verstoß, den Sie festhalten und dem Hauptschiedsrichter melden. Die Quellen unterscheiden sich bei der Strafe dafür, sie wird also überprüft.",
+   "review": "In Überprüfung für 2027: Regel 3.4.1 addiert eine Zeitstrafe von 10 Minuten, wenn ein Athlet die Strafschleife nicht absolviert. Das Online-Programm 2026 sagt, es könne zur Disqualifikation führen. Wenden Sie bis dahin das Regelwerk an und verweisen Sie den Fall an den Hauptschiedsrichter."
+  },
+  {
+   "heading": "Burpees, die den Standard nicht erfüllen",
+   "points": [
+    "Brust zum Boden, aufrecht mit gestreckter Hüfte und gestreckten Knien, dann ein Sprung, Hände über den Ohren",
+    "Burpees außerhalb der vorgesehenen Burpee-Zone zählen nicht",
+    "Athleten zählen ihre eigenen Burpees: Sie zählen nicht für sie"
+   ],
+   "narration": "Unsachgemäße Burpees gehören zu den häufigsten Verstößen. Ein vollständiger Burpee geht von der unteren Position, auf dem Boden liegend mit der Brust am Boden, zu einer ausbalancierten aufrechten Position mit gestreckter Hüfte und gestreckten Knien, gefolgt von einem Sprung mit den Händen über den Ohren. Burpees außerhalb der vorgesehenen Zone zählen nicht. Athleten zählen ihre eigenen Burpees, und Sie zählen nicht für sie. Wo der Standard nicht erfüllt ist, sagt das Programm, man solle zusätzliche Burpees verlangen und den Athleten daran erinnern, dass seine Bewegung und seine Reps überwacht werden."
+  },
+  {
+   "heading": "Die Glocke",
+   "points": [
+    "Bei Rigs wie den Monkey Bars ist das Nichtläuten der Glocke ein Fehlversuch",
+    "Glocken dürfen mit Armen, Händen oder dem Körper oberhalb der Brust angeschlagen werden",
+    "Die Glocke zu treten ist ein Fehlversuch: kein erneuter Versuch, der Athlet nimmt die Strafe"
+   ],
+   "narration": "Viele Hindernisse enden an einer Glocke, und bei Rigs wie den Monkey Bars ist das Nichtläuten eine Fehlerart. Ein Athlet, der abspringt, bevor er die Glocke läutet, ist gescheitert, egal wie weit er kam. Nach der allgemeinen Regel dürfen Glocken nur mit den Armen und Händen oder einem anderen Körperteil oberhalb der Brust angeschlagen werden. Die Glocke mit Füßen, Beinen oder Knien zu treten, zählt als Fehlversuch am Hindernis. Der Athlet darf es nicht erneut versuchen und muss die Strafe für dieses Hindernis absolvieren."
+  },
+  {
+   "heading": "Kurz gesagt",
+   "points": [
+    "Keine Stützkonstruktion oder vertikale Traverse, außer die Regel erlaubt es",
+    "Nur die erlaubten Teile des Hindernisses, in einer Bahn",
+    "Jedes Hindernis versuchen und jede Strafschleife vollständig absolvieren",
+    "Burpees nach Standard, in der Zone; Glocken geläutet, nie getreten"
+   ],
+   "narration": "Kurz gesagt. Achten Sie auf Athleten, die die Stützkonstruktion oder vertikale Traversen als Leiter nutzen, wo die Regel es verbietet. Achten Sie auf Anfassen außerhalb des erlaubten Bereichs, etwa das Greifen der Seile oder Ketten an einem Rig oder das Nutzen einer anderen Bahn. Jedes Hindernis muss versucht und jede Strafschleife vollständig absolviert werden. Burpees müssen den Standard erfüllen und in der Zone gemacht werden. Und die Glocke muss geläutet, nie getreten werden."
+  }
+ ],
+ "ocr-9-3": [
+  {
+   "heading": "Wie man entscheidet",
+   "points": [
+    "Finden Sie die genaue Regel: Anweisungen, Fehlerarten und Hinweise",
+    "Prüfen Sie, ob das, was Sie gesehen haben, zu einer aufgeführten Fehlerart passt",
+    "Treffen Sie die Entscheidung, weisen Sie den Athleten, halten Sie sie fest und eskalieren Sie bei Unsicherheit"
+   ],
+   "narration": "Diese Lektion gibt Ihnen drei Situationen aus dem Programm 2026. Entscheiden Sie bei jeder, was Sie tun würden, bevor Sie die Antwort hören. Die Methode ist jedes Mal dieselbe. Finden Sie die genaue Regel für das Hindernis. Prüfen Sie, ob das, was Sie gesehen haben, zu einer ihrer aufgeführten Fehlerarten passt. Treffen Sie dann die Entscheidung, weisen Sie den Athleten und halten Sie fest, was passiert ist. Wenn die Regel es nicht klärt oder Sie unsicher sind, eskalieren Sie an den Hauptschiedsrichter."
+  },
+  {
+   "heading": "Szenario 1: eine kurze Berührung oben",
+   "points": [
+    "Ein Athlet an der Helix berührt kurz mit einer Hand die Oberkante des Hindernisses",
+    "Die Berührung dauert einen Moment und verschafft ihm keinen Vorteil",
+    "Er macht weiter und läutet die Glocke"
+   ],
+   "narration": "Regel 4.2.6 führt das Berühren der Oberkante der Helix als Fehlerart auf, ohne Bedingung zum Vorteil. Olympus und die Z Wall sind genauso. Die Entscheidung, die das Regelwerk stützt, ist also ein Fehlversuch, und der Athlet nimmt die Strafe, auch wenn die Berührung nichts gebracht hat. Ein Vorteil zählt dort, wo die Regel es sagt. Bei den Monkey Bars ist nach Regel 4.2.7 der Bodenkontakt der Füße ein Fehlversuch, wenn er einen Vorteil verschafft. Prüfen Sie immer den Wortlaut der Fehlerart, bevor Sie entscheiden.",
+   "review": "In Überprüfung für 2027: Das Online-Programm 2026 bittet Schiedsrichter zu prüfen, ob die Berührung einen Vorteil verschafft hat, und sich auf den Sinn der Regel statt auf geringfügigen versehentlichen Kontakt zu konzentrieren. Die Regeln 4.2.6, 4.2.10 und 4.2.17 führen das Berühren der Oberkante als Fehlversuch ohne Vorteilsprüfung auf. Wenden Sie bis dahin das Regelwerk an und verweisen Sie eine strittige Entscheidung an den Hauptschiedsrichter."
+  },
+  {
+   "heading": "Szenario 2: schnelle Burpees, Hüfte nicht gestreckt",
+   "points": [
+    "Ein Athlet macht seine Straf-Burpees, nachdem er am Spear Throw gescheitert ist",
+    "Er bewegt sich schnell, und oben bei vielen Reps ist seine Hüfte noch gebeugt"
+   ],
+   "narration": "Diese Reps erfüllen den Standard nicht. Regel 3.17.4 definiert die obere Position als ausbalanciert und aufrecht, mit gestreckter Hüfte und gestreckten Knien, nicht gebeugt, vor dem Sprung. Eine Rep ohne das ist kein vollständiger Burpee. Das Programm sagt, man solle zusätzliche Burpees verlangen, wenn der Standard nicht erfüllt ist, und den Athleten daran erinnern, dass seine Bewegung und seine Reps überwacht werden. Zählen Sie nicht für ihn. Beim Spear Throw entscheidet das Videoauswertungs-Team über ausgelassene Burpees. Ohne Video entscheiden Sie vor Ort, schreiben es auf und geben es dem Hauptschiedsrichter.",
+   "review": "In Überprüfung für 2027: Die für ausgelassene oder fehlerhafte Burpees addierte Zeit unterscheidet sich zwischen dem Regelwerk (3.4.2), der Officiating SOP und dem Programm 2026. Diese Lektion vermittelt keine Zahl, bis die Leitung des Schiedsrichterwesens entscheidet."
+  },
+  {
+   "heading": "Szenario 3: an der Strafschleife vorbeilaufen",
+   "points": [
+    "Ein Athlet scheitert an Ihrer Station an einem Bestanden/Nicht-bestanden-Hindernis",
+    "Sie weisen ihn zur Strafschleife, aber er läuft direkt daran vorbei und macht weiter"
+   ],
+   "narration": "Das ist ein klarer Verstoß. Nach Regel 3.4.1 muss ein Athlet, der an einem Bestanden-oder-nicht-bestanden-Hindernis scheitert, die Strafschleife absolvieren, und dieser hat es nicht getan. Rennen Sie ihm nicht nach und streiten Sie nicht. Halten Sie die Stirnband-Nummer fest, dokumentieren Sie, was passiert ist, und melden Sie es dem Hauptschiedsrichter, sobald Sie können. Wenn Sie die Nummer nicht lesen konnten, melden Sie es sofort mit einer klaren Beschreibung: Farbe der Kleidung, besondere Merkmale und Rennkategorie. Die Strafe selbst wird über den Hauptschiedsrichter entschieden, nicht an Ihrem Hindernis.",
+   "review": "In Überprüfung für 2027: Regel 3.4.1 addiert eine Zeitstrafe von 10 Minuten, wenn die Strafschleife nicht absolviert wird. Das Online-Programm 2026 sagt, es könne zur Disqualifikation führen. Wenden Sie bis dahin das Regelwerk an und verweisen Sie den Fall an den Hauptschiedsrichter."
+  },
+  {
+   "heading": "Kurz gesagt",
+   "points": [
+    "Lesen Sie den genauen Wortlaut der Fehlerart: Ein Vorteil zählt nur, wo es dasteht",
+    "Ein Burpee ohne vollständige Streckung oben zählt nicht",
+    "Eine übersprungene Strafschleife: Nummer festhalten, dokumentieren, melden",
+    "Unsicher? An den Hauptschiedsrichter eskalieren"
+   ],
+   "narration": "Kurz gesagt. Eine kurze Berührung der Oberkante der Helix, von Olympus oder der Z Wall ist nach dem Regelwerk ein Fehlversuch, weil die Fehlerart keine Vorteilsprüfung hat, während einige andere Fehlerarten eine haben. Ein Burpee ohne gestreckte Hüfte und gestreckte Knie oben ist kein vollständiger Burpee, daher werden zusätzliche Burpees verlangt. Ein Athlet, der an der Strafschleife vorbeiläuft, hat gegen die Regeln verstoßen: Halten Sie die Stirnband-Nummer fest, dokumentieren Sie es und melden Sie es dem Hauptschiedsrichter."
+  }
+ ],
+ "ocr-4-2": [
+  {
+   "heading": "Ein Hindernis mit einem Versuch",
+   "points": [
+    "Ein Wurf: Ein Fehlwurf ist ein Fehlversuch, und ein Fehlversuch bedeutet die Strafe",
+    "Ihre Aufgabe: den Beginn des Versuchs sehen, das Ergebnis beurteilen, den Athleten zur Strafe schicken"
+   ],
+   "narration": "Der Spear Throw ist ein Bestanden-oder-nicht-bestanden-Hindernis mit einem Versuch. Jeder Athlet hat einen Wurf. Misslingt er, gibt es keinen zweiten Versuch: Er geht direkt zur Strafe. Ihre Aufgabe beim Spear Throw ist es, genau zu sehen, wann der Versuch beginnt, das Ergebnis zu beurteilen und den Athleten zur richtigen Strafe zu weisen."
+  },
+  {
+   "heading": "Was der Athlet tun muss",
+   "points": [
+    "Mit beiden Füßen hinter der Absperrung stehen",
+    "Den Speer auf das Ziel in derselben Bahn werfen",
+    "Der Speer bleibt im angezeigten Ziel stecken und bleibt dort, ohne dass ein Teil den Boden berührt"
+   ],
+   "narration": "Nach Regel 4.2.13 steht der Athlet mit beiden Füßen hinter der Absperrung und wirft auf das Ziel in seiner eigenen Bahn. Um zu bestehen, muss der Speer im angezeigten Ziel stecken bleiben und dort bleiben, ohne dass ein Teil des Speers den Boden berührt."
+  },
+  {
+   "heading": "Wann der Versuch beginnt",
+   "points": [
+    "Es ist ein Versuch, sobald der Speer in einer Vorwärtsbewegung losgelassen wird",
+    "Das Wechseln der Bahn ist erlaubt, aber nur vor dem Versuch",
+    "Eine verhedderte Leine, die den Wurf verdirbt, zählt trotzdem als Versuch"
+   ],
+   "narration": "Das Regelwerk sagt, der Versuch beginne, sobald der Athlet den Speer in einer Vorwärtsbewegung loslässt. Davor darf er die Bahn wechseln. Danach kann er nicht neu ansetzen. Und wenn sich die Leine verheddert und den Wurf verdirbt, zählt es trotzdem: Die Leine frei zu halten, ist Sache des Athleten.",
+   "review": "In Überprüfung für 2027: Das Online-Programm 2026 sagt, die Festlegung beginne früher, wenn der Speer zum Wurf nach hinten geführt wird. Das Regelwerk sagt: beim Loslassen. Wenden Sie bis zur Entscheidung der Leitung des Schiedsrichterwesens das Regelwerk an und verweisen Sie eine strittige Entscheidung an den Hauptschiedsrichter."
+  },
+  {
+   "heading": "Bestanden oder nicht bestanden",
+   "points": [
+    "Fehlversuch: Der Speer bleibt nicht im angezeigten Ziel stecken",
+    "Fehlversuch: Ein Teil des Speers berührt den Boden, sobald er still liegt",
+    "Allein kein Fehlversuch: den Boden im Flug zu streifen, wenn er frei vom Boden im Ziel endet"
+   ],
+   "narration": "Es gibt zwei Arten zu scheitern. Der Speer bleibt nicht im angezeigten Ziel stecken, oder irgendein Teil von ihm berührt den Boden, nachdem er zum Stillstand gekommen ist. Ein Speer darf auf dem Weg den Boden streifen, und das allein ist kein Fehlversuch, solange er im Ziel und frei vom Boden endet.",
+   "review": "In Überprüfung für 2027: Das Online-Programm 2026 führt „Speer berührt den Boden vor dem Ziel“ als Fehlversuch auf. Regel 4.2.13 erlaubt es. Wenden Sie das Regelwerk an, bis die Leitung des Schiedsrichterwesens entscheidet."
+  },
+  {
+   "heading": "Wann es abgeschlossen ist",
+   "points": [
+    "Abgeschlossen, sobald sich der Athlet mindestens 2 Meter von der Bahn entfernt hat",
+    "Er darf nicht gehen, bevor der Speer das Ziel, die Konstruktion oder den Boden getroffen hat",
+    "Ein Herausfallen oder Scheitern, bevor er 2 Meter entfernt ist, ist ein unvollständiger Versuch: Strafe"
+   ],
+   "narration": "Das Hindernis ist abgeschlossen, sobald sich der Athlet mindestens zwei Meter von seiner Bahn entfernt hat. Er darf nicht gehen, bevor der Speer das Ziel, die Konstruktion oder den Boden getroffen hat. Fällt der Speer heraus, bevor er zwei Meter entfernt ist, ist es ein unvollständiger Versuch, und die Strafe gilt."
+  },
+  {
+   "heading": "Die Strafe",
+   "points": [
+    "30 Burpees (15 bei Stadion-Events)",
+    "In der vorgesehenen Burpee-Zone: Burpees außerhalb zählen nicht",
+    "Jeder nach Standard: Brust zum Boden, aufrecht, dann ein Sprung mit den Händen über den Ohren"
+   ],
+   "narration": "Die Strafe für das Scheitern am Spear Throw sind dreißig Burpees, bei Stadion-Events fünfzehn. Sie müssen in der vorgesehenen Burpee-Zone gemacht werden, denn Burpees außerhalb zählen nicht. Jeder muss den Standard erfüllen: Brust zum Boden, zurück in eine ausbalancierte aufrechte Position, dann ein Sprung mit den Händen über den Ohren.",
+   "review": "In Überprüfung für 2027: Die für ausgelassene Burpees addierte Zeit unterscheidet sich zwischen dem Regelwerk (3.4.2), der Officiating SOP und dem Programm 2026. Diese Lektion vermittelt keine Zahl, bis die Leitung des Schiedsrichterwesens entscheidet."
+  },
+  {
+   "heading": "Was Sie tun",
+   "points": [
+    "Stehen Sie dort, wo Sie das Loslassen, die Absperrung und das Ziel sehen",
+    "Verkünden Sie das Ergebnis klar und ruhig",
+    "Schicken Sie den Athleten in die Burpee-Zone, wo die Kamera seine Stirnband-Nummer sehen kann",
+    "Verweisen Sie jeden Streitfall an den Hauptschiedsrichter: Streiten Sie nicht am Hindernis"
+   ],
+   "narration": "Stehen Sie dort, wo Sie das Loslassen, die Absperrung und das Ziel gleichzeitig sehen können. Verkünden Sie das Ergebnis klar und ruhig. Schicken Sie den Athleten in die Burpee-Zone und sorgen Sie dafür, dass die Kamera seine Stirnband-Nummer sehen kann. Wenn der Athlet die Entscheidung bestreitet, notieren Sie die Nummer und verweisen Sie an den Hauptschiedsrichter. Streiten Sie nicht am Hindernis."
+  },
+  {
+   "heading": "Kurz gesagt",
+   "points": [
+    "Ein Wurf: Der Versuch beginnt, wenn der Speer nach vorn losgelassen wird",
+    "Bestanden: im Ziel, nichts berührt den Boden, sobald er still liegt",
+    "Abgeschlossen: 2 Meter von der Bahn entfernt",
+    "Nicht bestanden: 30 Burpees in der Zone, jeder nach Standard"
+   ],
+   "narration": "Kurz gesagt. Ein Wurf, und der Versuch beginnt, wenn der Speer nach vorn losgelassen wird. Bestanden ist ein Speer im Ziel, bei dem nichts den Boden berührt, sobald er still liegt. Der Athlet ist fertig, wenn er zwei Meter von der Bahn entfernt ist. Nicht bestanden sind dreißig Burpees in der Burpee-Zone, jeder einzelne nach Standard."
+  }
+ ],
+ "deka-1-1": [
+  {
+   "heading": "Eine Beispiellektion",
+   "points": [
+    "Dieses Programm ist ein Platzhalter",
+    "Seine Lektion und sein Quiz zeigen, wie ein zweites Programm funktioniert",
+    "Nichts davon sind DEKA-Regeln"
+   ],
+   "narration": "Dies ist eine Beispiellektion in einem Platzhalterprogramm. Sie zeigt, wie ein zweites Programm neben dem OCR-Programm steht, mit eigenen Lektionen, eigenem Quiz, eigener Bestehensgrenze und eigenem Nachweis. Nichts hier sind die tatsächlichen Regeln von DEKA: Die kommen von den Programmverantwortlichen von DEKA."
+  },
+  {
+   "heading": "Reps zählen (Beispiel)",
+   "points": [
+    "Ein Judge zählt jede Rep, die den Standard erfüllt",
+    "Eine Rep, die ihn nicht erfüllt, ist eine No Rep und wird deutlich ausgerufen"
+   ],
+   "narration": "In diesem Beispiel zählt ein Judge jede Wiederholung, die den Bewegungsstandard erfüllt, und ruft deutlich eine No Rep aus, wenn eine ihn nicht erfüllt. Die echten Standards und Entscheidungen kommen mit dem eigenen Material von DEKA."
+  },
+  {
+   "heading": "Kurz gesagt (Beispiel)",
+   "points": [
+    "Nur Platzhalterinhalt",
+    "Das folgende Quiz ist ebenfalls ein Beispiel"
+   ],
+   "narration": "Damit ist die Beispiellektion zu Ende. Das folgende Quiz ist ebenfalls ein Beispiel, das zeigt, wie jedes Programm seine eigene Prüfung und seinen eigenen Nachweis führt."
+  }
+ ]
+}

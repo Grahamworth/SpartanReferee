@@ -99,7 +99,9 @@ try {
   for (const [name, page, token, ready, asId = ''] of PAGES) {
     await phone();
     await js(`${asId ? `localStorage.setItem('sr_learn_as', ${JSON.stringify(asId)})` : "localStorage.removeItem('sr_learn_as')"}; ${token === null ? '' : token ? `localStorage.setItem('sp_token', ${JSON.stringify(token)})` : "localStorage.removeItem('sp_token')"}`);
-    await send('Page.navigate', { url: `${SITE}/${page}` }); await sleep(150);
+    // CHECK_LANG=de: every page in that language (?lang= before the #), to catch long words and right-to-left layouts
+    const at = process.env.CHECK_LANG ? page.replace(/^([^?#]*)(\?[^#]*)?/, (m, p, q) => `${p}${q ? `${q}&` : '?'}lang=${process.env.CHECK_LANG}`) : page;
+    await send('Page.navigate', { url: `${SITE}/${at}` }); await sleep(150);
     await send('Page.reload', { ignoreCache: true });
     for (let i = 0; i < 40; i++) { await sleep(300); if (await js(ready)) break; }
     await sleep(700);

@@ -1,0 +1,1538 @@
+{
+ "cam-1-1": [
+  {
+   "heading": "Kamerat rangaistuspisteellä",
+   "points": [
+    "Puhelimet kuvaavat burpee-rangaistusaluetta",
+    "SpartanReferee-palvelin tallentaa ne ja ajaa AI-tuomaria jokaisella kameralla",
+    "Jokainen toisto lasketaan ja tarkistetaan standardia vastaan"
+   ],
+   "narration": "SpartanReferee kuvaa rangaistuspistettä puhelimilla. Jokainen puhelin lähettää kuvansa SpartanReferee-palvelimelle Wi-Fin tai mobiilidatan kautta. Palvelin tallentaa kuvan ja ajaa AI-tuomaria jokaisella kameralla, joten jokainen toisto lasketaan ja tarkistetaan liikestandardia vastaan."
+  },
+  {
+   "heading": "Kuka tekee mitä",
+   "points": [
+    "Tapahtuman päätuomari varaa pisteen ja vastaa sen käytöstä",
+    "Jokainen tapahtumaan määritetty tuomari voi seurata sitä livenä ja tarkistaa tulokset",
+    "Ylläpitäjät voivat varata, jatkaa tai pysäyttää minkä tahansa tapahtuman kamerat"
+   ],
+   "narration": "Jokaisella tapahtumalla on yksi kameravaraus. Päätuomari varaa sen tapahtumasivulta ja vastaa sen käytöstä kisapäivänä. Jokainen tapahtumaan määritetty tuomari voi avata sen, seurata kameroita livenä ja tarkistaa tulokset. Ylläpitäjät voivat puuttua asiaan ja varata, jatkaa tai pysäyttää minkä tahansa tapahtuman kamerat."
+  },
+  {
+   "heading": "Lyhyesti",
+   "points": [
+    "Puhelimet kuvaavat, palvelin tuomaroi, kaikki katsovat selaimella",
+    "Päätuomari varaa pisteen ja vastaa sen käytöstä"
+   ],
+   "narration": "Lyhyesti: puhelimet kuvaavat, palvelin tuomaroi ja jokainen tuomari katsoo selaimella. Päätuomari varaa pisteen ja vastaa sen käytöstä."
+  }
+ ],
+ "cam-1-2": [
+  {
+   "heading": "Tapahtumasi",
+   "points": [
+    "Tapahtumasi näkyvät etusivullasi",
+    "Avaa tapahtuma nähdäksesi sen kameroiden käyttöajat ja ketkä toimivat siellä tuomareina",
+    "Päätuomari näkee siellä Varaa burpeekamerat"
+   ],
+   "narration": "Tapahtumasi näkyvät SpartanReferee-etusivullasi. Avaa tapahtuma nähdäksesi sen kameroiden käyttöajat ja ketkä toimivat siellä tuomareina. Jos olet tapahtuman päätuomari, burpeekamerat varataan juuri siellä."
+  },
+  {
+   "heading": "Käyttöajat",
+   "points": [
+    "Kamerat ovat käynnissä klo 07:00–18:00 paikallista aikaa jokaisena tapahtumapäivänä",
+    "Ajat annetaan tapahtuman omassa paikallisessa ajassa",
+    "Etukäteen tehty varaus käynnistää palvelimensa 10 minuuttia etuajassa; heti käynnistäminen kestää noin 5 minuuttia"
+   ],
+   "narration": "Tapahtuman kamerat ovat käynnissä aamuseitsemästä iltakuuteen paikallista aikaa jokaisena tapahtumapäivänä. Varausajat annetaan tapahtuman omassa paikallisessa ajassa riippumatta siitä, mistä varaat. Etukäteen tehty varaus käynnistää palvelimensa kymmenen minuuttia etuajassa, jotta kamerat ovat valmiina ajoissa. Heti käynnistäminen kestää noin viisi minuuttia."
+  },
+  {
+   "heading": "Palvelimet ja yhteys",
+   "points": [
+    "Yksi palvelin hoitaa 2 kameraa",
+    "Jokainen kamera lähettää noin 3,5 Mbit/s",
+    "Tarkista paikan yhteys ennen kisapäivää: sen on riitettävä kaikille kameroille"
+   ],
+   "narration": "Yksi palvelin hoitaa kaksi kameraa, joten kameroiden määrä määrää palvelinten määrän. Jokainen kamera lähettää noin kolme ja puoli megabittiä sekunnissa, ja paikan yhteyden on riitettävä kaikille. Tarkista se ennen kisapäivää."
+  }
+ ],
+ "cam-1-3": [
+  {
+   "heading": "Jokaista kameraa varten",
+   "points": [
+    "Puhelin jalustalla tai telineessä",
+    "Varavirtalähde",
+    "Mobiilidata tai paikan Wi-Fi"
+   ],
+   "narration": "Jokaista kameraa varten tarvitset puhelimen jalustalla tai telineessä, varavirtalähteen, joka pitää puhelimen käynnissä koko päivän, sekä mobiilidatan tai paikan Wi-Fin."
+  },
+  {
+   "heading": "Sovellukset",
+   "points": [
+    "Android: SpartanReferee Broadcaster -sovellus",
+    "iPhone: Larix Broadcaster, App Storesta",
+    "Katsomiseen ja tuomarointiin: mikä tahansa puhelin, tabletti tai tietokone, jossa on selain, ilman asennettavaa"
+   ],
+   "narration": "Android-puhelimet käyttävät SpartanReferee Broadcaster -sovellusta. iPhonet käyttävät Larix Broadcasteria, jonka saa App Storesta. Kameroiden katsomiseen ja tuomarointiin kelpaa mikä tahansa puhelin, tabletti tai tietokone, jossa on selain: sille ei tarvitse asentaa mitään."
+  }
+ ],
+ "cam-2-1": [
+  {
+   "heading": "Mihin puhelin laitetaan",
+   "points": [
+    "Vaakatasossa telineessään",
+    "3–4 metrin päähän kilpailijoista",
+    "Jokaisen kilpailijan koko keho kuvassa, myös makuulla"
+   ],
+   "narration": "Aseta puhelin vaakatasoon telineeseensä kolmen tai neljän metrin päähän kilpailijoista. Pidä jokaisen kilpailijan koko keho kuvassa, myös silloin, kun hän makaa maassa."
+  },
+  {
+   "heading": "Kuvakulma",
+   "points": [
+    "Hieman viistosta tai sivulta kuvattuna rinta maahan -vaatimus näkyy paremmin kuin suoraan edestä",
+    "Punnerruksiin ja istumaannousuihin puhelin tulee asettaa sivulle lattian tasolle"
+   ],
+   "narration": "Hieman viistosta tai sivulta kuvattuna rinta maahan -vaatimus arvioituu paremmin kuin suoraan edestä kuvatessa. Punnerruksia ja istumaannousuja varten aseta puhelin sivulle lattian tasolle."
+  },
+  {
+   "heading": "Pidä väylät vapaina",
+   "points": [
+    "Huomioliivin keltaisessa paidassa olevia toimitsijoita ei koskaan lasketa kilpailijoiksi",
+    "Kuka tahansa muu kameran edessä seisova on tiellä",
+    "Seiso paikassa, josta näet kilpailijat peittämättä kuvaa"
+   ],
+   "narration": "Huomioliivin keltaisessa paidassa olevia toimitsijoita ei koskaan lasketa kilpailijoiksi. Kuka tahansa muu kameran edessä seisova on tiellä, joten pidä väylät vapaina ja seiso paikassa, josta näet kilpailijat peittämättä kameroita."
+  }
+ ],
+ "cam-2-2": [
+  {
+   "heading": "QR-koodit",
+   "points": [
+    "Avaa varaus konsolissa, kun se on käynnissä",
+    "Jokainen puhelintaan odottava kamera näyttää QR-koodit Live- ja Kamerat-välilehdillä",
+    "Koodit vaihtuvat jokaisella varauksella: skannaa ne joka kerta uudelleen"
+   ],
+   "narration": "Kun varaus on käynnissä, avaa se konsolissa. Jokainen puhelintaan odottava kamera näyttää QR-koodit Live- ja Kamerat-välilehdillä. Koodit vaihtuvat jokaisella varauksella, joten skannaa ne joka kerta uudelleen."
+  },
+  {
+   "heading": "Android: SpartanReferee Broadcaster",
+   "points": [
+    "Asenna sovellus; salli asennus tästä lähteestä, kun puhelin kysyy",
+    "Napauta Skannaa kameran QR-koodi ja skannaa kyseisen kameran koodi",
+    "Jätä laatu arvoon 720p, ellei signaali ole heikko, ja napauta sitten Avaa kamera ja Aloita lähetys"
+   ],
+   "narration": "Asenna Androidilla SpartanReferee Broadcaster. Puhelin varoittaa, koska sovellus ei ole Play Kaupasta: napauta Asetukset, salli asennus tästä lähteestä, palaa takaisin ja asenna. Napauta Skannaa kameran QR-koodi ja skannaa kyseisen kameran koodi. Jätä laatu arvoon 720p, ellei signaali ole heikko, ja napauta sitten Avaa kamera ja Aloita lähetys."
+  },
+  {
+   "heading": "iPhone: Larix Broadcaster",
+   "points": [
+    "Asenna Larix ja avaa se kerran sallien kameran ja mikrofonin",
+    "Skannaa kameran iPhone-koodi (Larix) puhelimen omalla kameralla, avaa linkki Larixissa ja napauta Import",
+    "Larixissa: Settings, Connections, valitse kamera ja paina sitten punaista painiketta"
+   ],
+   "narration": "Asenna iPhonelle Larix Broadcaster ja avaa se kerran sallien kameran ja mikrofonin. Skannaa kameran iPhone-koodi puhelimen omalla kameralla, avaa linkki Larixissa ja napauta Import. Siirry sitten Larixissa kohtaan Settings, Connections, valitse kamera ja paina punaista painiketta."
+  }
+ ],
+ "cam-3-1": [
+  {
+   "heading": "Käynnistä tuomari",
+   "points": [
+    "Jokaisen puhelimen kuva näkyy Live-välilehdellä muutaman sekunnin kuluessa",
+    "Paina kamerassa Käynnistä AI-tuomari, anna sille nimi ja valitse liike",
+    "Paina sitten Aloita tuomarointi: se toimii palvelimella, joten jatkaa, vaikka sulkisit sivun"
+   ],
+   "narration": "Jokaisen puhelimen kuva näkyy Live-välilehdellä muutaman sekunnin kuluttua lähetyksen alkamisesta. Paina kamerassa Käynnistä AI-tuomari, anna sille nimi, valitse, mitä se tuomaroi, ja paina Aloita tuomarointi. Tuomari toimii palvelimella, joten se jatkaa, vaikka sulkisit sivun."
+  },
+  {
+   "heading": "Mitä se tarkistaa burpeessa",
+   "points": [
+    "Rinta maahan",
+    "Lantio täysin suoraksi",
+    "Hyppy, molemmat jalat irti",
+    "Kädet korvien yläpuolella"
+   ],
+   "narration": "Burpeessa tuomari tarkistaa neljä asiaa: rinta maahan, lantio täysin suoraksi, hyppy molemmat jalat irti maasta ja kädet korvien yläpuolella. Toisto, josta yksikin puuttuu, on no rep."
+  },
+  {
+   "heading": "Kokeile",
+   "points": [
+    "Tee muutama koetoisto jokaisen kameran edessä",
+    "Tarkista, että jokainen lasketaan ja huono ei",
+    "Siirrä puhelinta, jos kilpailija poistuu kuvasta"
+   ],
+   "narration": "Ennen kuin kilpailijat saapuvat, tee muutama koetoisto jokaisen kameran edessä ja tarkista, että ne lasketaan ja että tahallaan huono toisto ei laskeudu. Jos kilpailija poistuu kuvasta, siirrä puhelinta."
+  }
+ ],
+ "cam-3-2": [
+  {
+   "heading": "Tulokset",
+   "points": [
+    "Tulokset-välilehti listaa kaikki tuomaroidut",
+    "Etsi kilpailijan numero hakee kaikista kameroista",
+    "Katso toistaa kilpailijan suorituksen, jossa jokainen toisto ja no rep on merkitty"
+   ],
+   "narration": "Tulokset-välilehti listaa kaikki tuomaroidut. Etsi kilpailijan numero hakee yhtä kilpailijaa kaikista kameroista. Katso toistaa kilpailijan suorituksen, jossa jokainen toisto ja jokainen no rep on merkitty."
+  },
+  {
+   "heading": "Kuinka kauan tiedot säilyvät",
+   "points": [
+    "Nauhoitukset ja tulokset säilyvät 7 päivää",
+    "Varauksen päättyessä nauhoitukset tallennetaan ja palvelimet sammutetaan",
+    "Jokainen tapahtuman tuomari voi tarkistaa ne"
+   ],
+   "narration": "Nauhoitukset ja tulokset säilyvät seitsemän päivää. Kun varaus päättyy, nauhoitukset tallennetaan ja palvelimet sammutetaan. Jokainen tapahtuman tuomari voi tarkistaa ne tänä aikana."
+  }
+ ],
+ "cam-3-3": [
+  {
+   "heading": "Puhelimet ja kuva",
+   "points": [
+    "Ei yhdisty: tarkista signaali ja skannaa sen koodi uudelleen tästä varauksesta",
+    "Pätkii tai katkeaa: signaali on liian heikko 720p:lle, joten valitse matalampi laatu",
+    "Kamera näkyy mutta ei kuvaa: paikan verkko voi estää videon, joten kokeile puhelimen mobiilidataa"
+   ],
+   "narration": "Jos puhelin ei yhdisty, tarkista sen signaali ja skannaa sen koodi uudelleen tästä varauksesta. Jos kuva pätkii tai katkeaa, signaali on liian heikko 720p:lle: valitse matalampi laatu. Jos kamera näkyy mutta kuvaa ei ole, paikan verkko voi estää videon: kokeile sen sijaan puhelimen mobiilidataa."
+  },
+  {
+   "heading": "Palvelimet ja internet",
+   "points": [
+    "Palvelin ei käynnistynyt: konsoli kertoo syyn; joskus Azurella ei ole vapaata palvelinta muutamaan minuuttiin, joten yritä uudelleen",
+    "Paikan internet katkeaa: mikään ei pääse palvelimelle, ennen kuin yhteys palaa",
+    "Vain Larix säilyttää oman kopionsa puhelimessa"
+   ],
+   "narration": "Jos palvelin ei käynnistynyt, konsoli kertoo syyn. Joskus vapaata palvelinta ei ole muutamaan minuuttiin: yritä uudelleen. Jos paikan internet katkeaa, mikään ei pääse palvelimelle, ennen kuin yhteys palaa, ja vain Larix säilyttää oman kopionsa videosta puhelimessa."
+  }
+ ],
+ "cam-4-1": [
+  {
+   "heading": "Ilmainen kamera",
+   "points": [
+    "AI-tuomari toimii omassa selaimessasi, puhelimesi tai tietokoneesi kameralla",
+    "Ei palvelinta eikä kustannuksia, milloin tahansa",
+    "Tue puhelin paikalleen, tee muutama burpee ja katso, miten jokainen tuomaroidaan"
+   ],
+   "narration": "Ilmainen kamera ajaa AI-tuomaria suoraan selaimessasi oman puhelimesi tai tietokoneesi kameralla, livenä tai minuutin mittaisella videolla. Palvelinta ei tarvita eikä se maksa mitään, ja voit käyttää sitä milloin tahansa. Tue puhelin paikalleen, tee muutama burpee ja katso, miten jokainen tuomaroidaan."
+  },
+  {
+   "heading": "Harjoittele oikeaa pistettä",
+   "points": [
+    "Päätuomarit voivat varata 30 minuutin harjoituspalvelimen",
+    "Puhelimet skannaavat koodinsa; konsoli, tuomari ja tarkistus toimivat kuten tapahtumassa",
+    "Se käyttää yhtä tapahtumien tarvitsemista palvelimista, joten se on päätuomareille ja ylläpitäjille"
+   ],
+   "narration": "Päätuomarit voivat myös varata kolmenkymmenen minuutin harjoituspalvelimen, jolla voi harjoitella koko pisteen toimintaa: puhelimet skannaavat koodinsa, ja konsoli, tuomari ja tarkistus toimivat aivan kuin tapahtumassa. Se käyttää yhtä tapahtumien tarvitsemista palvelimista, joten se on tarkoitettu päätuomareille ja ylläpitäjille."
+  }
+ ],
+ "ocr-1-1": [
+  {
+   "heading": "Miksi Spartan on olemassa",
+   "points": [
+    "Spartan on olemassa auttaakseen ihmisiä ylittämään rajansa",
+    "Tavoite: ihmiset, jotka ovat vahvempia fyysisesti ja henkisesti",
+    "Missio: auttaa ihmisiä elämään ilman rajoja"
+   ],
+   "narration": "Spartan on olemassa auttaakseen ihmisiä ylittämään rajansa ja vahvistumaan fyysisesti ja henkisesti. Sen missio on auttaa ihmisiä elämään ilman rajoja rakentamalla voimaa, kurinalaisuutta ja sitkeyttä, joita tarvitaan elämän haasteiden kohtaamiseen. Jokainen Spartan Race on suunniteltu saamaan kilpailijat tekemään jotain vaikeaa, epämukavaa ja muuttavaa. Se on ympäristö, jossa työskentelet tuomarina. Edessäsi olevat kilpailijat ovat valinneet tehdä jotain vaikeaa, ja säännöt ovat olemassa, jotta kaikki kohtaavat saman haasteen."
+  },
+  {
+   "heading": "Haaste kaikille",
+   "points": [
+    "Spartan-tapahtumat ovat kaikentasoisille, ensikertalaisista eliittikilpailijoihin",
+    "Miljoonat ihmiset ympäri maailmaa osallistuvat",
+    "Sillä on väliä, että uskaltaa tulla mukaan, ei sillä, mistä aloittaa"
+   ],
+   "narration": "Spartan-tapahtumat on suunniteltu kaikentasoisille kilpailijoille. Miljoonat ihmiset ympäri maailmaa osallistuvat, ensikertalaisista eliittikilpailijoihin. Spartanin näkemys on, että olennaista ei ole se, mistä aloittaa, vaan halu tulla mukaan, ylittää tekosyyt ja kohdata haaste. Jokainen radalle astuva osallistuu samaan sitkeyden ja päättäväisyyden kokeeseen. Kisapäivänä näet siis laajan kirjon kilpailijoita. Myöhemmin tällä kurssilla opit, ketä heistä valvot tarkimmin."
+  },
+  {
+   "heading": "Yhdet säännöt kaikkialla",
+   "points": [
+    "Kilpailusäännöt koskevat kaikkia Spartan-tapahtumia ja -kilpailuja maailmanlaajuisesti",
+    "Ne sitovat jokaista kilpailijaa jokaisessa Spartan-tapahtumassa",
+    "Niiden tavoitteet: reilu ja johdonmukainen kilpailu, maailmanlaajuiset standardit, kilpailijoiden turvallisuus"
+   ],
+   "narration": "Spartanin kilpailusäännöt koskevat kaikkia Spartan-tapahtumia ja -kilpailuja ympäri maailmaa, ja ne sitovat jokaista osallistuvaa kilpailijaa. Sääntökirjan mukaan säännöt kertovat, miten kilpailua tulee valvoa. Niiden tavoitteena on tehdä jokaisesta tapahtumasta reilu ja johdonmukainen, urheilullisuuden ja rehellisyyden hengessä toteutettu. Ne antavat selkeät ohjeet, jotta kilpailu on standardoitua maailmanlaajuisesti. Ja ne suojaavat kilpailijoiden terveyttä, turvallisuutta ja hyvinvointia niin pitkälle kuin se on esteratakilpailussa kohtuudella mahdollista."
+  },
+  {
+   "heading": "Sinun osuutesi",
+   "points": [
+    "Sovella kilpailusääntöjä ja valvontamenettelyjä johdonmukaisesti",
+    "Suojele Spartan-tapahtumien reiluutta ja rehellisyyttä maailmanlaajuisesti",
+    "Kurssin lopussa: osaat soveltaa sääntöjä johdonmukaisesti ja varmasti"
+   ],
+   "narration": "Tämä ohjelma esittelee Spartan-tuomareilta odotettavan roolin, vastuut ja standardit. Sen tavoitteena on, että jokainen tuomari soveltaa kilpailusääntöjä ja valvontamenettelyjä samalla tavalla ja suojelee näin Spartan-tapahtumien reiluutta ja rehellisyyttä maailmanlaajuisesti. Kilpailijan tulee saada sinun esteelläsi sama ratkaisu kuin samalla esteellä missä tahansa muussa Spartan-tapahtumassa. Kurssin lopussa sinun pitäisi osata soveltaa Spartanin sääntöjä johdonmukaisesti ja varmasti."
+  },
+  {
+   "heading": "Lyhyesti",
+   "points": [
+    "Spartan on olemassa auttaakseen ihmisiä ylittämään rajansa",
+    "Sen tapahtumat ovat kaikille, ensikertalaisista eliittikilpailijoihin",
+    "Yksi sääntökirja koskee kaikkia Spartan-tapahtumia maailmanlaajuisesti",
+    "Tehtäväsi: soveltaa sitä johdonmukaisesti reiluuden ja rehellisyyden suojaamiseksi"
+   ],
+   "narration": "Lyhyesti. Spartan on olemassa auttaakseen ihmisiä ylittämään rajansa ja vahvistumaan ruumiiltaan ja mieleltään. Sen tapahtumat ovat kaikille, ensikertalaisista eliittikilpailijoihin. Yhdet säännöt koskevat kaikkia Spartan-tapahtumia maailmassa, ja ne tähtäävät reiluun, johdonmukaiseen ja turvalliseen kilpailuun. Tuomarina tehtäväsi on soveltaa näitä sääntöjä johdonmukaisesti, jotta jokaisen kilpailun reiluus ja rehellisyys suojataan."
+  }
+ ],
+ "ocr-1-2": [
+  {
+   "heading": "Polkujuoksua esteillä",
+   "points": [
+    "Spartan Race on esteratakilpailu (OCR)",
+    "Siinä yhdistyvät polkujuoksu ja fyysiset esteet",
+    "Esteet testaavat sekä henkistä että fyysistä voimaa"
+   ],
+   "narration": "Spartan Race on esteratakilpailu: polkujuoksua yhdistettynä radan varrella oleviin fyysisiin esteisiin. Esteet on suunniteltu testaamaan sekä henkistä että fyysistä voimaa ja viemään kilpailijat pidemmälle kuin he uskoivat mahdolliseksi. Esteiden välillä kilpailijat juoksevat. Jokaisella esteellä heidän on selvitettävä tietty haaste, ja sääntökirja määrittelee tarkasti, mitä se vaatii. Tuomarina sinut on yleensä sijoitettu esteelle, joten se este ja sen säännöt ovat päivän painopiste."
+  },
+  {
+   "heading": "Viisi haastetyyppiä",
+   "points": [
+    "Kiipeäminen: esimerkiksi seinät ja Rope Climb",
+    "Kantaminen: esimerkiksi Bucket Carry ja Sandbag Carry",
+    "Ryömiminen: esimerkiksi Barbed Wire Crawl",
+    "Hyppääminen sekä vetäminen ja nostaminen: esimerkiksi Fire Jump ja Hercules Hoist"
+   ],
+   "narration": "Ohjelma ryhmittelee haasteet viiteen liiketyyppiin: kiipeämiseen, kantamiseen, ryömimiseen, hyppäämiseen sekä vetämiseen ja nostamiseen. Kiipeämiseen kuuluvat seinät ja Rope Climb. Kantamiseen kuuluvat Bucket Carry ja Sandbag Carry. Ryömimiseen kuuluu Barbed Wire Crawl. Hyppäämiseen kuuluu Fire Jump, ja vetämiseen ja nostamiseen kuuluu Hercules Hoist, jossa kilpailija vetää köyttä nostaakseen painon. Jokaisella esteellä on oma osionsa sääntökirjassa, jossa kerrotaan, mitä kilpailijan on tehtävä ja miten hän voi epäonnistua."
+  },
+  {
+   "heading": "Kaksi estetyyppiä sääntökirjassa",
+   "points": [
+    "Pakolliset esteet: ne on suoritettava ennen kuin radalla pääsee eteenpäin",
+    "Läpäisty/hylätty-esteet: hylkäys tarkoittaa rangaistusta, rangaistuslenkkiä tai burpeita",
+    "Jokaista estettä on yritettävä: vähintään sitä on kosketettava"
+   ],
+   "narration": "Sääntökirja jakaa esteet kahteen luokkaan. Pakolliset esteet on suoritettava, ennen kuin kilpailija pääsee radalla pidemmälle. Yhden epäonnistuminen tarkoittaa hylkäämistä, vaikka kilpailunjohtaja voi korvata sen aikarangaistuksella vakavuudesta riippuen. Läpäisty- tai hylätty-esteillä voi epäonnistua, ja epäonnistuminen tarkoittaa rangaistusta: rangaistuslenkkiä tai burpeita. Läpäisty- tai hylätty-esteet ovat joko yhden yrityksen tai usean yrityksen esteitä. Jokaista estettä on yritettävä, ja yritys on vähintään esteen koskettaminen. Estetyypeille on oma osionsa myöhemmin tällä kurssilla.",
+   "review": "Tarkistettavana vuodelle 2027: sääntökirjan (3.17.3) mukaan rangaistus on rangaistuslenkki tai 30 burpeeta sen mukaan, mitä Spartan määrittää kullekin tapahtumalle, sarjalle tai lähdölle. Valvontaohjeen (Officiating SOP) mukaan useimmilla esteillä rangaistus on lenkki ja Spear Throwssa burpeet; vuoden 2026 ohjelman mukaan burpeita käytetään vain Spear Throwssa. Siihen asti käytä lähtöinfossa vahvistettua rangaistusta ja ohjaa epäselvät tapaukset päätuomarille."
+  },
+  {
+   "heading": "Kilpailumuodot",
+   "points": [
+    "Vuoden 2026 lähteet mainitsevat Sprint-, Super-, Beast-, Ultra- ja Stadion-muodot",
+    "Yksi sääntökirja kattaa ne kaikki, mutta jotkin säännöt vaihtelevat muodon mukaan",
+    "Stadion: rangaistus minkä tahansa esteen epäonnistumisesta on aina 15 burpeeta",
+    "Tuomareiden vähimmäismäärä: 10 Sprintissä tai Stadionissa, 15 Superissa, 20 Beastissa tai Ultrassa"
+   ],
+   "narration": "Spartan-kilpailuja järjestetään useina muotoina. Vuoden 2026 sääntökirja ja valvontamenettely mainitsevat Sprintin, Superin, Beastin, Ultran ja Stadionin. Sama sääntökirja kattaa ne kaikki, mutta jotkin säännöt vaihtelevat muodon mukaan. Stadion-tapahtumissa esimerkiksi rangaistus esteen epäonnistumisesta on aina viisitoista burpeeta, jokaisella esteellä ja jokaisessa lähdössä. Spartanin valvontamenettely määrää myös tuomareiden vähimmäismäärän kullekin muodolle: kymmenen Sprintissä tai Stadionissa, viisitoista Superissa ja kaksikymmentä Beastissa tai Ultrassa."
+  },
+  {
+   "heading": "Lyhyesti",
+   "points": [
+    "Esteratakilpailu: polkujuoksua yhdistettynä fyysisiin esteisiin",
+    "Viisi haastetyyppiä: kiipeäminen, kantaminen, ryömiminen, hyppääminen, vetäminen ja nostaminen",
+    "Pakolliset esteet on suoritettava; läpäisty/hylätty-esteen epäonnistuminen tarkoittaa rangaistusta",
+    "Muodot: Sprint, Super, Beast, Ultra ja Stadion"
+   ],
+   "narration": "Lyhyesti. Spartan Race on esteratakilpailu: polkujuoksua yhdistettynä fyysisiin esteisiin, jotka testaavat henkistä ja fyysistä voimaa. Haasteet ovat kiipeäminen, kantaminen, ryömiminen, hyppääminen sekä vetäminen ja nostaminen. Sääntökirja jakaa esteet pakollisiin esteisiin, jotka on suoritettava, ja läpäisty- tai hylätty-esteisiin, joilla epäonnistuminen tarkoittaa rangaistusta. Jokaista estettä on yritettävä. Kilpailuja järjestetään useina muotoina, kuten Sprint, Super, Beast, Ultra ja Stadion."
+  }
+ ],
+ "ocr-2-1": [
+  {
+   "heading": "Mitä tuomarit suojaavat",
+   "points": [
+    "Reiluutta ja kilpailun rehellisyyttä",
+    "Sitä, että kilpailijat noudattavat virallisia kilpailusääntöjä",
+    "Rangaistusten johdonmukaista soveltamista",
+    "Eliitti- ja kilpasarjojen uskottavuutta"
+   ],
+   "narration": "Tuomareilla on väliä, koska he suojaavat kilpailun reiluutta ja rehellisyyttä. He huolehtivat siitä, että kilpailijat noudattavat virallisia kilpailusääntöjä, ja soveltavat rangaistuksia samalla tavalla kaikkiin. Juuri tämä johdonmukaisuus antaa Elite- ja kilpailullisille kisoille niiden uskottavuuden. Spartanin valvontamenettely ilmaisee asian näin: Spartanin valvonta luo ja ylläpitää kilpailun rehellisyyttä sääntöjen johdonmukaisella noudattamisen valvonnalla ja vakiintuneilla valvontakäytännöillä, jotta tulos on reilu ja oikeudenmukainen kaikille kilpailijoille."
+  },
+  {
+   "heading": "Mikä tuomari on",
+   "points": [
+    "Spartanin nimittämä toimitsija, joka huolehtii siitä, että kaikkia sääntöjä noudatetaan",
+    "Yleensä sijoitettuna esteelle tai videotarkistusteltalle",
+    "Esteellä: valvo sen sääntöjä ja seuraa epäonnistumisia",
+    "Raportoit päätuomarille"
+   ],
+   "narration": "Sääntökirja määrittelee tuomarin Spartanin nimittämäksi toimitsijaksi, jonka tehtävä on huolehtia siitä, että kaikkia sääntöjä noudatetaan. Tuomarit sijoitetaan yleensä esteille ja videotarkistusteltalle, ja he raportoivat päätoimitsijalle (Head Official). Spartanin valvontamenettely kuvaa tuomarin henkilöksi, joka on määrätty esteelle valvomaan sen sääntöjä ja seuraamaan epäonnistumisia. Sääntökirjassa toimitsijoita ovat kaikki, jotka Spartan nimeää hoitamaan tapahtumatehtäviä valtuutetussa asemassa: henkilöstö, tuomarit ja vapaaehtoiset. Tuomarina olet yksi heistä."
+  },
+  {
+   "heading": "Kenelle vastaat",
+   "points": [
+    "Päätuomari: tapahtuman sääntöjen ylin päättäjä",
+    "Sääntökirja kutsuu tätä roolia nimellä Head Official",
+    "Kilpailunjohtaja: vastaa tapahtuman kokonaistoiminnasta",
+    "Epävarmat tai kiistanalaiset ratkaisut menevät päätuomarille"
+   ],
+   "narration": "Jokaisessa tapahtumassa yksi henkilö on kaikkien sääntöasioiden ylin päättäjä ja lopullinen auktoriteetti sääntöjen valvonnassa ja tulkinnassa. Sääntökirja kutsuu häntä nimellä Head Official. Spartanin valvontamenettely ja tämä ohjelma kutsuvat häntä päätuomariksi. Hänelle sinä raportoit. Kilpailunjohtaja vastaa tapahtuman kokonaistoiminnasta ja läpiviennistä. Kun et ole varma ratkaisusta tai kilpailija kiistää sen, asia menee päätuomarille."
+  },
+  {
+   "heading": "Ratkaisusi vaikuttavat tuloksiin",
+   "points": [
+    "Ketju: tuomari, päätuomari, sitten kilpailunjohtaja tai ajanottotiimi",
+    "Päätuomari vahvistaa rangaistukset ja välittää ne eteenpäin",
+    "Tulokset ovat lopullisia vasta virallisen videotarkistuksen jälkeen",
+    "Aikarangaistukset lisätään kilpailijan maaliaikaan"
+   ],
+   "narration": "Se, mitä näet ja kirjaat esteelläsi, voi muuttaa tuloksia. Ketju kulkee sinulta päätuomarille ja sieltä kilpailunjohtajalle tai ajanottotiimille. Päätuomari hallinnoi videotarkistusta ja välittää vahvistetut rangaistukset ja hylkäämiset kilpailunjohtajalle ja ajanottotiimille. Sääntökirjan mukaan viralliset videotarkistukset tulee tehdä ennen kuin tulokset ovat lopullisia, joten tuloksia ei välttämättä julkaista heti. Aikarangaistukset lisätään kilpailijan maaliaikaan, joten tarkka ja selkeästi kirjattu ratkaisu on tärkeä."
+  },
+  {
+   "heading": "Miten sinut koulutetaan",
+   "points": [
+    "Perustuu Spartanin sääntökirjaan, Officiating SOP:iin ja Global Officiating Guidelinesiin",
+    "Painopiste: esteiden valvonta, rangaistukset, vuorovaikutus kilpailijoiden kanssa ja kilpailun rehellisyys",
+    "Verkkokoulutuksen suorittaminen on pakollista tuomarisertifioinnissa"
+   ],
+   "narration": "Tämä koulutus on olemassa, jotta tuomarit valvovat Spartanin kilpailusääntöjä reilusti ja johdonmukaisesti. Se perustuu kolmeen dokumenttiin: Spartanin sääntökirjaan, Officiating Standard Operating Procedureen ja Global Officiating Guidelinesiin. Se keskittyy esteiden valvontaan, rangaistuksiin, kilpailijoiden kohtaamiseen ja kilpailun rehellisyyteen. Valvontamenettelyn mukaan verkkokoulutusmoduulin suorittaminen on pakollista tuomarisertifioinnissa. Ennen jokaista tapahtumaa päätuomari huolehtii myös siitä, että jokainen tuomari on suorittanut tapahtumaa edeltävän koulutuksen."
+  },
+  {
+   "heading": "Lyhyesti",
+   "points": [
+    "Tuomarit suojaavat reiluutta, kilpailun rehellisyyttä ja johdonmukaisia rangaistuksia",
+    "Valvot sääntöjä esteelläsi ja seuraat epäonnistumisia",
+    "Raportoit päätuomarille, joka on sääntöjen lopullinen auktoriteetti",
+    "Ratkaisusi syötetään videotarkistukseen ja tuloksiin"
+   ],
+   "narration": "Lyhyesti. Tuomarit suojaavat kilpailun reiluutta ja rehellisyyttä ja huolehtivat siitä, että rangaistuksia sovelletaan johdonmukaisesti, mikä antaa kilpailulle uskottavuuden. Olet Spartanin nimittämä toimitsija, yleensä sijoitettuna esteelle valvomaan sen sääntöjä ja seuraamaan epäonnistumisia. Raportoit päätuomarille, jota sääntökirja kutsuu nimellä Head Official ja jolla on viimeinen sana säännöistä. Se, mitä kirjaat, kulkee videotarkistuksen kautta ja voi muuttaa kilpailijan maaliaikaa."
+  }
+ ],
+ "ocr-2-2": [
+  {
+   "heading": "Kilpasarjat ja Open",
+   "points": [
+    "Kilpasarjat: Elite- ja Age Group -kilpailijat",
+    "Open: avoin kaikille, osallistumispainotteinen sarja",
+    "Jokainen sarja starttaa lähdöissä tai aalloissa, jotka erotetaan lähtöajan tai tahtiryhmän mukaan"
+   ],
+   "narration": "Sääntökirja määrittelee kaksi sarjatyyppiä. Kilpasarjoihin kuuluvat Elite ja Age Group, ja Open on avoin kaikille. Tämä ohjelma kuvaa Openin osallistumispainotteiseksi sarjaksi. Kunkin sarjan sisällä kilpailijat starttaavat lähdöissä ja aalloissa: ryhmissä, jotka erotetaan lähtöaikojen tai tahtiryhmän mukaan. Kun tiedät, mikä sarja on tulossa esteellesi, tiedät myös, kuinka tarkasti sitä pitää valvoa."
+  },
+  {
+   "heading": "Mihin tuomarit keskittyvät",
+   "points": [
+    "Tuomarit keskittyvät ensisijaisesti kilpasarjoihin",
+    "Kilpasarjojen kilpailijoilta odotetaan kaikkien sääntöjen tarkkaa noudattamista",
+    "Valvo sääntöjä samalla tavalla jokaiselle kilpasarjan kilpailijalle",
+    "Ole paikallasi ennen ensimmäistä Elite-lähtöä"
+   ],
+   "narration": "Tuomarit keskittyvät ensisijaisesti kilpasarjoihin: Eliteen ja Age Groupiin. Sääntökirja odottaa jokaisen kilpasarjan kilpailijan noudattavan kaikkia sääntöjä tarkasti ja kilpailevan innokkaasti ja kilpailuhenkisesti. Valvontasi on siis oltava samanlaista jokaiselle kilpasarjan kilpailijalle, jokaisessa Elite- ja Age Group -aallossa. Spartanin valvontamenettelyn mukaan päätuomari varmistaa, että tuomarit ovat paikoillaan ennen ensimmäistä Elite-lähtöä, ja että valvonta, videotarkistus ja rangaistusten arviointi koskevat Elite- ja Age Group -sarjoja."
+  },
+  {
+   "heading": "Open-kilpailijat",
+   "points": [
+    "Open-kilpailijoita kannustetaan myös noudattamaan sääntöjä",
+    "Tunnelma on rennompi: urheilullisuus ja henkilökohtainen vastuu",
+    "Open-kilpailijoilta odotetaan Spartan-kunniasääntöä burpee-rangaistuksissa",
+    "Tuomarit voivat purkaa radan tai luovuttaa sen vapaaehtoisille Open-aalloissa"
+   ],
+   "narration": "Myös Open-kilpailijoita kannustetaan noudattamaan sääntöjä urheilullisuuden ja henkilökohtaisen vastuun hengessä, vaikka tunnelma Open-sarjassa on rennompi. Sääntökirja odottaa Open-sarjan kilpailijoiden toimivan Spartan-kunniasäännön mukaisesti suorittaessaan burpee-rangaistuksia. Tässä ohjelmassa tuomarin tapahtuma-aikajana päättyy radan purkamiseen tai sen luovuttamiseen vapaaehtoisille Open-aalloissa. Päätuomarisi lähtöinfo kertoo, kumpi pätee tapahtumassasi."
+  },
+  {
+   "heading": "Lähdöt, aallot ja ajanotto",
+   "points": [
+    "Kilpailijan on starttattava omassa lähdössään, aallossaan tai ryhmässään",
+    "Väärästä lähdöstä starttaava Elite-kilpailija siirretään Openiin",
+    "Elite-lähdöt: ensimmäisenä maaliviivan ylittävä voittaa (gun time)",
+    "Age Group-, Open- ja Elite Stadion -lähdöt: chip time. Molemmissa lisätään aikarangaistukset"
+   ],
+   "narration": "Jokaisen kilpailijan on startattava omassa lähdössään, aallossaan tai ryhmässään ja sen mukana. Väärästä lähdöstä startannut kilpailija ei ole oikeutettu palkintoihin, ja väärästä lähdöstä startannut Elite-kilpailija siirretään Open-sarjaan. Ajanotto vaihtelee sarjan mukaan. Elite-lähdössä voittaja on se, joka ylittää maaliviivan ensimmäisenä, ja tätä kutsutaan nimellä gun time. Age Group- ja Open-lähdöissä sekä Eliten Stadion-lähdöissä käytetään chip timea: aikaa lähtöviivan ylityksestä maaliviivan ylitykseen. Kummassakin tapauksessa aikarangaistukset lisätään."
+  },
+  {
+   "heading": "Lyhyesti",
+   "points": [
+    "Kilpasarjat tarkoittavat Eliteä ja Age Groupia; Open on avoin kaikille",
+    "Tuomarit keskittyvät ensisijaisesti kilpasarjojen kilpailijoihin",
+    "Jokainen kilpasarjan kilpailija saa saman valvonnan",
+    "Open-kilpailijoita kannustetaan noudattamaan sääntöjä Spartan-kunniasäännön hengessä"
+   ],
+   "narration": "Lyhyesti. Sarjoja on kahta tyyppiä: kilpasarjat eli Elite ja Age Group sekä Open, joka on avoin kaikille. Tuomarit keskittyvät ensisijaisesti kilpasarjoihin, joissa kilpailijoiden odotetaan noudattavan jokaista sääntöä, ja valvontasi on oltava samanlaista jokaiselle heistä. Open-kilpailijoita kannustetaan noudattamaan sääntöjä myös, rennommassa tunnelmassa ja kunniasäännön hengessä. Elite-lähdöt ratkaistaan gun timella, muut chip timella, ja aikarangaistukset lisätään."
+  }
+ ],
+ "ocr-2-3": [
+  {
+   "heading": "Puolueeton ja ammattimainen",
+   "points": [
+    "Ole puolueeton: sovella sääntöjä samalla tavalla jokaiseen kilpailijaan",
+    "Ole ammattimainen: rauhallinen, neutraali ja kunnioittava",
+    "Tunne kilpailusäännöt ja Officiating SOP"
+   ],
+   "narration": "Tuomarin ajattelutapa alkaa puolueettomuudesta ja ammattimaisuudesta. Spartanin valvontamenettely pyytää sinua soveltamaan esteiden sääntöjä johdonmukaisesti ja puolueettomasti riippumatta siitä, kuka kilpailija on. Pysy rauhallisena, neutraalina ja kunnioittavana ja edusta Spartania ammattimaisesti. Kaksi tärkeintä dokumenttiasi ovat Spartanin kilpailusäännöt ja Officiating Standard Operating Procedure. Tutustu molempiin ennen tapahtumaa ja varmista, että tunnet ja ymmärrät oman esteesi säännöt."
+  },
+  {
+   "heading": "Säännön tarkoitus, reiluus ja turvallisuus",
+   "points": [
+    "Keskity säännön tarkoitukseen, älä vähäiseen vahingossa tapahtuneeseen kosketukseen",
+    "Kysy, saiko kilpailija edun",
+    "Aseta reiluus ja kilpailijoiden turvallisuus etusijalle"
+   ],
+   "narration": "Keskity siihen, mitä varten sääntö on olemassa, äläkä vähäiseen vahingossa tapahtuneeseen kosketukseen. Yksi ohjelman tilanteista on kilpailija, joka koskettaa hetkellisesti esteen yläosaa mutta ei saa siitä etua. Mietittävä kysymys on, syntyikö etu. Aseta reiluus ja kilpailijoiden turvallisuus etusijalle. Kilpailijoiden terveyden, turvallisuuden ja hyvinvoinnin suojaaminen on yksi sääntökirjan ilmoitetuista tavoitteista. Jos huomaat esteellä turvallisuusongelman, ilmoita siitä heti päätuomarille tai kilpailunjohtajalle."
+  },
+  {
+   "heading": "Epävarmana ohjaa eteenpäin",
+   "points": [
+    "Ohjaa eteenpäin jokainen tilanne, josta et ole varma",
+    "Et ole varma rangaistuksesta tai sen valvonnasta: ota heti yhteys päätuomariin",
+    "Epäilyt, turvallisuushuolet tai epäjohdonmukaisuudet: ilmoita heti"
+   ],
+   "narration": "Sinulta ei odoteta, että ratkaiset jokaisen tilanteen yksin. Kun olet epävarma, ohjaa asia eteenpäin. Spartanin valvontamenettelyn mukaan jos rangaistuksen tyypistä tai sen valvonnasta on mitään epävarmuutta, otat heti yhteyden päätuomariin. Kun saavut esteellesi, ilmoita kaikki epäilyt, turvallisuushuolet tai epäjohdonmukaisuudet heti kilpailunjohtajalle tai päätuomarille. Päätuomari on tapahtuman sääntöjen lopullinen auktoriteetti, joten asian eteenpäin ohjaaminen kuuluu työn hyvään tekemiseen."
+  },
+  {
+   "heading": "Ennen kisapäivää",
+   "points": [
+    "Suorita tapahtumaa edeltävä koulutus ennen kuin osallistut",
+    "Se kattaa sääntökirjan painottaen usein epäonnistuttavia esteitä",
+    "Se kattaa myös tuomarin työnkulun, burpee-standardit ja videon Spear Throwssa",
+    "Saat lähtöinfopaketin ja pääsyn videoopetuksiin"
+   ],
+   "narration": "Aikajanasi alkaa ennen kisapäivää. Päätuomari huolehtii siitä, että jokainen tuomari suorittaa vakiomuotoisen tapahtumaa edeltävän koulutuksen ennen osallistumista. Se kattaa Spartanin sääntökirjan painottaen esteitä, joilla epäonnistutaan useimmin. Se kattaa myös tuomarin prosessin ja työnkulun, burpee-standardit ja niiden valvonnan sekä videotallennuksen ja -tarkistuksen, jota käytetään vain Spear Throwssa. Saat myös tapahtumaa edeltävän lähtöinfopaketin ja pääsyn virallisiin videoopetuksiin."
+  },
+  {
+   "heading": "Kisa-aamu",
+   "points": [
+    "Kirjaudu sisään, vahvista esteesi ja nouda varusteesi",
+    "Osallistu päätuomarin pakolliseen paikan päällä pidettävään lähtöinfoon",
+    "Saavu esteellesi hyvissä ajoin ennen ensimmäistä kilpasarjan aaltoa",
+    "Tarkasta este, kävele rangaistuslenkki ja valitse, missä seisot"
+   ],
+   "narration": "Kisa-aamuna ilmoittaudu teltalle, jonka sinulle on kerrottu, kirjaudu sisään, vahvista esteesi määräys ja nouda varusteesi. Liity viestintäkanavaan, jos sellaista käytetään. Osallistu päätuomarin pakolliseen paikan päällä pidettävään lähtöinfoon. Siirry sitten esteellesi hyvissä ajoin ennen ensimmäistä kilpasarjan aaltoa. Siellä tarkasta rakenne, tarkista, mistä suunnasta kilpailijat lähestyvät, kävele koko rangaistuslenkki ja päätä, missä seisot, jotta näet selvästi yritykset, suoritukset ja epäonnistumiset."
+  },
+  {
+   "heading": "Kilpailun aikana ja sen jälkeen",
+   "points": [
+    "Valvo Elite- ja kilpasarjojen aaltoja",
+    "Sen jälkeen pura rata tai luovuta se vapaaehtoisille Open-aalloissa",
+    "Palattuasi: kuvamateriaali menee videotarkistukseen, kirjalliset ratkaisut päätuomarille",
+    "Kilpailijat vievät protestit päätuomarille protestiajan kuluessa"
+   ],
+   "narration": "Kilpailun aikana valvot esteelläsi Elite- ja kilpasarjojen aaltoja. Sen jälkeen, tapahtumasta riippuen, puret radan tai luovutat sen vapaaehtoisille Open-aalloissa. Kun tuomarit palaavat, päätuomari hallinnoi kuvamateriaalin videotarkistusta. Missä videota ei ole, ratkaisusi tehdään paikan päällä, kirjoitetaan ylös ja luovutetaan päätuomarille, kun palaat. Tulokset ovat lopullisia vasta virallisen tarkistuksen jälkeen. Kilpailija, joka haluaa protestoida rangaistuksesta, vie sen päätuomarille protestiajan kuluessa.",
+   "review": "Tarkistettavana vuodelle 2027: sääntökirjan (3.19.1) mukaan protestiaika päättyy 15 minuuttia ennen sarjan palkintojenjakoa. Officiating SOP (4.2) antaa esimerkkinä katkaisuajaksi puoli tuntia ennen palkintojenjakoa. Siihen asti noudata sääntökirjaa, seuraa päätuomarin ilmoittamia protestiaikoja ja ohjaa jokainen protestoiva kilpailija päätuomarille."
+  },
+  {
+   "heading": "Lyhyesti",
+   "points": [
+    "Ole puolueeton, ammattimainen ja johdonmukainen",
+    "Mieti säännön tarkoitusta; aseta reiluus ja turvallisuus etusijalle",
+    "Epävarmana ohjaa asia päätuomarille",
+    "Päiväsi: koulutus, sisäänkirjautuminen, lähtöinfo, valmistelu, valvonta, luovutus"
+   ],
+   "narration": "Lyhyesti. Ole puolueeton ja ammattimainen ja sovella sääntöjä samalla tavalla jokaiseen kilpailijaan. Keskity säännön tarkoitukseen vähäisen vahingossa tapahtuneen kosketuksen sijaan ja aseta reiluus ja kilpailijoiden turvallisuus etusijalle. Kun olet epävarma, ohjaa asia päätuomarille. Tapahtuma-aikajanasi kulkee tapahtumaa edeltävästä koulutuksesta ja lähtöinfosta sisäänkirjautumisen ja varusteiden, esteen tarkastuksen ja valmistelun kautta kilpasarjojen aaltojen valvontaan ja lopuksi radan purkamiseen tai sen luovuttamiseen vapaaehtoisille Open-aalloissa."
+  }
+ ],
+ "ocr-3-1": [
+  {
+   "heading": "Työvuoroon ilmoittautuminen",
+   "points": [
+    "Ilmoittaudu vapaaehtoisten teltalle tai tuomariteltalle sinulle annettuna ilmoittautumisaikana",
+    "Kirjaudu sisään vapaaehtoiskoordinaattorin tai päätuomarin luona",
+    "Vahvista esteesi määräys",
+    "Tee itsesi tunnetuksi päätuomarille"
+   ],
+   "narration": "Kisapäiväsi alkaa sisäänkirjautumisesta. Mene vapaaehtoisten teltalle tai tuomariteltalle, jos tapahtumassasi sellainen on, sinulle annettuna ilmoittautumisaikana. Kirjaudu sisään vapaaehtoiskoordinaattorin tai päätuomarin luona ja vahvista, mille esteelle sinut on määrätty. Vaikka joku muu kirjaisi sinut sisään, varmista, että päätuomari tietää sinun olevan paikalla. Ennen ensimmäistä Elite-lähtöä päätuomarin on vahvistettava, että jokainen tuomari on paikallaan."
+  },
+  {
+   "heading": "Mitä noudat sisäänkirjautumisessa",
+   "points": [
+    "Viralliset materiaalit: tuomarin paita, lippis, kulkulupa tai muu määrätty varustus",
+    "Esteesi QR-koodikyltti, ellei se ole jo paikallaan",
+    "Paikka viralliselle viestintäkanavalle, kuten WhatsApp-ryhmälle"
+   ],
+   "narration": "Sisäänkirjautumisessa saat viralliset valvontamateriaalisi. Niihin kuuluvat tuomarin paita, lippis ja kulkulupa sekä kaikki muu sinulle määrätty varustus. Nouda myös esteesi QR-koodikyltti, ellei se ole jo asetettu paikalleen. Se linkittää kyseisen esteen videoopetukseen. Varmista lopuksi, että sinut lisätään viralliselle viestintäkanavalle. Se voi olla WhatsApp-ryhmä, toinen viestialusta tai suora yhteys päätuomariin."
+  },
+  {
+   "heading": "Tuomarin varusteet",
+   "points": [
+    "Tuomarin paita tai liivi",
+    "Kirjoitusalusta tai muistikirja, mieluiten vedenpitävä",
+    "Esteesi tulostetut sääntölaput",
+    "Videokamera ja jalusta vain, jos sinulle on sellainen määrätty"
+   ],
+   "narration": "Vuoden 2026 ohjelma luettelee, mitä tuomari tarvitsee esteellä. Pidä päälläsi tuomarin paitaa tai liiviä. Kanna mukanasi kirjoitusalustaa tai muistikirjaa, mieluiten vedenpitävää, koska kirjaat otsanauhojen numeroita ja muistiinpanoja, joskus märissä olosuhteissa. Ota mukaan esteesi tulostetut sääntölaput, jotta voit tarkistaa säännön paikan päällä. Jos sinulle on määrätty kamera, sinulla on myös videokamera ja jalusta."
+  },
+  {
+   "heading": "Tuo omat välttämättömyytesi",
+   "points": [
+    "Matkapuhelin",
+    "Olosuhteisiin sopiva vaatetus",
+    "Kynät tai lyijykynät, ruoka ja vesi",
+    "Kaikki tarvitsemasi henkilökohtainen, kuten lääkitys"
+   ],
+   "narration": "Tuo myös omat välttämättömyytesi. Tarvitset matkapuhelimen, koska sen kautta pysyt yhteydessä päätuomariin viestintäkanavalla. Pukeudu päivän olosuhteisiin sopivasti. Pakkaa mukaan kynät tai lyijykynät, ruokaa ja vettä sekä kaikki tarvitsemasi henkilökohtainen, kuten lääkitys. Kun kilpasarjojen aallot alkavat, huomiosi kuuluu esteellesi, joten tule valmistautuneena."
+  },
+  {
+   "heading": "Videovarusteet",
+   "points": [
+    "Päätuomari valmistelee, testaa ja jakaa valvontavarusteet",
+    "Kamerat, joiden akku kestää vähintään 2,5 tuntia, ja tarvittaessa varaakut",
+    "Säädettävät 7 jalan jalustat ja vähintään 32 Gt:n SD-kortit Full HD:lle",
+    "Video esteillä on vain Spear Throwta varten"
+   ],
+   "narration": "Valvontavarusteet ovat päätuomarin vastuulla. Hän valmistelee ja testaa ne tapahtumaa edeltävänä perjantaina ja jakaa ne kisapäivänä lopullisten ohjeiden kanssa. Menettelyssä on varusteille vähimmäisvaatimukset: videokamerat, joiden akku kestää vähintään kaksi ja puoli tuntia, varaakut, säädettävät seitsemän jalan jalustat ja muistikortit, joiden koko on vähintään kolmekymmentäkaksi gigatavua ja jotka ovat riittävän nopeita Full HD:lle. Videotallennus esteillä on vain Spear Throwta varten. Jos saat siellä kameran, pystytät sen ja tarkistat, että se tallentaa, ennen ensimmäistä Elite-aaltoa."
+  },
+  {
+   "heading": "Lyhyesti",
+   "points": [
+    "Ilmoittaudu teltalle ajoissa, kirjaudu sisään ja vahvista esteesi",
+    "Nouda materiaalit ja QR-kyltti ja liity viestintäkanavalle",
+    "Tuo vedenpitävä alusta, sääntölaput, puhelin, ruokaa ja vettä",
+    "Kamera ja jalusta vain, jos sinut on määrätty kuvaamaan Spear Throwta"
+   ],
+   "narration": "Lyhyesti. Ilmoittaudu teltalle ilmoittautumisaikanasi, kirjaudu sisään, vahvista esteesi ja kerro päätuomarille olevasi paikalla. Nouda materiaalisi ja esteesi QR-koodikyltti ja liity viestintäkanavalle. Tuo vedenpitävä alusta tai muistikirja, sääntölaput, puhelin, ruokaa ja vettä. Kannat kameraa ja jalustaa vain, jos sinut on määrätty kuvaamaan Spear Throwta."
+  }
+ ],
+ "ocr-3-2": [
+  {
+   "heading": "Lähtöinfo tulee ensin",
+   "points": [
+    "Päätuomarin paikan päällä pidettävä lähtöinfo on pakollinen ennen kuin lähdet paikoillesi",
+    "Se kattaa määräykset, estetyypit, rangaistuslenkit ja burpee-standardin",
+    "Se kattaa myös tapahtuman menettelyt ja rangaistusten raportoinnin",
+    "Saavu sitten esteellesi hyvissä ajoin ennen ensimmäistä kilpasarjan aaltoa"
+   ],
+   "narration": "Ennen kuin lähdet radalle, osallistut päätuomarin paikan päällä pidettävään lähtöinfoon. Se on pakollinen. Se kattaa tapahtuman omat menettelyt, missä kukin este on ja kuka sille on määrätty, mitkä esteet ovat pakollisia ja mitkä sallivat useita yrityksiä, rangaistuslenkit, burpee-standardin, kameran sijoittelun Spear Throwssa sekä sen, miten rangaistukset tunnistetaan, raportoidaan ja viestitään. Lähtöinfon jälkeen siirry esteellesi niin ajoissa, että ehdit valmistautua ennen kuin ensimmäinen kilpasarjan aalto saapuu."
+  },
+  {
+   "heading": "Tunne esteesi säännöt",
+   "points": [
+    "Lue esteesi ohjeet, epäonnistumistavat ja lisähuomautukset",
+    "Käytä esteesi sääntölappua, tehtävälappua ja QR-koodivideota",
+    "Tarkista miesten ja naisten vaihtoehdot: seinillä punainen askelma on vain naiskilpailijoille"
+   ],
+   "narration": "Käy läpi ja ymmärrä esteesi säännöt, ennen kuin ensimmäinen kilpailija saapuu. Sääntökirjassa jokaisella esteellä on kilpailijoiden ohjeet, epäonnistumistavat ja lisähuomautukset. Lue kaikki kolme. Apua ovat myös sääntölappusi, esteen tehtävälappu ja QR-koodin videoopetus. Kiinnitä huomiota miesten ja naisten erilaisiin vaihtoehtoihin. Esimerkiksi kuuden–yhdeksän jalan seinillä punaista askelmaa saavat käyttää vain naiskilpailijat, ja sitä käyttävä miespuolinen kilpailija epäonnistuu esteellä."
+  },
+  {
+   "heading": "Tarkasta rakenne",
+   "points": [
+    "Tarkasta esteen rakenne ja varmista, että se on käyttökelpoinen",
+    "Tutustu kilpailun kulkuun ja suuntaan, josta kilpailijat saapuvat",
+    "Ilmoita epäilyt, turvallisuushuolet tai epäjohdonmukaisuudet heti kilpailunjohtajalle tai päätuomarille"
+   ],
+   "narration": "Kun saavut paikalle, tarkasta este. Tarkista, että se on pystytetty oikein ja käyttökelpoisessa kunnossa. Katso, miten kilpailu kulkee sen läpi ja mistä suunnasta kilpailijat tulevat, jotta tiedät, missä he saapuvat ja mistä he lähtevät. Jos jokin huolestuttaa, olipa se epäilys rakenteesta, turvallisuushuoli tai jokin epäjohdonmukaisuus, ilmoita siitä heti kilpailunjohtajalle tai päätuomarille. Älä odota, että kilpailijat saapuvat."
+  },
+  {
+   "heading": "Kävele rangaistuslenkki",
+   "points": [
+    "Kävele koko rangaistuslenkki, jos sellainen on",
+    "Tunne reitti ja täsmälleen se kohta, jossa kilpailijat palaavat radalle",
+    "Lenkit vaihtelevat: juoksu, kantaminen, ryömiminen tai matkaan perustuva, esteesi osalta vahvistetun mukaan",
+    "Sama rangaistus koskee kaikkia sarjassa tai lähdössä"
+   ],
+   "narration": "Jos esteelläsi on rangaistuslenkki, kävele koko lenkki itse. Sinun on ymmärrettävä reitti ja paluukohta, jotta voit ohjata kilpailijaa selvästi ja nähdä, suorittaako hän sen. Lenkit eivät ole kaikki samanlaisia. Sääntökirjan mukaan niiden pituus voi vaihdella maaston mukaan, ja niihin voi kuulua kantamista, ryömimistä tai muita elementtejä. Päätuomari vahvistaa jokaisen esteen rangaistusmuodon kilpailunjohtajan kanssa. Mikä se onkin, sitä sovelletaan johdonmukaisesti sarjan tai lähdön sisällä.",
+   "review": "Tarkistettavana vuodelle 2027: sääntökirjan (3.17.3) mukaan rangaistus on lenkki tai 30 burpeeta sen mukaan, mitä Spartan määrittää kullekin esteelle ja tapahtumalle. Officiating SOP:n mukaan useimmilla esteillä rangaistus on lenkki ja Spear Throwssa burpeet, ja vuoden 2026 ohjelman mukaan burpeet vain Spear Throwssa. Siihen asti sovella päätuomarin esteellesi vahvistamaa rangaistusta ja ota yhteys päätuomariin, jos et ole varma."
+  },
+  {
+   "heading": "Missä seisot",
+   "points": [
+    "Valitse paikka, josta näet selvästi yritykset, suoritukset ja epäonnistumiset",
+    "Pidä näkymäsi esteelle esteettömänä",
+    "Vain Spear Throwssa: pystytä kamera Spear Throw -menettelyn kuvauksen mukaan",
+    "Varmista, että kamera tallentaa ennen ensimmäistä Elite-aaltoa"
+   ],
+   "narration": "Päätä, missä seisot, ennen kuin kilpailu alkaa. Tarvitset paikan, josta näet selvästi jokaisen yrityksen, jokaisen suorituksen ja jokaisen epäonnistumisen, ilman että mikään peittää näkymääsi. Mieti, missä epäonnistumiset esteelläsi yleensä tapahtuvat, ja ole niin lähellä, että voit puhutella kilpailijaa, kun sellainen tapahtuu. Vain Spear Throwssa pystytät myös videokameran Spear Throw -valvontamenettelyn mukaisesti ja varmistat, että se tallentaa, ennen kuin ensimmäinen Elite-aalto starttaa. Päätuomari voi käydä tarkistamassa valvonnan ja kameran paikan."
+  },
+  {
+   "heading": "Lyhyesti",
+   "points": [
+    "Osallistu pakolliseen lähtöinfoon ja saavu sitten esteellesi hyvissä ajoin",
+    "Tunne sen ohjeet, epäonnistumistavat ja huomautukset",
+    "Tarkasta rakenne, kävele rangaistuslenkki, ilmoita huolet heti",
+    "Seiso paikassa, josta näet jokaisen yrityksen; Spear Throwssa tarkista, että kamera tallentaa"
+   ],
+   "narration": "Lyhyesti. Osallistu päätuomarin lähtöinfoon ja siirry sitten esteellesi hyvissä ajoin ennen ensimmäistä kilpasarjan aaltoa. Tunne sen ohjeet, epäonnistumistavat ja lisähuomautukset, mukaan lukien miesten ja naisten vaihtoehdot. Tarkasta rakenne, kävele rangaistuslenkki ja ilmoita epäilyt ja turvallisuushuolet heti. Valitse sitten paikka, josta näet jokaisen yrityksen, ja Spear Throwssa varmista, että kamera tallentaa ennen ensimmäistä Elite-aaltoa."
+  }
+ ],
+ "ocr-3-3": [
+  {
+   "heading": "Kenelle raportoit",
+   "points": [
+    "Tuomari, sitten päätuomari, sitten kilpailunjohtaja tai ajanottotiimi",
+    "Raportoit päätuomarille: sääntökirja kutsuu tätä roolia nimellä Head Official",
+    "Päätuomari on sääntöjen valvonnan ja tulkinnan lopullinen auktoriteetti"
+   ],
+   "narration": "Vuoden 2026 ohjelma tiivistää viestintäketjun yhteen riviin: tuomari, sitten päätuomari, sitten kilpailunjohtaja tai ajanottotiimi. Tuomarina raportoit päätuomarille. Sääntökirja kutsuu häntä nimellä Head Official ja tekee hänestä kaikkien sääntöasioiden ylimmän päättäjän tapahtumassa sekä sääntöjen valvonnan ja tulkinnan lopullisen auktoriteetin. Raporttisi menevät päätuomarille, joka välittää ne eteenpäin."
+  },
+  {
+   "heading": "Mitä päätuomari välittää eteenpäin",
+   "points": [
+    "Kilpailun tapahtumat menevät kilpailunjohtajalle, joka johtaa tapahtuman kokonaistoimintaa",
+    "Kilpailijoiden tapaukset, kuten huijaaminen tai oikaisu, menevät ajanotolle",
+    "Vahvistetut rangaistukset ja hylkäämiset menevät kilpailunjohtajalle ja ajanotolle",
+    "Lopulliset rangaistusratkaisut voivat vahvistaa päätuomari ja ajanottotiimi"
+   ],
+   "narration": "Päätuomari yhdistää sinut muuhun tapahtumaan. Hän pitää kilpailunjohtajan, joka vastaa tapahtuman kokonaistoiminnasta, ajan tasalla kilpailun tapahtumista. Hän kertoo ajanottotiimille kilpailijoiden tapauksista, kuten huijaamisesta tai oikaisuista. Videotarkistuksen jälkeen hän ilmoittaa vahvistetut rangaistukset ja hylkäämiset kilpailunjohtajalle sekä ajanotto- ja teknologiatiimille. Sinun tehtäväsi on valvoa esteen sääntöjä, ohjata kilpailijat rangaistuksiin ja kirjata, mitä tapahtui. Lopulliset rangaistusratkaisut voivat vahvistaa päätuomari ja ajanottotiimi."
+  },
+  {
+   "heading": "Milloin soittaa",
+   "points": [
+    "Liity viralliselle kanavalle sisäänkirjautuessasi: ryhmächat, alusta tai suoraan päätuomari",
+    "Et ole varma rangaistuksen tyypistä tai sen valvonnasta: ota heti yhteys päätuomariin",
+    "Epäilyt tai turvallisuushuolet esteellä: kilpailunjohtaja tai päätuomari",
+    "Vaarat: ilmoita välittömästi päätuomarille, kilpailunjohtajalle tai Spartanin henkilöstölle"
+   ],
+   "narration": "Sisäänkirjautuessasi liityt viralliselle viestintäkanavalle. Se voi olla WhatsApp-ryhmä, toinen viestialusta tai suora yhteys päätuomariin. Käytä sitä. Jos et ole varma, mikä rangaistus on voimassa tai miten sitä valvotaan, ota heti yhteys päätuomariin arvaamisen sijaan. Ilmoita esteelläsi havaitsemasi epäilyt, turvallisuushuolet tai epäjohdonmukaisuudet kilpailunjohtajalle tai päätuomarille. Ja ilmoita kaikista vaaroista välittömästi päätuomarille, kilpailunjohtajalle tai Spartanin henkilöstölle."
+  },
+  {
+   "heading": "Kiistan tai karkaamisen raportointi",
+   "points": [
+    "Kiista: kirjaa otsanauhan numero ja syy ja raportoi se heti kun voit",
+    "Ei numeroa: raportoi heti selkeällä kuvauksella, kuten vaatetuksella ja sarjalla",
+    "Auta tunnistamaan kilpailija myöhemmin radalla, jos sitä pyydetään",
+    "Ei videota: kirjoita rangaistusratkaisusi ylös ja luovuta ne päätuomarille"
+   ],
+   "narration": "Useimmat raportit koskevat kilpailijoita. Jos kilpailija kiistää ratkaisun, kirjaa hänen otsanauhansa numero, kirjoita ylös syy, kuten epäonnistuminen esteellä ilman rangaistusta, ja raportoi asia päätuomarille niin pian kuin voit. Jos kilpailija poistuu suorittamatta rangaistusta etkä saa hänen numeroaan, raportoi asia silti heti selkeällä kuvauksella: vaatteiden väri, tunnistettavat piirteet ja kilpasarja. Missä videota ei ole, teet rangaistusratkaisut paikan päällä, kirjoitat ne ylös ja luovutat ne päätuomarille palatessasi."
+  },
+  {
+   "heading": "Lyhyesti",
+   "points": [
+    "Reittisi kulkee päätuomarille, joka tiedottaa kilpailunjohtajaa ja ajanottoa",
+    "Liity kanavalle sisäänkirjautuessasi ja käytä sitä",
+    "Kysy päätuomarilta epävarmana ja ilmoita vaaroista välittömästi",
+    "Kirjaa otsanauhojen numerot ja syyt sekä raportoi kiistat ja karkaamiset"
+   ],
+   "narration": "Lyhyesti. Raportoit päätuomarille, ja päätuomari tiedottaa kilpailunjohtajaa ja ajanottotiimiä. Liity viestintäkanavalle sisäänkirjautuessasi ja käytä sitä. Kun et ole varma rangaistuksesta, kysy heti päätuomarilta ja ilmoita vaaroista välittömästi. Kiistojen ja karkaamisten osalta kirjaa otsanauhan numero tai selkeä kuvaus, merkitse syy ja raportoi asia."
+  }
+ ],
+ "ocr-4-1": [
+  {
+   "heading": "Kolme estetyyppiä",
+   "points": [
+    "Pakollinen: on suoritettava ennen kuin kilpailija jatkaa",
+    "Usean yrityksen (läpäisty/hylätty): yritä uudelleen, kunnes onnistuu tai rangaistus tulee",
+    "Yhden yrityksen (läpäisty/hylätty): sitoutumisen jälkeen suorita este tai ota rangaistus",
+    "Sääntökirjan osa D luettelee jokaisen esteen yhden kolmesta tyypistä"
+   ],
+   "narration": "Sääntökirja jakaa esteet pakollisiin ja läpäisty- tai hylätty-esteisiin. Läpäisty- tai hylätty-esteitä on kahta lajia, usean yrityksen ja yhden yrityksen esteitä, joten käytännössä työskentelet kolmen tyypin kanssa. Pakollinen este on suoritettava, ennen kuin kilpailija pääsee pidemmälle. Usean yrityksen estettä voi yrittää niin monta kertaa kuin tarvitaan, kunnes se on suoritettu tai rangaistus annetaan. Yhden yrityksen este on suoritettava, kun kilpailija on sitoutunut, tai rangaistus astuu voimaan. Sääntökirja luettelee jokaisen esteen yhden tyypin alla, ja lähtöinfo käy läpi luokitukset.",
+   "review": "Tarkistettavana vuodelle 2027: sääntökirja ja vuoden 2026 ohjelma luokittelevat useita esteitä eri tavoin. Sääntökirjassa Monkey Bars, Multi-Rig, Twister, Olympus, Z Wall, Beater ja Helix ovat yhden yrityksen esteitä, Atlas Carry, Tire Flip ja Stairway to Sparta usean yrityksen esteitä ja A-Frame Cargo pakollinen. Ohjelma luettelee ensimmäisen ryhmän usean yrityksen esteiksi, toisen pakollisiksi ja A-Frame Cargon usean yrityksen esteeksi. Siihen asti sovella esteen sääntökirjan osaa ja ohjaa kiistanalainen ratkaisu päätuomarille."
+  },
+  {
+   "heading": "Jokaista estettä on yritettävä",
+   "points": [
+    "Yritys tarkoittaa vähintään esteen koskettamista",
+    "Se voi sisältää veteen tai vaikeaan maastoon astumisen esteelle päästäkseen",
+    "Maastoa ei voi ohittaa rangaistuksella, ellei lähtöinfo tai kisahenkilöstö salli sitä",
+    "Esteen yrittämättä jättäminen on yleinen rikkomus, jota kannattaa tarkkailla"
+   ],
+   "narration": "Jokaista estettä on yritettävä. Sääntökirja asettaa vähimmäisvaatimuksen: yritys on esteen koskettamista. Joskus yritykseen kuuluu myös esteelle pääseminen, esimerkiksi veteen astuminen tai muun vaikean maaston ylittäminen. Sitä maastoa ei voi ohittaa ottamalla rangaistuksen, ellei kilpailua edeltävissä lähtöinfoissa tai kisapäivän henkilöstö ole sanonut sen olevan hyväksyttävää. Vuoden 2026 ohjelma luettelee esteen yrittämättä jättämisen yleisten sääntörikkomusten joukkoon, joten tarkkaile kilpailijoita, jotka suuntaavat rangaistukseen yrittämättä."
+  },
+  {
+   "heading": "Pakolliset esteet",
+   "points": [
+    "Suoritetaan kokonaan: ei ohitusta eikä rangaistusta sen tilalle, ellei toimitsija toisin sano",
+    "Epäonnistuminen tarkoittaa hylkäämistä; kilpailunjohtaja voi korvata sen aikarangaistuksella",
+    "Esimerkkejä: Bucket Carry, Sandbag Carry, Log Carry, Barbed Wire Crawl",
+    "Bucket Carry: materiaalin menetys tarkoittaa koko radan uusimista täydellä ämpärillä"
+   ],
+   "narration": "Pakollinen este on suoritettava kokonaan, ennen kuin kilpailija jatkaa. Kilpailija ei voi ohittaa sitä tai vaihtaa sitä rangaistukseen, ellei kisatoimitsija ohjeista häntä niin. Sääntökirjan mukaan pakollisen esteen epäonnistuminen tarkoittaa hylkäämistä, vaikka kilpailunjohtaja voi korvata sen aikarangaistuksella rikkomuksen vakavuuden mukaan. Kantamiset ja ryömimiset ovat tyypillisiä. Esimerkiksi Bucket Carryssa ei ole burpee-vaihtoehtoa, ja ämpäri, joka palaa materiaali puuttuen, tarkoittaa, että kilpailija uusii koko radan oikein täytetyllä ämpärillä."
+  },
+  {
+   "heading": "Usean yrityksen esteet",
+   "points": [
+    "Kilpailija voi yrittää uudelleen niin monta kertaa kuin tarvitaan",
+    "Päättyy suoritukseen tai siihen, että kilpailija luovuttaa ja ottaa rangaistuksen",
+    "Esimerkkejä: Rope Climb, Bender, Inverted Wall",
+    "Rope Climb: vaihda köyttä vasta maahan palattuasi; yksi köysi yritystä kohden"
+   ],
+   "narration": "Usean yrityksen estettä voi yrittää yhä uudelleen. Kilpailija jatkaa, kunnes joko suorittaa sen tai päättää luovuttaa ja ottaa rangaistuksen. Kunkin esteen säännöt kertovat, mitä uusintayritys tarkoittaa. Rope Climbissa kilpailija voi esimerkiksi vaihtaa köyttä maahan palattuaan ja yrittää uudelleen, mutta useamman kuin yhden köyden käyttäminen yhden yrityksen aikana on epäonnistuminen. Toistuvia yrityksiä tekevien kilpailijoiden tulisi antaa tietä ensimmäistä kertaa yrittäville, vaikka sääntökirjan mukaan se ei ole pakollista."
+  },
+  {
+   "heading": "Yhden yrityksen esteet: milloin sitoutuminen alkaa",
+   "points": [
+    "Sitoutumisen jälkeen kilpailija suorittaa esteen tai ottaa rangaistuksen: ei uutta yritystä",
+    "Kunkin esteen omat säännöt määrittelevät, milloin sitoutuminen alkaa",
+    "Spear Throw: kun keihäs vapautetaan eteenpäin suuntautuvalla liikkeellä",
+    "Ape Hanger: kun kilpailija koskettaa mitä tahansa yläpuolisista tangoista"
+   ],
+   "narration": "Yhden yrityksen este antaa kilpailijalle yhden yrityksen sen jälkeen, kun hän on sitoutunut. Sen jälkeen hän joko suorittaa esteen tai ottaa rangaistuksen. Keskeinen kysymys on, milloin sitoutuminen alkaa, ja sääntökirja vastaa siihen este kerrallaan. Spear Throwssa yritys alkaa, kun keihäs vapautetaan eteenpäin suuntautuvalla liikkeellä. Ape Hangerissa kilpailija on sitoutunut, kun hän koskettaa mitä tahansa yläpuolisista tangoista. Tunne esteesi sitoutumiskohta: se ratkaisee, voiko kilpailija vielä aloittaa alusta.",
+   "review": "Tarkistettavana vuodelle 2027: vuoden 2026 ohjelman mukaan sitoutuminen alkaa, kun yrityksen liike alkaa, ja Spear Throwssa silloin, kun keihästä vedetään taakse heittoa varten. Sääntökirja määrittelee sitoutumisen este kerrallaan, ja Spear Throwssa se tapahtuu vapautuksessa. Siihen asti sovella kunkin esteen sääntöä ja ohjaa kiistanalainen ratkaisu päätuomarille."
+  },
+  {
+   "heading": "Mikä on epäonnistuminen",
+   "points": [
+    "Arvioi esteesi sääntöjen epäonnistumistapoja vasten",
+    "Kellon potkaiseminen jaloilla, säärillä tai polvilla on epäonnistuminen, ei uutta yritystä",
+    "Epäonnistuminen toisen kilpailijan merkittävän häirinnän vuoksi: toimitsija voi sallia uudelleenaloituksen",
+    "Yleisiä epäonnistumisia ovat tukirakenteen käyttö ja kellon soittamatta jättäminen"
+   ],
+   "narration": "Epäonnistuminen määritellään kunkin esteen säännöissä, sen epäonnistumistapojen luettelossa. Arvioi sitä luetteloa vasten, älä omaa käsitystäsi siitä, miten este pitäisi tehdä. Kaksi yleissääntöä pätee esteillä. Kellon potkaiseminen jaloilla, säärillä tai polvilla on epäonnistuminen: kilpailija ei voi yrittää uudelleen ja hänen on suoritettava rangaistus. Ja jos toisen kilpailijan merkittävä fyysinen häirintä aiheuttaa epäonnistumisen, kilpailija voi aloittaa uudelleen ilman lisärangaistusta, kun toimitsija antaa luvan."
+  },
+  {
+   "heading": "Lyhyesti",
+   "points": [
+    "Jokaista estettä on yritettävä: vähintään sitä on kosketettava",
+    "Pakollinen: suorita kokonaan tai joudu hylätyksi",
+    "Usean yrityksen: yritä uudelleen, kunnes onnistut, tai ota rangaistus; yhden yrityksen: yksi yritys sitoutumisen jälkeen",
+    "Arvioi kunkin esteen omia epäonnistumistapoja; mikä este on mitäkin tyyppiä, on tarkistettavana"
+   ],
+   "narration": "Lyhyesti. Jokaista estettä on yritettävä, ja koskettaminen on vähimmäisvaatimus. Pakollinen este on suoritettava kokonaan, ja sen epäonnistuminen tarkoittaa hylkäämistä, ellei kilpailunjohtaja korvaa sitä aikarangaistuksella. Usean yrityksen estettä voi yrittää uudelleen, kunnes se on suoritettu tai kilpailija ottaa rangaistuksen. Yhden yrityksen este sallii yhden yrityksen, kun kilpailija sitoutuu, kyseisen esteen sääntöjen määrittelemässä kohdassa. Arvioi jokaista estettä sen omia epäonnistumistapoja vasten ja muista, että se, mikä este on mitäkin tyyppiä, on tarkistettavana vuodelle 2027."
+  }
+ ],
+ "ocr-5-1": [
+  {
+   "heading": "Kaksi estetyyppiä, kaksi lopputulosta",
+   "points": [
+    "Pakolliset esteet on suoritettava: epäonnistuminen tarkoittaa hylkäämistä",
+    "Kilpailunjohtaja voi korvata sen aikarangaistuksella vakavuuden mukaan",
+    "Läpäisty/hylätty-esteen epäonnistuminen tarkoittaa rangaistusta: rangaistuslenkkiä tai burpeita"
+   ],
+   "narration": "Sääntökirja jakaa esteet kahteen luokkaan. Pakolliset esteet on suoritettava. Yhden epäonnistuminen tarkoittaa hylkäämistä tapahtumasta, vaikka kilpailunjohtaja voi korvata sen aikarangaistuksella rikkomuksen vakavuuden mukaan. Läpäisty- tai hylätty-esteet ovat erilaisia. Kilpailija, joka epäonnistuu sellaisella, pysyy kilpailussa ja ottaa sen sijaan rangaistuksen. Rangaistus on joko rangaistuslenkki tai burpeet, ja Spartan määrää, kumpi pätee kullekin esteelle, tapahtumalle, sarjalle tai lähdölle.",
+   "review": "Tarkistettavana vuodelle 2027: sääntö 3.17.3 sanoo, että rangaistus on rangaistuslenkki tai 30 burpeeta sen mukaan, mitä Spartan määrittää kullekin esteelle, tapahtumalle, sarjalle tai lähdölle, ja Stadionissa aina 15 burpeeta. Officiating SOP:n mukaan useimmilla esteillä rangaistus on lenkki ja Spear Throwssa burpeet; vuoden 2026 ohjelman mukaan burpeet vain Spear Throwssa. Siihen asti käytä päätuomarin esteellesi vahvistamaa rangaistusta ja kysy päätuomarilta, jos et ole varma."
+  },
+  {
+   "heading": "Rangaistuslenkki",
+   "points": [
+    "Merkitty radan osuus, jonka kilpailija suorittaa esteen epäonnistuttuaan",
+    "Sen pituus vaihtelee, ja siihen voi kuulua kantamista, ryömimistä tai muita haasteita",
+    "Sitä sovelletaan samalla tavalla kaikkiin sarjassa tai lähdössä",
+    "Kävele koko lenkki ennen kilpailun alkua: tunne reitti ja paluukohta"
+   ],
+   "narration": "Rangaistuslenkki on merkitty radan osuus, jonka kilpailija suorittaa esteen epäonnistuttuaan. Sen pituus voi vaihdella maaston mukaan, ja siihen voi kuulua lisähaasteita, kuten kantamista tai ryömimistä. Suunnittelusta riippumatta sitä sovelletaan johdonmukaisesti kaikkiin samassa sarjassa tai lähdössä. Ennen ensimmäistä kilpasarjan aaltoa kävele koko lenkki itse. Sinun on tunnettava reitti ja paluukohta, jotta voit ohjata kilpailijat oikein ja nähdä jokaisen, joka oikaisee."
+  },
+  {
+   "heading": "Burpee-vajeet",
+   "points": [
+    "Kilpailijoille, jotka eivät suorita vaadittuja burpeita, lisätään aikaa maaliaikaan",
+    "Suuri vaje voi tarkoittaa suurta aikarangaistusta",
+    "Vaje voidaan havaita radalla tai videotarkistuksessa ennen palkintoja",
+    "Kuinka paljon aikaa kukin väliin jäänyt burpee lisää, on tarkistettavana vuodelle 2027"
+   ],
+   "narration": "Kun rangaistus on burpeet, kilpailijalle, joka ei suorita vaadittua määrää, lisätään aikaa kokonaismaaliaikaan. Vuoden 2026 ohjelma toteaa asian yksinkertaisesti: suuri burpee-vaje voi johtaa suureen aikarangaistukseen. Vaje voidaan havaita kilpailun aikana tai virallisessa videotarkistuksessa ennen palkintoja, minkä vuoksi tulokset eivät välttämättä ole lopullisia heti. Se, kuinka paljon aikaa yksi väliin jäänyt burpee tarkalleen lisää, on tarkistettavana, joten tällä oppitunnilla ei opeteta lukua.",
+   "review": "Tarkistettavana vuodelle 2027: sääntö 3.4.2 lisää 30 sekuntia jokaisesta 10 ensimmäisestä väliin jääneestä burpeesta ja yhteensä 10 minuuttia, jos yli 10 jää väliin. Officiating SOP lisää 30 sekuntia kustakin ja 10 minuuttia, jos suoritettuja on alle 20; vuoden 2026 ohjelman mukaan 11 tai useampi virheellinen on 10 minuuttia ja alle 20 on hylkäys. Tällä oppitunnilla ei opeteta lukua, ennen kuin valvontavastaava ratkaisee asian: päätuomari vahvistaa rangaistukset."
+  },
+  {
+   "heading": "Rangaistuksen suorittamatta jättäminen",
+   "points": [
+    "Rangaistuslenkit on suoritettava kokonaan",
+    "Rangaistuksen ohittaminen tuo lisärangaistuksen: lisäaikaa tai hylkäämisen",
+    "Mitä lenkin ohittaminen maksaa, on tarkistettavana vuodelle 2027",
+    "Sinun osuutesi: kirjaa otsanauhan numero ja raportoi se päätuomarille"
+   ],
+   "narration": "Rangaistuslenkit on suoritettava kokonaan. Kilpailija, joka epäonnistuu läpäisty- tai hylätty-esteellä eikä suorita rangaistusta, on rikkonut sääntöjä, ja siitä seuraa hinta. Virallisen videotarkistuksen aikana kisatoimitsijat voivat lisätä aikarangaistuksen tai hylätä. Vuoden 2026 lähteet ovat eri mieltä lenkin ohittamisen tarkasta rangaistuksesta, joten se on tarkistettavana. Sinun osuutesi ei muutu: kirjaa kilpailijan otsanauhan numero, merkitse, mitä tapahtui, ja raportoi se päätuomarille.",
+   "review": "Tarkistettavana vuodelle 2027: sääntö 3.4.1 lisää 10 minuutin aikarangaistuksen, kun kilpailija epäonnistuu läpäisty/hylätty-esteellä eikä suorita rangaistuslenkkiä. Vuoden 2026 ohjelman mukaan rangaistuksen suorittamatta jättäminen voi johtaa hylkäämiseen, ja Officiating SOP ei aseta lukua. Siihen asti, kun valvontavastaava ratkaisee asian, noudata sääntökirjaa: kirjaa se, raportoi se ja jätä rangaistus päätuomarin ratkaistavaksi."
+  },
+  {
+   "heading": "Kun kilpailija lähtee ilman rangaistusta",
+   "points": [
+    "Kirjaa otsanauhan numero ja syy, kuten epäonnistunut este ilman rangaistusta",
+    "Ei numeroa? Anna päätuomarille selkeä kuvaus: vaatetus, tunnistepiirteet, sarja",
+    "Raportoi se heti kun voit ja auta tunnistamaan kilpailija myöhemmin, jos pyydetään"
+   ],
+   "narration": "Valvontamenettely kertoo, mitä tehdä, kun kilpailija poistuu esteeltäsi suorittamatta rangaistusta. Kirjoita ylös hänen otsanauhansa numero ja syy. Raportoi asia päätuomarille niin pian kuin toiminnallisesti voit. Jos et saanut numeroa, raportoi asia silti heti, kilpailijan selkeällä ulkoisella kuvauksella: vaatteiden väri, tunnistettavat piirteet ja kilpasarja. Sinua voidaan pyytää auttamaan hänen tunnistamisessaan myöhemmin radalla."
+  },
+  {
+   "heading": "Lyhyesti",
+   "points": [
+    "Pakollinen este epäonnistui: hylkääminen, ellei kilpailunjohtaja korvaa sitä aikarangaistuksella",
+    "Läpäisty/hylätty-este epäonnistui: rangaistuslenkki, suoritettu kokonaan, tai burpeet",
+    "Väliin jääneet burpeet ja ohitetut lenkit tuovat lisärangaistuksia: määrät ovat tarkistettavana",
+    "Kirjaa otsanauhan numero ja raportoi päätuomarille"
+   ],
+   "narration": "Lyhyesti. Jos kilpailija epäonnistuu pakollisella esteellä, rangaistus on hylkääminen, ellei kilpailunjohtaja korvaa sitä aikarangaistuksella. Jos hän epäonnistuu läpäisty- tai hylätty-esteellä, hän ottaa määrätyn rangaistuksen: rangaistuslenkin, suoritettuna kokonaan, tai burpeet. Väliin jääneet burpeet ja ohitetut lenkit tuovat lisärangaistuksia, ja tarkat määrät ovat tarkistettavana vuodelle 2027. Mitä tahansa tapahtuukin, kirjaa otsanauhan numero ja raportoi se päätuomarille.",
+   "review": "Tarkistettavana vuodelle 2027: burpeet rangaistuksena (sääntö 3.17.3), väliin jääneistä burpeista lisättävä aika (3.4.2) ja lenkin ohittamisen rangaistus (3.4.1) eroavat kaikki sääntökirjan, Officiating SOP:n ja vuoden 2026 ohjelman välillä. Siihen asti, kun valvontavastaava ratkaisee asian, käytä päätuomarin esteellesi vahvistamaa rangaistusta, älä opeta aikalukua ja ohjaa kiistanalaiset ratkaisut päätuomarille."
+  }
+ ],
+ "ocr-5-2": [
+  {
+   "heading": "Tehtäväsi esteellä",
+   "points": [
+    "Varmista, että kilpailijat noudattavat esteen ohjeita",
+    "Tarkkaile sääntörikkomuksia ja tunne esteen epäonnistumisehdot",
+    "Ohjaa jokainen epäonnistunut kilpailija oikeaan rangaistukseen",
+    "Raportoi ongelmat ja sääntöjen noudattamatta jättäminen päätuomarille"
+   ],
+   "narration": "Sääntökirja määrittelee tuomarin toimitsijaksi, joka on nimitetty huolehtimaan sääntöjen noudattamisesta ja joka on yleensä sijoitettu esteelle tai videotarkistusteltalle ja raportoi päätoimitsijalle (Head Official), jota tämä ohjelma kutsuu päätuomariksi. Esteellä se tarkoittaa neljää asiaa. Varmista, että kilpailijat noudattavat ohjeita. Tarkkaile rikkomuksia ja tiedä tarkasti, mikä on epäonnistuminen. Ohjaa jokainen epäonnistuja oikeaan rangaistukseen. Ja raportoi ongelmat päätuomarille."
+  },
+  {
+   "heading": "Jokaista estettä on yritettävä",
+   "points": [
+    "Yritys tarkoittaa vähintään esteen koskettamista",
+    "Se voi sisältää veteen tai vaikeaan maastoon astumisen esteelle päästäkseen",
+    "Maastoa ei voi ohittaa rangaistuksella, ellei lähtöinfo tai kisahenkilöstö salli sitä"
+   ],
+   "narration": "Jokaista estettä on yritettävä. Yritys tarkoittaa vähintäänkin esteen koskettamista. Jos este on vedessä tai muussa vaikeassa maastossa, yritykseen voi kuulua sen maaston läpi pääseminen esteelle. Kilpailijat eivät voi ohittaa sitä maastoa ottamalla rangaistuksen, ellei kilpailua edeltävä lähtöinfo tai kisapäivän henkilöstö ole sanonut sen olevan hyväksyttävää. Kilpailija, joka kävelee suoraan rangaistukseen koskettamatta estettä, ei siis ole täyttänyt sääntöä."
+  },
+  {
+   "heading": "Kellot ja häirintä",
+   "points": [
+    "Kelloa saa lyödä vain käsivarsilla, käsillä tai vartalon osalla rinnan yläpuolella",
+    "Kellon potkaiseminen on epäonnistuminen: ei uutta yritystä, suoraan rangaistukseen",
+    "Epäonnistuiko toisen kilpailijan merkittävän häirinnän vuoksi? Toimitsija voi sallia uudelleenaloituksen"
+   ],
+   "narration": "Kaksi yleissääntöä pätee monilla esteillä. Kelloja saa lyödä vain käsivarsilla, käsillä tai muulla vartalon osalla rinnan yläpuolella. Kilpailija, joka potkaisee kelloa jalalla, sääreellä tai polvella, on epäonnistunut esteellä: hän ei voi yrittää uudelleen ja hänen on suoritettava rangaistus. Ja jos kilpailija epäonnistuu, koska toinen kilpailija häiritsi fyysisesti merkittävästi, toimitsija voi antaa hänelle luvan aloittaa este uudelleen ilman lisärangaistusta. Jos olet epävarma, kysy päätuomarilta."
+  },
+  {
+   "heading": "Rangaistukseen ohjaaminen",
+   "points": [
+    "Lähetä jokainen epäonnistunut kilpailija esteellesi määrättyyn rangaistukseen",
+    "Jokaisen esteen rangaistusmuoto vahvistetaan ennen tapahtumaa ja käydään läpi lähtöinfossa",
+    "Et ole varma, mikä rangaistus pätee? Ota heti yhteys päätuomariin"
+   ],
+   "narration": "Kun kilpailija epäonnistuu, ohjaa hänet selvästi oikeaan rangaistukseen. Ennen tapahtumaa päätuomari vahvistaa jokaisen esteen rangaistusmuodon kilpailunjohtajan kanssa, olipa se juoksulenkki, kantolenkki, ryömintälenkki tai burpeet, ja paikan päällä pidettävä lähtöinfo kertoo, mikä koskee sinun estettäsi. Valvontamenettelyn mukaan useimmilla esteillä on rangaistuslenkki ja Spear Throwssa burpeet. Jos et koskaan ole varma, mikä rangaistus pätee, ota heti yhteys päätuomariin.",
+   "review": "Tarkistettavana vuodelle 2027: sääntö 3.17.3 sanoo, että rangaistus on rangaistuslenkki tai 30 burpeeta sen mukaan, mitä Spartan määrittää kullekin esteelle, tapahtumalle, sarjalle tai lähdölle, ja Stadionissa aina 15 burpeeta. Officiating SOP:n mukaan useimmilla esteillä rangaistus on lenkki ja Spear Throwssa burpeet; vuoden 2026 ohjelman mukaan burpeet vain Spear Throwssa. Siihen asti käytä päätuomarin esteellesi vahvistamaa rangaistusta ja kysy päätuomarilta, jos et ole varma."
+  },
+  {
+   "heading": "Kilpailijan käytös radalla",
+   "points": [
+    "Kilpailijoiden on kuljettava koko virallinen rata: sen seuraaminen on heidän vastuullaan",
+    "Ei fyysistä apua keneltäkään muulta kuin Spartanin toimitsijalta, eikä tahdittamista",
+    "Tieto muiden kilpailijoiden etenemisestä tai ajoista ei ole apua",
+    "Otsanauhan numeron on oltava näkyvissä ja luettavissa koko ajan"
+   ],
+   "narration": "Kilpailijoiden on kuljettava virallinen rata kokonaisuudessaan, ja sen oikea seuraaminen on heidän oma vastuunsa. He eivät saa ottaa vastaan fyysistä apua keneltäkään muulta kuin Spartanin toimitsijalta. Siihen kuuluvat ruoka ja juoma virallisten huoltopisteiden ulkopuolella, välineet, fyysinen tuki ja tahdittaminen, millä tarkoitetaan sitä, että joku juoksee heidän kanssaan valmentaakseen tai määrätäkseen vauhtia. Tieto muiden kilpailijoiden etenemisestä tai ajoista ei ole apua. Otsanauhassa oleva kisanumero on pidettävä selvästi esillä ja luettavissa koko ajan."
+  },
+  {
+   "heading": "Epäurheilijamainen käytös ja raportointi",
+   "points": [
+    "Kilpailijoiden on kohdeltava kaikkia kunnioittavasti: ei loukkaavaa, uhkaavaa tai herjaavaa käytöstä",
+    "Käytöksestä annettavan rangaistuksen päättää päätuomari: sinun tehtäväsi on raportoida se",
+    "Kirjaa otsanauhan numero ja tapahtunut ja raportoi päätuomarille",
+    "Selitä sääntö rauhallisesti äläkä kärjistä riitaa esteellä"
+   ],
+   "narration": "Kilpailijoiden on kohdeltava muita kilpailijoita, Spartanin henkilöstöä, vapaaehtoisia, katsojia ja yleisöä reilusti, kunnioittavasti ja kohteliaasti, eivätkä he saa käyttää loukkaavaa, uhkaavaa tai herjaavaa kieltä tai käytöstä. Epäurheilijamainen käytös voi johtaa rangaistukseen, jonka päättää päätoimitsija, päätuomari. Asiasta riippumatta kirjoita ylös otsanauhan numero ja tapahtunut ja raportoi se niin pian kuin voit. Raportit kulkevat sinulta päätuomarille ja sieltä kilpailunjohtajalle tai ajanottotiimille. Jos kilpailija kiistää ratkaisusi, selitä sääntö rauhallisesti ja vältä riitelyä."
+  },
+  {
+   "heading": "Lyhyesti",
+   "points": [
+    "Jokaista estettä on yritettävä: vähintään sitä on kosketettava",
+    "Tunne epäonnistumisehdot: potkaistu kello on epäonnistuminen",
+    "Lähetä jokainen epäonnistunut esteesi rangaistukseen; epävarmana kysy päätuomarilta",
+    "Kirjaa numero, raportoi päätuomarille äläkä riitele"
+   ],
+   "narration": "Lyhyesti. Jokaista estettä on yritettävä, ja vähimmäisvaatimus on sen koskettaminen. Tunne esteesi ohjeet ja epäonnistumisehdot sekä yleiset ehdot, kuten sen, että potkaistu kello on epäonnistuminen. Lähetä jokainen epäonnistunut kilpailija esteellesi määrättyyn rangaistukseen ja kysy päätuomarilta, jos et ole varma. Kilpailijoiden on seurattava rataa, otettava vastaan ulkopuolista apua ja pidettävä numeronsa näkyvissä. Kun jokin menee pieleen, kirjaa numero, raportoi se äläkä riitele esteellä."
+  }
+ ],
+ "ocr-5-3": [
+  {
+   "heading": "Missä burpeet ovat rangaistus",
+   "points": [
+    "Spartan määrää lenkin tai burpeet kullekin esteelle, tapahtumalle, sarjalle tai lähdölle",
+    "Kun burpeet on määrätty, rangaistus on 30 burpeeta",
+    "Stadion-tapahtumat: aina 15 burpeeta",
+    "Spear Thrown rangaistus on 30 burpeeta"
+   ],
+   "narration": "Säännön 3.17.3 mukaan läpäisty- tai hylätty-esteen rangaistus on joko rangaistuslenkki tai burpeet sen mukaan, mitä Spartan määrittää kullekin esteelle, tapahtumalle, sarjalle tai lähdölle. Kun burpeet on määrätty, ne ovat kolmekymmentä burpeeta. Stadion-tapahtumissa jokaisen esteen rangaistus on viisitoista burpeeta. Spear Thrown rangaistus on kolmekymmentä burpeeta. Ennen tapahtumaa päätuomari vahvistaa jokaisen esteen rangaistusmuodon kilpailunjohtajan kanssa, joten lähtöinfo kertoo, käyttääkö esteesi burpeita.",
+   "review": "Tarkistettavana vuodelle 2027: sääntö 3.17.3 sanoo, että rangaistus on rangaistuslenkki tai 30 burpeeta sen mukaan, mitä Spartan määrittää kullekin esteelle, tapahtumalle, sarjalle tai lähdölle, ja Stadionissa aina 15 burpeeta. Officiating SOP:n mukaan useimmilla esteillä rangaistus on lenkki ja Spear Throwssa burpeet; vuoden 2026 ohjelman mukaan burpeet vain Spear Throwssa. Siihen asti käytä päätuomarin esteellesi vahvistamaa rangaistusta ja kysy päätuomarilta, jos et ole varma."
+  },
+  {
+   "heading": "Burpee-alue",
+   "points": [
+    "Burpeet on tehtävä merkityllä burpee-alueella",
+    "Alueen ulkopuolella tehdyt burpeet eivät lasketa rangaistukseen",
+    "Toimitsijat voivat lisätä alueita, kun yksi on täynnä tai sarjojen erottamiseksi",
+    "Tehtäväsi: varmista, että burpeet tehdään oikealla alueella"
+   ],
+   "narration": "Burpeet on suoritettava merkityn burpee-alueen sisällä. Alueen ulkopuolella tehtyjä ei lasketa rangaistukseen, joten kilpailija, joka ajautuu pois alueelta, tekee toistoja, joita ei hyväksytä. Kisatoimitsijat voivat määrätä lisää burpee-alueita, kun yhdeltä loppuu tila tai kun halutaan pitää kilpailijasarjat erillään. Osa tehtävääsi on varmistaa, että burpeet tehdään oikealla alueella, jossa sinä ja kamera näette ne."
+  },
+  {
+   "heading": "Otsanauha maahan",
+   "points": [
+    "Kilpailija asettaa otsanauhansa maahan suoraan eteensä",
+    "Kadonnut otsanauha: kirjaa kilpailijan nimi tai sano se kameran äänelle",
+    "Kerro päätuomarille jokaisesta kilpailijasta, joka on kuvattu ilman otsanauhaa"
+   ],
+   "narration": "Burpeita tehdessään kilpailija asettaa otsanauhansa maahan suoraan eteensä. Päätuomarin lähtöviivalla tekemät ilmoitukset kattavat tämän, joten kilpailijoiden pitäisi tietää se ennen kuin he saapuvat luoksesi. Jos kilpailija on hukannut otsanauhansa, kirjaa hänen nimensä tai sano kameran äänelle, kuka hän on. Kummassakin tapauksessa kerro päätuomarille jokaisesta kilpailijasta, joka on kuvattu ilman otsanauhaa, jotta materiaali voidaan yhdistää oikeaan henkilöön."
+  },
+  {
+   "heading": "Kilpailijan näyttäminen kameralle",
+   "points": [
+    "Pidä otsanauhaa noin kahden jalan päässä linssistä noin kaksi sekuntia",
+    "Anna se heti takaisin kilpailijalle",
+    "Älä koskaan pidä kahta otsanauhaa kerrallaan äläkä anna kilpailijoiden ojentaa niitä sinulle",
+    "Älä koskaan siirrä kilpailijan vartaloa tai kasvoja kameraa varten"
+   ],
+   "narration": "Spear Throwssa video tunnistaa jokaisen kilpailijan. Pidä otsanauhaa noin kahden jalan päässä kameran linssistä noin kaksi sekuntia, jotta numero näkyy selvästi tarkistuksessa. Palauta se sitten heti kilpailijalle. Älä koskaan pidä kahta otsanauhaa samaan aikaan äläkä anna kilpailijoiden ojentaa otsanauhojaan sinulle. Äläkä koskaan siirrä fyysisesti kilpailijan vartaloa tai kasvoja saadaksesi hänet kuvaan: tunnistus tulee otsanauhasta, jota pidetään selvästi esillä."
+  },
+  {
+   "heading": "Videotarkistus ratkaisee väliin jääneet burpeet",
+   "points": [
+    "Väliin jääneet burpeet ratkaistaan videotarkistuksessa",
+    "Tulokset eivät välttämättä ole lopullisia ennen virallista videotarkistusta",
+    "Materiaali pysyy päätuomarilla eikä sitä koskaan anneta kilpailijoille",
+    "Kolme tehtävääsi: liikestandardi, alue, selkeä tunnistus"
+   ],
+   "narration": "Vuoden 2026 ohjelman mukaan videotarkistus ratkaisee väliin jääneet burpeet. Siksi tuloksia ei välttämättä julkaista heti: virallinen tarkistus tehdään ennen kuin ne ovat lopullisia. Päätuomari hallinnoi tarkistusta tuomarien palatessa esteiltään, säilyttää materiaalin tapahtumapäivän loppuun asti eikä koskaan anna sitä kilpailijoille. Sinun osuutesi radalla mahdollistaa tarkistuksen: valvo liikestandardia, pidä burpeet alueella ja tunnista jokainen kilpailija selvästi kameralle.",
+   "review": "Tarkistettavana vuodelle 2027: väliin jääneistä burpeista lisättävä aika eroaa säännön 3.4.2, Officiating SOP:n ja vuoden 2026 ohjelman välillä, ja SOP antaa paikan päällä olevan tuomarin päättää kirjallisesti, kun videota ei ole. Burpee-aikarangaistuksia käsittelevä oppitunti esittää jokaisen version. Tällä oppitunnilla ei opeteta lukua: päätuomari vahvistaa rangaistukset tarkistuksen jälkeen."
+  },
+  {
+   "heading": "Lyhyesti",
+   "points": [
+    "Burpeet ovat rangaistus siellä, missä Spartan niin määrää: 30 tai Stadionissa 15",
+    "Vain alueella tehdyt burpeet lasketaan",
+    "Otsanauha maahan eteen; näytetään kameralle ja heti takaisin",
+    "Videotarkistus ratkaisee väliin jääneet burpeet"
+   ],
+   "narration": "Lyhyesti. Burpeet ovat rangaistus siellä, missä Spartan niin määrää: kolmekymmentä burpeeta tai Stadion-tapahtumissa viisitoista, ja Spear Throwssa aina. Vain merkityllä alueella tehdyt burpeet lasketaan. Kilpailijan otsanauha asetetaan maahan hänen eteensä, ja sinä näytät sen kameralle pari sekuntia ja annat sen heti takaisin. Videotarkistus ratkaisee sitten väliin jääneet burpeet, joten tehtäväsi on standardi, alue ja selkeä tunnistus.",
+   "review": "Tarkistettavana vuodelle 2027: sääntö 3.17.3 sanoo, että rangaistus on rangaistuslenkki tai 30 burpeeta sen mukaan, mitä Spartan määrittää kullekin esteelle, tapahtumalle, sarjalle tai lähdölle, ja Stadionissa aina 15 burpeeta. Officiating SOP:n mukaan useimmilla esteillä rangaistus on lenkki ja Spear Throwssa burpeet; vuoden 2026 ohjelman mukaan burpeet vain Spear Throwssa. Siihen asti käytä päätuomarin esteellesi vahvistamaa rangaistusta ja kysy päätuomarilta, jos et ole varma."
+  }
+ ],
+ "ocr-6-1": [
+  {
+   "heading": "Yksi täydellinen burpee",
+   "points": [
+    "Yksi kierros kahden asennon välillä: alhaalla ja ylhäällä",
+    "Alaasennosta yläasentoon ja sitten hyppy",
+    "Toisto, josta puuttuu osa standardia, ei ole täydellinen burpee"
+   ],
+   "narration": "Sääntö 3.17.4 määrittelee yhden täydellisen burpeen. Se on yksi kierros kahden kehonasennon välillä, joita kutsutaan ylä- ja alaasennoksi. Kilpailija siirtyy alaasennosta yläasentoon ja hyppää sitten. Jokaisen burpee-rangaistuksen toiston on täytettävä tämä standardi. Toisto, josta puuttuu osa siitä, ei ole täydellinen burpee, ja voit vaatia kilpailijaa tekemään toisen. Seuraavat diat käsittelevät jokaisen osan vuorollaan."
+  },
+  {
+   "heading": "Alhaalla ja ylhäällä",
+   "points": [
+    "Alhaalla: mahallaan maassa, rinta koskettaa maata",
+    "Ylhäällä: tasapainoisesti pystyssä, asento, jonka kuka tahansa pystyy pitämään kaatumatta",
+    "Ylhäällä lantio ja polvet ovat suorina, eivät koukussa"
+   ],
+   "narration": "Alaasento on mahallaan makaaminen kasvot alaspäin maassa, rinta maata koskettaen. Yläasento on tasapainoinen pystyasento: sellainen, jonka kuka tahansa pystyy pitämään pitkään kaatumatta eteen tai taakse. Ylhäällä kilpailijan lantion ja polvien tulisi olla suorina, ei koukussa. Katso kummankin pään asentoa jokaisessa toistossa. Rinta, joka jää vajaaksi maasta, tai lantio, joka on yhä koukussa ylhäällä, tarkoittaa, ettei toisto ole täyttänyt standardia."
+  },
+  {
+   "heading": "Hyppy",
+   "points": [
+    "Takaisin ylhäällä kilpailija hyppää",
+    "Kädet ojennetaan ylös korvien yläpuolelle",
+    "Ei hyppyä tai kädet eivät korvien yläpuolella: toisto ei ole täydellinen"
+   ],
+   "narration": "Kun kilpailija on palannut alaasennosta yläasentoon, hän hyppää kädet ylös korvien yläpuolelle ojennettuina. Sääntö asettaa hypyn sen jälkeen, kun yläasento on saavutettu, joten kilpailijan on ensin noustava pystyyn. Katso käsiä jalkojen lisäksi. Kädet, jotka yltävät vain olkapäille tai kasvoille, eivät täytä standardia, eikä myöskään toisto ilman hyppyä lainkaan."
+  },
+  {
+   "heading": "Yksi yhtenäinen liike",
+   "points": [
+    "Vuoden 2026 ohjelma: liikkeen on oltava yhtenäinen jokaisessa toistossa",
+    "Nopeidenkin toistojen on täytettävä standardin jokainen osa",
+    "Tyypillinen virhe: nopeat burpeet, joissa ylhäällä ei ojenneta kokonaan"
+   ],
+   "narration": "Vuoden 2026 ohjelma lisää, että liikkeen on oltava yhtenäinen jokaisessa toistossa: alas maahan, ylös seisomaan ja hyppy yhtenä liikkeenä. Se antaa myös tyypillisen tilanteen, jota tarkkailla: kilpailija tekee nopeita burpeita ojentamatta ylhäällä täysin. Kysymys on aina sama. Täyttikö toisto standardin? Rinta maassa, lantio ja polvet suorina ylhäällä ja sitten hyppy kädet korvien yläpuolella. Jos ei, se ei ole täydellinen burpee."
+  },
+  {
+   "heading": "Lyhyesti",
+   "points": [
+    "Alhaalla: mahallaan maassa, rinta koskettaa maata",
+    "Ylhäällä: tasapainoisesti pystyssä, lantio ja polvet suorina",
+    "Sitten hyppy kädet korvien yläpuolella",
+    "Yksi yhtenäinen liike ja jokainen toisto standardin mukaan, kuinka nopea tahansa"
+   ],
+   "narration": "Lyhyesti. Yksi täydellinen burpee kulkee alaasennosta yläasentoon, ja sen jälkeen tulee hyppy. Alhaalla kilpailija makaa mahallaan rinta maata koskettaen. Ylhäällä hän seisoo tasapainoisesti pystyssä lantio ja polvet suorina. Sitten hän hyppää kädet korvien yläpuolella. Jokainen toisto on yksi yhtenäinen liike, ja jokaisen toiston on täytettävä standardi, kuinka nopeasti se tehdäänkin."
+  }
+ ],
+ "ocr-6-2": [
+  {
+   "heading": "Kilpailijat laskevat, et sinä",
+   "points": [
+    "Kilpailijat laskevat omat burpeensa",
+    "Tuomarit eivät laske heidän puolestaan",
+    "Tehtäväsi on standardi: katso jokaista toistoa",
+    "Muistuta kilpailijoita, että liikettä ja toistoja valvotaan"
+   ],
+   "narration": "Kilpailijat vastaavat omien burpeidensa laskemisesta. Tuomarit eivät laske heidän puolestaan. Se vapauttaa sinut tärkeimpään tehtävään: katsomaan, täyttääkö jokainen toisto liikestandardin. Vuoden 2026 ohjelma ehdottaa muistuttamaan kilpailijoita siitä, että sekä liikestandardia että toistojen määrää valvotaan. Missä on video, burpeiden määrä ja laatu tarkistetaan uudelleen videotarkistuksessa."
+  },
+  {
+   "heading": "Standardin tarkkailu",
+   "points": [
+    "Seiso paikassa, josta näkymäsi kilpailijaan on esteetön",
+    "Tarkista rinta alhaalla, lantio ja polvet ylhäällä ja kädet hypyssä",
+    "Pidä burpeet alueella ja otsanauha maassa edessä",
+    "Älä koske kilpailijaan tai siirrä häntä kameraa varten"
+   ],
+   "narration": "Sijoitu niin, että näkymäsi on esteetön. Sinun on nähtävä rinnan koskettavan maata, lantion ja polvien ojentuvan ylhäällä ja käsien nousevan korvien yläpuolelle hypyssä. Pidä silmällä myös aluetta, koska sen ulkopuoliset burpeet eivät lasketa, sekä otsanauhaa, joka pysyy maassa kilpailijan edessä. Älä koskaan siirrä fyysisesti kilpailijan vartaloa tai kasvoja kameraa varten."
+  },
+  {
+   "heading": "Lisäburpeiden vaatiminen",
+   "points": [
+    "Standardin alittava toisto: vaadi lisäburpee",
+    "Selitä selkeästi ja rauhallisesti, mikä puuttui",
+    "Uupuneet kilpailijat voivat jatkaa, jos ponnistus on aitoa"
+   ],
+   "narration": "Kun toisto ei täytä standardia, vaadi kilpailijaa tekemään lisäburpeita, jotta rangaistus koostuu täydellisistä burpeista. Selitä selkeästi ja rauhallisesti, mikä puuttui, esimerkiksi rinta ei koskettanut maata tai lantio oli yhä koukussa ylhäällä. Jotkut kilpailijat ovat uupuneita. Vuoden 2026 ohjelman mukaan heidän annetaan jatkaa, jos ponnistus on aitoa. He voivat jatkaa, mutta jokaisen toiston on silti täytettävä standardi."
+  },
+  {
+   "heading": "Kun kilpailija kiistää ratkaisusi",
+   "points": [
+    "Pysy rauhallisena, selitä sääntö ja vältä riitelyä",
+    "Kirjaa otsanauhan numero ja se, mistä kiisteltiin",
+    "Ohjaa kiista päätuomarille",
+    "Älä kärjistä riitaa esteellä"
+   ],
+   "narration": "Jotkut kilpailijat ovat eri mieltä, kun pyydät lisäburpeita. Pysy rauhallisena ja ammattimaisena, selitä sääntö selkeästi äläkä anna vetää itseäsi riitaan. Kirjaa kilpailijan otsanauhan numero ja se, mistä kiisteltiin, ja raportoi se päätuomarille niin pian kuin voit. Kiistat ratkaisee päätuomari, eivätkä ne ole sinun voitettavissasi esteellä. Seuraa muita alueella olevia kilpailijoita, kun hoidat asiaa."
+  },
+  {
+   "heading": "Lyhyesti",
+   "points": [
+    "Kilpailijat laskevat; sinä valvot standardia",
+    "Selkeä näkymä rintaan, lantioon ja polviin sekä käsiin",
+    "Standardin alittava: vaadi lisäburpeita, selitettynä rauhallisesti",
+    "Uupunut mutta aito: anna jatkaa; kiistat menevät päätuomarille"
+   ],
+   "narration": "Lyhyesti. Kilpailijat laskevat omat burpeensa, ja sinä valvot standardia. Seiso paikassa, josta näet selvästi rinnan alhaalla, lantion ja polvet ylhäällä ja kädet hypyssä, ja pidä burpeet alueen sisällä. Jos toisto jää vajaaksi, vaadi lisäburpeita ja selitä syy rauhallisesti. Anna uupuneiden jatkaa, jos ponnistus on aitoa. Ja jos kilpailija kiistää ratkaisusi, kirjaa numero ja ohjaa asia päätuomarille."
+  }
+ ],
+ "ocr-6-3": [
+  {
+   "heading": "Väliin jääneet burpeet muuttuvat ajaksi",
+   "points": [
+    "Kilpailijoille, jotka eivät suorita vaadittuja burpeita, lisätään aikaa maaliaikaan",
+    "Vajeet havaitaan radalla tai palkintoja edeltävässä tarkistuksessa",
+    "Kuinka paljon aikaa lisätään, on tarkistettavana vuodelle 2027"
+   ],
+   "narration": "Kun burpeet ovat rangaistus ja kilpailija ei suorita vaadittua määrää, hänen kokonaismaaliaikaansa lisätään aikaa. Väliin jääneet burpeet voidaan tunnistaa kilpailun aikana tai kilpailun jälkeisessä tarkistuksessa ennen palkintoja. Kaikki kolme vuoden 2026 lähdettä ovat yhtä mieltä siitä, että väliin jääneet burpeet maksavat aikaa. Ne eivät ole yhtä mieltä siitä, kuinka paljon, joten tällä oppitunnilla ei opeteta lukua. Määrät ovat tarkistettavana vuodelle 2027, kunnes valvontavastaava ratkaisee asian.",
+   "review": "Tarkistettavana vuodelle 2027: sääntö 3.4.2 lisää 30 sekuntia jokaisesta 10 ensimmäisestä väliin jääneestä burpeesta ja yhteensä 10 minuuttia, jos yli 10 jää väliin. Officiating SOP lisää 30 sekuntia kustakin ja 10 minuuttia, jos suoritettuja on alle 20; vuoden 2026 ohjelman mukaan 11 tai useampi virheellinen on 10 minuuttia ja alle 20 on hylkäys. Tällä oppitunnilla ei opeteta lukua, ennen kuin valvontavastaava ratkaisee asian: päätuomari vahvistaa rangaistukset."
+  },
+  {
+   "heading": "Missä vuoden 2026 lähteet ovat eri mieltä",
+   "points": [
+    "Kuinka paljon aikaa kukin väliin jäänyt burpee lisää ja onko olemassa katto",
+    "Missä kynnys sijaitsee: väliin jääneet vai suoritetut burpeet",
+    "Tarkoittaako suuri vaje aikarangaistusta vai hylkäämistä",
+    "Myös Stadion 15 burpeen rangaistuksineen on kiistanalainen"
+   ],
+   "narration": "Sääntökirja, valvontamenettely ja vuoden 2026 ohjelma kuvaavat kukin burpee-aikarangaistukset eri tavoin. Ne eroavat siinä, kuinka paljon aikaa yksi väliin jäänyt burpee lisää ja onko olemassa katto. Ne eroavat siinä, missä kynnys sijaitsee, laskettuna väliin jääneinä tai suoritettuina burpeina. Ja ne eroavat siinä, tarkoittaako suuri vaje pitkää aikarangaistusta vai hylkäämistä. Stadionissa, jossa rangaistus on viisitoista burpeeta, on sama ongelma. Siihen asti, kun valvontavastaava ratkaisee asian, kohtele jokaista lukua tarkistettavana.",
+   "review": "Tarkistettavana vuodelle 2027: sääntö 3.4.2 lisää 30 sekuntia jokaisesta 10 ensimmäisestä väliin jääneestä burpeesta ja 10 minuuttia, jos yli 10 jää väliin (Stadion: 30 sekuntia kustakin 5 ensimmäisestä, 5 minuuttia, jos yli 5). Officiating SOP lisää 30 sekuntia kustakin ja 10 minuuttia, jos suoritettuja on alle 20 (Stadion: alle 10). Vuoden 2026 ohjelma: 30 sekuntia kustakin, 10 minuuttia 11 tai useammasta virheellisestä, hylkäys alle 20 suoritetusta. Älä esitä lukuja kilpailijoille: ohjaa kysymykset päätuomarille."
+  },
+  {
+   "heading": "Mikä lasketaan väliin jääneeksi burpeeksi",
+   "points": [
+    "Burpee, jota ei tehty",
+    "Merkityn alueen ulkopuolella tehty burpee: se ei lasketa rangaistukseen",
+    "Liikestandardin alittava toisto: se ei ole täydellinen burpee",
+    "Tarkistus katsoo sekä burpeiden määrää että laatua"
+   ],
+   "narration": "Vaje ei ole vain burpeita, joita ei koskaan tehty. Merkityn alueen ulkopuolella tehdyt burpeet eivät lasketa rangaistukseen. Toisto, joka ei täytä liikestandardia, ei ole täydellinen burpee, ja vuoden 2026 ohjelma kohtelee väliin jääneitä ja virheellisiä burpeita samalla tavoin. Valvontamenettelyn mukaan tarkistus ratkaisee sekä burpeiden määrän että laadun. Siksi standardin valvonta paikan päällä ja lisätoistojen vaatiminen on tärkeää.",
+   "review": "Tarkistettavana vuodelle 2027: kuinka paljon aikaa väliin jääneet tai virheelliset burpeet lisäävät, eroaa säännön 3.4.2, Officiating SOP:n ja vuoden 2026 ohjelman välillä. Se, mikä on täydellinen burpee, ei eroa: sovella sääntöjä 3.17.4 ja 3.17.5 ja jätä aikarangaistus päätuomarille."
+  },
+  {
+   "heading": "Kuka päättää rangaistuksesta",
+   "points": [
+    "Videon kanssa: burpeita koskevat ratkaisut määrästä ja laadusta tehdään videotarkistuksessa",
+    "Ilman videota: ratkaiset paikan päällä, kirjoitat sen ylös ja annat sen päätuomarille",
+    "Päätuomari lähettää vahvistetut rangaistukset kilpailunjohtajalle ja ajanottotiimille",
+    "Rangaistukset esitetään tulostelttassa tarkistuksen aikana"
+   ],
+   "narration": "Missä on video, ratkaisut siitä, kuinka monta burpeeta tehtiin ja kuinka hyvin, tehdään videotarkistuksessa. Päätuomari hallinnoi tarkistusta tuomarien palatessa esteiltään ja lähettää vahvistetut rangaistukset ja hylkäämiset kilpailunjohtajalle ja ajanottotiimille. Missä videota ei ole, valvontamenettelyn mukaan paikan päällä oleva tuomari ratkaisee asian, dokumentoi ratkaisun kirjallisesti ja antaa sen päätuomarille palattuaan esteeltä. Rangaistukset esitetään tulostelttassa tarkistuksen aikana.",
+   "review": "Tarkistettavana vuodelle 2027: Officiating SOP (6.iii) sanoo, että burpee-rangaistuksia koskevat ratkaisut tehdään videotarkistuksessa, kun videota on, ja paikan päällä olevan tuomarin kirjallisesti, kun videota ei ole. Vuoden 2026 ohjelman mukaan rangaistusratkaisut tekee videotarkistustiimi. Siihen asti noudata Officiating SOP:ia: jos kameraa ei ole, kirjoita ratkaisusi ylös ja anna se päätuomarille."
+  },
+  {
+   "heading": "Lyhyesti",
+   "points": [
+    "Väliin jääneet tai virheelliset burpeet lisäävät aikaa kilpailijan maaliaikaan",
+    "Kuinka paljon aikaa, on tarkistettavana vuodelle 2027: ohjaa kysymykset päätuomarille",
+    "Valvo standardia ja aluetta paikan päällä",
+    "Videon kanssa tarkistus ratkaisee; ilman sitä kirjoita ratkaisusi ylös"
+   ],
+   "narration": "Lyhyesti. Väliin jääneet tai virheelliset burpeet lisäävät aikaa kilpailijan maaliaikaan, mutta kuinka paljon, on tarkistettavana vuodelle 2027, koska sääntökirja, valvontamenettely ja vuoden 2026 ohjelma ovat eri mieltä. Älä esitä lukua: ohjaa kysymykset päätuomarille. Se, mitä hallitset, on radalla: liikestandardi ja alue. Missä on video, tarkistus ratkaisee. Missä sitä ei ole, kirjoita ratkaisusi ylös ja anna se päätuomarille.",
+   "review": "Tarkistettavana vuodelle 2027: väliin jääneistä burpeista lisättävä aika eroaa säännön 3.4.2, Officiating SOP:n ja vuoden 2026 ohjelman välillä (jokainen versio on toisella dialla), ja SOP ja ohjelma eroavat siinä, kuka päättää, kun videota ei ole. Siihen asti, kun valvontavastaava ratkaisee asian, älä opeta lukua, noudata Officiating SOP:ia kirjallisissa ratkaisuissa ja ohjaa kiistanalaiset ratkaisut päätuomarille."
+  }
+ ],
+ "ocr-7-1": [
+  {
+   "heading": "Kilpailijan kysymykseen vastaaminen",
+   "points": [
+    "Pysy rauhallisena ja ammattimaisena kysymyksen sävystä riippumatta",
+    "Selitä sääntö selkeästi: mitä este vaati ja mikä jäi puuttumaan",
+    "Vältä riitoja: kysymys ei ole väittely"
+   ],
+   "narration": "Kilpailijat kysyvät sinulta ratkaisuistasi, usein väsyneinä ja turhautuneina. Pysy rauhallisena ja ammattimaisena. Vastaa selittämällä sääntö selkeästi: mitä este heiltä vaati ja minkä osan he eivät täyttäneet. Pidä se lyhyenä, koska esteellesi saapuu yhä muita kilpailijoita. Jos kilpailija hyväksyy selityksen, lähetä hänet rangaistukseen. Jos hän ei hyväksy, siitä on tullut kiista. Kiistaa ei ratkaista riitelemällä esteellä. Ohjaat sen päätuomarille."
+  },
+  {
+   "heading": "Kun siitä tulee kiista",
+   "points": [
+    "Kirjaa kilpailijan otsanauhan numero",
+    "Kirjoita ylös syy, esimerkiksi epäonnistunut este ilman suoritettua rangaistusta",
+    "Raportoi se päätuomarille niin pian kuin voit",
+    "Älä kärjistä riitaa esteellä"
+   ],
+   "narration": "Jos kilpailija kiistää ratkaisusi, sinulla on kolme tehtävää. Ensin kirjaa hänen otsanauhansa numero. Säännöt tekevät jokaisesta kilpailijasta vastuullisen siitä, että kisanumero on otsanauhassa luettavasti koko ajan. Toiseksi kirjoita ylös kiistan syy, esimerkiksi että kilpailija epäonnistui esteellä eikä suorittanut rangaistusta. Kolmanneksi raportoi se päätuomarille niin pian kuin toiminnallisesti voit. Ratkaisua ei tehdä esteelläsi, joten kärjistämisestä ei ole mitään hyötyä. Pidä muistiinpanosi asiallisina: päätuomari luottaa niihin."
+  },
+  {
+   "heading": "Kun et saa otsanauhan numeroa",
+   "points": [
+    "Raportoi se heti päätuomarille",
+    "Anna selkeä kuvaus: vaatteiden väri, tunnistepiirteet, sarja",
+    "Auta tunnistamaan kilpailija myöhemmin radalla, jos sinua pyydetään"
+   ],
+   "narration": "Joskus kilpailija poistuu esteen alueelta suorittamatta rangaistusta etkä pysty lukemaan hänen numeroaan. Valvontamenettely kattaa tämän. Raportoi asia päätuomarille välittömästi sen sijaan, että odottaisit, kunnes palaat esteeltä. Anna selkeä ulkoinen kuvaus: vaatteiden väri, kaikki, mikä tekee hänestä helposti tunnistettavan, ja kilpasarja, jos voit sen päätellä. Sinua voidaan pyytää auttamaan kilpailijan tunnistamisessa myöhemmin radalla. Pysy sillä välin keskittyneenä esteeseesi ja yhä saapuviin kilpailijoihin."
+  },
+  {
+   "heading": "Kilpailijan käytös",
+   "points": [
+    "Kilpailijoiden on kohdeltava toimitsijoita reilusti, kunnioittavasti ja kohteliaasti",
+    "Loukkaava, uhkaava tai herjaava kieli tai käytös rikkoo sääntöjä",
+    "Käytösrikkomuksesta annettavan rangaistuksen päättää päätoimitsija",
+    "Sinun osuutesi: kirjaa numero, merkitse tapahtunut, raportoi se"
+   ],
+   "narration": "Säännöt edellyttävät kilpailijoiden kohtelevan kaikkia tapahtumassa, toimitsijat mukaan lukien, reilusti, kunnioittavasti ja kohteliaasti eivätkä käyttävän loukkaavaa, uhkaavaa tai herjaavaa kieltä tai käytöstä. Käytösrikkomuksesta voi seurata rangaistus, joka riippuu sen vakavuudesta. Sääntökirjassa se päätös kuuluu päätoimitsijalle, ei sinulle. Törkeä epäurheilijamainen käytös tai fyysinen väkivalta toimitsijaa kohtaan voi olla syy määräaikaiseen kilpailukieltoon. Sinun osuutesi on sama kuin missä tahansa kiistassa: pysy rauhallisena, kirjaa otsanauhan numero, merkitse, mitä sanottiin tai tehtiin, ja raportoi se päätuomarille."
+  },
+  {
+   "heading": "Kilpailun jälkeen: protestit ja videotarkistus",
+   "points": [
+    "Tulokset eivät ole lopullisia ennen kuin virallinen videotarkistus on tehty",
+    "Kilpailijat tuovat protestit päätoimitsijalle protestiajan kuluessa",
+    "Toimitsijoiden ei tarvitse ottaa huomioon kilpailijoiden tai katsojien ottamaa materiaalia",
+    "Virallista videomateriaalia ei koskaan anneta kilpailijoille"
+   ],
+   "narration": "Kiistanalainen ratkaisu ei pääty esteelläsi. Ennen kuin tulokset ovat lopullisia, tehdään virallinen videotarkistus. Kilpailija, joka haluaa kiistää rangaistuksen, tuo protestin päätoimitsijalle protestiajan kuluessa, joka alkaa heti kun hän ylittää maaliviivan. Toimitsijoilla ei ole velvollisuutta ottaa huomioon kilpailijoiden tai katsojien ottamia videoita tai valokuvia. Valvontamenettelyn mukaan virallista materiaalia ei myöskään koskaan anneta kilpailijoille. Jos kilpailija siis tarjoaa sinulle puhelimensa materiaalia tai pyytää nähdä omaasi, ohjaa hänet päätuomarille ja protestimenettelyyn.",
+   "review": "Tarkistettavana vuodelle 2027: sääntö 3.19.1 päättää protestiajan 15 minuuttia ennen kilpailijan sarjan palkintojenjakoa. Officiating SOP antaa esimerkkinä puoli tuntia ennen palkintoja ja sallii tuomarin virheiden korjaamisen muille kuin palkintopallille sijoittuneille kilpailijoille jopa kaksi tuntia viimeisten palkintojen jälkeen. Siihen asti noudata sääntökirjaa ja ohjaa ajoitusta koskevat kysymykset päätuomarille."
+  },
+  {
+   "heading": "Lyhyesti",
+   "points": [
+    "Pysy rauhallisena, selitä sääntö selkeästi, älä riitele",
+    "Kiista: otsanauhan numero, mitä tapahtui, raportoi päätuomarille",
+    "Ei numeroa: raportoi heti selkeällä kuvauksella",
+    "Protestit ja videotarkistus tapahtuvat kilpailun jälkeen, ei esteellä"
+   ],
+   "narration": "Lyhyesti. Vastaa kysymyksiin rauhallisesti ja selitä sääntö selkeästi ilman riitelyä. Jos siitä tulee kiista, kirjaa otsanauhan numero, kirjoita ylös, mitä tapahtui, ja raportoi se päätuomarille niin pian kuin voit. Jos et saa numeroa, raportoi asia heti selkeällä kuvauksella kilpailijasta. Loukkaava käytös kirjataan ja raportoidaan samalla tavalla. Lopullinen ratkaisu tulee myöhemmin videotarkistuksen ja protestiajan kautta, ei esteelläsi."
+  }
+ ],
+ "ocr-8-1": [
+  {
+   "heading": "Ammattimainen käytös esteellä",
+   "points": [
+    "Pysy keskittyneenä esteeseesi",
+    "Vältä häiriötekijöitä ja pitkiä keskusteluja",
+    "Pysy neutraalina ja kunnioittavana jokaista kilpailijaa kohtaan",
+    "Edusta Spartania ammattimaisesti"
+   ],
+   "narration": "Säännöt ovat olemassa, jotta jokainen Spartan-tapahtuma järjestetään reilusti ja johdonmukaisesti urheilullisuuden ja rehellisyyden hengessä. Esteellä sinä olet se, jonka kautta se tapahtuu. Pysy keskittyneenä esteeseen ja sitä yrittäviin kilpailijoihin. Vältä häiriötekijöitä ja pitkiä keskusteluja, koska epäonnistumista, jota et nähnyt, et voi tuomita. Pysy neutraalina ja kunnioittavana kaikkia kohtaan, keitä he ovatkaan. Kilpailijoille ja katsojille sinä olet Spartan, joten edusta Spartania ammattimaisesti."
+  },
+  {
+   "heading": "Missä tuomari on säännöissä",
+   "points": [
+    "Tuomari on Spartanin nimittämä toimitsija, joka huolehtii sääntöjen noudattamisesta",
+    "Yleensä sijoitettuna esteelle tai videotarkistusteltalle",
+    "Päätoimitsija (Head Official) on ylin päättäjä ja sääntöjen lopullinen auktoriteetti",
+    "Ketjusi: sinä, päätuomari, sitten kilpailunjohtaja tai ajanottotiimi"
+   ],
+   "narration": "Sääntökirja määrittelee tuomarin Spartanin nimittämäksi toimitsijaksi, jonka tehtävä on huolehtia sääntöjen noudattamisesta ja joka on yleensä sijoitettu esteille tai videotarkistusteltalle. Tuomarit raportoivat päätoimitsijalle (Head Official), joka on kaikkien sääntöasioiden ylin päättäjä tapahtumassa ja niiden valvonnan ja tulkinnan lopullinen auktoriteetti. Valvontamenettelyssä ja tässä ohjelmassa raportoit päätuomarille. Päätuomari raportoi sitten kilpailun tapahtumat kilpailunjohtajalle ja rangaistukset ajanottotiimille."
+  },
+  {
+   "heading": "Mistä sinä päätät",
+   "points": [
+    "Valvo esteen sääntöjä",
+    "Ohjaa epäonnistuneet kilpailijat oikeaan rangaistukseen",
+    "Dokumentoi rikkomukset",
+    "Et ole varma rangaistuksesta tai sen valvonnasta? Ota heti yhteys päätuomariin"
+   ],
+   "narration": "Esteellä vastaat kolmesta asiasta. Valvot esteen sääntöjä. Ohjaat epäonnistuneen kilpailijan kyseisen esteen oikeaan rangaistukseen. Ja dokumentoit rikkomukset. Missä burpeista ei ole videotodistetta, valvontamenettely antaa burpeiden määrää ja laatua koskevan ratkaisun sinulle: teet sen paikan päällä, kirjoitat sen ylös ja luovutat sen päätuomarille palatessasi. Jos et ole varma rangaistuksen tyypistä tai sen valvonnasta, ota heti yhteys päätuomariin."
+  },
+  {
+   "heading": "Kuka vahvistaa rangaistuksen",
+   "points": [
+    "Lopulliset rangaistusratkaisut voivat vahvistaa päätuomari ja ajanottotiimi",
+    "Videotarkistuksessa toimitsijat voivat yhä arvioida rangaistuksia, hylkäämiseen asti",
+    "Päätuomari välittää vahvistetut rangaistukset kilpailunjohtajalle ja ajanotolle",
+    "Muistiinpanosi ovat todiste, jonka varassa nämä ratkaisut ovat"
+   ],
+   "narration": "Ratkaisusi käynnistää prosessin, mutta se ei aina ole viimeinen sana. Ohjelman mukaan lopulliset rangaistusratkaisut voivat vahvistaa päätuomari ja ajanottotiimi. Sääntökirjan mukaan päätoimitsija vastaa viime kädessä sääntöjen ylläpitämisestä, ja virallisen videotarkistuksen aikana kisatoimitsijat voivat yhä arvioida rangaistuksia, hylkääminen mukaan lukien. Päätuomari hallinnoi tuota tarkistusta ja välittää vahvistetut rangaistukset ja hylkäämiset kilpailunjohtajalle ja ajanottotiimille. Siksi muistiinpanoillasi on väliä: selkeät, asialliset kirjaukset mahdollistavat oikean ratkaisun vahvistamisen."
+  },
+  {
+   "heading": "Lyhyesti",
+   "points": [
+    "Keskittynyt, neutraali, kunnioittava ja ammattimainen",
+    "Valvot sääntöjä, ohjaat kilpailijat rangaistuksiin ja dokumentoit rikkomukset",
+    "Päätuomari vahvistaa rangaistukset ja käsittelee ne, jotka ohjaat hänelle",
+    "Epävarma? Ota heti yhteys päätuomariin"
+   ],
+   "narration": "Lyhyesti. Pysy keskittyneenä esteeseesi, neutraalina ja kunnioittavana ja edusta Spartania ammattimaisesti. Valvot esteen sääntöjä, ohjaat epäonnistuneet kilpailijat oikeaan rangaistukseen ja dokumentoit rikkomukset. Päätoimitsijalla on lopullinen valta säännöistä, ja päätuomari vahvistaa rangaistukset, käsittelee ne, jotka ohjaat hänelle, ja välittää ne kilpailunjohtajalle ja ajanotolle. Jos olet koskaan epävarma, ota heti yhteys päätuomariin."
+  }
+ ],
+ "ocr-8-2": [
+  {
+   "heading": "Turvallisuus kuuluu työhön",
+   "points": [
+    "Säännöt pyrkivät suojaamaan kilpailijoiden terveyttä, turvallisuutta ja hyvinvointia",
+    "Seuraa esteesi turvallisuutta ja varmista, että kilpailijat liikkuvat turvallisesti",
+    "Älä salli vaarallisia oikaisuja: kilpailijoiden on kuljettava koko virallinen rata"
+   ],
+   "narration": "Sääntöjen yksi tarkoitus on suojata kilpailijoiden terveyttä, turvallisuutta ja hyvinvointia niin pitkälle kuin se on esteratakilpailussa kohtuudella mahdollista. Ohjelma asettaa kilpailijoiden turvallisuuden reiluuden rinnalle prioriteetiksesi. Se tarkoittaa esteesi turvallisuuden seuraamista, sen varmistamista, että kilpailijat liikkuvat turvallisesti, ja vaarallisten oikaisujen kieltämistä. Oikaisun salliminen ei koskaan ole sinun päätettävissäsi: säännöt edellyttävät kilpailijoiden kulkevan virallisen radan kokonaisuudessaan."
+  },
+  {
+   "heading": "Tarkasta ja ilmoita vaarat heti",
+   "points": [
+    "Tarkasta rakenne ja varmista, että se on käyttökelpoinen, ennen ensimmäistä aaltoa",
+    "Kävele rangaistuslenkki ja opi kilpailijoiden lähestymissuunta",
+    "Ilmoita vaarat välittömästi: päätuomari, kilpailunjohtaja tai Spartanin henkilöstö"
+   ],
+   "narration": "Turvallisuus alkaa ennen ensimmäistä kilpasarjan aaltoa. Kun saavut esteellesi, tarkasta rakenne ja tarkista, että se on käyttökelpoinen. Tutustu kilpailun kulkuun ja suuntaan, josta kilpailijat tulevat, ja kävele koko rangaistuslenkki, jotta tiedät sen reitin ja paluukohdan. Jos jokin huolestuttaa, olipa se epäilys, turvallisuushuoli tai epäjohdonmukaisuus, ilmoita siitä heti päätuomarille tai kilpailunjohtajalle. Kilpailun aikana ilmoita kaikista vaaroista heti päätuomarille, kilpailunjohtajalle tai Spartanin henkilöstölle."
+  },
+  {
+   "heading": "Turvallinen liikkuminen esteiden säännöissä",
+   "points": [
+    "Rope Climb: tule alas turvallisesti ja hallitusti, vähintään yksi käsi köydellä",
+    "Hercules Hoist: laske paino alas hallitusti; sen pudottaminen on epäonnistuminen",
+    "Uinti tai vesiylitys: ei sukeltamista; sukeltaminen on epäonnistuminen"
+   ],
+   "narration": "Jotkin esteiden säännöt sisältävät turvallisuuden suoraan, ja valvot niitä kuten mitä tahansa muita sääntöjä. Rope Climbissa kilpailijoiden on palattava maahan turvallisella ja hallitulla tavalla ja vähintään yksi käsi koko ajan köyttä koskettaen. Hercules Hoistissa paino on laskettava hallitusti, ei vapaassa pudotuksessa, ja sen pudottaminen hallitsemattomasti on epäonnistuminen. Uinnissa tai vesiylityksessä sukeltaminen ei ole sallittua, ja se on epäonnistumistapa. Tunne esteesi turvallisuussäännöt, ennen kuin ensimmäinen kilpailija saapuu."
+  },
+  {
+   "heading": "Sama tulkinta koko kilpailun ajan",
+   "points": [
+    "Sovella sääntöjä tasapuolisesti kaikkiin kilpailijoihin",
+    "Käytä samaa tulkintaa ensimmäisestä aallosta viimeiseen",
+    "Jokaista rangaistusta sovelletaan johdonmukaisesti sarjan tai lähdön sisällä",
+    "Painopisteesi: kilpasarjat, Elite ja Age Group"
+   ],
+   "narration": "Johdonmukaisuus tekee tuloksista reiluja. Sovella sääntöjä tasapuolisesti jokaiseen kilpailijaan ja käytä samaa tulkintaa ensimmäisestä aallosta viimeiseen. Ratkaisu, jonka teet ensimmäiselle Elite-kilpailijalle, on standardi kaikille hänen jälkeensä. Sääntökirjan mukaan jokaista rangaistusta sovelletaan johdonmukaisesti määrätyn sarjan tai lähdön sisällä. Painopisteesi on kilpasarjoissa, Elitessä ja Age Groupissa, joiden odotetaan noudattavan jokaista sääntöä. Myös Open-kilpailijoita kannustetaan noudattamaan sääntöjä rennommassa tunnelmassa."
+  },
+  {
+   "heading": "Pysy säännössä ja ohjaa eteenpäin, kun olet epävarma",
+   "points": [
+    "Arvioi esteen kirjallisia epäonnistumistapoja vasten",
+    "Vältä henkilökohtaista harkintaa säännön ulkopuolella",
+    "Epävarmana ohjaa ratkaisu päätuomarille"
+   ],
+   "narration": "Johdonmukaisuus tarkoittaa myös sitä, ettei lisää omia sääntöjä. Arvioi jokainen yritys esteen kirjallisia epäonnistumistapoja vasten, ei sitä vasten, mitä itse pidät reiluna, ja vältä harkintaa sen yli, mitä sääntö sanoo. Jos tilanne ei ole selvästi katettu tai et ole varma, mikä rangaistus pätee tai miten sitä valvotaan, ota heti yhteys päätuomariin. Kerran eteenpäin ohjattu ja tehty ratkaisu voidaan sitten soveltaa samalla tavalla kaikkiin."
+  },
+  {
+   "heading": "Lyhyesti",
+   "points": [
+    "Seuraa turvallisuutta, vaadi turvallista liikkumista, älä salli oikaisuja",
+    "Tarkasta ajoissa ja ilmoita vaarat heti",
+    "Samat säännöt, sama tulkinta, jokainen kilpailija, koko kilpailun ajan",
+    "Epävarma? Ohjaa päätuomarille"
+   ],
+   "narration": "Lyhyesti. Kilpailijoiden turvallisuus on reiluuden rinnalla prioriteettisi. Seuraa estettäsi, varmista, että kilpailijat liikkuvat turvallisesti, äläkä salli oikaisuja. Tarkasta este ja kävele rangaistuslenkki ennen ensimmäistä aaltoa ja ilmoita vaaroista heti päätuomarille, kilpailunjohtajalle tai Spartanin henkilöstölle. Sovella samoja sääntöjä samalla tulkinnalla jokaiseen kilpailijaan koko kilpailun ajan. Ja kun olet epävarma, ohjaa asia päätuomarille."
+  }
+ ],
+ "ocr-9-1": [
+  {
+   "heading": "Katso käsiä ja jalkoja",
+   "points": [
+    "Useimmat epäonnistumistavat liittyvät siihen, mihin kädet ja jalat koskevat",
+    "Monkey Bars: vain kädet ja käsivarret; jalat tai säären tangoilla on epäonnistuminen",
+    "Olympus: jalat saavat levätä seinällä, mutta jalka otteella tai reiässä on epäonnistuminen"
+   ],
+   "narration": "Useimmat esteiden epäonnistumiset johtuvat siitä, mihin kilpailijan kädet ja jalat koskevat, joten silmäsi suuntaavat sinne. Monkey Barsilla kilpailija etenee vain käsillä ja käsivarsilla. Jalkojen tai säärten koskettaminen tankoihin on epäonnistuminen, ja niin on myös maahan koskeminen edun saamiseksi. Olympuksella kilpailijat saavat asettaa jalkansa ja polvensa seinää vasten tueksi, mutta minkä tahansa otteen tai reiän koskettaminen jaloilla on epäonnistuminen. Tiedä täsmälleen, mitkä kosketukset esteesi sallii."
+  },
+  {
+   "heading": "Keskity täsmälliseen sääntöön",
+   "points": [
+    "Tunne esteesi ohjeet, epäonnistumistavat ja huomautukset ennen ensimmäistä aaltoa",
+    "Helix ja Z Wall: yritys alkaa neljällä kosketuspisteellä",
+    "Monkey Bars, Multi-Rig, Olympus: kun molemmat jalat ovat poistuneet lähtöaskelmalta"
+   ],
+   "narration": "Jokaisella esteellä on oma sääntönsä, jossa on kilpailijoiden ohjeet, epäonnistumistavat ja lisähuomautukset. Tarkkaile sitä sääntöä, älä yleistä käsitystä hyvästä yrityksestä. Tiedä, milloin yritys alkaa, koska siitä lähtien kilpailija on sitoutunut. Helixillä ja Z Wallilla se alkaa, kun neljä kosketuspistettä on muodostettu. Monkey Barsilla, Multi-Rigillä ja Olympuksella se alkaa, kun molemmat jalat ovat poistuneet lähtöaskelmalta. Jos et näe alkua, et voi olla varma, mikä lasketaan."
+  },
+  {
+   "heading": "Missä seisot",
+   "points": [
+    "Paikka, josta on esteetön näkymä yrityksiin, suorituksiin ja epäonnistumisiin",
+    "Tarkista kilpailun kulku ja kilpailijoiden lähestymissuunta",
+    "Ennakoi, missä epäonnistumiset yleensä tapahtuvat, ja pidä ne kohdat näkyvissä"
+   ],
+   "narration": "Selvitä ennen ensimmäistä aaltoa paras paikka, jossa seistä. Tarvitset esteettömän näkymän yrityksiin, suorituksiin ja epäonnistumisiin. Tutustu kilpailun kulkuun ja suuntaan, josta kilpailijat saapuvat. Mieti, missä epäonnistumisia yleensä tapahtuu esteelläsi, ja varmista, että nuo kohdat ovat selvästi näkyvissä. Valvontamenettely kutsuu esteitä, joilla on historiaa usein toistuvista epäonnistumisista, usein epäonnistuttaviksi esteiksi (high-failure). Ne vaativat aktiivista valvontaa, joten sijaintisi on siellä vielä tärkeämpi."
+  },
+  {
+   "heading": "Valmiina puuttumaan epäonnistumiseen",
+   "points": [
+    "Seiso paikassa, josta voit puhutella epäonnistuvaa kilpailijaa ja ohjata hänet rangaistukseen",
+    "Tunne rangaistuslenkin reitti ja paluukohta",
+    "Pidä kello näkyvissä: sen potkaiseminen on epäonnistuminen"
+   ],
+   "narration": "Epäonnistumisen näkeminen on puolet työstä. Toinen puoli on kilpailijan kohtaaminen, joten sijoitu paikkaan, josta voit puhutella häntä heti kun hän epäonnistuu ja osoittaa hänelle rangaistuksen. Kävele rangaistuslenkki etukäteen, jotta tiedät sen reitin ja sen, missä se palaa radalle. Pidä myös kello näkyvissä. Yleissäännön mukaan kelloja saa lyödä vain käsivarsilla, käsillä tai muulla vartalon osalla rinnan yläpuolella. Kellon potkaiseminen on epäonnistuminen. Tarkista myös esteesi oma sääntö."
+  },
+  {
+   "heading": "Lyhyesti",
+   "points": [
+    "Katso käsiä ja jalkoja",
+    "Tunne täsmällinen sääntö ja se, milloin yritys alkaa",
+    "Seiso paikassa, josta näet selvästi, missä epäonnistumisia tapahtuu",
+    "Ole valmis ohjaamaan kilpailija rangaistukseen"
+   ],
+   "narration": "Lyhyesti. Katso kilpailijan käsiä ja jalkoja, koska siellä useimmat epäonnistumiset tapahtuvat. Tunne esteesi täsmällinen sääntö, yrityksen alkamishetki mukaan lukien. Seiso paikassa, jossa näkymäsi on esteetön ja tavalliset epäonnistumiskohdat ovat näkyvissä. Ja sijoitu niin, että voit kohdata kilpailijan heti kun hän epäonnistuu, ja lähettää hänet oikeaan rangaistukseen."
+  }
+ ],
+ "ocr-9-2": [
+  {
+   "heading": "Tukirakenteen käyttö",
+   "points": [
+    "Seinät: tukirakenteen, sivujen tai hihnojen käyttö on epäonnistuminen",
+    "Riggit: pystysuoran ristikon käyttö tikkaina on epäonnistuminen",
+    "Vaakasuoraa ristikkoa saa käyttää aloittamiseen tai siirtymiseen, kun sääntö sen sallii"
+   ],
+   "narration": "Ristikko on esteen pääasiallinen tukirakenne: metalliset vino-, pysty- ja vaakapalkit. Monet esteet kieltävät sen käytön. Seinillä tukirakenteen, seinän sivujen tai hihnojen käyttö tasapainon auttamiseen, ylös kiipeämiseen tai alas tulemiseen on epäonnistuminen. Monkey Barsilla ja muilla riggeillä pystysuoran ristikon käyttö tikkaina aloittamiseen, etenemiseen tai lopettamiseen on epäonnistuminen. Mutta monet riggit sallivat vaakasuoran ristikon käytön aloittamiseen tai siirtymiseen etenemisen aikana. Tarkista, mikä pätee esteesi kohdalla."
+  },
+  {
+   "heading": "Sallitun alueen ulkopuolinen käsittely",
+   "points": [
+    "Multi-Rig: köysien, lenkkien tai ketjujen, joilla kiinnitys on kiinni, tarttuminen on epäonnistuminen",
+    "Helix: toisen väylän tankojen käyttö on epäonnistuminen",
+    "Olympus: otteen tai reiän koskettaminen jaloilla on epäonnistuminen"
+   ],
+   "narration": "Sallitun alueen ulkopuolinen käsittely tarkoittaa sellaisen esteen osan käyttöä, jota sääntö ei salli. Multi-Rigillä kilpailijat saavat käyttää vain kiinnikkeitä. Köysien, lenkkien tai ketjujen, jotka kiinnittävät ne rakenteeseen, tarttuminen on epäonnistuminen, samoin useamman kuin yhden väylän käyttö. Helixillä toisen väylän tankojen käyttö on epäonnistuminen. Olympuksella kädet työskentelevät otteilla, ja jalka otteella tai reiässä on epäonnistuminen. Tunne esteesi sallittu alue täsmälleen."
+  },
+  {
+   "heading": "Yrittämättä jättäminen ja lenkin ohittaminen",
+   "points": [
+    "Jokaista estettä on yritettävä: vähintään kilpailija koskettaa sitä",
+    "Epäonnistuneen kilpailijan on suoritettava rangaistuslenkki kokonaan",
+    "Lenkin ohittamisesta rangaistaan: rangaistus on tarkistettavana vuodelle 2027"
+   ],
+   "narration": "Jokaista estettä on yritettävä. Yritys tarkoittaa vähintäänkin esteen koskettamista. Joskus se tarkoittaa veden tai vaikean maaston läpi pääsemistä esteelle, eikä sitä voi ohittaa rangaistuksella, ellei lähtöinfo tai kisahenkilöstö niin sano. Kilpailijan, joka yrittää ja epäonnistuu, on suoritettava rangaistuslenkki kokonaan. Sen ohittaminen on rikkomus, jonka kirjaat ja raportoit päätuomarille. Lähteet eroavat siitä, mikä rangaistus siitä on, joten se on tarkistettavana.",
+   "review": "Tarkistettavana vuodelle 2027: sääntö 3.4.1 lisää 10 minuutin aikarangaistuksen, kun kilpailija ei suorita rangaistuslenkkiä. Vuoden 2026 verkko-ohjelman mukaan siitä voi seurata hylkääminen. Siihen asti noudata sääntökirjaa ja ohjaa tapaus päätuomarille."
+  },
+  {
+   "heading": "Burpeet, jotka eivät täytä standardia",
+   "points": [
+    "Rinta maahan, pystyyn lantio ja polvet suorina, sitten hyppy kädet korvien yläpuolella",
+    "Merkityn burpee-alueen ulkopuolella tehdyt burpeet eivät lasketa",
+    "Kilpailijat laskevat omat burpeensa: sinä et laske heidän puolestaan"
+   ],
+   "narration": "Virheelliset burpeet ovat yksi yleisimmistä rikkomuksista. Yksi täydellinen burpee kulkee alaasennosta, jossa rinta on maassa, tasapainoiseen pystyasentoon lantio ja polvet suorina, ja sen jälkeen tulee hyppy kädet korvien yläpuolella. Merkityn alueen ulkopuolella tehtyjä burpeita ei lasketa. Kilpailijat laskevat omat burpeensa, etkä sinä laske heidän puolestaan. Kun standardi ei täyty, ohjelman mukaan vaaditaan lisäburpeita ja muistutetaan kilpailijaa siitä, että hänen liikettään ja toistojaan valvotaan."
+  },
+  {
+   "heading": "Kello",
+   "points": [
+    "Riggeillä, kuten Monkey Barsilla, kellon soittamatta jättäminen on epäonnistuminen",
+    "Kelloa saa lyödä käsivarsilla, käsillä tai vartalolla rinnan yläpuolella",
+    "Kellon potkaiseminen on epäonnistuminen: ei uutta yritystä, kilpailija ottaa rangaistuksen"
+   ],
+   "narration": "Monet esteet päättyvät kelloon, ja riggeillä, kuten Monkey Barsilla, sen soittamatta jättäminen on epäonnistumistapa. Kilpailija, joka tulee alas ennen kellon soittamista, on epäonnistunut, kuinka pitkälle hän olikin päässyt. Yleissäännön mukaan kelloja saa lyödä vain käsivarsilla ja käsillä tai muulla vartalon osalla rinnan yläpuolella. Jalkojen, säärten tai polvien käyttö kellon potkaisemiseen lasketaan esteen epäonnistumiseksi. Kilpailija ei voi yrittää uudelleen, ja hänen on suoritettava kyseisen esteen rangaistus."
+  },
+  {
+   "heading": "Lyhyesti",
+   "points": [
+    "Ei tukirakennetta tai pystysuoraa ristikkoa, ellei sääntö salli sitä",
+    "Vain esteen sallitut osat, yhdellä väylällä",
+    "Yritä jokaista estettä ja suorita jokainen rangaistuslenkki kokonaan",
+    "Burpeet standardin mukaan alueella; kello soitetaan, ei koskaan potkaista"
+   ],
+   "narration": "Lyhyesti. Tarkkaile kilpailijoita, jotka käyttävät tukirakennetta tai pystysuoraa ristikkoa tikkaina siellä, missä sääntö sen kieltää. Tarkkaile sallitun alueen ulkopuolista käsittelyä, kuten riggin köysiin tai ketjuihin tarttumista tai toisen väylän käyttöä. Jokaista estettä on yritettävä ja jokainen rangaistuslenkki on suoritettava kokonaan. Burpeiden on täytettävä standardi ja ne on tehtävä alueella. Ja kello on soitettava, ei koskaan potkaistava."
+  }
+ ],
+ "ocr-9-3": [
+  {
+   "heading": "Miten päätät",
+   "points": [
+    "Etsi täsmällinen sääntö: ohjeet, epäonnistumistavat ja huomautukset",
+    "Tarkista, vastaako näkemäsi jotain luetteloitua epäonnistumistapaa",
+    "Tee ratkaisu, ohjaa kilpailija, kirjaa se ja ohjaa eteenpäin, kun olet epävarma"
+   ],
+   "narration": "Tämä oppitunti antaa sinulle kolme tilannetta vuoden 2026 ohjelmasta. Päätä kunkin kohdalla, mitä tekisit, ennen kuin kuulet vastauksen. Menetelmä on joka kerta sama. Etsi esteen täsmällinen sääntö. Tarkista, vastaako näkemäsi jotain sen luetteloiduista epäonnistumistavoista. Tee sitten ratkaisu, ohjaa kilpailija ja kirjaa, mitä tapahtui. Jos sääntö ei ratkaise asiaa tai olet epävarma, ohjaa se päätuomarille."
+  },
+  {
+   "heading": "Tilanne 1: lyhyt kosketus yläosaan",
+   "points": [
+    "Helixillä kilpailija koskettaa hetkellisesti esteen yläosaa yhdellä kädellä",
+    "Kosketus kestää hetken eikä anna hänelle etua",
+    "Hän jatkaa ja soittaa kelloa"
+   ],
+   "narration": "Sääntö 4.2.6 luettelee Helixin yläosan koskettamisen epäonnistumistavaksi ilman etua koskevaa ehtoa. Olympus ja Z Wall ovat samanlaisia. Sääntökirjan tukema ratkaisu on siis epäonnistuminen, ja kilpailija ottaa rangaistuksen, vaikka kosketus ei antanut mitään etua. Edulla on merkitystä siellä, missä sääntö niin sanoo. Monkey Barsilla säännön 4.2.7 mukaan jalkojen koskettaminen maahan on epäonnistuminen, kun se luo edun. Tarkista aina epäonnistumistavan sanamuoto ennen kuin päätät.",
+   "review": "Tarkistettavana vuodelle 2027: vuoden 2026 verkko-ohjelma pyytää tuomareita harkitsemaan, loiko kosketus edun, ja keskittymään säännön tarkoitukseen, ei vähäiseen vahingossa tapahtuneeseen kosketukseen. Säännöt 4.2.6, 4.2.10 ja 4.2.17 luettelevat yläosan koskettamisen epäonnistumiseksi ilman etutestiä. Siihen asti noudata sääntökirjaa ja ohjaa kiistanalainen ratkaisu päätuomarille."
+  },
+  {
+   "heading": "Tilanne 2: nopeat burpeet, lantio ei suorana",
+   "points": [
+    "Kilpailija tekee rangaistusburpeitaan epäonnistuttuaan Spear Throwssa",
+    "Hän liikkuu nopeasti, ja monen toiston yläasennossa hänen lantionsa on yhä koukussa"
+   ],
+   "narration": "Nuo toistot eivät täytä standardia. Sääntö 3.17.4 määrittelee yläasennon tasapainoiseksi ja pystyksi, lantio ja polvet suorina, ei koukussa, ennen hyppyä. Toisto ilman sitä ei ole täydellinen burpee. Ohjelman mukaan vaaditaan lisäburpeita, kun standardi ei täyty, ja muistutetaan kilpailijaa siitä, että hänen liikettään ja toistojaan valvotaan. Älä laske heidän puolestaan. Spear Throwssa videotarkistustiimi ratkaisee väliin jääneet burpeet. Ilman videota ratkaiset paikan päällä, kirjoitat sen ylös ja annat sen päätuomarille.",
+   "review": "Tarkistettavana vuodelle 2027: väliin jääneistä tai virheellisistä burpeista lisättävä aika eroaa sääntökirjan (3.4.2), Officiating SOP:n ja vuoden 2026 ohjelman välillä. Tällä oppitunnilla ei opeteta lukua, ennen kuin valvontavastaava ratkaisee asian."
+  },
+  {
+   "heading": "Tilanne 3: rangaistuslenkin ohi juokseminen",
+   "points": [
+    "Kilpailija epäonnistuu läpäisty/hylätty-esteellä pisteelläsi",
+    "Ohjaat hänet rangaistuslenkille, mutta hän juoksee sen ohi ja jatkaa"
+   ],
+   "narration": "Tämä on selvä rikkomus. Säännön 3.4.1 mukaan kilpailijan, joka yrittää ja epäonnistuu läpäisty- tai hylätty-esteellä, on suoritettava rangaistuslenkki, eikä tämä suorittanut. Älä aja takaa äläkä riitele. Kirjaa otsanauhan numero, dokumentoi tapahtunut ja raportoi se päätuomarille niin pian kuin voit. Jos et pystynyt lukemaan numeroa, raportoi se heti selkeällä kuvauksella: vaatteiden väri, tunnistepiirteet ja kilpasarja. Itse rangaistuksesta päätetään päätuomarin kautta, ei esteelläsi.",
+   "review": "Tarkistettavana vuodelle 2027: sääntö 3.4.1 lisää 10 minuutin aikarangaistuksen, kun rangaistuslenkkiä ei suoriteta. Vuoden 2026 verkko-ohjelman mukaan siitä voi seurata hylkääminen. Siihen asti noudata sääntökirjaa ja ohjaa tapaus päätuomarille."
+  },
+  {
+   "heading": "Lyhyesti",
+   "points": [
+    "Lue epäonnistumistavan täsmällinen sanamuoto: etu merkitsee vain siellä, missä niin sanotaan",
+    "Burpee ilman täyttä ojennusta ylhäällä ei lasketa",
+    "Ohitettu rangaistuslenkki: kirjaa numero, dokumentoi, raportoi",
+    "Epävarma? Ohjaa päätuomarille"
+   ],
+   "narration": "Lyhyesti. Lyhyt kosketus Helixin, Olympuksen tai Z Wallin yläosaan on sääntökirjan mukaan epäonnistuminen, koska epäonnistumistavassa ei ole etutestiä, kun taas joissakin muissa epäonnistumistavoissa on. Burpee, jossa lantio ja polvet eivät ole suorina ylhäällä, ei ole täydellinen burpee, joten vaaditaan lisäburpeita. Kilpailija, joka juoksee rangaistuslenkin ohi, on rikkonut sääntöjä: kirjaa otsanauhan numero, dokumentoi se ja raportoi se päätuomarille."
+  }
+ ],
+ "ocr-4-2": [
+  {
+   "heading": "Yhden yrityksen este",
+   "points": [
+    "Yksi heitto: ohi menevä on hylätty, ja hylkäys tarkoittaa rangaistusta",
+    "Tehtäväsi: näe yrityksen alku, arvioi tulos, lähetä kilpailija rangaistukseen"
+   ],
+   "narration": "Spear Throw on yhden yrityksen läpäisty- tai hylätty-este. Jokainen kilpailija saa yhden heiton. Jos se epäonnistuu, toista yritystä ei ole: hän menee suoraan rangaistukseen. Tehtäväsi Spear Throwssa on nähdä täsmälleen, milloin yritys alkaa, arvioida tulos ja ohjata kilpailija oikeaan rangaistukseen."
+  },
+  {
+   "heading": "Mitä kilpailijan on tehtävä",
+   "points": [
+    "Seiso molemmat jalat esteen takana",
+    "Heitä keihäs saman väylän maaliin",
+    "Keihäs uppoaa osoitettuun maaliin ja pysyy siinä, mikään osa ei kosketa maata"
+   ],
+   "narration": "Säännön 4.2.13 mukaan kilpailija seisoo molemmat jalat esteen takana ja heittää oman väylänsä maaliin. Läpäistäkseen keihään on upottava osoitettuun maaliin ja pysyttävä siinä niin, ettei mikään osa keihästä kosketa maata."
+  },
+  {
+   "heading": "Milloin yritys alkaa",
+   "points": [
+    "Se on yritys, kun keihäs vapautetaan eteenpäin suuntautuvalla liikkeellä",
+    "Väylän vaihtaminen on sallittua, mutta vain ennen yritystä",
+    "Heiton pilaava sotkeutunut naru lasketaan silti yritykseksi"
+   ],
+   "narration": "Sääntökirjan mukaan yritys alkaa, kun kilpailija vapauttaa keihään eteenpäin suuntautuvalla liikkeellä. Sitä ennen hän saa vaihtaa väylää. Sen jälkeen hän ei voi aloittaa alusta. Ja jos naru sotkeutuu ja pilaa heiton, se lasketaan silti: narun pitäminen selvänä on kilpailijan tehtävä.",
+   "review": "Tarkistettavana vuodelle 2027: vuoden 2026 verkko-ohjelman mukaan sitoutuminen alkaa aiemmin, kun keihästä vedetään taakse heittoa varten. Sääntökirjan mukaan vapautuksessa. Siihen asti, kun valvontavastaava ratkaisee asian, noudata sääntökirjaa ja ohjaa kiistanalainen ratkaisu päätuomarille."
+  },
+  {
+   "heading": "Läpäisty vai hylätty",
+   "points": [
+    "Hylätty: keihäs ei uppoa osoitettuun maaliin",
+    "Hylätty: jokin keihään osa koskettaa maata, kun se on paikallaan",
+    "Ei hylkäys yksinään: maan hipaisu lennon aikana, jos se päätyy maaliin irti maasta"
+   ],
+   "narration": "Epäonnistumistapoja on kaksi. Keihäs ei uppoa osoitettuun maaliin tai jokin sen osa koskettaa maata sen jälkeen, kun se on pysähtynyt. Keihäs saa hipaista maata matkalla, eikä se yksin ole hylkäys, kunhan se päätyy maaliin ja irti maasta.",
+   "review": "Tarkistettavana vuodelle 2027: vuoden 2026 verkko-ohjelma luettelee ”keihäs koskettaa maata ennen maalia” epäonnistumiseksi. Sääntö 4.2.13 sallii sen. Noudata sääntökirjaa, kunnes valvontavastaava ratkaisee asian."
+  },
+  {
+   "heading": "Milloin suoritus on valmis",
+   "points": [
+    "Valmis, kun kilpailija on siirtynyt vähintään 2 metrin päähän väylästä",
+    "Hän ei voi lähteä, ennen kuin keihäs on osunut maaliin, rakenteeseen tai maahan",
+    "Putoaminen tai epäonnistuminen ennen kuin hän on 2 metrin päässä on keskeneräinen yritys: rangaistus"
+   ],
+   "narration": "Este on suoritettu, kun kilpailija on siirtynyt vähintään kaksi metriä pois väylästään. Hän ei voi lähteä ennen kuin keihäs on osunut maaliin, rakenteeseen tai maahan. Jos keihäs putoaa pois ennen kuin hän on kahden metrin päässä, se on keskeneräinen yritys, ja rangaistus astuu voimaan."
+  },
+  {
+   "heading": "Rangaistus",
+   "points": [
+    "30 burpeeta (15 Stadion-tapahtumissa)",
+    "Merkityllä burpee-alueella: sen ulkopuolella tehdyt burpeet eivät lasketa",
+    "Jokainen standardin mukaan: rinta maahan, pystyyn, sitten hyppy kädet korvien yläpuolella"
+   ],
+   "narration": "Spear Thrown epäonnistumisen rangaistus on kolmekymmentä burpeeta tai viisitoista Stadion-tapahtumissa. Ne on tehtävä merkityllä burpee-alueella, koska sen ulkopuolella tehtyjä ei lasketa. Jokaisen on täytettävä standardi: rinta maahan, takaisin tasapainoiseen pystyasentoon ja sitten hyppy kädet korvien yläpuolella.",
+   "review": "Tarkistettavana vuodelle 2027: väliin jääneistä burpeista lisättävä aika eroaa sääntökirjan (3.4.2), Officiating SOP:n ja vuoden 2026 ohjelman välillä. Tällä oppitunnilla ei opeteta lukua, ennen kuin valvontavastaava ratkaisee asian."
+  },
+  {
+   "heading": "Mitä teet",
+   "points": [
+    "Seiso paikassa, josta näet vapautuksen, esteen ja maalin",
+    "Kerro tulos selkeästi ja rauhallisesti",
+    "Lähetä kilpailija burpee-alueelle, jossa kamera näkee hänen otsanauhansa numeron",
+    "Ohjaa kiista päätuomarille: älä riitele esteellä"
+   ],
+   "narration": "Seiso paikassa, josta näet vapautuksen, esteen ja maalin samaan aikaan. Kerro tulos selkeästi ja rauhallisesti. Lähetä kilpailija burpee-alueelle ja varmista, että kamera näkee hänen otsanauhansa numeron. Jos kilpailija kiistää ratkaisun, kirjaa numero ja ohjaa asia päätuomarille. Älä riitele esteellä."
+  },
+  {
+   "heading": "Lyhyesti",
+   "points": [
+    "Yksi heitto: yritys alkaa, kun keihäs vapautetaan eteenpäin",
+    "Läpäisty: maalissa, mikään ei kosketa maata, kun se on paikallaan",
+    "Valmis: 2 metrin päässä väylästä",
+    "Hylätty: 30 burpeeta alueella, jokainen standardin mukaan"
+   ],
+   "narration": "Lyhyesti. Yksi heitto, ja yritys alkaa, kun keihäs vapautetaan eteenpäin. Läpäisty on keihäs maalissa niin, ettei mikään kosketa maata, kun se on paikallaan. Kilpailija on valmis, kun hän on kahden metrin päässä väylästä. Hylätty on kolmekymmentä burpeeta burpee-alueella, jokainen standardin mukaan."
+  }
+ ],
+ "deka-1-1": [
+  {
+   "heading": "Esimerkkioppitunti",
+   "points": [
+    "Tämä ohjelma on paikkamerkki",
+    "Sen oppitunti ja tietovisa näyttävät, miten toinen ohjelma toimii",
+    "Mikään siitä ei ole DEKAn sääntöjä"
+   ],
+   "narration": "Tämä on esimerkkioppitunti paikkamerkkiohjelmassa. Se näyttää, miten toinen ohjelma toimii OCR-ohjelman rinnalla omine oppitunteineen, tietovisoineen, läpäisyrajoineen ja todistuksineen. Mikään tässä ei ole DEKAn varsinaisia sääntöjä: ne tulevat DEKAn ohjelman omistajilta."
+  },
+  {
+   "heading": "Toistojen laskeminen (esimerkki)",
+   "points": [
+    "Tuomari laskee jokaisen standardin täyttävän toiston",
+    "Toisto, joka ei täytä sitä, on no rep, joka ilmoitetaan selvästi"
+   ],
+   "narration": "Tässä esimerkissä tuomari laskee jokaisen liikestandardin täyttävän toiston ja ilmoittaa no repin selvästi, kun toisto ei sitä täytä. Todelliset standardit ja ratkaisut tulevat DEKAn omasta materiaalista."
+  },
+  {
+   "heading": "Lyhyesti (esimerkki)",
+   "points": [
+    "Vain paikkamerkkisisältöä",
+    "Seuraava tietovisa on myös esimerkki"
+   ],
+   "narration": "Tämä oli esimerkkioppitunnin loppu. Seuraava tietovisa on myös esimerkki, joka näyttää, miten jokainen ohjelma pitää oman arviointinsa ja todistuksensa."
+  }
+ ]
+}

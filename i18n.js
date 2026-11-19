@@ -86,7 +86,12 @@
       if (!m) continue;
       const got = {};
       // what was in a slot is translated too when it's a text of its own ("No rep. {x}" with x a no-rep reason)
-      p.names.forEach((nm, i) => { const s = m[i + 1]; got[nm] = depth < 2 && /\p{L}/u.test(s) ? s.match(/^\s*/)[0] + translate(c, lang, s, null, depth + 1).trim() + s.match(/\s*$/)[0] : s; }); // keeping the spaces around it
+      p.names.forEach((nm, i) => {
+        const s = m[i + 1];
+        // an English plural ending the page put in a slot ("attempt{x}" with "s") means nothing in another language: left out
+        if (lang !== 'en' && /^(s|es)$/.test(s)) { got[nm] = ''; return; }
+        got[nm] = depth < 2 && /\p{L}/u.test(s) ? s.match(/^\s*/)[0] + translate(c, lang, s, null, depth + 1).trim() + s.match(/\s*$/)[0] : s; // keeping the spaces around it
+      });
       return fill(p.v, got, lang);
     }
     return text;
@@ -214,6 +219,14 @@
       sel.innerHTML = LANGS.map(([c, name]) => `<option value="${c}"${c === api.lang ? ' selected' : ''}>${name}</option>`).join('');
       sel.addEventListener('change', () => {
         store.set(sel.value);
+        // on the website, signed in: saved with the referee straight away (it follows them to any device and their lessons);
+        // keepalive lets it finish while the page reloads. The apps and the judge have no account to save it to.
+        try {
+          const token = localStorage.getItem('sp_token');
+          if (token && /^https?:$/.test(location.protocol) && (location.hostname.endsWith('azurestaticapps.net') || location.port === '8795')) {
+            fetch('/api/home', { method: 'POST', keepalive: true, headers: { 'Content-Type': 'application/json', 'X-Session': token }, body: JSON.stringify({ language: sel.value }) }).catch(() => {});
+          }
+        } catch { /* storage blocked: the home page saves it next time */ }
         const u = new URL(location.href);
         u.searchParams.delete('lang');
         location.replace(u.href);

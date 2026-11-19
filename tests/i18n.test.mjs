@@ -105,3 +105,9 @@ for (const f of fs.readdirSync(path.join(ROOT, 'i18n')).filter((x) => /^[a-z]{2}
     assert.match(read('scripts/site-files.txt'), new RegExp(`^i18n/${f}$`, 'm'));
   });
 }
+
+test("an English plural ending the page puts in a slot (attempt{x} with 's') is left out in other languages, where it means nothing", () => {
+  const c = I.compile({ '{n} attempt{x}': '{n} محاولة{x}', 'cited by {links} {x}': 'cité par {links} {x}', items: 'éléments' });
+  assert.equal(I.translate(c, 'ar', '3 attempts'), '3 محاولة');
+  assert.equal(I.translate(c, 'fr', 'cited by 4 items'), 'cité par 4 éléments', 'a whole word in a slot is still translated');
+});

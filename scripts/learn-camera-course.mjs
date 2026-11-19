@@ -4,7 +4,7 @@
 // for head referees and admins, the 30-minute practice server (slides with an "action"). Loaded by scripts/learn-seed.mjs.
 
 export const CAMERA = {
-  id: 'camera-station', code: 'cam', title: 'Burpee camera station', category: 'referee', learnerRole: 'Camera station referee', locales: 'en',
+  id: 'camera-station', code: 'cam', title: 'Burpee camera station', category: 'referee', learnerRole: 'Camera station referee', locales: 'en,fr,de,nl,es,it,el,hr,cs,pl,fi,sv,da,ar,th',
   description: 'How SpartanReferee\'s burpee camera station works, and how to set it up, connect the phones, judge with the AI judge, sort out problems and practise. For every referee: the head referee books and runs it, and everyone watches and reviews.',
   version: {
     edition: '2027', completionRule: 'lessons+assessment', passMark: 80, maxAttempts: null, retakeWaitHours: 0, validityMonths: 12, renewalDueDays: 30,

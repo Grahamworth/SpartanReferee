@@ -1,7 +1,7 @@
 // The lesson player (step 3), phone first: slides with a figure, narration through the media adapter (Azure narration, the device's own
 // voice, or captions only), captions and a full transcript, keyboard controls, a bookmark, completion, a language switcher with clear
 // Preview translation labels, and for editors the content versions with writing, review and approval (LRN-02..05, LRN-07, AT-04, AT-05).
-import { $, call, esc, toast, fail, badge, day, redraw, act, hooks, runHooks, LANG } from './core.js';
+import { $, call, esc, toast, fail, badge, day, redraw, act, hooks, runHooks, LANG, t } from './core.js';
 import { drawAction } from './practice.js';
 
 // ---------------------------------------------------------------- figures: simple drawings, in the page's own colours
@@ -81,12 +81,17 @@ function ruleChip(id) {
   const r = (L.rules || []).find((x) => x.id === id);
   return `<a class="ruleChip${r && r.state !== 'approved' ? ' pending' : ''}" href="#/rules/${encodeURIComponent(id)}" title="${esc(r ? `${r.title} (${r.stateText || r.state})` : id)}">${esc(id.replace(/^[A-Z]+-\d{4}-/, ''))}</a>`;
 }
+// a slide's review note starts with "Under review for 2027:" in the lesson's own language: that part in bold
+function reviewNote(text) {
+  const m = /^([^:：]{1,60}2027\s*[:：])\s*/.exec(text);
+  return `<p class="reviewNote">${m ? `<b>${esc(m[1])}</b> ${esc(text.slice(m[0].length))}` : esc(text)}</p>`;
+}
 function drawSlide() {
   const c = L.content, s = c.slides[slide], n = c.slides.length;
   $('lpStage').innerHTML = `<div class="lpFig">${FIGURES[s.figure] || FIGURES.placeholder}</div>
-    <div class="lpText"><p class="lpCount">${slide + 1} of ${n}</p><h2>${esc(s.heading)}</h2>
+    <div class="lpText"><p class="lpCount"><span dir="ltr">${slide + 1} / ${n}</span></p><h2>${esc(s.heading)}</h2>
       <ul class="lpPoints">${s.points.map((p) => `<li>${esc(p)}</li>`).join('')}</ul>
-      ${s.review ? `<p class="reviewNote"><b>${esc(L.content.locale === 'es' ? 'En revisión' : 'Under review')}</b> ${esc(s.review.replace(/^(Under review for 2027|En revisión para 2027):\s*/, ''))}</p>` : ''}
+      ${s.review ? reviewNote(s.review) : ''}
       ${s.note ? `<p class="note">${esc(s.note)}</p>` : ''}
       ${s.rules?.length ? `<p class="lpRules"><span>Rules</span>${s.rules.map(ruleChip).join('')}</p>` : ''}
       ${s.action ? '<div class="lpAction" id="lpAction"></div>' : ''}</div>`;
@@ -135,14 +140,16 @@ async function lessonView(rest) {
   const [id, qs = ''] = rest.split('?');
   const q = new URLSearchParams(qs || location.hash.split('?')[1] || '');
   stopVoice();
-  L = await call(`lessons/${encodeURIComponent(id)}?${new URLSearchParams([...(q.get('locale') ? [['locale', q.get('locale')]] : []), ...(q.get('content') ? [['content', q.get('content')]] : [])])}`);
+  // the language picked at the top of the page, unless this address names one (the lesson's own language switch)
+  const pageLang = (window.SR_I18N && SR_I18N.lang) || '';
+  L = await call(`lessons/${encodeURIComponent(id)}?${new URLSearchParams([...(q.get('locale') ? [['locale', q.get('locale')]] : pageLang ? [['locale', pageLang]] : []), ...(q.get('content') ? [['content', q.get('content')]] : [])])}`);
   const c = L.content, back = `#/programmes/${encodeURIComponent(L.programme.id)}`;
   slide = c && L.progress && L.progress.contentId === c.id ? Math.min(L.progress.slide, c.slides.length - 1) : 0;
   const done = L.completions.find((x) => !x.preview), donePreview = L.completions.find((x) => x.preview);
-  const head = `<section class="card lpHead"><p class="crumbs"><a href="${back}">${esc(L.programme.title)}</a> · ${esc(L.module.title)}</p>
+  const head = `<section class="card lpHead"><p class="crumbs"><a href="${back}">${esc(L.programme.title)}</a> · <span>${esc(L.module.title)}</span></p>
     <h1>${esc(L.lesson.title)}</h1>
     <p class="badges">${L.version.state !== 'published' ? badge(L.version.state, `${L.version.edition} ${L.version.state}`) : ''}${L.programme.demo ? badge('preview', 'Demonstration content') : ''}${done ? badge('completed', 'Completed') : donePreview ? badge('pending', 'Done in a preview translation') : ''}${c && c.state !== 'published' && !c.preview ? badge(c.state) : ''}</p>
-    ${L.extra?.reviews?.length ? `<p class="reviewNote"><b>Under review</b> ${L.extra.reviews.map((i) => esc(i.title)).join('; ')}. <a href="#/reviews?programme=${esc(L.programme.id)}">See the review items</a></p>` : ''}
+    ${L.extra?.reviews?.length ? `<div class="reviewNote"><b>Under review</b><ul class="reviewTitles">${L.extra.reviews.map((i) => `<li>${esc(i.title)}</li>`).join('')}</ul><a href="#/reviews?programme=${esc(L.programme.id)}">See the review items</a></div>` : ''}
     ${langSwitch()}</section>`;
   if (!c) return `${head}<section class="card"><h2>Being written</h2><p>This lesson's content hasn't been published yet.</p><p><a class="btnLink" href="${back}">Back to the programme</a></p></section>${editorPanel()}`;
   const preview = c.preview ? `<p class="previewBanner" role="note"><b>Preview translation.</b> ${esc(c.translatedBy || 'Not reviewed yet')}. The English is the approved version. Completing the lesson in this language is recorded, but it counts towards your qualification only in an approved language.</p>` : '';
@@ -158,7 +165,7 @@ async function lessonView(rest) {
         <button type="button" id="lpEnd" class="lpBtn lpMain" hidden>${done ? 'Done' : 'Finish'}</button>
       </div>
       <div class="lpTools"><button type="button" class="link" id="lpCc" aria-pressed="true">Captions</button><button type="button" class="link" id="lpTx" aria-expanded="false">Transcript</button>
-        <span class="muted lpMedia">${esc(L.media.label)}${L.media.kind !== 'text' ? ` · ${esc(L.media.voice)}` : ''}${L.media.note ? ` · ${esc(L.media.note)}` : ''}</span></div>
+        <span class="muted lpMedia"><span>${esc(L.media.label)}</span>${L.media.kind !== 'text' ? ` · <span dir="ltr">${esc(L.media.voice)}</span>` : ''}${L.media.note ? ` · <span>${esc(L.media.note)}</span>` : ''}</span></div>
       <p class="note lpKeys">Keys: ← and → move between slides, space plays or pauses, C turns captions on or off.</p>
       <div id="lpTranscript" class="lpTranscript" hidden><h3>Transcript</h3>${c.slides.map((s, i) => `<p><b>${i + 1}. ${esc(s.heading)}</b> ${esc(s.narration)}</p>`).join('')}</div>
     </section>
@@ -188,13 +195,13 @@ async function mediaView() {
   return `<section class="card"><h1>Media</h1><p class="note">How lessons are played: narration by Azure AI Speech, the device's own voice, or captions only, for every programme or one. Changing it never changes a lesson's content or anyone's completions, which record the content version, not how it was played.${d.speechOn ? '' : " Azure narration isn't set up on this server: the device's voice stands in."}</p>
     ${d.scopes.map((s) => `<form class="mediaForm" data-scope="${esc(s.id)}"><h2>${esc(s.title)}</h2>${s.set || s.id === 'default' ? '' : '<p class="note">Uses the default until set here.</p>'}
       <label>Provider <select name="provider">${d.providers.map((p) => `<option value="${esc(p.id)}"${p.id === s.provider ? ' selected' : ''}>${esc(p.label)}</option>`).join('')}</select></label>
-      ${['en', 'es'].map((loc) => `<label>${esc(LANG[loc])} voice <select name="voice-${loc}">${d.voices[loc].map((v) => `<option${(s.voices[loc] || d.voices[loc][0]) === v ? ' selected' : ''}>${esc(v)}</option>`).join('')}</select></label>`).join('')}
+      ${Object.keys(LANG).filter((loc) => d.voices[loc]).map((loc) => `<label>${esc(LANG[loc])} voice <select name="voice-${loc}">${d.voices[loc].map((v) => `<option${(s.voices[loc] || d.voices[loc][0]) === v ? ' selected' : ''}>${esc(v)}</option>`).join('')}</select></label>`).join('')}
       <button class="small" type="submit">Save</button></form>`).join('')}</section>`;
 }
 function wireMedia() {
   for (const f of document.querySelectorAll('.mediaForm')) f.addEventListener('submit', (e) => {
     e.preventDefault();
-    act(async () => { await call(`media/${f.dataset.scope}`, { method: 'PUT', body: { provider: f.provider.value, voices: { en: f['voice-en'].value, es: f['voice-es'].value } } }); toast('Media settings saved'); redraw(); }, e.submitter);
+    act(async () => { await call(`media/${f.dataset.scope}`, { method: 'PUT', body: { provider: f.provider.value, voices: Object.fromEntries([...f.querySelectorAll('select[name^="voice-"]')].map((x) => [x.name.slice(6), x.value])) } }); toast('Media settings saved'); redraw(); }, e.submitter);
   });
 }
 
@@ -219,7 +226,7 @@ export function wire() {
   }
   $('lpLang')?.addEventListener('change', (e) => { stopVoice(); location.hash = lessonUrl(L.lesson.id, `locale=${e.target.value}`); });
   for (const b of document.querySelectorAll('[data-cstate]')) b.onclick = () => {
-    if (b.dataset.cstate === 'published' && !confirm('Publish this content? Learners see it at once, and it never changes afterwards.')) return;
+    if (b.dataset.cstate === 'published' && !confirm(t('Publish this content? Learners see it at once, and it never changes afterwards.'))) return;
     act(async () => { await call(`content/${L.content.id}/state`, { method: 'POST', body: { to: b.dataset.cstate } }); toast('Done'); redraw(); }, b);
   };
   $('newContent')?.addEventListener('submit', (e) => {

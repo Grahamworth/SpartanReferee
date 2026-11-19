@@ -1,6 +1,6 @@
 // Assessments and credentials (step 4): taking an assessment, its result with feedback and rule references, assessors' decisions,
 // the question bank for editors, and demonstration credentials with their history and a PDF (ASM-01..05, AT-04, AT-08, AT-10).
-import { $, S, call, esc, toast, badge, bar, day, when, redraw, act, hooks, loadPdf } from './core.js';
+import { $, S, call, esc, toast, badge, bar, day, when, redraw, act, hooks, loadPdf, t } from './core.js';
 import { clip } from './judgement.js';
 
 const TYPE = { single: 'Single choice', multiple: 'Multiple choice', video: 'Video judgement' };
@@ -146,7 +146,7 @@ export function wire() {
       answers[qid] = { chosen, reason: card.querySelector('textarea')?.value || '' };
     }
     const blank = Object.values(answers).filter((a) => !a.chosen.length).length;
-    if (blank && !confirm(`${blank} question${blank === 1 ? ' has' : 's have'} no answer. Submit anyway?`)) return;
+    if (blank && !confirm(blank === 1 ? t('One question has no answer. Submit anyway?') : t('{n} questions have no answer. Submit anyway?', { n: blank }))) return;
     act(async () => {
       const r = await call(`attempts/${form.dataset.id}/submit`, { method: 'POST', body: { answers } });
       toast(r.attempt.result === 'pass' ? (r.credential ? 'Passed: credential issued' : 'Passed') : r.attempt.result === 'pending' ? 'Submitted: an assessor checks it next' : 'Submitted');
@@ -170,5 +170,5 @@ export function wire() {
       toast('Question added'); redraw();
     }, e.submitter);
   });
-  for (const b of document.querySelectorAll('[data-del-q]')) b.onclick = () => { if (confirm('Delete this question from the draft?')) act(async () => { await call(`questions/${b.dataset.delQ}`, { method: 'DELETE' }); redraw(); }, b); };
+  for (const b of document.querySelectorAll('[data-del-q]')) b.onclick = () => { if (confirm(t('Delete this question from the draft?'))) act(async () => { await call(`questions/${b.dataset.delQ}`, { method: 'DELETE' }); redraw(); }, b); };
 }

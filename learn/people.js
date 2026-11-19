@@ -1,6 +1,6 @@
 // People: your profile, and for admins and coordinators everyone they look after, possible duplicates and the audit log (step 1).
 // Each profile ends with the person's learning record (programmes.js).
-import { $, S, call, esc, toast, has, isAdmin, regionName, roleText, when, formBody, ROLE, LANG, redraw, act } from './core.js';
+import { $, S, call, esc, toast, has, isAdmin, regionName, roleText, when, formBody, ROLE, LANG, redraw, act, t } from './core.js';
 import { recordSection, wireRecord } from './programmes.js';
 
 const FIELD = { legal_name: ['legalName', 'Legal name'], preferred_name: ['preferredName', 'Preferred name'], email: ['email', 'Email'], country: ['country', 'Country (two letters)'], region_id: ['regionId', 'Region'], locale: ['locale', 'Language'], status: ['status', 'Status'] };
@@ -74,7 +74,7 @@ export function wire({ reloadMe }) {
   }, b);
   $('erasePerson')?.addEventListener('submit', (e) => {
     e.preventDefault();
-    if (!confirm('Erase this person? Their name, address and sign-in link are removed for good.')) return;
+    if (!confirm(t('Erase this person? Their name, address and sign-in link are removed for good.'))) return;
     act(async () => { const r = await call(`people/${e.target.dataset.id}/erase`, { method: 'POST', body: { confirm: e.target.confirm.value.trim() } }); toast(`${r.erased} erased`); alert(r.note); redraw(); }, e.submitter);
   });
   $('peopleFilter')?.addEventListener('submit', (e) => { e.preventDefault(); location.hash = `#/people?${new URLSearchParams(formBody(e.target))}`; });

@@ -1,0 +1,1538 @@
+{
+ "cam-1-1": [
+  {
+   "heading": "Kamery u trestné stanice",
+   "points": [
+    "Telefony natáčejí zónu trestných burpee",
+    "Server SpartanReferee je nahrává a na každé kameře spouští AI rozhodčího",
+    "Každé opakování se počítá a kontroluje podle normy"
+   ],
+   "narration": "SpartanReferee natáčí trestnou stanici na telefony. Každý telefon posílá obraz na server SpartanReferee přes Wi-Fi nebo mobilní data. Server ho nahrává a na každé kameře spouští AI rozhodčího, takže se každé opakování počítá a kontroluje podle normy pohybu."
+  },
+  {
+   "heading": "Kdo co dělá",
+   "points": [
+    "Hlavní rozhodčí akce stanici rezervuje a řídí",
+    "Každý rozhodčí přidělený k akci ji může sledovat živě a kontrolovat výsledky",
+    "Administrátoři mohou rezervovat, prodloužit nebo zastavit kamery jakékoli akce"
+   ],
+   "narration": "Každá akce má jednu rezervaci kamer. Hlavní rozhodčí ji rezervuje na stránce akce a v den závodu ji řídí. Každý rozhodčí přidělený k akci ji může otevřít, sledovat kamery živě a kontrolovat výsledky. Administrátoři mohou zasáhnout a rezervovat, prodloužit nebo zastavit kamery jakékoli akce."
+  },
+  {
+   "heading": "Ve zkratce",
+   "points": [
+    "Telefony natáčejí, server rozhoduje, všichni sledují v prohlížeči",
+    "Hlavní rozhodčí stanici rezervuje a řídí"
+   ],
+   "narration": "Ve zkratce: telefony natáčejí, server rozhoduje a každý rozhodčí sleduje v prohlížeči. Hlavní rozhodčí stanici rezervuje a řídí."
+  }
+ ],
+ "cam-1-2": [
+  {
+   "heading": "Vaše akce",
+   "points": [
+    "Vaše akce najdete na své domovské stránce",
+    "Otevřete některou a uvidíte hodiny kamer a kdo na ní rozhoduje",
+    "Hlavní rozhodčí tam vidí Rezervovat burpee kamery"
+   ],
+   "narration": "Vaše akce jsou na vaší domovské stránce SpartanReferee. Otevřete některou a uvidíte hodiny kamer a kdo na ní rozhoduje. Pokud jste její hlavní rozhodčí, právě tam rezervujete burpee kamery."
+  },
+  {
+   "heading": "Hodiny",
+   "points": [
+    "Kamery běží každý den akce od 07:00 do 18:00 místního času",
+    "Časy se zadávají v místním čase akce",
+    "Rezervace předem spustí servery o 10 minut dřív; spuštění hned trvá asi 5 minut"
+   ],
+   "narration": "Kamery akce běží každý její den od sedmi ráno do šesti večer místního času. Časy rezervace jsou v místním čase akce, ať rezervujete odkudkoli. Rezervace předem spustí servery o deset minut dřív, aby byly kamery připravené včas. Spuštění hned trvá asi pět minut."
+  },
+  {
+   "heading": "Servery a připojení",
+   "points": [
+    "Každý server zvládne 2 kamery",
+    "Každá kamera posílá asi 3,5 Mb/s",
+    "Před závodem ověřte připojení místa konání: musí unést všechny kamery"
+   ],
+   "narration": "Každý server zvládne dvě kamery, takže počet kamer určuje počet serverů. Každá kamera posílá asi tři a půl megabitu za sekundu a připojení místa konání musí unést všechny. Ověřte ho předem."
+  }
+ ],
+ "cam-1-3": [
+  {
+   "heading": "Pro každou kameru",
+   "points": [
+    "Telefon na stativu nebo stojanu",
+    "Powerbanka",
+    "Mobilní data nebo Wi-Fi místa konání"
+   ],
+   "narration": "Pro každou kameru potřebujete telefon na stativu nebo stojanu, powerbanku, aby vydržel celý den, a mobilní data nebo Wi-Fi místa konání."
+  },
+  {
+   "heading": "Aplikace",
+   "points": [
+    "Android: aplikace SpartanReferee Broadcaster",
+    "iPhone: Larix Broadcaster z App Store",
+    "Ke sledování a rozhodování: jakýkoli telefon, tablet nebo počítač s prohlížečem, bez instalace"
+   ],
+   "narration": "Telefony s Androidem používají aplikaci SpartanReferee Broadcaster. iPhony používají Larix Broadcaster z App Store. Ke sledování kamer a rozhodování stačí jakýkoli telefon, tablet nebo počítač s prohlížečem: nic se do nich instalovat nemusí."
+  }
+ ],
+ "cam-2-1": [
+  {
+   "heading": "Kam s telefonem",
+   "points": [
+    "Na šířku, na stojanu",
+    "3 až 4 metry od závodníků",
+    "Celé tělo každého závodníka v záběru, i vleže"
+   ],
+   "narration": "Postavte telefon na šířku na stojan, tři až čtyři metry od závodníků. Mějte celé tělo každého závodníka v záběru, i když leží na zemi."
+  },
+  {
+   "heading": "Úhel",
+   "points": [
+    "Mírně z úhlu nebo z boku posoudí hrudník u země lépe než přímo zepředu",
+    "Kliky a sedy-lehy vyžadují telefon z boku u podlahy"
+   ],
+   "narration": "Pohled mírně z úhlu nebo z boku posoudí hrudník u země lépe než kamera přímo zepředu. U kliků a sedů-lehů dejte telefon bokem u podlahy."
+  },
+  {
+   "heading": "Dráhy nechte volné",
+   "points": [
+    "Činovníci ve žlutých reflexních tričkách se nikdy nepočítají jako závodníci",
+    "Kdokoli jiný před kamerou překáží",
+    "Stůjte tam, odkud závodníky vidíte, aniž byste zakrývali záběr"
+   ],
+   "narration": "Činovníci ve žlutých reflexních tričkách se nikdy nepočítají jako závodníci. Kdokoli jiný, kdo stojí před kamerou, překáží, proto nechte dráhy volné a stůjte tam, odkud závodníky vidíte, aniž byste zakrývali kamery."
+  }
+ ],
+ "cam-2-2": [
+  {
+   "heading": "QR kódy",
+   "points": [
+    "Jakmile je rezervace zapnutá, otevřete ji na konzoli",
+    "Každá kamera čekající na telefon ukazuje QR kódy na kartách Živě a Kamery",
+    "Kódy se s každou rezervací mění: naskenujte je pokaždé znovu"
+   ],
+   "narration": "Jakmile je rezervace zapnutá, otevřete ji na konzoli. Každá kamera, která čeká na telefon, ukazuje QR kódy na kartách Živě a Kamery. Kódy se s každou rezervací mění, proto je naskenujte pokaždé znovu."
+  },
+  {
+   "heading": "Android: SpartanReferee Broadcaster",
+   "points": [
+    "Nainstalujte aplikaci; když se telefon zeptá, povolte instalaci z tohoto zdroje",
+    "Klepněte na Naskenovat QR kód kamery a naskenujte kód dané kamery",
+    "Kvalitu nechte na 720p, pokud není slabý signál, pak Otevřít kameru a Vysílat živě"
+   ],
+   "narration": "Na Androidu nainstalujte SpartanReferee Broadcaster. Telefon vás varuje, protože aplikace není z Obchodu Play: klepněte na Nastavení, povolte instalaci z tohoto zdroje, vraťte se a nainstalujte. Klepněte na Naskenovat QR kód kamery a naskenujte kód dané kamery. Kvalitu nechte na 720p, pokud není signál slabý, pak klepněte na Otevřít kameru a Vysílat živě."
+  },
+  {
+   "heading": "iPhone: Larix Broadcaster",
+   "points": [
+    "Nainstalujte Larix, jednou ho otevřete a povolte kameru a mikrofon",
+    "Naskenujte kód kamery pro iPhone (Larix) fotoaparátem telefonu, otevřete odkaz v Larixu a klepněte na Import",
+    "V Larixu: Nastavení, Připojení, zaškrtněte kameru a stiskněte červené tlačítko"
+   ],
+   "narration": "Na iPhonu nainstalujte Larix Broadcaster a jednou ho otevřete, přičemž povolte kameru a mikrofon. Naskenujte kód kamery pro iPhone fotoaparátem telefonu, otevřete odkaz v Larixu a klepněte na Import. Pak v Larixu přejděte do Nastavení, Připojení, zaškrtněte kameru a stiskněte červené tlačítko."
+  }
+ ],
+ "cam-3-1": [
+  {
+   "heading": "Spusťte rozhodčího",
+   "points": [
+    "Obraz každého telefonu se na kartě Živě ukáže během několika sekund",
+    "U kamery stiskněte Spustit AI rozhodčího, pojmenujte ji a zvolte cvik",
+    "Pak Začít rozhodovat: běží na serveru, takže pokračuje, i když stránku zavřete"
+   ],
+   "narration": "Obraz každého telefonu se na kartě Živě ukáže během několika sekund po zahájení vysílání. U kamery stiskněte Spustit AI rozhodčího, dejte jí jméno, zvolte, co se bude posuzovat, a stiskněte Začít rozhodovat. Rozhodčí běží na serveru, takže pokračuje, i když stránku zavřete."
+  },
+  {
+   "heading": "Co kontroluje u burpee",
+   "points": [
+    "Hrudník u země",
+    "Plné natažení boků",
+    "Výskok, obě nohy od země",
+    "Ruce nad ušima"
+   ],
+   "narration": "U burpee rozhodčí kontroluje čtyři věci: hrudník u země, plné natažení boků, výskok s oběma nohama od země a ruce nad ušima. Opakování, které jednu z nich nesplní, je no rep."
+  },
+  {
+   "heading": "Vyzkoušejte to",
+   "points": [
+    "Před každou kamerou udělejte pár zkušebních opakování",
+    "Ověřte, že se každé počítá a špatné ne",
+    "Pokud závodník vypadne ze záběru, posuňte telefon"
+   ],
+   "narration": "Než dorazí závodníci, udělejte před každou kamerou pár zkušebních opakování a ověřte, že se počítají a že záměrně špatné se nepočítá. Pokud závodník vypadne ze záběru, posuňte telefon."
+  }
+ ],
+ "cam-3-2": [
+  {
+   "heading": "Výsledky",
+   "points": [
+    "Výsledky uvádějí všechny posouzené",
+    "Najít číslo závodníka prohledá všechny kamery",
+    "Sledovat přehraje závodníka s označenými všemi opakováními a no repy"
+   ],
+   "narration": "Karta Výsledky uvádí všechny posouzené závodníky. Najít číslo závodníka prohledá všechny kamery kvůli jednomu závodníkovi. Sledovat tohoto závodníka přehraje se všemi opakováními a všemi no repy označenými."
+  },
+  {
+   "heading": "Jak dlouho se uchovává",
+   "points": [
+    "Záznamy a výsledky se uchovávají 7 dní",
+    "Po skončení rezervace se záznamy uloží a servery se vypnou",
+    "Všichni rozhodčí akce je mohou kontrolovat"
+   ],
+   "narration": "Záznamy a výsledky se uchovávají sedm dní. Když rezervace skončí, záznamy se uloží a servery se vypnou. Všichni rozhodčí akce je v té době mohou kontrolovat."
+  }
+ ],
+ "cam-3-3": [
+  {
+   "heading": "Telefony a obraz",
+   "points": [
+    "Nepřipojí se: zkontrolujte signál a naskenujte kód znovu z této rezervace",
+    "Seká se nebo vypadává: signál je na 720p příliš slabý, zvolte nižší kvalitu",
+    "Kamera je, ale bez obrazu: síť místa může blokovat video, zkuste mobilní data telefonu"
+   ],
+   "narration": "Pokud se telefon nepřipojí, zkontrolujte jeho signál a naskenujte kód znovu z této rezervace. Pokud se obraz seká nebo vypadává, signál je na 720p příliš slabý: zvolte nižší kvalitu. Pokud se kamera zobrazí, ale bez obrazu, síť místa může blokovat video: zkuste místo toho mobilní data telefonu."
+  },
+  {
+   "heading": "Servery a internet",
+   "points": [
+    "Server se nespustil: konzole řekne proč; někdy Azure na pár minut nemá volný server, zkuste to znovu",
+    "Internet na místě vypadne: nic se na server nedostane, dokud se nevrátí",
+    "Vlastní kopii na telefonu si ponechává jen Larix"
+   ],
+   "narration": "Pokud se server nespustil, konzole řekne proč. Někdy na pár minut není žádný server volný: zkuste to znovu. Pokud internet na místě vypadne, nic se na server nedostane, dokud se nevrátí, a vlastní kopii videa na telefonu si ponechává jen Larix."
+  }
+ ],
+ "cam-4-1": [
+  {
+   "heading": "Bezplatná kamera",
+   "points": [
+    "AI rozhodčí běží přímo ve vašem prohlížeči, na kameru tohoto telefonu nebo počítače",
+    "Žádný server a žádné náklady, kdykoli",
+    "Opřete telefon, udělejte pár burpee a sledujte, jak se každé posoudí"
+   ],
+   "narration": "Bezplatná kamera spouští AI rozhodčího přímo ve vašem prohlížeči, na kameru vašeho telefonu nebo počítače, živě nebo na minutě videa. Nepotřebuje server, nic nestojí a můžete ji použít kdykoli. Opřete telefon, udělejte pár burpee a sledujte, jak se každé posoudí."
+  },
+  {
+   "heading": "Nacvičte skutečnou stanici",
+   "points": [
+    "Hlavní rozhodčí mohou rezervovat 30minutový cvičný server",
+    "Telefony skenují kódy, konzole, rozhodčí i kontrola, stejně jako na akci",
+    "Využívá jeden ze serverů potřebných pro akce, proto je pro hlavní rozhodčí a administrátory"
+   ],
+   "narration": "Hlavní rozhodčí si také mohou rezervovat třicetiminutový cvičný server a nacvičit celou stanici: telefony skenující své kódy, konzoli, rozhodčího i kontrolu, přesně jako na akci. Využívá jeden ze serverů, které akce potřebují, proto je pro hlavní rozhodčí a administrátory."
+  }
+ ],
+ "ocr-1-1": [
+  {
+   "heading": "Proč Spartan existuje",
+   "points": [
+    "Spartan existuje, aby lidem pomáhal překonat jejich limity",
+    "Cíl: lidé silnější fyzicky i psychicky",
+    "Poslání: pomáhat lidem žít bez limitů"
+   ],
+   "narration": "Spartan existuje, aby lidem pomáhal překonat jejich limity a být silnější fyzicky i psychicky. Jeho posláním je pomáhat lidem žít bez limitů tím, že budují sílu, disciplínu a odolnost potřebné k zvládání životních výzev. Každý Spartan Race je navržen tak, aby závodníci dělali něco těžkého, nepohodlného a proměňujícího. V tomto prostředí pracujete jako rozhodčí. Závodníci před vámi se rozhodli udělat něco obtížného a pravidla existují proto, aby všichni čelili stejné zkoušce."
+  },
+  {
+   "heading": "Výzva pro každého",
+   "points": [
+    "Akce Spartan jsou pro všechny úrovně, od prvozávodníků po elitu",
+    "Účastní se miliony lidí po celém světě",
+    "Záleží na ochotě přijít, ne na tom, kde začínáte"
+   ],
+   "narration": "Akce Spartan jsou navrženy pro závodníky každé úrovně. Účastní se miliony lidí po celém světě, od prvozávodníků po elitní soutěžící. Spartan zastává názor, že nezáleží na tom, kde začínáte, ale na ochotě přijít, překonat výmluvy a postavit se výzvě. Každý, kdo vstoupí na trať, se účastní stejné zkoušky vytrvalosti a odhodlání. V den závodu proto uvidíte širokou škálu závodníků. Později v tomto kurzu se dozvíte, které z nich posuzujete nejpozorněji."
+  },
+  {
+   "heading": "Jedna sada pravidel všude",
+   "points": [
+    "Pravidla soutěže platí na všech akcích a soutěžích Spartan po celém světě",
+    "Jsou závazná pro každého soutěžícího na každé akci Spartan",
+    "Jejich cíle: spravedlivé a jednotné závodění, globální standardy, bezpečnost soutěžících"
+   ],
+   "narration": "Pravidla soutěže Spartan platí na všech akcích a soutěžích Spartan po celém světě a jsou závazná pro každého zúčastněného soutěžícího. Pravidla říkají, že vysvětlují, jak se má závod rozhodovat. Jejich cílem je, aby každá akce byla spravedlivá a jednotná, vedená ve sportovním duchu a s integritou. Dávají jasné pokyny, aby byla soutěž standardizovaná globálně. A chrání zdraví, bezpečnost a pohodu soutěžících, pokud to lze v závodech s překážkami rozumně zajistit."
+  },
+  {
+   "heading": "Vaše role",
+   "points": [
+    "Důsledně uplatňujte pravidla soutěže a postupy rozhodování",
+    "Chraňte spravedlnost a integritu akcí Spartan po celém světě",
+    "Na konci kurzu: uplatňovat pravidla důsledně a sebejistě"
+   ],
+   "narration": "Tento program představuje roli, odpovědnosti a standardy očekávané od rozhodčích Spartan. Jeho cílem je, aby každý rozhodčí uplatňoval pravidla soutěže a postupy rozhodování stejně a chránil tak spravedlnost a integritu akcí Spartan po celém světě. Závodník má na vaší překážce dostat stejné rozhodnutí jako na téže překážce na jakékoli jiné akci Spartan. Na konci kurzu byste měli umět uplatňovat pravidla Spartan důsledně a sebejistě."
+  },
+  {
+   "heading": "Ve zkratce",
+   "points": [
+    "Spartan existuje, aby lidem pomáhal překonat jejich limity",
+    "Jeho akce jsou pro všechny, od začátečníků po elitu",
+    "Jedna sada pravidel platí na každé akci Spartan po celém světě",
+    "Váš úkol: uplatňovat ji důsledně a chránit spravedlnost a integritu"
+   ],
+   "narration": "Ve zkratce. Spartan existuje, aby lidem pomáhal překonat jejich limity a být silnější na těle i na duchu. Jeho akce jsou pro všechny, od prvozávodníků po elitní soutěžící. Jedna sada pravidel platí na každé akci Spartan na světě a usiluje o závodění, které je spravedlivé, jednotné a bezpečné. Vaším úkolem jako rozhodčího je uplatňovat tato pravidla důsledně, aby byla chráněna spravedlnost a integrita každého závodu."
+  }
+ ],
+ "ocr-1-2": [
+  {
+   "heading": "Běh v terénu s překážkami",
+   "points": [
+    "Spartan Race je závod s překážkami (OCR)",
+    "Spojuje běh v terénu s fyzickými překážkami",
+    "Překážky zkoušejí duševní i fyzickou sílu"
+   ],
+   "narration": "Spartan Race je závod s překážkami: běh v terénu spojený s fyzickými překážkami na trati. Překážky jsou navrženy tak, aby zkoušely duševní i fyzickou sílu a posouvaly závodníky za hranice toho, co považovali za možné. Mezi překážkami závodníci běží. U každé překážky musí překonat určitou výzvu a pravidla přesně stanovují, co to obnáší. Jako rozhodčí jste obvykle postaveni u jedné překážky, takže tato překážka a její pravidla jsou vaším středem zájmu pro celý den."
+  },
+  {
+   "heading": "Pět druhů výzev",
+   "points": [
+    "Šplhání: například stěny a Rope Climb",
+    "Nošení: například Bucket Carry a Sandbag Carry",
+    "Plazení: například Barbed Wire Crawl",
+    "Skákání a tahání a zvedání: například Fire Jump a Hercules Hoist"
+   ],
+   "narration": "Program dělí výzvy do pěti druhů pohybu: šplhání, nošení, plazení, skákání a tahání a zvedání. Šplhání zahrnuje stěny a Rope Climb. Nošení zahrnuje Bucket Carry a Sandbag Carry. Plazení zahrnuje Barbed Wire Crawl. Skákání zahrnuje Fire Jump a tahání a zvedání zahrnuje Hercules Hoist, kde závodník tahem za lano zvedá závaží. Každá překážka má v pravidlech vlastní oddíl, který stanoví, co musí závodník udělat a jak může neuspět."
+  },
+  {
+   "heading": "Dva druhy překážek v pravidlech",
+   "points": [
+    "Povinné překážky: musí se splnit, než závodník pokračuje po trati",
+    "Překážky splněno/nesplněno: nesplnění znamená trest, trestný okruh nebo burpee",
+    "Každou překážku je nutné zkusit: minimálně se jí dotknout"
+   ],
+   "narration": "Pravidla dělí překážky do dvou kategorií. Povinné překážky se musí splnit, než závodník pokračuje po trati. Nesplnění znamená diskvalifikaci, i když ředitel závodu může podle závažnosti nahradit diskvalifikaci časovým trestem. U překážek splněno/nesplněno lze neuspět a neúspěch znamená trest: trestný okruh nebo burpee. Překážky splněno/nesplněno jsou buď s jedním pokusem, nebo s více pokusy. Každou překážku je nutné zkusit a pokus je minimálně dotek. Druhy překážek mají vlastní oddíl později v tomto kurzu.",
+   "review": "Ke kontrole pro 2027: pravidla (3.17.3) říkají, že trestem je trestný okruh nebo 30 burpee, jak Spartan určí pro každou akci, kategorii či vlnu. SOP pro rozhodování říká okruh u většiny překážek a burpee u Spear Throw; program 2026 říká, že burpee se používají jen u Spear Throw. Mezitím použijte trest potvrzený na vašem briefingu a jakékoli pochybnosti předejte hlavnímu rozhodčímu."
+  },
+  {
+   "heading": "Formáty závodů",
+   "points": [
+    "Zdroje 2026 uvádějí formáty Sprint, Super, Beast, Ultra a Stadion",
+    "Jedna sada pravidel platí pro všechny, ale některá pravidla se podle formátu liší",
+    "Stadion: trest za nesplnění jakékoli překážky je vždy 15 burpee",
+    "Minimum rozhodčích: 10 u Sprintu nebo Stadionu, 15 u Superu, 20 u Beastu nebo Ultra"
+   ],
+   "narration": "Závody Spartan mají několik formátů. Pravidla a postup rozhodování z roku 2026 uvádějí Sprint, Super, Beast, Ultra a Stadion. Platí pro ně táž pravidla, ale některá se podle formátu liší. Například na akcích Stadion je trest za nesplnění překážky vždy patnáct burpee, u každé překážky i v každé vlně. Postup rozhodování Spartan také stanoví minimální počet rozhodčích pro každý formát: deset pro Sprint nebo Stadion, patnáct pro Super a dvacet pro Beast nebo Ultra."
+  },
+  {
+   "heading": "Ve zkratce",
+   "points": [
+    "Závod s překážkami: běh v terénu spojený s fyzickými překážkami",
+    "Pět druhů výzev: šplhání, nošení, plazení, skákání, tahání a zvedání",
+    "Povinné překážky se musí splnit; nesplnění překážky splněno/nesplněno znamená trest",
+    "Formáty: Sprint, Super, Beast, Ultra a Stadion"
+   ],
+   "narration": "Ve zkratce. Spartan Race je závod s překážkami: běh v terénu spojený s fyzickými překážkami, které zkoušejí duševní i fyzickou sílu. Výzvy jsou šplhání, nošení, plazení, skákání a tahání a zvedání. Pravidla dělí překážky na povinné, které se musí splnit, a překážky splněno/nesplněno, kde nesplnění znamená trest. Každou překážku je nutné zkusit. Závody mají několik formátů, včetně Sprintu, Superu, Beastu, Ultra a Stadionu."
+  }
+ ],
+ "ocr-2-1": [
+  {
+   "heading": "Co rozhodčí chrání",
+   "points": [
+    "Spravedlnost a integritu závodu",
+    "Závodníky dodržující oficiální pravidla soutěže",
+    "Důsledně uplatňované tresty",
+    "Důvěryhodnost pro kategorii Elite a soutěžní závodění"
+   ],
+   "narration": "Rozhodčí jsou důležití, protože chrání spravedlnost a integritu závodu. Zajišťují, aby závodníci dodržovali oficiální pravidla soutěže, a uplatňují tresty u všech stejně. Tato důslednost dává kategorii Elite a soutěžnímu závodění důvěryhodnost. Postup rozhodování Spartan to vyjadřuje takto: rozhodování Spartan zakládá a udržuje integritu závodu důsledným vymáháním pravidel a standardní praxí rozhodování, aby byl výsledek spravedlivý a rovný pro všechny závodníky."
+  },
+  {
+   "heading": "Kdo je rozhodčí",
+   "points": [
+    "Činovník jmenovaný Spartan, který dbá na dodržování všech pravidel",
+    "Obvykle postavený u překážky nebo ve stanu kontroly videa",
+    "U své překážky: vymáhat její pravidla a sledovat nesplnění",
+    "Odpovídáte hlavnímu rozhodčímu"
+   ],
+   "narration": "Pravidla definují rozhodčího jako činovníka jmenovaného Spartan, jehož úkolem je dbát na dodržování všech pravidel. Rozhodčí jsou obvykle postaveni u překážek a ve stanu kontroly videa a odpovídají hlavnímu činiteli (Head Official). Postup rozhodování Spartan popisuje rozhodčího jako osobu přidělenou k překážce, která vymáhá její pravidla a sleduje nesplnění. V pravidlech jsou činovníci všichni, koho Spartan určí k výkonu povinností akce v pozici autority: personál, rozhodčí i dobrovolníci. Jako rozhodčí jste jedním z nich."
+  },
+  {
+   "heading": "Komu odpovídáte",
+   "points": [
+    "Hlavní rozhodčí: hlavní rozhodující osoba ve věci pravidel na akci",
+    "Pravidla tuto roli nazývají Head Official",
+    "Ředitel závodu: odpovídá za celkový provoz akce",
+    "Nejisté nebo sporné rozhodnutí jde k hlavnímu rozhodčímu"
+   ],
+   "narration": "Na každé akci je jedna osoba hlavním rozhodujícím ve všech věcech pravidel a nejvyšší autoritou pro jejich vymáhání a výklad. Pravidla tuto osobu nazývají Head Official. Postup rozhodování Spartan a tento program ji nazývají hlavní rozhodčí. Tomu podléháte. Ředitel závodu odpovídá za celkový provoz a řízení akce. Když si nejste jisti rozhodnutím nebo ho závodník zpochybní, jde k hlavnímu rozhodčímu."
+  },
+  {
+   "heading": "Vaše rozhodnutí se promítnou do výsledků",
+   "points": [
+    "Řetězec: rozhodčí, hlavní rozhodčí, pak ředitel závodu nebo tým časomíry",
+    "Hlavní rozhodčí potvrzuje tresty a předává je dál",
+    "Výsledky jsou konečné až po oficiální kontrole videa",
+    "Časové tresty se přičítají k cílovému času závodníka"
+   ],
+   "narration": "To, co u své překážky vidíte a zaznamenáte, může změnit výsledky. Řetězec vede od vás k hlavnímu rozhodčímu a pak k řediteli závodu nebo týmu časomíry. Hlavní rozhodčí řídí kontrolu videa a potvrzené tresty a diskvalifikace předává řediteli závodu a týmu časomíry. Pravidla říkají, že před konečnými výsledky má proběhnout oficiální kontrola videa, takže výsledky nemusí být zveřejněny hned. Časové tresty se přičítají k cílovému času závodníka, proto záleží na přesném a jasně zaznamenaném rozhodnutí."
+  },
+  {
+   "heading": "Jak jste školeni",
+   "points": [
+    "Vychází z Pravidel Spartan, SOP pro rozhodování a Globálních zásad rozhodování",
+    "Zaměření: vymáhání pravidel u překážek, tresty, jednání se závodníky a integrita závodu",
+    "Absolvování online školení je povinné pro certifikaci rozhodčích"
+   ],
+   "narration": "Toto školení existuje proto, aby rozhodčí vymáhali pravidla soutěže Spartan spravedlivě a důsledně. Vychází ze tří dokumentů: Pravidel Spartan, Standardního pracovního postupu rozhodování a Globálních zásad rozhodování. Zaměřuje se na vymáhání pravidel u překážek, tresty, jednání se závodníky a integritu soutěže. Podle postupu rozhodování je absolvování online školicího modulu povinné pro certifikaci rozhodčích. Před každou akcí také hlavní rozhodčí zajišťuje, aby každý rozhodčí absolvoval předakční školení."
+  },
+  {
+   "heading": "Ve zkratce",
+   "points": [
+    "Rozhodčí chrání spravedlnost, integritu závodu a jednotné tresty",
+    "U své překážky vymáháte pravidla a sledujete nesplnění",
+    "Odpovídáte hlavnímu rozhodčímu, konečné autoritě ve věci pravidel",
+    "Vaše rozhodnutí vstupují do kontroly videa a do výsledků"
+   ],
+   "narration": "Ve zkratce. Rozhodčí chrání spravedlnost a integritu závodu a zajišťují, aby se tresty uplatňovaly důsledně, což dává soutěžnímu závodění důvěryhodnost. Jste činovník jmenovaný Spartan, obvykle postavený u překážky, abyste vymáhali její pravidla a sledovali nesplnění. Odpovídáte hlavnímu rozhodčímu, kterého pravidla nazývají Head Official a který má poslední slovo ve věci pravidel. To, co zaznamenáte, projde kontrolou videa a může změnit cílový čas závodníka."
+  }
+ ],
+ "ocr-2-2": [
+  {
+   "heading": "Soutěžní a Open",
+   "points": [
+    "Soutěžní: závodníci Elite a Age Group",
+    "Open: otevřená všem, kategorie zaměřená na účast",
+    "Každá kategorie startuje ve vlnách rozdělených podle času startu nebo tempa"
+   ],
+   "narration": "Pravidla definují dva druhy kategorií. Soutěžní, která zahrnuje Elite a Age Group, a Open, která je otevřená všem. Tento program popisuje Open jako kategorii zaměřenou na účast. V rámci každé kategorie závodníci startují ve vlnách: skupinách rozdělených podle času startu nebo podle tempa. Když víte, která kategorie projíždí vaší překážkou, víte, jak pozorně ji musíte posuzovat."
+  },
+  {
+   "heading": "Kde se rozhodčí soustředí",
+   "points": [
+    "Rozhodčí se soustředí především na soutěžní kategorie",
+    "Od soutěžních závodníků se očekává dodržování každého pravidla",
+    "Vymáhejte pravidla stejně u každého soutěžního závodníka",
+    "Buďte na místě před prvním startem Elite"
+   ],
+   "narration": "Rozhodčí se soustředí především na soutěžní kategorie: Elite a Age Group. Pravidla očekávají, že každý soutěžní závodník dodrží všechna pravidla výslovně a bude závodit s bojovným a soutěžním duchem. Vaše vymáhání proto musí být stejné u každého soutěžního závodníka, v každé vlně Elite i Age Group. Postup rozhodování Spartan říká, že hlavní rozhodčí potvrzuje, že rozhodčí jsou na místě před prvním startem Elite, a že rozhodování, kontrola videa a udělování trestů platí pro kategorie Elite a Age Group."
+  },
+  {
+   "heading": "Závodníci Open",
+   "points": [
+    "Závodníkům Open se také doporučuje dodržovat pravidla",
+    "Atmosféra je uvolněnější: sportovní chování a osobní odpovědnost",
+    "Od závodníků Open se u trestných burpee očekává spartanská čest",
+    "Rozhodčí mohou pro vlny Open trať uklidit nebo ji předat dobrovolníkům"
+   ],
+   "narration": "Závodníkům Open se také doporučuje dodržovat pravidla, v duchu sportovního chování a osobní odpovědnosti, přestože je atmosféra v kategorii Open uvolněnější. Pravidla očekávají, že soutěžící v kategorii Open uplatní spartanskou čest, když dělají trestné burpee. V tomto programu končí časový plán rozhodčího úklidem trati nebo předáním dobrovolníkům pro vlny Open. Briefing vašeho hlavního rozhodčího vám řekne, co platí na vaší akci."
+  },
+  {
+   "heading": "Vlny a měření času",
+   "points": [
+    "Závodníci musí startovat ve své přidělené vlně nebo skupině",
+    "Závodník Elite, který startuje v nesprávné vlně, je přeřazen do Open",
+    "Vlny Elite: vyhrává první v cíli (čas od výstřelu)",
+    "Age Group, Open a vlny Elite na Stadionu: čas z čipu. Oba přičítají časové tresty"
+   ],
+   "narration": "Každý závodník musí startovat ve své přidělené vlně nebo skupině a spolu s ní. Závodník, který startuje v nesprávné vlně, nemá nárok na ceny, a závodník Elite, který startuje v nesprávné vlně, je přeřazen do kategorie Open. Měření času se podle kategorie liší. Ve vlně Elite vyhrává ten, kdo proběhne cílem první, což se nazývá čas od výstřelu. Vlny Age Group a Open a vlny Elite na Stadionu používají čas z čipu: od překročení startovní čáry po překročení cíle. V obou případech se přičítají případné časové tresty."
+  },
+  {
+   "heading": "Ve zkratce",
+   "points": [
+    "Soutěžní je Elite a Age Group; Open je otevřená všem",
+    "Rozhodčí se soustředí především na soutěžní závodníky",
+    "Každý soutěžní závodník má stejné vymáhání",
+    "Závodníkům Open se doporučuje dodržovat pravidla, na spartanskou čest"
+   ],
+   "narration": "Ve zkratce. Existují dva druhy kategorií: soutěžní, tedy Elite a Age Group, a Open, která je otevřená všem. Rozhodčí se soustředí především na soutěžní kategorie, kde se očekává dodržování každého pravidla, a vaše vymáhání musí být u všech stejné. Závodníkům Open se také doporučuje dodržovat pravidla, v uvolněnější atmosféře a na spartanskou čest. Vlny Elite se vyhrávají na čas od výstřelu, ostatní na čas z čipu, s přičtením případných časových trestů."
+  }
+ ],
+ "ocr-2-3": [
+  {
+   "heading": "Nestranný a profesionální",
+   "points": [
+    "Buďte nestranní: uplatňujte pravidla stejně u každého závodníka",
+    "Buďte profesionální: klidní, neutrální a uctiví",
+    "Znejte Pravidla soutěže a SOP pro rozhodování"
+   ],
+   "narration": "Postoj rozhodčího začíná nestranností a profesionalitou. Postup rozhodování Spartan od vás žádá uplatňovat pravidla překážek důsledně a nestranně, ať je závodník kdokoli. Zůstaňte klidní, neutrální a uctiví a reprezentujte Spartan profesionálně. Vašimi dvěma klíčovými dokumenty jsou Pravidla soutěže Spartan a Standardní pracovní postup rozhodování. Seznamte se s oběma před akcí a ujistěte se, že znáte a chápete pravidla své vlastní překážky."
+  },
+  {
+   "heading": "Smysl pravidla, spravedlnost a bezpečnost",
+   "points": [
+    "Soustřeďte se na smysl pravidla, ne na drobný nahodilý kontakt",
+    "Ptejte se, zda závodník získal výhodu",
+    "Spravedlnost a bezpečnost závodníků na prvním místě"
+   ],
+   "narration": "Soustřeďte se na to, k čemu pravidlo slouží, ne na drobný nahodilý kontakt. Jedním ze scénářů programu je závodník, který se krátce dotkne vrchu překážky, ale nezíská žádnou výhodu. Je třeba se ptát, zda vznikla výhoda. Spravedlnost a bezpečnost závodníků mějte na prvním místě. Ochrana zdraví, bezpečnosti a pohody soutěžících je jedním z uvedených cílů pravidel. Pokud u své překážky zaznamenáte bezpečnostní obavu, ihned ji nahlaste hlavnímu rozhodčímu nebo řediteli závodu."
+  },
+  {
+   "heading": "Když si nejste jisti, předejte to výš",
+   "points": [
+    "Předejte každou situaci, u které si nejste jisti",
+    "Nejste si jisti trestem nebo jeho vymáháním: ihned kontaktujte hlavního rozhodčího",
+    "Pochybnosti, bezpečnostní obavy nebo nesrovnalosti: nahlaste je ihned"
+   ],
+   "narration": "Nikdo od vás nečeká, že každou situaci vyřešíte sami. Když si nejste jisti, předejte ji výš. Postup rozhodování Spartan říká, že při jakékoli nejistotě ohledně druhu trestu nebo jeho vymáhání okamžitě kontaktujete hlavního rozhodčího. Když dorazíte k překážce, jakékoli pochybnosti, bezpečnostní obavy nebo nesrovnalosti ihned nahlaste řediteli závodu nebo hlavnímu rozhodčímu. Hlavní rozhodčí je na akci konečnou autoritou ve věci pravidel, takže předání výš je součástí dobře odvedené práce."
+  },
+  {
+   "heading": "Před dnem závodu",
+   "points": [
+    "Před účastí absolvujte předakční školení",
+    "Pokrývá pravidla s důrazem na překážky s vysokou mírou nesplnění",
+    "Pokrývá také pracovní postup rozhodčího, normy burpee a video u Spear Throw",
+    "Dostanete briefingový balíček a přístup k videonávodům"
+   ],
+   "narration": "Váš časový plán začíná před dnem závodu. Hlavní rozhodčí zajišťuje, aby každý rozhodčí před účastí absolvoval standardní předakční školení. Pokrývá Pravidla Spartan s důrazem na překážky s vysokou mírou nesplnění, tedy ty, na kterých závodníci neuspějí nejčastěji. Pokrývá také postup a pracovní postup rozhodčího, normy burpee a jejich vymáhání a natáčení a kontrolu videa, které se používá jen u Spear Throw. Dostanete také předakční briefingový balíček a přístup k oficiálním videonávodům."
+  },
+  {
+   "heading": "Ráno před závodem",
+   "points": [
+    "Přihlaste se, potvrďte svou překážku a převezměte vybavení",
+    "Zúčastněte se povinného briefingu hlavního rozhodčího na místě",
+    "K překážce dorazte s dostatečným předstihem před první soutěžní vlnou",
+    "Prohlédněte překážku, projděte trestný okruh a zvolte, kde budete stát"
+   ],
+   "narration": "Ráno před závodem se hlaste ve stanu, který vám byl určen, přihlaste se, potvrďte přidělení k překážce a převezměte vybavení. Připojte se ke komunikačnímu kanálu, pokud se používá. Zúčastněte se povinného briefingu hlavního rozhodčího na místě. Pak se vydejte k překážce s dostatečným předstihem před první soutěžní vlnou. Tam si prohlédněte uspořádání, zjistěte, odkud závodníci přicházejí, projděte celý trestný okruh a rozhodněte, kde budete stát, abyste jasně viděli pokusy, splnění i nesplnění."
+  },
+  {
+   "heading": "Během závodu a po něm",
+   "points": [
+    "Rozhodujte vlny Elite a soutěžní vlny",
+    "Pak trať uklidíte, nebo ji pro vlny Open předáte dobrovolníkům",
+    "Po návratu: záznam jde na kontrolu videa, písemná rozhodnutí hlavnímu rozhodčímu",
+    "Závodníci podávají protest hlavnímu rozhodčímu v době pro protesty"
+   ],
+   "narration": "Během závodu rozhodujete u své překážky vlny Elite a soutěžní vlny. Poté podle akce uklidíte trať, nebo ji pro vlny Open předáte dobrovolníkům. Jakmile se rozhodčí vracejí, hlavní rozhodčí řídí kontrolu videa záznamu. Kde video není, vaše rozhodnutí se činí na místě, zapisují se a po návratu se předávají hlavnímu rozhodčímu. Výsledky jsou konečné až po oficiální kontrole. Závodník, který chce protestovat proti trestu, jej podá hlavnímu rozhodčímu v době pro protesty.",
+   "review": "Ke kontrole pro 2027: pravidla (3.19.1) říkají, že doba pro protesty končí 15 minut před vyhlášením výsledků kategorie. SOP pro rozhodování (4.2) uvádí jako příklad uzávěrky půl hodiny před vyhlášením. Mezitím uplatňujte pravidla, řiďte se časy protestů, které hlavní rozhodčí oznámí, a závodníka s protestem pošlete k hlavnímu rozhodčímu."
+  },
+  {
+   "heading": "Ve zkratce",
+   "points": [
+    "Buďte nestranní, profesionální a důslední",
+    "Myslete na smysl pravidla; spravedlnost a bezpečnost na prvním místě",
+    "Když si nejste jisti, předejte to hlavnímu rozhodčímu",
+    "Váš den: školení, přihlášení, briefing, příprava, rozhodování, předání"
+   ],
+   "narration": "Ve zkratce. Buďte nestranní a profesionální a uplatňujte pravidla u každého závodníka stejně. Soustřeďte se na smysl pravidla spíše než na drobný nahodilý kontakt a spravedlnost a bezpečnost závodníků mějte na prvním místě. Když si nejste jisti, předejte to hlavnímu rozhodčímu. Váš časový plán akce vede od předakčního školení a briefingu přes přihlášení a vybavení, prohlídku a přípravu překážky až po rozhodování soutěžních vln a nakonec úklid nebo předání dobrovolníkům pro vlny Open."
+  }
+ ],
+ "ocr-3-1": [
+  {
+   "heading": "Hlášení se do služby",
+   "points": [
+    "Ve stanu dobrovolníků nebo rozhodčích se hlaste v přidělený čas",
+    "Přihlaste se u koordinátora dobrovolníků nebo hlavního rozhodčího",
+    "Potvrďte své přidělení k překážce",
+    "Ať o vás hlavní rozhodčí ví"
+   ],
+   "narration": "Váš den závodu začíná přihlášením. Jděte do stanu dobrovolníků, nebo do stanu rozhodčích, pokud ho vaše akce má, v čas hlášení, který jste dostali. Přihlaste se u koordinátora dobrovolníků nebo u hlavního rozhodčího a potvrďte, ke které překážce jste přiděleni. I když vás přihlásí někdo jiný, ujistěte se, že hlavní rozhodčí ví, že jste tam. Před prvním startem Elite musí hlavní rozhodčí potvrdit, že každý rozhodčí je na místě."
+  },
+  {
+   "heading": "Co si vyzvednete při přihlášení",
+   "points": [
+    "Oficiální materiály: tričko rozhodčího, čepice, průkazy nebo jiné přidělené vybavení",
+    "Cedule s QR kódem vaší překážky, pokud už není na místě",
+    "Místo v oficiálním komunikačním kanálu, například ve skupině WhatsApp"
+   ],
+   "narration": "Při přihlášení dostanete své oficiální materiály pro rozhodování. To znamená tričko rozhodčího, čepici a průkazy a jakékoli další přidělené vybavení. Vyzvedněte si také ceduli s QR kódem své překážky, pokud už není umístěna na místě. Odkazuje na videonávod k dané překážce. Nakonec se ujistěte, že jste přidáni do oficiálního komunikačního kanálu. Může to být skupina WhatsApp, jiná komunikační platforma nebo přímý kontakt na hlavního rozhodčího."
+  },
+  {
+   "heading": "Vaše vybavení rozhodčího",
+   "points": [
+    "Tričko nebo vesta rozhodčího",
+    "Psací podložka nebo zápisník, nejlépe voděodolný",
+    "Vytištěné listy pravidel pro vaši překážku",
+    "Videokamera a stativ, jen pokud vám je přidělena"
+   ],
+   "narration": "Program 2026 uvádí, co rozhodčí u překážky potřebuje. Mějte na sobě tričko nebo vestu rozhodčího. Noste psací podložku nebo zápisník, nejlépe voděodolný, protože budete zapisovat čísla na čelenkách a poznámky, někdy za mokra. Přineste vytištěné listy pravidel své překážky, abyste mohli pravidlo ověřit na místě. Pokud vám je přidělena kamera, budete mít také videokameru a stativ."
+  },
+  {
+   "heading": "Vlastní nezbytnosti",
+   "points": [
+    "Mobilní telefon",
+    "Oblečení vhodné do daných podmínek",
+    "Tužky nebo propisky, jídlo a voda",
+    "Cokoli osobního, co potřebujete, například léky"
+   ],
+   "narration": "Přineste si i vlastní nezbytnosti. Potřebujete mobilní telefon, protože právě jím zůstáváte spojeni s hlavním rozhodčím přes komunikační kanál. Oblečte se podle podmínek v daný den. Zabalte si tužky nebo propisky, jídlo a vodu a cokoli osobního, co potřebujete, například léky. Jakmile soutěžní vlny odstartují, vaše pozornost patří překážce, proto buďte připraveni."
+  },
+  {
+   "heading": "Videovybavení",
+   "points": [
+    "Hlavní rozhodčí připravuje, testuje a vydává vybavení pro rozhodování",
+    "Kamery s baterií na alespoň 2,5 hodiny a náhradní baterie, kde je třeba",
+    "Nastavitelné 7stopé stativy a SD karty alespoň 32 GB pro full HD",
+    "Video u překážek je jen pro Spear Throw"
+   ],
+   "narration": "Za vybavení pro rozhodování odpovídá hlavní rozhodčí. Připraví a otestuje ho v pátek před akcí a v den závodu ho vydá s konečnými pokyny. Postup stanoví minimum pro vybavení: videokamery s baterií na alespoň dvě a půl hodiny, náhradní baterie, nastavitelné sedmistopé stativy a paměťové karty alespoň třicet dva gigabajty, dost rychlé pro plné vysoké rozlišení. Natáčení videa u překážek je jen pro Spear Throw. Pokud tam dostanete kameru, postavíte ji a před první vlnou Elite ověříte, že nahrává."
+  },
+  {
+   "heading": "Ve zkratce",
+   "points": [
+    "Hlaste se včas ve stanu, přihlaste se a potvrďte svou překážku",
+    "Vyzvedněte si materiály a QR ceduli a připojte se ke komunikačnímu kanálu",
+    "Přineste voděodolnou podložku, listy pravidel, telefon, jídlo a vodu",
+    "Kamera a stativ jen pokud máte natáčet Spear Throw"
+   ],
+   "narration": "Ve zkratce. Hlaste se ve stanu v čas hlášení, přihlaste se, potvrďte svou překážku a dejte hlavnímu rozhodčímu vědět, že jste tam. Vyzvedněte si materiály a QR ceduli své překážky a připojte se ke komunikačnímu kanálu. Přineste voděodolnou podložku nebo zápisník, listy pravidel, telefon, jídlo a vodu. Kameru a stativ nosíte jen tehdy, pokud máte natáčet Spear Throw."
+  }
+ ],
+ "ocr-3-2": [
+  {
+   "heading": "Nejdřív briefing",
+   "points": [
+    "Briefing hlavního rozhodčího na místě je povinný, před nasazením",
+    "Pokrývá přidělení, klasifikace překážek, trestné okruhy a normu burpee",
+    "Pokrývá také postupy akce a hlášení trestů",
+    "Pak dorazte k překážce s předstihem před první soutěžní vlnou"
+   ],
+   "narration": "Než vyrazíte na trať, zúčastníte se briefingu hlavního rozhodčího na místě. Je povinný. Pokrývá postupy konkrétní akce, kde je která překážka a kdo k ní byl přidělen, které překážky jsou povinné a které umožňují více pokusů, trestné okruhy, normu burpee, umístění kamery u Spear Throw a jak se tresty určují, hlásí a sdělují. Po briefingu se vydejte k překážce s dostatkem času na přípravu před příchodem první soutěžní vlny."
+  },
+  {
+   "heading": "Znejte pravidla své překážky",
+   "points": [
+    "Přečtěte si pokyny překážky, způsoby nesplnění a doplňující poznámky",
+    "Použijte list pravidel, misijní list a video z QR kódu své překážky",
+    "Zkontrolujte varianty pro muže a ženy: u stěn je červený schod jen pro ženy"
+   ],
+   "narration": "Před příchodem prvního závodníka si projděte a pochopte pravidla své překážky. V pravidlech má každá překážka pokyny pro soutěžící, způsoby nesplnění a doplňující poznámky. Přečtěte si všechny tři. Pomůže vám i list pravidel, misijní list překážky a videonávod z QR kódu. Dávejte pozor na odlišné varianty pro muže a ženy. U stěn vysokých šest až devět stop smí červený schod použít například jen ženy a muž, který ho použije, překážku nesplní."
+  },
+  {
+   "heading": "Prohlédněte uspořádání",
+   "points": [
+    "Prohlédněte uspořádání překážky a ověřte, že je provozuschopná",
+    "Zjistěte tok závodu a směr, odkud závodníci přicházejí",
+    "Pochybnosti, bezpečnostní obavy nebo nesrovnalosti ihned hlaste řediteli závodu nebo hlavnímu rozhodčímu"
+   ],
+   "narration": "Když dorazíte, prohlédněte překážku. Zkontrolujte, zda je správně postavená a provozuschopná. Podívejte se, jak závod překážkou prochází a odkud budou závodníci přicházet, abyste věděli, kde dorazí a kudy odejdou. Pokud vás cokoli znepokojuje, ať jde o pochybnost o uspořádání, bezpečnostní obavu nebo něco nesrovnalého, ihned to nahlaste řediteli závodu nebo hlavnímu rozhodčímu. Nečekejte, až dorazí závodníci."
+  },
+  {
+   "heading": "Projděte trestný okruh",
+   "points": [
+    "Projděte celý trestný okruh, pokud existuje",
+    "Znejte trasu a přesně, kde se závodníci vracejí na trať",
+    "Okruhy se liší: běh, nošení, plazení nebo podle vzdálenosti, jak je potvrzeno pro vaši překážku",
+    "Stejný trest platí pro všechny v kategorii nebo vlně"
+   ],
+   "narration": "Pokud má vaše překážka trestný okruh, projděte si celý okruh sami. Musíte rozumět trase a místu návratu, abyste mohli závodníka jasně nasměrovat a vidět, zda okruh dokončí. Okruhy nejsou všechny stejné. Pravidla říkají, že jejich délka se může lišit podle terénu a mohou zahrnovat nošení, plazení nebo jiné prvky. Hlavní rozhodčí potvrzuje formát trestu každé překážky s ředitelem závodu. Ať je jakýkoli, uplatňuje se jednotně v rámci kategorie nebo vlny.",
+   "review": "Ke kontrole pro 2027: pravidla (3.17.3) říkají, že trestem je okruh nebo 30 burpee, jak Spartan určí pro každou překážku a akci. SOP pro rozhodování říká okruh u většiny překážek a burpee u Spear Throw a program 2026 říká burpee jen u Spear Throw. Mezitím uplatňujte trest, který hlavní rozhodčí potvrdí pro vaši překážku, a pokud si nejste jisti, kontaktujte hlavního rozhodčího."
+  },
+  {
+   "heading": "Kde stát",
+   "points": [
+    "Zvolte místo, odkud jasně vidíte pokusy, splnění i nesplnění",
+    "Mějte nerušený výhled na překážku",
+    "Jen u Spear Throw: postavte kameru podle postupu pro Spear Throw",
+    "Před první vlnou Elite ověřte, že kamera nahrává"
+   ],
+   "narration": "Rozhodněte, kde budete stát, ještě než začne závod. Potřebujete místo, odkud jasně uvidíte každý pokus, každé splnění i každé nesplnění, bez čehokoli, co by vám zakrývalo výhled. Zamyslete se, kde u vaší překážky k nesplnění obvykle dochází, a buďte dost blízko, abyste mohli závodníka oslovit, když k němu dojde. Jen u Spear Throw také postavíte videokameru podle postupu rozhodování pro Spear Throw a ověříte, že nahrává, před startem první vlny Elite. Hlavní rozhodčí může přijít zkontrolovat vymáhání a polohu kamery."
+  },
+  {
+   "heading": "Ve zkratce",
+   "points": [
+    "Zúčastněte se povinného briefingu a pak dorazte včas k překážce",
+    "Znejte její pokyny, způsoby nesplnění a poznámky",
+    "Prohlédněte uspořádání, projděte trestný okruh, každou obavu ihned hlaste",
+    "Stůjte tak, abyste viděli každý pokus; u Spear Throw ověřte, že kamera nahrává"
+   ],
+   "narration": "Ve zkratce. Zúčastněte se briefingu hlavního rozhodčího a pak se včas dostaňte k překážce před první soutěžní vlnou. Znejte její pokyny, způsoby nesplnění a doplňující poznámky, včetně případných variant pro muže a ženy. Prohlédněte uspořádání, projděte trestný okruh a jakoukoli pochybnost nebo bezpečnostní obavu hlaste okamžitě. Pak zvolte místo, odkud uvidíte každý pokus, a u Spear Throw před první vlnou Elite ověřte, že kamera nahrává."
+  }
+ ],
+ "ocr-3-3": [
+  {
+   "heading": "Komu podáváte hlášení",
+   "points": [
+    "Rozhodčí, pak hlavní rozhodčí, pak ředitel závodu nebo tým časomíry",
+    "Hlásíte hlavnímu rozhodčímu: pravidla tuto roli nazývají Head Official",
+    "Hlavní rozhodčí je konečnou autoritou pro vymáhání a výklad pravidel"
+   ],
+   "narration": "Program 2026 shrnuje komunikační řetězec do jedné řádky: rozhodčí, pak hlavní rozhodčí, pak ředitel závodu nebo tým časomíry. Jako rozhodčí hlásíte hlavnímu rozhodčímu. Pravidla tuto osobu nazývají Head Official a činí ji hlavní rozhodující osobou ve všech věcech pravidel na akci a konečnou autoritou pro vymáhání a výklad pravidel. Vaše hlášení jdou k hlavnímu rozhodčímu, který je předává dál."
+  },
+  {
+   "heading": "Co hlavní rozhodčí předává dál",
+   "points": [
+    "Incidenty závodu jdou řediteli závodu, který řídí celkový provoz akce",
+    "Incidenty soutěžících, například podvádění nebo zkratky, jdou časomíře",
+    "Potvrzené tresty a diskvalifikace jdou řediteli závodu a časomíře",
+    "Konečná rozhodnutí o trestech může potvrdit hlavní rozhodčí a tým časomíry"
+   ],
+   "narration": "Hlavní rozhodčí vás spojuje se zbytkem akce. Informuje ředitele závodu, který odpovídá za celkový provoz akce, o incidentech závodu. Týmu časomíry sděluje incidenty soutěžících, jako je podvádění nebo zkratky. Po kontrole videa sděluje potvrzené tresty a diskvalifikace řediteli závodu a týmu časomíry a techniky. Vaším úkolem je vymáhat pravidla překážky, nasměrovat závodníky k trestům a zaznamenat, co se stalo. Konečná rozhodnutí o trestech může potvrdit hlavní rozhodčí a tým časomíry."
+  },
+  {
+   "heading": "Kdy volat",
+   "points": [
+    "Při přihlášení se připojte k oficiálnímu kanálu: skupinový chat, platforma nebo přímo hlavní rozhodčí",
+    "Nejste si jisti druhem trestu nebo jeho vymáháním: ihned kontaktujte hlavního rozhodčího",
+    "Pochybnosti nebo bezpečnostní obavy u překážky: řediteli závodu nebo hlavnímu rozhodčímu",
+    "Nebezpečí: ihned hlaste hlavnímu rozhodčímu, řediteli závodu nebo personálu Spartan"
+   ],
+   "narration": "Při přihlášení se připojíte k oficiálnímu komunikačnímu kanálu. Může to být skupina WhatsApp, jiná komunikační platforma nebo přímá linka na hlavního rozhodčího. Používejte ho. Pokud si nejste jisti, který trest platí nebo jak ho vymáhat, okamžitě kontaktujte hlavního rozhodčího a nehádejte. Pochybnosti, bezpečnostní obavy nebo nesrovnalosti u své překážky hlaste řediteli závodu nebo hlavnímu rozhodčímu. A jakékoli nebezpečí hlaste okamžitě hlavnímu rozhodčímu, řediteli závodu nebo personálu Spartan."
+  },
+  {
+   "heading": "Hlášení sporu nebo útěku",
+   "points": [
+    "Spor: zapište číslo na čelence a důvod a nahlaste to, jakmile můžete",
+    "Bez čísla: nahlaste ihned s jasným popisem, například oblečení a kategorie",
+    "Na požádání později pomozte závodníka na trati identifikovat",
+    "Bez videa: zapište svá rozhodnutí o trestech a předejte je hlavnímu rozhodčímu"
+   ],
+   "narration": "Většina hlášení se týká závodníků. Pokud závodník rozhodnutí zpochybní, zaznamenejte číslo na jeho čelence, zapište důvod, například nesplněnou překážku bez trestu, a nahlaste to hlavnímu rozhodčímu, jakmile můžete. Pokud závodník odejde, aniž by vykonal trest, a nemůžete získat jeho číslo, nahlaste to hned s jasným popisem: barva oblečení, rozpoznatelné rysy a kategorie závodu. Kde není video, činíte rozhodnutí o trestech na místě, zapisujete je a po návratu je předáváte hlavnímu rozhodčímu."
+  },
+  {
+   "heading": "Ve zkratce",
+   "points": [
+    "Vaše linie vede k hlavnímu rozhodčímu, který informuje ředitele závodu a časomíru",
+    "Při přihlášení se připojte ke kanálu a používejte ho",
+    "Když si nejste jisti, zeptejte se hlavního rozhodčího a nebezpečí hlaste ihned",
+    "Zapisujte čísla na čelenkách a důvody a hlaste spory a útěky"
+   ],
+   "narration": "Ve zkratce. Hlásíte hlavnímu rozhodčímu a hlavní rozhodčí informuje ředitele závodu a tým časomíry. Při přihlášení se připojte ke komunikačnímu kanálu a používejte ho. Když si nejste jisti trestem, ihned se zeptejte hlavního rozhodčího a nebezpečí hlaste okamžitě. U sporů a útěků zapište číslo na čelence nebo jasný popis, poznamenejte důvod a nahlaste to."
+  }
+ ],
+ "ocr-4-1": [
+  {
+   "heading": "Tři druhy překážek",
+   "points": [
+    "Povinná: musí se splnit, než závodník pokračuje",
+    "S více pokusy (splněno/nesplněno): opakuje se do úspěchu nebo do trestu",
+    "S jedním pokusem (splněno/nesplněno): po zavázání se ji závodník splní nebo vykoná trest",
+    "Část D pravidel uvádí každou překážku pod jedním ze tří druhů"
+   ],
+   "narration": "Pravidla dělí překážky na povinné a splněno/nesplněno. Překážky splněno/nesplněno jsou dvou druhů, s více pokusy a s jedním pokusem, takže v praxi pracujete se třemi druhy. Povinná překážka se musí splnit, než závodník půjde dál. Překážku s více pokusy lze zkoušet tolikrát, kolikrát je potřeba, dokud se nesplní nebo dokud není udělen trest. Překážku s jedním pokusem musí závodník po zavázání se splnit, jinak platí trest. Pravidla uvádějí každou překážku pod jedním druhem a briefing pokrývá klasifikace.",
+   "review": "Ke kontrole pro 2027: pravidla a program 2026 třídí několik překážek různě. Pravidla mají Monkey Bars, Multi-Rig, Twister, Olympus, Z Wall, Beater a Helix jako překážky s jedním pokusem, Atlas Carry, Tire Flip a Stairway to Sparta jako s více pokusy a A-Frame Cargo jako povinnou. Program uvádí první skupinu jako s více pokusy, druhou jako povinné a A-Frame Cargo jako s více pokusy. Mezitím použijte oddíl pravidel pro danou překážku a sporné rozhodnutí předejte hlavnímu rozhodčímu."
+  },
+  {
+   "heading": "Každou překážku je nutné zkusit",
+   "points": [
+    "Pokus je minimálně dotek překážky",
+    "Může zahrnovat vstup do vody nebo náročného terénu, aby se k překážce dostalo",
+    "Tento terén nelze obejít trestem, pokud to briefing nebo personál závodu nedovolí",
+    "Nepokus o překážku je častý přestupek, na který dávejte pozor"
+   ],
+   "narration": "Každou překážku je nutné zkusit. Pravidla stanoví minimum: pokus je dotek překážky. Někdy pokus zahrnuje i cestu k překážce, například vstup do vody nebo přechod jiného náročného terénu. Tento terén nelze přeskočit trestem, pokud předzávodní briefingy nebo personál v den závodu neřekli, že je to přijatelné. Program 2026 uvádí nepokus o překážku mezi častými porušeními pravidel, proto dávejte pozor na závodníky, kteří míří k trestu, aniž by to zkusili."
+  },
+  {
+   "heading": "Povinné překážky",
+   "points": [
+    "Splňují se celé: žádné obejití ani trest místo toho, pokud to činovník neřekne",
+    "Nesplnění znamená diskvalifikaci; ředitel závodu může nahradit časovým trestem",
+    "Příklady: Bucket Carry, Sandbag Carry, Log Carry, Barbed Wire Crawl",
+    "Bucket Carry: ztracený materiál znamená zopakovat celou trať s plným kbelíkem"
+   ],
+   "narration": "Povinná překážka se musí splnit celá, než závodník pokračuje. Závodník ji nemůže obejít ani vyměnit za trest, pokud mu to nenařídí činovník závodu. Podle pravidel znamená nesplnění povinné překážky diskvalifikaci, i když ředitel závodu může podle závažnosti přestupku nahradit diskvalifikaci časovým trestem. Typická jsou nošení a plazení. U Bucket Carry například není možnost burpee a kbelík, který se vrátí s chybějícím materiálem, znamená, že závodník musí zopakovat celou trať se správně naplněným kbelíkem."
+  },
+  {
+   "heading": "Překážky s více pokusy",
+   "points": [
+    "Závodník může zkoušet tolikrát, kolikrát je potřeba",
+    "Končí splněním, nebo se závodník vzdá a vykoná trest",
+    "Příklady: Rope Climb, Bender, Inverted Wall",
+    "Rope Climb: lano měnit až po návratu na zem; jedno lano na pokus"
+   ],
+   "narration": "Překážku s více pokusy lze zkoušet znovu a znovu. Závodník pokračuje, dokud ji buď nesplní, nebo se rozhodne ji opustit a vykonat trest. Pravidla každé překážky říkají, co opakování zahrnuje. U Rope Climb například smí závodník po návratu na zem vyměnit lano a zkusit to znovu, ale použití více než jednoho lana během jediného pokusu je nesplnění. Závodníci, kteří opakují pokusy, by měli dát přednost těm, kdo to zkoušejí poprvé, i když pravidla říkají, že to není povinné."
+  },
+  {
+   "heading": "Překážky s jedním pokusem: kdy začíná zavázání",
+   "points": [
+    "Po zavázání se závodník překážku splní nebo vykoná trest: žádné opakování",
+    "Pravidla každé překážky určují, kdy zavázání začíná",
+    "Spear Throw: když je oštěp vypuštěn pohybem vpřed",
+    "Ape Hanger: když se závodník dotkne kterékoli horní tyče"
+   ],
+   "narration": "Překážka s jedním pokusem dává závodníkovi jeden pokus, jakmile se zavázal. Poté ji buď splní, nebo vykoná trest. Klíčovou otázkou je, kdy zavázání začíná, a pravidla na ni odpovídají překážku po překážce. U Spear Throw pokus začíná, když je oštěp vypuštěn pohybem vpřed. U Ape Hanger je závodník zavázán, jakmile se dotkne kterékoli horní tyče. Znejte bod zavázání své překážky: rozhoduje o tom, zda se závodník ještě může vrátit na začátek.",
+   "review": "Ke kontrole pro 2027: program 2026 říká, že zavázání začíná, jakmile začne pohyb pokusu, a u Spear Throw když se oštěp zatáhne k hodu. Pravidla definují zavázání překážku po překážce a u Spear Throw je to při vypuštění. Mezitím uplatňujte pravidlo dané překážky a sporné rozhodnutí předejte hlavnímu rozhodčímu."
+  },
+  {
+   "heading": "Co se počítá jako nesplnění",
+   "points": [
+    "Posuzujte podle způsobů nesplnění v pravidlech své překážky",
+    "Kopnutí do zvonu chodidly, nohama nebo koleny je nesplnění, bez opakování",
+    "Nesplnění vlivem výrazného zásahu jiného závodníka: činovník může povolit restart",
+    "Častá nesplnění: použití podpůrné konstrukce a nezazvonění zvonu"
+   ],
+   "narration": "Nesplnění je definováno v pravidlech každé překážky, v jejím seznamu způsobů nesplnění. Posuzujte podle tohoto seznamu, ne podle vlastní představy, jak má být překážka provedena. Napříč překážkami platí dvě obecná pravidla. Kopnutí do zvonu chodidly, nohama nebo koleny se počítá jako nesplnění: závodník nemůže opakovat a musí vykonat trest. A pokud k nesplnění vedl výrazný fyzický zásah jiného soutěžícího, může závodník po svolení činovníka restartovat bez dalšího trestu."
+  },
+  {
+   "heading": "Ve zkratce",
+   "points": [
+    "Každou překážku je nutné zkusit: minimálně se jí dotknout",
+    "Povinná: splnit celou, jinak hrozí diskvalifikace",
+    "S více pokusy: opakovat do splnění nebo trest; s jedním pokusem: jeden pokus po zavázání",
+    "Posuzujte způsoby nesplnění každé překážky; které je který druh, je ke kontrole"
+   ],
+   "narration": "Ve zkratce. Každou překážku je nutné zkusit a dotek je minimum. Povinná překážka se musí splnit celá a její nesplnění znamená diskvalifikaci, pokud ředitel závodu nenahradí časovým trestem. Překážku s více pokusy lze opakovat, dokud se nesplní nebo závodník nevykoná trest. Překážka s jedním pokusem dovoluje jeden pokus, jakmile se závodník zaváže, v bodě, který určují pravidla dané překážky. Posuzujte každou překážku podle jejích vlastních způsobů nesplnění a pamatujte, že to, která překážka je kterého druhu, je ke kontrole pro 2027."
+  }
+ ],
+ "ocr-5-1": [
+  {
+   "heading": "Dva druhy překážek, dva druhy výsledku",
+   "points": [
+    "Povinné překážky se musí splnit: jejich nesplnění znamená diskvalifikaci",
+    "Ředitel závodu může podle závažnosti nahradit časovým trestem",
+    "Nesplnění překážky splněno/nesplněno znamená trest: trestný okruh nebo burpee"
+   ],
+   "narration": "Pravidla dělí překážky do dvou kategorií. Povinné překážky se musí splnit. Nesplnění jedné znamená diskvalifikaci z akce, i když ředitel závodu může podle závažnosti přestupku nahradit časovým trestem. Překážky splněno/nesplněno jsou jiné. Závodník, který jednu nesplní, zůstává v závodě a vykoná místo toho trest. Tím trestem je buď trestný okruh, nebo burpee, a Spartan určuje, který platí pro každou překážku, akci, kategorii či vlnu.",
+   "review": "Ke kontrole pro 2027: pravidlo 3.17.3 říká, že trestem je trestný okruh nebo 30 burpee, jak Spartan určí pro každou překážku, akci, kategorii či vlnu, a na Stadionu vždy 15 burpee. SOP pro rozhodování říká okruh u většiny překážek a burpee u Spear Throw; program 2026 říká burpee jen u Spear Throw. Mezitím použijte trest, který hlavní rozhodčí potvrdí pro vaši překážku, a pokud si nejste jisti, zeptejte se hlavního rozhodčího."
+  },
+  {
+   "heading": "Trestný okruh",
+   "points": [
+    "Určený úsek trati, který závodník absolvuje po nesplnění překážky",
+    "Jeho délka se liší a může zahrnovat nošení, plazení nebo jiné výzvy",
+    "Uplatňuje se stejně u všech v kategorii nebo vlně",
+    "Projděte celý okruh před začátkem závodu: znejte trasu a místo návratu"
+   ],
+   "narration": "Trestný okruh je určený úsek trati, který závodník absolvuje po nesplnění překážky. Jeho délka se může lišit podle terénu a může zahrnovat další výzvy, například nošení nebo plazení. Ať je navržen jakkoli, uplatňuje se jednotně u všech ve stejné kategorii nebo vlně. Před první soutěžní vlnou projděte celý okruh sami. Musíte znát trasu a místo návratu, abyste mohli správně nasměrovat závodníky a všimli si každého, kdo ho zkrátí."
+  },
+  {
+   "heading": "Nedodělané burpee",
+   "points": [
+    "Závodníkům, kteří nedokončí požadovaná burpee, se k cílovému času přičte čas",
+    "Velký nedodělek může znamenat velký časový trest",
+    "Nedodělek lze zjistit na trati nebo při kontrole videa, před vyhlášením",
+    "Kolik času přidá každé vynechané burpee, je ke kontrole pro 2027"
+   ],
+   "narration": "Tam, kde jsou trestem burpee, závodníkovi, který nedokončí požadovaný počet, se k celkovému cílovému času přičte čas. Program 2026 to říká jednoduše: velký nedodělek burpee může mít za následek velký časový trest. Nedodělek lze zjistit během závodu nebo při oficiální kontrole videa před vyhlášením, proto výsledky nemusí být konečné hned. Přesně kolik času přidá vynechané burpee, je ke kontrole, takže tato lekce neučí žádné číslo.",
+   "review": "Ke kontrole pro 2027: pravidlo 3.4.2 přičítá 30 sekund za každé z prvních 10 vynechaných burpee a celkem 10 minut, pokud je vynecháno více než 10. SOP pro rozhodování přičítá 30 sekund za každé a 10 minut, pokud je dokončeno méně než 20; program 2026 říká, že 11 nebo více nesprávných je 10 minut a méně než 20 je diskvalifikace. Tato lekce neučí žádné číslo, dokud nerozhodne vedoucí rozhodování: tresty potvrzuje hlavní rozhodčí."
+  },
+  {
+   "heading": "Nevykonání trestu",
+   "points": [
+    "Trestné okruhy se musí absolvovat celé",
+    "Vynechání trestu přináší další trest: přičtený čas nebo diskvalifikaci",
+    "Kolik stojí vynechání okruhu, je ke kontrole pro 2027",
+    "Vaše role: zapsat číslo na čelence a nahlásit to hlavnímu rozhodčímu"
+   ],
+   "narration": "Trestné okruhy se musí absolvovat celé. Závodník, který nesplní překážku splněno/nesplněno a trest nevykoná, porušil pravidla a něco ho to bude stát. Při oficiální kontrole videa mohou činovníci závodu přidat časový trest nebo diskvalifikovat. Zdroje 2026 se v přesném trestu za vynechání okruhu rozcházejí, proto je ke kontrole. Vaše role se nemění: zapište číslo na čelence závodníka, poznamenejte, co se stalo, a nahlaste to hlavnímu rozhodčímu.",
+   "review": "Ke kontrole pro 2027: pravidlo 3.4.1 přičítá 10minutový časový trest, když závodník nesplní překážku splněno/nesplněno a nevykoná trestný okruh. Program 2026 říká, že nevykonání trestu může mít za následek diskvalifikaci, a SOP pro rozhodování žádné číslo neuvádí. Dokud nerozhodne vedoucí rozhodování, uplatňujte pravidla: zapište to, nahlaste to a trest nechte na hlavním rozhodčím."
+  },
+  {
+   "heading": "Když závodník odejde bez trestu",
+   "points": [
+    "Zapište číslo na čelence a důvod, například nesplněná překážka bez trestu",
+    "Bez čísla? Dejte hlavnímu rozhodčímu jasný popis: oblečení, rysy, kategorie",
+    "Nahlaste to, jakmile můžete, a na požádání později pomozte závodníka identifikovat"
+   ],
+   "narration": "Postup rozhodování říká, co dělat, když závodník odejde od vaší překážky, aniž by vykonal trest. Zapište si číslo na jeho čelence a důvod. Nahlaste to hlavnímu rozhodčímu, jakmile to provozně půjde. Pokud jste číslo nezískali, nahlaste to přesto hned, s jasným fyzickým popisem závodníka: barva oblečení, rozpoznatelné rysy a kategorie závodu. Můžete být později požádáni, abyste pomohli závodníka na trati identifikovat."
+  },
+  {
+   "heading": "Ve zkratce",
+   "points": [
+    "Nesplnění povinné překážky: diskvalifikace, pokud ředitel závodu nenahradí časovým trestem",
+    "Nesplnění překážky splněno/nesplněno: trestný okruh, absolvovaný celý, nebo burpee",
+    "Vynechaná burpee a vynechané okruhy přinášejí další tresty: částky jsou ke kontrole",
+    "Zapište číslo na čelence a nahlaste to hlavnímu rozhodčímu"
+   ],
+   "narration": "Ve zkratce. Nesplníte-li povinnou překážku, trestem je diskvalifikace, pokud ředitel závodu nenahradí časovým trestem. Nesplní-li závodník překážku splněno/nesplněno, vykoná určený trest: trestný okruh, absolvovaný celý, nebo burpee. Vynechaná burpee a vynechané okruhy přinášejí další tresty a přesné částky jsou ke kontrole pro 2027. Ať se stane cokoli, zapište číslo na čelence a nahlaste to hlavnímu rozhodčímu.",
+   "review": "Ke kontrole pro 2027: tam, kde jsou trestem burpee (pravidlo 3.17.3), čas přičtený za vynechaná burpee (3.4.2) a trest za vynechání okruhu (3.4.1) se mezi pravidly, SOP pro rozhodování a programem 2026 liší. Dokud nerozhodne vedoucí rozhodování, použijte trest, který hlavní rozhodčí potvrdí pro vaši překážku, neučte žádné časové číslo a sporná rozhodnutí předejte hlavnímu rozhodčímu."
+  }
+ ],
+ "ocr-5-2": [
+  {
+   "heading": "Vaše práce u překážky",
+   "points": [
+    "Dbejte, aby závodníci dodržovali pokyny překážky",
+    "Sledujte porušení pravidel a znejte podmínky nesplnění překážky",
+    "Každého, kdo neuspěje, nasměrujte ke správnému trestu",
+    "Problémy a nedodržování hlaste hlavnímu rozhodčímu"
+   ],
+   "narration": "Pravidla definují rozhodčího jako činovníka jmenovaného k dohledu nad dodržováním pravidel, obvykle postaveného u překážky nebo ve stanu kontroly videa, který odpovídá hlavnímu činiteli (Head Official), jejž tento program nazývá hlavní rozhodčí. U své překážky to znamená čtyři věci. Dbát, aby závodníci dodržovali pokyny. Sledovat porušení a přesně vědět, co se počítá jako nesplnění. Každého, kdo neuspěje, poslat ke správnému trestu. A hlásit problémy hlavnímu rozhodčímu."
+  },
+  {
+   "heading": "Každou překážku je nutné zkusit",
+   "points": [
+    "Pokus je minimálně dotek překážky",
+    "Může zahrnovat vstup do vody nebo náročného terénu, aby se k překážce dostalo",
+    "Tento terén nelze obejít trestem, pokud to briefing nebo personál závodu nedovolí"
+   ],
+   "narration": "Každou překážku je nutné zkusit. Pokus je přinejmenším dotek překážky. Tam, kde je překážka ve vodě nebo v jiném náročném terénu, může pokus zahrnovat i prostup tímto terénem k ní. Závodníci tento terén nemohou obejít tím, že vykonají trest, pokud předzávodní briefing nebo personál v den závodu neřekl, že je to přijatelné. Závodník, který jde rovnou k trestu, aniž by se překážky dotkl, tedy pravidlo nesplnil."
+  },
+  {
+   "heading": "Zvony a zásah",
+   "points": [
+    "Do zvonů se smí udeřit jen pažemi, rukama nebo tělem nad hrudníkem",
+    "Kopnutí do zvonu je nesplnění: bez opakování, rovnou k trestu",
+    "Nesplnění kvůli výraznému zásahu jiného závodníka? Činovník může povolit restart"
+   ],
+   "narration": "Na mnoha překážkách platí dvě obecná pravidla. Do zvonů se smí udeřit jen pažemi, rukama nebo jinou částí těla nad hrudníkem. Závodník, který kopne do zvonu chodidlem, nohou nebo kolenem, překážku nesplnil: nemůže opakovat a musí vykonat trest. A pokud závodník neuspěje, protože mu jiný soutěžící výrazně fyzicky zasáhl do pokusu, může mu činovník dovolit překážku restartovat bez dalšího trestu. Pokud si nejste jisti, zeptejte se hlavního rozhodčího."
+  },
+  {
+   "heading": "Nasměrování k trestu",
+   "points": [
+    "Každého, kdo neuspěje, pošlete k trestu určenému pro vaši překážku",
+    "Formát trestu každé překážky se potvrzuje před akcí a probírá na briefingu",
+    "Nevíte, který trest platí? Ihned kontaktujte hlavního rozhodčího"
+   ],
+   "narration": "Když závodník neuspěje, jasně ho nasměrujte ke správnému trestu. Před akcí hlavní rozhodčí potvrzuje formát trestu každé překážky s ředitelem závodu, ať je to běžecký okruh, okruh s nošením, okruh s plazením nebo burpee, a briefing na místě pokrývá, co platí pro vaši. Postup rozhodování říká, že většina překážek používá trestný okruh a Spear Throw burpee. Pokud si někdy nejste jisti, který trest platí, okamžitě kontaktujte hlavního rozhodčího.",
+   "review": "Ke kontrole pro 2027: pravidlo 3.17.3 říká, že trestem je trestný okruh nebo 30 burpee, jak Spartan určí pro každou překážku, akci, kategorii či vlnu, a na Stadionu vždy 15 burpee. SOP pro rozhodování říká okruh u většiny překážek a burpee u Spear Throw; program 2026 říká burpee jen u Spear Throw. Mezitím použijte trest, který hlavní rozhodčí potvrdí pro vaši překážku, a pokud si nejste jisti, zeptejte se hlavního rozhodčího."
+  },
+  {
+   "heading": "Chování závodníků na trati",
+   "points": [
+    "Závodníci musí absolvovat celou oficiální trať: její dodržení je jejich odpovědnost",
+    "Žádná fyzická pomoc od nikoho kromě činovníka Spartan a žádné udávání tempa",
+    "Informace o postupu nebo časech jiných závodníků není pomoc",
+    "Číslo na čelence musí být vždy viditelné a čitelné"
+   ],
+   "narration": "Závodníci musí absolvovat oficiální trať celou a její správné dodržení je jejich vlastní odpovědnost. Nesmějí přijmout fyzickou pomoc od nikoho kromě činovníka Spartan. To zahrnuje jídlo a pití mimo oficiální občerstvovací stanice, vybavení, fyzickou podporu a udávání tempa, tedy když s nimi někdo běží, aby je koučoval nebo nastavoval tempo. Sdělení o postupu nebo časech jiných závodníků pomocí není. Startovní číslo na čelence musí být vždy zřetelně vystaveno a čitelné."
+  },
+  {
+   "heading": "Nesportovní chování a hlášení",
+   "points": [
+    "Závodníci musí jednat se všemi s respektem: žádné urážlivé, výhružné ani nactiutrhačné chování",
+    "Trest za chování určuje hlavní rozhodčí: vaším úkolem je to nahlásit",
+    "Zapište číslo na čelence a co se stalo a nahlaste hlavnímu rozhodčímu",
+    "Pravidlo vysvětlete klidně a nestupňujte konflikt u překážky"
+   ],
+   "narration": "Závodníci musí jednat s ostatními soutěžícími, personálem Spartan, dobrovolníky, diváky i veřejností spravedlivě, s respektem a zdvořile a nesmějí používat urážlivý, výhružný ani nactiutrhačný jazyk či chování. Nesportovní chování může vést k trestu, o kterém rozhoduje Head Official, tedy hlavní rozhodčí. Ať jde o cokoli, zapište číslo na čelence a co se stalo a nahlaste to, jakmile můžete. Hlášení jdou od vás k hlavnímu rozhodčímu a dál k řediteli závodu nebo týmu časomíry. Pokud závodník vaše rozhodnutí zpochybní, klidně vysvětlete pravidlo a vyhněte se hádce."
+  },
+  {
+   "heading": "Ve zkratce",
+   "points": [
+    "Každou překážku je nutné zkusit: minimálně dotek",
+    "Znejte podmínky nesplnění: kopnutý zvon je nesplnění",
+    "Každého, kdo neuspěje, pošlete k trestu své překážky; když si nejste jisti, zeptejte se hlavního rozhodčího",
+    "Zapište číslo, nahlaste hlavnímu rozhodčímu a nehádejte se"
+   ],
+   "narration": "Ve zkratce. Každou překážku je nutné zkusit a minimem je dotek. Znejte pokyny a podmínky nesplnění své překážky i obecné, například že kopnutý zvon je nesplnění. Každého, kdo neuspěje, pošlete k trestu určenému pro vaši překážku a když si nejste jisti, zeptejte se hlavního rozhodčího. Závodníci musí dodržet trať, nepřijímat cizí pomoc a mít číslo viditelné. Když se něco pokazí, zapište číslo, nahlaste to a u překážky se nehádejte."
+  }
+ ],
+ "ocr-5-3": [
+  {
+   "heading": "Kde jsou trestem burpee",
+   "points": [
+    "Spartan určuje okruh nebo burpee pro každou překážku, akci, kategorii či vlnu",
+    "Kde jsou určena burpee, trest je 30 burpee",
+    "Akce Stadion: vždy 15 burpee",
+    "Trest u Spear Throw je 30 burpee"
+   ],
+   "narration": "Podle pravidla 3.17.3 je trestem za překážku splněno/nesplněno buď trestný okruh, nebo burpee, jak Spartan určí pro každou překážku, akci, kategorii či vlnu. Kde jsou určena burpee, je to třicet burpee. Na akcích Stadion je trestem u každé překážky patnáct burpee. Trest u Spear Throw je třicet burpee. Před akcí hlavní rozhodčí potvrzuje formát trestu každé překážky s ředitelem závodu, takže briefing vám řekne, zda vaše překážka používá burpee.",
+   "review": "Ke kontrole pro 2027: pravidlo 3.17.3 říká, že trestem je trestný okruh nebo 30 burpee, jak Spartan určí pro každou překážku, akci, kategorii či vlnu, a na Stadionu vždy 15 burpee. SOP pro rozhodování říká okruh u většiny překážek a burpee u Spear Throw; program 2026 říká burpee jen u Spear Throw. Mezitím použijte trest, který hlavní rozhodčí potvrdí pro vaši překážku, a pokud si nejste jisti, zeptejte se hlavního rozhodčího."
+  },
+  {
+   "heading": "Zóna burpee",
+   "points": [
+    "Burpee se musí dělat uvnitř určené zóny burpee",
+    "Burpee mimo zónu se do trestu nezapočítávají",
+    "Činovníci mohou přidat zóny, když je jedna plná, nebo pro oddělení kategorií",
+    "Vaše práce: dohlédnout, aby se burpee dělala ve správné zóně"
+   ],
+   "narration": "Burpee se musí dělat uvnitř určené zóny burpee. Ta, která se udělají mimo ni, se do trestu nezapočítávají, takže závodník, který z zóny vyklouzne, dělá opakování, která mu nebudou uznána. Činovníci závodu mohou určit další zóny burpee, když jedné dojde místo, nebo aby oddělili kategorie závodníků. Součástí vaší práce je dohlédnout, aby se burpee dělala ve správné zóně, kde je vidíte vy i kamera."
+  },
+  {
+   "heading": "Čelenka patří na zem",
+   "points": [
+    "Závodník položí čelenku na zem přímo před sebe",
+    "Ztracená čelenka: zapište jméno závodníka nebo ho řekněte do zvuku kamery",
+    "Každého závodníka zaznamenaného bez čelenky nahlaste hlavnímu rozhodčímu"
+   ],
+   "narration": "Při dělání burpee závodník pokládá čelenku na zem přímo před sebe. Pokrývají to oznámení hlavního rozhodčího na startu, takže závodníci by to měli vědět, než dorazí k vám. Pokud závodník čelenku ztratil, zapište jeho jméno, nebo použijte zvuk kamery a řekněte, kdo to je. V obou případech hlavnímu rozhodčímu nahlaste každého závodníka zaznamenaného bez čelenky, aby se záznam dal přiřadit ke správné osobě."
+  },
+  {
+   "heading": "Ukázání závodníka kameře",
+   "points": [
+    "Držte čelenku asi dvě stopy od objektivu asi dvě sekundy",
+    "Ihned ji vraťte závodníkovi",
+    "Nikdy nedržte dvě čelenky najednou a nenechte si je od závodníků podávat",
+    "Nikdy nehýbejte tělem ani obličejem závodníka kvůli kameře"
+   ],
+   "narration": "U Spear Throw video identifikuje každého závodníka. Držte čelenku asi dvě stopy od objektivu kamery asi dvě sekundy, aby bylo číslo při kontrole jasné. Pak ji ihned vraťte závodníkovi. Nikdy nedržte dvě čelenky najednou a nenechte si od závodníků čelenky podávat. A nikdy fyzicky nehýbejte tělem ani obličejem závodníka, abyste ho dostali do záběru: identifikace vychází z čelenky, držené jasně nahoře."
+  },
+  {
+   "heading": "Kontrola videa určí vynechaná burpee",
+   "points": [
+    "Vynechaná burpee se určují při kontrole videa",
+    "Výsledky nemusí být konečné, dokud neproběhne oficiální kontrola videa",
+    "Záznam zůstává u hlavního rozhodčího a nikdy se nedává závodníkům",
+    "Vaše tři úkoly: norma pohybu, zóna, jasná identifikace"
+   ],
+   "narration": "Program 2026 říká, že vynechaná burpee určuje kontrola videa. Proto nemusí být výsledky zveřejněny hned: oficiální kontrola proběhne, než jsou konečné. Hlavní rozhodčí řídí kontrolu, když se rozhodčí vracejí od překážek, uchovává záznam do konce dne akce a nikdy ho nedává závodníkům. Vaše role na trati umožňuje kontrolu provést: vymáhejte normu pohybu, držte burpee v zóně a jasně identifikujte každého závodníka pro kameru.",
+   "review": "Ke kontrole pro 2027: čas přičtený za vynechaná burpee se liší mezi pravidlem 3.4.2, SOP pro rozhodování a programem 2026 a SOP nechává rozhodovat písemně rozhodčího na místě, kde není video. Lekce o časových trestech za burpee uvádí každou verzi. Tato lekce neučí žádné číslo: tresty po kontrole potvrzuje hlavní rozhodčí."
+  },
+  {
+   "heading": "Ve zkratce",
+   "points": [
+    "Burpee jsou trestem, kde je Spartan určí: 30, nebo 15 na Stadionu",
+    "Počítají se jen burpee uvnitř zóny",
+    "Čelenka na zemi před závodníkem; ukázat kameře, pak hned vrátit",
+    "Kontrola videa určí vynechaná burpee"
+   ],
+   "narration": "Ve zkratce. Burpee jsou trestem, kde je Spartan určí: třicet burpee, nebo patnáct na akcích Stadion, a vždy u Spear Throw. Počítají se jen burpee uvnitř určené zóny. Čelenka závodníka je na zemi před ním a vy ji ukážete kameře na pár sekund a hned vrátíte. Kontrola videa pak určí případná vynechaná burpee, takže vaším úkolem je norma, zóna a jasná identifikace.",
+   "review": "Ke kontrole pro 2027: pravidlo 3.17.3 říká, že trestem je trestný okruh nebo 30 burpee, jak Spartan určí pro každou překážku, akci, kategorii či vlnu, a na Stadionu vždy 15 burpee. SOP pro rozhodování říká okruh u většiny překážek a burpee u Spear Throw; program 2026 říká burpee jen u Spear Throw. Mezitím použijte trest, který hlavní rozhodčí potvrdí pro vaši překážku, a pokud si nejste jisti, zeptejte se hlavního rozhodčího."
+  }
+ ],
+ "ocr-6-1": [
+  {
+   "heading": "Jedno úplné burpee",
+   "points": [
+    "Jeden cyklus mezi dvěma polohami: dolní a horní",
+    "Z dolní polohy nahoru do horní, pak výskok",
+    "Opakování, které nesplní část normy, není úplné burpee"
+   ],
+   "narration": "Pravidlo 3.17.4 definuje jedno úplné burpee. Je to jeden cyklus mezi dvěma polohami těla, nazývanými horní a dolní. Závodník přejde z dolní polohy do horní polohy a pak vyskočí. Každé opakování v trestných burpee musí tuto normu splnit. Opakování, které část normy nesplní, není úplné burpee a můžete po závodníkovi vyžadovat další. Následující snímky probírají každou část zvlášť."
+  },
+  {
+   "heading": "Dolní a horní poloha",
+   "points": [
+    "Dolní: leh na břiše na zemi, hrudník se dotýká země",
+    "Horní: vyvážený vzpřímený stoj, který by kdokoli udržel bez pádu",
+    "Nahoře jsou boky a kolena natažené, ne pokrčené"
+   ],
+   "narration": "Dolní poloha je leh na břiše, obličejem k zemi, s hrudníkem dotýkajícím se země. Horní poloha je vyvážený vzpřímený stoj: takový, který by kdokoli udržel dlouho, aniž by upadl dopředu nebo dozadu. Nahoře by měl mít závodník boky a kolena natažené, ne pokrčené. Sledujte oba konce každého opakování. Hrudník, který se zastaví před zemí, nebo boky stále pokrčené nahoře znamenají, že opakování normu nesplnilo."
+  },
+  {
+   "heading": "Výskok",
+   "points": [
+    "Po návratu nahoru závodník vyskočí",
+    "Ruce jsou natažené nahoru, nad ušima",
+    "Žádný výskok nebo ruce ne nad ušima: opakování není úplné"
+   ],
+   "narration": "Jakmile se závodník z dolní polohy vrátí do horní, vyskočí s rukama nataženýma nahoru nad ušima. Pravidlo klade výskok až po dosažení horní polohy, takže se závodník musí nejdřív vzpřímit. Sledujte ruce stejně jako nohy. Ruce, které sahají jen k ramenům nebo k obličeji, normu nesplňují, stejně jako opakování bez výskoku."
+  },
+  {
+   "heading": "Jeden plynulý pohyb",
+   "points": [
+    "Program 2026: pohyb musí být u každého opakování plynulý",
+    "Rychlá opakování musí také splnit každou část normy",
+    "Typická chyba: rychlá burpee s neúplným natažením nahoře"
+   ],
+   "narration": "Program 2026 dodává, že pohyb musí být u každého opakování plynulý: dolů k zemi, nahoru do stoje a výskok, jako jeden pohyb. Uvádí také typický scénář, na který dávat pozor: závodník dělá rychlá burpee bez plného natažení nahoře. Otázka je vždy stejná. Splnilo opakování normu? Hrudník na zemi, nahoře boky a kolena natažené, pak výskok s rukama nad ušima. Pokud ne, není to úplné burpee."
+  },
+  {
+   "heading": "Ve zkratce",
+   "points": [
+    "Dole: leh na břiše, hrudník se dotýká země",
+    "Nahoře: vyvážený vzpřímený stoj, boky a kolena natažené",
+    "Pak výskok s rukama nad ušima",
+    "Jeden plynulý pohyb a každé opakování podle normy, jakkoli rychlé"
+   ],
+   "narration": "Ve zkratce. Jedno úplné burpee vede z dolní polohy do horní polohy a následuje výskok. Dole závodník leží na břiše s hrudníkem dotýkajícím se země. Nahoře stojí vyváženě a vzpřímeně, s boky a koleny nataženými. Pak vyskočí s rukama nad ušima. Každé opakování je jeden plynulý pohyb a každé opakování musí splnit normu, jakkoli rychle je provedeno."
+  }
+ ],
+ "ocr-6-2": [
+  {
+   "heading": "Počítají závodníci, ne vy",
+   "points": [
+    "Závodníci počítají svá burpee sami",
+    "Rozhodčí za ně nepočítají",
+    "Vaše práce je norma: sledujte každé opakování",
+    "Připomeňte závodníkům, že pohyb i počet opakování se sledují"
+   ],
+   "narration": "Za počítání svých burpee odpovídají závodníci sami. Rozhodčí za ně nepočítají. Vám tak zbývá práce, na které záleží: sledovat, zda každé opakování splňuje normu pohybu. Program 2026 doporučuje závodníkům připomenout, že se sleduje jak norma pohybu, tak počet opakování. Kde je video, počet i kvalita burpee se znovu kontrolují při kontrole videa."
+  },
+  {
+   "heading": "Sledování normy",
+   "points": [
+    "Stůjte tam, odkud máte na závodníka nerušený výhled",
+    "Zkontrolujte hrudník dole, boky a kolena nahoře, ruce ve výskoku",
+    "Burpee držte v zóně, čelenka na zemi před závodníkem",
+    "Nedotýkejte se závodníka ani s ním nehýbejte kvůli kameře"
+   ],
+   "narration": "Postavte se tak, abyste měli nerušený výhled. Musíte vidět, jak hrudník dosáhne země, jak se nahoře natáhnou boky a kolena a jak jdou ruce při výskoku nad uši. Hlídejte také zónu, protože burpee mimo ni se nepočítají, a čelenku, která zůstává na zemi před závodníkem. Nikdy fyzicky nehýbejte tělem ani obličejem závodníka kvůli kameře."
+  },
+  {
+   "heading": "Žádost o další burpee",
+   "points": [
+    "Opakování pod normou: vyžadujte další burpee",
+    "Jasně a klidně vysvětlete, co chybělo",
+    "Vyčerpaní závodníci mohou pokračovat, pokud je jejich snaha upřímná"
+   ],
+   "narration": "Když opakování normu nesplní, vyžadujte po závodníkovi další burpee, aby se trest skládal z úplných burpee. Jasně a klidně vysvětlete, co chybělo, například že se hrudník nedotkl země nebo že boky zůstaly nahoře pokrčené. Někteří závodníci budou vyčerpaní. Program 2026 říká nechat je pokračovat, pokud je jejich snaha upřímná. Mohou pokračovat, ale každé opakování musí normu splnit."
+  },
+  {
+   "heading": "Když závodník vaše rozhodnutí zpochybní",
+   "points": [
+    "Zůstaňte klidní, vysvětlete pravidlo a vyhněte se hádce",
+    "Zapište číslo na čelence a co bylo zpochybněno",
+    "Spor předejte hlavnímu rozhodčímu",
+    "Nestupňujte konflikt u překážky"
+   ],
+   "narration": "Někteří závodníci budou nesouhlasit, když požádáte o další burpee. Zůstaňte klidní a profesionální, jasně vysvětlete pravidlo a nenechte se vtáhnout do hádky. Zapište číslo na čelence závodníka a co bylo zpochybněno a nahlaste to hlavnímu rozhodčímu, jakmile můžete. Spory řeší hlavní rozhodčí, vy je u překážky vyhrávat nemáte. Zatímco to řešíte, dál sledujte ostatní závodníky v zóně."
+  },
+  {
+   "heading": "Ve zkratce",
+   "points": [
+    "Závodníci počítají; vy sledujete normu",
+    "Jasný výhled na hrudník, boky a kolena a ruce",
+    "Pod normou: vyžadujte další burpee, klidně vysvětlená",
+    "Vyčerpaný, ale upřímný: nechte pokračovat; spory jdou k hlavnímu rozhodčímu"
+   ],
+   "narration": "Ve zkratce. Závodníci počítají svá burpee sami a vy sledujete normu. Stůjte tak, abyste jasně viděli hrudník dole, boky a kolena nahoře a ruce ve výskoku, a držte burpee uvnitř zóny. Pokud opakování nedosáhne normy, vyžadujte další burpee a klidně vysvětlete proč. Vyčerpané závodníky nechte pokračovat, pokud je jejich snaha upřímná. A pokud závodník vaše rozhodnutí zpochybní, zapište číslo a předejte to hlavnímu rozhodčímu."
+  }
+ ],
+ "ocr-6-3": [
+  {
+   "heading": "Vynechaná burpee se mění na čas",
+   "points": [
+    "Závodníkům, kteří nedokončí požadovaná burpee, se k cílovému času přičte čas",
+    "Nedodělky se zjistí na trati nebo při kontrole před vyhlášením",
+    "Kolik času se přičte, je ke kontrole pro 2027"
+   ],
+   "narration": "Tam, kde jsou trestem burpee a závodník nedokončí požadovaný počet, se k jeho celkovému cílovému času přičte čas. Vynechaná burpee lze zjistit během závodu nebo při kontrole po závodě před vyhlášením. Všechny tři zdroje 2026 se shodují, že vynechaná burpee stojí čas. Neshodují se v tom, kolik, takže tato lekce neučí žádné číslo. Částky jsou ke kontrole pro 2027, dokud nerozhodne vedoucí rozhodování.",
+   "review": "Ke kontrole pro 2027: pravidlo 3.4.2 přičítá 30 sekund za každé z prvních 10 vynechaných burpee a celkem 10 minut, pokud je vynecháno více než 10. SOP pro rozhodování přičítá 30 sekund za každé a 10 minut, pokud je dokončeno méně než 20; program 2026 říká, že 11 nebo více nesprávných je 10 minut a méně než 20 je diskvalifikace. Tato lekce neučí žádné číslo, dokud nerozhodne vedoucí rozhodování: tresty potvrzuje hlavní rozhodčí."
+  },
+  {
+   "heading": "V čem se zdroje 2026 rozcházejí",
+   "points": [
+    "Kolik času přidá každé vynechané burpee a zda existuje strop",
+    "Kde leží práh: vynechaná burpee, nebo dokončená burpee",
+    "Zda velký nedodělek znamená časový trest, nebo diskvalifikaci",
+    "Stadion s trestem 15 burpee je také sporný"
+   ],
+   "narration": "Pravidla, postup rozhodování a program 2026 popisují časové tresty za burpee každý jinak. Liší se v tom, kolik času vynechané burpee přidá a zda existuje strop. Liší se v tom, kde leží práh, počítaný ve vynechaných burpee, nebo v dokončených burpee. A liší se v tom, zda velký nedodělek znamená dlouhý časový trest, nebo diskvalifikaci. Stadion, kde je trestem patnáct burpee, má stejný problém. Dokud nerozhodne vedoucí rozhodování, považujte každé číslo za ke kontrole.",
+   "review": "Ke kontrole pro 2027: pravidlo 3.4.2 přičítá 30 sekund za každé z prvních 10 vynechaných burpee a celkem 10 minut za více než 10 (Stadion: 30 sekund za každé z prvních 5, 5 minut za více než 5). SOP pro rozhodování přičítá 30 sekund za vynechané burpee a 10 minut, pokud je dokončeno méně než 20 (Stadion: méně než 10). Program 2026 říká 30 sekund za každé, 10 minut za 11 nebo více nesprávných a diskvalifikaci za méně než 20. Mezitím závodníkům žádné číslo neuvádějte: dotazy na časové tresty předejte hlavnímu rozhodčímu."
+  },
+  {
+   "heading": "Co se počítá jako vynechané burpee",
+   "points": [
+    "Burpee, které se neudělalo",
+    "Burpee mimo určenou zónu: do trestu se nezapočítává",
+    "Opakování pod normou pohybu: není to úplné burpee",
+    "Kontrola posuzuje počet i kvalitu burpee"
+   ],
+   "narration": "Nedodělek nejsou jen burpee, která se vůbec neudělala. Burpee udělaná mimo určenou zónu se do trestu nezapočítávají. Opakování, které nesplňuje normu pohybu, není úplné burpee a program 2026 považuje vynechaná a nesprávná burpee za rovnocenná. Podle postupu rozhodování kontrola rozhoduje o množství i kvalitě burpee. Proto záleží na tom vymáhat normu hned na místě a žádat další opakování.",
+   "review": "Ke kontrole pro 2027: kolik času přidají vynechaná nebo nesprávná burpee, se liší mezi pravidlem 3.4.2, SOP pro rozhodování a programem 2026. Co je úplné burpee, se neliší: uplatňujte pravidla 3.17.4 a 3.17.5 a časový trest nechte na hlavním rozhodčím."
+  },
+  {
+   "heading": "Kdo trest určuje",
+   "points": [
+    "S videem: rozhodnutí o počtu a kvalitě burpee se činí při kontrole videa",
+    "Bez videa: rozhodnete na místě, zapíšete a předáte hlavnímu rozhodčímu",
+    "Hlavní rozhodčí posílá potvrzené tresty řediteli závodu a týmu časomíry",
+    "Tresty se při kontrole zobrazují ve stanu výsledků"
+   ],
+   "narration": "Kde je video, rozhodnutí o tom, kolik burpee bylo uděláno a jak dobře, se činí při kontrole videa. Hlavní rozhodčí tuto kontrolu řídí, jakmile se rozhodčí vracejí od svých překážek, a potvrzené tresty a diskvalifikace posílá řediteli závodu a týmu časomíry. Kde video není, postup rozhodování říká, že rozhodčí na místě rozhodne, rozhodnutí písemně zdokumentuje a po návratu od překážky ho předá hlavnímu rozhodčímu. Tresty se při kontrole zobrazují ve stanu výsledků.",
+   "review": "Ke kontrole pro 2027: SOP pro rozhodování (6.iii) říká, že rozhodnutí o trestech za burpee se činí při kontrole videa, kde video je, a rozhodčím na místě, písemně, kde není. Program 2026 říká, že rozhodnutí o trestech činí tým kontroly videa. Mezitím se řiďte SOP pro rozhodování: bez kamery své rozhodnutí zapište a předejte hlavnímu rozhodčímu."
+  },
+  {
+   "heading": "Ve zkratce",
+   "points": [
+    "Vynechaná nebo nesprávná burpee přidají čas k cíli závodníka",
+    "Kolik času, je ke kontrole pro 2027: dotazy předejte hlavnímu rozhodčímu",
+    "Vymáhejte normu a zónu hned na místě",
+    "S videem rozhoduje kontrola; bez něj své rozhodnutí zapište"
+   ],
+   "narration": "Ve zkratce. Vynechaná nebo nesprávná burpee přidají čas k cíli závodníka, ale kolik času, je ke kontrole pro 2027, protože se pravidla, postup rozhodování a program 2026 rozcházejí. Neuvádějte číslo: dotazy předejte hlavnímu rozhodčímu. To, co ovlivníte, je na trati: norma pohybu a zóna. Kde je video, rozhoduje kontrola. Kde není, své rozhodnutí zapište a předejte hlavnímu rozhodčímu.",
+   "review": "Ke kontrole pro 2027: čas přičtený za vynechaná burpee se liší mezi pravidlem 3.4.2, SOP pro rozhodování a programem 2026 (každá verze je na druhém snímku) a SOP a program se liší v tom, kdo rozhoduje, když video není. Dokud nerozhodne vedoucí rozhodování, neučte žádné číslo, řiďte se SOP pro rozhodování ohledně písemných rozhodnutí a sporná rozhodnutí předejte hlavnímu rozhodčímu."
+  }
+ ],
+ "ocr-7-1": [
+  {
+   "heading": "Odpověď na otázku závodníka",
+   "points": [
+    "Zůstaňte klidní a profesionální, ať je tón otázky jakýkoli",
+    "Jasně vysvětlete pravidlo: co překážka vyžadovala a co chybělo",
+    "Vyhněte se hádkám: otázka není debata"
+   ],
+   "narration": "Závodníci se vás budou ptát na vaše rozhodnutí, často když jsou unavení a frustrovaní. Zůstaňte klidní a profesionální. Odpovídejte jasným vysvětlením pravidla: co překážka od nich vyžadovala a kterou část nesplnili. Buďte struční, protože k vaší překážce stále přicházejí další závodníci. Pokud závodník vysvětlení přijme, pošlete ho k trestu. Pokud ne, stal se z toho spor. Spor nevyřešíte hádkou u překážky. Předáte ho hlavnímu rozhodčímu."
+  },
+  {
+   "heading": "Když se z toho stane spor",
+   "points": [
+    "Zapište číslo na čelence závodníka",
+    "Zapište důvod, například nesplněná překážka bez vykonaného trestu",
+    "Nahlaste to hlavnímu rozhodčímu, jakmile můžete",
+    "Nestupňujte konflikt u překážky"
+   ],
+   "narration": "Pokud závodník vaše rozhodnutí zpochybní, máte tři úkoly. Za prvé zapište číslo na jeho čelence. Pravidla činí každého soutěžícího odpovědným za to, aby měl startovní číslo na čelence vždy čitelné. Za druhé zapište důvod sporu, například že závodník překážku nesplnil a trest nevykonal. Za třetí to nahlaste hlavnímu rozhodčímu, jakmile to provozně půjde. Rozhodnutí se nečiní u vaší překážky, takže eskalací nic nezískáte. Poznámky pište věcně: hlavní rozhodčí se na ně bude spoléhat."
+  },
+  {
+   "heading": "Když nezískáte číslo na čelence",
+   "points": [
+    "Nahlaste to hlavnímu rozhodčímu ihned",
+    "Dejte jasný popis: barva oblečení, rozpoznatelné rysy, kategorie závodu",
+    "Na požádání později pomozte závodníka na trati identifikovat"
+   ],
+   "narration": "Někdy závodník opustí prostor překážky, aniž by vykonal trest, a vy nemůžete přečíst jeho číslo. Postup rozhodování to pokrývá. Nahlaste to hlavnímu rozhodčímu okamžitě, nečekejte, až se vrátíte od překážky. Dejte jasný fyzický popis: barvu oblečení, cokoli, podle čeho je snadno poznat, a pokud to poznáte, jeho kategorii závodu. Můžete být později požádáni, abyste pomohli závodníka na trati identifikovat. Mezitím zůstaňte soustředění na svou překážku a závodníky, kteří stále přicházejí."
+  },
+  {
+   "heading": "Chování závodníků",
+   "points": [
+    "Závodníci musí jednat s činovníky spravedlivě, s respektem a zdvořile",
+    "Urážlivý, výhružný nebo nactiutrhačný jazyk či chování porušuje pravidla",
+    "Trest za porušení chování určuje Head Official",
+    "Vaše role: zapsat číslo, poznamenat, co se stalo, nahlásit to"
+   ],
+   "narration": "Pravidla očekávají, že závodníci budou jednat se všemi na akci, včetně činovníků, spravedlivě, s respektem a zdvořile a nebudou používat urážlivý, výhružný ani nactiutrhačný jazyk či chování. Porušení chování může vést k trestu, který závisí na jeho závažnosti. V pravidlech toto rozhodnutí patří Head Official, ne vám. Hrubé nesportovní chování nebo fyzické násilí vůči činovníkovi může být důvodem k suspendaci. Vaše role je stejná jako u jakéhokoli sporu: zůstaňte klidní, zapište číslo na čelence, poznamenejte, co bylo řečeno nebo uděláno, a nahlaste to hlavnímu rozhodčímu."
+  },
+  {
+   "heading": "Po závodě: protesty a kontrola videa",
+   "points": [
+    "Výsledky nejsou konečné, dokud neproběhne oficiální kontrola videa",
+    "Závodníci podávají protesty Head Official v době pro protesty",
+    "Činovníci nemusí zvažovat záznam pořízený závodníky nebo diváky",
+    "Oficiální videozáznam se soutěžícím nikdy nedává"
+   ],
+   "narration": "Sporné rozhodnutí nekončí u vaší překážky. Než jsou výsledky konečné, proběhne oficiální kontrola videa. Závodník, který chce trest napadnout, podá protest Head Official v době pro protesty, která začíná, jakmile závodník proběhne cílem. Činovníci nejsou povinni zvažovat videa ani fotografie pořízené soutěžícími nebo diváky. Postup rozhodování také říká, že oficiální záznam se soutěžícím nikdy nedává. Pokud vám tedy závodník nabídne záznam ze svého telefonu nebo chce vidět váš, odkažte ho na hlavního rozhodčího a proces protestu.",
+   "review": "Ke kontrole pro 2027: pravidlo 3.19.1 ukončuje dobu pro protesty 15 minut před vyhlášením výsledků kategorie závodníka. SOP pro rozhodování uvádí jako příklad půl hodiny před vyhlášením a umožňuje opravit chyby rozhodčích u závodníků mimo stupně vítězů až dvě hodiny po závěrečném vyhlášení. Mezitím uplatňujte pravidla a dotazy na časy předejte hlavnímu rozhodčímu."
+  },
+  {
+   "heading": "Ve zkratce",
+   "points": [
+    "Zůstaňte klidní, jasně vysvětlete pravidlo, nehádejte se",
+    "Spor: číslo na čelence, co se stalo, nahlásit hlavnímu rozhodčímu",
+    "Bez čísla: nahlaste ihned, s jasným popisem",
+    "Protesty a kontrola videa probíhají po závodě, ne u vaší překážky"
+   ],
+   "narration": "Ve zkratce. Na otázky odpovídejte klidně a jasně vysvětlete pravidlo, bez hádek. Pokud se z toho stane spor, zapište číslo na čelence, napište, co se stalo, a nahlaste to hlavnímu rozhodčímu, jakmile můžete. Pokud číslo nezískáte, nahlaste to ihned s jasným popisem závodníka. Urážlivé chování se zaznamenává a hlásí stejně. Konečné rozhodnutí přijde později, prostřednictvím kontroly videa a doby pro protesty, ne u vaší překážky."
+  }
+ ],
+ "ocr-8-1": [
+  {
+   "heading": "Profesionální chování u překážky",
+   "points": [
+    "Zůstaňte soustředění na svou překážku",
+    "Vyhněte se rozptýlení a dlouhým rozhovorům",
+    "Zůstaňte neutrální a uctiví ke každému závodníkovi",
+    "Reprezentujte Spartan profesionálně"
+   ],
+   "narration": "Pravidla existují proto, aby byla každá akce Spartan vedena spravedlivě a jednotně, v duchu sportovního chování a integrity. U své překážky jste tím, kdo to zajišťuje. Zůstaňte soustředění na překážku a závodníky, kteří ji zkoušejí. Vyhněte se rozptýlení a dlouhým rozhovorům, protože nesplnění, které jste neviděli, nemůžete posoudit. Zůstaňte neutrální a uctiví ke každému, ať je to kdokoli. Pro závodníky a diváky jste Spartan, proto Spartan reprezentujte profesionálně."
+  },
+  {
+   "heading": "Kde je rozhodčí v pravidlech",
+   "points": [
+    "Rozhodčí je činovník jmenovaný Spartan, který dbá na dodržování pravidel",
+    "Obvykle postavený u překážky nebo ve stanu kontroly videa",
+    "Head Official je hlavní rozhodující osoba a konečná autorita ve věci pravidel",
+    "Váš řetězec: vy, hlavní rozhodčí, pak ředitel závodu nebo tým časomíry"
+   ],
+   "narration": "Pravidla definují rozhodčího jako činovníka jmenovaného Spartan, jehož úkolem je dbát na dodržování pravidel, obvykle postaveného u překážek nebo ve stanu kontroly videa. Rozhodčí odpovídají Head Official, který je na akci hlavní rozhodující osobou ve všech věcech pravidel a nejvyšší autoritou pro jejich vymáhání a výklad. V postupu rozhodování a v tomto programu odpovídáte hlavnímu rozhodčímu. Hlavní rozhodčí pak hlásí incidenty závodu řediteli závodu a tresty týmu časomíry."
+  },
+  {
+   "heading": "O čem rozhodujete",
+   "points": [
+    "Vymáháte pravidla překážky",
+    "Závodníky, kteří neuspějí, nasměrujete ke správnému trestu",
+    "Dokumentujete porušení",
+    "Nejste si jisti trestem nebo jeho vymáháním? Ihned kontaktujte hlavního rozhodčího"
+   ],
+   "narration": "U své překážky odpovídáte za tři věci. Vymáháte pravidla překážky. Závodníka, který neuspěje, nasměrujete ke správnému trestu pro tuto překážku. A dokumentujete porušení. Kde nejsou o burpee žádné videodůkazy, postup rozhodování činí rozhodnutí o množství a kvalitě burpee vaším: učiníte ho na místě, zapíšete a po návratu předáte hlavnímu rozhodčímu. Pokud si nejste jisti druhem trestu nebo jeho vymáháním, ihned kontaktujte hlavního rozhodčího."
+  },
+  {
+   "heading": "Kdo trest potvrzuje",
+   "points": [
+    "Konečná rozhodnutí o trestech může potvrdit hlavní rozhodčí a tým časomíry",
+    "Při kontrole videa mohou činovníci stále posuzovat tresty, až po diskvalifikaci",
+    "Hlavní rozhodčí předává potvrzené tresty řediteli závodu a časomíře",
+    "Vaše poznámky jsou důkazem, na kterém tato rozhodnutí stojí"
+   ],
+   "narration": "Vaše rozhodnutí proces zahajuje, ale nemusí mít poslední slovo. Program říká, že konečná rozhodnutí o trestech může potvrdit hlavní rozhodčí a tým časomíry. Podle pravidel odpovídá Head Official v konečném důsledku za dodržování pravidel a při oficiální kontrole videa mohou činovníci závodu stále posuzovat tresty, včetně diskvalifikace. Hlavní rozhodčí tuto kontrolu řídí a potvrzené tresty a diskvalifikace předává řediteli závodu a týmu časomíry. Proto na vašich poznámkách záleží: jasné, věcné záznamy umožní potvrdit správné rozhodnutí."
+  },
+  {
+   "heading": "Ve zkratce",
+   "points": [
+    "Soustředění, neutrální, uctiví a profesionální",
+    "Vymáháte pravidla, nasměrujete závodníky k trestům a dokumentujete porušení",
+    "Hlavní rozhodčí potvrzuje tresty a řeší, co mu předáte",
+    "Nejste si jisti? Ihned kontaktujte hlavního rozhodčího"
+   ],
+   "narration": "Ve zkratce. Zůstaňte soustředění na svou překážku, neutrální a uctiví a reprezentujte Spartan profesionálně. Vymáháte pravidla překážky, nasměrujete závodníky, kteří neuspějí, ke správnému trestu a dokumentujete porušení. Head Official má konečnou autoritu ve věci pravidel a hlavní rozhodčí potvrzuje tresty, řeší, co mu předáte, a předává je řediteli závodu a časomíře. Pokud si někdy nejste jisti, ihned kontaktujte hlavního rozhodčího."
+  }
+ ],
+ "ocr-8-2": [
+  {
+   "heading": "Bezpečnost je součástí práce",
+   "points": [
+    "Pravidla mají chránit zdraví, bezpečnost a pohodu závodníků",
+    "Sledujte bezpečnost své překážky a dbejte, aby se závodníci pohybovali bezpečně",
+    "Nedovolte nebezpečné zkratky: závodníci musí absolvovat celou oficiální trať"
+   ],
+   "narration": "Jedním z účelů pravidel je chránit zdraví, bezpečnost a pohodu soutěžících, pokud to lze v závodech s překážkami rozumně zajistit. Program staví bezpečnost závodníků vedle spravedlnosti jako vaši prioritu. To znamená sledovat bezpečnost své překážky, dbát, aby se závodníci pohybovali bezpečně, a nedovolit nebezpečné zkratky. Zkratku nikdy nemůžete povolit vy: pravidla vyžadují, aby závodníci absolvovali oficiální trať celou."
+  },
+  {
+   "heading": "Prohlédněte a nebezpečí hlaste ihned",
+   "points": [
+    "Před první vlnou prohlédněte uspořádání a ověřte, že je provozuschopné",
+    "Projděte trestný okruh a zjistěte, odkud závodníci přicházejí",
+    "Nebezpečí hlaste ihned: hlavnímu rozhodčímu, řediteli závodu nebo personálu Spartan"
+   ],
+   "narration": "Bezpečnost začíná před první soutěžní vlnou. Když dorazíte k překážce, prohlédněte uspořádání a ověřte, že je provozuschopné. Projděte tok závodu a směr, odkud budou závodníci přicházet, a projděte celý trestný okruh, abyste znali jeho trasu a místo návratu. Pokud vás cokoli znepokojuje, pochybnost, bezpečnostní obava nebo nesrovnalost, ihned to nahlaste hlavnímu rozhodčímu nebo řediteli závodu. Během závodu jakékoli nebezpečí hlaste hned hlavnímu rozhodčímu, řediteli závodu nebo personálu Spartan."
+  },
+  {
+   "heading": "Bezpečný pohyb v pravidlech překážek",
+   "points": [
+    "Rope Climb: slézt bezpečně a pod kontrolou, alespoň jedna ruka na laně",
+    "Hercules Hoist: závaží spouštět pod kontrolou; upuštění je nesplnění",
+    "Plavání nebo přechod vody: žádný skok na hlavu; skok na hlavu je nesplnění"
+   ],
+   "narration": "Některá pravidla překážek zahrnují bezpečnost přímo a vymáháte je jako každé jiné pravidlo. U Rope Climb se musí závodníci vrátit na zem bezpečně a pod kontrolou, s alespoň jednou rukou stále na laně. U Hercules Hoist se závaží musí spouštět pod kontrolou, ne volným pádem, a nekontrolované upuštění je nesplnění. U plavání nebo přechodu vody není skok na hlavu dovolen a je to způsob nesplnění. Znejte bezpečnostní pravidla své překážky, než dorazí první závodník."
+  },
+  {
+   "heading": "Stejný výklad po celý závod",
+   "points": [
+    "Uplatňujte pravidla stejně u všech závodníků",
+    "Používejte stejný výklad od první vlny do poslední",
+    "Každý trest se uplatňuje jednotně v rámci kategorie nebo vlny",
+    "Vaše zaměření: soutěžní kategorie, Elite a Age Group"
+   ],
+   "narration": "Důslednost je to, co dělá výsledky spravedlivými. Uplatňujte pravidla stejně u každého závodníka a používejte stejný výklad od první vlny do poslední. Rozhodnutí, které učiníte u prvního závodníka Elite, je normou pro všechny po něm. Pravidla říkají, že každý trest se uplatňuje jednotně v rámci určené kategorie nebo vlny. Vaším zaměřením jsou soutěžní kategorie, Elite a Age Group, od nichž se očekává dodržování každého pravidla. Závodníkům Open se také doporučuje dodržovat pravidla, v uvolněnější atmosféře."
+  },
+  {
+   "heading": "Držte se pravidla a když si nejste jisti, předejte to výš",
+   "points": [
+    "Posuzujte podle písemných způsobů nesplnění překážky",
+    "Vyhněte se osobnímu úsudku nad rámec pravidla",
+    "Když si nejste jisti, předejte rozhodnutí hlavnímu rozhodčímu"
+   ],
+   "narration": "Důslednost také znamená nepřidávat vlastní pravidla. Posuzujte každý pokus podle písemných způsobů nesplnění překážky, ne podle toho, co sami považujete za spravedlivé, a vyhněte se úsudku nad to, co říká pravidlo. Pokud situace není jasně pokryta nebo si nejste jisti, který trest platí nebo jak ho vymáhat, ihned kontaktujte hlavního rozhodčího. Rozhodnutí, které bylo předáno výš a učiněno jednou, lze pak uplatnit stejně u všech."
+  },
+  {
+   "heading": "Ve zkratce",
+   "points": [
+    "Sledujte bezpečnost, trvejte na bezpečném pohybu, nedovolte zkratky",
+    "Prohlédněte včas a nebezpečí hlaste ihned",
+    "Stejná pravidla, stejný výklad, každý závodník, celý závod",
+    "Nejste si jisti? Předejte hlavnímu rozhodčímu"
+   ],
+   "narration": "Ve zkratce. Bezpečnost závodníků je vaší prioritou vedle spravedlnosti. Sledujte svou překážku, dbejte, aby se závodníci pohybovali bezpečně, a nedovolte zkratky. Před první vlnou prohlédněte překážku a projděte trestný okruh a nebezpečí hlaste ihned hlavnímu rozhodčímu, řediteli závodu nebo personálu Spartan. Uplatňujte stejná pravidla se stejným výkladem u každého závodníka po celý závod. A když si nejste jisti, předejte to hlavnímu rozhodčímu."
+  }
+ ],
+ "ocr-9-1": [
+  {
+   "heading": "Sledujte ruce a nohy",
+   "points": [
+    "Většina způsobů nesplnění se týká toho, čeho se dotýkají ruce a nohy",
+    "Monkey Bars: jen ruce a paže; nohy nebo kolena na tyčích jsou nesplnění",
+    "Olympus: nohy se smějí opřít o stěnu, ale noha na chytu nebo v otvoru je nesplnění"
+   ],
+   "narration": "Většina nesplnění u překážek se scvrkává na to, čeho se dotýkají ruce a nohy závodníka, a právě tam míří vaše oči. Na Monkey Bars závodník přechází jen rukama a pažemi. Dotek nohou nebo kolen o tyče je nesplnění, stejně jako dotek země k získání výhody. Na Olympus se smějí závodníci opřít nohy a kolena o stěnu, ale dotek jakéhokoli chytu nebo otvoru nohama je nesplnění. Znejte přesně, které doteky vaše překážka dovoluje."
+  },
+  {
+   "heading": "Soustřeďte se na přesné pravidlo",
+   "points": [
+    "Znejte pokyny, způsoby nesplnění a poznámky své překážky před první vlnou",
+    "Helix a Z Wall: pokus začíná při čtyřech bodech kontaktu",
+    "Monkey Bars, Multi-Rig, Olympus: jakmile obě nohy opustí startovní schod"
+   ],
+   "narration": "Každá překážka má vlastní pravidlo, s pokyny pro soutěžící, způsoby nesplnění a doplňujícími poznámkami. Sledujte toto pravidlo, ne obecnou představu dobrého pokusu. Znejte okamžik, kdy pokus začíná, protože od té chvíle je závodník zavázán. U Helix a Z Wall začíná, jakmile je dosaženo čtyř bodů kontaktu. U Monkey Bars, Multi-Rig a Olympus začíná, jakmile obě nohy opustí startovní schod. Pokud začátek propásnete, nemůžete si být jisti, co se počítá."
+  },
+  {
+   "heading": "Kde stát",
+   "points": [
+    "Místo s nerušeným výhledem na pokusy, splnění i nesplnění",
+    "Zkontrolujte tok závodu a směr, odkud závodníci přicházejí",
+    "Předvídejte, kde k nesplnění obvykle dochází, a mějte ta místa na očích"
+   ],
+   "narration": "Před první vlnou si ujasněte nejlepší místo, kde stát. Potřebujete nerušený výhled na pokusy, splnění i nesplnění. Projděte tok závodu a směr, odkud závodníci přicházejí. Zamyslete se, kde k nesplnění u vaší překážky obvykle dochází, a zajistěte, aby ta místa byla jasně vidět. Postup rozhodování nazývá překážky s historií častého nesplnění překážkami s vysokou mírou nesplnění. Vyžadují aktivní vymáhání, takže na vaší poloze tam záleží ještě víc."
+  },
+  {
+   "heading": "Připraveni zasáhnout při nesplnění",
+   "points": [
+    "Stůjte tam, kde můžete oslovit závodníka, který neuspěl, a nasměrovat ho k trestu",
+    "Znejte trasu trestného okruhu a místo návratu",
+    "Mějte na očích zvon: kopnutí do něj je nesplnění"
+   ],
+   "narration": "Vidět nesplnění je jen polovina práce. Druhou polovinou je zapojit se do jednání se závodníkem, proto se postavte tam, kde ho můžete oslovit hned, jak neuspěje, a nasměrovat ho k trestu. Předem projděte trestný okruh, abyste znali jeho trasu a kde se vrací na trať. Mějte na očích také zvon. Podle obecného pravidla se do zvonů smí udeřit jen pažemi, rukama nebo jinou částí těla nad hrudníkem. Kopnutí do zvonu je nesplnění. Zkontrolujte i pravidlo své překážky."
+  },
+  {
+   "heading": "Ve zkratce",
+   "points": [
+    "Sledujte ruce a nohy",
+    "Znejte přesné pravidlo a kdy pokus začíná",
+    "Stůjte s jasným výhledem na místa, kde dochází k nesplnění",
+    "Buďte připraveni nasměrovat závodníka k trestu"
+   ],
+   "narration": "Ve zkratce. Sledujte ruce a nohy závodníka, protože právě tam k většině nesplnění dochází. Znejte přesné pravidlo své překážky, včetně okamžiku, kdy pokus začíná. Stůjte tam, kde máte nerušený výhled a obvyklá místa nesplnění jsou na dohled. A postavte se tak, abyste mohli závodníka oslovit, jakmile neuspěje, a poslat ho ke správnému trestu."
+  }
+ ],
+ "ocr-9-2": [
+  {
+   "heading": "Použití podpůrné konstrukce",
+   "points": [
+    "Stěny: použití podpůrné konstrukce, boků nebo popruhů je nesplnění",
+    "Rigy: použití svislého příhradového nosníku jako žebříku je nesplnění",
+    "Vodorovný příhradový nosník lze použít ke startu nebo přenosu, kde to pravidlo dovoluje"
+   ],
+   "narration": "Příhradový nosník je hlavní nosná konstrukce překážky: kovové šikmé, svislé a vodorovné nosníky. Mnoho překážek jeho použití zakazuje. U stěn je použití podpůrné konstrukce, boků stěny nebo popruhů k pomoci s rovnováhou, šplhem nahoru nebo slezením dolů nesplnění. Na Monkey Bars a dalších rigích je použití svislého nosníku jako žebříku ke startu, přechodu nebo dokončení nesplnění. Mnoho rigů však závodníkům dovoluje použít vodorovný nosník ke startu nebo k přenosu během přechodu. Zkontrolujte, co platí pro vaši překážku."
+  },
+  {
+   "heading": "Manipulace mimo povolenou oblast",
+   "points": [
+    "Multi-Rig: chytání lan, popruhů nebo řetězů držících nástavec je nesplnění",
+    "Helix: použití tyčí z jiné dráhy je nesplnění",
+    "Olympus: dotek chytu nebo otvoru nohama je nesplnění"
+   ],
+   "narration": "Manipulace mimo povolenou oblast znamená použití části překážky, kterou pravidlo nedovoluje. Na Multi-Rig smějí závodníci používat jen nástavce. Chytání lan, popruhů nebo řetězů, které je připevňují ke konstrukci, je nesplnění, stejně jako použití více než jedné dráhy. Na Helix je použití tyčí z jiné dráhy nesplnění. Na Olympus pracují s chyty ruce a noha na chytu nebo v otvoru je nesplnění. Znejte přesně povolenou oblast své překážky."
+  },
+  {
+   "heading": "Nepokus a vynechání okruhu",
+   "points": [
+    "Každou překážku je nutné zkusit: minimálně se jí závodník dotkne",
+    "Závodník, který neuspěje, musí absolvovat trestný okruh celý",
+    "Vynechání okruhu se trestá: trest je ke kontrole pro 2027"
+   ],
+   "narration": "Každou překážku je nutné zkusit. Pokus je minimálně dotek překážky. Někdy to znamená projít vodou nebo náročným terénem, aby se k ní dostalo, a to nelze obejít trestem, pokud to briefing nebo personál závodu neřekl. Závodník, který se pokusí a neuspěje, musí trestný okruh absolvovat celý. Jeho vynechání je porušení, které zapíšete a nahlásíte hlavnímu rozhodčímu. Zdroje se v trestu za něj liší, proto je ke kontrole.",
+   "review": "Ke kontrole pro 2027: pravidlo 3.4.1 přičítá 10minutový časový trest, když závodník nedokončí trestný okruh. Online program 2026 říká, že to může mít za následek diskvalifikaci. Mezitím uplatňujte pravidla a případ předejte hlavnímu rozhodčímu."
+  },
+  {
+   "heading": "Burpee, která nesplňují normu",
+   "points": [
+    "Hrudník k zemi, vzpřímeně s boky a koleny nataženými, pak výskok, ruce nad ušima",
+    "Burpee mimo určenou zónu burpee se nepočítají",
+    "Závodníci počítají svá burpee sami: vy za ně nepočítáte"
+   ],
+   "narration": "Nesprávná burpee patří mezi nejčastější přestupky. Jedno úplné burpee vede z dolní polohy, kdy závodník leží s hrudníkem na zemi, do vyváženého vzpřímeného stoje s boky a koleny nataženými, po němž následuje výskok s rukama nad ušima. Burpee udělaná mimo určenou zónu se nepočítají. Závodníci počítají svá burpee sami a vy za ně nepočítáte. Kde není norma splněna, program říká vyžadovat další burpee a připomenout závodníkovi, že se jeho pohyb i opakování sledují."
+  },
+  {
+   "heading": "Zvon",
+   "points": [
+    "Na rigech jako Monkey Bars je nezazvonění zvonu nesplnění",
+    "Do zvonů se smí udeřit pažemi, rukama nebo tělem nad hrudníkem",
+    "Kopnutí do zvonu je nesplnění: bez opakování, závodník vykoná trest"
+   ],
+   "narration": "Mnoho překážek končí u zvonu a na rigech, jako jsou Monkey Bars, je nezazvonění způsobem nesplnění. Závodník, který spadne dřív, než zazvoní, neuspěl, ať se dostal jakkoli daleko. Podle obecného pravidla se do zvonů smí udeřit jen pažemi a rukama nebo jinou částí těla nad hrudníkem. Použití nohou, kolen či lýtek ke kopnutí do zvonu se počítá jako nesplnění překážky. Závodník nesmí opakovat a musí vykonat trest za tuto překážku."
+  },
+  {
+   "heading": "Ve zkratce",
+   "points": [
+    "Žádná podpůrná konstrukce ani svislý nosník, pokud to pravidlo nedovoluje",
+    "Jen povolené části překážky, v jedné dráze",
+    "Zkoušejte každou překážku a každý trestný okruh absolvujte celý",
+    "Burpee podle normy, v zóně; zvony zvonit, nikdy nekopat"
+   ],
+   "narration": "Ve zkratce. Sledujte, zda závodníci nepoužívají podpůrnou konstrukci nebo svislý nosník jako žebřík tam, kde to pravidlo zakazuje. Sledujte manipulaci mimo povolenou oblast, například chytání lan nebo řetězů na rigu či použití jiné dráhy. Každou překážku je nutné zkusit a každý trestný okruh absolvovat celý. Burpee musí splňovat normu a dělat se v zóně. A zvon se musí zazvonit, nikdy nekopnout."
+  }
+ ],
+ "ocr-9-3": [
+  {
+   "heading": "Jak se rozhodovat",
+   "points": [
+    "Najděte přesné pravidlo: pokyny, způsoby nesplnění a poznámky",
+    "Ověřte, zda to, co jste viděli, odpovídá uvedenému způsobu nesplnění",
+    "Rozhodněte, nasměrujte závodníka, zapište to a když si nejste jisti, předejte to výš"
+   ],
+   "narration": "Tato lekce vám dává tři situace z programu 2026. U každé se rozhodněte, co byste udělali, než uslyšíte odpověď. Postup je pokaždé stejný. Najděte přesné pravidlo překážky. Ověřte, zda to, co jste viděli, odpovídá některému z jejích uvedených způsobů nesplnění. Pak rozhodněte, nasměrujte závodníka a zapište, co se stalo. Pokud to pravidlo nevyřeší nebo si nejste jisti, předejte to hlavnímu rozhodčímu."
+  },
+  {
+   "heading": "Scénář 1: krátký dotek vrchu",
+   "points": [
+    "Závodník na Helix se na okamžik jednou rukou dotkne vrchu překážky",
+    "Dotek trvá chvilku a nepřináší mu žádnou výhodu",
+    "Pokračuje a zazvoní na zvon"
+   ],
+   "narration": "Pravidlo 4.2.6 uvádí dotek vrchu Helix jako způsob nesplnění, bez podmínky o výhodě. Olympus a Z Wall jsou stejné. Rozhodnutí, které pravidla podporují, je tedy nesplnění a závodník vykoná trest, i když dotek nic nepřinesl. Výhoda hraje roli tam, kde to pravidlo říká. U Monkey Bars je podle pravidla 4.2.7 dotek země nohama nesplněním, když vytváří výhodu. Před rozhodnutím vždy zkontrolujte znění způsobu nesplnění.",
+   "review": "Ke kontrole pro 2027: online program 2026 žádá rozhodčí, aby zvážili, zda dotek vytvořil výhodu, a soustředili se na smysl pravidla, ne na drobný nahodilý kontakt. Pravidla 4.2.6, 4.2.10 a 4.2.17 uvádějí dotek vrchu jako nesplnění bez testu výhody. Mezitím uplatňujte pravidla a sporné rozhodnutí předejte hlavnímu rozhodčímu."
+  },
+  {
+   "heading": "Scénář 2: rychlá burpee, boky nenatažené",
+   "points": [
+    "Závodník dělá trestná burpee po nesplnění Spear Throw",
+    "Pohybuje se rychle a nahoře má u mnoha opakování boky stále pokrčené"
+   ],
+   "narration": "Ta opakování normu nesplňují. Pravidlo 3.17.4 definuje horní polohu jako vyváženou a vzpřímenou, s boky a koleny nataženými, ne pokrčenými, před výskokem. Opakování bez toho není úplné burpee. Program říká vyžadovat další burpee, když norma není splněna, a připomenout závodníkovi, že se jeho pohyb a opakování sledují. Za závodníka nepočítejte. U Spear Throw určuje vynechaná burpee tým kontroly videa. Bez videa rozhodnete na místě, zapíšete to a předáte hlavnímu rozhodčímu.",
+   "review": "Ke kontrole pro 2027: čas přičtený za vynechaná nebo nesprávná burpee se liší mezi pravidly (3.4.2), SOP pro rozhodování a programem 2026. Tato lekce neučí žádné číslo, dokud nerozhodne vedoucí rozhodování."
+  },
+  {
+   "heading": "Scénář 3: běh kolem trestného okruhu",
+   "points": [
+    "Závodník nesplní překážku splněno/nesplněno u vaší stanice",
+    "Nasměrujete ho k trestnému okruhu, ale on proběhne rovnou kolem a pokračuje"
+   ],
+   "narration": "To je jasné porušení. Podle pravidla 3.4.1 musí závodník, který se pokusí o překážku splněno/nesplněno a neuspěje, absolvovat trestný okruh, a tento ho neabsolvoval. Nehoňte ho ani se nehádejte. Zapište číslo na čelence, zdokumentujte, co se stalo, a nahlaste to hlavnímu rozhodčímu, jakmile můžete. Pokud jste číslo nepřečetli, nahlaste to okamžitě s jasným popisem: barva oblečení, rozpoznatelné rysy a kategorie závodu. Samotný trest se určuje přes hlavního rozhodčího, ne u vaší překážky.",
+   "review": "Ke kontrole pro 2027: pravidlo 3.4.1 přičítá 10minutový časový trest, když závodník nedokončí trestný okruh. Online program 2026 říká, že to může mít za následek diskvalifikaci. Mezitím uplatňujte pravidla a případ předejte hlavnímu rozhodčímu."
+  },
+  {
+   "heading": "Ve zkratce",
+   "points": [
+    "Čtěte přesné znění způsobu nesplnění: výhoda se počítá jen tam, kde to říká",
+    "Burpee bez plného natažení nahoře se nepočítá",
+    "Vynechaný trestný okruh: zapište číslo, zdokumentujte, nahlaste",
+    "Nejste si jisti? Předejte to hlavnímu rozhodčímu"
+   ],
+   "narration": "Ve zkratce. Krátký dotek vrchu Helix, Olympus nebo Z Wall je podle pravidel nesplnění, protože způsob nesplnění nemá test výhody, zatímco některé jiné způsoby nesplnění ho mají. Burpee bez natažených boků a kolen nahoře není úplné burpee, proto se vyžadují další burpee. Závodník, který proběhne kolem trestného okruhu, porušil pravidla: zapište číslo na čelence, zdokumentujte to a nahlaste hlavnímu rozhodčímu."
+  }
+ ],
+ "ocr-4-2": [
+  {
+   "heading": "Překážka s jedním pokusem",
+   "points": [
+    "Jeden hod: minutí je nesplnění a nesplnění znamená trest",
+    "Vaše práce: vidět začátek pokusu, posoudit výsledek, poslat závodníka k trestu"
+   ],
+   "narration": "Spear Throw je překážka splněno/nesplněno s jedním pokusem. Každý závodník má jeden hod. Pokud neuspěje, druhý pokus není: jde rovnou k trestu. Vaším úkolem u Spear Throw je přesně vidět, kdy pokus začíná, posoudit výsledek a nasměrovat závodníka ke správnému trestu."
+  },
+  {
+   "heading": "Co musí závodník udělat",
+   "points": [
+    "Stát oběma nohama za bariérou",
+    "Hodit oštěpem na cíl ve stejné dráze",
+    "Oštěp se zabodne do určeného cíle a zůstane v něm, žádná jeho část se nedotýká země"
+   ],
+   "narration": "Podle pravidla 4.2.13 stojí závodník oběma nohama za bariérou a hází na cíl ve své vlastní dráze. Aby uspěl, musí se oštěp zabodnout do určeného cíle a zůstat v něm, přičemž se žádná část oštěpu nedotýká země."
+  },
+  {
+   "heading": "Kdy pokus začíná",
+   "points": [
+    "Je to pokus, jakmile je oštěp vypuštěn pohybem vpřed",
+    "Změna dráhy je dovolena, ale jen před pokusem",
+    "Zamotané vlákno, které hod pokazí, se stále počítá jako pokus"
+   ],
+   "narration": "Pravidla říkají, že pokus začíná, jakmile závodník vypustí oštěp pohybem vpřed. Předtím může změnit dráhu. Poté už nemůže začít znovu. A pokud se vlákno zamotá a hod pokazí, stále se to počítá: udržet vlákno volné je úkolem závodníka.",
+   "review": "Ke kontrole pro 2027: online program 2026 říká, že zavázání začíná dříve, když se oštěp zatáhne k hodu. Pravidla říkají, že při vypuštění. Dokud nerozhodne vedoucí rozhodování, uplatňujte pravidla a sporné rozhodnutí předejte hlavnímu rozhodčímu."
+  },
+  {
+   "heading": "Splněno nebo nesplněno",
+   "points": [
+    "Nesplnění: oštěp se nezabodne do určeného cíle",
+    "Nesplnění: jakákoli část oštěpu se dotýká země, jakmile je v klidu",
+    "Samo o sobě není nesplnění: otření o zem za letu, pokud skončí v cíli bez doteku země"
+   ],
+   "narration": "Existují dva způsoby nesplnění. Oštěp se nezabodne do určeného cíle, nebo se jakákoli jeho část dotýká země, jakmile se zastavil. Oštěp se může cestou o zem otřít a samo o sobě to není nesplnění, pokud skončí v cíli a bez doteku země.",
+   "review": "Ke kontrole pro 2027: online program 2026 uvádí „oštěp se dotkne země před cílem“ jako nesplnění. Pravidlo 4.2.13 to dovoluje. Uplatňujte pravidla, dokud nerozhodne vedoucí rozhodování."
+  },
+  {
+   "heading": "Kdy je splněno",
+   "points": [
+    "Splněno, jakmile se závodník vzdálil alespoň 2 metry od dráhy",
+    "Nesmí odejít, dokud oštěp nezasáhl cíl, konstrukci nebo zem",
+    "Pád nebo nesplnění dřív, než je 2 metry daleko, je neúplný pokus: trest"
+   ],
+   "narration": "Překážka je splněna, jakmile se závodník vzdálil alespoň dva metry od své dráhy. Nesmí odejít dřív, než oštěp zasáhl cíl, konstrukci nebo zem. Pokud oštěp vypadne dřív, než je závodník dva metry daleko, je to neúplný pokus a platí trest."
+  },
+  {
+   "heading": "Trest",
+   "points": [
+    "30 burpee (15 na akcích Stadion)",
+    "V určené zóně burpee: burpee mimo ni se nepočítají",
+    "Každé podle normy: hrudník k zemi, vzpřímeně, pak výskok s rukama nad ušima"
+   ],
+   "narration": "Trest za nesplnění Spear Throw je třicet burpee, nebo patnáct na akcích Stadion. Musí se dělat v určené zóně burpee, protože burpee mimo ni se nepočítají. Každé musí splnit normu: hrudník k zemi, zpět do vyváženého vzpřímeného stoje, pak výskok s rukama nad ušima.",
+   "review": "Ke kontrole pro 2027: čas přičtený za vynechaná nebo nesprávná burpee se liší mezi pravidly (3.4.2), SOP pro rozhodování a programem 2026. Tato lekce neučí žádné číslo, dokud nerozhodne vedoucí rozhodování."
+  },
+  {
+   "heading": "Co děláte",
+   "points": [
+    "Stůjte tam, kde vidíte vypuštění, bariéru a cíl",
+    "Výsledek ohlaste jasně a klidně",
+    "Pošlete závodníka do zóny burpee, kde kamera vidí číslo na jeho čelence",
+    "Jakýkoli spor předejte hlavnímu rozhodčímu: u překážky se nehádejte"
+   ],
+   "narration": "Stůjte tam, odkud vidíte vypuštění, bariéru i cíl současně. Výsledek ohlaste jasně a klidně. Pošlete závodníka do zóny burpee a ujistěte se, že kamera vidí číslo na jeho čelence. Pokud závodník rozhodnutí zpochybní, poznamenejte si číslo a předejte to hlavnímu rozhodčímu. U překážky se nehádejte."
+  },
+  {
+   "heading": "Ve zkratce",
+   "points": [
+    "Jeden hod: pokus začíná, když je oštěp vypuštěn vpřed",
+    "Splněno: v cíli, nic se nedotýká země, jakmile je v klidu",
+    "Dokončeno: 2 metry od dráhy",
+    "Nesplněno: 30 burpee v zóně, každé podle normy"
+   ],
+   "narration": "Ve zkratce. Jeden hod a pokus začíná, když je oštěp vypuštěn vpřed. Splněno je, když je oštěp v cíli a nic se nedotýká země, jakmile je v klidu. Závodník je hotov, když je dva metry od dráhy. Nesplnění je třicet burpee v zóně burpee, každé podle normy."
+  }
+ ],
+ "deka-1-1": [
+  {
+   "heading": "Ukázková lekce",
+   "points": [
+    "Tento program je zástupný",
+    "Jeho lekce a kvíz ukazují, jak funguje druhý program",
+    "Nic z toho nejsou pravidla DEKA"
+   ],
+   "narration": "Toto je ukázková lekce v zástupném programu. Ukazuje, jak druhý program funguje vedle programu OCR, s vlastními lekcemi, kvízem, hranicí úspěšnosti a osvědčením. Nic zde nejsou skutečná pravidla DEKA: ta pocházejí od vlastníků programu DEKA."
+  },
+  {
+   "heading": "Počítání opakování (ukázka)",
+   "points": [
+    "Rozhodčí počítá každé opakování, které splňuje normu",
+    "Opakování, které ji nesplňuje, je no rep, ohlášený jasně"
+   ],
+   "narration": "V této ukázce rozhodčí počítá každé opakování, které splňuje normu pohybu, a jasně ohlásí no rep, když ho nesplňuje. Skutečné normy a rozhodnutí přijdou s vlastními materiály DEKA."
+  },
+  {
+   "heading": "Ve zkratce (ukázka)",
+   "points": [
+    "Pouze zástupný obsah",
+    "Kvíz, který následuje, je také ukázkový"
+   ],
+   "narration": "To je konec ukázkové lekce. Kvíz, který následuje, je také ukázkový, aby ukázal, jak každý program uchovává vlastní hodnocení a osvědčení."
+  }
+ ]
+}

@@ -1,6 +1,6 @@
 // Programmes (step 2): your overview, the catalogue, one programme's page (its versions, policy and curriculum, with editing, review
 // and approval for its editors and owner), and each person's learning record. The server checks everything again.
-import { $, S, call, esc, toast, regionName, roleText, day, formBody, badge, bar, redraw, act, hooks, runHooks, LANG } from './core.js';
+import { $, S, call, esc, toast, regionName, roleText, day, formBody, badge, bar, redraw, act, hooks, runHooks, LANG, t } from './core.js';
 
 const RULE = { lessons: 'Complete every lesson', assessment: 'Pass the assessment', 'lessons+assessment': 'Complete every lesson and pass the assessment' };
 const CATEGORY = { referee: 'Referee', judge: 'Judge', other: 'Other' };
@@ -33,7 +33,7 @@ export function wireRecord() {
     e.preventDefault();
     act(async () => { await call('enrolments', { method: 'POST', body: { programmeId: e.target.programmeId.value, personId: e.target.dataset.person } }); toast('Enrolled'); redraw(); }, e.submitter);
   });
-  for (const b of document.querySelectorAll('[data-withdraw]')) b.onclick = () => { if (confirm('Withdraw from this programme? Their record is kept.')) act(async () => { await call(`enrolments/${b.dataset.withdraw}`, { method: 'DELETE' }); toast('Withdrawn'); redraw(); }, b); };
+  for (const b of document.querySelectorAll('[data-withdraw]')) b.onclick = () => { if (confirm(t('Withdraw from this programme? Their record is kept.'))) act(async () => { await call(`enrolments/${b.dataset.withdraw}`, { method: 'DELETE' }); toast('Withdrawn'); redraw(); }, b); };
 }
 
 // ---------------------------------------------------------------- the overview
@@ -95,7 +95,7 @@ async function programmePage(id) {
   return `<section class="card progHead" data-current-version="${esc(v.id)}">
       <p class="crumbs"><a href="#/programmes">Programmes</a></p>
       <h1>${esc(p.title)}</h1>
-      <p class="badges">${badge(v.state, `${v.edition}: ${({ draft: 'draft', review: 'in review', published: 'published', superseded: 'superseded', archived: 'archived' })[v.state]}`)}${p.demo ? badge('preview', 'Demonstration content') : ''}${p.status === 'archived' ? badge('archived') : ''}</p>
+      <p class="badges">${`<span class="badge">${esc(v.edition)}</span>${badge(v.state)}`}${p.demo ? badge('preview', 'Demonstration content') : ''}${p.status === 'archived' ? badge('archived') : ''}</p>
       ${p.description ? `<p>${esc(p.description)}</p>` : ''}
       ${d.versions.length > 1 ? `<label class="versionPick">Version <select id="versionPick">${d.versions.map((x) => `<option value="${esc(x.id)}"${x.id === v.id ? ' selected' : ''}>${esc(x.edition)} (${esc(x.state)})</option>`).join('')}</select></label>` : ''}
       ${v.state !== 'published' && !d.can.edit ? '' : v.state !== 'published' ? '<p class="note">Learners only ever see a published version.</p>' : ''}
@@ -160,16 +160,16 @@ export function wire() {
   const versionId = () => document.querySelector('[data-current-version]')?.dataset.currentVersion;
   for (const b of document.querySelectorAll('[data-state]')) b.onclick = () => {
     const to = b.dataset.state;
-    if (to === 'published' && !confirm('Publish this version? Learners move to it for new enrolments, and it can never change afterwards.')) return;
-    if (to === 'archived' && !confirm('Archive this version?')) return;
+    if (to === 'published' && !confirm(t('Publish this version? Learners move to it for new enrolments, and it can never change afterwards.'))) return;
+    if (to === 'archived' && !confirm(t('Archive this version?'))) return;
     act(async () => {
       await call(`versions/${versionId()}/state`, { method: 'POST', body: { to } }); toast({ review: 'Sent for review', published: 'Published', draft: 'Sent back to draft', archived: 'Archived' }[to]); redraw();
     }, b);
   };
   $('addModule')?.addEventListener('submit', (e) => { e.preventDefault(); act(async () => { await call(`versions/${versionId()}/modules`, { method: 'POST', body: formBody(e.target) }); toast('Module added'); redraw(); }, e.submitter); });
   for (const f of document.querySelectorAll('.addLesson')) f.addEventListener('submit', (e) => { e.preventDefault(); act(async () => { await call(`modules/${f.dataset.module}/lessons`, { method: 'POST', body: { ...formBody(f), minutes: Number(f.minutes.value) } }); toast('Lesson added'); redraw(); }, e.submitter); });
-  for (const b of document.querySelectorAll('[data-del-module]')) b.onclick = () => { if (confirm('Delete this module and its lessons from the draft?')) act(async () => { await call(`modules/${b.dataset.delModule}`, { method: 'DELETE' }); redraw(); }, b); };
-  for (const b of document.querySelectorAll('[data-del-lesson]')) b.onclick = () => { if (confirm('Delete this lesson from the draft?')) act(async () => { await call(`lessons/${b.dataset.delLesson}`, { method: 'DELETE' }); redraw(); }, b); };
+  for (const b of document.querySelectorAll('[data-del-module]')) b.onclick = () => { if (confirm(t('Delete this module and its lessons from the draft?'))) act(async () => { await call(`modules/${b.dataset.delModule}`, { method: 'DELETE' }); redraw(); }, b); };
+  for (const b of document.querySelectorAll('[data-del-lesson]')) b.onclick = () => { if (confirm(t('Delete this lesson from the draft?'))) act(async () => { await call(`lessons/${b.dataset.delLesson}`, { method: 'DELETE' }); redraw(); }, b); };
   $('policyForm')?.addEventListener('submit', (e) => {
     e.preventDefault();
     const b = Object.fromEntries([...new FormData(e.target)]);

@@ -11,6 +11,8 @@ export const AS_KEY = 'sr_learn_as';
 export const ROLE = { global_admin: 'Global admin', programme_owner: 'Programme owner', regional_coordinator: 'Regional coordinator', content_editor: 'Content editor', assessor: 'Assessor', technical_admin: 'Technical admin' };
 export const LANG = { en: 'English', fr: 'Français', de: 'Deutsch', nl: 'Nederlands', es: 'Español', it: 'Italiano', el: 'Ελληνικά', hr: 'Hrvatski', cs: 'Čeština', pl: 'Polski', fi: 'Suomi', sv: 'Svenska', da: 'Dansk', ar: 'العربية', th: 'ไทย' };
 /** the page's state: who's signed in (and who they're viewing as), and the regions */
+/** a text in the page's language (i18n.js), for what isn't on the page itself: dialog boxes */
+export const t = (text, values) => (window.SR_I18N ? window.SR_I18N.t(text, values) : text);
 export const S = { me: null, regions: [] };
 
 export async function call(path, { method = 'GET', body } = {}) {

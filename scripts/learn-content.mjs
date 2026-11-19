@@ -6,7 +6,7 @@
 import { CAMERA } from './learn-camera-course.mjs';
 
 export const OCR = {
-  id: 'ocr-referee', title: 'Spartan OCR Referee', category: 'referee', learnerRole: 'OCR Referee', locales: 'en,es',
+  id: 'ocr-referee', title: 'Spartan OCR Referee', category: 'referee', learnerRole: 'OCR Referee', locales: 'en,fr,de,nl,es,it,el,hr,cs,pl,fi,sv,da,ar,th',
   description: 'The online programme for Spartan obstacle course race referees: the rules, the race-day workflow, obstacles, penalties, the burpee standard and conduct. Built from the 2026 programme as a map for the 2027 edition.',
   version: {
     edition: '2027', completionRule: 'lessons+assessment', passMark: 80, maxAttempts: 3, retakeWaitHours: 24, validityMonths: 12, renewalDueDays: 60,

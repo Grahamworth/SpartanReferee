@@ -1,0 +1,1538 @@
+{
+ "cam-1-1": [
+  {
+   "heading": "Camera's op het penaltystation",
+   "points": [
+    "Telefoons filmen de burpeestrafzone",
+    "Een SpartanReferee-server neemt ze op en laat op elke camera een AI-judge draaien",
+    "Elke herhaling wordt geteld en getoetst aan de standaard"
+   ],
+   "narration": "SpartanReferee filmt het penaltystation met telefoons. Elke telefoon stuurt zijn beeld via wifi of mobiele data naar een SpartanReferee-server. De server neemt het op en laat op elke camera een AI-judge draaien, zodat elke herhaling wordt geteld en getoetst aan de bewegingsstandaard."
+  },
+  {
+   "heading": "Wie doet wat",
+   "points": [
+    "De hoofdscheidsrechter van het evenement boekt het station en beheert het",
+    "Elke scheidsrechter die aan het evenement is toegewezen kan live meekijken en de resultaten controleren",
+    "Beheerders kunnen de camera's van elk evenement boeken, verlengen of stoppen"
+   ],
+   "narration": "Elk evenement heeft één camerabeoordeling. De hoofdscheidsrechter boekt die vanaf de evenementpagina en beheert hem op de dag zelf. Elke scheidsrechter die aan het evenement is toegewezen, kan hem openen om de camera's live te bekijken en de resultaten te controleren. Beheerders kunnen ingrijpen en de camera's van elk evenement boeken, verlengen of stoppen."
+  },
+  {
+   "heading": "Kort samengevat",
+   "points": [
+    "Telefoons filmen, de server beoordeelt, iedereen kijkt mee in een browser",
+    "De hoofdscheidsrechter boekt en beheert het"
+   ],
+   "narration": "Kort samengevat: telefoons filmen, de server beoordeelt en elke scheidsrechter kijkt mee in een browser. De hoofdscheidsrechter boekt en beheert het."
+  }
+ ],
+ "cam-1-2": [
+  {
+   "heading": "Jouw evenementen",
+   "points": [
+    "Je evenementen staan op je startpagina",
+    "Open er een om de cameratijden te zien en wie er scheidsrechter is",
+    "De hoofdscheidsrechter ziet daar Boek de burpeecamera's"
+   ],
+   "narration": "Je evenementen staan op je SpartanReferee-startpagina. Open er een om de cameratijden te zien en wie er scheidsrechter is. Als je de hoofdscheidsrechter bent, boek je daar de burpeecamera's."
+  },
+  {
+   "heading": "De uren",
+   "points": [
+    "De camera's draaien van 07:00 tot 18:00 lokale tijd op elke dag van het evenement",
+    "Tijden worden ingevoerd in de eigen lokale tijd van het evenement",
+    "Een vooraf gemaakte boeking start zijn servers 10 minuten eerder; nu starten duurt ongeveer 5 minuten"
+   ],
+   "narration": "De camera's van een evenement draaien op elke dag van het evenement van zeven uur 's ochtends tot zes uur 's avonds, lokale tijd. Boekingstijden zijn in de eigen lokale tijd van het evenement, waar je ook boekt. Een vooraf gemaakte boeking start zijn servers tien minuten eerder, zodat de camera's op tijd klaar zijn. Een boeking meteen starten duurt ongeveer vijf minuten."
+  },
+  {
+   "heading": "Servers en de verbinding",
+   "points": [
+    "Elke server verwerkt 2 camera's",
+    "Elke camera verstuurt ongeveer 3,5 Mbit/s",
+    "Controleer de verbinding van de locatie vóór de dag: die moet alle camera's aankunnen"
+   ],
+   "narration": "Elke server verwerkt twee camera's, dus het aantal camera's bepaalt het aantal servers. Elke camera verstuurt ongeveer drieënhalve megabit per seconde, en de verbinding van de locatie moet ze allemaal aankunnen. Controleer dat vóór de dag."
+  }
+ ],
+ "cam-1-3": [
+  {
+   "heading": "Voor elke camera",
+   "points": [
+    "Een telefoon op een statief of standaard",
+    "Een powerbank",
+    "Mobiele data of het wifi van de locatie"
+   ],
+   "narration": "Voor elke camera heb je een telefoon op een statief of standaard nodig, een powerbank om hem de hele dag aan te houden, en mobiele data of het wifi van de locatie."
+  },
+  {
+   "heading": "De apps",
+   "points": [
+    "Android: de app SpartanReferee Broadcaster",
+    "iPhone: Larix Broadcaster, uit de App Store",
+    "Om te kijken en te beoordelen: elke telefoon, tablet of computer met een browser, zonder iets te installeren"
+   ],
+   "narration": "Android-telefoons gebruiken de app SpartanReferee Broadcaster. iPhones gebruiken Larix Broadcaster, uit de App Store. Om de camera's te bekijken en te beoordelen volstaat elke telefoon, tablet of computer met een browser: daarop hoef je niets te installeren."
+  }
+ ],
+ "cam-2-1": [
+  {
+   "heading": "Waar de telefoon komt te staan",
+   "points": [
+    "Liggend, op zijn standaard",
+    "3 tot 4 meter van de atleten",
+    "Het hele lichaam van elke atleet in beeld, ook liggend op de grond"
+   ],
+   "narration": "Zet de telefoon liggend op zijn standaard, drie tot vier meter van de atleten. Houd het hele lichaam van elke atleet in beeld, ook wanneer ze plat op de grond liggen."
+  },
+  {
+   "heading": "De hoek",
+   "points": [
+    "Licht schuin of zijdelings beoordeelt borst naar de grond beter dan recht van voren",
+    "Push-ups en sit-ups vragen om de telefoon zijdelings op vloerhoogte"
+   ],
+   "narration": "Een licht schuin of zijdelings beeld beoordeelt borst naar de grond beter dan een camera recht van voren. Zet de telefoon bij push-ups en sit-ups zijdelings op vloerhoogte."
+  },
+  {
+   "heading": "Houd de banen vrij",
+   "points": [
+    "Officials in felgele hesjes worden nooit als atleet geteld",
+    "Iedereen anders die voor een camera staat, zit in de weg",
+    "Sta waar je de atleten kunt zien zonder het beeld te blokkeren"
+   ],
+   "narration": "Officials in felgele hesjes worden nooit als atleet geteld. Iedereen anders die voor een camera staat, zit in de weg. Houd dus de banen vrij en sta waar je de atleten kunt zien zonder de camera's te blokkeren."
+  }
+ ],
+ "cam-2-2": [
+  {
+   "heading": "De QR-codes",
+   "points": [
+    "Open de boeking op de console zodra die aanstaat",
+    "Elke camera die op zijn telefoon wacht, toont QR-codes op de tabs Live en Camera's",
+    "De codes veranderen bij elke boeking: scan ze elke keer opnieuw"
+   ],
+   "narration": "Zodra de boeking aanstaat, open je hem op de console. Elke camera die op zijn telefoon wacht, toont QR-codes op de tabs Live en Camera's. De codes veranderen bij elke boeking, dus scan ze elke keer opnieuw."
+  },
+  {
+   "heading": "Android: SpartanReferee Broadcaster",
+   "points": [
+    "Installeer de app; sta installeren uit deze bron toe wanneer de telefoon erom vraagt",
+    "Tik op Scan de QR-code van de camera en scan de code van die camera",
+    "Laat de kwaliteit op 720p staan tenzij het signaal zwak is, dan Camera openen en Live gaan"
+   ],
+   "narration": "Installeer op Android SpartanReferee Broadcaster. De telefoon waarschuwt je omdat de app niet uit de Play Store komt: tik op Instellingen, sta installeren uit deze bron toe, ga terug en installeer. Tik op Scan de QR-code van de camera en scan de code van die camera. Laat de kwaliteit op 720p staan tenzij het signaal zwak is, en tik dan op Camera openen en Live gaan."
+  },
+  {
+   "heading": "iPhone: Larix Broadcaster",
+   "points": [
+    "Installeer Larix en open het één keer, met toestemming voor camera en microfoon",
+    "Scan de iPhone-code (Larix) van de camera met de camera van de telefoon, open de link in Larix en tik op Import",
+    "In Larix: Settings, Connections, vink de camera aan en druk dan op de rode knop"
+   ],
+   "narration": "Installeer op een iPhone Larix Broadcaster en open het één keer, met toestemming voor de camera en de microfoon. Scan de iPhone-code van de camera met de eigen camera van de telefoon, open de link in Larix en tik op Import. Ga dan in Larix naar Settings, Connections, vink de camera aan en druk op de rode knop."
+  }
+ ],
+ "cam-3-1": [
+  {
+   "heading": "De judge starten",
+   "points": [
+    "Het beeld van elke telefoon verschijnt binnen een paar seconden op de tab Live",
+    "Druk bij een camera op AI-judge starten, geef hem een naam en kies de oefening",
+    "Dan Beoordeling starten: het draait op de server, dus het gaat door als je de pagina sluit"
+   ],
+   "narration": "Het beeld van elke telefoon verschijnt binnen een paar seconden nadat hij live is gegaan op de tab Live. Druk bij een camera op AI-judge starten, geef hem een naam, kies wat hij beoordeelt en druk op Beoordeling starten. De judge draait op de server, dus hij gaat door als je de pagina sluit."
+  },
+  {
+   "heading": "Wat hij bij een burpee controleert",
+   "points": [
+    "Borst naar de grond",
+    "Volledige heupstrekking",
+    "Een sprong, beide voeten van de grond",
+    "Handen boven de oren"
+   ],
+   "narration": "Bij een burpee controleert de judge vier dingen: borst naar de grond, volledige heupstrekking, een sprong met beide voeten van de grond en handen boven de oren. Een herhaling waarbij er één ontbreekt, is een no rep."
+  },
+  {
+   "heading": "Test hem",
+   "points": [
+    "Doe een paar testherhalingen voor elke camera",
+    "Controleer of elke goede wordt geteld en een slechte niet",
+    "Verplaats de telefoon als een atleet uit beeld gaat"
+   ],
+   "narration": "Doe voordat de atleten komen een paar testherhalingen voor elke camera en controleer of ze worden geteld, en of een opzettelijk slechte niet wordt geteld. Gaat de atleet uit beeld, verplaats dan de telefoon."
+  }
+ ],
+ "cam-3-2": [
+  {
+   "heading": "Resultaten",
+   "points": [
+    "Resultaten toont iedereen die is beoordeeld",
+    "Startnummer zoeken doorzoekt elke camera",
+    "Bekijken speelt een atleet af met elke herhaling en no rep gemarkeerd"
+   ],
+   "narration": "De tab Resultaten toont iedereen die is beoordeeld. Startnummer zoeken doorzoekt elke camera naar één atleet. Bekijken speelt die atleet af met elke herhaling en elke no rep gemarkeerd."
+  },
+  {
+   "heading": "Hoe lang het wordt bewaard",
+   "points": [
+    "Opnamen en resultaten worden 7 dagen bewaard",
+    "Aan het einde van de boeking worden de opnamen opgeslagen en de servers afgesloten",
+    "Elke scheidsrechter bij het evenement kan ze controleren"
+   ],
+   "narration": "Opnamen en resultaten worden zeven dagen bewaard. Als de boeking afloopt, worden de opnamen opgeslagen en de servers afgesloten. Elke scheidsrechter bij het evenement kan ze in die tijd controleren."
+  }
+ ],
+ "cam-3-3": [
+  {
+   "heading": "Telefoons en beeld",
+   "points": [
+    "Verbindt niet: controleer het signaal en scan de code opnieuw vanuit deze boeking",
+    "Haperen of wegvallen: het signaal is te zwak voor 720p, kies dus een lagere kwaliteit",
+    "Een camera maar geen beeld: het netwerk van de locatie blokkeert mogelijk video, probeer de mobiele data van de telefoon"
+   ],
+   "narration": "Als een telefoon niet wil verbinden, controleer dan het signaal en scan de code opnieuw vanuit deze boeking. Als het beeld hapert of wegvalt, is het signaal te zwak voor 720p: kies een lagere kwaliteit. Als een camera wel verschijnt maar zonder beeld, blokkeert het netwerk van de locatie mogelijk video: probeer in plaats daarvan de mobiele data van de telefoon."
+  },
+  {
+   "heading": "Servers en het internet",
+   "points": [
+    "De server startte niet: de console zegt waarom; soms heeft Azure een paar minuten geen server vrij, dus probeer het opnieuw",
+    "Het internet van de locatie valt uit: niets bereikt de server tot het terug is",
+    "Alleen Larix bewaart een eigen kopie op de telefoon"
+   ],
+   "narration": "Als de server niet startte, zegt de console waarom. Soms is er een paar minuten geen server vrij: probeer het opnieuw. Als het internet van de locatie uitvalt, bereikt niets de server totdat het terug is, en alleen Larix bewaart een eigen kopie van de video op de telefoon."
+  }
+ ],
+ "cam-4-1": [
+  {
+   "heading": "De gratis camera",
+   "points": [
+    "De AI-judge draait in je eigen browser, op de camera van deze telefoon of computer",
+    "Geen server en geen kosten, op elk moment",
+    "Zet de telefoon neer, doe een paar burpees en zie ze elk beoordeeld worden"
+   ],
+   "narration": "De gratis camera laat de AI-judge direct in je browser draaien, op de camera van je eigen telefoon of computer, live of op een minuut video. Er is geen server en het kost niets, en je kunt hem op elk moment gebruiken. Zet de telefoon neer, doe een paar burpees en kijk hoe elke wordt beoordeeld."
+  },
+  {
+   "heading": "Het echte station repeteren",
+   "points": [
+    "Hoofdscheidsrechters kunnen een oefenserver van 30 minuten boeken",
+    "Telefoons scannen hun codes, de console, de judge en de review, zoals bij een evenement",
+    "Hij gebruikt een van de servers die evenementen nodig hebben, dus hij is voor hoofdscheidsrechters en beheerders"
+   ],
+   "narration": "Hoofdscheidsrechters kunnen ook een oefenserver van dertig minuten boeken, om het hele station te repeteren: de telefoons die hun codes scannen, de console, de judge en de review, precies zoals bij een evenement. Hij gebruikt een van de servers die evenementen nodig hebben, dus hij is voor hoofdscheidsrechters en beheerders."
+  }
+ ],
+ "deka-1-1": [
+  {
+   "heading": "Een voorbeeldles",
+   "points": [
+    "Dit programma is een voorbeeld",
+    "De les en quiz laten zien hoe een tweede programma werkt",
+    "Niets ervan zijn de regels van DEKA"
+   ],
+   "narration": "Dit is een voorbeeldles in een voorbeeldprogramma. Het laat zien hoe een tweede programma naast het OCR-programma staat, met eigen lessen, quiz, slaaggrens en certificaat. Niets hier zijn de werkelijke regels van DEKA: die komen van de programma-eigenaren van DEKA."
+  },
+  {
+   "heading": "Herhalingen tellen (voorbeeld)",
+   "points": [
+    "Een judge telt elke herhaling die aan de standaard voldoet",
+    "Een herhaling die dat niet doet is een no-rep, duidelijk aangegeven"
+   ],
+   "narration": "In dit voorbeeld telt een judge elke herhaling die aan de bewegingsstandaard voldoet en geeft hij duidelijk een no-rep als dat niet zo is. De echte standaarden en beslissingen komen met het eigen materiaal van DEKA."
+  },
+  {
+   "heading": "Kort samengevat (voorbeeld)",
+   "points": [
+    "Alleen voorbeeldinhoud",
+    "De quiz die volgt is ook een voorbeeld"
+   ],
+   "narration": "Dat was het einde van de voorbeeldles. De quiz die volgt is ook een voorbeeld, om te laten zien hoe elk programma zijn eigen toets en certificaat bijhoudt."
+  }
+ ],
+ "ocr-1-1": [
+  {
+   "heading": "Waarom Spartan bestaat",
+   "points": [
+    "Spartan bestaat om mensen te helpen hun grenzen te verleggen",
+    "Het doel: mensen die sterker zijn, lichamelijk en geestelijk",
+    "De missie: mensen helpen te leven zonder grenzen"
+   ],
+   "narration": "Spartan bestaat om mensen te helpen hun grenzen te verleggen en sterker te worden, lichamelijk en geestelijk. De missie is mensen te helpen te leven zonder grenzen, door de kracht, discipline en veerkracht op te bouwen die ze nodig hebben om de uitdagingen van het leven aan te gaan. Elke Spartan Race is ontworpen om atleten iets te laten doen dat zwaar, ongemakkelijk en transformerend is. Dat is de omgeving waarin je als scheidsrechter werkt. De atleten voor je hebben ervoor gekozen iets moeilijks te doen, en de regels bestaan zodat ze allemaal voor dezelfde test staan."
+  },
+  {
+   "heading": "Een uitdaging voor iedereen",
+   "points": [
+    "Spartan-evenementen zijn voor alle niveaus, van eerste keer racers tot elitewedstrijdlopers",
+    "Miljoenen mensen over de hele wereld doen mee",
+    "Wat telt is de bereidheid om te komen opdagen, niet waar je begint"
+   ],
+   "narration": "Spartan-evenementen zijn ontworpen voor atleten van elk niveau. Miljoenen mensen over de hele wereld doen mee, van eerste keer racers tot elitewedstrijdlopers. Spartan vindt dat wat telt niet is waar je begint, maar de bereidheid om te komen opdagen, excuses opzij te zetten en de uitdaging aan te gaan. Iedereen die het parcours op stapt, doet mee aan dezelfde test van doorzettingsvermogen en vastberadenheid. Op racedag zie je dus een breed scala aan atleten. Verderop in deze cursus leer je bij welke je het scherpst let."
+  },
+  {
+   "heading": "Eén set regels, overal",
+   "points": [
+    "De Rules of Competition gelden voor alle Spartan-evenementen en -wedstrijden wereldwijd",
+    "Ze zijn bindend voor elke deelnemer bij elk Spartan-evenement",
+    "Hun doel: eerlijk en consistent racen, wereldwijde standaarden, veiligheid van deelnemers"
+   ],
+   "narration": "De Spartan Rules of Competition gelden voor alle Spartan-evenementen en -wedstrijden over de hele wereld, en ze zijn bindend voor elke deelnemer. Het regelboek zegt dat de regels uitleggen hoe een race moet worden gejureerd. Ze beogen elk evenement eerlijk en consistent te maken, met sportiviteit en integriteit. Ze geven duidelijke richtlijnen, zodat de competitie wereldwijd gestandaardiseerd is. En ze beschermen de gezondheid, veiligheid en het welzijn van deelnemers, voor zover dat redelijkerwijs mogelijk is bij hindernislopen."
+  },
+  {
+   "heading": "Jouw rol hierin",
+   "points": [
+    "Pas de wedstrijdregels en officiating-procedures consistent toe",
+    "Bescherm de eerlijkheid en integriteit van Spartan-evenementen wereldwijd",
+    "Aan het einde van deze cursus: de regels consistent en zelfverzekerd toepassen"
+   ],
+   "narration": "Dit programma introduceert de rol, verantwoordelijkheden en normen die van Spartan-scheidsrechters worden verwacht. Het doel is dat elke scheidsrechter de wedstrijdregels en de officiating-procedures op dezelfde manier toepast, om de eerlijkheid en integriteit van Spartan-evenementen wereldwijd te beschermen. Een atleet moet bij jouw hindernis dezelfde beslissing krijgen als bij dezelfde hindernis bij elk ander Spartan-evenement. Aan het einde van de cursus kun je de Spartan-regels consistent en zelfverzekerd toepassen."
+  },
+  {
+   "heading": "Kort samengevat",
+   "points": [
+    "Spartan bestaat om mensen te helpen hun grenzen te verleggen",
+    "De evenementen zijn voor iedereen, van beginners tot elitewedstrijdlopers",
+    "Eén regelboek geldt voor elk Spartan-evenement wereldwijd",
+    "Jouw taak: het consistent toepassen, om eerlijkheid en integriteit te beschermen"
+   ],
+   "narration": "Kort samengevat. Spartan bestaat om mensen te helpen hun grenzen te verleggen en sterker te worden in lichaam en geest. De evenementen zijn voor iedereen, van eerste keer racers tot elitewedstrijdlopers. Eén set regels geldt voor elk Spartan-evenement ter wereld, met als doel eerlijk, consistent en veilig racen. Jouw taak als scheidsrechter is die regels consistent toe te passen, zodat de eerlijkheid en integriteit van elke race worden beschermd."
+  }
+ ],
+ "ocr-1-2": [
+  {
+   "heading": "Trailrunning met hindernissen",
+   "points": [
+    "Een Spartan Race is een hindernisloop (OCR)",
+    "Het combineert trailrunning met fysieke hindernissen",
+    "De hindernissen testen zowel mentale als fysieke kracht"
+   ],
+   "narration": "Een Spartan Race is een hindernisloop: trailrunning gecombineerd met fysieke hindernissen langs het parcours. De hindernissen zijn ontworpen om zowel mentale als fysieke kracht te testen en racers voorbij hun gedachte grenzen te duwen. Tussen de hindernissen rennen atleten. Bij elke hindernis moeten ze een bepaalde uitdaging overwinnen, en het regelboek beschrijft precies wat dat inhoudt. Als scheidsrechter sta je meestal bij een hindernis, dus die hindernis en zijn regels zijn je focus voor de dag."
+  },
+  {
+   "heading": "Vijf soorten uitdaging",
+   "points": [
+    "Klimmen: bijvoorbeeld de muren en de Rope Climb",
+    "Dragen: bijvoorbeeld de Bucket Carry en de Sandbag Carry",
+    "Kruipen: bijvoorbeeld de Barbed Wire Crawl",
+    "Springen, en trekken en tillen: bijvoorbeeld de Fire Jump en de Hercules Hoist"
+   ],
+   "narration": "Het programma deelt de uitdagingen in vijf soorten beweging in: klimmen, dragen, kruipen, springen, en trekken en tillen. Klimmen omvat de muren en de Rope Climb. Dragen omvat de Bucket Carry en de Sandbag Carry. Kruipen omvat de Barbed Wire Crawl. Springen omvat de Fire Jump, en trekken en tillen omvat de Hercules Hoist, waarbij de atleet aan een touw trekt om een gewicht omhoog te halen. Elke hindernis heeft in het regelboek een eigen sectie die beschrijft wat de atleet moet doen en hoe hij kan falen."
+  },
+  {
+   "heading": "Twee soorten hindernissen in het regelboek",
+   "points": [
+    "Verplichte hindernissen: moeten worden voltooid voordat je verder mag op het parcours",
+    "Geslaagd/gezakt-hindernissen: falen betekent een straf, een strafronde of burpees",
+    "Elke hindernis moet worden geprobeerd: minimaal aangeraakt"
+   ],
+   "narration": "Het regelboek verdeelt hindernissen in twee categorieën. Verplichte hindernissen moeten worden voltooid voordat de atleet verder mag op het parcours. Falen betekent diskwalificatie, hoewel de Race Director een tijdstraf kan opleggen, afhankelijk van hoe ernstig het is. Geslaagd of gezakt-hindernissen kunnen worden gefaald, en falen betekent een straf: een strafronde of burpees. Geslaagd of gezakt-hindernissen zijn een of meerdere pogingen. Elke hindernis moet worden geprobeerd, en een poging is minimaal het aanraken ervan. De soorten hindernissen krijgen verderop in deze cursus een eigen sectie.",
+   "review": "In herziening voor 2027: het regelboek (3.17.3) zegt dat de straf een strafronde of 30 burpees is, zoals Spartan per evenement, categorie of heat bepaalt. De Officiating SOP zegt een ronde voor de meeste hindernissen en burpees bij de Spear Throw; het programma van 2026 zegt dat burpees alleen bij de Spear Throw worden gebruikt. Gebruik intussen de straf die in je briefing is bevestigd en leg elke twijfel voor aan de Hoofdscheidsrechter."
+  },
+  {
+   "heading": "Raceformaten",
+   "points": [
+    "De bronnen van 2026 noemen de formaten Sprint, Super, Beast, Ultra en Stadion",
+    "Eén regelboek dekt ze allemaal, maar sommige regels verschillen per formaat",
+    "Stadion: de straf voor het falen van elke hindernis is altijd 15 burpees",
+    "Minimum aantal scheidsrechters: 10 bij een Sprint of Stadion, 15 bij een Super, 20 bij een Beast of Ultra"
+   ],
+   "narration": "Spartan-races bestaan in meerdere formaten. Het regelboek en de officiating-procedure van 2026 noemen de Sprint, Super, Beast, Ultra en Stadion. Hetzelfde regelboek dekt ze allemaal, maar sommige regels verschillen per formaat. Bij Stadion-evenementen is de straf voor het falen van een hindernis bijvoorbeeld altijd vijftien burpees, voor elke hindernis en elke heat. De officiating-procedure van Spartan stelt ook een minimum aantal scheidsrechters per formaat vast: tien voor een Sprint of een Stadion, vijftien voor een Super en twintig voor een Beast of een Ultra."
+  },
+  {
+   "heading": "Kort samengevat",
+   "points": [
+    "Een hindernisloop: trailrunning gecombineerd met fysieke hindernissen",
+    "Vijf soorten uitdaging: klimmen, dragen, kruipen, springen, trekken en tillen",
+    "Verplichte hindernissen moeten worden voltooid; falen bij een geslaagd/gezakt-hindernis betekent een straf",
+    "Formaten: Sprint, Super, Beast, Ultra en Stadion"
+   ],
+   "narration": "Kort samengevat. Een Spartan Race is een hindernisloop: trailrunning gecombineerd met fysieke hindernissen die mentale en fysieke kracht testen. De uitdagingen zijn klimmen, dragen, kruipen, springen, en trekken en tillen. Het regelboek verdeelt hindernissen in verplichte hindernissen, die moeten worden voltooid, en geslaagd of gezakt-hindernissen, waar falen een straf betekent. Elke hindernis moet worden geprobeerd. Races bestaan in meerdere formaten, waaronder de Sprint, Super, Beast, Ultra en Stadion."
+  }
+ ],
+ "ocr-2-1": [
+  {
+   "heading": "Wat scheidsrechters beschermen",
+   "points": [
+    "Eerlijkheid en de integriteit van de race",
+    "Atleten die de officiële wedstrijdregels volgen",
+    "Straffen die consistent worden toegepast",
+    "Geloofwaardigheid voor Elite en competitief racen"
+   ],
+   "narration": "Scheidsrechters doen ertoe omdat ze de eerlijkheid en integriteit van de race beschermen. Ze zorgen dat atleten de officiële wedstrijdregels volgen en passen straffen voor iedereen op dezelfde manier toe. Die consistentie geeft Elite en competitief racen zijn geloofwaardigheid. De officiating-procedure van Spartan zegt het zo: Spartan-officiating zorgt voor en handhaaft raceintegriteit door consistente handhaving van de regels en standaard officiating-praktijk, zodat de uitkomst eerlijk en billijk is voor alle atleten."
+  },
+  {
+   "heading": "Wat een scheidsrechter is",
+   "points": [
+    "Een door Spartan aangestelde official die ervoor zorgt dat alle regels worden gevolgd",
+    "Meestal bij een hindernis of in de videoreviewtent",
+    "Bij jouw hindernis: de regels ervan handhaven en fouten bijhouden",
+    "Je rapporteert aan de Hoofdscheidsrechter"
+   ],
+   "narration": "Het regelboek definieert een scheidsrechter als een door Spartan aangestelde official wiens taak het is ervoor te zorgen dat alle regels worden gevolgd. Scheidsrechters staan meestal bij hindernissen en in de videoreviewtent, en rapporteren aan de Head Official. De officiating-procedure van Spartan beschrijft de scheidsrechter als de persoon die aan een hindernis is toegewezen om de regels ervan te handhaven en fouten bij te houden. In het regelboek zijn officials iedereen die Spartan aanwijst om evenementtaken uit te voeren in een gezagspositie: staf, scheidsrechters en vrijwilligers. Als scheidsrechter ben je een van hen."
+  },
+  {
+   "heading": "Aan wie je verantwoording aflegt",
+   "points": [
+    "De Hoofdscheidsrechter: de belangrijkste beslisser over de regels bij het evenement",
+    "Het regelboek noemt deze rol de Head Official",
+    "De Race Director: verantwoordelijk voor de algehele gang van zaken bij het evenement",
+    "Onzekere of betwiste beslissingen gaan naar de Hoofdscheidsrechter"
+   ],
+   "narration": "Bij elk evenement is één persoon de belangrijkste beslisser over alle kwesties van de regels, en de uiteindelijke autoriteit voor het handhaven en interpreteren ervan. Het regelboek noemt deze persoon de Head Official. De officiating-procedure van Spartan en dit programma noemen hem de Hoofdscheidsrechter. Aan hem rapporteer je. De Race Director is verantwoordelijk voor de algehele gang van zaken en het verloop van het evenement. Als je twijfelt over een beslissing, of een atleet betwist er een, gaat die naar de Hoofdscheidsrechter."
+  },
+  {
+   "heading": "Je beslissingen bereiken de uitslag",
+   "points": [
+    "De keten: scheidsrechter, Hoofdscheidsrechter, dan Race Director of tijdwaarneming",
+    "De Hoofdscheidsrechter bevestigt straffen en geeft ze door",
+    "Uitslagen zijn pas definitief na de officiële videoreview",
+    "Tijdstraffen worden bij de eindtijd van de atleet opgeteld"
+   ],
+   "narration": "Wat je bij je hindernis ziet en vastlegt, kan de uitslag veranderen. De keten loopt van jou naar de Hoofdscheidsrechter, naar de Race Director of de tijdwaarneming. De Hoofdscheidsrechter beheert de videoreview en geeft bevestigde straffen en diskwalificaties door aan de Race Director en de tijdwaarneming. Het regelboek zegt dat er een officiële videoreview moet plaatsvinden voordat uitslagen definitief zijn, dus uitslagen worden niet altijd meteen gepubliceerd. Tijdstraffen worden bij de eindtijd van de atleet opgeteld, dus een nauwkeurige, duidelijk vastgelegde beslissing is belangrijk."
+  },
+  {
+   "heading": "Hoe je wordt getraind",
+   "points": [
+    "Gebaseerd op het Spartan Rulebook, de Officiating SOP en de Global Officiating Guidelines",
+    "Focus: handhaving bij hindernissen, straffen, omgang met atleten en raceintegriteit",
+    "De online training voltooien is verplicht voor scheidsrechtercertificering"
+   ],
+   "narration": "Deze training bestaat zodat scheidsrechters de wedstrijdregels van Spartan eerlijk en consistent handhaven. Ze is gebaseerd op drie documenten: het Spartan Rulebook, de Officiating Standard Operating Procedure en de Global Officiating Guidelines. Ze richt zich op handhaving bij hindernissen, straffen, hoe je met atleten omgaat en de integriteit van de competitie. Volgens de officiating-procedure is het voltooien van de online trainingsmodule verplicht voor scheidsrechtercertificering. Vóór elk evenement zorgt de Hoofdscheidsrechter er ook voor dat elke scheidsrechter de pre-eventtraining heeft voltooid."
+  },
+  {
+   "heading": "Kort samengevat",
+   "points": [
+    "Scheidsrechters beschermen eerlijkheid, raceintegriteit en consistente straffen",
+    "Je handhaaft de regels bij je hindernis en houdt fouten bij",
+    "Je rapporteert aan de Hoofdscheidsrechter, de laatste autoriteit over de regels",
+    "Je beslissingen voeden de videoreview en de uitslag"
+   ],
+   "narration": "Kort samengevat. Scheidsrechters beschermen de eerlijkheid en integriteit van de race en zorgen dat straffen consistent worden toegepast, wat competitief racen zijn geloofwaardigheid geeft. Je bent een door Spartan aangestelde official, meestal bij een hindernis, om de regels ervan te handhaven en fouten bij te houden. Je rapporteert aan de Hoofdscheidsrechter, die het regelboek de Head Official noemt en die het laatste woord heeft over de regels. Wat je vastlegt gaat door de videoreview en kan de eindtijd van een atleet veranderen."
+  }
+ ],
+ "ocr-2-2": [
+  {
+   "heading": "Competitief en Open",
+   "points": [
+    "Competitief: Elite- en Age Group-racers",
+    "Open: open voor iedereen, de categorie gericht op deelname",
+    "Elke categorie start in heats of waves, gescheiden op starttijd of tempogroep"
+   ],
+   "narration": "Het regelboek definieert twee soorten categorie. Competitief, waaronder Elite en Age Group, en Open, die open is voor iedereen. Dit programma beschrijft Open als de categorie gericht op deelname. Binnen elke categorie starten atleten in heats en waves: groepen gescheiden op starttijd of tempogroep. Weten welke categorie door je hindernis komt, vertelt je hoe nauwkeurig je moet jureren."
+  },
+  {
+   "heading": "Waar scheidsrechters op letten",
+   "points": [
+    "Scheidsrechters richten zich vooral op de Competitieve categorieën",
+    "Van Competitieve racers wordt verwacht dat ze elke regel nauwgezet volgen",
+    "Handhaaf de regels voor elke Competitieve racer op dezelfde manier",
+    "Sta op je plek vóór de eerste Elite-start"
+   ],
+   "narration": "Scheidsrechters richten zich vooral op de Competitieve categorieën: Elite en Age Group. Het regelboek verwacht van elke Competitieve racer dat hij alle regels nauwgezet volgt en vol overgave en competitief racet. Je handhaving moet dus voor elke Competitieve racer hetzelfde zijn, in elke Elite- en Age Group-wave. De officiating-procedure van Spartan zegt dat de Hoofdscheidsrechter bevestigt dat scheidsrechters op hun plek staan vóór de eerste Elite-start, en dat officiating, videoreview en strafbepaling bedoeld zijn voor de categorieën Elite en Age Group."
+  },
+  {
+   "heading": "Open-racers",
+   "points": [
+    "Open-racers worden ook aangemoedigd de regels te volgen",
+    "De sfeer is ontspannener: sportiviteit en persoonlijke verantwoordelijkheid",
+    "Van Open-racers wordt verwacht dat ze Spartan-eer gebruiken bij burpeestraffen",
+    "Scheidsrechters mogen bij de Open-waves opruimen of overdragen aan vrijwilligers"
+   ],
+   "narration": "Open-racers worden ook aangemoedigd de regels te volgen, in de geest van sportiviteit en persoonlijke verantwoordelijkheid, ook al is de sfeer in de Open-categorie ontspannener. Het regelboek verwacht van deelnemers in de Open-categorie dat ze Spartan-eer gebruiken wanneer ze burpeestraffen voltooien. In dit programma eindigt het tijdschema van de scheidsrechter met het opruimen van het parcours, of het overdragen aan vrijwilligers voor de Open-waves. De briefing van je Hoofdscheidsrechter vertelt je wat er bij jouw evenement geldt."
+  },
+  {
+   "heading": "Heats, waves en tijdwaarneming",
+   "points": [
+    "Racers moeten starten in hun toegewezen heat, wave of groep",
+    "Een Elite-racer die in de verkeerde heat start, wordt naar Open verplaatst",
+    "Elite-heats: wie als eerste over de finish komt wint (gun time)",
+    "Age Group, Open en Elite Stadion-heats: chiptijd. Beide tellen eventuele tijdstraffen erbij"
+   ],
+   "narration": "Elke racer moet starten in en met zijn toegewezen heat, wave of groep. Een racer die in de verkeerde heat start, komt niet in aanmerking voor prijzen, en een Elite-racer die in de verkeerde heat start, wordt naar de Open-categorie verplaatst. De tijdwaarneming verschilt per categorie. In een Elite-heat wint wie als eerste over de finishlijn komt, de zogeheten gun time. Age Group- en Open-heats, en Elite-heats bij Stadion, gebruiken chiptijd: van het passeren van de startlijn tot het passeren van de finish. In beide gevallen worden eventuele tijdstraffen opgeteld."
+  },
+  {
+   "heading": "Kort samengevat",
+   "points": [
+    "Competitief is Elite en Age Group; Open is open voor iedereen",
+    "Scheidsrechters richten zich vooral op Competitieve racers",
+    "Elke Competitieve racer krijgt dezelfde handhaving",
+    "Open-racers worden aangemoedigd de regels te volgen, op Spartan-eer"
+   ],
+   "narration": "Kort samengevat. Er zijn twee soorten categorie: Competitief, dat is Elite en Age Group, en Open, die open is voor iedereen. Scheidsrechters richten zich vooral op de Competitieve categorieën, waar racers elke regel moeten volgen, en je handhaving moet voor elk van hen hetzelfde zijn. Open-racers worden ook aangemoedigd de regels te volgen, in een ontspannener sfeer en op Spartan-eer. Elite-heats worden gewonnen op gun time, de andere op chiptijd, met eventuele tijdstraffen erbij."
+  }
+ ],
+ "ocr-2-3": [
+  {
+   "heading": "Onpartijdig en professioneel",
+   "points": [
+    "Wees onpartijdig: pas de regels op dezelfde manier toe op elke atleet",
+    "Wees professioneel: kalm, neutraal en respectvol",
+    "Ken de Competition Rules en de Officiating SOP"
+   ],
+   "narration": "De instelling van een scheidsrechter begint met onpartijdig en professioneel zijn. De officiating-procedure van Spartan vraagt je de hindernisregels consistent en onpartijdig toe te passen, wie de atleet ook is. Blijf kalm, neutraal en respectvol, en vertegenwoordig Spartan professioneel. Je twee belangrijkste documenten zijn de Spartan Competition Rules en de Officiating Standard Operating Procedure. Maak je vóór het evenement met beide vertrouwd en zorg dat je de regels voor je eigen hindernis kent en begrijpt."
+  },
+  {
+   "heading": "Bedoeling van de regel, eerlijkheid en veiligheid",
+   "points": [
+    "Richt je op de bedoeling van de regel, niet op klein onopzettelijk contact",
+    "Vraag je af of de atleet een voordeel behaalde",
+    "Zet eerlijkheid en veiligheid van atleten voorop"
+   ],
+   "narration": "Richt je op waar een regel voor dient, niet op klein onopzettelijk contact. Een van de scenario's in het programma is een atleet die kort de bovenkant van een hindernis aanraakt maar geen voordeel behaalt. De vraag die je moet stellen is of er een voordeel is ontstaan. Zet eerlijkheid en veiligheid van atleten voorop. Het beschermen van de gezondheid, veiligheid en het welzijn van deelnemers is een van de genoemde doelen van het regelboek. Als je bij je hindernis een veiligheidsprobleem ziet, meld dat dan meteen aan de Hoofdscheidsrechter of de Race Director."
+  },
+  {
+   "heading": "Bij twijfel: opschalen",
+   "points": [
+    "Schaal elke situatie waarover je twijfelt op",
+    "Twijfel je over de straf of hoe je die handhaaft: neem direct contact op met de Hoofdscheidsrechter",
+    "Twijfels, veiligheidsproblemen of inconsistenties: meld ze meteen"
+   ],
+   "narration": "Er wordt niet van je verwacht dat je elke situatie zelf oplost. Schaal op als je twijfelt. De officiating-procedure van Spartan zegt dat je bij elke onzekerheid over het type straf of hoe je die handhaaft direct contact opneemt met de Hoofdscheidsrechter. Als je bij je hindernis aankomt, meld je twijfels, veiligheidsproblemen of inconsistenties meteen aan de Race Director of de Hoofdscheidsrechter. De Hoofdscheidsrechter is de laatste autoriteit over de regels bij het evenement, dus opschalen hoort bij je werk goed doen."
+  },
+  {
+   "heading": "Vóór de racedag",
+   "points": [
+    "Voltooi de pre-eventtraining voordat je meedoet",
+    "Die behandelt het regelboek, met nadruk op hindernissen waar veel fouten gebeuren",
+    "Ook de workflow van de scheidsrechter, burpeestandaarden en video bij de Spear Throw",
+    "Je krijgt een briefingpakket en toegang tot videotutorials"
+   ],
+   "narration": "Je tijdschema begint vóór de racedag. De Hoofdscheidsrechter zorgt dat elke scheidsrechter de standaard pre-eventtraining voltooit voordat hij meedoet. Die behandelt het Spartan Rulebook, met nadruk op hindernissen waar veel fouten gebeuren, oftewel de hindernissen waar atleten het vaakst falen. Ook behandelt ze het proces en de workflow van de scheidsrechter, burpeestandaarden en hoe je ze handhaaft, en videoopname en -review, die alleen bij de Spear Throw wordt gebruikt. Je krijgt ook een pre-eventbriefingpakket en toegang tot de officiële videotutorials."
+  },
+  {
+   "heading": "Raceochtend",
+   "points": [
+    "Check in, bevestig je hindernis en haal je uitrusting op",
+    "Woon de verplichte briefing ter plaatse van de Hoofdscheidsrechter bij",
+    "Ben ruim op tijd bij je hindernis vóór de eerste competitieve wave",
+    "Inspecteer de hindernis, loop de strafronde en kies waar je staat"
+   ],
+   "narration": "Meld je op de raceochtend bij de tent die je is opgegeven, teken in, bevestig je hindernistoewijzing en haal je uitrusting op. Sluit je aan bij het communicatiekanaal als dat wordt gebruikt. Woon de verplichte briefing ter plaatse van de Hoofdscheidsrechter bij. Ga dan naar je hindernis met genoeg tijd vóór de eerste competitieve wave. Inspecteer daar de opstelling, kijk uit welke kant atleten naderen, loop de hele strafronde en bepaal waar je staat zodat je pogingen, voltooiingen en fouten duidelijk kunt zien."
+  },
+  {
+   "heading": "Tijdens de race en daarna",
+   "points": [
+    "Jureer de Elite- en competitieve waves",
+    "Ruim daarna het parcours op, of draag over aan vrijwilligers voor de Open-waves",
+    "Bij terugkeer: beeldmateriaal gaat naar de videoreview, schriftelijke beslissingen naar de Hoofdscheidsrechter",
+    "Atleten brengen een protest in bij de Hoofdscheidsrechter, binnen de protesttermijn"
+   ],
+   "narration": "Tijdens de race jureer je de Elite- en competitieve waves bij je hindernis. Daarna ruim je, afhankelijk van het evenement, het parcours op of draag je over aan vrijwilligers voor de Open-waves. Als scheidsrechters terugkeren, beheert de Hoofdscheidsrechter de videoreview van het beeldmateriaal. Waar geen video is, worden je beslissingen ter plekke genomen, opgeschreven en bij terugkomst aan de Hoofdscheidsrechter overhandigd. Uitslagen zijn pas definitief na de officiële review. Een atleet die een straf wil aanvechten, brengt dat tijdens de protesttermijn bij de Hoofdscheidsrechter in.",
+   "review": "In herziening voor 2027: het regelboek (3.19.1) zegt dat de protesttermijn 15 minuten vóór de prijsuitreiking van de categorie eindigt. De Officiating SOP (4.2) geeft een half uur vóór de uitreiking als voorbeeld van de uiterste termijn. Pas intussen het regelboek toe, volg de protesttijden die de Hoofdscheidsrechter aankondigt en stuur elke atleet met een protest naar de Hoofdscheidsrechter."
+  },
+  {
+   "heading": "Kort samengevat",
+   "points": [
+    "Wees onpartijdig, professioneel en consistent",
+    "Denk aan de bedoeling van de regel; zet eerlijkheid en veiligheid voorop",
+    "Schaal bij twijfel op naar de Hoofdscheidsrechter",
+    "Jouw dag: training, check-in, briefing, opstelling, jureren, overdracht"
+   ],
+   "narration": "Kort samengevat. Wees onpartijdig en professioneel en pas de regels op elke atleet op dezelfde manier toe. Richt je op de bedoeling van de regel in plaats van op klein onopzettelijk contact, en zet eerlijkheid en veiligheid van atleten voorop. Schaal bij twijfel op naar de Hoofdscheidsrechter. Het tijdschema van je evenement loopt van pre-eventtraining en briefing, via check-in en uitrusting, inspectie en opstelling van de hindernis, naar het jureren van de competitieve waves, en ten slotte opruimen of overdragen aan vrijwilligers voor de Open-waves."
+  }
+ ],
+ "ocr-3-1": [
+  {
+   "heading": "Je melden voor dienst",
+   "points": [
+    "Meld je bij de Vrijwilligerstent of de scheidsrechterstent op je toegewezen meldtijd",
+    "Teken in bij de Vrijwilligerscoördinator of de Hoofdscheidsrechter",
+    "Bevestig je hindernistoewijzing",
+    "Maak jezelf bekend bij de Hoofdscheidsrechter"
+   ],
+   "narration": "Je racedag begint bij het inchecken. Ga naar de Vrijwilligerstent, of de scheidsrechterstent als je evenement die heeft, op de meldtijd die je is gegeven. Teken in bij de Vrijwilligerscoördinator of de Hoofdscheidsrechter en bevestig welke hindernis je is toegewezen. Ook als iemand anders je inschrijft, zorg dat de Hoofdscheidsrechter weet dat je er bent. Vóór de eerste Elite-start moet de Hoofdscheidsrechter bevestigen dat elke scheidsrechter op zijn plek staat."
+  },
+  {
+   "heading": "Wat je bij het inchecken ophaalt",
+   "points": [
+    "Officiële materialen: scheidsrechtershirt, pet, pasjes of andere toegewezen uitrusting",
+    "Het QR-codebord voor je hindernis, tenzij het al staat",
+    "Een plek in het officiële communicatiekanaal, zoals een WhatsApp-groep"
+   ],
+   "narration": "Bij het inchecken ontvang je je officiële officiating-materialen. Dat zijn je scheidsrechtershirt, pet en pasjes, en alle andere uitrusting die je is toegewezen. Haal ook het QR-codebord voor je hindernis op, tenzij het al ter plaatse staat. Het verwijst naar de videotutorial voor die hindernis. Zorg ten slotte dat je wordt toegevoegd aan het officiële communicatiekanaal. Dat kan een WhatsApp-groep zijn, een ander berichtenplatform of een direct contact voor de Hoofdscheidsrechter."
+  },
+  {
+   "heading": "Je scheidsrechtersuitrusting",
+   "points": [
+    "Scheidsrechtershirt of -vest",
+    "Een schrijfplank of notitieboekje, bij voorkeur waterdicht",
+    "Uitgeprinte regelbladen voor je hindernis",
+    "Een videocamera en statief, alleen als je er een toegewezen krijgt"
+   ],
+   "narration": "Het programma van 2026 noemt wat een scheidsrechter bij de hindernis nodig heeft. Draag je scheidsrechtershirt of -vest. Neem een schrijfplank of notitieboekje mee, bij voorkeur waterdicht, want je noteert hoofdbandnummers en aantekeningen, soms in natte omstandigheden. Neem uitgeprinte regelbladen voor je hindernis mee, zodat je een regel ter plekke kunt nakijken. Als je een camera is toegewezen, heb je ook een videocamera en een statief."
+  },
+  {
+   "heading": "Neem je eigen essentials mee",
+   "points": [
+    "Een mobiele telefoon",
+    "Kleding die past bij de omstandigheden",
+    "Pennen of potloden, eten en water",
+    "Alles persoonlijks wat je nodig hebt, zoals medicijnen"
+   ],
+   "narration": "Neem ook je eigen essentials mee. Je hebt een mobiele telefoon nodig, want zo blijf je via het communicatiekanaal in contact met de Hoofdscheidsrechter. Draag kleding die past bij de omstandigheden van die dag. Pak pennen of potloden, eten en water in, en alles persoonlijks wat je nodig hebt, zoals medicijnen. Zodra de competitieve waves beginnen, gaat je aandacht naar je hindernis, dus kom voorbereid."
+  },
+  {
+   "heading": "De videouitrusting",
+   "points": [
+    "De Hoofdscheidsrechter bereidt de officiating-uitrusting voor, test en deelt die uit",
+    "Camera's met minstens 2,5 uur accuduur, en reserveaccu's waar nodig",
+    "Verstelbare statieven van 7 voet en SD-kaarten van minstens 32 GB voor full HD",
+    "Video bij de hindernissen is alleen voor de Spear Throw"
+   ],
+   "narration": "De officiating-uitrusting is de verantwoordelijkheid van de Hoofdscheidsrechter. Die bereidt haar voor en test haar op de vrijdag vóór het evenement, en deelt haar op racedag uit met laatste instructies. De procedure stelt een minimum voor de uitrusting: videocamera's met minstens twee en een half uur accuduur, reserveaccu's, verstelbare statieven van zeven voet en geheugenkaarten van minstens tweeëndertig gigabyte, snel genoeg voor full high definition. Videoopname bij hindernissen is alleen voor de Spear Throw. Als je daar een camera krijgt, zet je hem op en controleer je dat hij opneemt vóór de eerste Elite-wave."
+  },
+  {
+   "heading": "Kort samengevat",
+   "points": [
+    "Meld je op tijd bij de tent, teken in en bevestig je hindernis",
+    "Haal je materialen en QR-bord op en sluit je aan bij het communicatiekanaal",
+    "Neem een waterdichte plank, regelbladen, telefoon, eten en water mee",
+    "Camera en statief alleen als je bent toegewezen om de Spear Throw te filmen"
+   ],
+   "narration": "Kort samengevat. Meld je op je meldtijd bij de tent, teken in, bevestig je hindernis en laat de Hoofdscheidsrechter weten dat je er bent. Haal je materialen en het QR-codebord voor je hindernis op, en sluit je aan bij het communicatiekanaal. Neem een waterdichte plank of notitieboekje mee, je regelbladen, je telefoon, eten en water. Je draagt alleen een camera en statief als je bent toegewezen om de Spear Throw te filmen."
+  }
+ ],
+ "ocr-3-2": [
+  {
+   "heading": "Eerst de briefing",
+   "points": [
+    "De briefing ter plaatse van de Hoofdscheidsrechter is verplicht, voordat je wordt ingezet",
+    "Ze behandelt toewijzingen, hindernisclassificaties, strafrondes en de burpeestandaard",
+    "Ook de evenementprocedures en hoe straffen worden gemeld",
+    "Ben dan ruim op tijd bij je hindernis vóór de eerste competitieve wave"
+   ],
+   "narration": "Voordat je het parcours op gaat, woon je de briefing ter plaatse van de Hoofdscheidsrechter bij. Die is verplicht. Ze behandelt de eigen procedures van het evenement, waar elke hindernis is en wie eraan is toegewezen, welke hindernissen verplicht zijn en welke meerdere pogingen toestaan, de strafrondes, de burpeestandaard, de camerapositie bij de Spear Throw, en hoe straffen worden vastgesteld, gemeld en gecommuniceerd. Ga na de briefing naar je hindernis met genoeg tijd om je voor te bereiden voordat de eerste competitieve wave arriveert."
+  },
+  {
+   "heading": "Ken de regels van je hindernis",
+   "points": [
+    "Lees de instructies, faalwijzen en aanvullende notities van je hindernis",
+    "Gebruik het regelblad, het missieblad en de QR-codevideo van je hindernis",
+    "Let op opties voor mannen en vrouwen: bij muren is de rode trede alleen voor vrouwelijke atleten"
+   ],
+   "narration": "Bekijk en begrijp de regels van je hindernis voordat de eerste atleet arriveert. In het regelboek heeft elke hindernis instructies voor deelnemers, faalwijzen en aanvullende notities. Lees alle drie. Je regelblad, het missieblad van de hindernis en de QR-codevideotutorial helpen ook. Let op verschillende opties voor mannen en vrouwen. Bij de muren van zes tot negen voet mag de rode trede bijvoorbeeld alleen door vrouwelijke atleten worden gebruikt, en een mannelijke atleet die hem gebruikt, faalt de hindernis."
+  },
+  {
+   "heading": "Inspecteer de opstelling",
+   "points": [
+    "Inspecteer de opstelling van de hindernis en controleer of hij bruikbaar is",
+    "Bekijk de raceflow en de richting waaruit atleten naderen",
+    "Meld twijfels, veiligheidsproblemen of inconsistenties meteen aan de Race Director of Hoofdscheidsrechter"
+   ],
+   "narration": "Inspecteer de hindernis als je aankomt. Controleer of hij goed is opgesteld en in bruikbare staat verkeert. Kijk hoe de race erdoorheen loopt en uit welke richting atleten zullen naderen, zodat je weet waar ze aankomen en waar ze vertrekken. Als iets je zorgen baart, of het nu een twijfel over de opstelling is, een veiligheidsprobleem of iets inconsistents, meld het dan meteen aan de Race Director of de Hoofdscheidsrechter. Wacht niet tot de atleten er zijn."
+  },
+  {
+   "heading": "Loop de strafronde",
+   "points": [
+    "Loop de hele strafronde, waar die er is",
+    "Ken de route en precies waar atleten op het parcours terugkeren",
+    "Rondes verschillen: hardlopen, dragen, kruipen of afstandsgebaseerd, zoals bevestigd voor je hindernis",
+    "Dezelfde straf geldt voor iedereen in de categorie of heat"
+   ],
+   "narration": "Als je hindernis een strafronde heeft, loop dan zelf de hele ronde. Je moet de route en het terugkeerpunt begrijpen, zodat je een atleet duidelijk kunt aansturen en kunt zien of hij hem voltooit. Rondes zijn niet allemaal gelijk. Het regelboek zegt dat hun afstand met het terrein kan variëren en dat ze draag-, kruip- of andere elementen kunnen bevatten. De Hoofdscheidsrechter bevestigt het strafformat van elke hindernis met de Race Director. Wat het ook is, het wordt consistent toegepast binnen de categorie of heat.",
+   "review": "In herziening voor 2027: het regelboek (3.17.3) zegt dat de straf een ronde of 30 burpees is, zoals Spartan per hindernis en evenement bepaalt. De Officiating SOP zegt een ronde voor de meeste hindernissen en burpees bij de Spear Throw, en het programma van 2026 zegt burpees alleen bij de Spear Throw. Pas intussen de straf toe die de Hoofdscheidsrechter voor je hindernis bevestigt, en neem contact op met de Hoofdscheidsrechter als je het niet zeker weet."
+  },
+  {
+   "heading": "Waar je staat",
+   "points": [
+    "Kies een plek waar je pogingen, voltooiingen en fouten duidelijk ziet",
+    "Houd je zicht op de hindernis vrij",
+    "Alleen bij de Spear Throw: zet de camera op zoals de Spear Throw-procedure beschrijft",
+    "Bevestig vóór de eerste Elite-wave dat de camera opneemt"
+   ],
+   "narration": "Bepaal waar je staat voordat het racen begint. Je hebt een positie nodig waar je elke poging, elke voltooiing en elke fout duidelijk kunt zien, zonder dat iets je zicht blokkeert. Bedenk waar fouten bij jouw hindernis meestal gebeuren en sta dichtbij genoeg om een atleet aan te spreken als dat gebeurt. Alleen bij de Spear Throw zet je ook de videocamera op, volgens de officiating-procedure van de Spear Throw, en bevestig je dat hij opneemt voordat de eerste Elite-wave start. De Hoofdscheidsrechter kan langskomen om de handhaving en camerapositie te controleren."
+  },
+  {
+   "heading": "Kort samengevat",
+   "points": [
+    "Woon de verplichte briefing bij en ben dan ruim op tijd bij je hindernis",
+    "Ken de instructies, faalwijzen en notities ervan",
+    "Inspecteer de opstelling, loop de strafronde, meld elk probleem meteen",
+    "Sta waar je elke poging ziet; controleer bij de Spear Throw of de camera opneemt"
+   ],
+   "narration": "Kort samengevat. Woon de briefing van de Hoofdscheidsrechter bij en ga dan ruim op tijd naar je hindernis vóór de eerste competitieve wave. Ken de instructies, faalwijzen en aanvullende notities ervan, inclusief opties voor mannen en vrouwen. Inspecteer de opstelling, loop de strafronde en meld elke twijfel of elk veiligheidsprobleem meteen. Kies dan een positie waar je elke poging kunt zien, en bevestig bij de Spear Throw dat de camera opneemt vóór de eerste Elite-wave."
+  }
+ ],
+ "ocr-3-3": [
+  {
+   "heading": "Aan wie je rapporteert",
+   "points": [
+    "Scheidsrechter, dan Hoofdscheidsrechter, dan Race Director of tijdwaarnemingsteam",
+    "Je rapporteert aan de Hoofdscheidsrechter: het regelboek noemt deze rol de Head Official",
+    "De Hoofdscheidsrechter is de laatste autoriteit over het handhaven en interpreteren van de regels"
+   ],
+   "narration": "Het programma van 2026 vat de communicatieketen in één regel samen: scheidsrechter, dan Hoofdscheidsrechter, dan de Race Director of het tijdwaarnemingsteam. Als scheidsrechter rapporteer je aan de Hoofdscheidsrechter. Het regelboek noemt deze persoon de Head Official en maakt hem tot de belangrijkste beslisser over alle regelkwesties bij het evenement, en de uiteindelijke autoriteit voor het handhaven en interpreteren van de regels. Je rapporten gaan naar de Hoofdscheidsrechter, die ze doorgeeft."
+  },
+  {
+   "heading": "Wat de Hoofdscheidsrechter doorgeeft",
+   "points": [
+    "Raceincidenten gaan naar de Race Director, die de algehele gang van zaken bij het evenement leidt",
+    "Incidenten met deelnemers, zoals vals spelen of shortcuts, gaan naar de tijdwaarneming",
+    "Bevestigde straffen en diskwalificaties gaan naar de Race Director en de tijdwaarneming",
+    "Definitieve strafbeslissingen kunnen worden bevestigd door de Hoofdscheidsrechter en het tijdwaarnemingsteam"
+   ],
+   "narration": "De Hoofdscheidsrechter verbindt je met de rest van het evenement. Hij houdt de Race Director, die verantwoordelijk is voor de algehele gang van zaken, op de hoogte van raceincidenten. Hij vertelt het tijdwaarnemingsteam over incidenten met deelnemers, zoals vals spelen of shortcuts. Na de videoreview communiceert hij bevestigde straffen en diskwalificaties aan de Race Director en het team Timing en Tech. Jouw taak is de hindernisregels handhaven, atleten naar straffen verwijzen en vastleggen wat er gebeurde. Definitieve strafbeslissingen kunnen worden bevestigd door de Hoofdscheidsrechter en het tijdwaarnemingsteam."
+  },
+  {
+   "heading": "Wanneer je belt",
+   "points": [
+    "Sluit je bij het inchecken aan bij het officiële kanaal: een groepschat, een platform of rechtstreeks de Hoofdscheidsrechter",
+    "Twijfel je over een type straf of hoe je die handhaaft: neem direct contact op met de Hoofdscheidsrechter",
+    "Twijfels of veiligheidsproblemen bij de hindernis: de Race Director of Hoofdscheidsrechter",
+    "Gevaren: meld ze meteen aan de Hoofdscheidsrechter, de Race Director of Spartan-staf"
+   ],
+   "narration": "Bij het inchecken sluit je je aan bij het officiële communicatiekanaal. Dat kan een WhatsApp-groep zijn, een ander berichtenplatform of een directe lijn naar de Hoofdscheidsrechter. Gebruik het. Als je niet zeker weet welke straf geldt of hoe je die handhaaft, neem dan direct contact op met de Hoofdscheidsrechter in plaats van te gokken. Meld twijfels, veiligheidsproblemen of inconsistenties bij je hindernis aan de Race Director of de Hoofdscheidsrechter. En meld elk gevaar meteen, aan de Hoofdscheidsrechter, de Race Director of Spartan-staf."
+  },
+  {
+   "heading": "Een geschil of ontsnapping melden",
+   "points": [
+    "Geschil: noteer het hoofdbandnummer en de reden, en meld het zo snel mogelijk",
+    "Geen nummer: meld het meteen met een duidelijke beschrijving, zoals kleding en categorie",
+    "Help de atleet later op het parcours te identificeren als dat wordt gevraagd",
+    "Geen video: schrijf je strafbeslissingen op en geef ze aan de Hoofdscheidsrechter"
+   ],
+   "narration": "De meeste meldingen gaan over atleten. Als een atleet een beslissing betwist, noteer dan zijn hoofdbandnummer, schrijf de reden op, bijvoorbeeld een gefaalde hindernis zonder de straf, en meld het zo snel mogelijk aan de Hoofdscheidsrechter. Als een atleet vertrekt zonder de straf te doen en je zijn nummer niet kunt krijgen, meld het dan meteen met een duidelijke beschrijving: kleurkleding, onderscheidende kenmerken en racecategorie. Waar geen video is, neem je strafbeslissingen ter plekke, schrijf je ze op en geef je ze bij terugkomst aan de Hoofdscheidsrechter."
+  },
+  {
+   "heading": "Kort samengevat",
+   "points": [
+    "Jouw lijn loopt naar de Hoofdscheidsrechter, die de Race Director en de tijdwaarneming informeert",
+    "Sluit je bij het inchecken aan bij het kanaal en gebruik het",
+    "Vraag het de Hoofdscheidsrechter bij twijfel, en meld gevaren meteen",
+    "Noteer hoofdbandnummers en redenen, en meld geschillen en ontsnappingen"
+   ],
+   "narration": "Kort samengevat. Je rapporteert aan de Hoofdscheidsrechter, en de Hoofdscheidsrechter informeert de Race Director en het tijdwaarnemingsteam. Sluit je bij het inchecken aan bij het communicatiekanaal en gebruik het. Als je twijfelt over een straf, vraag het dan meteen aan de Hoofdscheidsrechter, en meld gevaren meteen. Noteer bij geschillen en ontsnappingen het hoofdbandnummer of een duidelijke beschrijving, noteer de reden en meld het."
+  }
+ ],
+ "ocr-4-1": [
+  {
+   "heading": "Drie soorten hindernissen",
+   "points": [
+    "Verplicht: moet worden voltooid voordat de atleet verder gaat",
+    "Meerdere pogingen (geslaagd/gezakt): opnieuw proberen tot het lukt of de straf volgt",
+    "Eén poging (geslaagd/gezakt): eenmaal vastgelegd, voltooi hem of neem de straf",
+    "Deel D van het regelboek zet elke hindernis onder een van de drie"
+   ],
+   "narration": "Het regelboek verdeelt hindernissen in verplicht en geslaagd of gezakt. Geslaagd of gezakt-hindernissen zijn er in twee soorten, meerdere pogingen en één poging, dus in de praktijk werk je met drie soorten. Een verplichte hindernis moet worden voltooid voordat de atleet verder gaat. Een hindernis met meerdere pogingen kan zo vaak als nodig worden geprobeerd, tot hij is voltooid of een straf wordt gegeven. Een hindernis met één poging moet worden voltooid zodra de atleet zich heeft vastgelegd, anders volgt de straf. Het regelboek zet elke hindernis onder één soort, en de briefing behandelt de classificaties.",
+   "review": "In herziening voor 2027: het regelboek en het programma van 2026 delen meerdere hindernissen anders in. Het regelboek heeft Monkey Bars, Multi-Rig, Twister, Olympus, Z Wall, Beater en Helix als één poging, Atlas Carry, Tire Flip en Stairway to Sparta als meerdere pogingen, en A-Frame Cargo als verplicht. Het programma noemt de eerste groep meerdere pogingen, de tweede verplicht en A-Frame Cargo meerdere pogingen. Pas intussen de regelboeksectie voor de hindernis toe en leg een betwiste beslissing voor aan de Hoofdscheidsrechter."
+  },
+  {
+   "heading": "Elke hindernis moet worden geprobeerd",
+   "points": [
+    "Een poging betekent minimaal het aanraken van de hindernis",
+    "Het kan het betreden van water of moeilijk terrein om de hindernis te bereiken omvatten",
+    "Dat terrein mag niet met een straf worden omzeild, tenzij de briefing of racestaf het toestaat",
+    "Een hindernis niet proberen is een veelvoorkomende overtreding om op te letten"
+   ],
+   "narration": "Elke hindernis moet worden geprobeerd. Het regelboek stelt het minimum: een poging is het aanraken van de hindernis. Soms omvat de poging ook het bereiken van de hindernis, bijvoorbeeld het betreden van water of het oversteken van ander moeilijk terrein. Dat terrein mag niet worden overgeslagen door een straf te nemen, tenzij de briefings vóór de race of de staf op racedag hebben gezegd dat het acceptabel is. Het programma van 2026 noemt het niet proberen van een hindernis onder de veelvoorkomende regelovertredingen, dus let op atleten die naar de straf gaan zonder het te proberen."
+  },
+  {
+   "heading": "Verplichte hindernissen",
+   "points": [
+    "Volledig voltooid: geen omweg en geen straf in plaats daarvan, tenzij een official dat zegt",
+    "Falen betekent diskwalificatie; de Race Director kan een tijdstraf opleggen",
+    "Voorbeelden: Bucket Carry, Sandbag Carry, Log Carry, Barbed Wire Crawl",
+    "Bucket Carry: verloren materiaal betekent het hele parcours opnieuw met een volle emmer"
+   ],
+   "narration": "Een verplichte hindernis moet volledig worden voltooid voordat de atleet verder gaat. De atleet mag hem niet omzeilen of omruilen voor een straf, tenzij een raceofficial dat opdraagt. Volgens het regelboek betekent het falen van een verplichte hindernis diskwalificatie, hoewel de Race Director een tijdstraf kan opleggen, afhankelijk van hoe ernstig de overtreding is. Dragen en kruipen zijn typisch. Bij de Bucket Carry is er bijvoorbeeld geen burpeeoptie, en een emmer die terugkomt met ontbrekend materiaal betekent dat de atleet het hele parcours opnieuw doet met een correct gevulde emmer."
+  },
+  {
+   "heading": "Hindernissen met meerdere pogingen",
+   "points": [
+    "De atleet mag zo vaak als nodig opnieuw proberen",
+    "Het eindigt in een voltooiing, of de atleet geeft op en neemt de straf",
+    "Voorbeelden: Rope Climb, Bender, Inverted Wall",
+    "Rope Climb: wissel alleen van touw na terugkeer op de grond; één touw per poging"
+   ],
+   "narration": "Een hindernis met meerdere pogingen kan telkens opnieuw worden geprobeerd. De atleet gaat door tot hij hem voltooit of ervoor kiest op te geven en de straf te nemen. De regels van elke hindernis zeggen wat een nieuwe poging inhoudt. Bij de Rope Climb mag een atleet bijvoorbeeld van touw wisselen nadat hij op de grond is teruggekeerd en het opnieuw proberen, maar het gebruik van meer dan één touw tijdens één poging is een fout. Atleten die herhaalde pogingen doen, moeten voorrang geven aan wie het voor het eerst probeert, hoewel het regelboek zegt dat dat niet verplicht is."
+  },
+  {
+   "heading": "Hindernissen met één poging: wanneer de vastlegging begint",
+   "points": [
+    "Eenmaal vastgelegd voltooit de atleet de hindernis of neemt de straf: geen nieuwe poging",
+    "De eigen regels van elke hindernis bepalen wanneer de vastlegging begint",
+    "Spear Throw: wanneer de speer in een voorwaartse beweging wordt losgelaten",
+    "Ape Hanger: wanneer de atleet een van de bovenliggende stangen aanraakt"
+   ],
+   "narration": "Een hindernis met één poging geeft de atleet één kans zodra hij zich heeft vastgelegd. Daarna voltooit hij hem of neemt hij de straf. De sleutelvraag is wanneer de vastlegging begint, en het regelboek beantwoordt die per hindernis. Bij de Spear Throw begint de poging wanneer de speer in een voorwaartse beweging wordt losgelaten. Bij de Ape Hanger is de atleet vastgelegd zodra hij een van de bovenliggende stangen aanraakt. Ken het vastleggingspunt van je hindernis: het bepaalt of de atleet nog kan resetten.",
+   "review": "In herziening voor 2027: het programma van 2026 zegt dat de vastlegging begint zodra de pogingsbeweging start, en bij de Spear Throw wanneer de speer naar achteren wordt getrokken om te gooien. Het regelboek definieert de vastlegging per hindernis, en bij de Spear Throw is dat bij het loslaten. Pas intussen de regel van elke hindernis toe en leg een betwiste beslissing voor aan de Hoofdscheidsrechter."
+  },
+  {
+   "heading": "Wat als fout telt",
+   "points": [
+    "Beoordeel op de faalwijzen in de regels van je hindernis",
+    "Een bel schoppen met voeten, benen of knieën is een fout, zonder nieuwe poging",
+    "Gefaald door aanzienlijke hinder van een andere atleet: een official mag een herstart toestaan",
+    "Veelvoorkomende fouten: de steunconstructie gebruiken en de bel niet luiden"
+   ],
+   "narration": "Falen wordt gedefinieerd in de regels van elke hindernis, in de lijst met faalwijzen. Beoordeel op die lijst, niet op je eigen idee van hoe de hindernis moet worden gedaan. Twee algemene regels gelden voor alle hindernissen. Een bel schoppen met voeten, benen of knieën telt als een fout: de atleet kan het niet opnieuw proberen en moet de straf voltooien. En als aanzienlijke fysieke hinder van een andere deelnemer de fout veroorzaakt, mag de atleet zonder extra straf herstarten, zodra een official toestemming geeft."
+  },
+  {
+   "heading": "Kort samengevat",
+   "points": [
+    "Elke hindernis moet worden geprobeerd: minstens aanraken",
+    "Verplicht: voltooi hem volledig, of riskeer diskwalificatie",
+    "Meerdere pogingen: opnieuw proberen tot het lukt of de straf nemen; één poging: één kans zodra vastgelegd",
+    "Beoordeel de eigen faalwijzen van elke hindernis; welke hindernis welk soort is, wordt herzien"
+   ],
+   "narration": "Kort samengevat. Elke hindernis moet worden geprobeerd, en aanraken is het minimum. Een verplichte hindernis moet volledig worden voltooid, en falen betekent diskwalificatie tenzij de Race Director een tijdstraf oplegt. Een hindernis met meerdere pogingen kan opnieuw worden geprobeerd tot hij is voltooid of de atleet de straf neemt. Een hindernis met één poging laat één kans toe zodra de atleet zich vastlegt, op het punt dat de regels van die hindernis bepalen. Beoordeel elke hindernis op zijn eigen faalwijzen, en onthoud dat welke hindernis welk soort is, wordt herzien voor 2027."
+  }
+ ],
+ "ocr-4-2": [
+  {
+   "heading": "Een hindernis met één poging",
+   "points": [
+    "Eén worp: een misser is een fout, en een fout betekent de straf",
+    "Jouw taak: zien dat de poging begint, het resultaat beoordelen, de atleet naar de straf sturen"
+   ],
+   "narration": "De Spear Throw is een geslaagd of gezakt-hindernis met één poging. Elke atleet krijgt één worp. Als die mislukt, is er geen tweede kans: hij gaat direct naar de straf. Jouw taak bij de Spear Throw is precies zien wanneer de poging begint, het resultaat beoordelen en de atleet naar de juiste straf sturen."
+  },
+  {
+   "heading": "Wat de atleet moet doen",
+   "points": [
+    "Met beide voeten achter de afscheiding staan",
+    "De speer naar het doel in dezelfde baan gooien",
+    "De speer blijft steken in het aangewezen doel en blijft daar, zonder dat enig deel de grond raakt"
+   ],
+   "narration": "Volgens regel 4.2.13 staat de atleet met beide voeten achter de afscheiding en gooit hij naar het doel in zijn eigen baan. Om te slagen moet de speer in het aangewezen doel blijven steken en daar blijven, zonder dat enig deel van de speer de grond raakt."
+  },
+  {
+   "heading": "Wanneer de poging begint",
+   "points": [
+    "Het is een poging zodra de speer in een voorwaartse beweging wordt losgelaten",
+    "Van baan wisselen mag, maar alleen vóór de poging",
+    "Een verwarde lijn die de worp bederft, telt nog steeds als poging"
+   ],
+   "narration": "Het regelboek zegt dat de poging begint zodra de atleet de speer in een voorwaartse beweging loslaat. Daarvoor mag hij van baan wisselen. Daarna kan hij niet meer resetten. En als de lijn in de war raakt en de worp bederft, telt die toch: de lijn vrijhouden is de taak van de atleet.",
+   "review": "In herziening voor 2027: het online programma van 2026 zegt dat de vastlegging eerder begint, wanneer de speer naar achteren wordt getrokken om te gooien. Het regelboek zegt bij het loslaten. Pas tot de officiating lead beslist het regelboek toe en leg een betwiste beslissing voor aan de Hoofdscheidsrechter."
+  },
+  {
+   "heading": "Geslaagd of gezakt",
+   "points": [
+    "Fout: de speer blijft niet steken in het aangewezen doel",
+    "Fout: enig deel van de speer raakt de grond zodra hij stilligt",
+    "Op zichzelf geen fout: de grond schampen tijdens de vlucht, als hij uiteindelijk vrij van de grond in het doel staat"
+   ],
+   "narration": "Er zijn twee manieren om te falen. De speer blijft niet steken in het aangewezen doel, of enig deel ervan raakt de grond zodra hij is gestopt. Een speer mag onderweg de grond schampen, en dat alleen is geen fout, zolang hij uiteindelijk in het doel staat en vrij is van de grond.",
+   "review": "In herziening voor 2027: het online programma van 2026 noemt “speer raakt de grond vóór het doel” een fout. Regel 4.2.13 staat het toe. Pas tot de officiating lead beslist het regelboek toe."
+  },
+  {
+   "heading": "Wanneer het voltooid is",
+   "points": [
+    "Voltooid zodra de atleet zich minstens 2 meter van de baan heeft verwijderd",
+    "Hij mag niet vertrekken voordat de speer het doel, de constructie of de grond heeft geraakt",
+    "Een val of fout voordat hij 2 meter weg is, is een onvoltooide poging: straf"
+   ],
+   "narration": "De hindernis is voltooid zodra de atleet zich minstens twee meter van zijn baan heeft verwijderd. Hij mag niet vertrekken voordat de speer het doel, de constructie of de grond heeft geraakt. Als de speer eruit valt voordat hij twee meter weg is, is het een onvoltooide poging en geldt de straf."
+  },
+  {
+   "heading": "De straf",
+   "points": [
+    "30 burpees (15 bij Stadion-evenementen)",
+    "In de aangewezen burpeezone: burpees daarbuiten tellen niet",
+    "Elk volgens de standaard: borst naar de grond, rechtop, dan een sprong met de handen boven de oren"
+   ],
+   "narration": "De straf voor het falen van de Spear Throw is dertig burpees, of vijftien bij Stadion-evenementen. Ze moeten in de aangewezen burpeezone worden gedaan, want burpees daarbuiten tellen niet. Elke moet aan de standaard voldoen: borst naar de grond, terug naar een evenwichtige rechtopstaande positie, dan een sprong met de handen boven de oren.",
+   "review": "In herziening voor 2027: de tijd die voor gemiste burpees wordt toegevoegd verschilt tussen het regelboek (3.4.2), de Officiating SOP en het programma van 2026. Deze les leert geen getal totdat de officiating lead beslist."
+  },
+  {
+   "heading": "Wat je doet",
+   "points": [
+    "Sta waar je het loslaten, de afscheiding en het doel kunt zien",
+    "Geef het resultaat duidelijk en kalm door",
+    "Stuur de atleet naar de burpeezone, waar de camera zijn hoofdbandnummer kan zien",
+    "Leg elk geschil voor aan de Hoofdscheidsrechter: discussieer niet bij de hindernis"
+   ],
+   "narration": "Sta waar je het loslaten, de afscheiding en het doel tegelijk kunt zien. Geef het resultaat duidelijk en kalm door. Stuur de atleet naar de burpeezone en zorg dat de camera zijn hoofdbandnummer kan zien. Als de atleet de beslissing betwist, noteer dan het nummer en leg het voor aan de Hoofdscheidsrechter. Discussieer niet bij de hindernis."
+  },
+  {
+   "heading": "Kort samengevat",
+   "points": [
+    "Eén worp: de poging begint wanneer de speer voorwaarts wordt losgelaten",
+    "Geslaagd: in het doel, niets raakt de grond zodra hij stilligt",
+    "Voltooid: 2 meter van de baan",
+    "Fout: 30 burpees in de zone, elk volgens de standaard"
+   ],
+   "narration": "Kort samengevat. Eén worp, en de poging begint wanneer de speer voorwaarts wordt losgelaten. Geslaagd is een speer in het doel waarbij niets de grond raakt zodra hij stilligt. De atleet is klaar wanneer hij twee meter van de baan af is. Een fout is dertig burpees in de burpeezone, elk volgens de standaard."
+  }
+ ],
+ "ocr-5-1": [
+  {
+   "heading": "Twee soorten hindernissen, twee soorten uitkomst",
+   "points": [
+    "Verplichte hindernissen moeten worden voltooid: falen betekent diskwalificatie",
+    "De Race Director kan een tijdstraf opleggen, afhankelijk van hoe ernstig het was",
+    "Het falen van een geslaagd/gezakt-hindernis betekent een straf: een strafronde of burpees"
+   ],
+   "narration": "Het regelboek verdeelt hindernissen in twee categorieën. Verplichte hindernissen moeten worden voltooid. Falen betekent diskwalificatie van het evenement, hoewel de Race Director een tijdstraf kan opleggen, afhankelijk van hoe ernstig de overtreding was. Geslaagd of gezakt-hindernissen zijn anders. Een atleet die er een faalt, blijft in de race en neemt in plaats daarvan een straf. Die straf is een strafronde of burpees, en Spartan bepaalt welke geldt per hindernis, evenement, categorie of heat.",
+   "review": "In herziening voor 2027: regel 3.17.3 zegt dat de straf een strafronde of 30 burpees is, zoals Spartan per hindernis, evenement, categorie of heat bepaalt, en bij Stadion altijd 15 burpees. De Officiating SOP zegt een ronde voor de meeste hindernissen en burpees bij de Spear Throw; het programma van 2026 zegt burpees alleen bij de Spear Throw. Gebruik intussen de straf die de Hoofdscheidsrechter voor je hindernis bevestigt, en vraag het de Hoofdscheidsrechter als je het niet zeker weet."
+  },
+  {
+   "heading": "De strafronde",
+   "points": [
+    "Een aangewezen stuk parcours dat de atleet voltooit na het falen van een hindernis",
+    "De lengte varieert, en kan dragen, kruipen of andere uitdagingen omvatten",
+    "Hij wordt op dezelfde manier toegepast op iedereen in de categorie of heat",
+    "Loop de hele ronde voordat het racen begint: ken de route en het terugkeerpunt"
+   ],
+   "narration": "Een strafronde is een aangewezen deel van het parcours dat de atleet voltooit na het falen van een hindernis. De afstand kan met het terrein variëren, en er kunnen extra uitdagingen in zitten, zoals dragen of kruipen. Hoe hij ook is ontworpen, hij wordt consistent toegepast op iedereen in dezelfde categorie of heat. Loop vóór de eerste competitieve wave zelf de hele ronde. Je moet de route en het terugkeerpunt kennen, zodat je atleten correct kunt aansturen en iedereen ziet die hem afsnijdt."
+  },
+  {
+   "heading": "Burpeetekorten",
+   "points": [
+    "Atleten die de vereiste burpees niet voltooien, krijgen tijd bij hun finish opgeteld",
+    "Een groot tekort kan een zware tijdstraf betekenen",
+    "Een tekort kan op het parcours of in de videoreview worden gevonden, vóór de prijsuitreiking",
+    "Hoeveel tijd elke gemiste burpee toevoegt, wordt herzien voor 2027"
+   ],
+   "narration": "Waar burpees de straf zijn, krijgt een atleet die het vereiste aantal niet voltooit tijd opgeteld bij zijn totale eindtijd. Het programma van 2026 zegt het simpel: een groot burpeetekort kan een zware tijdstraf opleveren. Een tekort kan tijdens de race worden gevonden, of in de officiële videoreview vóór de prijsuitreiking, en daarom zijn uitslagen niet altijd meteen definitief. Hoeveel tijd een gemiste burpee precies toevoegt, wordt herzien, dus deze les leert geen getal.",
+   "review": "In herziening voor 2027: regel 3.4.2 telt 30 seconden op voor elk van de eerste 10 gemiste burpees en in totaal 10 minuten als er meer dan 10 worden gemist. De Officiating SOP telt 30 seconden per stuk op en 10 minuten als er minder dan 20 worden voltooid; het programma van 2026 zegt dat 11 of meer onjuiste 10 minuten zijn en minder dan 20 een diskwalificatie. Deze les leert geen getal totdat de officiating lead beslist: de Hoofdscheidsrechter bevestigt straffen."
+  },
+  {
+   "heading": "De straf niet voltooien",
+   "points": [
+    "Strafrondes moeten volledig worden voltooid",
+    "De straf overslaan geeft een verdere straf: tijd erbij of diskwalificatie",
+    "Wat het overslaan van een ronde kost, wordt herzien voor 2027",
+    "Jouw deel: noteer het hoofdbandnummer en meld het aan de Hoofdscheidsrechter"
+   ],
+   "narration": "Strafrondes moeten volledig worden voltooid. Een atleet die een geslaagd of gezakt-hindernis faalt en de straf niet voltooit, heeft de regels overtreden, en dat gaat hem kosten. Tijdens de officiële videoreview kunnen raceofficials een tijdstraf toevoegen of diskwalificeren. De bronnen van 2026 spreken elkaar tegen over de exacte straf voor het overslaan van een ronde, dus die wordt herzien. Jouw deel verandert niet: noteer het hoofdbandnummer van de atleet, noteer wat er gebeurde en meld het aan de Hoofdscheidsrechter.",
+   "review": "In herziening voor 2027: regel 3.4.1 telt een tijdstraf van 10 minuten op wanneer een atleet een geslaagd/gezakt-hindernis faalt en de strafronde niet voltooit. Het programma van 2026 zegt dat het niet voltooien van een straf tot diskwalificatie kan leiden, en de Officiating SOP noemt geen getal. Pas tot de officiating lead beslist het regelboek toe: leg het vast, meld het en laat de straf aan de Hoofdscheidsrechter."
+  },
+  {
+   "heading": "Als een atleet vertrekt zonder de straf",
+   "points": [
+    "Noteer het hoofdbandnummer en de reden, zoals een gefaalde hindernis zonder straf",
+    "Geen nummer? Geef de Hoofdscheidsrechter een duidelijke beschrijving: kleding, kenmerken, categorie",
+    "Meld het zo snel mogelijk en help de atleet later te identificeren als dat wordt gevraagd"
+   ],
+   "narration": "De Officiating-procedure zegt wat je doet als een atleet je hindernis verlaat zonder de straf te voltooien. Schrijf zijn hoofdbandnummer en de reden op. Meld het aan de Hoofdscheidsrechter zodra je dat operationeel kunt. Als je het nummer niet kon krijgen, meld het dan toch meteen, met een duidelijke fysieke beschrijving van de atleet: de kleur van zijn kleding, onderscheidende kenmerken en zijn racecategorie. Je wordt mogelijk gevraagd hem later op het parcours te helpen identificeren."
+  },
+  {
+   "heading": "Kort samengevat",
+   "points": [
+    "Verplichte hindernis gefaald: diskwalificatie, tenzij de Race Director een tijdstraf oplegt",
+    "Geslaagd/gezakt-hindernis gefaald: een strafronde, volledig voltooid, of burpees",
+    "Gemiste burpees en overgeslagen rondes geven verdere straffen: de bedragen worden herzien",
+    "Noteer het hoofdbandnummer en meld aan de Hoofdscheidsrechter"
+   ],
+   "narration": "Kort samengevat. Faal je een verplichte hindernis, dan is de straf diskwalificatie, tenzij de Race Director een tijdstraf oplegt. Faal je een geslaagd of gezakt-hindernis, dan neemt de atleet de aangewezen straf: een strafronde, volledig voltooid, of burpees. Gemiste burpees en overgeslagen rondes geven verdere straffen, en de exacte bedragen worden herzien voor 2027. Wat er ook gebeurt, noteer het hoofdbandnummer en meld het aan de Hoofdscheidsrechter.",
+   "review": "In herziening voor 2027: waar burpees de straf zijn (regel 3.17.3), de tijd die voor gemiste burpees wordt toegevoegd (3.4.2) en de straf voor het overslaan van een ronde (3.4.1) verschillen allemaal tussen het regelboek, de Officiating SOP en het programma van 2026. Gebruik tot de officiating lead beslist de straf die de Hoofdscheidsrechter voor je hindernis bevestigt, leer geen tijdgetal en leg betwiste beslissingen voor aan de Hoofdscheidsrechter."
+  }
+ ],
+ "ocr-5-2": [
+  {
+   "heading": "Jouw taak bij de hindernis",
+   "points": [
+    "Zorg dat atleten de instructies van de hindernis volgen",
+    "Let op regelovertredingen en ken de faalvoorwaarden van de hindernis",
+    "Stuur elke atleet die faalt naar de juiste straf",
+    "Meld problemen en niet-naleving aan de Hoofdscheidsrechter"
+   ],
+   "narration": "Het regelboek definieert een scheidsrechter als een official die is aangesteld om ervoor te zorgen dat de regels worden gevolgd, meestal bij een hindernis of in de videoreviewtent, en die rapporteert aan de Head Official, die dit programma de Hoofdscheidsrechter noemt. Bij jouw hindernis betekent dat vier dingen. Zorg dat atleten de instructies volgen. Let op overtredingen en weet precies wat als fout telt. Stuur iedereen die faalt naar de juiste straf. En meld problemen aan de Hoofdscheidsrechter."
+  },
+  {
+   "heading": "Elke hindernis moet worden geprobeerd",
+   "points": [
+    "Een poging betekent minimaal het aanraken van de hindernis",
+    "Het kan het betreden van water of moeilijk terrein om de hindernis te bereiken omvatten",
+    "Dat terrein mag niet met een straf worden omzeild, tenzij de briefing of racestaf het toestaat"
+   ],
+   "narration": "Elke hindernis moet worden geprobeerd. Een poging betekent minimaal het aanraken van de hindernis. Als de hindernis in water of ander moeilijk terrein ligt, kan de poging omvatten dat je door dat terrein heen komt om hem te bereiken. Atleten kunnen dat terrein niet omzeilen door een straf te nemen, tenzij de briefing vóór de race of de staf op racedag heeft gezegd dat het acceptabel is. Een atleet die rechtstreeks naar de straf loopt zonder de hindernis aan te raken, heeft dus niet aan de regel voldaan."
+  },
+  {
+   "heading": "Bellen en hinder",
+   "points": [
+    "Bellen mogen alleen worden geraakt met de armen, handen of het lichaam boven de borst",
+    "Een bel schoppen is een fout: geen nieuwe poging, direct naar de straf",
+    "Gefaald door aanzienlijke hinder van een andere atleet? Een official mag een herstart toestaan"
+   ],
+   "narration": "Twee algemene regels gelden bij veel hindernissen. Bellen mogen alleen worden geraakt met de armen, de handen of een ander lichaamsdeel boven de borst. Een atleet die de bel met een voet, been of knie schopt, heeft de hindernis gefaald: hij kan het niet opnieuw proberen en moet de straf voltooien. En als een atleet faalt doordat een andere deelnemer fysiek op aanzienlijke wijze heeft gehinderd, kan een official hem toestemming geven de hindernis zonder extra straf te herstarten. Vraag het de Hoofdscheidsrechter als je twijfelt."
+  },
+  {
+   "heading": "Naar de straf verwijzen",
+   "points": [
+    "Stuur elke atleet die faalt naar de straf die voor je hindernis is bepaald",
+    "Het strafformat van elke hindernis wordt vóór het evenement bevestigd en bij de briefing behandeld",
+    "Weet je niet welke straf geldt? Neem direct contact op met de Hoofdscheidsrechter"
+   ],
+   "narration": "Als een atleet faalt, verwijs hem dan duidelijk naar de juiste straf. Vóór het evenement bevestigt de Hoofdscheidsrechter het strafformat van elke hindernis met de Race Director, of dat nu een looprondje, een draagronde, een kruipronde of burpees is, en de briefing ter plaatse behandelt wat voor de jouwe geldt. De Officiating-procedure zegt dat de meeste hindernissen een strafronde gebruiken, en de Spear Throw burpees. Als je ooit niet zeker weet welke straf geldt, neem dan direct contact op met de Hoofdscheidsrechter.",
+   "review": "In herziening voor 2027: regel 3.17.3 zegt dat de straf een strafronde of 30 burpees is, zoals Spartan per hindernis, evenement, categorie of heat bepaalt, en bij Stadion altijd 15 burpees. De Officiating SOP zegt een ronde voor de meeste hindernissen en burpees bij de Spear Throw; het programma van 2026 zegt burpees alleen bij de Spear Throw. Gebruik intussen de straf die de Hoofdscheidsrechter voor je hindernis bevestigt, en vraag het de Hoofdscheidsrechter als je het niet zeker weet."
+  },
+  {
+   "heading": "Gedrag van atleten op het parcours",
+   "points": [
+    "Atleten moeten het hele officiële parcours afleggen: het volgen ervan is hun verantwoordelijkheid",
+    "Geen fysieke hulp van iemand anders dan een Spartan-official, en geen pacing",
+    "Te horen krijgen hoe andere atleten ervoor staan of welke tijden ze hebben, is geen hulp",
+    "Het hoofdbandnummer moet te allen tijde zichtbaar en leesbaar zijn"
+   ],
+   "narration": "Atleten moeten het officiële parcours in zijn geheel afleggen, en het correct volgen ervan is hun eigen verantwoordelijkheid. Ze mogen geen fysieke hulp aanvaarden van iemand anders dan een Spartan-official. Dat omvat eten en drinken buiten de officiële verzorgingsposten, uitrusting, fysieke ondersteuning en pacing, oftewel dat iemand met hen meeloopt om hen te coachen of het tempo te bepalen. Te horen krijgen hoe andere atleten ervoor staan of welke tijden ze hebben, is geen hulp. Het racenummer op de hoofdband moet te allen tijde duidelijk zichtbaar en leesbaar zijn."
+  },
+  {
+   "heading": "Onsportief gedrag en melden",
+   "points": [
+    "Atleten moeten iedereen met respect behandelen: geen beledigend, bedreigend of kwetsend gedrag",
+    "De Hoofdscheidsrechter beslist over elke straf voor gedrag: jouw taak is het te melden",
+    "Noteer het hoofdbandnummer en wat er gebeurde, en meld het aan de Hoofdscheidsrechter",
+    "Leg de regel kalm uit en laat een conflict bij de hindernis niet escaleren"
+   ],
+   "narration": "Atleten moeten medewedstrijdlopers, Spartan-staf, vrijwilligers, toeschouwers en het publiek met eerlijkheid, respect en beleefdheid behandelen, en mogen geen beledigende, bedreigende of kwetsende taal of gedrag gebruiken. Onsportief gedrag kan tot een straf leiden, waarover de Head Official, de Hoofdscheidsrechter, beslist. Wat het probleem ook is, schrijf het hoofdbandnummer en wat er gebeurde op en meld het zo snel mogelijk. Meldingen gaan van jou naar de Hoofdscheidsrechter, en verder naar de Race Director of het tijdwaarnemingsteam. Als een atleet je beslissing betwist, leg de regel dan kalm uit en vermijd een discussie."
+  },
+  {
+   "heading": "Kort samengevat",
+   "points": [
+    "Elke hindernis moet worden geprobeerd: minimaal een aanraking",
+    "Ken de faalvoorwaarden: een geschopte bel is een fout",
+    "Stuur elke atleet die faalt naar de straf van je hindernis; vraag het bij twijfel de Hoofdscheidsrechter",
+    "Noteer het nummer, meld aan de Hoofdscheidsrechter en discussieer niet"
+   ],
+   "narration": "Kort samengevat. Elke hindernis moet worden geprobeerd, en dat betekent minimaal het aanraken ervan. Ken de instructies en faalvoorwaarden van je hindernis, en ook de algemene, zoals een geschopte bel die een fout is. Stuur elke atleet die faalt naar de straf die voor je hindernis is bepaald, en vraag het de Hoofdscheidsrechter als je twijfelt. Atleten moeten het parcours volgen, geen hulp van buiten aannemen en hun nummer zichtbaar houden. Als er iets misgaat, noteer het nummer, meld het en discussieer niet bij de hindernis."
+  }
+ ],
+ "ocr-5-3": [
+  {
+   "heading": "Waar burpees de straf zijn",
+   "points": [
+    "Spartan bepaalt een ronde of burpees per hindernis, evenement, categorie of heat",
+    "Waar burpees zijn bepaald, is de straf 30 burpees",
+    "Stadion-evenementen: altijd 15 burpees",
+    "De straf van de Spear Throw is 30 burpees"
+   ],
+   "narration": "Volgens regel 3.17.3 is de straf voor een geslaagd of gezakt-hindernis een strafronde of burpees, zoals Spartan per hindernis, evenement, categorie of heat bepaalt. Waar burpees zijn bepaald, is het dertig burpees. Bij Stadion-evenementen is de straf van elke hindernis vijftien burpees. De straf van de Spear Throw is dertig burpees. Vóór het evenement bevestigt de Hoofdscheidsrechter het strafformat van elke hindernis met de Race Director, dus de briefing vertelt je of je hindernis burpees gebruikt.",
+   "review": "In herziening voor 2027: regel 3.17.3 zegt dat de straf een strafronde of 30 burpees is, zoals Spartan per hindernis, evenement, categorie of heat bepaalt, en bij Stadion altijd 15 burpees. De Officiating SOP zegt een ronde voor de meeste hindernissen en burpees bij de Spear Throw; het programma van 2026 zegt burpees alleen bij de Spear Throw. Gebruik intussen de straf die de Hoofdscheidsrechter voor je hindernis bevestigt, en vraag het de Hoofdscheidsrechter als je het niet zeker weet."
+  },
+  {
+   "heading": "De burpeezone",
+   "points": [
+    "Burpees moeten binnen de aangewezen burpeezone worden gedaan",
+    "Burpees buiten de zone tellen niet mee voor de straf",
+    "Officials mogen zones toevoegen als er een vol is, of om categorieën te scheiden",
+    "Jouw taak: zorg dat burpees in de juiste zone gebeuren"
+   ],
+   "narration": "Burpees moeten binnen de aangewezen burpeezone worden voltooid. Burpees die daarbuiten worden gedaan, tellen niet mee voor de straf, dus een atleet die uit de zone drijft, doet herhalingen die niet worden geteld. Raceofficials kunnen extra burpeezones aanwijzen als er in een geen ruimte meer is, of om categorieën atleten gescheiden te houden. Een deel van je taak is zorgen dat burpees in de juiste zone gebeuren, waar jij en de camera ze kunnen zien."
+  },
+  {
+   "heading": "De hoofdband gaat op de grond",
+   "points": [
+    "De atleet legt zijn hoofdband op de grond, direct voor zich",
+    "Hoofdband kwijt: noteer de naam van de atleet, of laat hem die op de audio van de camera zeggen",
+    "Meld aan de Hoofdscheidsrechter elke atleet die zonder hoofdband is opgenomen"
+   ],
+   "narration": "Tijdens het doen van burpees legt de atleet zijn hoofdband op de grond, direct voor zich. De aankondigingen van de Hoofdscheidsrechter bij de startlijn behandelen dit, dus atleten zouden het moeten weten voordat ze bij jou komen. Als een atleet zijn hoofdband is kwijtgeraakt, noteer dan zijn naam, of laat hem op de audio van de camera zeggen wie hij is. Meld hoe dan ook elke atleet die zonder hoofdband is opgenomen aan de Hoofdscheidsrechter, zodat het beeld aan de juiste persoon kan worden gekoppeld."
+  },
+  {
+   "heading": "De atleet aan de camera tonen",
+   "points": [
+    "Houd de hoofdband ongeveer twee voet van de lens, ongeveer twee seconden",
+    "Geef hem direct terug aan de atleet",
+    "Houd nooit twee hoofdbanden tegelijk vast, en laat atleten ze niet aan jou geven",
+    "Verplaats nooit het lichaam of gezicht van een atleet om de camera te plezieren"
+   ],
+   "narration": "Bij de Spear Throw identificeert de video elke atleet. Houd de hoofdband ongeveer twee voet van de cameralens, ongeveer twee seconden, zodat het nummer bij de review duidelijk te zien is. Geef hem dan meteen terug aan de atleet. Houd nooit twee hoofdbanden tegelijk vast, en laat atleten hun hoofdbanden niet aan jou geven. En verplaats nooit fysiek het lichaam of gezicht van een atleet om hem in beeld te krijgen: de identificatie komt van de hoofdband, duidelijk omhooggehouden."
+  },
+  {
+   "heading": "Videoreview bepaalt gemiste burpees",
+   "points": [
+    "Gemiste burpees worden bepaald in de videoreview",
+    "Uitslagen zijn mogelijk pas definitief als de officiële videoreview klaar is",
+    "Beeldmateriaal blijft bij de Hoofdscheidsrechter en wordt nooit aan atleten gegeven",
+    "Je drie taken: de bewegingsstandaard, de zone, een duidelijke identificatie"
+   ],
+   "narration": "Het programma van 2026 zegt dat videoreview gemiste burpees bepaalt. Daarom worden uitslagen niet altijd meteen gepubliceerd: de officiële review vindt plaats voordat ze definitief zijn. De Hoofdscheidsrechter beheert de review terwijl scheidsrechters van hun hindernissen terugkeren, bewaart het beeldmateriaal tot het einde van de evenementdag en geeft het nooit aan atleten. Jouw deel op het parcours maakt de review mogelijk: handhaaf de bewegingsstandaard, houd burpees in de zone en identificeer elke atleet duidelijk voor de camera.",
+   "review": "In herziening voor 2027: de tijd die voor gemiste burpees wordt toegevoegd verschilt tussen regel 3.4.2, de Officiating SOP en het programma van 2026, en de SOP laat de scheidsrechter ter plekke schriftelijk beslissen als er geen video is. De les over tijdstraffen voor burpees zet elke versie uiteen. Deze les leert geen getal: de Hoofdscheidsrechter bevestigt straffen na de review."
+  },
+  {
+   "heading": "Kort samengevat",
+   "points": [
+    "Burpees zijn de straf waar Spartan ze aanwijst: 30, of 15 bij Stadion",
+    "Alleen burpees binnen de zone tellen",
+    "Hoofdband op de grond ervoor; aan de camera getoond, dan direct terug",
+    "Videoreview bepaalt gemiste burpees"
+   ],
+   "narration": "Kort samengevat. Burpees zijn de straf waar Spartan ze aanwijst: dertig burpees, of vijftien bij Stadion-evenementen, en altijd bij de Spear Throw. Alleen burpees binnen de aangewezen zone tellen. De hoofdband van de atleet gaat op de grond voor hem, en jij toont hem een paar seconden aan de camera en geeft hem dan direct terug. Videoreview bepaalt vervolgens gemiste burpees, dus jouw taak is de standaard, de zone en een duidelijke identificatie.",
+   "review": "In herziening voor 2027: regel 3.17.3 zegt dat de straf een strafronde of 30 burpees is, zoals Spartan per hindernis, evenement, categorie of heat bepaalt, en bij Stadion altijd 15 burpees. De Officiating SOP zegt een ronde voor de meeste hindernissen en burpees bij de Spear Throw; het programma van 2026 zegt burpees alleen bij de Spear Throw. Gebruik intussen de straf die de Hoofdscheidsrechter voor je hindernis bevestigt, en vraag het de Hoofdscheidsrechter als je het niet zeker weet."
+  }
+ ],
+ "ocr-6-1": [
+  {
+   "heading": "Eén complete burpee",
+   "points": [
+    "Eén cyclus tussen twee posities: de onderste en de bovenste",
+    "Van de onderste positie omhoog naar de bovenste, dan een sprong",
+    "Een herhaling waarbij een deel van de standaard ontbreekt, is geen complete burpee"
+   ],
+   "narration": "Regel 3.17.4 definieert één complete burpee. Het is één cyclus tussen twee lichaamsposities, de bovenste en de onderste. De atleet beweegt van de onderste positie omhoog naar de bovenste positie, en springt dan. Elke herhaling in een burpeestraf moet aan deze standaard voldoen. Een herhaling waarbij een deel ontbreekt, is geen complete burpee, en je kunt van de atleet eisen dat hij er nog een doet. De volgende dia's behandelen elk onderdeel afzonderlijk."
+  },
+  {
+   "heading": "De onderste en de bovenste positie",
+   "points": [
+    "Onder: voorover liggend op de grond, met de borst die de grond raakt",
+    "Boven: evenwichtig en rechtop, een houding die iedereen kan aanhouden zonder om te vallen",
+    "Bovenaan zijn heupen en knieën gestrekt, niet gebogen"
+   ],
+   "narration": "De onderste positie is voorover liggen, met het gezicht naar beneden op de grond, met de borst die de grond raakt. De bovenste positie is een evenwichtige, rechtopstaande houding: een die iedereen lang kan aanhouden zonder voor- of achterover te vallen. Bovenaan moeten de heupen en knieën van de atleet gestrekt zijn, niet gebogen. Let op beide uiteinden van elke herhaling. Een borst die niet tot de grond komt, of heupen die bovenaan nog gebogen zijn, betekent dat de herhaling niet aan de standaard voldoet."
+  },
+  {
+   "heading": "De sprong",
+   "points": [
+    "Eenmaal terug bovenaan springt de atleet",
+    "De handen zijn naar boven gestrekt, boven de oren",
+    "Geen sprong, of handen niet boven de oren: de herhaling is niet compleet"
+   ],
+   "narration": "Zodra de atleet van de onderste positie naar de bovenste positie is teruggekeerd, springt hij, met de handen naar boven gestrekt boven de oren. De regel plaatst de sprong nadat de bovenste positie is bereikt, dus de atleet moet eerst rechtop staan. Let op de handen en op de voeten. Handen die alleen de schouders of het gezicht bereiken, voldoen niet aan de standaard, en een herhaling zonder enige sprong evenmin."
+  },
+  {
+   "heading": "Eén vloeiende beweging",
+   "points": [
+    "Het programma van 2026: de beweging moet bij elke herhaling vloeiend zijn",
+    "Snelle herhalingen moeten nog steeds aan elk onderdeel van de standaard voldoen",
+    "Een typische fout: snelle burpees met onvolledige strekking bovenaan"
+   ],
+   "narration": "Het programma van 2026 voegt toe dat de beweging bij elke herhaling vloeiend moet zijn: omlaag naar de grond, omhoog tot staan en de sprong, als één beweging. Het geeft ook een typisch scenario om op te letten: een atleet die snelle burpees doet zonder zich bovenaan volledig te strekken. De vraag is altijd dezelfde. Voldeed de herhaling aan de standaard? Borst op de grond, heupen en knieën bovenaan gestrekt, dan een sprong met de handen boven de oren. Zo niet, dan is het geen complete burpee."
+  },
+  {
+   "heading": "Kort samengevat",
+   "points": [
+    "Onder: voorover liggend, borst raakt de grond",
+    "Boven: evenwichtig en rechtop, heupen en knieën gestrekt",
+    "Dan een sprong met de handen boven de oren",
+    "Eén vloeiende beweging, en elke herhaling volgens de standaard, hoe snel ook"
+   ],
+   "narration": "Kort samengevat. Eén complete burpee gaat van de onderste positie naar de bovenste positie, gevolgd door een sprong. Onderaan ligt de atleet voorover met de borst die de grond raakt. Bovenaan staat hij evenwichtig en rechtop, met gestrekte heupen en knieën. Dan springt hij met de handen boven de oren. Elke herhaling is één vloeiende beweging, en elke herhaling moet aan de standaard voldoen, hoe snel ze ook wordt gedaan."
+  }
+ ],
+ "ocr-6-2": [
+  {
+   "heading": "Atleten tellen, jij niet",
+   "points": [
+    "Atleten tellen hun eigen burpees",
+    "Scheidsrechters tellen niet voor hen",
+    "Jouw taak is de standaard: let op elke herhaling",
+    "Herinner atleten eraan dat de beweging en de herhalingen worden gecontroleerd"
+   ],
+   "narration": "Atleten zijn verantwoordelijk voor het tellen van hun eigen burpees. Scheidsrechters tellen niet voor hen. Dat laat jou vrij voor de taak die telt: let op of elke herhaling aan de bewegingsstandaard voldoet. Het programma van 2026 stelt voor atleten eraan te herinneren dat zowel de bewegingsstandaard als het aantal herhalingen wordt gecontroleerd. Waar video is, worden het aantal en de kwaliteit van de burpees in de videoreview opnieuw gecontroleerd."
+  },
+  {
+   "heading": "Op de standaard letten",
+   "points": [
+    "Sta waar je zicht op de atleet vrij is",
+    "Controleer de borst onderaan, de heupen en knieën bovenaan, de handen in de sprong",
+    "Houd de burpees binnen de zone, met de hoofdband op de grond ervoor",
+    "Raak de atleet niet aan en verplaats hem niet voor de camera"
+   ],
+   "narration": "Positioneer jezelf zo dat je zicht vrij is. Je moet zien dat de borst de grond bereikt, dat de heupen en knieën bovenaan strekken en dat de handen in de sprong boven de oren gaan. Houd ook de zone in de gaten, want burpees daarbuiten tellen niet, en de hoofdband, die op de grond voor de atleet blijft liggen. Verplaats nooit fysiek het lichaam of gezicht van een atleet om de camera te plezieren."
+  },
+  {
+   "heading": "Om extra burpees vragen",
+   "points": [
+    "Een herhaling onder de standaard: eis een extra burpee",
+    "Leg duidelijk en kalm uit wat ontbrak",
+    "Uitgeputte atleten mogen doorgaan als hun inzet oprecht is"
+   ],
+   "narration": "Als een herhaling niet aan de standaard voldoet, eis dan dat de atleet extra burpees doet, zodat de straf uit complete burpees bestaat. Leg duidelijk en kalm uit wat ontbrak, bijvoorbeeld de borst die de grond niet raakte, of de heupen die bovenaan nog gebogen waren. Sommige atleten zullen uitgeput zijn. Het programma van 2026 zegt dat je hen moet laten doorgaan als hun inzet oprecht is. Ze kunnen doorgaan, maar elke herhaling moet nog steeds aan de standaard voldoen."
+  },
+  {
+   "heading": "Als een atleet je beslissing betwist",
+   "points": [
+    "Blijf kalm, leg de regel uit en vermijd een discussie",
+    "Noteer het hoofdbandnummer en wat werd betwist",
+    "Leg het geschil voor aan de Hoofdscheidsrechter",
+    "Laat een conflict bij de hindernis niet escaleren"
+   ],
+   "narration": "Sommige atleten zijn het oneens als je om extra burpees vraagt. Blijf kalm en professioneel, leg de regel duidelijk uit en laat je niet in een discussie trekken. Noteer het hoofdbandnummer van de atleet en wat werd betwist, en meld het zo snel mogelijk aan de Hoofdscheidsrechter. Geschillen worden door de Hoofdscheidsrechter beslecht, niet door jou bij de hindernis gewonnen. Blijf de andere atleten in de zone in de gaten houden terwijl je dit afhandelt."
+  },
+  {
+   "heading": "Kort samengevat",
+   "points": [
+    "Atleten tellen; jij let op de standaard",
+    "Vrij zicht op de borst, de heupen en knieën en de handen",
+    "Onder de standaard: eis extra burpees, kalm uitgelegd",
+    "Uitgeput maar oprecht: laat ze doorgaan; geschillen gaan naar de Hoofdscheidsrechter"
+   ],
+   "narration": "Kort samengevat. Atleten tellen hun eigen burpees, en jij let op de standaard. Sta waar je duidelijk de borst onderaan, de heupen en knieën bovenaan en de handen in de sprong kunt zien, en houd de burpees binnen de zone. Als een herhaling tekortschiet, eis dan extra burpees en leg kalm uit waarom. Laat uitgeputte atleten doorgaan als hun inzet oprecht is. En als een atleet je beslissing betwist, noteer dan het nummer en leg het voor aan de Hoofdscheidsrechter."
+  }
+ ],
+ "ocr-6-3": [
+  {
+   "heading": "Gemiste burpees worden tijd",
+   "points": [
+    "Atleten die de vereiste burpees niet voltooien, krijgen tijd bij hun finish opgeteld",
+    "Tekorten worden op het parcours of in de review vóór de prijsuitreiking gevonden",
+    "Hoeveel tijd erbij komt, wordt herzien voor 2027"
+   ],
+   "narration": "Waar burpees de straf zijn en een atleet het vereiste aantal niet voltooit, wordt tijd opgeteld bij zijn totale eindtijd. Gemiste burpees kunnen tijdens de race worden vastgesteld, of in de review na de race vóór de prijsuitreiking. Alle drie de bronnen van 2026 zijn het erover eens dat gemiste burpees tijd kosten. Over hoeveel zijn ze het niet eens, dus deze les leert geen getal. De bedragen worden herzien voor 2027, tot de officiating lead beslist.",
+   "review": "In herziening voor 2027: regel 3.4.2 telt 30 seconden op voor elk van de eerste 10 gemiste burpees en in totaal 10 minuten als er meer dan 10 worden gemist. De Officiating SOP telt 30 seconden per stuk op en 10 minuten als er minder dan 20 worden voltooid; het programma van 2026 zegt dat 11 of meer onjuiste 10 minuten zijn en minder dan 20 een diskwalificatie. Deze les leert geen getal totdat de officiating lead beslist: de Hoofdscheidsrechter bevestigt straffen."
+  },
+  {
+   "heading": "Waar de bronnen van 2026 het oneens zijn",
+   "points": [
+    "Hoeveel tijd elke gemiste burpee toevoegt, en of er een plafond is",
+    "Waar de drempel ligt: gemiste burpees, of voltooide burpees",
+    "Of een groot tekort een tijdstraf of diskwalificatie betekent",
+    "Ook Stadion, met zijn straf van 15 burpees, wordt betwist"
+   ],
+   "narration": "Het regelboek, de Officiating-procedure en het programma van 2026 beschrijven elk de tijdstraffen voor burpees anders. Ze verschillen in hoeveel tijd een gemiste burpee toevoegt, en of er een plafond is. Ze verschillen in waar de drempel ligt, geteld in gemiste burpees of in voltooide burpees. En ze verschillen in of een groot tekort een lange tijdstraf of diskwalificatie betekent. Stadion, waar de straf vijftien burpees is, heeft hetzelfde probleem. Behandel tot de officiating lead beslist elk getal als in herziening.",
+   "review": "In herziening voor 2027: regel 3.4.2 telt 30 seconden op voor elk van de eerste 10 gemiste burpees en in totaal 10 minuten voor meer dan 10 (Stadion: 30 seconden per stuk voor de eerste 5, 5 minuten voor meer dan 5). De Officiating SOP telt 30 seconden per gemiste burpee op en 10 minuten als er minder dan 20 worden voltooid (Stadion: minder dan 10). Het programma van 2026 zegt 30 seconden per stuk, 10 minuten voor 11 of meer onjuiste, en diskwalificatie voor minder dan 20. Noem intussen geen getal aan atleten: verwijs vragen over tijdstraffen naar de Hoofdscheidsrechter."
+  },
+  {
+   "heading": "Wat als gemiste burpee telt",
+   "points": [
+    "Een burpee die niet werd gedaan",
+    "Een burpee buiten de aangewezen zone: telt niet mee voor de straf",
+    "Een herhaling onder de bewegingsstandaard: geen complete burpee",
+    "De review kijkt naar zowel het aantal als de kwaliteit van de burpees"
+   ],
+   "narration": "Een tekort is niet alleen burpees die nooit werden gedaan. Burpees die buiten de aangewezen zone worden gedaan, tellen niet mee voor de straf. Een herhaling die niet aan de bewegingsstandaard voldoet, is geen complete burpee, en het programma van 2026 behandelt gemiste en onjuiste burpees gelijk. Volgens de Officiating-procedure beslist de review over zowel de hoeveelheid als de kwaliteit van de burpees. Daarom is het belangrijk de standaard ter plekke te handhaven en om extra herhalingen te vragen.",
+   "review": "In herziening voor 2027: hoeveel tijd gemiste of onjuiste burpees toevoegen, verschilt tussen regel 3.4.2, de Officiating SOP en het programma van 2026. Wat een complete burpee is, verschilt niet: pas regels 3.17.4 en 3.17.5 toe en laat de tijdstraf aan de Hoofdscheidsrechter."
+  },
+  {
+   "heading": "Wie over de straf beslist",
+   "points": [
+    "Met video: burpeebeslissingen over aantal en kwaliteit worden in de videoreview genomen",
+    "Zonder video: je beslist ter plekke, schrijft het op en geeft het aan de Hoofdscheidsrechter",
+    "De Hoofdscheidsrechter stuurt bevestigde straffen naar de Race Director en het tijdwaarnemingsteam",
+    "Straffen worden tijdens de review getoond in de uitslagentent"
+   ],
+   "narration": "Waar video is, worden beslissingen over hoeveel burpees er zijn gedaan, en hoe goed, in de videoreview genomen. De Hoofdscheidsrechter beheert die review terwijl scheidsrechters van hun hindernissen terugkeren, en stuurt bevestigde straffen en diskwalificaties naar de Race Director en het tijdwaarnemingsteam. Waar geen video is, zegt de Officiating-procedure dat de scheidsrechter ter plekke beslist, de beslissing schriftelijk vastlegt en haar bij terugkeer van de hindernis aan de Hoofdscheidsrechter geeft. Straffen worden tijdens de review getoond in de uitslagentent.",
+   "review": "In herziening voor 2027: de Officiating SOP (6.iii) zegt dat beslissingen over burpeestraffen in de videoreview worden genomen waar video is, en door de scheidsrechter ter plekke, schriftelijk, waar die er niet is. Het programma van 2026 zegt dat strafbeslissingen worden genomen door het videoreviewteam. Volg intussen de Officiating SOP: schrijf zonder camera je beslissing op en geef haar aan de Hoofdscheidsrechter."
+  },
+  {
+   "heading": "Kort samengevat",
+   "points": [
+    "Gemiste of onjuiste burpees voegen tijd toe aan de finish van de atleet",
+    "Hoeveel tijd wordt herzien voor 2027: verwijs vragen naar de Hoofdscheidsrechter",
+    "Handhaaf de standaard en de zone ter plekke",
+    "Met video beslist de review; zonder video schrijf je je beslissing op"
+   ],
+   "narration": "Kort samengevat. Gemiste of onjuiste burpees voegen tijd toe aan de finish van de atleet, maar hoeveel tijd wordt herzien voor 2027, omdat het regelboek, de Officiating-procedure en het programma van 2026 het oneens zijn. Noem geen getal: verwijs vragen naar de Hoofdscheidsrechter. Wat je zelf in de hand hebt, is op het parcours: de bewegingsstandaard en de zone. Waar video is, beslist de review. Waar die er niet is, schrijf je je beslissing op en geef je haar aan de Hoofdscheidsrechter.",
+   "review": "In herziening voor 2027: de tijd die voor gemiste burpees wordt toegevoegd verschilt tussen regel 3.4.2, de Officiating SOP en het programma van 2026 (elke versie staat op de tweede dia), en de SOP en het programma verschillen over wie beslist als er geen video is. Leer tot de officiating lead beslist geen getal, volg de Officiating SOP over schriftelijke beslissingen en leg betwiste beslissingen voor aan de Hoofdscheidsrechter."
+  }
+ ],
+ "ocr-7-1": [
+  {
+   "heading": "Een vraag van een atleet beantwoorden",
+   "points": [
+    "Blijf kalm en professioneel, wat de toon van de vraag ook is",
+    "Leg de regel duidelijk uit: wat de hindernis vroeg en wat werd gemist",
+    "Vermijd discussies: een vraag is geen debat"
+   ],
+   "narration": "Atleten zullen je vragen stellen over je beslissingen, vaak terwijl ze moe en gefrustreerd zijn. Blijf kalm en professioneel. Antwoord door de regel duidelijk uit te leggen: wat de hindernis van hen vroeg, en welk deel ze niet haalden. Houd het kort, want er komen nog steeds atleten bij je hindernis aan. Als de atleet de uitleg accepteert, stuur hem dan naar de straf. Zo niet, dan is het een geschil geworden. Een geschil los je niet op door bij de hindernis te discussiëren. Je legt het voor aan de Hoofdscheidsrechter."
+  },
+  {
+   "heading": "Wanneer het een geschil wordt",
+   "points": [
+    "Noteer het hoofdbandnummer van de atleet",
+    "Schrijf de reden op, bijvoorbeeld een gefaalde hindernis zonder voltooide straf",
+    "Meld het zo snel mogelijk aan de Hoofdscheidsrechter",
+    "Laat het conflict bij de hindernis niet escaleren"
+   ],
+   "narration": "Als een atleet je beslissing betwist, heb je drie taken. Noteer eerst zijn hoofdbandnummer. De regels maken elke deelnemer ervoor verantwoordelijk zijn racenummer te allen tijde leesbaar op zijn hoofdband te houden. Schrijf ten tweede de reden voor het geschil op, bijvoorbeeld dat de atleet de hindernis faalde en de straf niet voltooide. Meld het ten derde zo snel als je operationeel kunt aan de Hoofdscheidsrechter. De beslissing wordt niet bij jouw hindernis genomen, dus escaleren levert niets op. Houd je aantekeningen feitelijk: de Hoofdscheidsrechter vertrouwt erop."
+  },
+  {
+   "heading": "Als je het hoofdbandnummer niet kunt krijgen",
+   "points": [
+    "Meld het meteen aan de Hoofdscheidsrechter",
+    "Geef een duidelijke beschrijving: kleur van de kleding, onderscheidende kenmerken, racecategorie",
+    "Help de atleet later op het parcours te identificeren als je dat wordt gevraagd"
+   ],
+   "narration": "Soms verlaat een atleet het hindernisgebied zonder de straf te voltooien, en kun je zijn nummer niet lezen. De officiating-procedure behandelt dit. Meld het meteen aan de Hoofdscheidsrechter, in plaats van te wachten tot je terugkomt van de hindernis. Geef een duidelijke fysieke beschrijving: de kleur van zijn kleding, alles wat hem makkelijk herkenbaar maakt en zijn racecategorie als je die kunt zien. Je wordt mogelijk gevraagd de atleet later op het parcours te helpen identificeren. Blijf intussen gefocust op je hindernis en de atleten die nog steeds aankomen."
+  },
+  {
+   "heading": "Gedrag van atleten",
+   "points": [
+    "Atleten moeten officials met eerlijkheid, respect en beleefdheid behandelen",
+    "Beledigende, bedreigende of kwetsende taal of gedrag overtreedt de regels",
+    "De Head Official beslist over elke straf voor een gedragsovertreding",
+    "Jouw deel: noteer het nummer, noteer wat er gebeurde, meld het"
+   ],
+   "narration": "De regels verwachten dat atleten iedereen bij het evenement, officials inbegrepen, met eerlijkheid, respect en beleefdheid behandelen, en geen beledigende, bedreigende of kwetsende taal of gedrag gebruiken. Een gedragsovertreding kan tot een straf leiden die afhangt van hoe ernstig het was. In het regelboek ligt die beslissing bij de Head Official, niet bij jou. Grof onsportief gedrag, of fysiek geweld tegen een official, kan reden zijn voor schorsing. Jouw deel is hetzelfde als bij elk geschil: blijf kalm, noteer het hoofdbandnummer, noteer wat er is gezegd of gedaan en meld het aan de Hoofdscheidsrechter."
+  },
+  {
+   "heading": "Na de race: protesten en videoreview",
+   "points": [
+    "Uitslagen zijn pas definitief na de officiële videoreview",
+    "Atleten brengen protesten in bij de Head Official tijdens de protesttermijn",
+    "Officials hoeven beeldmateriaal van atleten of toeschouwers niet te beoordelen",
+    "Officieel videomateriaal wordt nooit aan deelnemers gegeven"
+   ],
+   "narration": "Een betwiste beslissing eindigt niet bij jouw hindernis. Voordat uitslagen definitief zijn, is er een officiële videoreview. Een atleet die een straf wil aanvechten, brengt tijdens de protesttermijn een protest in bij de Head Official, die begint zodra hij de finishlijn passeert. Officials zijn niet verplicht video's of foto's van deelnemers of toeschouwers in overweging te nemen. De officiating-procedure zegt ook dat officieel beeldmateriaal nooit aan deelnemers wordt gegeven. Als een atleet je zijn telefoonbeelden aanbiedt, of vraagt de jouwe te zien, verwijs hem dan naar de Hoofdscheidsrechter en het protestproces.",
+   "review": "In herziening voor 2027: regel 3.19.1 laat de protesttermijn 15 minuten vóór de prijsuitreiking van de categorie van de atleet eindigen. De Officiating SOP geeft een half uur vóór de uitreiking als voorbeeld, en laat fouten van scheidsrechters voor atleten buiten het podium tot twee uur na de laatste prijsuitreiking corrigeren. Pas intussen het regelboek toe en leg vragen over tijden voor aan de Hoofdscheidsrechter."
+  },
+  {
+   "heading": "Kort samengevat",
+   "points": [
+    "Blijf kalm, leg de regel duidelijk uit, discussieer niet",
+    "Geschil: hoofdbandnummer, wat er gebeurde, melden aan de Hoofdscheidsrechter",
+    "Geen nummer: meld het meteen, met een duidelijke beschrijving",
+    "Protesten en videoreview gebeuren na de race, niet bij jouw hindernis"
+   ],
+   "narration": "Kort samengevat. Beantwoord vragen kalm en leg de regel duidelijk uit, zonder te discussiëren. Als het een geschil wordt, noteer dan het hoofdbandnummer, schrijf op wat er gebeurde en meld het zo snel mogelijk aan de Hoofdscheidsrechter. Als je het nummer niet kunt krijgen, meld het dan meteen met een duidelijke beschrijving van de atleet. Beledigend gedrag wordt op dezelfde manier vastgelegd en gemeld. De uiteindelijke beslissing komt later, via de videoreview en de protesttermijn, niet bij jouw hindernis."
+  }
+ ],
+ "ocr-8-1": [
+  {
+   "heading": "Professioneel gedrag bij je hindernis",
+   "points": [
+    "Blijf gefocust op je hindernis",
+    "Vermijd afleiding en lange gesprekken",
+    "Blijf neutraal en respectvol tegenover elke atleet",
+    "Vertegenwoordig Spartan professioneel"
+   ],
+   "narration": "De regels bestaan zodat elk Spartan-evenement eerlijk en consistent wordt gehouden, in een geest van sportiviteit en integriteit. Bij jouw hindernis ben jij hoe dat gebeurt. Blijf gefocust op de hindernis en de atleten die hem proberen. Vermijd afleiding en lange gesprekken, want een fout die je niet zag, is een fout die je niet kunt beoordelen. Blijf neutraal en respectvol tegenover iedereen, wie het ook is. Voor atleten en toeschouwers ben jij Spartan, dus vertegenwoordig Spartan professioneel."
+  },
+  {
+   "heading": "Waar een scheidsrechter staat in de regels",
+   "points": [
+    "Een scheidsrechter is een door Spartan aangestelde official die ervoor zorgt dat de regels worden gevolgd",
+    "Meestal bij een hindernis of in de videoreviewtent",
+    "De Head Official is de belangrijkste beslisser en de laatste autoriteit over de regels",
+    "Jouw keten: jij, de Hoofdscheidsrechter, dan de Race Director of het tijdwaarnemingsteam"
+   ],
+   "narration": "Het regelboek definieert een scheidsrechter als een door Spartan aangestelde official wiens taak het is ervoor te zorgen dat de regels worden gevolgd, meestal bij hindernissen of in de videoreviewtent. Scheidsrechters rapporteren aan de Head Official, die de belangrijkste beslisser is over alle kwesties van de regels bij een evenement, en de uiteindelijke autoriteit voor het handhaven en interpreteren ervan. In de officiating-procedure en dit programma rapporteer je aan de Hoofdscheidsrechter. De Hoofdscheidsrechter rapporteert vervolgens raceincidenten aan de Race Director, en straffen aan het tijdwaarnemingsteam."
+  },
+  {
+   "heading": "Waarover je beslist",
+   "points": [
+    "De hindernisregels handhaven",
+    "Atleten die falen naar de juiste straf verwijzen",
+    "Overtredingen documenteren",
+    "Twijfel je over de straf of hoe je die handhaaft? Neem direct contact op met de Hoofdscheidsrechter"
+   ],
+   "narration": "Bij jouw hindernis ben je verantwoordelijk voor drie dingen. Je handhaaft de regels van de hindernis. Je verwijst een atleet die faalt naar de juiste straf voor die hindernis. En je documenteert overtredingen. Waar geen videobewijs van burpees is, maakt de officiating-procedure de beslissing over het aantal en de kwaliteit van de burpees de jouwe: je neemt haar ter plekke, schrijft haar op en geeft haar bij terugkomst aan de Hoofdscheidsrechter. Als je twijfelt over het type straf of hoe je die handhaaft, neem dan direct contact op met de Hoofdscheidsrechter."
+  },
+  {
+   "heading": "Wie een straf bevestigt",
+   "points": [
+    "Definitieve strafbeslissingen kunnen worden bevestigd door de Hoofdscheidsrechter en het tijdwaarnemingsteam",
+    "In de videoreview kunnen officials nog steeds straffen beoordelen, tot en met diskwalificatie",
+    "De Hoofdscheidsrechter geeft bevestigde straffen door aan de Race Director en de tijdwaarneming",
+    "Jouw aantekeningen zijn het bewijs waarop die beslissingen rusten"
+   ],
+   "narration": "Jouw beslissing zet het proces in gang, maar is niet altijd het laatste woord. Het programma zegt dat definitieve strafbeslissingen kunnen worden bevestigd door de Hoofdscheidsrechter en het tijdwaarnemingsteam. Volgens het regelboek is de Head Official uiteindelijk verantwoordelijk voor het handhaven van de regels, en tijdens de officiële videoreview kunnen raceofficials nog steeds straffen beoordelen, diskwalificatie inbegrepen. De Hoofdscheidsrechter beheert die review en geeft bevestigde straffen en diskwalificaties door aan de Race Director en het tijdwaarnemingsteam. Daarom zijn je aantekeningen belangrijk: duidelijke, feitelijke registraties laten de juiste beslissing bevestigen."
+  },
+  {
+   "heading": "Kort samengevat",
+   "points": [
+    "Gefocust, neutraal, respectvol en professioneel",
+    "Je handhaaft de regels, verwijst atleten naar straffen en documenteert overtredingen",
+    "De Hoofdscheidsrechter bevestigt straffen en behandelt wat je voorlegt",
+    "Twijfel je? Neem direct contact op met de Hoofdscheidsrechter"
+   ],
+   "narration": "Kort samengevat. Blijf gefocust op je hindernis, neutraal en respectvol, en vertegenwoordig Spartan professioneel. Je handhaaft de hindernisregels, verwijst atleten die falen naar de juiste straf en documenteert overtredingen. De Head Official heeft de laatste autoriteit over de regels, en de Hoofdscheidsrechter bevestigt straffen, behandelt wat je voorlegt en geeft ze door aan de Race Director en de tijdwaarneming. Als je ooit twijfelt, neem dan direct contact op met de Hoofdscheidsrechter."
+  }
+ ],
+ "ocr-8-2": [
+  {
+   "heading": "Veiligheid hoort bij de baan",
+   "points": [
+    "De regels beogen de gezondheid, veiligheid en het welzijn van atleten te beschermen",
+    "Houd de veiligheid van je hindernis in de gaten en zorg dat atleten veilig bewegen",
+    "Sta geen gevaarlijke shortcuts toe: atleten moeten het hele officiële parcours afleggen"
+   ],
+   "narration": "Een doel van de regels is de gezondheid, veiligheid en het welzijn van deelnemers te beschermen, voor zover dat redelijkerwijs mogelijk is bij hindernislopen. Het programma zet de veiligheid van atleten naast eerlijkheid als je prioriteit. Dat betekent de veiligheid van je hindernis in de gaten houden, zorgen dat atleten veilig bewegen en geen gevaarlijke shortcuts toestaan. Een shortcut toestaan is nooit aan jou: de regels vereisen dat atleten het officiële parcours in zijn geheel afleggen."
+  },
+  {
+   "heading": "Inspecteer en meld gevaren meteen",
+   "points": [
+    "Inspecteer vóór de eerste wave de opstelling en controleer of die bruikbaar is",
+    "Loop de strafronde en leer de naderingsrichting van de atleten kennen",
+    "Meld gevaren meteen: Hoofdscheidsrechter, Race Director of Spartan-staf"
+   ],
+   "narration": "Veiligheid begint vóór de eerste competitieve wave. Als je bij je hindernis aankomt, inspecteer je de opstelling en controleer je of die bruikbaar is. Bekijk de raceflow en de richting waaruit atleten zullen naderen, en loop de hele strafronde zodat je de route en het terugkeerpunt kent. Als iets je zorgen baart, een twijfel, een veiligheidsprobleem of een inconsistentie, meld het dan meteen aan de Hoofdscheidsrechter of de Race Director. Meld tijdens de race elk gevaar direct aan de Hoofdscheidsrechter, de Race Director of Spartan-staf."
+  },
+  {
+   "heading": "Veilig bewegen in de hindernisregels",
+   "points": [
+    "Rope Climb: kom veilig en onder controle naar beneden, minstens één hand aan het touw",
+    "Hercules Hoist: laat het gewicht onder controle zakken; laten vallen is een fout",
+    "Zwem- of wateroversteek: niet duiken; duiken is een fout"
+   ],
+   "narration": "Sommige hindernisregels bevatten veiligheid direct, en je handhaaft ze als elke andere regel. Bij de Rope Climb moeten atleten op veilige en gecontroleerde wijze terugkeren naar de grond, met te allen tijde minstens één hand aan het touw. Bij de Hercules Hoist moet het gewicht onder controle worden neergelaten, niet in vrije val, en het ongecontroleerd laten vallen ervan is een fout. Bij een zwem- of wateroversteek is duiken niet toegestaan, en het is een faalwijze. Ken de veiligheidsregels van je hindernis voordat de eerste atleet arriveert."
+  },
+  {
+   "heading": "Dezelfde interpretatie de hele race",
+   "points": [
+    "Pas de regels gelijk toe op alle atleten",
+    "Gebruik dezelfde interpretatie van de eerste wave tot de laatste",
+    "Elke straf wordt consistent toegepast binnen zijn categorie of heat",
+    "Jouw focus: de Competitieve categorieën, Elite en Age Group"
+   ],
+   "narration": "Consistentie maakt uitslagen eerlijk. Pas de regels gelijk toe op elke atleet en gebruik dezelfde interpretatie van de eerste wave tot de laatste. De beslissing die je voor de eerste Elite-atleet neemt, is de standaard voor iedereen na hem. Het regelboek zegt dat elke straf consistent wordt toegepast binnen de aangewezen categorie of heat. Je focus ligt op de Competitieve categorieën, Elite en Age Group, van wie wordt verwacht dat ze elke regel volgen. Open-racers worden ook aangemoedigd de regels te volgen, in een ontspannener sfeer."
+  },
+  {
+   "heading": "Blijf bij de regel, en schaal op bij twijfel",
+   "points": [
+    "Beoordeel op de geschreven faalwijzen van de hindernis",
+    "Vermijd persoonlijk oordeel buiten de regel",
+    "Schaal de beslissing bij twijfel op naar de Hoofdscheidsrechter"
+   ],
+   "narration": "Consistentie betekent ook geen eigen regels toevoegen. Beoordeel elke poging op de geschreven faalwijzen van de hindernis, niet op wat je zelf eerlijk vindt, en vermijd oordelen die verder gaan dan wat de regel zegt. Als een situatie niet duidelijk wordt gedekt, of je niet zeker weet welke straf geldt of hoe je die handhaaft, neem dan direct contact op met de Hoofdscheidsrechter. Een beslissing die is opgeschaald en eenmaal genomen, kan dan op dezelfde manier op iedereen worden toegepast."
+  },
+  {
+   "heading": "Kort samengevat",
+   "points": [
+    "Houd de veiligheid in de gaten, dring aan op veilig bewegen, sta geen shortcuts toe",
+    "Inspecteer vroeg en meld gevaren meteen",
+    "Dezelfde regels, dezelfde interpretatie, elke atleet, de hele race",
+    "Twijfel je? Schaal op naar de Hoofdscheidsrechter"
+   ],
+   "narration": "Kort samengevat. De veiligheid van atleten staat naast eerlijkheid als je prioriteit. Houd je hindernis in de gaten, zorg dat atleten veilig bewegen en sta geen shortcuts toe. Inspecteer de hindernis en loop de strafronde vóór de eerste wave, en meld gevaren meteen aan de Hoofdscheidsrechter, de Race Director of Spartan-staf. Pas dezelfde regels, met dezelfde interpretatie, toe op elke atleet de hele race. En schaal bij twijfel op naar de Hoofdscheidsrechter."
+  }
+ ],
+ "ocr-9-1": [
+  {
+   "heading": "Let op de handen en voeten",
+   "points": [
+    "De meeste faalwijzen gaan over wat de handen en voeten aanraken",
+    "Monkey Bars: alleen handen en armen; voeten of benen op de stangen is een fout",
+    "Olympus: voeten mogen op de muur rusten, maar een voet op een greep of in een gat is een fout"
+   ],
+   "narration": "De meeste hindernisfouten komen neer op wat de handen en voeten van een atleet aanraken, dus daar gaan je ogen naartoe. Bij de Monkey Bars verplaatst de atleet zich alleen met handen en armen. Voeten of benen die de stangen raken is een fout, en dat geldt ook voor het aanraken van de grond om een voordeel te krijgen. Bij Olympus mogen atleten hun voeten en knieën voor steun tegen de muur zetten, maar het aanraken van een greep of gat met de voeten is een fout. Weet precies welke contacten je hindernis toestaat."
+  },
+  {
+   "heading": "Richt je op de exacte regel",
+   "points": [
+    "Ken de instructies, faalwijzen en notities van je hindernis vóór de eerste wave",
+    "Helix en Z Wall: de poging begint bij vier contactpunten",
+    "Monkey Bars, Multi-Rig, Olympus: zodra beide voeten de starttrede verlaten"
+   ],
+   "narration": "Elke hindernis heeft zijn eigen regel, met instructies voor deelnemers, faalwijzen en aanvullende notities. Let op die regel, niet op een algemeen idee van een goede poging. Weet wanneer de poging begint, want vanaf dan is de atleet vastgelegd. Bij de Helix en de Z Wall begint hij zodra er vier contactpunten zijn. Bij de Monkey Bars, de Multi-Rig en Olympus begint hij zodra beide voeten de starttrede hebben verlaten. Als je het begin mist, weet je niet zeker wat telt."
+  },
+  {
+   "heading": "Waar je staat",
+   "points": [
+    "Een plek met vrij zicht op pogingen, voltooiingen en fouten",
+    "Controleer de raceflow en de naderingsrichting van de atleten",
+    "Verwacht waar fouten meestal gebeuren en houd die punten in zicht"
+   ],
+   "narration": "Bepaal vóór de eerste wave de beste plek om te staan. Je hebt vrij zicht nodig op de pogingen, de voltooiingen en de fouten. Bekijk de raceflow en de richting waaruit atleten naderen. Bedenk waar fouten bij jouw hindernis meestal gebeuren en zorg dat die punten goed in zicht zijn. De officiating-procedure noemt hindernissen met een geschiedenis van veel fouten hindernissen met veel fouten. Ze vragen om actieve handhaving, dus je positie daar is nog belangrijker."
+  },
+  {
+   "heading": "Klaar om in te grijpen bij een fout",
+   "points": [
+    "Sta waar je een falende atleet kunt aanspreken en naar de straf kunt verwijzen",
+    "Ken de route en het terugkeerpunt van de strafronde",
+    "Houd de bel in het oog: erop schoppen is een fout"
+   ],
+   "narration": "Een fout zien is de helft van het werk. De andere helft is de atleet aanspreken, dus positioneer jezelf waar je hem kunt aanspreken zodra hij faalt en hem naar de straf kunt wijzen. Loop vooraf de strafronde, zodat je de route kent en waar die op het parcours terugkeert. Houd ook de bel in het oog. Volgens de algemene regel mogen bellen alleen worden geraakt met de armen, de handen of een ander lichaamsdeel boven de borst. Op de bel schoppen is een fout. Controleer ook de eigen regel van je hindernis."
+  },
+  {
+   "heading": "Kort samengevat",
+   "points": [
+    "Let op de handen en voeten",
+    "Ken de exacte regel, en wanneer de poging begint",
+    "Sta met een helder zicht op waar fouten gebeuren",
+    "Wees klaar om de atleet naar de straf te verwijzen"
+   ],
+   "narration": "Kort samengevat. Let op de handen en voeten van de atleet, want daar gebeuren de meeste fouten. Ken de exacte regel van je hindernis, inclusief het moment waarop de poging begint. Sta waar je zicht vrij is en de gebruikelijke foutpunten in beeld zijn. En positioneer jezelf zo dat je de atleet kunt aanspreken zodra hij faalt en hem naar de juiste straf kunt sturen."
+  }
+ ],
+ "ocr-9-2": [
+  {
+   "heading": "De steunconstructie gebruiken",
+   "points": [
+    "Muren: de steunconstructie, zijkanten of banden gebruiken is een fout",
+    "Rigs: verticale truss als ladder gebruiken is een fout",
+    "Horizontale truss mag worden gebruikt om te starten of over te stappen, waar de regel het toestaat"
+   ],
+   "narration": "De truss is de belangrijkste draagconstructie van de hindernis: de metalen diagonale, verticale en horizontale balken. Veel hindernissen verbieden het gebruik ervan. Bij de muren is het gebruiken van de steunconstructie, de zijkanten van de muur of de banden om te helpen met balans, omhoog klimmen of naar beneden komen een fout. Op de Monkey Bars en andere rigs is het gebruiken van verticale truss als ladder om te starten, te traverseren of af te ronden een fout. Maar bij veel rigs mogen atleten horizontale truss gebruiken om te starten, of om tijdens de traverse over te stappen. Controleer wat voor je hindernis geldt."
+  },
+  {
+   "heading": "Aanraken buiten het toegestane gebied",
+   "points": [
+    "Multi-Rig: de touwen, slings of kettingen vastgrijpen die een onderdeel vasthouden is een fout",
+    "Helix: stangen uit een andere baan gebruiken is een fout",
+    "Olympus: een greep of gat met de voeten aanraken is een fout"
+   ],
+   "narration": "Aanraken buiten het toegestane gebied betekent een deel van de hindernis gebruiken dat de regel niet toestaat. Bij de Multi-Rig mogen atleten alleen de onderdelen gebruiken. De touwen, slings of kettingen die ze aan de constructie bevestigen vastgrijpen is een fout, en meer dan één baan gebruiken ook. Bij de Helix is het gebruiken van stangen uit een andere baan een fout. Bij Olympus werken de handen de grepen af, en een voet op een greep of in een gat is een fout. Ken het toegestane gebied van je hindernis precies."
+  },
+  {
+   "heading": "Niet proberen, en de ronde overslaan",
+   "points": [
+    "Elke hindernis moet worden geprobeerd: minimaal raakt de atleet hem aan",
+    "Een atleet die faalt, moet de strafronde volledig voltooien",
+    "De ronde overslaan wordt bestraft: de straf wordt herzien voor 2027"
+   ],
+   "narration": "Elke hindernis moet worden geprobeerd. Een poging betekent minimaal het aanraken van de hindernis. Soms betekent het door water of moeilijk terrein komen om hem te bereiken, en dat kan niet met een straf worden omzeild, tenzij de briefing of de racestaf het zegt. Een atleet die een poging doet en faalt, moet de strafronde volledig voltooien. Hem overslaan is een overtreding die je vastlegt en meldt aan de Hoofdscheidsrechter. De bronnen verschillen over de straf ervoor, dus die wordt herzien.",
+   "review": "In herziening voor 2027: regel 3.4.1 telt een tijdstraf van 10 minuten op wanneer een atleet de strafronde niet voltooit. Het online programma van 2026 zegt dat het tot diskwalificatie kan leiden. Pas intussen het regelboek toe en leg het geval voor aan de Hoofdscheidsrechter."
+  },
+  {
+   "heading": "Burpees die niet aan de standaard voldoen",
+   "points": [
+    "Borst naar de grond, rechtop met heupen en knieën gestrekt, dan een sprong, handen boven de oren",
+    "Burpees buiten de aangewezen burpeezone tellen niet",
+    "Atleten tellen hun eigen burpees: jij telt niet voor hen"
+   ],
+   "narration": "Onjuiste burpees zijn een van de meest voorkomende overtredingen. Eén complete burpee gaat van de onderste positie, liggend met de borst op de grond, naar een evenwichtige rechtopstaande positie met gestrekte heupen en knieën, gevolgd door een sprong met de handen boven de oren. Burpees buiten de aangewezen zone tellen niet. Atleten tellen hun eigen burpees, en jij telt niet voor hen. Waar de standaard niet wordt gehaald, zegt het programma extra burpees te eisen en de atleet eraan te herinneren dat zijn beweging en zijn herhalingen worden gecontroleerd."
+  },
+  {
+   "heading": "De bel",
+   "points": [
+    "Bij rigs zoals de Monkey Bars is het niet luiden van de bel een fout",
+    "Bellen mogen worden geraakt met de armen, handen of het lichaam boven de borst",
+    "Op de bel schoppen is een fout: geen nieuwe poging, de atleet neemt de straf"
+   ],
+   "narration": "Veel hindernissen eindigen bij een bel, en bij rigs zoals de Monkey Bars is het niet luiden ervan een faalwijze. Een atleet die eraf komt voordat hij de bel luidt, heeft gefaald, hoe ver hij ook kwam. Volgens de algemene regel mogen bellen alleen worden geraakt met de armen en handen, of een ander lichaamsdeel boven de borst. Het schoppen van de bel met de voeten, benen of knieën telt als hindernisfout. De atleet mag het niet opnieuw proberen en moet de straf voor die hindernis voltooien."
+  },
+  {
+   "heading": "Kort samengevat",
+   "points": [
+    "Geen steunconstructie of verticale truss tenzij de regel het toestaat",
+    "Alleen de toegestane delen van de hindernis, in één baan",
+    "Probeer elke hindernis, en voltooi elke strafronde volledig",
+    "Burpees volgens de standaard, in de zone; bellen luiden, nooit schoppen"
+   ],
+   "narration": "Kort samengevat. Let op atleten die de steunconstructie gebruiken, of verticale truss als ladder, waar de regel het verbiedt. Let op aanraken buiten het toegestane gebied, zoals het vastgrijpen van de touwen of kettingen van een rig, of het gebruiken van een andere baan. Elke hindernis moet worden geprobeerd, en elke strafronde volledig voltooid. Burpees moeten aan de standaard voldoen en in de zone worden gedaan. En de bel moet worden geluid, nooit geschopt."
+  }
+ ],
+ "ocr-9-3": [
+  {
+   "heading": "Hoe te beslissen",
+   "points": [
+    "Zoek de exacte regel: instructies, faalwijzen en notities",
+    "Controleer of wat je zag overeenkomt met een genoemde faalwijze",
+    "Neem de beslissing, verwijs de atleet, leg het vast en schaal op bij twijfel"
+   ],
+   "narration": "Deze les geeft je drie situaties uit het programma van 2026. Beslis bij elke wat je zou doen voordat je het antwoord hoort. De methode is elke keer dezelfde. Zoek de exacte regel voor de hindernis. Controleer of wat je zag overeenkomt met een van de genoemde faalwijzen. Neem dan de beslissing, verwijs de atleet en leg vast wat er gebeurde. Als de regel het niet beslecht, of je twijfelt, schaal dan op naar de Hoofdscheidsrechter."
+  },
+  {
+   "heading": "Scenario 1: een korte aanraking bovenaan",
+   "points": [
+    "Een atleet op de Helix raakt kort de bovenkant van de hindernis aan met één hand",
+    "De aanraking duurt een moment en geeft geen voordeel",
+    "Hij gaat door en luidt de bel"
+   ],
+   "narration": "Regel 4.2.6 noemt het aanraken van de bovenkant van de Helix een faalwijze, zonder voorwaarde over voordeel. Olympus en de Z Wall zijn hetzelfde. De beslissing die het regelboek ondersteunt, is dus een fout, en de atleet neemt de straf, ook al leverde de aanraking niets op. Voordeel telt waar de regel dat zegt. Bij de Monkey Bars is volgens regel 4.2.7 het aanraken van de grond met de voeten een fout wanneer het een voordeel oplevert. Controleer altijd de formulering van de faalwijze voordat je beslist.",
+   "review": "In herziening voor 2027: het online programma van 2026 vraagt scheidsrechters te overwegen of de aanraking een voordeel opleverde, en zich te richten op de bedoeling van de regel, niet op klein onopzettelijk contact. Regels 4.2.6, 4.2.10 en 4.2.17 noemen het aanraken van de bovenkant een fout zonder voordeeltoets. Pas intussen het regelboek toe en leg een betwiste beslissing voor aan de Hoofdscheidsrechter."
+  },
+  {
+   "heading": "Scenario 2: snelle burpees, heupen niet gestrekt",
+   "points": [
+    "Een atleet doet zijn strafburpees na het falen van de Spear Throw",
+    "Hij beweegt snel, en bovenaan veel herhalingen zijn zijn heupen nog gebogen"
+   ],
+   "narration": "Die herhalingen voldoen niet aan de standaard. Regel 3.17.4 definieert de bovenste positie als evenwichtig en rechtop, met de heupen en knieën gestrekt, niet gebogen, vóór de sprong. Een herhaling zonder dat is geen complete burpee. Het programma zegt extra burpees te eisen wanneer de standaard niet wordt gehaald, en de atleet eraan te herinneren dat zijn beweging en herhalingen worden gecontroleerd. Tel niet voor hem. Bij de Spear Throw beslist het videoreviewteam over gemiste burpees. Zonder video beslis je ter plekke, schrijf je het op en geef je het aan de Hoofdscheidsrechter.",
+   "review": "In herziening voor 2027: de tijd die voor gemiste of onjuiste burpees wordt toegevoegd verschilt tussen het regelboek (3.4.2), de Officiating SOP en het programma van 2026. Deze les leert geen getal totdat de officiating lead beslist."
+  },
+  {
+   "heading": "Scenario 3: langs de strafronde rennen",
+   "points": [
+    "Een atleet faalt een geslaagd/gezakt-hindernis bij jouw post",
+    "Je verwijst hem naar de strafronde, maar hij rent er recht langs en gaat door"
+   ],
+   "narration": "Dit is een duidelijke overtreding. Volgens regel 3.4.1 moet een atleet die een geslaagd of gezakt-hindernis probeert en faalt de strafronde voltooien, en deze deed dat niet. Ga hem niet achterna en discussieer niet. Noteer het hoofdbandnummer, documenteer wat er gebeurde en meld het zo snel mogelijk aan de Hoofdscheidsrechter. Als je het nummer niet kon lezen, meld het dan meteen met een duidelijke beschrijving: kleur van de kleding, onderscheidende kenmerken en racecategorie. De straf zelf wordt via de Hoofdscheidsrechter bepaald, niet bij jouw hindernis.",
+   "review": "In herziening voor 2027: regel 3.4.1 telt een tijdstraf van 10 minuten op wanneer de strafronde niet wordt voltooid. Het online programma van 2026 zegt dat het tot diskwalificatie kan leiden. Pas intussen het regelboek toe en leg het geval voor aan de Hoofdscheidsrechter."
+  },
+  {
+   "heading": "Kort samengevat",
+   "points": [
+    "Lees de exacte formulering van de faalwijze: voordeel telt alleen waar dat staat",
+    "Een burpee zonder volledige strekking bovenaan telt niet",
+    "Een overgeslagen strafronde: noteer het nummer, documenteer, meld",
+    "Twijfel je? Schaal op naar de Hoofdscheidsrechter"
+   ],
+   "narration": "Kort samengevat. Een korte aanraking van de bovenkant van de Helix, Olympus of de Z Wall is volgens het regelboek een fout, omdat de faalwijze geen voordeeltoets heeft, terwijl sommige andere faalwijzen die wel hebben. Een burpee zonder gestrekte heupen en knieën bovenaan is geen complete burpee, dus extra burpees zijn vereist. Een atleet die langs de strafronde rent, heeft de regels overtreden: noteer het hoofdbandnummer, documenteer het en meld het aan de Hoofdscheidsrechter."
+  }
+ ]
+}

@@ -15,13 +15,32 @@ hooks.programme.push(async (d) => {
 });
 
 // ---------------------------------------------------------------- rule references
+// searching the rules: lower case, without accents, so "penalite" finds "pénalité" and "Spear" finds "spear"
+const fold = (s) => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+/** shows only the rules with every word typed (in the number, name, text or source), as you type */
+function filterRules() {
+  const input = $('ruleQ'), list = $('ruleList'); if (!input || !list) return;
+  const words = fold(input.value).split(/s+/).filter(Boolean), items = [...list.querySelectorAll('li[data-q]')];
+  let shown = 0;
+  for (const li of items) { const hit = words.every((w) => li.dataset.q.includes(w)); li.classList.toggle('off', !hit); if (hit) shown++; }
+  list.classList.toggle('searching', words.length > 0);
+  $('ruleCount').textContent = words.length ? `${shown} of ${items.length}` : `${items.length} rules`;
+  $('ruleNone').hidden = !(words.length && !shown);
+  // kept in the address (without redrawing), so going back to the list finds the same search
+  const [path, qs = ''] = location.hash.split('?'), p = new URLSearchParams(qs);
+  if (input.value.trim()) p.set('q', input.value.trim()); else p.delete('q');
+  history.replaceState(null, '', `${path}${p.toString() ? `?${p}` : ''}`);
+}
+
 async function rulesView(rest) {
   if (rest) return ruleView(rest);
   const q = new URLSearchParams(location.hash.split('?')[1] || ''), pid = q.get('programme') || 'ocr-referee';
   const d = await call(`rules?programme=${encodeURIComponent(pid)}`);
   return `<section class="card"><h1>Rule references</h1><p class="note">The sections of the source documents that lessons and questions teach. Each change is a new version, approved before it's current, and flags everything that cites it for review.</p>
-      <ul class="plain docList">${d.documents.map((x) => `<li><b>${esc(x.title)} ${esc(x.edition)}</b> ${badge(x.approval === 'baseline' ? 'preview' : x.approval, x.approvalText)}<br><small class="muted">${esc(x.note)}</small></li>`).join('')}</ul></section>
-    <section class="card"><ul class="rowList">${d.rules.map((r) => `<li><a href="#/rules/${encodeURIComponent(r.id)}"><b>${esc(r.section)} ${esc(r.title)}</b><small>${esc(r.id)} · v${r.versionNo} · cited by ${r.links} ${r.links === 1 ? 'item' : 'items'}${r.draftChange ? ' · a change is drafted' : ''}</small></a>${stateBadge(r)}</li>`).join('') || '<li class="muted">None yet.</li>'}</ul></section>`;
+      <details class="docsBox"><summary>The source documents (${d.documents.length})</summary><ul class="plain docList">${d.documents.map((x) => `<li><b>${esc(x.title)} ${esc(x.edition)}</b> ${badge(x.approval === 'baseline' ? 'preview' : x.approval, x.approvalText)}<br><small class="muted">${esc(x.note)}</small></li>`).join('')}</ul></details>
+      <div class="ruleSearch"><input type="search" id="ruleQ" value="${esc(q.get('q') || '')}" placeholder="Search: a number, a name or any words" aria-label="Search the rules" aria-controls="ruleList" autocomplete="off" enterkeyhint="search"><span class="muted" id="ruleCount" aria-live="polite"></span></div>
+      <ul class="rowList ruleList" id="ruleList">${d.rules.map((r) => `<li data-q="${esc(fold([r.section, r.id, r.title, r.excerpt, r.docTitle, r.stateText].join(' ')))}"><a href="#/rules/${encodeURIComponent(r.id)}"><b>${esc(r.section)} ${esc(r.title)}</b><small>${esc(r.id)} · v${r.versionNo} · cited by ${r.links} ${r.links === 1 ? 'item' : 'items'}${r.draftChange ? ' · a change is drafted' : ''}</small><small class="ruleExcerpt">${esc(r.excerpt)}</small></a>${stateBadge(r)}</li>`).join('') || '<li class="muted">None yet.</li>'}</ul>
+      <p class="muted" id="ruleNone" hidden>No rule matches that. Try fewer words, or a section number such as 3.17.</p></section>`;
 }
 async function ruleView(id) {
   const d = await call(`rules/${encodeURIComponent(id)}`), r = d.rule;
@@ -57,7 +76,7 @@ async function reviewsView() {
 // ---------------------------------------------------------------- the handbook (AT-06)
 let H = null;
 async function handbookView(rest) {
-  const q = new URLSearchParams(location.hash.split('?')[1] || ''), locale = q.get('locale') || 'en';
+  const q = new URLSearchParams(location.hash.split('?')[1] || ''), locale = q.get('locale') || (window.SR_I18N && SR_I18N.lang) || 'en';
   H = await call(`handbook/${encodeURIComponent(rest)}?locale=${encodeURIComponent(locale)}`);
   const v = H.version;
   return `<section class="card"><p class="crumbs"><a href="#/programmes/${esc(H.programme.id)}">${esc(H.programme.title)}</a></p><h1>Handbook</h1>
@@ -66,11 +85,15 @@ async function handbookView(rest) {
         <li><b>Status</b> ${H.programme.demo ? 'Demonstration content, built on the 2026 baseline: not approved 2027 rules' : 'Approved'}</li></ul>
       <button class="primary" type="button" id="handbookPdf">Download the PDF</button></section>
     ${H.sections.map((m, mi) => `<section class="card"><h2>${mi + 1}. ${esc(m.title)}</h2>${m.summary ? `<p class="note">${esc(m.summary)}</p>` : ''}
-      ${m.lessons.map((l) => `<h3 class="sub">${esc(l.title)}${l.preview ? ' (preview translation)' : ''}</h3>${l.written ? l.slides.map((s) => `<p><b>${esc(s.heading)}</b></p><ul>${s.points.map((p) => `<li>${esc(p)}</li>`).join('')}</ul>${s.review ? `<p class="reviewNote"><b>Under review</b> ${esc(s.review)}</p>` : ''}`).join('') : '<p class="muted">Being written.</p>'}`).join('')}</section>`).join('')}
+      ${m.lessons.map((l) => `<h3 class="sub">${esc(l.title)}${l.preview ? ' (preview translation)' : ''}</h3>${l.written ? l.slides.map((s) => `<p><b>${esc(s.heading)}</b></p><ul>${s.points.map((p) => `<li>${esc(p)}</li>`).join('')}</ul>${s.review ? `<p class="reviewNote">${esc(s.review)}</p>` : ''}`).join('') : '<p class="muted">Being written.</p>'}`).join('')}</section>`).join('')}
     <section class="card"><h2>Rule references</h2><ul class="plain">${H.rules.map((r) => `<li><b>${esc(r.section)} ${esc(r.title)}</b> <small class="muted">${esc(r.stateText)}</small><br>${esc(r.excerpt || '')}</li>`).join('')}</ul></section>
     ${H.reviews.length ? `<section class="card"><h2>Under review</h2><ul class="plain">${H.reviews.map((i) => `<li>${esc(i.title)} <small class="muted">${esc(KIND[i.kind])}</small></li>`).join('')}</ul></section>` : ''}`;
 }
+// jsPDF's built-in fonts only draw Western European letters: for Czech, Polish, Croatian, Greek, Arabic and Thai the browser makes the
+// PDF instead (print, then Save as PDF), from this page, which it lays out properly in any script
+const PDF_LETTERS = new Set(['en', 'fr', 'de', 'nl', 'es', 'it', 'fi', 'sv', 'da']);
 async function handbookPdf() {
+  if (!PDF_LETTERS.has(H.locale)) { window.print(); return; }
   const JsPDF = await loadPdf(), doc = new JsPDF({ unit: 'mm', format: 'a4' }), v = H.version;
   const W = 210, M = 18, width = W - 2 * M;
   const stamp = `${H.programme.title} · ${v.edition} edition (${v.state}) · ${LANG[H.locale] || H.locale}: ${H.language.state} · made ${day(H.generatedAt)}`;
@@ -104,7 +127,7 @@ async function handbookPdf() {
       for (const s of l.slides) {
         para(s.heading, 10.5, 'bold', 1);
         for (const p of s.points) para(`•  ${p}`, 10, 'normal', 0.5);
-        if (s.review) { doc.setTextColor(170, 110, 0); para(`Under review: ${s.review.replace(/^(Under review for 2027|En revisión para 2027):\s*/, '')}`, 9, 'italic', 1); doc.setTextColor(20, 20, 20); }
+        if (s.review) { doc.setTextColor(170, 110, 0); para(s.review, 9, 'italic', 1); doc.setTextColor(20, 20, 20); }
         y += 1.5;
       }
       para(`Content ${l.locale} v${l.contentVersion} · ${l.sourceHash} · ${l.sources}`, 7.5, 'normal', 4);
@@ -121,6 +144,7 @@ async function handbookPdf() {
 export const views = { rules: rulesView, reviews: reviewsView, handbook: handbookView };
 
 export function wire() {
+  if ($('ruleQ')) { $('ruleQ').addEventListener('input', filterRules); filterRules(); }
   $('handbookPdf')?.addEventListener('click', (e) => act(() => handbookPdf(), e.currentTarget));
   $('ruleChange')?.addEventListener('submit', (e) => { e.preventDefault(); act(async () => { await call(`rules/${encodeURIComponent(e.target.dataset.id)}/versions`, { method: 'POST', body: Object.fromEntries([...new FormData(e.target)]) }); toast('Change drafted: review items raised'); redraw(); }, e.submitter); });
   for (const b of document.querySelectorAll('[data-rule-state]')) b.onclick = () => act(async () => { await call(`rule-versions/${b.dataset.key}/state`, { method: 'POST', body: { to: b.dataset.ruleState } }); toast(b.dataset.ruleState === 'approved' ? 'Approved: it\'s the current version' : 'Withdrawn'); redraw(); }, b);

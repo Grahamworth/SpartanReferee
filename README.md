@@ -54,6 +54,8 @@ node scripts/i18n-extract.mjs --check   # what each language is missing; node sc
 
 A text with no translation shows in English, so nothing breaks while a language catches up.
 
+**The learning platform and each referee's language** (19 November 2026): /learn is translated the same way, including the server's messages and the programmes' titles, summaries and questions (`contentTexts()` in the extractor reads them from the seed data). The lessons themselves are content versions in each language, so they keep their own approval state: every lesson is in all 15 languages, the 14 translations machine-made by Claude and published for the demo with "Claude (machine translation), not yet reviewed" as their translator (`scripts/learn-translations/<code>.json`, loaded by `learn-seed.mjs`). Each language has its own narration voice. A referee chooses their language on their first visit (Home or Learning); it's kept with them (`/api/home`), so a new device and their lessons use it, and changing the menu at the top saves it straight away. The handbook PDF is drawn by jsPDF in the Western European languages and by the browser's print (Save as PDF) in the others, whose letters jsPDF's fonts can't draw. Native speakers should review the lessons before real use; Spartan's officiating terms (Head Official, Race Director) were chosen by each translator where the site had none.
+
 What follows was written for HeadJudge, before the rename.
 
 ## HeadJudge, as copied

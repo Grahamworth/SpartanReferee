@@ -3,7 +3,8 @@
 // duplicates, audit), practice.js (the camera course's practice cameras), and the later steps' areas. Everything is checked again on the server
 // (api/src/learn); hiding a link here is only tidiness. An admin can view the page as any invented person: every request then
 // says so (X-Learn-As).
-import { devSignInButton, signedIn, signOut } from '../api-base.js';
+import { devSignInButton, signedIn, signOut, call as siteCall } from '../api-base.js';
+import { language } from '../language.js';
 import { microsoftButton } from '../email-signin-web.js';
 import { $, S, show, call, esc, fail, store, AS_KEY, ROLE, has, isAdmin } from './core.js';
 import * as programmes from './programmes.js';
@@ -69,6 +70,8 @@ async function enter() {
     if (e.status === 403) { $('closedText').textContent = e.message; show($('closed'), true); return; }
     fail(e.message); return; // e.g. the database waking up: try again in a minute
   }
+  // the first visit asks for a language, as the home page does (someone may come here first)
+  try { if (language(await siteCall('home'), $('langCard'))) return; } catch { /* the page still works in this language */ }
   ({ regions: S.regions } = await call('regions'));
   addEventListener('hashchange', draw);
   draw();

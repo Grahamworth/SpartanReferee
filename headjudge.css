@@ -313,3 +313,11 @@ html[lang="ar"] *, html[lang="th"] * { font-style: normal !important; letter-spa
 .assignAs select { flex: 1; min-width: 0; }
 .rowBtns { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
 @media (max-width: 640px) { .adminList li:has(.rowBtns) { flex-wrap: wrap; } .rowBtns { width: 100%; justify-content: stretch; } .rowBtns button { flex: 1; } }
+
+/* the language chooser on a referee's first visit (language.js), on the home page and the learning platform */
+.langCard { margin-bottom: 18px; }
+.langGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; margin-top: 12px; }
+.langGrid button { min-height: 48px; padding: 0 14px; background: var(--bg); color: var(--text); border: 1px solid var(--line); font: 600 1rem Barlow, sans-serif; text-align: start; cursor: pointer; }
+.langGrid button:hover, .langGrid button:focus-visible { border-color: var(--primary-text); }
+.langGrid button.suggested { border-color: var(--primary); }
+.langGrid button small { display: block; color: var(--muted); font-weight: 400; font-size: .8rem; }

@@ -2,7 +2,7 @@
 import test from 'node:test';
 import assert from 'node:assert';
 import { PROGRAMMES } from '../scripts/learn-content.mjs';
-import { LESSONS } from '../scripts/learn-lessons.mjs';
+import { LESSONS, TRANSLATIONS } from '../scripts/learn-lessons.mjs';
 import { RULES, DISPUTES } from '../scripts/learn-rules.mjs';
 
 test('the OCR programme is complete: all 22 lessons have English content, ending on a summary', () => {
@@ -23,5 +23,13 @@ test('lesson text: no dashes, and a disagreement is flagged as under review rath
   for (const [k, l] of Object.entries(LESSONS)) for (const s of l.en) {
     assert.doesNotMatch([s.heading, ...s.points, s.narration].join(' '), /[–—]/, `${k}: ${s.heading}`);
     if (s.review) assert.match(s.review, /^(Under review for 2027|En revisión para 2027): /, `${k}: ${s.heading}`);
+  }
+});
+test('every lesson is in all 14 other languages, slide for slide and point for point with its English', () => {
+  assert.deepStrictEqual(Object.keys(TRANSLATIONS).sort(), ['ar', 'cs', 'da', 'de', 'el', 'es', 'fi', 'fr', 'hr', 'it', 'nl', 'pl', 'sv', 'th']);
+  for (const [loc, lessons] of Object.entries(TRANSLATIONS)) for (const [k, l] of Object.entries(LESSONS)) {
+    const t = lessons[k]; assert.ok(t, `${loc} ${k}`);
+    assert.strictEqual(t.length, l.en.length, `${loc} ${k} slides`);
+    t.forEach((s, i) => { assert.strictEqual(s.points.length, l.en[i].points.length, `${loc} ${k} slide ${i + 1}`); assert.strictEqual(!!s.review, !!l.en[i].review, `${loc} ${k} slide ${i + 1} review`); assert.ok(s.heading && s.narration); });
   }
 });

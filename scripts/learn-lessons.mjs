@@ -73,3 +73,9 @@ export const LESSONS = {
   'ocr-4-2': { sources: SPEAR_SOURCES, en: SPEAR_EN, es: SPEAR_ES, esBy: 'Claude (machine translation), not reviewed' },
   'deka-1-1': { sources: 'Placeholder content written for the demonstration, not DEKA material.', en: DEKA_EN },
 };
+
+// every lesson in the other languages (machine translations, 19 November 2026): scripts/learn-translations/<code>.json, { lesson key: slides }
+import fs from 'node:fs';
+const TR = new URL('./learn-translations/', import.meta.url);
+export const TRANSLATIONS = Object.fromEntries(fs.readdirSync(TR).filter((f) => /^[a-z]{2}\.json$/.test(f)).sort()
+  .map((f) => [f.slice(0, 2), JSON.parse(fs.readFileSync(new URL(f, TR), 'utf8'))]));

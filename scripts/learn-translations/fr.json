@@ -1,0 +1,1538 @@
+{
+ "cam-1-1": [
+  {
+   "heading": "Des caméras à la station de pénalité",
+   "points": [
+    "Des téléphones filment la zone de pénalité burpees",
+    "Un serveur SpartanReferee les enregistre et fait tourner un juge IA sur chaque caméra",
+    "Chaque rep est comptée et vérifiée selon le standard"
+   ],
+   "narration": "SpartanReferee filme la station de pénalité avec des téléphones. Chaque téléphone envoie son image à un serveur SpartanReferee par Wi-Fi ou en données mobiles. Le serveur l'enregistre et fait tourner un juge IA sur chaque caméra : chaque rep est ainsi comptée et vérifiée selon le standard du mouvement."
+  },
+  {
+   "heading": "Qui fait quoi",
+   "points": [
+    "L'arbitre principal de l'événement réserve la station et la gère",
+    "Chaque arbitre affecté à l'événement peut la regarder en direct et consulter les résultats",
+    "Les administrateurs peuvent réserver, prolonger ou arrêter les caméras de n'importe quel événement"
+   ],
+   "narration": "Chaque événement a une seule réservation de caméras. L'arbitre principal la réserve depuis la page de l'événement et la gère le jour J. Chaque arbitre affecté à l'événement peut l'ouvrir pour regarder les caméras en direct et consulter les résultats. Les administrateurs peuvent intervenir pour réserver, prolonger ou arrêter les caméras de n'importe quel événement."
+  },
+  {
+   "heading": "En bref",
+   "points": [
+    "Les téléphones filment, le serveur juge, tout le monde regarde dans un navigateur",
+    "L'arbitre principal réserve et gère la station"
+   ],
+   "narration": "En bref : les téléphones filment, le serveur juge, et chaque arbitre regarde dans un navigateur. L'arbitre principal réserve et gère la station."
+  }
+ ],
+ "cam-1-2": [
+  {
+   "heading": "Vos événements",
+   "points": [
+    "Vos événements sont sur votre page d'accueil",
+    "Ouvrez-en un pour voir ses horaires de caméras et qui l'arbitre",
+    "L'arbitre principal y trouve Réserver les caméras burpees"
+   ],
+   "narration": "Vos événements se trouvent sur votre page d'accueil SpartanReferee. Ouvrez-en un pour voir ses horaires de caméras et qui l'arbitre. Si vous en êtes l'arbitre principal, c'est là que vous réservez les caméras burpees."
+  },
+  {
+   "heading": "Les horaires",
+   "points": [
+    "Les caméras fonctionnent de 07:00 à 18:00, heure locale, chaque jour de l'événement",
+    "Les heures sont saisies dans l'heure locale de l'événement",
+    "Une réservation faite à l'avance démarre ses serveurs 10 minutes plus tôt ; un démarrage immédiat prend environ 5 minutes"
+   ],
+   "narration": "Les caméras d'un événement fonctionnent de sept heures du matin à six heures du soir, heure locale, chacun de ses jours. Les heures de réservation sont dans l'heure locale de l'événement, d'où que vous réserviez. Une réservation faite à l'avance démarre ses serveurs dix minutes plus tôt, pour que les caméras soient prêtes à l'heure. Un démarrage immédiat prend environ cinq minutes."
+  },
+  {
+   "heading": "Les serveurs et la connexion",
+   "points": [
+    "Chaque serveur prend 2 caméras",
+    "Chaque caméra envoie environ 3,5 Mbit/s",
+    "Vérifiez la connexion du lieu avant le jour J : elle doit supporter toutes les caméras"
+   ],
+   "narration": "Chaque serveur prend deux caméras : le nombre de caméras détermine donc le nombre de serveurs. Chaque caméra envoie environ trois mégabits et demi par seconde, et la connexion du lieu doit toutes les supporter. Vérifiez-la avant le jour J."
+  }
+ ],
+ "cam-1-3": [
+  {
+   "heading": "Pour chaque caméra",
+   "points": [
+    "Un téléphone sur un trépied ou un support",
+    "Une batterie externe",
+    "Des données mobiles ou le Wi-Fi du lieu"
+   ],
+   "narration": "Pour chaque caméra, il vous faut un téléphone sur un trépied ou un support, une batterie externe pour tenir toute la journée, et des données mobiles ou le Wi-Fi du lieu."
+  },
+  {
+   "heading": "Les applications",
+   "points": [
+    "Android : l'application SpartanReferee Broadcaster",
+    "iPhone : Larix Broadcaster, depuis l'App Store",
+    "Pour regarder et juger : n'importe quel téléphone, tablette ou ordinateur avec un navigateur, sans rien installer"
+   ],
+   "narration": "Les téléphones Android utilisent l'application SpartanReferee Broadcaster. Les iPhone utilisent Larix Broadcaster, depuis l'App Store. Pour regarder les caméras et juger, n'importe quel téléphone, tablette ou ordinateur avec un navigateur convient : il n'y a rien à installer."
+  }
+ ],
+ "cam-2-1": [
+  {
+   "heading": "Où placer le téléphone",
+   "points": [
+    "En paysage, sur son support",
+    "À 3 à 4 mètres des athlètes",
+    "Le corps entier de chaque athlète dans l'image, y compris allongé à plat"
+   ],
+   "narration": "Placez le téléphone en paysage sur son support, à trois ou quatre mètres des athlètes. Gardez le corps entier de chaque athlète dans l'image, y compris quand il est allongé à plat sur le sol."
+  },
+  {
+   "heading": "L'angle",
+   "points": [
+    "Un angle léger ou de profil juge mieux la poitrine au sol que de face",
+    "Pour les pompes et les abdos, le téléphone doit être de profil, au niveau du sol"
+   ],
+   "narration": "Une vue légèrement de biais ou de profil juge mieux la poitrine au sol qu'une caméra de face. Pour les pompes et les abdos, placez le téléphone de profil, au niveau du sol."
+  },
+  {
+   "heading": "Gardez les couloirs dégagés",
+   "points": [
+    "Les officiels en haut jaune haute visibilité ne sont jamais comptés comme athlètes",
+    "Toute autre personne devant une caméra gêne",
+    "Placez-vous là où vous voyez les athlètes sans bloquer la vue"
+   ],
+   "narration": "Les officiels en haut jaune haute visibilité ne sont jamais comptés comme athlètes. Toute autre personne qui se tient devant une caméra gêne : gardez donc les couloirs dégagés, et placez-vous là où vous voyez les athlètes sans bloquer les caméras."
+  }
+ ],
+ "cam-2-2": [
+  {
+   "heading": "Les codes QR",
+   "points": [
+    "Ouvrez la réservation dans la console une fois qu'elle est active",
+    "Chaque caméra en attente de son téléphone affiche des codes QR dans les onglets En direct et Caméras",
+    "Les codes changent à chaque réservation : scannez-les de nouveau à chaque fois"
+   ],
+   "narration": "Une fois la réservation active, ouvrez-la dans la console. Chaque caméra qui attend son téléphone affiche des codes QR dans les onglets En direct et Caméras. Les codes changent à chaque réservation : scannez-les donc de nouveau à chaque fois."
+  },
+  {
+   "heading": "Android : SpartanReferee Broadcaster",
+   "points": [
+    "Installez l'application ; autorisez l'installation depuis cette source quand le téléphone le demande",
+    "Touchez Scanner le code QR de la caméra et scannez le code de cette caméra",
+    "Laissez la qualité sur 720p sauf si le signal est faible, puis Ouvrir la caméra et Passer en direct"
+   ],
+   "narration": "Sur Android, installez SpartanReferee Broadcaster. Le téléphone vous avertit parce qu'elle ne vient pas du Play Store : touchez Paramètres, autorisez l'installation depuis cette source, revenez en arrière et installez. Touchez Scanner le code QR de la caméra et scannez le code de cette caméra. Laissez la qualité sur 720p sauf si le signal est faible, puis touchez Ouvrir la caméra et Passer en direct."
+  },
+  {
+   "heading": "iPhone : Larix Broadcaster",
+   "points": [
+    "Installez Larix et ouvrez-le une fois en autorisant la caméra et le micro",
+    "Scannez le code iPhone (Larix) de la caméra avec l'appareil photo du téléphone, ouvrez le lien dans Larix et touchez Importer",
+    "Dans Larix : Paramètres, Connexions, cochez la caméra, puis appuyez sur le bouton rouge"
+   ],
+   "narration": "Sur iPhone, installez Larix Broadcaster et ouvrez-le une fois en autorisant la caméra et le micro. Scannez le code iPhone de la caméra avec l'appareil photo du téléphone, ouvrez le lien dans Larix et touchez Importer. Puis, dans Larix, allez dans Paramètres, Connexions, cochez la caméra et appuyez sur le bouton rouge."
+  }
+ ],
+ "cam-3-1": [
+  {
+   "heading": "Lancer le juge",
+   "points": [
+    "L'image de chaque téléphone s'affiche dans l'onglet En direct en quelques secondes",
+    "Appuyez sur Lancer le juge IA sur une caméra, donnez-lui un nom et choisissez l'exercice",
+    "Puis Lancer le jugement : il tourne sur le serveur, donc il continue quand vous fermez la page"
+   ],
+   "narration": "L'image de chaque téléphone s'affiche dans l'onglet En direct quelques secondes après sa mise en direct. Appuyez sur Lancer le juge IA sur une caméra, donnez-lui un nom, choisissez ce qu'elle juge, puis appuyez sur Lancer le jugement. Le juge tourne sur le serveur : il continue donc quand vous fermez la page."
+  },
+  {
+   "heading": "Ce qu'il vérifie sur un burpee",
+   "points": [
+    "Poitrine au sol",
+    "Extension complète des hanches",
+    "Un saut, les deux pieds décollés",
+    "Mains au-dessus des oreilles"
+   ],
+   "narration": "Sur un burpee, le juge vérifie quatre choses : la poitrine au sol, l'extension complète des hanches, un saut avec les deux pieds décollés du sol, et les mains au-dessus des oreilles. Une rep qui en manque une est un no rep."
+  },
+  {
+   "heading": "Testez-le",
+   "points": [
+    "Faites quelques reps de test devant chaque caméra",
+    "Vérifiez que chacune est comptée, et qu'une mauvaise ne l'est pas",
+    "Déplacez le téléphone si un athlète sort de l'image"
+   ],
+   "narration": "Avant l'arrivée des athlètes, faites quelques reps de test devant chaque caméra et vérifiez qu'elles sont comptées, et qu'une rep volontairement mauvaise ne l'est pas. Si l'athlète sort de l'image, déplacez le téléphone."
+  }
+ ],
+ "cam-3-2": [
+  {
+   "heading": "Les résultats",
+   "points": [
+    "Résultats liste tous les athlètes jugés",
+    "Chercher un numéro d'athlète fouille toutes les caméras",
+    "Regarder rejoue un athlète avec chaque rep et no rep signalés"
+   ],
+   "narration": "L'onglet Résultats liste tous les athlètes jugés. Chercher un numéro d'athlète fouille toutes les caméras pour retrouver un athlète. Regarder rejoue cet athlète avec chaque rep et chaque no rep signalés."
+  },
+  {
+   "heading": "Combien de temps c'est conservé",
+   "points": [
+    "Les enregistrements et les résultats sont conservés 7 jours",
+    "À la fin de la réservation, les enregistrements sont sauvegardés et les serveurs s'arrêtent",
+    "Chaque arbitre de l'événement peut les consulter"
+   ],
+   "narration": "Les enregistrements et les résultats sont conservés sept jours. À la fin de la réservation, les enregistrements sont sauvegardés et les serveurs s'arrêtent. Chaque arbitre de l'événement peut les consulter pendant ce temps."
+  }
+ ],
+ "cam-3-3": [
+  {
+   "heading": "Les téléphones et les images",
+   "points": [
+    "Ne se connecte pas : vérifiez son signal et scannez de nouveau son code depuis cette réservation",
+    "Saccade ou décroche : le signal est trop faible pour du 720p, choisissez donc une qualité inférieure",
+    "Une caméra mais pas d'image : le réseau du lieu bloque peut-être la vidéo, essayez les données mobiles du téléphone"
+   ],
+   "narration": "Si un téléphone ne se connecte pas, vérifiez son signal et scannez de nouveau son code depuis cette réservation. Si l'image saccade ou décroche, le signal est trop faible pour du 720p : choisissez une qualité inférieure. Si une caméra apparaît mais sans image, le réseau du lieu bloque peut-être la vidéo : essayez plutôt les données mobiles du téléphone."
+  },
+  {
+   "heading": "Les serveurs et Internet",
+   "points": [
+    "Le serveur n'a pas démarré : la console en donne la raison ; parfois Azure n'a aucun serveur libre pendant quelques minutes, réessayez",
+    "Internet tombe sur le lieu : rien n'atteint le serveur tant qu'il n'est pas revenu",
+    "Seul Larix garde sa propre copie sur le téléphone"
+   ],
+   "narration": "Si le serveur n'a pas démarré, la console en donne la raison. Parfois aucun serveur n'est libre pendant quelques minutes : réessayez. Si Internet tombe sur le lieu, rien n'atteint le serveur tant qu'il n'est pas revenu, et seul Larix garde sa propre copie de la vidéo sur le téléphone."
+  }
+ ],
+ "cam-4-1": [
+  {
+   "heading": "La caméra gratuite",
+   "points": [
+    "Le juge IA tourne dans votre propre navigateur, avec la caméra de ce téléphone ou ordinateur",
+    "Pas de serveur et aucun coût, à tout moment",
+    "Calez le téléphone, faites quelques burpees et regardez chacun être jugé"
+   ],
+   "narration": "La caméra gratuite fait tourner le juge IA directement dans votre navigateur, avec la caméra de votre propre téléphone ou ordinateur, en direct ou sur une minute de vidéo. Il n'y a ni serveur ni coût, et vous pouvez l'utiliser à tout moment. Calez le téléphone, faites quelques burpees et regardez chacun être jugé."
+  },
+  {
+   "heading": "Répéter la vraie station",
+   "points": [
+    "Les arbitres principaux peuvent réserver un serveur d'entraînement de 30 minutes",
+    "Les téléphones scannent leurs codes, puis la console, le juge et la revue, comme lors d'un événement",
+    "Il utilise l'un des serveurs dont les événements ont besoin : il est donc réservé aux arbitres principaux et aux administrateurs"
+   ],
+   "narration": "Les arbitres principaux peuvent aussi réserver un serveur d'entraînement de trente minutes, pour répéter toute la station : les téléphones qui scannent leurs codes, la console, le juge et la revue, exactement comme lors d'un événement. Il utilise l'un des serveurs dont les événements ont besoin : il est donc réservé aux arbitres principaux et aux administrateurs."
+  }
+ ],
+ "ocr-1-1": [
+  {
+   "heading": "Pourquoi Spartan existe",
+   "points": [
+    "Spartan existe pour aider les gens à repousser leurs limites",
+    "Le but : des gens plus forts, physiquement et mentalement",
+    "La mission : aider les gens à vivre sans limites"
+   ],
+   "narration": "Spartan existe pour aider les gens à repousser leurs limites et à devenir plus forts, physiquement et mentalement. Sa mission est de les aider à vivre sans limites, en développant la force, la discipline et la résilience dont ils ont besoin pour affronter les défis de la vie. Chaque Spartan Race est conçue pour que les athlètes fassent quelque chose de difficile, d'inconfortable et de transformateur. C'est le cadre dans lequel vous travaillez en tant qu'arbitre. Les athlètes que vous avez devant vous ont choisi de faire quelque chose de difficile, et les règles existent pour que tous affrontent la même épreuve."
+  },
+  {
+   "heading": "Un défi pour tous",
+   "points": [
+    "Les événements Spartan s'adressent à tous les niveaux, des premiers pas aux compétiteurs Elite",
+    "Des millions de personnes dans le monde y participent",
+    "Ce qui compte, c'est la volonté de se présenter, pas le point de départ"
+   ],
+   "narration": "Les événements Spartan sont conçus pour des athlètes de tous niveaux. Des millions de personnes dans le monde y participent, des débutants aux compétiteurs Elite. Pour Spartan, ce qui compte n'est pas le point de départ, mais la volonté de se présenter, de dépasser les excuses et de relever le défi. Tous ceux qui entrent sur le parcours participent à la même épreuve de courage et de détermination. Le jour de la course, vous verrez donc des athlètes très variés. Plus loin dans ce cours, vous apprendrez lesquels vous arbitrez de plus près."
+  },
+  {
+   "heading": "Un seul règlement, partout",
+   "points": [
+    "Le Règlement de compétition s'applique à tous les événements et compétitions Spartan dans le monde",
+    "Il s'impose à chaque concurrent de chaque événement Spartan",
+    "Ses buts : des courses équitables et cohérentes, des normes mondiales, la sécurité des concurrents"
+   ],
+   "narration": "Le Règlement de compétition Spartan s'applique à tous les événements et compétitions Spartan dans le monde, et il s'impose à chaque concurrent qui y participe. Le règlement explique comment une course doit être arbitrée. Il vise à rendre chaque événement équitable et cohérent, dans un esprit sportif et d'intégrité. Il donne des directives claires, pour que la compétition soit standardisée à l'échelle mondiale. Et il protège la santé, la sécurité et le bien-être des concurrents, autant que cela peut raisonnablement se faire dans les courses à obstacles."
+  },
+  {
+   "heading": "Votre rôle",
+   "points": [
+    "Appliquer le règlement de compétition et les procédures d'arbitrage de façon cohérente",
+    "Protéger l'équité et l'intégrité des événements Spartan dans le monde",
+    "À la fin de ce cours : appliquer le règlement avec cohérence et assurance"
+   ],
+   "narration": "Ce programme présente le rôle, les responsabilités et les normes attendues des arbitres Spartan. Son but est que chaque arbitre applique le règlement de compétition et les procédures d'arbitrage de la même façon, afin de protéger l'équité et l'intégrité des événements Spartan dans le monde. Un athlète doit recevoir à votre obstacle la même décision qu'au même obstacle de n'importe quel autre événement Spartan. À la fin du cours, vous devriez être capable d'appliquer le règlement Spartan avec cohérence et assurance."
+  },
+  {
+   "heading": "En bref",
+   "points": [
+    "Spartan existe pour aider les gens à repousser leurs limites",
+    "Ses événements s'adressent à tous, des débutants aux compétiteurs Elite",
+    "Un seul règlement s'applique à tous les événements Spartan dans le monde",
+    "Votre mission : l'appliquer avec cohérence, pour protéger l'équité et l'intégrité"
+   ],
+   "narration": "En bref. Spartan existe pour aider les gens à repousser leurs limites et à devenir plus forts de corps et d'esprit. Ses événements s'adressent à tous, des débutants aux compétiteurs Elite. Un seul règlement s'applique à tous les événements Spartan dans le monde, et il vise des courses équitables, cohérentes et sûres. Votre mission d'arbitre est d'appliquer ces règles avec cohérence, afin que l'équité et l'intégrité de chaque course soient protégées."
+  }
+ ],
+ "ocr-1-2": [
+  {
+   "heading": "De la course en sentier avec des obstacles",
+   "points": [
+    "Une Spartan Race est une course à obstacles (OCR)",
+    "Elle associe course en sentier et obstacles physiques",
+    "Les obstacles testent la force mentale comme physique"
+   ],
+   "narration": "Une Spartan Race est une course à obstacles : de la course en sentier combinée à des obstacles physiques le long du parcours. Les obstacles sont conçus pour tester la force mentale comme physique, et pour pousser les coureurs au-delà de ce qu'ils croyaient possible. Entre les obstacles, les athlètes courent. À chaque obstacle, ils doivent relever un défi précis, et le règlement dit exactement en quoi il consiste. En tant qu'arbitre, vous êtes généralement posté à un obstacle : cet obstacle et ses règles sont donc votre priorité de la journée."
+  },
+  {
+   "heading": "Cinq sortes de défis",
+   "points": [
+    "Grimper : par exemple les murs et la Rope Climb",
+    "Porter : par exemple le Bucket Carry et le Sandbag Carry",
+    "Ramper : par exemple le Barbed Wire Crawl",
+    "Sauter, tirer et soulever : par exemple le Fire Jump et le Hercules Hoist"
+   ],
+   "narration": "Le programme regroupe les défis en cinq sortes de mouvements : grimper, porter, ramper, sauter, et tirer et soulever. Grimper comprend les murs et la Rope Climb. Porter comprend le Bucket Carry et le Sandbag Carry. Ramper comprend le Barbed Wire Crawl. Sauter comprend le Fire Jump, et tirer et soulever comprend le Hercules Hoist, où l'athlète tire une corde pour hisser un poids. Chaque obstacle a sa propre section dans le règlement, qui indique ce que l'athlète doit faire et comment il peut échouer."
+  },
+  {
+   "heading": "Deux sortes d'obstacles dans le règlement",
+   "points": [
+    "Obstacles obligatoires : à terminer avant d'aller plus loin sur le parcours",
+    "Obstacles réussite/échec : un échec entraîne une pénalité, une boucle de pénalité ou des burpees",
+    "Chaque obstacle doit être tenté : au minimum, touché"
+   ],
+   "narration": "Le règlement répartit les obstacles en deux catégories. Les obstacles obligatoires doivent être terminés avant que l'athlète aille plus loin sur le parcours. En échouer un entraîne la disqualification, même si le directeur de course peut y substituer une pénalité de temps, selon la gravité. Les obstacles réussite ou échec peuvent être ratés, et un échec entraîne une pénalité : une boucle de pénalité ou des burpees. Les obstacles réussite ou échec sont soit à tentative unique, soit à tentatives multiples. Chaque obstacle doit être tenté, et une tentative consiste, au minimum, à le toucher. Les types d'obstacles ont leur propre section plus loin dans ce cours.",
+   "review": "En cours de révision pour 2027 : le règlement (3.17.3) dit que la pénalité est une boucle de pénalité ou 30 burpees, selon ce que Spartan désigne pour chaque événement, catégorie ou vague. La SOP d'arbitrage dit une boucle pour la plupart des obstacles et des burpees au Spear Throw ; le programme 2026 dit que les burpees ne servent qu'au Spear Throw. En attendant, utilisez la pénalité confirmée lors de votre briefing et renvoyez tout doute à l'arbitre principal."
+  },
+  {
+   "heading": "Les formats de course",
+   "points": [
+    "Les sources 2026 citent les formats Sprint, Super, Beast, Ultra et Stadion",
+    "Un seul règlement les couvre tous, mais certaines règles varient selon le format",
+    "Stadion : la pénalité pour l'échec à n'importe quel obstacle est toujours de 15 burpees",
+    "Minimum d'arbitres : 10 pour un Sprint ou un Stadion, 15 pour un Super, 20 pour un Beast ou un Ultra"
+   ],
+   "narration": "Les courses Spartan existent en plusieurs formats. Le règlement 2026 et la procédure d'arbitrage citent le Sprint, le Super, le Beast, l'Ultra et le Stadion. Le même règlement les couvre tous, mais certaines règles varient selon le format. Lors des événements Stadion, par exemple, la pénalité pour l'échec à un obstacle est toujours de quinze burpees, pour chaque obstacle et chaque vague. La procédure d'arbitrage de Spartan fixe aussi un nombre minimum d'arbitres par format : dix pour un Sprint ou un Stadion, quinze pour un Super, et vingt pour un Beast ou un Ultra."
+  },
+  {
+   "heading": "En bref",
+   "points": [
+    "Une course à obstacles : course en sentier combinée à des obstacles physiques",
+    "Cinq sortes de défis : grimper, porter, ramper, sauter, tirer et soulever",
+    "Les obstacles obligatoires doivent être terminés ; l'échec à un obstacle réussite/échec entraîne une pénalité",
+    "Formats : Sprint, Super, Beast, Ultra et Stadion"
+   ],
+   "narration": "En bref. Une Spartan Race est une course à obstacles : de la course en sentier combinée à des obstacles physiques qui testent la force mentale et physique. Les défis sont grimper, porter, ramper, sauter, et tirer et soulever. Le règlement distingue les obstacles obligatoires, qui doivent être terminés, et les obstacles réussite ou échec, où un échec entraîne une pénalité. Chaque obstacle doit être tenté. Les courses existent en plusieurs formats, dont le Sprint, le Super, le Beast, l'Ultra et le Stadion."
+  }
+ ],
+ "ocr-2-1": [
+  {
+   "heading": "Ce que les arbitres protègent",
+   "points": [
+    "L'équité et l'intégrité de la course",
+    "Les athlètes qui respectent le règlement officiel de compétition",
+    "Des pénalités appliquées de façon cohérente",
+    "La crédibilité des courses Elite et compétitives"
+   ],
+   "narration": "Les arbitres comptent parce qu'ils protègent l'équité et l'intégrité de la course. Ils veillent à ce que les athlètes respectent le règlement officiel de compétition, et ils appliquent les pénalités de la même façon pour tous. C'est cette cohérence qui donne sa crédibilité aux courses Elite et compétitives. La procédure d'arbitrage de Spartan le formule ainsi : l'arbitrage Spartan établit et maintient l'intégrité de la course grâce à une application cohérente des règles et à des pratiques d'arbitrage standard, afin que le résultat soit juste et équitable pour tous les athlètes."
+  },
+  {
+   "heading": "Ce qu'est un arbitre",
+   "points": [
+    "Un officiel nommé par Spartan qui veille à ce que toutes les règles soient respectées",
+    "Généralement posté à un obstacle, ou sous la tente de revue vidéo",
+    "À votre obstacle : faire respecter ses règles et surveiller les échecs",
+    "Vous rendez compte à l'arbitre principal"
+   ],
+   "narration": "Le règlement définit un arbitre comme un officiel nommé par Spartan dont la tâche est de veiller à ce que toutes les règles soient respectées. Les arbitres sont généralement postés aux obstacles et sous la tente de revue vidéo, et ils rendent compte à l'officiel principal. La procédure d'arbitrage de Spartan décrit l'arbitre comme la personne affectée à un obstacle pour en faire respecter les règles et surveiller les échecs. Dans le règlement, les officiels sont toutes les personnes que Spartan désigne pour assumer des fonctions d'événement avec autorité : personnel, arbitres et bénévoles. En tant qu'arbitre, vous en faites partie."
+  },
+  {
+   "heading": "À qui vous rendez compte",
+   "points": [
+    "L'arbitre principal : le principal décideur sur les règles lors de l'événement",
+    "Le règlement appelle ce rôle l'officiel principal",
+    "Le directeur de course : responsable du fonctionnement global de l'événement",
+    "Les décisions incertaines ou contestées vont à l'arbitre principal"
+   ],
+   "narration": "À chaque événement, une personne est le principal décideur pour toutes les questions de règlement, et l'autorité ultime pour les faire respecter et les interpréter. Le règlement l'appelle l'officiel principal. La procédure d'arbitrage de Spartan et ce programme l'appellent l'arbitre principal. C'est à lui que vous rendez compte. Le directeur de course est responsable du fonctionnement et du déroulement global de l'événement. Quand vous avez un doute sur une décision, ou qu'un athlète en conteste une, elle va à l'arbitre principal."
+  },
+  {
+   "heading": "Vos décisions arrivent jusqu'aux résultats",
+   "points": [
+    "La chaîne : arbitre, arbitre principal, puis directeur de course ou équipe de chronométrage",
+    "L'arbitre principal confirme les pénalités et les transmet",
+    "Les résultats ne sont définitifs qu'après la revue vidéo officielle",
+    "Les pénalités de temps s'ajoutent au temps d'arrivée de l'athlète"
+   ],
+   "narration": "Ce que vous voyez et consignez à votre obstacle peut modifier les résultats. La chaîne va de vous à l'arbitre principal, puis au directeur de course ou à l'équipe de chronométrage. L'arbitre principal gère la revue vidéo, et transmet les pénalités et disqualifications confirmées au directeur de course et à l'équipe de chronométrage. Le règlement dit qu'une revue vidéo officielle doit avoir lieu avant que les résultats soient définitifs : les résultats peuvent donc ne pas être publiés tout de suite. Les pénalités de temps s'ajoutent au temps d'arrivée de l'athlète : une décision exacte et clairement consignée est donc importante."
+  },
+  {
+   "heading": "Comment vous êtes formé",
+   "points": [
+    "Fondée sur le Règlement Spartan, la SOP d'arbitrage et les Directives mondiales d'arbitrage",
+    "Priorités : application aux obstacles, pénalités, relations avec les athlètes et intégrité de la course",
+    "Suivre la formation en ligne est obligatoire pour la certification d'arbitre"
+   ],
+   "narration": "Cette formation existe pour que les arbitres fassent respecter le règlement de compétition Spartan de façon équitable et cohérente. Elle repose sur trois documents : le Règlement Spartan, la procédure opérationnelle standard d'arbitrage et les Directives mondiales d'arbitrage. Elle porte sur l'application aux obstacles, les pénalités, la manière de traiter les athlètes et l'intégrité de la compétition. Selon la procédure d'arbitrage, suivre le module de formation en ligne est obligatoire pour la certification d'arbitre. Avant chaque événement, l'arbitre principal s'assure aussi que chaque arbitre a terminé la formation préalable."
+  },
+  {
+   "heading": "En bref",
+   "points": [
+    "Les arbitres protègent l'équité, l'intégrité de la course et la cohérence des pénalités",
+    "Vous faites respecter les règles à votre obstacle et surveillez les échecs",
+    "Vous rendez compte à l'arbitre principal, autorité finale sur les règles",
+    "Vos décisions alimentent la revue vidéo et les résultats"
+   ],
+   "narration": "En bref. Les arbitres protègent l'équité et l'intégrité de la course, et veillent à ce que les pénalités soient appliquées de façon cohérente, ce qui donne sa crédibilité à la course compétitive. Vous êtes un officiel nommé par Spartan, généralement posté à un obstacle, pour en faire respecter les règles et surveiller les échecs. Vous rendez compte à l'arbitre principal, que le règlement appelle l'officiel principal, et qui a le dernier mot sur les règles. Ce que vous consignez passe par la revue vidéo et peut modifier le temps d'arrivée d'un athlète."
+  }
+ ],
+ "ocr-2-2": [
+  {
+   "heading": "Compétitif et Open",
+   "points": [
+    "Compétitif : les coureurs Elite et Age Group",
+    "Open : ouvert à tous, la catégorie centrée sur la participation",
+    "Chaque catégorie part en vagues ou en groupes, séparés par l'heure de départ ou le groupe d'allure"
+   ],
+   "narration": "Le règlement définit deux sortes de catégories. Compétitif, qui comprend Elite et Age Group, et Open, qui est ouvert à tous. Ce programme décrit l'Open comme la catégorie centrée sur la participation. Dans chaque catégorie, les athlètes partent en vagues et en groupes : des groupes séparés par leur heure de départ ou leur groupe d'allure. Savoir quelle catégorie passe à votre obstacle vous indique à quel point vous devez l'arbitrer de près."
+  },
+  {
+   "heading": "Là où les arbitres se concentrent",
+   "points": [
+    "Les arbitres se concentrent principalement sur les catégories Compétitives",
+    "Les coureurs Compétitifs doivent respecter explicitement chaque règle",
+    "Appliquez les règles de la même façon à chaque coureur Compétitif",
+    "Soyez en position avant le premier départ Elite"
+   ],
+   "narration": "Les arbitres se concentrent principalement sur les catégories Compétitives : Elite et Age Group. Le règlement attend de chaque coureur Compétitif qu'il respecte explicitement toutes les règles, et qu'il coure avec esprit et esprit de compétition. Votre application des règles doit donc être la même pour chaque coureur Compétitif, dans chaque vague Elite et Age Group. La procédure d'arbitrage de Spartan dit que l'arbitre principal confirme que les arbitres sont en position avant le premier départ Elite, et que l'arbitrage, la revue vidéo et l'évaluation des pénalités concernent les catégories Elite et Age Group."
+  },
+  {
+   "heading": "Les coureurs Open",
+   "points": [
+    "Les coureurs Open sont eux aussi encouragés à respecter les règles",
+    "L'ambiance est plus détendue : esprit sportif et responsabilité personnelle",
+    "Les coureurs Open doivent s'en remettre à l'honneur Spartan pour les burpees de pénalité",
+    "Les arbitres peuvent démonter le parcours, ou passer la main aux bénévoles, pour les vagues Open"
+   ],
+   "narration": "Les coureurs Open sont eux aussi encouragés à respecter les règles, dans un esprit sportif et de responsabilité personnelle, même si l'ambiance de la catégorie Open est plus détendue. Le règlement attend des concurrents de la catégorie Open qu'ils s'en remettent à l'honneur Spartan lorsqu'ils font leurs burpees de pénalité. Dans ce programme, le déroulement de l'événement pour l'arbitre se termine par le démontage du parcours, ou la passation aux bénévoles pour les vagues Open. Le briefing de votre arbitre principal vous dira ce qui s'applique à votre événement."
+  },
+  {
+   "heading": "Vagues, groupes et chronométrage",
+   "points": [
+    "Les coureurs doivent partir dans leur vague, groupe ou série assigné",
+    "Un coureur Elite qui part dans la mauvaise vague est transféré en Open",
+    "Vagues Elite : le premier à franchir la ligne d'arrivée gagne (temps pistolet)",
+    "Vagues Age Group, Open et Elite Stadion : temps puce. Les deux ajoutent les pénalités de temps"
+   ],
+   "narration": "Chaque coureur doit partir dans la vague, le groupe ou la série qui lui est assigné, et avec eux. Un coureur qui part dans la mauvaise vague n'est pas éligible aux récompenses, et un coureur Elite qui part dans la mauvaise vague est transféré dans la catégorie Open. Le chronométrage diffère selon la catégorie. Dans une vague Elite, le vainqueur est celui qui franchit la ligne d'arrivée en premier, ce qu'on appelle le temps pistolet. Les vagues Age Group et Open, et les vagues Elite en Stadion, utilisent le temps puce : du franchissement de la ligne de départ à celui de la ligne d'arrivée. Dans les deux cas, les éventuelles pénalités de temps s'ajoutent."
+  },
+  {
+   "heading": "En bref",
+   "points": [
+    "Compétitif signifie Elite et Age Group ; l'Open est ouvert à tous",
+    "Les arbitres se concentrent principalement sur les coureurs Compétitifs",
+    "Chaque coureur Compétitif reçoit la même application des règles",
+    "Les coureurs Open sont encouragés à respecter les règles, sur l'honneur Spartan"
+   ],
+   "narration": "En bref. Il y a deux sortes de catégories : Compétitif, c'est-à-dire Elite et Age Group, et Open, ouvert à tous. Les arbitres se concentrent principalement sur les catégories Compétitives, où les coureurs doivent respecter chaque règle, et votre application doit être la même pour chacun d'eux. Les coureurs Open sont eux aussi encouragés à respecter les règles, dans une ambiance plus détendue et sur l'honneur Spartan. Les vagues Elite se gagnent au temps pistolet, les autres au temps puce, avec les éventuelles pénalités de temps ajoutées."
+  }
+ ],
+ "ocr-2-3": [
+  {
+   "heading": "Impartial et professionnel",
+   "points": [
+    "Soyez impartial : appliquez les règles de la même façon à chaque athlète",
+    "Soyez professionnel : calme, neutre et respectueux",
+    "Connaissez le Règlement de compétition et la SOP d'arbitrage"
+   ],
+   "narration": "L'état d'esprit de l'arbitre commence par l'impartialité et le professionnalisme. La procédure d'arbitrage de Spartan vous demande d'appliquer les règles de l'obstacle de façon cohérente et impartiale, quel que soit l'athlète. Restez calme, neutre et respectueux, et représentez Spartan avec professionnalisme. Vos deux documents clés sont le Règlement de compétition Spartan et la procédure opérationnelle standard d'arbitrage. Familiarisez-vous avec les deux avant l'événement, et assurez-vous de connaître et de comprendre les règles de votre propre obstacle."
+  },
+  {
+   "heading": "L'intention de la règle, l'équité et la sécurité",
+   "points": [
+    "Concentrez-vous sur l'intention de la règle, pas sur un contact accidentel mineur",
+    "Demandez-vous si l'athlète a obtenu un avantage",
+    "Placez l'équité et la sécurité des athlètes en premier"
+   ],
+   "narration": "Concentrez-vous sur la raison d'être d'une règle, pas sur un contact accidentel mineur. L'un des scénarios du programme est un athlète qui touche brièvement le haut d'un obstacle sans en tirer aucun avantage. La question à se poser est de savoir si un avantage a été créé. Placez l'équité et la sécurité des athlètes en premier. Protéger la santé, la sécurité et le bien-être des concurrents est l'un des buts affichés du règlement. Si vous constatez un problème de sécurité à votre obstacle, signalez-le immédiatement à l'arbitre principal ou au directeur de course."
+  },
+  {
+   "heading": "En cas de doute, remontez l'information",
+   "points": [
+    "Remontez toute situation dont vous n'êtes pas sûr",
+    "Pas sûr de la pénalité ou de la façon de l'appliquer : contactez l'arbitre principal tout de suite",
+    "Doutes, problèmes de sécurité ou incohérences : signalez-les immédiatement"
+   ],
+   "narration": "On ne vous demande pas de régler seul chaque situation. Quand vous avez un doute, remontez l'information. La procédure d'arbitrage de Spartan dit qu'en cas d'incertitude sur le type de pénalité ou sur la façon de l'appliquer, vous contactez immédiatement l'arbitre principal. En arrivant à votre obstacle, signalez immédiatement au directeur de course ou à l'arbitre principal tout doute, problème de sécurité ou incohérence. L'arbitre principal est l'autorité finale sur les règles lors de l'événement : remonter l'information fait donc partie d'un travail bien fait."
+  },
+  {
+   "heading": "Avant le jour de la course",
+   "points": [
+    "Suivez la formation préalable à l'événement avant d'y participer",
+    "Elle couvre le règlement, en insistant sur les obstacles à fort taux d'échec",
+    "Elle couvre aussi le déroulement du travail d'arbitre, les standards du burpee et la vidéo au Spear Throw",
+    "Vous recevez un dossier de briefing et l'accès à des tutoriels vidéo"
+   ],
+   "narration": "Votre calendrier commence avant le jour de la course. L'arbitre principal veille à ce que chaque arbitre suive la formation standard préalable à l'événement avant d'y participer. Elle couvre le Règlement Spartan, en insistant sur les obstacles à fort taux d'échec, ceux que les athlètes ratent le plus souvent. Elle couvre aussi le processus et le déroulement du travail d'arbitre, les standards du burpee et la manière de les faire respecter, ainsi que l'enregistrement et la revue vidéo, utilisés uniquement au Spear Throw. Vous recevez aussi un dossier de briefing préalable à l'événement et l'accès aux tutoriels vidéo officiels."
+  },
+  {
+   "heading": "Le matin de la course",
+   "points": [
+    "Enregistrez-vous, confirmez votre obstacle et récupérez votre équipement",
+    "Assistez au briefing obligatoire sur place de l'arbitre principal",
+    "Rejoignez votre obstacle bien avant la première vague compétitive",
+    "Inspectez l'obstacle, parcourez la boucle de pénalité et choisissez où vous placer"
+   ],
+   "narration": "Le matin de la course, présentez-vous à la tente qu'on vous a indiquée, signez, confirmez l'obstacle qui vous est attribué et récupérez votre équipement. Rejoignez le canal de communication s'il y en a un. Assistez au briefing obligatoire sur place de l'arbitre principal. Puis rendez-vous à votre obstacle en prenant de la marge avant la première vague compétitive. Là, inspectez l'installation, vérifiez dans quel sens les athlètes arrivent, parcourez toute la boucle de pénalité et décidez où vous placer pour voir clairement les tentatives, les réussites et les échecs."
+  },
+  {
+   "heading": "Pendant la course et après",
+   "points": [
+    "Arbitrez les vagues Elite et compétitives",
+    "Puis démontez le parcours, ou passez la main aux bénévoles pour les vagues Open",
+    "À votre retour : les images vont à la revue vidéo, les décisions écrites à l'arbitre principal",
+    "Les athlètes portent toute réclamation devant l'arbitre principal, pendant la période de réclamation"
+   ],
+   "narration": "Pendant la course, vous arbitrez les vagues Elite et compétitives à votre obstacle. Ensuite, selon l'événement, vous démontez le parcours ou vous passez la main aux bénévoles pour les vagues Open. Au retour des arbitres, l'arbitre principal gère la revue vidéo des images. Là où il n'y a pas de vidéo, vos décisions sont prises sur place, écrites, et remises à l'arbitre principal à votre retour. Les résultats ne sont définitifs qu'après la revue officielle. Un athlète qui veut contester une pénalité s'adresse à l'arbitre principal pendant la période de réclamation.",
+   "review": "En cours de révision pour 2027 : le règlement (3.19.1) dit que la période de réclamation se termine 15 minutes avant la cérémonie de remise des prix de la catégorie. La SOP d'arbitrage (4.2) donne une demi-heure avant la cérémonie comme exemple de limite. En attendant, appliquez le règlement, suivez les horaires de réclamation annoncés par l'arbitre principal et envoyez tout athlète qui réclame à l'arbitre principal."
+  },
+  {
+   "heading": "En bref",
+   "points": [
+    "Soyez impartial, professionnel et cohérent",
+    "Pensez à l'intention de la règle ; placez l'équité et la sécurité en premier",
+    "En cas de doute, remontez à l'arbitre principal",
+    "Votre journée : formation, enregistrement, briefing, installation, arbitrage, passation"
+   ],
+   "narration": "En bref. Soyez impartial et professionnel, et appliquez les règles de la même façon à chaque athlète. Concentrez-vous sur l'intention de la règle plutôt que sur un contact accidentel mineur, et placez l'équité et la sécurité des athlètes en premier. En cas de doute, remontez à l'arbitre principal. Le déroulement de votre événement va de la formation et du briefing préalables, en passant par l'enregistrement et l'équipement, l'inspection et l'installation de l'obstacle, jusqu'à l'arbitrage des vagues compétitives, puis au démontage ou à la passation aux bénévoles pour les vagues Open."
+  }
+ ],
+ "ocr-3-1": [
+  {
+   "heading": "Se présenter",
+   "points": [
+    "Présentez-vous à la tente des bénévoles, ou à la tente des arbitres, à l'heure de convocation qui vous a été donnée",
+    "Signez auprès du coordinateur des bénévoles ou de l'arbitre principal",
+    "Confirmez l'obstacle qui vous est attribué",
+    "Faites-vous connaître de l'arbitre principal"
+   ],
+   "narration": "Votre jour de course commence à l'enregistrement. Rendez-vous à la tente des bénévoles, ou à la tente des arbitres si votre événement en a une, à l'heure de convocation qui vous a été donnée. Signez auprès du coordinateur des bénévoles ou de l'arbitre principal, et confirmez quel obstacle vous a été attribué. Même si quelqu'un d'autre vous enregistre, assurez-vous que l'arbitre principal sait que vous êtes là. Avant le premier départ Elite, l'arbitre principal doit confirmer que chaque arbitre est en position."
+  },
+  {
+   "heading": "Ce que vous récupérez à l'enregistrement",
+   "points": [
+    "Le matériel officiel : tee-shirt d'arbitre, casquette, accréditations ou autre équipement attribué",
+    "Le panneau à code QR de votre obstacle, sauf s'il est déjà en place",
+    "Une place dans le canal de communication officiel, par exemple un groupe WhatsApp"
+   ],
+   "narration": "À l'enregistrement, vous recevez votre matériel officiel d'arbitrage. C'est-à-dire votre tee-shirt d'arbitre, votre casquette et vos accréditations, ainsi que tout autre équipement qui vous a été attribué. Récupérez aussi le panneau à code QR de votre obstacle, sauf s'il est déjà installé sur place. Il renvoie au tutoriel vidéo de cet obstacle. Enfin, assurez-vous d'être ajouté au canal de communication officiel. Cela peut être un groupe WhatsApp, une autre messagerie, ou un contact direct avec l'arbitre principal."
+  },
+  {
+   "heading": "Votre tenue d'arbitre",
+   "points": [
+    "Maillot ou gilet d'arbitre",
+    "Une planchette ou un carnet, de préférence étanche",
+    "Les fiches de règles imprimées de votre obstacle",
+    "Une caméra vidéo et un trépied, seulement si on vous en attribue une"
+   ],
+   "narration": "Le programme 2026 liste ce dont un arbitre a besoin à l'obstacle. Portez votre maillot ou gilet d'arbitre. Ayez une planchette ou un carnet, de préférence étanche, car vous noterez des numéros de bandeau et des remarques, parfois par temps humide. Apportez les fiches de règles imprimées de votre obstacle, pour vérifier une règle sur place. Si on vous attribue une caméra, vous aurez aussi une caméra vidéo et un trépied."
+  },
+  {
+   "heading": "Apportez vos affaires essentielles",
+   "points": [
+    "Un téléphone portable",
+    "Des vêtements adaptés aux conditions",
+    "Des stylos ou crayons, de quoi manger et de l'eau",
+    "Tout ce dont vous avez personnellement besoin, comme un médicament"
+   ],
+   "narration": "Apportez aussi vos propres affaires essentielles. Il vous faut un téléphone portable, car c'est ainsi que vous restez en lien avec l'arbitre principal par le canal de communication. Portez des vêtements adaptés aux conditions du jour. Prenez des stylos ou des crayons, de quoi manger, de l'eau, et tout ce dont vous avez personnellement besoin, comme un médicament. Une fois les vagues compétitives lancées, votre attention appartient à votre obstacle : venez donc préparé."
+  },
+  {
+   "heading": "Le matériel vidéo",
+   "points": [
+    "L'arbitre principal prépare, teste et distribue le matériel d'arbitrage",
+    "Des caméras avec au moins 2,5 heures d'autonomie, et des batteries de secours si nécessaire",
+    "Des trépieds réglables de 7 pieds, et des cartes SD d'au moins 32 Go pour du Full HD",
+    "La vidéo aux obstacles ne concerne que le Spear Throw"
+   ],
+   "narration": "Le matériel d'arbitrage est sous la responsabilité de l'arbitre principal. Il le prépare et le teste le vendredi avant l'événement, et le distribue le jour de la course avec les dernières consignes. La procédure fixe un minimum pour ce matériel : des caméras vidéo avec au moins deux heures et demie d'autonomie, des batteries de secours, des trépieds réglables de sept pieds, et des cartes mémoire d'au moins trente-deux gigaoctets, assez rapides pour la haute définition complète. L'enregistrement vidéo aux obstacles ne concerne que le Spear Throw. Si on vous y donne une caméra, vous l'installez et vérifiez qu'elle enregistre avant la première vague Elite."
+  },
+  {
+   "heading": "En bref",
+   "points": [
+    "Présentez-vous à la tente à l'heure, signez et confirmez votre obstacle",
+    "Récupérez votre matériel et le panneau QR, et rejoignez le canal de communication",
+    "Apportez une planchette étanche, les fiches de règles, un téléphone, de quoi manger et de l'eau",
+    "Caméra et trépied seulement si vous êtes affecté au filmage du Spear Throw"
+   ],
+   "narration": "En bref. Présentez-vous à la tente à l'heure de convocation, signez, confirmez votre obstacle et faites savoir à l'arbitre principal que vous êtes là. Récupérez votre matériel et le panneau à code QR de votre obstacle, et rejoignez le canal de communication. Apportez une planchette ou un carnet étanche, vos fiches de règles, votre téléphone, de quoi manger et de l'eau. Vous n'avez une caméra et un trépied que si vous êtes affecté au filmage du Spear Throw."
+  }
+ ],
+ "ocr-3-2": [
+  {
+   "heading": "Le briefing d'abord",
+   "points": [
+    "Le briefing sur place de l'arbitre principal est obligatoire, avant de vous déployer",
+    "Il couvre les affectations, les classifications des obstacles, les boucles de pénalité et le standard du burpee",
+    "Il couvre aussi les procédures de l'événement et la manière de signaler les pénalités",
+    "Puis rejoignez votre obstacle bien avant la première vague compétitive"
+   ],
+   "narration": "Avant de partir sur le parcours, vous assistez au briefing sur place de l'arbitre principal. Il est obligatoire. Il couvre les procédures propres à l'événement, l'emplacement de chaque obstacle et qui y est affecté, quels obstacles sont obligatoires et lesquels permettent plusieurs tentatives, les boucles de pénalité, le standard du burpee, le placement de la caméra au Spear Throw, et la manière dont les pénalités sont identifiées, signalées et communiquées. Après le briefing, rendez-vous à votre obstacle en prenant assez de temps pour vous préparer avant l'arrivée de la première vague compétitive."
+  },
+  {
+   "heading": "Connaissez les règles de votre obstacle",
+   "points": [
+    "Lisez les consignes, les modes d'échec et les notes supplémentaires de votre obstacle",
+    "Utilisez la fiche de règles, la fiche de mission et la vidéo du code QR de votre obstacle",
+    "Vérifiez les options hommes et femmes : sur les murs, la marche rouge est réservée aux athlètes femmes"
+   ],
+   "narration": "Relisez et comprenez les règles de votre obstacle avant l'arrivée du premier athlète. Dans le règlement, chaque obstacle a ses consignes pour les concurrents, ses modes d'échec et ses notes supplémentaires. Lisez les trois. Votre fiche de règles, la fiche de mission de l'obstacle et le tutoriel vidéo du code QR aident aussi. Repérez les options différentes pour les hommes et les femmes. Sur les murs de six à neuf pieds, par exemple, la marche rouge peut être réservée aux athlètes femmes, et un athlète homme qui l'utilise échoue à l'obstacle."
+  },
+  {
+   "heading": "Inspectez l'installation",
+   "points": [
+    "Inspectez l'installation de l'obstacle et vérifiez qu'il est en état de servir",
+    "Examinez le flux de la course et la direction d'où arrivent les athlètes",
+    "Signalez immédiatement tout doute, problème de sécurité ou incohérence au directeur de course ou à l'arbitre principal"
+   ],
+   "narration": "En arrivant, inspectez l'obstacle. Vérifiez qu'il est correctement installé et en état de servir. Regardez comment la course le traverse et d'où les athlètes vont arriver, pour savoir où ils arriveront et d'où ils repartiront. Si quelque chose vous inquiète, qu'il s'agisse d'un doute sur l'installation, d'un problème de sécurité ou d'une incohérence, signalez-le immédiatement au directeur de course ou à l'arbitre principal. N'attendez pas l'arrivée des athlètes."
+  },
+  {
+   "heading": "Parcourez la boucle de pénalité",
+   "points": [
+    "Parcourez toute la boucle de pénalité, s'il y en a une",
+    "Connaissez le trajet et l'endroit exact où les athlètes retournent sur le parcours",
+    "Les boucles varient : course, portage, ramping ou basées sur la distance, comme confirmé pour votre obstacle",
+    "La même pénalité s'applique à tous dans la catégorie ou la vague"
+   ],
+   "narration": "Si votre obstacle a une boucle de pénalité, parcourez-la en entier vous-même. Vous devez comprendre le trajet et le point de retour, pour pouvoir diriger clairement un athlète et voir s'il la termine. Les boucles ne sont pas toutes identiques. Le règlement dit que leur distance peut varier selon le terrain, et qu'elles peuvent comprendre des portages, des passages à ramper ou d'autres éléments. L'arbitre principal confirme le format de pénalité de chaque obstacle avec le directeur de course. Quel qu'il soit, il est appliqué de façon cohérente dans la catégorie ou la vague.",
+   "review": "En cours de révision pour 2027 : le règlement (3.17.3) dit que la pénalité est une boucle ou 30 burpees, selon ce que Spartan désigne pour chaque obstacle et événement. La SOP d'arbitrage dit une boucle pour la plupart des obstacles et des burpees au Spear Throw, et le programme 2026 dit des burpees seulement au Spear Throw. En attendant, appliquez la pénalité que l'arbitre principal confirme pour votre obstacle, et contactez-le en cas de doute."
+  },
+  {
+   "heading": "Où se placer",
+   "points": [
+    "Choisissez un endroit d'où vous voyez clairement les tentatives, les réussites et les échecs",
+    "Gardez une vue dégagée sur l'obstacle",
+    "Au Spear Throw seulement : installez la caméra comme le décrit la procédure du Spear Throw",
+    "Confirmez que la caméra enregistre avant la première vague Elite"
+   ],
+   "narration": "Décidez où vous placer avant le début des courses. Il vous faut une position d'où vous voyez clairement chaque tentative, chaque réussite et chaque échec, sans rien qui bloque la vue. Pensez à l'endroit où les échecs se produisent d'ordinaire sur votre obstacle, et soyez assez près pour parler à un athlète quand cela arrive. Au Spear Throw seulement, vous installez aussi la caméra vidéo, en suivant la procédure d'arbitrage du Spear Throw, et vous confirmez qu'elle enregistre avant le départ de la première vague Elite. L'arbitre principal peut passer vérifier l'application des règles et la position de la caméra."
+  },
+  {
+   "heading": "En bref",
+   "points": [
+    "Assistez au briefing obligatoire, puis rejoignez votre obstacle à temps",
+    "Connaissez ses consignes, ses modes d'échec et ses notes",
+    "Inspectez l'installation, parcourez la boucle de pénalité, signalez immédiatement tout souci",
+    "Placez-vous là où vous voyez chaque tentative ; au Spear Throw, vérifiez que la caméra enregistre"
+   ],
+   "narration": "En bref. Assistez au briefing de l'arbitre principal, puis rejoignez votre obstacle à temps avant la première vague compétitive. Connaissez ses consignes, ses modes d'échec et ses notes supplémentaires, y compris les options hommes et femmes. Inspectez l'installation, parcourez la boucle de pénalité et signalez tout doute ou problème de sécurité sans attendre. Puis choisissez une position d'où vous voyez chaque tentative et, au Spear Throw, confirmez que la caméra enregistre avant la première vague Elite."
+  }
+ ],
+ "ocr-3-3": [
+  {
+   "heading": "À qui vous rendez compte",
+   "points": [
+    "Arbitre, puis arbitre principal, puis directeur de course ou équipe de chronométrage",
+    "Vous rendez compte à l'arbitre principal : le règlement appelle ce rôle l'officiel principal",
+    "L'arbitre principal est l'autorité finale pour appliquer et interpréter les règles"
+   ],
+   "narration": "Le programme 2026 résume la chaîne de communication en une ligne : arbitre, puis arbitre principal, puis le directeur de course ou l'équipe de chronométrage. En tant qu'arbitre, vous rendez compte à l'arbitre principal. Le règlement appelle cette personne l'officiel principal, et en fait le principal décideur pour toutes les questions de règlement lors de l'événement, et l'autorité ultime pour appliquer et interpréter les règles. Vos comptes rendus vont à l'arbitre principal, qui les transmet."
+  },
+  {
+   "heading": "Ce que l'arbitre principal transmet",
+   "points": [
+    "Les incidents de course vont au directeur de course, qui dirige le fonctionnement global de l'événement",
+    "Les incidents de concurrents, comme la triche ou les raccourcis, vont au chronométrage",
+    "Les pénalités et disqualifications confirmées vont au directeur de course et au chronométrage",
+    "Les décisions finales de pénalité peuvent être confirmées par l'arbitre principal et l'équipe de chronométrage"
+   ],
+   "narration": "L'arbitre principal vous relie au reste de l'événement. Il tient le directeur de course, responsable du fonctionnement global de l'événement, informé des incidents de course. Il informe l'équipe de chronométrage des incidents de concurrents comme la triche ou les raccourcis. Après la revue vidéo, il communique les pénalités et disqualifications confirmées au directeur de course et à l'équipe Chronométrage et Technique. Votre travail est de faire respecter les règles de l'obstacle, d'orienter les athlètes vers les pénalités et de consigner ce qui s'est passé. Les décisions finales de pénalité peuvent être confirmées par l'arbitre principal et l'équipe de chronométrage."
+  },
+  {
+   "heading": "Quand appeler",
+   "points": [
+    "Rejoignez le canal officiel à l'enregistrement : un groupe de discussion, une plateforme ou l'arbitre principal directement",
+    "Pas sûr d'un type de pénalité ou de la façon de l'appliquer : contactez l'arbitre principal tout de suite",
+    "Doutes ou problèmes de sécurité à l'obstacle : le directeur de course ou l'arbitre principal",
+    "Dangers : signalez-les immédiatement à l'arbitre principal, au directeur de course ou au personnel Spartan"
+   ],
+   "narration": "À l'enregistrement, vous rejoignez le canal de communication officiel. Cela peut être un groupe WhatsApp, une autre messagerie, ou une ligne directe avec l'arbitre principal. Servez-vous-en. Si vous ne savez pas quelle pénalité s'applique ou comment l'appliquer, contactez immédiatement l'arbitre principal plutôt que de deviner. Signalez les doutes, problèmes de sécurité ou incohérences de votre obstacle au directeur de course ou à l'arbitre principal. Et signalez immédiatement tout danger, à l'arbitre principal, au directeur de course ou au personnel Spartan."
+  },
+  {
+   "heading": "Signaler un litige ou une fuite",
+   "points": [
+    "Litige : notez le numéro de bandeau et le motif, et signalez-le dès que possible",
+    "Pas de numéro : signalez-le tout de suite avec une description claire, comme la tenue et la catégorie",
+    "Aidez à identifier l'athlète plus tard sur le parcours si on vous le demande",
+    "Pas de vidéo : écrivez vos décisions de pénalité et remettez-les à l'arbitre principal"
+   ],
+   "narration": "La plupart des comptes rendus concernent les athlètes. Si un athlète conteste une décision, notez son numéro de bandeau, écrivez le motif, par exemple un obstacle raté sans la pénalité, et signalez-le à l'arbitre principal dès que possible. Si un athlète s'en va sans faire la pénalité et que vous ne pouvez pas relever son numéro, signalez-le immédiatement avec une description claire : couleur de la tenue, signes distinctifs et catégorie de course. Là où il n'y a pas de vidéo, vous prenez les décisions de pénalité sur place, vous les écrivez et vous les remettez à l'arbitre principal à votre retour."
+  },
+  {
+   "heading": "En bref",
+   "points": [
+    "Votre ligne mène à l'arbitre principal, qui informe le directeur de course et le chronométrage",
+    "Rejoignez le canal à l'enregistrement et utilisez-le",
+    "Demandez à l'arbitre principal en cas de doute, et signalez les dangers immédiatement",
+    "Consignez les numéros de bandeau et les motifs, et signalez les litiges et les fuites"
+   ],
+   "narration": "En bref. Vous rendez compte à l'arbitre principal, et l'arbitre principal informe le directeur de course et l'équipe de chronométrage. Rejoignez le canal de communication à l'enregistrement et utilisez-le. Quand vous avez un doute sur une pénalité, demandez tout de suite à l'arbitre principal, et signalez immédiatement les dangers. Pour les litiges et les fuites, notez le numéro de bandeau ou une description claire, écrivez le motif, et signalez-le."
+  }
+ ],
+ "ocr-4-1": [
+  {
+   "heading": "Trois types d'obstacles",
+   "points": [
+    "Obligatoire : à terminer avant que l'athlète continue",
+    "Tentatives multiples (réussite/échec) : réessayer jusqu'à la réussite ou la pénalité",
+    "Tentative unique (réussite/échec) : une fois engagé, le terminer ou prendre la pénalité",
+    "La Partie D du règlement classe chaque obstacle dans l'un des trois"
+   ],
+   "narration": "Le règlement répartit les obstacles en obligatoires et en réussite ou échec. Les obstacles réussite ou échec sont de deux sortes, à tentatives multiples et à tentative unique : en pratique, vous travaillez donc avec trois types. Un obstacle obligatoire doit être terminé avant que l'athlète aille plus loin. Un obstacle à tentatives multiples peut être tenté autant de fois que nécessaire, jusqu'à la réussite ou jusqu'à une pénalité. Un obstacle à tentative unique doit être terminé une fois que l'athlète s'est engagé, sinon la pénalité s'applique. Le règlement classe chaque obstacle dans un seul type, et le briefing couvre les classifications.",
+   "review": "En cours de révision pour 2027 : le règlement et le programme 2026 classent des obstacles différemment. Le règlement range Monkey Bars, Multi-Rig, Twister, Olympus, Z Wall, Beater et Helix parmi les tentatives uniques, Atlas Carry, Tire Flip et Stairway to Sparta parmi les tentatives multiples, et A-Frame Cargo parmi les obligatoires. Le programme classe le premier groupe en tentatives multiples, le deuxième en obligatoires et A-Frame Cargo en tentatives multiples. En attendant, appliquez le règlement pour l'obstacle et renvoyez tout doute à l'arbitre principal."
+  },
+  {
+   "heading": "Chaque obstacle doit être tenté",
+   "points": [
+    "Au minimum, une tentative consiste à toucher l'obstacle",
+    "Elle peut comprendre d'entrer dans l'eau ou un terrain difficile pour atteindre l'obstacle",
+    "Ce terrain ne peut pas être contourné avec une pénalité sauf si le briefing ou le personnel de course l'autorise",
+    "Ne pas tenter un obstacle est une infraction courante à surveiller"
+   ],
+   "narration": "Chaque obstacle doit être tenté. Le règlement fixe le minimum : une tentative consiste à toucher l'obstacle. Parfois la tentative comprend aussi le fait d'atteindre l'obstacle, par exemple entrer dans l'eau ou traverser un autre terrain difficile. Ce terrain ne peut pas être évité en prenant une pénalité, sauf si les briefings d'avant-course ou le personnel de course ont dit que c'est acceptable. Le programme 2026 range le fait de ne pas tenter un obstacle parmi les infractions courantes : surveillez donc les athlètes qui se dirigent vers la pénalité sans essayer."
+  },
+  {
+   "heading": "Les obstacles obligatoires",
+   "points": [
+    "À terminer en entier : pas de contournement ni de pénalité à la place, sauf si un officiel le dit",
+    "En échouer un entraîne la disqualification ; le directeur de course peut y substituer une pénalité de temps",
+    "Exemples : Bucket Carry, Sandbag Carry, Log Carry, Barbed Wire Crawl",
+    "Bucket Carry : du contenu perdu oblige à refaire tout le parcours avec un seau plein"
+   ],
+   "narration": "Un obstacle obligatoire doit être terminé en entier avant que l'athlète continue. Il ne peut ni le contourner ni l'échanger contre une pénalité, sauf si un officiel de la course le lui demande. Selon le règlement, échouer un obstacle obligatoire entraîne la disqualification, même si le directeur de course peut y substituer une pénalité de temps selon la gravité de l'infraction. Les portages et les passages à ramper en sont typiques. Au Bucket Carry, par exemple, il n'y a pas d'option burpees, et un seau qui revient avec du contenu en moins oblige l'athlète à refaire tout le parcours avec un seau correctement rempli."
+  },
+  {
+   "heading": "Les obstacles à tentatives multiples",
+   "points": [
+    "L'athlète peut réessayer autant de fois que nécessaire",
+    "Cela se termine par une réussite, ou l'athlète abandonne et prend la pénalité",
+    "Exemples : Rope Climb, Bender, Inverted Wall",
+    "Rope Climb : changer de corde seulement après être revenu au sol ; une corde par tentative"
+   ],
+   "narration": "Un obstacle à tentatives multiples peut être retenté encore et encore. L'athlète continue jusqu'à le réussir ou jusqu'à choisir de l'abandonner et de prendre la pénalité. Les règles de chaque obstacle disent ce qu'implique une nouvelle tentative. À la Rope Climb, par exemple, un athlète peut changer de corde après être revenu au sol et réessayer, mais utiliser plus d'une corde pendant une seule tentative est un échec. Les athlètes qui font des tentatives répétées devraient laisser passer ceux qui essaient pour la première fois, même si le règlement dit que ce n'est pas obligatoire."
+  },
+  {
+   "heading": "Les obstacles à tentative unique : quand commence l'engagement",
+   "points": [
+    "Une fois engagé, l'athlète termine l'obstacle ou prend la pénalité : pas de nouvel essai",
+    "Les règles propres à chaque obstacle définissent quand l'engagement commence",
+    "Spear Throw : quand la lance est lâchée d'un mouvement vers l'avant",
+    "Ape Hanger : quand l'athlète touche l'une des barres au-dessus de lui"
+   ],
+   "narration": "Un obstacle à tentative unique donne à l'athlète un seul essai une fois qu'il s'est engagé. Ensuite, il le termine ou il prend la pénalité. La question clé est de savoir quand l'engagement commence, et le règlement y répond obstacle par obstacle. Au Spear Throw, la tentative commence quand la lance est lâchée d'un mouvement vers l'avant. À l'Ape Hanger, l'athlète est engagé dès qu'il touche l'une des barres au-dessus de lui. Connaissez le point d'engagement de votre obstacle : il décide si l'athlète peut encore se replacer.",
+   "review": "En cours de révision pour 2027 : le programme 2026 dit que l'engagement commence dès que le mouvement de la tentative démarre, et au Spear Throw quand la lance est ramenée en arrière pour lancer. Le règlement définit l'engagement obstacle par obstacle, et au Spear Throw c'est au lâcher. En attendant, appliquez la règle de chaque obstacle et renvoyez toute décision contestée à l'arbitre principal."
+  },
+  {
+   "heading": "Ce qui compte comme un échec",
+   "points": [
+    "Jugez selon les modes d'échec des règles de votre obstacle",
+    "Frapper une cloche avec les pieds, les jambes ou les genoux est un échec, sans nouvel essai",
+    "Échec dû à une gêne importante d'un autre athlète : un officiel peut autoriser un nouveau départ",
+    "Parmi les échecs courants : utiliser la structure de soutien et ne pas sonner la cloche"
+   ],
+   "narration": "L'échec est défini dans les règles de chaque obstacle, dans sa liste de modes d'échec. Jugez selon cette liste, pas selon votre propre idée de la façon dont l'obstacle devrait être fait. Deux règles générales s'appliquent à tous les obstacles. Frapper une cloche avec les pieds, les jambes ou les genoux compte comme un échec : l'athlète ne peut pas réessayer et doit accomplir la pénalité. Et si une gêne physique importante d'un autre concurrent cause l'échec, l'athlète peut repartir sans pénalité supplémentaire, une fois qu'un officiel en a donné l'autorisation."
+  },
+  {
+   "heading": "En bref",
+   "points": [
+    "Chaque obstacle doit être tenté : au moins le toucher",
+    "Obligatoire : à terminer en entier, sinon disqualification",
+    "Tentatives multiples : réessayer jusqu'à la réussite ou prendre la pénalité ; tentative unique : un essai une fois engagé",
+    "Jugez les modes d'échec propres à chaque obstacle ; quel obstacle est de quel type est en cours de révision"
+   ],
+   "narration": "En bref. Chaque obstacle doit être tenté, et le toucher est le minimum. Un obstacle obligatoire doit être terminé en entier, et l'échouer entraîne la disqualification, sauf si le directeur de course y substitue une pénalité de temps. Un obstacle à tentatives multiples peut être retenté jusqu'à la réussite ou jusqu'à ce que l'athlète prenne la pénalité. Un obstacle à tentative unique ne permet qu'un essai une fois que l'athlète s'engage, au point que définissent les règles de cet obstacle. Jugez chaque obstacle selon ses propres modes d'échec, et rappelez-vous que quel obstacle est de quel type est en cours de révision pour 2027."
+  }
+ ],
+ "ocr-5-1": [
+  {
+   "heading": "Deux sortes d'obstacles, deux sortes de conséquences",
+   "points": [
+    "Les obstacles obligatoires doivent être terminés : en échouer un entraîne la disqualification",
+    "Le directeur de course peut y substituer une pénalité de temps, selon la gravité",
+    "Échouer un obstacle réussite/échec entraîne une pénalité : une boucle de pénalité ou des burpees"
+   ],
+   "narration": "Le règlement répartit les obstacles en deux catégories. Les obstacles obligatoires doivent être terminés. En échouer un entraîne la disqualification de l'événement, même si le directeur de course peut y substituer une pénalité de temps, selon la gravité de l'infraction. Les obstacles réussite ou échec sont différents. Un athlète qui en échoue un reste dans la course et prend une pénalité à la place. Cette pénalité est soit une boucle de pénalité, soit des burpees, et Spartan fixe laquelle s'applique pour chaque obstacle, événement, catégorie ou vague.",
+   "review": "En cours de révision pour 2027 : la règle 3.17.3 dit que la pénalité est une boucle de pénalité ou 30 burpees, selon ce que Spartan désigne pour chaque obstacle, événement, catégorie ou vague, et toujours 15 burpees au Stadion. La SOP d'arbitrage dit une boucle pour la plupart des obstacles et des burpees au Spear Throw ; le programme 2026 dit des burpees seulement au Spear Throw. En attendant, utilisez la pénalité que l'arbitre principal confirme pour votre obstacle, et demandez-lui en cas de doute."
+  },
+  {
+   "heading": "La boucle de pénalité",
+   "points": [
+    "Un tronçon désigné du parcours que l'athlète effectue après avoir échoué un obstacle",
+    "Sa longueur varie, et elle peut comprendre des portages, des passages à ramper ou d'autres défis",
+    "Elle est appliquée de la même façon à tous dans la catégorie ou la vague",
+    "Parcourez toute la boucle avant le début des courses : connaissez le trajet et le point de retour"
+   ],
+   "narration": "Une boucle de pénalité est une section désignée du parcours que l'athlète effectue après avoir échoué un obstacle. Sa distance peut varier selon le terrain, et elle peut comprendre des défis supplémentaires comme des portages ou des passages à ramper. Quelle que soit sa conception, elle est appliquée de façon cohérente à tous dans la même catégorie ou la même vague. Avant la première vague compétitive, parcourez vous-même toute la boucle. Vous devez connaître le trajet et le point de retour, pour orienter correctement les athlètes et voir ceux qui la raccourcissent."
+  },
+  {
+   "heading": "Les burpees manquants",
+   "points": [
+    "Les athlètes qui ne font pas tous les burpees requis se voient ajouter du temps à leur arrivée",
+    "Un gros manque peut entraîner une lourde pénalité de temps",
+    "Un manque peut être constaté sur le parcours ou en revue vidéo, avant les remises de prix",
+    "Le temps que chaque burpee manqué ajoute est en cours de révision pour 2027"
+   ],
+   "narration": "Là où les burpees sont la pénalité, un athlète qui ne fait pas le nombre requis se voit ajouter du temps à son temps d'arrivée global. Le programme 2026 le dit simplement : un gros manque de burpees peut entraîner une lourde pénalité de temps. Un manque peut être constaté pendant la course, ou lors de la revue vidéo officielle avant les remises de prix, c'est pourquoi les résultats peuvent ne pas être définitifs tout de suite. Le temps exact qu'ajoute un burpee manqué est en cours de révision : cette leçon n'enseigne donc aucun chiffre.",
+   "review": "En cours de révision pour 2027 : la règle 3.4.2 ajoute 30 secondes pour chacun des 10 premiers burpees manqués et 10 minutes au total si plus de 10 sont manqués. La SOP d'arbitrage ajoute 30 secondes chacun et 10 minutes si moins de 20 sont faits ; le programme 2026 dit que 11 incorrects ou plus font 10 minutes et que moins de 20 est une disqualification. Cette leçon n'enseigne aucun chiffre tant que le responsable de l'arbitrage n'a pas tranché : l'arbitre principal confirme les pénalités."
+  },
+  {
+   "heading": "Ne pas accomplir la pénalité",
+   "points": [
+    "Les boucles de pénalité doivent être faites en entier",
+    "Sauter la pénalité entraîne une pénalité supplémentaire : du temps ajouté ou la disqualification",
+    "Ce que coûte le fait de sauter une boucle est en cours de révision pour 2027",
+    "Votre rôle : noter le numéro de bandeau et le signaler à l'arbitre principal"
+   ],
+   "narration": "Les boucles de pénalité doivent être faites en entier. Un athlète qui échoue un obstacle réussite ou échec et n'accomplit pas la pénalité a enfreint le règlement, et cela lui coûtera. Lors de la revue vidéo officielle, les officiels de la course peuvent ajouter une pénalité de temps ou disqualifier. Les sources 2026 ne concordent pas sur la pénalité exacte pour une boucle sautée : elle est donc en cours de révision. Votre rôle ne change pas : notez le numéro de bandeau de l'athlète, notez ce qui s'est passé et signalez-le à l'arbitre principal.",
+   "review": "En cours de révision pour 2027 : la règle 3.4.1 ajoute une pénalité de temps de 10 minutes quand un athlète échoue un obstacle réussite/échec et n'accomplit pas la boucle de pénalité. Le programme 2026 dit que ne pas accomplir une pénalité peut entraîner la disqualification, et la SOP d'arbitrage ne fixe aucun chiffre. Tant que le responsable de l'arbitrage n'a pas tranché, appliquez le règlement : consignez, signalez, et laissez la pénalité à l'arbitre principal."
+  },
+  {
+   "heading": "Quand un athlète part sans la pénalité",
+   "points": [
+    "Notez le numéro de bandeau et le motif, par exemple un obstacle raté sans pénalité",
+    "Pas de numéro ? Donnez à l'arbitre principal une description claire : tenue, signes distinctifs, catégorie",
+    "Signalez-le dès que possible, et aidez à identifier l'athlète plus tard si on vous le demande"
+   ],
+   "narration": "La procédure d'arbitrage dit quoi faire quand un athlète quitte votre obstacle sans avoir accompli la pénalité. Écrivez son numéro de bandeau et le motif. Signalez-le à l'arbitre principal dès que vous le pouvez sur le plan opérationnel. Si vous n'avez pas pu relever le numéro, signalez-le quand même tout de suite, avec une description physique claire de l'athlète : la couleur de sa tenue, ses signes distinctifs et sa catégorie de course. On pourra vous demander d'aider à l'identifier plus tard sur le parcours."
+  },
+  {
+   "heading": "En bref",
+   "points": [
+    "Obstacle obligatoire échoué : disqualification, sauf si le directeur de course y substitue une pénalité de temps",
+    "Obstacle réussite/échec échoué : une boucle de pénalité, faite en entier, ou des burpees",
+    "Burpees manqués et boucles sautées entraînent des pénalités supplémentaires : les montants sont en cours de révision",
+    "Notez le numéro de bandeau et rendez compte à l'arbitre principal"
+   ],
+   "narration": "En bref. Si un athlète échoue un obstacle obligatoire, la pénalité est la disqualification, sauf si le directeur de course y substitue une pénalité de temps. S'il échoue un obstacle réussite ou échec, il prend la pénalité désignée : une boucle de pénalité, faite en entier, ou des burpees. Les burpees manqués et les boucles sautées entraînent des pénalités supplémentaires, et les montants exacts sont en cours de révision pour 2027. Quoi qu'il arrive, notez le numéro de bandeau et signalez-le à l'arbitre principal.",
+   "review": "En cours de révision pour 2027 : là où les burpees sont la pénalité (règle 3.17.3), le temps ajouté pour les burpees manqués (3.4.2) et la pénalité pour une boucle sautée (3.4.1) diffèrent tous entre le règlement, la SOP d'arbitrage et le programme 2026. Tant que le responsable de l'arbitrage n'a pas tranché, utilisez la pénalité que l'arbitre principal confirme pour votre obstacle, n'enseignez aucun chiffre de temps, et renvoyez les décisions contestées à l'arbitre principal."
+  }
+ ],
+ "ocr-5-2": [
+  {
+   "heading": "Votre rôle à l'obstacle",
+   "points": [
+    "Veiller à ce que les athlètes suivent les consignes de l'obstacle",
+    "Surveiller les infractions et connaître les conditions d'échec de l'obstacle",
+    "Orienter chaque athlète qui échoue vers la bonne pénalité",
+    "Signaler les problèmes et les manquements à l'arbitre principal"
+   ],
+   "narration": "Le règlement définit un arbitre comme un officiel nommé pour veiller au respect des règles, généralement posté à un obstacle ou sous la tente de revue vidéo, et rendant compte à l'officiel principal, que ce programme appelle l'arbitre principal. À votre obstacle, cela veut dire quatre choses. Veiller à ce que les athlètes suivent les consignes. Surveiller les infractions, en sachant exactement ce qui compte comme un échec. Envoyer toute personne qui échoue vers la bonne pénalité. Et signaler les problèmes à l'arbitre principal."
+  },
+  {
+   "heading": "Chaque obstacle doit être tenté",
+   "points": [
+    "Au minimum, une tentative consiste à toucher l'obstacle",
+    "Elle peut comprendre d'entrer dans l'eau ou un terrain difficile pour atteindre l'obstacle",
+    "Ce terrain ne peut pas être contourné avec une pénalité, sauf si le briefing ou le personnel de course l'autorise"
+   ],
+   "narration": "Chaque obstacle doit être tenté. Au minimum, une tentative consiste à toucher l'obstacle. Quand l'obstacle se trouve dans l'eau ou sur un autre terrain difficile, la tentative peut comprendre la traversée de ce terrain pour l'atteindre. Les athlètes ne peuvent pas contourner ce terrain en prenant une pénalité, sauf si le briefing d'avant-course ou le personnel de course ont dit que c'est acceptable. Un athlète qui va directement à la pénalité sans toucher l'obstacle n'a donc pas respecté la règle."
+  },
+  {
+   "heading": "Cloches et gêne",
+   "points": [
+    "Les cloches ne peuvent être frappées qu'avec les bras, les mains ou le corps au-dessus de la poitrine",
+    "Frapper une cloche avec le pied est un échec : pas de nouvel essai, direction la pénalité",
+    "Échec dû à une gêne importante d'un autre athlète ? Un officiel peut autoriser un nouveau départ"
+   ],
+   "narration": "Deux règles générales s'appliquent à de nombreux obstacles. Les cloches ne peuvent être frappées qu'avec les bras, les mains ou une autre partie du corps au-dessus de la poitrine. Un athlète qui frappe la cloche avec un pied, une jambe ou un genou a échoué l'obstacle : il ne peut pas réessayer, et il doit accomplir la pénalité. Et si un athlète échoue parce qu'un autre concurrent l'a gêné physiquement de façon importante, un officiel peut lui donner l'autorisation de recommencer l'obstacle sans pénalité supplémentaire. En cas de doute, demandez à l'arbitre principal."
+  },
+  {
+   "heading": "Orienter vers la pénalité",
+   "points": [
+    "Envoyez chaque athlète qui échoue vers la pénalité fixée pour votre obstacle",
+    "Le format de pénalité de chaque obstacle est confirmé avant l'événement et couvert au briefing",
+    "Pas sûr de la pénalité applicable ? Contactez tout de suite l'arbitre principal"
+   ],
+   "narration": "Quand un athlète échoue, orientez-le clairement vers la bonne pénalité. Avant l'événement, l'arbitre principal confirme avec le directeur de course le format de pénalité de chaque obstacle, qu'il s'agisse d'une boucle de course, d'une boucle de portage, d'une boucle à ramper ou de burpees, et le briefing sur place couvre ce qui s'applique au vôtre. La procédure d'arbitrage dit que la plupart des obstacles utilisent une boucle de pénalité, et que le Spear Throw utilise des burpees. Si vous ne savez jamais quelle pénalité s'applique, contactez immédiatement l'arbitre principal.",
+   "review": "En cours de révision pour 2027 : la règle 3.17.3 dit que la pénalité est une boucle de pénalité ou 30 burpees, selon ce que Spartan désigne pour chaque obstacle, événement, catégorie ou vague, et toujours 15 burpees au Stadion. La SOP d'arbitrage dit une boucle pour la plupart des obstacles et des burpees au Spear Throw ; le programme 2026 dit des burpees seulement au Spear Throw. En attendant, utilisez la pénalité que l'arbitre principal confirme pour votre obstacle, et demandez-lui en cas de doute."
+  },
+  {
+   "heading": "La conduite des athlètes sur le parcours",
+   "points": [
+    "Les athlètes doivent parcourir tout le parcours officiel : le suivre est leur responsabilité",
+    "Aucune aide physique de quiconque sauf d'un officiel Spartan, et pas de meneur d'allure",
+    "Être informé de la progression ou des temps des autres athlètes n'est pas une aide",
+    "Le numéro de bandeau doit être visible et lisible en permanence"
+   ],
+   "narration": "Les athlètes doivent parcourir le parcours officiel en entier, et le suivre correctement est de leur propre responsabilité. Ils ne peuvent accepter d'aide physique de personne, sauf d'un officiel Spartan. Cela comprend la nourriture et les boissons hors des postes de ravitaillement officiels, le matériel, le soutien physique et le rythme imposé, c'est-à-dire quelqu'un qui court avec eux pour les coacher ou régler leur allure. Être informé de la progression ou des temps des autres athlètes n'est pas une aide. Le numéro de course du bandeau doit être clairement affiché et lisible à tout moment."
+  },
+  {
+   "heading": "Conduite antisportive et signalement",
+   "points": [
+    "Les athlètes doivent traiter chacun avec respect : pas de conduite injurieuse, menaçante ou insultante",
+    "L'arbitre principal décide de toute pénalité pour conduite : votre rôle est de la signaler",
+    "Notez le numéro de bandeau et ce qui s'est passé, et signalez-le à l'arbitre principal",
+    "Expliquez calmement la règle, et n'aggravez pas un conflit à l'obstacle"
+   ],
+   "narration": "Les athlètes doivent traiter les autres concurrents, le personnel Spartan, les bénévoles, les spectateurs et le public avec équité, respect et courtoisie, et ne doivent pas employer de langage ou de comportement injurieux, menaçant ou insultant. Une conduite antisportive peut entraîner une pénalité, décidée par l'officiel principal, c'est-à-dire l'arbitre principal. Quel que soit le problème, notez le numéro de bandeau et ce qui s'est passé, et signalez-le dès que possible. Les comptes rendus vont de vous à l'arbitre principal, puis au directeur de course ou à l'équipe de chronométrage. Si un athlète conteste votre décision, expliquez calmement la règle et évitez la dispute."
+  },
+  {
+   "heading": "En bref",
+   "points": [
+    "Chaque obstacle doit être tenté : au minimum, le toucher",
+    "Connaissez les conditions d'échec : une cloche frappée du pied est un échec",
+    "Envoyez chaque athlète qui échoue vers la pénalité de votre obstacle ; en cas de doute, demandez à l'arbitre principal",
+    "Notez le numéro, rendez compte à l'arbitre principal et ne vous disputez pas"
+   ],
+   "narration": "En bref. Chaque obstacle doit être tenté, et au minimum cela veut dire le toucher. Connaissez les consignes et les conditions d'échec de votre obstacle, et les générales aussi, comme une cloche frappée du pied qui est un échec. Envoyez chaque athlète qui échoue vers la pénalité fixée pour votre obstacle, et demandez à l'arbitre principal en cas de doute. Les athlètes doivent suivre le parcours, ne recevoir aucune aide extérieure et garder leur numéro visible. Quand quelque chose ne va pas, notez le numéro, signalez-le, et ne vous disputez pas à l'obstacle."
+  }
+ ],
+ "ocr-5-3": [
+  {
+   "heading": "Quand les burpees sont la pénalité",
+   "points": [
+    "Spartan désigne une boucle ou des burpees pour chaque obstacle, événement, catégorie ou vague",
+    "Là où des burpees sont désignés, la pénalité est de 30 burpees",
+    "Événements Stadion : toujours 15 burpees",
+    "La pénalité du Spear Throw est de 30 burpees"
+   ],
+   "narration": "Selon la règle 3.17.3, la pénalité pour un obstacle réussite ou échec est soit une boucle de pénalité, soit des burpees, selon ce que Spartan désigne pour chaque obstacle, événement, catégorie ou vague. Là où des burpees sont désignés, c'est trente burpees. Lors des événements Stadion, la pénalité de chaque obstacle est de quinze burpees. La pénalité du Spear Throw est de trente burpees. Avant l'événement, l'arbitre principal confirme avec le directeur de course le format de pénalité de chaque obstacle : le briefing vous dit donc si votre obstacle utilise des burpees.",
+   "review": "En cours de révision pour 2027 : la règle 3.17.3 dit que la pénalité est une boucle de pénalité ou 30 burpees, selon ce que Spartan désigne pour chaque obstacle, événement, catégorie ou vague, et toujours 15 burpees au Stadion. La SOP d'arbitrage dit une boucle pour la plupart des obstacles et des burpees au Spear Throw ; le programme 2026 dit des burpees seulement au Spear Throw. En attendant, utilisez la pénalité que l'arbitre principal confirme pour votre obstacle, et demandez-lui en cas de doute."
+  },
+  {
+   "heading": "La zone de burpees",
+   "points": [
+    "Les burpees doivent être faits dans la zone de burpees désignée",
+    "Les burpees faits en dehors de la zone ne comptent pas pour la pénalité",
+    "Les officiels peuvent ajouter des zones quand l'une est pleine, ou pour séparer les catégories",
+    "Votre rôle : veiller à ce que les burpees se fassent dans la bonne zone"
+   ],
+   "narration": "Les burpees doivent être faits à l'intérieur de la zone de burpees désignée. Tous ceux faits en dehors ne comptent pas pour la pénalité : un athlète qui dérive hors de la zone fait donc des reps qui ne seront pas comptées. Les officiels de la course peuvent désigner des zones de burpees supplémentaires quand l'une manque de place, ou pour séparer des catégories d'athlètes. Une partie de votre rôle est de veiller à ce que les burpees se fassent dans la bonne zone, là où vous et la caméra pouvez les voir."
+  },
+  {
+   "heading": "Le bandeau se pose au sol",
+   "points": [
+    "L'athlète pose son bandeau au sol, juste devant lui",
+    "Bandeau perdu : notez le nom de l'athlète, ou faites-le dire dans l'audio de la caméra",
+    "Informez l'arbitre principal de tout athlète filmé sans bandeau"
+   ],
+   "narration": "Pendant les burpees, l'athlète pose son bandeau au sol, juste devant lui. Les annonces de la ligne de départ de l'arbitre principal le couvrent : les athlètes devraient donc le savoir avant d'arriver chez vous. Si un athlète a perdu son bandeau, notez son nom, ou utilisez l'audio de la caméra pour dire qui il est. Dans les deux cas, informez l'arbitre principal de tout athlète filmé sans bandeau, pour que les images puissent être rattachées à la bonne personne."
+  },
+  {
+   "heading": "Montrer l'athlète à la caméra",
+   "points": [
+    "Tenez le bandeau à environ deux pieds de l'objectif pendant environ deux secondes",
+    "Rendez-le aussitôt à l'athlète",
+    "Ne tenez jamais deux bandeaux à la fois, et ne laissez pas les athlètes vous les remettre",
+    "Ne déplacez jamais le corps ou le visage d'un athlète pour la caméra"
+   ],
+   "narration": "Au Spear Throw, la vidéo identifie chaque athlète. Tenez le bandeau à environ deux pieds de l'objectif de la caméra pendant environ deux secondes, pour que le numéro soit net à la revue. Puis rendez-le immédiatement à l'athlète. Ne tenez jamais deux bandeaux en même temps, et ne laissez pas les athlètes vous remettre leur bandeau. Et ne déplacez jamais physiquement le corps ou le visage d'un athlète pour le mettre dans le cadre : l'identification vient du bandeau, tenu bien visible."
+  },
+  {
+   "heading": "La revue vidéo détermine les burpees manqués",
+   "points": [
+    "Les burpees manqués sont déterminés en revue vidéo",
+    "Les résultats peuvent ne pas être définitifs avant la fin de la revue vidéo officielle",
+    "Les images restent chez l'arbitre principal et ne sont jamais données aux athlètes",
+    "Vos trois tâches : le standard du mouvement, la zone, une identification claire"
+   ],
+   "narration": "Le programme 2026 dit que la revue vidéo détermine les burpees manqués. C'est pourquoi les résultats peuvent ne pas être publiés tout de suite : la revue officielle a lieu avant qu'ils soient définitifs. L'arbitre principal gère la revue au retour des arbitres de leurs obstacles, conserve les images jusqu'à la fin de la journée de l'événement, et ne les donne jamais aux athlètes. Ce que vous faites sur le parcours rend la revue possible : faire respecter le standard du mouvement, garder les burpees dans la zone et identifier clairement chaque athlète pour la caméra.",
+   "review": "En cours de révision pour 2027 : le temps ajouté pour les burpees manqués diffère entre la règle 3.4.2, la SOP d'arbitrage et le programme 2026, et la SOP laisse l'arbitre sur place décider, par écrit, là où il n'y a pas de vidéo. La leçon sur les pénalités de temps pour les burpees présente chaque version. Cette leçon n'enseigne aucun chiffre : l'arbitre principal confirme les pénalités après la revue."
+  },
+  {
+   "heading": "En bref",
+   "points": [
+    "Les burpees sont la pénalité là où Spartan les désigne : 30, ou 15 au Stadion",
+    "Seuls les burpees faits dans la zone comptent",
+    "Bandeau au sol devant l'athlète ; montré à la caméra, puis aussitôt rendu",
+    "La revue vidéo détermine les burpees manqués"
+   ],
+   "narration": "En bref. Les burpees sont la pénalité là où Spartan les désigne : trente burpees, ou quinze lors des événements Stadion, et toujours au Spear Throw. Seuls comptent les burpees faits dans la zone désignée. Le bandeau de l'athlète est posé au sol devant lui, et vous le montrez à la caméra pendant quelques secondes, puis vous le rendez aussitôt. La revue vidéo détermine ensuite les éventuels burpees manqués : votre rôle est donc le standard, la zone et une identification claire.",
+   "review": "En cours de révision pour 2027 : la règle 3.17.3 dit que la pénalité est une boucle de pénalité ou 30 burpees, selon ce que Spartan désigne pour chaque obstacle, événement, catégorie ou vague, et toujours 15 burpees au Stadion. La SOP d'arbitrage dit une boucle pour la plupart des obstacles et des burpees au Spear Throw ; le programme 2026 dit des burpees seulement au Spear Throw. En attendant, utilisez la pénalité que l'arbitre principal confirme pour votre obstacle, et demandez-lui en cas de doute."
+  }
+ ],
+ "ocr-6-1": [
+  {
+   "heading": "Un burpee complet",
+   "points": [
+    "Un cycle entre deux positions : la basse et la haute",
+    "De la position basse à la position haute, puis un saut",
+    "Une rep qui rate une partie du standard n'est pas un burpee complet"
+   ],
+   "narration": "La règle 3.17.4 définit un burpee complet. C'est un cycle entre deux positions du corps, appelées la position haute et la position basse. L'athlète passe de la position basse à la position haute, puis saute. Chaque rep d'une pénalité de burpees doit respecter ce standard. Une rep qui en rate une partie n'est pas un burpee complet, et vous pouvez exiger de l'athlète qu'il en fasse une autre. Les diapositives suivantes reprennent chaque partie à tour de rôle."
+  },
+  {
+   "heading": "La position basse et la position haute",
+   "points": [
+    "Bas : allongé sur le ventre au sol, la poitrine touchant le sol",
+    "Haut : en équilibre et debout, une posture que tout le monde pourrait tenir sans tomber",
+    "En haut, les hanches et les genoux sont tendus, pas fléchis"
+   ],
+   "narration": "La position basse est allongé sur le ventre, face contre terre, la poitrine touchant le sol. La position haute est une position debout équilibrée : une position que n'importe qui pourrait tenir longtemps sans tomber en avant ni en arrière. En haut, les hanches et les genoux de l'athlète doivent être tendus, pas fléchis. Surveillez les deux extrémités de chaque rep. Une poitrine qui s'arrête avant le sol, ou des hanches encore fléchies en haut, signifie que la rep ne respecte pas le standard."
+  },
+  {
+   "heading": "Le saut",
+   "points": [
+    "Une fois revenu en haut, l'athlète saute",
+    "Les mains sont tendues vers le haut, au-dessus des oreilles",
+    "Pas de saut, ou mains pas au-dessus des oreilles : la rep n'est pas complète"
+   ],
+   "narration": "Une fois que l'athlète est revenu en position haute depuis la position basse, il saute, les mains tendues vers le haut au-dessus des oreilles. La règle place le saut après l'arrivée en position haute : l'athlète doit donc d'abord se tenir debout. Surveillez les mains autant que les pieds. Des mains qui n'atteignent que les épaules ou le visage ne respectent pas le standard, pas plus qu'une rep sans aucun saut."
+  },
+  {
+   "heading": "Un seul mouvement continu",
+   "points": [
+    "Le programme 2026 : le mouvement doit être continu pour chaque rep",
+    "Des reps rapides doivent quand même respecter chaque partie du standard",
+    "Un défaut typique : des burpees rapides avec une extension incomplète en haut"
+   ],
+   "narration": "Le programme 2026 ajoute que le mouvement doit être continu pour chaque rep : descente au sol, remontée debout et saut, en un seul mouvement. Il donne aussi un scénario typique à surveiller : un athlète qui fait des burpees rapides sans s'étendre complètement en haut. La question est toujours la même. La rep respecte-t-elle le standard ? Poitrine au sol, hanches et genoux tendus en haut, puis un saut avec les mains au-dessus des oreilles. Sinon, ce n'est pas un burpee complet."
+  },
+  {
+   "heading": "En bref",
+   "points": [
+    "Bas : allongé sur le ventre, poitrine touchant le sol",
+    "Haut : en équilibre et debout, hanches et genoux tendus",
+    "Puis un saut avec les mains au-dessus des oreilles",
+    "Un seul mouvement continu, et chaque rep selon le standard, aussi rapide soit-elle"
+   ],
+   "narration": "En bref. Un burpee complet va de la position basse à la position haute, suivie d'un saut. En bas, l'athlète est allongé sur le ventre, la poitrine touchant le sol. En haut, il se tient debout en équilibre, hanches et genoux tendus. Puis il saute avec les mains au-dessus des oreilles. Chaque rep est un seul mouvement continu, et chaque rep doit respecter le standard, quelle que soit sa vitesse."
+  }
+ ],
+ "ocr-6-2": [
+  {
+   "heading": "Les athlètes comptent, pas vous",
+   "points": [
+    "Les athlètes comptent leurs propres burpees",
+    "Les arbitres ne comptent pas à leur place",
+    "Votre rôle est le standard : surveillez chaque rep",
+    "Rappelez aux athlètes que le mouvement et les reps sont contrôlés"
+   ],
+   "narration": "Les athlètes sont responsables du décompte de leurs propres burpees. Les arbitres ne comptent pas à leur place. Cela vous laisse libre pour la tâche qui compte : surveiller si chaque rep respecte le standard du mouvement. Le programme 2026 suggère de rappeler aux athlètes que le standard du mouvement et le nombre de reps sont tous deux contrôlés. Là où il y a de la vidéo, le nombre et la qualité des burpees sont vérifiés de nouveau lors de la revue vidéo."
+  },
+  {
+   "heading": "Surveiller le standard",
+   "points": [
+    "Placez-vous là où votre vue sur l'athlète est dégagée",
+    "Vérifiez la poitrine en bas, les hanches et les genoux en haut, les mains pendant le saut",
+    "Gardez les burpees dans la zone, avec le bandeau au sol devant l'athlète",
+    "Ne touchez pas l'athlète et ne le déplacez pas pour la caméra"
+   ],
+   "narration": "Placez-vous de façon à avoir une vue dégagée. Vous devez voir la poitrine atteindre le sol, les hanches et les genoux se tendre en haut, et les mains passer au-dessus des oreilles pendant le saut. Gardez aussi un œil sur la zone, car les burpees faits en dehors ne comptent pas, et sur le bandeau, qui reste au sol devant l'athlète. Ne déplacez jamais physiquement le corps ou le visage d'un athlète pour la caméra."
+  },
+  {
+   "heading": "Demander des burpees supplémentaires",
+   "points": [
+    "Une rep sous le standard : exigez un burpee supplémentaire",
+    "Expliquez clairement et calmement ce qui manquait",
+    "Les athlètes épuisés peuvent continuer si leur effort est sincère"
+   ],
+   "narration": "Quand une rep ne respecte pas le standard, exigez de l'athlète des burpees supplémentaires, pour que la pénalité soit faite de burpees complets. Expliquez clairement et calmement ce qui manquait, par exemple la poitrine qui ne touchait pas le sol, ou les hanches encore fléchies en haut. Certains athlètes seront épuisés. Le programme 2026 dit de les laisser continuer si leur effort est sincère. Ils peuvent poursuivre, mais chaque rep doit toujours respecter le standard."
+  },
+  {
+   "heading": "Quand un athlète conteste votre décision",
+   "points": [
+    "Restez calme, expliquez la règle et évitez la dispute",
+    "Notez le numéro de bandeau et ce qui est contesté",
+    "Renvoyez le litige à l'arbitre principal",
+    "N'aggravez pas un conflit à l'obstacle"
+   ],
+   "narration": "Certains athlètes ne seront pas d'accord quand vous demanderez des burpees supplémentaires. Restez calme et professionnel, expliquez clairement la règle et ne vous laissez pas entraîner dans une dispute. Notez le numéro de bandeau de l'athlète et ce qui a été contesté, et signalez-le à l'arbitre principal dès que possible. Les litiges sont à résoudre par l'arbitre principal, pas à gagner par vous à l'obstacle. Continuez de surveiller les autres athlètes de la zone pendant que vous gérez cela."
+  },
+  {
+   "heading": "En bref",
+   "points": [
+    "Les athlètes comptent ; vous surveillez le standard",
+    "Vue claire sur la poitrine, les hanches et les genoux, et les mains",
+    "Sous le standard : exigez des burpees supplémentaires, expliqués calmement",
+    "Épuisé mais sincère : laissez continuer ; les litiges vont à l'arbitre principal"
+   ],
+   "narration": "En bref. Les athlètes comptent leurs propres burpees, et vous surveillez le standard. Placez-vous là où vous voyez clairement la poitrine en bas, les hanches et les genoux en haut, et les mains pendant le saut, et gardez les burpees dans la zone. Si une rep est insuffisante, exigez des burpees supplémentaires et expliquez pourquoi, calmement. Laissez continuer les athlètes épuisés si leur effort est sincère. Et si un athlète conteste votre décision, notez le numéro et renvoyez-le à l'arbitre principal."
+  }
+ ],
+ "ocr-6-3": [
+  {
+   "heading": "Les burpees manqués deviennent du temps",
+   "points": [
+    "Les athlètes qui ne font pas tous les burpees requis se voient ajouter du temps à leur arrivée",
+    "Les manques sont constatés sur le parcours ou lors de la revue avant les remises de prix",
+    "Le temps ajouté est en cours de révision pour 2027"
+   ],
+   "narration": "Là où les burpees sont la pénalité et qu'un athlète ne fait pas le nombre requis, du temps est ajouté à son temps d'arrivée global. Les burpees manqués peuvent être repérés pendant la course, ou lors de la revue d'après-course avant les remises de prix. Les trois sources 2026 s'accordent pour dire que les burpees manqués coûtent du temps. Elles ne s'accordent pas sur combien : cette leçon n'enseigne donc aucun chiffre. Les montants sont en cours de révision pour 2027, jusqu'à ce que le responsable de l'arbitrage tranche.",
+   "review": "En cours de révision pour 2027 : la règle 3.4.2 ajoute 30 secondes pour chacun des 10 premiers burpees manqués et 10 minutes au total si plus de 10 sont manqués. La SOP d'arbitrage ajoute 30 secondes chacun et 10 minutes si moins de 20 sont faits ; le programme 2026 dit que 11 incorrects ou plus font 10 minutes et que moins de 20 est une disqualification. Cette leçon n'enseigne aucun chiffre tant que le responsable de l'arbitrage n'a pas tranché : l'arbitre principal confirme les pénalités."
+  },
+  {
+   "heading": "Là où les sources 2026 divergent",
+   "points": [
+    "Combien de temps ajoute chaque burpee manqué, et s'il y a un plafond",
+    "Où se situe le seuil : burpees manqués, ou burpees faits",
+    "Si un gros manque signifie une pénalité de temps ou la disqualification",
+    "Le Stadion, avec sa pénalité de 15 burpees, est lui aussi contesté"
+   ],
+   "narration": "Le règlement, la procédure d'arbitrage et le programme 2026 décrivent chacun différemment les pénalités de temps pour les burpees. Ils diffèrent sur le temps qu'ajoute un burpee manqué, et sur l'existence d'un plafond. Ils diffèrent sur l'endroit où se situe le seuil, compté en burpees manqués ou en burpees faits. Et ils diffèrent sur la question de savoir si un gros manque signifie une longue pénalité de temps ou la disqualification. Le Stadion, où la pénalité est de quinze burpees, pose le même problème. Tant que le responsable de l'arbitrage n'a pas tranché, considérez chaque chiffre comme en cours de révision.",
+   "review": "En cours de révision pour 2027 : la règle 3.4.2 ajoute 30 secondes pour chacun des 10 premiers burpees manqués et 10 minutes au total pour plus de 10 (Stadion : 30 secondes chacun pour les 5 premiers, 5 minutes pour plus de 5). La SOP d'arbitrage ajoute 30 secondes par burpee manqué et 10 minutes si moins de 20 sont faits (Stadion : moins de 10). Le programme 2026 dit 30 secondes chacun, 10 minutes pour 11 incorrects ou plus, et la disqualification pour moins de 20. En attendant, n'annoncez aucun chiffre aux athlètes : renvoyez les questions sur les pénalités de temps à l'arbitre principal."
+  },
+  {
+   "heading": "Ce qui compte comme un burpee manqué",
+   "points": [
+    "Un burpee qui n'a pas été fait",
+    "Un burpee hors de la zone désignée : il ne compte pas pour la pénalité",
+    "Une rep sous le standard du mouvement : ce n'est pas un burpee complet",
+    "La revue examine à la fois le nombre et la qualité des burpees"
+   ],
+   "narration": "Un manque ne se limite pas aux burpees jamais faits. Les burpees faits en dehors de la zone désignée ne comptent pas pour la pénalité. Une rep qui ne respecte pas le standard du mouvement n'est pas un burpee complet, et le programme 2026 traite de la même façon les burpees manqués et incorrects. Selon la procédure d'arbitrage, la revue décide à la fois de la quantité et de la qualité des burpees. C'est pourquoi il importe de faire respecter le standard sur place, et de demander des reps supplémentaires.",
+   "review": "En cours de révision pour 2027 : le temps ajouté pour les burpees manqués ou incorrects diffère entre la règle 3.4.2, la SOP d'arbitrage et le programme 2026. Ce qui compte comme un burpee complet, lui, ne diffère pas : appliquez les règles 3.17.4 et 3.17.5, et laissez la pénalité de temps à l'arbitre principal."
+  },
+  {
+   "heading": "Qui décide de la pénalité",
+   "points": [
+    "Avec vidéo : les décisions sur le nombre et la qualité des burpees sont prises en revue vidéo",
+    "Sans vidéo : vous décidez sur place, vous l'écrivez et vous le remettez à l'arbitre principal",
+    "L'arbitre principal transmet les pénalités confirmées au directeur de course et à l'équipe de chronométrage",
+    "Les pénalités sont affichées dans la tente des résultats pendant la revue"
+   ],
+   "narration": "Là où il y a de la vidéo, les décisions sur le nombre de burpees faits, et sur leur qualité, sont prises lors de la revue vidéo. L'arbitre principal gère cette revue au retour des arbitres de leurs obstacles, et transmet les pénalités et disqualifications confirmées au directeur de course et à l'équipe de chronométrage. Là où il n'y a pas de vidéo, la procédure d'arbitrage dit que l'arbitre sur place décide, consigne sa décision par écrit et la remet à l'arbitre principal à son retour de l'obstacle. Les pénalités sont affichées dans la tente des résultats pendant la revue.",
+   "review": "En cours de révision pour 2027 : la SOP d'arbitrage (6.iii) dit que les décisions de pénalité de burpees sont prises en revue vidéo là où il y a de la vidéo, et par l'arbitre sur place, par écrit, là où il n'y en a pas. Le programme 2026 dit que les décisions de pénalité sont prises par l'équipe de revue vidéo. En attendant, suivez la SOP d'arbitrage : sans caméra, écrivez votre décision et remettez-la à l'arbitre principal."
+  },
+  {
+   "heading": "En bref",
+   "points": [
+    "Les burpees manqués ou incorrects ajoutent du temps à l'arrivée de l'athlète",
+    "Combien de temps est en cours de révision pour 2027 : renvoyez les questions à l'arbitre principal",
+    "Faites respecter le standard et la zone sur place",
+    "Avec vidéo, la revue décide ; sans, écrivez votre décision"
+   ],
+   "narration": "En bref. Les burpees manqués ou incorrects ajoutent du temps à l'arrivée de l'athlète, mais combien de temps est en cours de révision pour 2027, parce que le règlement, la procédure d'arbitrage et le programme 2026 ne concordent pas. N'annoncez aucun chiffre : renvoyez les questions à l'arbitre principal. Ce que vous maîtrisez se passe sur le parcours : le standard du mouvement et la zone. Là où il y a de la vidéo, la revue décide. Là où il n'y en a pas, écrivez votre décision et remettez-la à l'arbitre principal.",
+   "review": "En cours de révision pour 2027 : le temps ajouté pour les burpees manqués diffère entre la règle 3.4.2, la SOP d'arbitrage et le programme 2026 (chaque version figure sur la deuxième diapositive), et la SOP et le programme diffèrent sur qui décide quand il n'y a pas de vidéo. Tant que le responsable de l'arbitrage n'a pas tranché, n'enseignez aucun chiffre, suivez la SOP d'arbitrage pour les décisions écrites, et renvoyez les décisions contestées à l'arbitre principal."
+  }
+ ],
+ "ocr-7-1": [
+  {
+   "heading": "Répondre à la question d'un athlète",
+   "points": [
+    "Restez calme et professionnel, quel que soit le ton de la question",
+    "Expliquez clairement la règle : ce que l'obstacle demandait, et ce qui a manqué",
+    "Évitez les disputes : une question n'est pas un débat"
+   ],
+   "narration": "Les athlètes vous questionneront sur vos décisions, souvent alors qu'ils sont fatigués et frustrés. Restez calme et professionnel. Répondez en expliquant clairement la règle : ce que l'obstacle leur demandait, et quelle partie ils n'ont pas respectée. Soyez bref, car d'autres athlètes arrivent encore à votre obstacle. Si l'athlète accepte l'explication, envoyez-le à la pénalité. S'il ne l'accepte pas, cela est devenu un litige. On ne règle pas un litige en se disputant à l'obstacle. On le renvoie à l'arbitre principal."
+  },
+  {
+   "heading": "Quand cela devient un litige",
+   "points": [
+    "Notez le numéro de bandeau de l'athlète",
+    "Écrivez le motif, par exemple un obstacle raté sans pénalité accomplie",
+    "Signalez-le à l'arbitre principal dès que possible",
+    "N'aggravez pas le conflit à l'obstacle"
+   ],
+   "narration": "Si un athlète conteste votre décision, vous avez trois tâches. D'abord, notez son numéro de bandeau. Le règlement rend chaque concurrent responsable de garder son numéro de course sur son bandeau, lisible, à tout moment. Ensuite, écrivez le motif du litige, par exemple que l'athlète a échoué l'obstacle et n'a pas accompli la pénalité. Enfin, signalez-le à l'arbitre principal dès que vous le pouvez sur le plan opérationnel. La décision ne se prend pas à votre obstacle : il n'y a donc rien à gagner à aggraver le conflit. Gardez vos notes factuelles : l'arbitre principal s'appuiera dessus."
+  },
+  {
+   "heading": "Quand vous ne pouvez pas relever le numéro de bandeau",
+   "points": [
+    "Signalez-le tout de suite à l'arbitre principal",
+    "Donnez une description claire : couleur de la tenue, signes distinctifs, catégorie de course",
+    "Aidez à identifier l'athlète plus tard sur le parcours si on vous le demande"
+   ],
+   "narration": "Il arrive qu'un athlète quitte la zone de l'obstacle sans avoir accompli la pénalité, et que vous ne puissiez pas lire son numéro. La procédure d'arbitrage le prévoit. Signalez-le immédiatement à l'arbitre principal, plutôt que d'attendre votre retour de l'obstacle. Donnez une description physique claire : la couleur de sa tenue, tout ce qui le rend facile à reconnaître, et sa catégorie de course si vous pouvez la déterminer. On pourra vous demander d'aider à identifier l'athlète plus tard sur le parcours. En attendant, restez concentré sur votre obstacle et sur les athlètes qui arrivent encore."
+  },
+  {
+   "heading": "La conduite des athlètes",
+   "points": [
+    "Les athlètes doivent traiter les officiels avec équité, respect et courtoisie",
+    "Un langage ou une conduite injurieux, menaçants ou insultants enfreint le règlement",
+    "L'officiel principal décide de toute pénalité pour une infraction de conduite",
+    "Votre rôle : noter le numéro, noter ce qui s'est passé, le signaler"
+   ],
+   "narration": "Le règlement attend des athlètes qu'ils traitent chacun lors de l'événement, officiels compris, avec équité, respect et courtoisie, et qu'ils n'emploient pas de langage ou de conduite injurieux, menaçants ou insultants. Une infraction de conduite peut entraîner une pénalité qui dépend de sa gravité. Dans le règlement, cette décision revient à l'officiel principal, pas à vous. Une conduite antisportive grave, ou la violence physique envers un officiel, peut justifier une suspension. Votre rôle est le même que pour tout litige : rester calme, noter le numéro de bandeau, noter ce qui a été dit ou fait, et le signaler à l'arbitre principal."
+  },
+  {
+   "heading": "Après la course : réclamations et revue vidéo",
+   "points": [
+    "Les résultats ne sont pas définitifs tant que la revue vidéo officielle n'a pas eu lieu",
+    "Les athlètes portent leurs réclamations devant l'officiel principal pendant la période de réclamation",
+    "Les officiels ne sont pas tenus d'examiner les images prises par des athlètes ou des spectateurs",
+    "Les images vidéo officielles ne sont jamais remises aux concurrents"
+   ],
+   "narration": "Une décision contestée ne s'arrête pas à votre obstacle. Avant que les résultats soient définitifs, il y a une revue vidéo officielle. Un athlète qui veut contester une pénalité dépose une réclamation auprès de l'officiel principal pendant la période de réclamation, qui commence dès qu'il franchit la ligne d'arrivée. Les officiels ne sont pas obligés d'examiner les vidéos ou photos prises par des concurrents ou des spectateurs. La procédure d'arbitrage dit aussi que les images officielles ne sont jamais remises aux concurrents. Si un athlète vous propose les images de son téléphone, ou demande à voir les vôtres, renvoyez-le à l'arbitre principal et à la procédure de réclamation.",
+   "review": "En cours de révision pour 2027 : la règle 3.19.1 met fin à la période de réclamation 15 minutes avant la cérémonie de remise des prix de la catégorie de l'athlète. La SOP d'arbitrage donne une demi-heure avant les remises de prix comme exemple, et permet de corriger les erreurs d'arbitre pour les athlètes hors podium jusqu'à deux heures après les dernières remises de prix. En attendant, appliquez le règlement et renvoyez les questions d'horaire à l'arbitre principal."
+  },
+  {
+   "heading": "En bref",
+   "points": [
+    "Restez calme, expliquez clairement la règle, ne vous disputez pas",
+    "Litige : numéro de bandeau, ce qui s'est passé, signalement à l'arbitre principal",
+    "Pas de numéro : signalez-le tout de suite, avec une description claire",
+    "Réclamations et revue vidéo ont lieu après la course, pas à votre obstacle"
+   ],
+   "narration": "En bref. Répondez calmement aux questions et expliquez clairement la règle, sans vous disputer. Si cela devient un litige, notez le numéro de bandeau, écrivez ce qui s'est passé et signalez-le à l'arbitre principal dès que possible. Si vous ne pouvez pas relever le numéro, signalez-le immédiatement avec une description claire de l'athlète. Une conduite injurieuse est consignée et signalée de la même façon. La décision finale vient plus tard, par la revue vidéo et la période de réclamation, pas à votre obstacle."
+  }
+ ],
+ "ocr-8-1": [
+  {
+   "heading": "Conduite professionnelle à votre obstacle",
+   "points": [
+    "Restez concentré sur votre obstacle",
+    "Évitez les distractions et les longues conversations",
+    "Restez neutre et respectueux avec chaque athlète",
+    "Représentez Spartan avec professionnalisme"
+   ],
+   "narration": "Les règles existent pour que chaque événement Spartan soit mené de façon équitable et cohérente, dans un esprit sportif et d'intégrité. À votre obstacle, c'est vous qui le rendez possible. Restez concentré sur l'obstacle et sur les athlètes qui le tentent. Évitez les distractions et les longues conversations, car un échec que vous n'avez pas vu est un échec que vous ne pouvez pas annoncer. Restez neutre et respectueux avec tout le monde, quel qu'il soit. Pour les athlètes et les spectateurs, vous êtes Spartan : représentez donc Spartan avec professionnalisme."
+  },
+  {
+   "heading": "La place d'un arbitre dans le règlement",
+   "points": [
+    "Un arbitre est un officiel nommé par Spartan qui veille au respect des règles",
+    "Généralement posté à un obstacle ou sous la tente de revue vidéo",
+    "L'officiel principal est le principal décideur et l'autorité finale sur les règles",
+    "Votre chaîne : vous, l'arbitre principal, puis le directeur de course ou l'équipe de chronométrage"
+   ],
+   "narration": "Le règlement définit un arbitre comme un officiel nommé par Spartan dont la tâche est de veiller au respect des règles, généralement posté aux obstacles ou sous la tente de revue vidéo. Les arbitres rendent compte à l'officiel principal, qui est le principal décideur pour toutes les questions de règlement lors d'un événement, et l'autorité ultime pour les faire respecter et les interpréter. Dans la procédure d'arbitrage et dans ce programme, vous rendez compte à l'arbitre principal. L'arbitre principal rend ensuite compte des incidents de course au directeur de course, et des pénalités à l'équipe de chronométrage."
+  },
+  {
+   "heading": "Ce que vous décidez",
+   "points": [
+    "Faire respecter les règles de l'obstacle",
+    "Orienter les athlètes qui échouent vers la bonne pénalité",
+    "Consigner les infractions",
+    "Pas sûr de la pénalité ou de la façon de l'appliquer ? Contactez l'arbitre principal tout de suite"
+   ],
+   "narration": "À votre obstacle, vous êtes responsable de trois choses. Vous faites respecter les règles de l'obstacle. Vous orientez un athlète qui échoue vers la bonne pénalité pour cet obstacle. Et vous consignez les infractions. Là où il n'y a pas de preuve vidéo des burpees, la procédure d'arbitrage vous confie la décision sur la quantité et la qualité des burpees : vous la prenez sur place, vous l'écrivez et vous la remettez à l'arbitre principal à votre retour. Si vous avez un doute sur le type de pénalité ou sur la façon de l'appliquer, contactez immédiatement l'arbitre principal."
+  },
+  {
+   "heading": "Qui confirme une pénalité",
+   "points": [
+    "Les décisions finales de pénalité peuvent être confirmées par l'arbitre principal et l'équipe de chronométrage",
+    "En revue vidéo, les officiels peuvent encore évaluer des pénalités, jusqu'à la disqualification",
+    "L'arbitre principal transmet les pénalités confirmées au directeur de course et au chronométrage",
+    "Vos notes sont la preuve sur laquelle reposent ces décisions"
+   ],
+   "narration": "Votre décision lance le processus, mais ce n'est pas toujours le dernier mot. Le programme dit que les décisions finales de pénalité peuvent être confirmées par l'arbitre principal et l'équipe de chronométrage. Selon le règlement, l'officiel principal est responsable en dernier ressort du respect des règles, et pendant la revue vidéo officielle, les officiels de la course peuvent encore évaluer des pénalités, disqualification comprise. L'arbitre principal gère cette revue, et transmet les pénalités et disqualifications confirmées au directeur de course et à l'équipe de chronométrage. C'est pourquoi vos notes comptent : des comptes rendus clairs et factuels permettent de confirmer la bonne décision."
+  },
+  {
+   "heading": "En bref",
+   "points": [
+    "Concentré, neutre, respectueux et professionnel",
+    "Vous faites respecter les règles, orientez les athlètes vers les pénalités et consignez les infractions",
+    "L'arbitre principal confirme les pénalités et traite ce que vous lui renvoyez",
+    "Un doute ? Contactez tout de suite l'arbitre principal"
+   ],
+   "narration": "En bref. Restez concentré sur votre obstacle, neutre et respectueux, et représentez Spartan avec professionnalisme. Vous faites respecter les règles de l'obstacle, orientez les athlètes qui échouent vers la bonne pénalité et consignez les infractions. L'officiel principal a l'autorité finale sur les règles, et l'arbitre principal confirme les pénalités, traite ce que vous lui renvoyez et les transmet au directeur de course et au chronométrage. En cas de doute, contactez tout de suite l'arbitre principal."
+  }
+ ],
+ "ocr-8-2": [
+  {
+   "heading": "La sécurité fait partie du travail",
+   "points": [
+    "Les règles visent à protéger la santé, la sécurité et le bien-être des athlètes",
+    "Surveillez la sécurité de votre obstacle et veillez à ce que les athlètes se déplacent en sécurité",
+    "N'autorisez pas de raccourcis dangereux : les athlètes doivent parcourir tout le parcours officiel"
+   ],
+   "narration": "L'un des buts des règles est de protéger la santé, la sécurité et le bien-être des concurrents, autant que cela peut raisonnablement se faire dans les courses à obstacles. Le programme place la sécurité des athlètes au même rang que l'équité parmi vos priorités. Cela veut dire surveiller la sécurité de votre obstacle, veiller à ce que les athlètes se déplacent en sécurité et ne pas autoriser de raccourcis dangereux. Un raccourci n'est jamais à vous d'autoriser : le règlement exige des athlètes qu'ils parcourent le parcours officiel en entier."
+  },
+  {
+   "heading": "Inspectez, et signalez immédiatement les dangers",
+   "points": [
+    "Avant la première vague, inspectez l'installation et vérifiez qu'elle est en état de servir",
+    "Parcourez la boucle de pénalité et apprenez la direction d'où arrivent les athlètes",
+    "Signalez immédiatement les dangers : arbitre principal, directeur de course ou personnel Spartan"
+   ],
+   "narration": "La sécurité commence avant la première vague compétitive. En arrivant à votre obstacle, inspectez l'installation et vérifiez qu'elle est en état de servir. Examinez le flux de la course et la direction d'où arriveront les athlètes, et parcourez toute la boucle de pénalité pour en connaître le trajet et le point de retour. Si quelque chose vous inquiète, un doute, un problème de sécurité ou une incohérence, signalez-le immédiatement à l'arbitre principal ou au directeur de course. Pendant la course, signalez tout danger sans attendre à l'arbitre principal, au directeur de course ou au personnel Spartan."
+  },
+  {
+   "heading": "Les mouvements sûrs dans les règles des obstacles",
+   "points": [
+    "Rope Climb : redescendre en sécurité et sous contrôle, au moins une main sur la corde",
+    "Hercules Hoist : redescendre le poids sous contrôle ; le lâcher est un échec",
+    "Nage ou traversée d'eau : pas de plongeon ; plonger est un échec"
+   ],
+   "narration": "Certaines règles d'obstacles intègrent directement la sécurité, et vous les faites respecter comme n'importe quelle autre règle. À la Rope Climb, les athlètes doivent revenir au sol de façon sûre et contrôlée, avec au moins une main touchant la corde à tout moment. Au Hercules Hoist, le poids doit être redescendu sous contrôle, pas en chute libre, et le lâcher de façon incontrôlée est un échec. À une nage ou une traversée d'eau, le plongeon n'est pas autorisé, et c'est un mode d'échec. Connaissez les règles de sécurité de votre obstacle avant l'arrivée du premier athlète."
+  },
+  {
+   "heading": "La même interprétation pendant toute la course",
+   "points": [
+    "Appliquez les règles de façon égale à tous les athlètes",
+    "Gardez la même interprétation de la première à la dernière vague",
+    "Chaque pénalité s'applique de façon cohérente dans sa catégorie ou sa vague",
+    "Votre priorité : les catégories Compétitives, Elite et Age Group"
+   ],
+   "narration": "La cohérence est ce qui rend les résultats équitables. Appliquez les règles de façon égale à chaque athlète, et gardez la même interprétation de la première à la dernière vague. La décision que vous prenez pour le premier athlète Elite sert de référence pour tous ceux qui suivent. Le règlement dit que chaque pénalité est appliquée de façon cohérente dans la catégorie ou la vague désignée. Votre priorité va aux catégories Compétitives, Elite et Age Group, dont on attend qu'elles respectent chaque règle. Les coureurs Open sont eux aussi encouragés à respecter les règles, dans une ambiance plus détendue."
+  },
+  {
+   "heading": "Tenez-vous-en à la règle, et remontez en cas de doute",
+   "points": [
+    "Jugez selon les modes d'échec écrits de l'obstacle",
+    "Évitez le jugement personnel au-delà de la règle",
+    "En cas de doute, remontez la décision à l'arbitre principal"
+   ],
+   "narration": "La cohérence, c'est aussi ne pas ajouter de règles de votre cru. Jugez chaque tentative selon les modes d'échec écrits de l'obstacle, pas selon ce que vous trouvez personnellement juste, et évitez tout jugement au-delà de ce que dit la règle. Si une situation n'est pas clairement couverte, ou si vous ne savez pas quelle pénalité s'applique ni comment l'appliquer, contactez tout de suite l'arbitre principal. Une décision remontée et prise une fois peut ensuite être appliquée de la même façon à tous."
+  },
+  {
+   "heading": "En bref",
+   "points": [
+    "Surveillez la sécurité, exigez des mouvements sûrs, n'autorisez aucun raccourci",
+    "Inspectez tôt et signalez immédiatement les dangers",
+    "Mêmes règles, même interprétation, pour chaque athlète, pendant toute la course",
+    "Un doute ? Remontez à l'arbitre principal"
+   ],
+   "narration": "En bref. La sécurité des athlètes est, avec l'équité, votre priorité. Surveillez votre obstacle, veillez à ce que les athlètes se déplacent en sécurité et n'autorisez aucun raccourci. Inspectez l'obstacle et parcourez la boucle de pénalité avant la première vague, et signalez les dangers sans attendre à l'arbitre principal, au directeur de course ou au personnel Spartan. Appliquez les mêmes règles, avec la même interprétation, à chaque athlète pendant toute la course. Et en cas de doute, remontez à l'arbitre principal."
+  }
+ ],
+ "ocr-9-1": [
+  {
+   "heading": "Surveillez les mains et les pieds",
+   "points": [
+    "La plupart des modes d'échec concernent ce que touchent les mains et les pieds",
+    "Monkey Bars : mains et bras uniquement ; des pieds ou des jambes sur les barres sont un échec",
+    "Olympus : les pieds peuvent s'appuyer sur le mur, mais un pied sur une prise ou dans un trou est un échec"
+   ],
+   "narration": "La plupart des échecs aux obstacles se résument à ce que touchent les mains et les pieds d'un athlète : c'est donc là que vont vos yeux. Aux Monkey Bars, l'athlète traverse en n'utilisant que les mains et les bras. Des pieds ou des jambes qui touchent les barres sont un échec, tout comme toucher le sol pour se donner un avantage. À l'Olympus, les athlètes peuvent appuyer leurs pieds et leurs genoux contre le mur pour se soutenir, mais toucher une prise ou un trou avec les pieds est un échec. Sachez exactement quels contacts votre obstacle autorise."
+  },
+  {
+   "heading": "Concentrez-vous sur la règle exacte",
+   "points": [
+    "Connaissez les consignes, modes d'échec et notes de votre obstacle avant la première vague",
+    "Helix et Z Wall : la tentative commence à quatre points de contact",
+    "Monkey Bars, Multi-Rig, Olympus : dès que les deux pieds quittent la marche de départ"
+   ],
+   "narration": "Chaque obstacle a sa propre règle, avec des consignes pour les concurrents, des modes d'échec et des notes supplémentaires. Surveillez cette règle, pas une idée générale de ce qu'est une bonne tentative. Sachez quand la tentative commence, car à partir de là l'athlète est engagé. À l'Helix et au Z Wall, elle commence dès que quatre points de contact sont établis. Aux Monkey Bars, au Multi-Rig et à l'Olympus, elle commence dès que les deux pieds ont quitté la marche de départ. Si vous manquez le début, vous ne pouvez pas être sûr de ce qui compte."
+  },
+  {
+   "heading": "Où se placer",
+   "points": [
+    "Un endroit d'où la vue sur les tentatives, les réussites et les échecs est dégagée",
+    "Vérifiez le flux de la course et la direction d'où arrivent les athlètes",
+    "Anticipez où les échecs se produisent d'ordinaire, et gardez ces points en vue"
+   ],
+   "narration": "Avant la première vague, déterminez le meilleur endroit où vous placer. Il vous faut une vue dégagée sur les tentatives, les réussites et les échecs. Examinez le flux de la course et la direction d'où arrivent les athlètes. Pensez à l'endroit où les échecs se produisent d'ordinaire sur votre obstacle, et assurez-vous que ces points sont bien en vue. La procédure d'arbitrage appelle obstacles à fort taux d'échec ceux qui ont un historique d'échecs fréquents. Ils demandent une application active des règles : votre position y compte donc encore plus."
+  },
+  {
+   "heading": "Prêt à intervenir lors d'un échec",
+   "points": [
+    "Placez-vous là où vous pouvez parler à un athlète qui échoue et l'orienter vers la pénalité",
+    "Connaissez le trajet de la boucle de pénalité et son point de retour",
+    "Gardez la cloche en vue : la frapper du pied est un échec"
+   ],
+   "narration": "Voir un échec, c'est la moitié du travail. L'autre moitié, c'est d'aborder l'athlète : placez-vous donc là où vous pouvez lui parler dès qu'il échoue et l'orienter vers la pénalité. Parcourez la boucle de pénalité au préalable, pour en connaître le trajet et l'endroit où elle rejoint le parcours. Gardez aussi la cloche en vue. Selon la règle générale, les cloches ne peuvent être frappées qu'avec les bras, les mains ou une autre partie du corps au-dessus de la poitrine. Frapper la cloche du pied est un échec. Vérifiez aussi la règle propre à votre obstacle."
+  },
+  {
+   "heading": "En bref",
+   "points": [
+    "Surveillez les mains et les pieds",
+    "Connaissez la règle exacte, et quand la tentative commence",
+    "Placez-vous avec une vue claire là où les échecs se produisent",
+    "Soyez prêt à orienter l'athlète vers la pénalité"
+   ],
+   "narration": "En bref. Surveillez les mains et les pieds de l'athlète, car c'est là que se produisent la plupart des échecs. Connaissez la règle exacte de votre obstacle, y compris le moment où la tentative commence. Placez-vous là où votre vue est dégagée et où les points d'échec habituels sont en vue. Et positionnez-vous de façon à pouvoir aborder l'athlète dès qu'il échoue, et l'envoyer vers la bonne pénalité."
+  }
+ ],
+ "ocr-9-2": [
+  {
+   "heading": "Utiliser la structure de soutien",
+   "points": [
+    "Murs : utiliser la structure de soutien, les côtés ou les sangles est un échec",
+    "Rigs : utiliser une poutrelle verticale comme échelle est un échec",
+    "Une poutrelle horizontale peut servir à démarrer ou à passer d'un point à un autre, là où la règle l'autorise"
+   ],
+   "narration": "La poutrelle est la structure porteuse principale de l'obstacle : les poutres métalliques diagonales, verticales et horizontales. De nombreux obstacles interdisent de l'utiliser. Aux murs, utiliser la structure de soutien, les côtés du mur ou les sangles pour s'aider à l'équilibre, à monter ou à descendre est un échec. Aux Monkey Bars et aux autres rigs, utiliser une poutrelle verticale comme échelle pour démarrer, traverser ou finir est un échec. Mais de nombreux rigs permettent d'utiliser une poutrelle horizontale pour démarrer, ou pour passer d'un point à un autre pendant la traversée. Vérifiez ce qui s'applique à votre obstacle."
+  },
+  {
+   "heading": "Toucher en dehors de la zone autorisée",
+   "points": [
+    "Multi-Rig : saisir les cordes, élingues ou chaînes qui tiennent un accessoire est un échec",
+    "Helix : utiliser les barres d'un autre couloir est un échec",
+    "Olympus : toucher une prise ou un trou avec les pieds est un échec"
+   ],
+   "narration": "Toucher en dehors de la zone autorisée, c'est utiliser une partie de l'obstacle que la règle n'autorise pas. Au Multi-Rig, les athlètes ne peuvent utiliser que les accessoires. Saisir les cordes, élingues ou chaînes qui les fixent à la structure est un échec, tout comme utiliser plus d'un couloir. À l'Helix, utiliser les barres d'un autre couloir est un échec. À l'Olympus, les mains travaillent sur les prises, et un pied sur une prise ou dans un trou est un échec. Connaissez exactement la zone autorisée de votre obstacle."
+  },
+  {
+   "heading": "Ne pas tenter, et sauter la boucle",
+   "points": [
+    "Chaque obstacle doit être tenté : au minimum, l'athlète le touche",
+    "Un athlète qui échoue doit accomplir la boucle de pénalité en entier",
+    "Sauter la boucle est sanctionné : la pénalité est en cours de révision pour 2027"
+   ],
+   "narration": "Chaque obstacle doit être tenté. Au minimum, une tentative consiste à toucher l'obstacle. Parfois elle consiste à traverser de l'eau ou un terrain difficile pour l'atteindre, et cela ne peut pas être contourné avec une pénalité sauf si le briefing ou le personnel de course le disent. Un athlète qui tente et échoue doit accomplir la boucle de pénalité en entier. La sauter est une infraction que vous consignez et signalez à l'arbitre principal. Les sources diffèrent sur la pénalité correspondante : elle est donc en cours de révision.",
+   "review": "En cours de révision pour 2027 : la règle 3.4.1 ajoute une pénalité de temps de 10 minutes quand un athlète n'accomplit pas la boucle de pénalité. Le programme en ligne 2026 dit que cela peut entraîner la disqualification. En attendant, appliquez le règlement et renvoyez le cas à l'arbitre principal."
+  },
+  {
+   "heading": "Des burpees qui ne respectent pas le standard",
+   "points": [
+    "Poitrine au sol, debout avec hanches et genoux tendus, puis un saut, mains au-dessus des oreilles",
+    "Les burpees faits en dehors de la zone de burpees désignée ne comptent pas",
+    "Les athlètes comptent leurs propres burpees : vous ne comptez pas à leur place"
+   ],
+   "narration": "Les burpees incorrects sont l'une des infractions les plus courantes. Un burpee complet va de la position basse, allongé avec la poitrine au sol, à une position debout équilibrée avec hanches et genoux tendus, suivie d'un saut avec les mains au-dessus des oreilles. Les burpees faits en dehors de la zone désignée ne comptent pas. Les athlètes comptent leurs propres burpees, et vous ne comptez pas à leur place. Là où le standard n'est pas respecté, le programme dit d'exiger des burpees supplémentaires, et de rappeler à l'athlète que son mouvement et ses reps sont contrôlés."
+  },
+  {
+   "heading": "La cloche",
+   "points": [
+    "Sur des rigs comme les Monkey Bars, ne pas sonner la cloche est un échec",
+    "Les cloches peuvent être frappées avec les bras, les mains ou le corps au-dessus de la poitrine",
+    "Frapper la cloche du pied est un échec : pas de nouvel essai, l'athlète prend la pénalité"
+   ],
+   "narration": "De nombreux obstacles se terminent par une cloche, et sur des rigs comme les Monkey Bars, ne pas la sonner est un mode d'échec. Un athlète qui tombe avant d'avoir sonné la cloche a échoué, aussi loin soit-il allé. Selon la règle générale, les cloches ne peuvent être frappées qu'avec les bras et les mains, ou une autre partie du corps au-dessus de la poitrine. Utiliser les pieds, les jambes ou les genoux pour frapper la cloche compte comme un échec de l'obstacle. L'athlète ne peut pas réessayer, et doit accomplir la pénalité de cet obstacle."
+  },
+  {
+   "heading": "En bref",
+   "points": [
+    "Pas de structure de soutien ni de poutrelle verticale sauf si la règle l'autorise",
+    "Seulement les parties autorisées de l'obstacle, dans un seul couloir",
+    "Tenter chaque obstacle, et accomplir chaque boucle de pénalité en entier",
+    "Burpees selon le standard, dans la zone ; cloches sonnées, jamais frappées du pied"
+   ],
+   "narration": "En bref. Surveillez les athlètes qui utilisent la structure de soutien, ou une poutrelle verticale comme échelle, là où la règle l'interdit. Surveillez le toucher en dehors de la zone autorisée, comme saisir les cordes ou les chaînes d'un rig, ou utiliser un autre couloir. Chaque obstacle doit être tenté, et chaque boucle de pénalité accomplie en entier. Les burpees doivent respecter le standard et être faits dans la zone. Et la cloche doit être sonnée, jamais frappée du pied."
+  }
+ ],
+ "ocr-9-3": [
+  {
+   "heading": "Comment décider",
+   "points": [
+    "Trouvez la règle exacte : consignes, modes d'échec et notes",
+    "Vérifiez si ce que vous avez vu correspond à un mode d'échec listé",
+    "Prenez la décision, orientez l'athlète, consignez-la, et remontez en cas de doute"
+   ],
+   "narration": "Cette leçon vous présente trois situations tirées du programme 2026. Pour chacune, décidez de ce que vous feriez avant d'entendre la réponse. La méthode est toujours la même. Trouvez la règle exacte de l'obstacle. Vérifiez si ce que vous avez vu correspond à l'un de ses modes d'échec listés. Puis prenez la décision, orientez l'athlète et consignez ce qui s'est passé. Si la règle ne tranche pas, ou si vous avez un doute, remontez à l'arbitre principal."
+  },
+  {
+   "heading": "Scénario 1 : un bref toucher sur le haut",
+   "points": [
+    "Un athlète à l'Helix touche brièvement le haut de l'obstacle d'une main",
+    "Le toucher dure un instant et ne lui donne aucun avantage",
+    "Il continue et sonne la cloche"
+   ],
+   "narration": "La règle 4.2.6 range le fait de toucher le haut de l'Helix parmi les modes d'échec, sans condition d'avantage. L'Olympus et le Z Wall sont pareils. La décision que soutient le règlement est donc un échec, et l'athlète prend la pénalité, même si le toucher n'a rien apporté. L'avantage compte là où la règle le dit. Aux Monkey Bars, selon la règle 4.2.7, des pieds qui touchent le sol sont un échec quand cela crée un avantage. Vérifiez toujours le libellé du mode d'échec avant de décider.",
+   "review": "En cours de révision pour 2027 : le programme en ligne 2026 demande aux arbitres de se demander si le toucher a créé un avantage, et de se concentrer sur l'intention de la règle, pas sur un contact accidentel mineur. Les règles 4.2.6, 4.2.10 et 4.2.17 rangent le fait de toucher le haut parmi les échecs, sans test d'avantage. En attendant, appliquez le règlement et renvoyez une décision contestée à l'arbitre principal."
+  },
+  {
+   "heading": "Scénario 2 : des burpees rapides, hanches non tendues",
+   "points": [
+    "Un athlète fait ses burpees de pénalité après avoir échoué au Spear Throw",
+    "Il va vite, et en haut de nombreuses reps ses hanches sont encore fléchies"
+   ],
+   "narration": "Ces reps ne respectent pas le standard. La règle 3.17.4 définit la position haute comme équilibrée et debout, avec les hanches et les genoux tendus, pas fléchis, avant le saut. Une rep sans cela n'est pas un burpee complet. Le programme dit d'exiger des burpees supplémentaires quand le standard n'est pas respecté, et de rappeler à l'athlète que son mouvement et ses reps sont contrôlés. Ne comptez pas à sa place. Au Spear Throw, c'est l'équipe de revue vidéo qui décide des burpees manqués. Sans vidéo, vous décidez sur place, vous l'écrivez et vous le remettez à l'arbitre principal.",
+   "review": "En cours de révision pour 2027 : le temps ajouté pour les burpees manqués ou incorrects diffère entre le règlement (3.4.2), la SOP d'arbitrage et le programme 2026. Cette leçon n'enseigne aucun chiffre tant que le responsable de l'arbitrage n'a pas tranché."
+  },
+  {
+   "heading": "Scénario 3 : passer devant la boucle de pénalité sans la faire",
+   "points": [
+    "Un athlète échoue un obstacle réussite/échec à votre poste",
+    "Vous l'orientez vers la boucle de pénalité, mais il passe devant sans s'arrêter et continue"
+   ],
+   "narration": "C'est une infraction claire. Selon la règle 3.4.1, un athlète qui tente et échoue un obstacle réussite ou échec doit accomplir la boucle de pénalité, et celui-ci ne l'a pas fait. Ne lui courez pas après et ne vous disputez pas. Notez le numéro de bandeau, consignez ce qui s'est passé et signalez-le à l'arbitre principal dès que possible. Si vous n'avez pas pu lire le numéro, signalez-le immédiatement avec une description claire : couleur de la tenue, signes distinctifs et catégorie de course. La pénalité elle-même se décide par l'arbitre principal, pas à votre obstacle.",
+   "review": "En cours de révision pour 2027 : la règle 3.4.1 ajoute une pénalité de temps de 10 minutes quand la boucle de pénalité n'est pas accomplie. Le programme en ligne 2026 dit que cela peut entraîner la disqualification. En attendant, appliquez le règlement et renvoyez le cas à l'arbitre principal."
+  },
+  {
+   "heading": "En bref",
+   "points": [
+    "Lisez le libellé exact du mode d'échec : l'avantage ne compte que là où il est mentionné",
+    "Un burpee sans extension complète en haut ne compte pas",
+    "Boucle de pénalité sautée : notez le numéro, consignez, signalez",
+    "Un doute ? Remontez à l'arbitre principal"
+   ],
+   "narration": "En bref. Un bref toucher sur le haut de l'Helix, de l'Olympus ou du Z Wall est un échec selon le règlement, car le mode d'échec n'a pas de test d'avantage, alors que d'autres modes d'échec en ont un. Un burpee sans hanches ni genoux tendus en haut n'est pas un burpee complet : des burpees supplémentaires sont donc exigés. Un athlète qui passe devant la boucle de pénalité a enfreint le règlement : notez le numéro de bandeau, consignez-le et signalez-le à l'arbitre principal."
+  }
+ ],
+ "ocr-4-2": [
+  {
+   "heading": "Un obstacle à tentative unique",
+   "points": [
+    "Un seul lancer : un raté est un échec, et un échec entraîne la pénalité",
+    "Votre rôle : voir le début de la tentative, juger le résultat, envoyer l'athlète à la pénalité"
+   ],
+   "narration": "Le Spear Throw est un obstacle à tentative unique, réussite ou échec. Chaque athlète a un seul lancer. S'il échoue, il n'y a pas de deuxième essai : il va directement à la pénalité. Votre rôle au Spear Throw est de voir exactement quand la tentative commence, de juger le résultat et d'orienter l'athlète vers la bonne pénalité."
+  },
+  {
+   "heading": "Ce que l'athlète doit faire",
+   "points": [
+    "Se tenir avec les deux pieds derrière la barrière",
+    "Lancer la lance sur la cible de son couloir",
+    "La lance se plante dans la cible indiquée et y reste, sans qu'aucune partie ne touche le sol"
+   ],
+   "narration": "Selon la règle 4.2.13, l'athlète se tient avec les deux pieds derrière la barrière et lance sur la cible de son propre couloir. Pour réussir, la lance doit se planter dans la cible indiquée et y rester, sans qu'aucune partie de la lance ne touche le sol."
+  },
+  {
+   "heading": "Quand commence la tentative",
+   "points": [
+    "C'est une tentative dès que la lance est lâchée d'un mouvement vers l'avant",
+    "Changer de couloir est permis, mais seulement avant la tentative",
+    "Une attache emmêlée qui gâche le lancer compte quand même comme une tentative"
+   ],
+   "narration": "Le règlement dit que la tentative commence dès que l'athlète lâche la lance d'un mouvement vers l'avant. Avant cela, il peut changer de couloir. Après, il ne peut plus se replacer. Et si l'attache s'emmêle et gâche le lancer, cela compte quand même : garder l'attache dégagée est le travail de l'athlète.",
+   "review": "En cours de révision pour 2027 : le programme en ligne 2026 dit que l'engagement commence plus tôt, quand la lance est ramenée en arrière pour lancer. Le règlement dit au lâcher. Tant que le responsable de l'arbitrage n'a pas tranché, appliquez le règlement et renvoyez toute décision contestée à l'arbitre principal."
+  },
+  {
+   "heading": "Réussite ou échec",
+   "points": [
+    "Échec : la lance ne se plante pas dans la cible indiquée",
+    "Échec : une partie quelconque de la lance touche le sol une fois immobile",
+    "Pas un échec en soi : effleurer le sol en vol, si elle finit dans la cible sans toucher le sol"
+   ],
+   "narration": "Il y a deux façons d'échouer. La lance ne se plante pas dans la cible indiquée, ou une partie quelconque touche le sol une fois qu'elle s'est arrêtée. Une lance peut effleurer le sol en chemin, et cela seul n'est pas un échec, tant qu'elle finit dans la cible sans toucher le sol.",
+   "review": "En cours de révision pour 2027 : le programme en ligne 2026 range « la lance touche le sol avant la cible » parmi les échecs. La règle 4.2.13 l'autorise. Appliquez le règlement jusqu'à ce que le responsable de l'arbitrage tranche."
+  },
+  {
+   "heading": "Quand c'est terminé",
+   "points": [
+    "Terminé dès que l'athlète s'est éloigné d'au moins 2 mètres du couloir",
+    "Il ne peut pas partir avant que la lance ait touché la cible, la structure ou le sol",
+    "Une chute ou un échec avant d'être à 2 mètres est une tentative incomplète : pénalité"
+   ],
+   "narration": "L'obstacle est terminé dès que l'athlète s'est éloigné d'au moins deux mètres de son couloir. Il ne peut pas partir avant que la lance ait touché la cible, la structure ou le sol. Si la lance tombe avant qu'il soit à deux mètres, c'est une tentative incomplète, et la pénalité s'applique."
+  },
+  {
+   "heading": "La pénalité",
+   "points": [
+    "30 burpees (15 lors des événements Stadion)",
+    "Dans la zone de burpees désignée : les burpees faits en dehors ne comptent pas",
+    "Chacun selon le standard : poitrine au sol, debout, puis un saut avec les mains au-dessus des oreilles"
+   ],
+   "narration": "La pénalité pour un échec au Spear Throw est de trente burpees, ou quinze lors des événements Stadion. Ils doivent être faits dans la zone de burpees désignée, car les burpees faits en dehors ne comptent pas. Chacun doit respecter le standard : poitrine au sol, retour à une position debout équilibrée, puis un saut avec les mains au-dessus des oreilles.",
+   "review": "En cours de révision pour 2027 : le temps ajouté pour les burpees manqués diffère entre le règlement (3.4.2), la SOP d'arbitrage et le programme 2026. Cette leçon n'enseigne aucun chiffre tant que le responsable de l'arbitrage n'a pas tranché."
+  },
+  {
+   "heading": "Ce que vous faites",
+   "points": [
+    "Placez-vous là où vous voyez le lâcher, la barrière et la cible",
+    "Annoncez le résultat clairement et calmement",
+    "Envoyez l'athlète à la zone de burpees, où la caméra voit son numéro de bandeau",
+    "Renvoyez tout litige à l'arbitre principal : ne discutez pas à l'obstacle"
+   ],
+   "narration": "Placez-vous là où vous voyez en même temps le lâcher, la barrière et la cible. Annoncez le résultat clairement et calmement. Envoyez l'athlète à la zone de burpees, et assurez-vous que la caméra voit son numéro de bandeau. Si l'athlète conteste la décision, notez son numéro et renvoyez-le à l'arbitre principal. Ne discutez pas à l'obstacle."
+  },
+  {
+   "heading": "En bref",
+   "points": [
+    "Un seul lancer : la tentative commence quand la lance est lâchée vers l'avant",
+    "Réussite : dans la cible, rien ne touche le sol une fois immobile",
+    "Terminé : à 2 mètres du couloir",
+    "Échec : 30 burpees dans la zone, chacun selon le standard"
+   ],
+   "narration": "En bref. Un seul lancer, et la tentative commence quand la lance est lâchée vers l'avant. Une réussite est une lance dans la cible, avec rien qui touche le sol une fois immobile. L'athlète a fini quand il est à deux mètres du couloir. Un échec, c'est trente burpees dans la zone de burpees, chacun selon le standard."
+  }
+ ],
+ "deka-1-1": [
+  {
+   "heading": "Une leçon d'exemple",
+   "points": [
+    "Ce programme est fictif",
+    "Sa leçon et son quiz montrent comment fonctionne un second programme",
+    "Rien de tout cela n'est les règles de DEKA"
+   ],
+   "narration": "Voici une leçon d'exemple dans un programme fictif. Elle montre comment un second programme se place à côté de celui d'OCR, avec ses propres leçons, son quiz, son seuil de réussite et son attestation. Rien ici ne constitue les vraies règles de DEKA : elles viendront des responsables du programme DEKA."
+  },
+  {
+   "heading": "Compter les reps (exemple)",
+   "points": [
+    "Un juge compte chaque rep qui respecte le standard",
+    "Une rep qui ne le respecte pas est un no rep, annoncé clairement"
+   ],
+   "narration": "Dans cet exemple, un juge compte chaque répétition qui respecte le standard du mouvement, et annonce clairement un no rep quand l'une ne le respecte pas. Les vrais standards et décisions viendront avec le matériel propre à DEKA."
+  },
+  {
+   "heading": "En bref (exemple)",
+   "points": [
+    "Contenu fictif uniquement",
+    "Le quiz qui suit est lui aussi un exemple"
+   ],
+   "narration": "C'est la fin de la leçon d'exemple. Le quiz qui suit en est un aussi, pour montrer comment chaque programme garde sa propre évaluation et sa propre attestation."
+  }
+ ]
+}

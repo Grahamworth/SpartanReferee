@@ -1,0 +1,1538 @@
+{
+ "cam-1-1": [
+  {
+   "heading": "Kamere na stanici za kazne",
+   "points": [
+    "Mobiteli snimaju zonu kaznenih burpeeja",
+    "SpartanReferee poslužitelj ih snima i pokreće AI suca na svakoj kameri",
+    "Svako se ponavljanje broji i provjerava prema standardu"
+   ],
+   "narration": "SpartanReferee snima stanicu za kazne mobitelima. Svaki mobitel šalje sliku SpartanReferee poslužitelju putem Wi-Fi-ja ili mobilnih podataka. Poslužitelj je snima i pokreće AI suca na svakoj kameri, pa se svako ponavljanje broji i provjerava prema standardu pokreta."
+  },
+  {
+   "heading": "Tko što radi",
+   "points": [
+    "Glavni sudac natjecanja rezervira stanicu i vodi je",
+    "Svaki sudac dodijeljen natjecanju može je gledati uživo i pregledavati rezultate",
+    "Administratori mogu rezervirati, produljiti ili zaustaviti kamere bilo kojeg natjecanja"
+   ],
+   "narration": "Svako natjecanje ima jednu rezervaciju kamera. Glavni sudac rezervira je na stranici natjecanja i vodi je na dan utrke. Svaki sudac dodijeljen natjecanju može je otvoriti kako bi uživo gledao kamere i pregledavao rezultate. Administratori mogu uskočiti i rezervirati, produljiti ili zaustaviti kamere bilo kojeg natjecanja."
+  },
+  {
+   "heading": "Ukratko",
+   "points": [
+    "Mobiteli snimaju, poslužitelj sudi, svi gledaju u pregledniku",
+    "Glavni sudac rezervira i vodi stanicu"
+   ],
+   "narration": "Ukratko: mobiteli snimaju, poslužitelj sudi, a svaki sudac gleda u pregledniku. Glavni sudac rezervira i vodi stanicu."
+  }
+ ],
+ "cam-1-2": [
+  {
+   "heading": "Vaša natjecanja",
+   "points": [
+    "Vaša su natjecanja na vašoj početnoj stranici",
+    "Otvorite jedno da vidite sate rada kamera i tko sudi na njemu",
+    "Glavni sudac tamo vidi Rezervirajte burpee kamere"
+   ],
+   "narration": "Vaša su natjecanja na vašoj SpartanReferee početnoj stranici. Otvorite jedno da vidite sate rada kamera i tko na njemu sudi. Ako ste njegov glavni sudac, tamo rezervirate kamere za burpee."
+  },
+  {
+   "heading": "Sati rada",
+   "points": [
+    "Kamere rade od 07:00 do 18:00 po lokalnom vremenu svakog dana natjecanja",
+    "Vremena se unose po lokalnom vremenu samog natjecanja",
+    "Rezervacija unaprijed pokreće poslužitelje 10 minuta ranije; pokretanje odmah traje oko 5 minuta"
+   ],
+   "narration": "Kamere natjecanja rade od sedam ujutro do šest navečer, po lokalnom vremenu, svakog dana natjecanja. Vremena rezervacije su po lokalnom vremenu samog natjecanja, bez obzira na to odakle rezervirate. Rezervacija unaprijed pokreće poslužitelje deset minuta ranije, kako bi kamere bile spremne na vrijeme. Pokretanje odmah traje oko pet minuta."
+  },
+  {
+   "heading": "Poslužitelji i veza",
+   "points": [
+    "Svaki poslužitelj prima 2 kamere",
+    "Svaka kamera šalje oko 3,5 Mbit/s",
+    "Provjerite vezu lokacije prije dana utrke: mora podnijeti sve kamere"
+   ],
+   "narration": "Svaki poslužitelj prima dvije kamere, pa broj kamera određuje broj poslužitelja. Svaka kamera šalje oko tri i pol megabita u sekundi, a veza lokacije mora podnijeti sve njih. Provjerite je prije dana utrke."
+  }
+ ],
+ "cam-1-3": [
+  {
+   "heading": "Za svaku kameru",
+   "points": [
+    "Mobitel na stativu ili postolju",
+    "Powerbank",
+    "Mobilni podaci ili Wi-Fi lokacije"
+   ],
+   "narration": "Za svaku kameru trebate mobitel na stativu ili postolju, powerbank da radi cijeli dan te mobilne podatke ili Wi-Fi lokacije."
+  },
+  {
+   "heading": "Aplikacije",
+   "points": [
+    "Android: aplikacija SpartanReferee Broadcaster",
+    "iPhone: Larix Broadcaster, iz App Storea",
+    "Za gledanje i suđenje: bilo koji mobitel, tablet ili računalo s preglednikom, bez instalacije"
+   ],
+   "narration": "Android mobiteli koriste aplikaciju SpartanReferee Broadcaster. iPhone koristi Larix Broadcaster, iz App Storea. Za gledanje kamera i suđenje dovoljan je bilo koji mobitel, tablet ili računalo s preglednikom: na njega ne treba ništa instalirati."
+  }
+ ],
+ "cam-2-1": [
+  {
+   "heading": "Gdje ide mobitel",
+   "points": [
+    "Vodoravno, na postolju",
+    "3 do 4 metra od natjecatelja",
+    "Cijelo tijelo svakog natjecatelja u kadru, i kad leži ravno"
+   ],
+   "narration": "Postavite mobitel vodoravno na postolje, tri do četiri metra od natjecatelja. Cijelo tijelo svakog natjecatelja neka bude u kadru, i kad leži ravno na tlu."
+  },
+  {
+   "heading": "Kut",
+   "points": [
+    "Blago koso ili bočno bolje prosuđuje prsa do tla nego ravno ispred",
+    "Sklekovi i trbušnjaci traže mobitel bočno u razini poda"
+   ],
+   "narration": "Blago kosi ili bočni pogled bolje prosuđuje prsa do tla nego kamera ravno ispred. Za sklekove i trbušnjake postavite mobitel bočno u razini poda."
+  },
+  {
+   "heading": "Držite staze slobodnima",
+   "points": [
+    "Službene osobe u žutim reflektirajućim majicama nikad se ne broje kao natjecatelji",
+    "Svatko drugi tko stoji ispred kamere smeta",
+    "Stanite tako da vidite natjecatelje bez zaklanjanja kadra"
+   ],
+   "narration": "Službene osobe u žutim reflektirajućim majicama nikad se ne broje kao natjecatelji. Svatko drugi tko stoji ispred kamere smeta, zato držite staze slobodnima i stanite tako da vidite natjecatelje bez zaklanjanja kamera."
+  }
+ ],
+ "cam-2-2": [
+  {
+   "heading": "QR kodovi",
+   "points": [
+    "Otvorite rezervaciju na konzoli kad je uključena",
+    "Svaka kamera koja čeka svoj mobitel prikazuje QR kodove na karticama Uživo i Kamere",
+    "Kodovi se mijenjaju sa svakom rezervacijom: skenirajte ih ponovno svaki put"
+   ],
+   "narration": "Kad je rezervacija uključena, otvorite je na konzoli. Svaka kamera koja čeka svoj mobitel prikazuje QR kodove na karticama Uživo i Kamere. Kodovi se mijenjaju sa svakom rezervacijom, pa ih skenirajte ponovno svaki put."
+  },
+  {
+   "heading": "Android: SpartanReferee Broadcaster",
+   "points": [
+    "Instalirajte aplikaciju; dopustite instalaciju iz ovog izvora kad mobitel zatraži",
+    "Dodirnite Skeniraj QR kod kamere i skenirajte kod te kamere",
+    "Ostavite kvalitetu na 720p osim ako je signal slab, zatim Otvori kameru i Kreni uživo"
+   ],
+   "narration": "Na Androidu instalirajte SpartanReferee Broadcaster. Mobitel vas upozorava jer aplikacija nije iz trgovine Play: dodirnite Postavke, dopustite instalaciju iz ovog izvora, vratite se i instalirajte. Dodirnite Skeniraj QR kod kamere i skenirajte kod te kamere. Ostavite kvalitetu na 720p osim ako je signal slab, zatim dodirnite Otvori kameru i Kreni uživo."
+  },
+  {
+   "heading": "iPhone: Larix Broadcaster",
+   "points": [
+    "Instalirajte Larix i jednom ga otvorite, dopuštajući kameru i mikrofon",
+    "Skenirajte iPhone (Larix) kod kamere kamerom mobitela, otvorite poveznicu u Larixu i dodirnite Import",
+    "U Larixu: Settings, Connections, označite kameru pa pritisnite crveni gumb"
+   ],
+   "narration": "Na iPhoneu instalirajte Larix Broadcaster i jednom ga otvorite, dopuštajući kameru i mikrofon. Skenirajte iPhone kod kamere vlastitom kamerom mobitela, otvorite poveznicu u Larixu i dodirnite Import. Zatim u Larixu idite na Settings, Connections, označite kameru i pritisnite crveni gumb."
+  }
+ ],
+ "cam-3-1": [
+  {
+   "heading": "Pokrenite suca",
+   "points": [
+    "Slika svakog mobitela prikazuje se na kartici Uživo unutar nekoliko sekundi",
+    "Pritisnite Pokreni AI suca na kameri, nazovite je i odaberite vježbu",
+    "Zatim Počni suditi: radi na poslužitelju, pa se nastavlja kad zatvorite stranicu"
+   ],
+   "narration": "Slika svakog mobitela prikazuje se na kartici Uživo unutar nekoliko sekundi nakon što krene uživo. Pritisnite Pokreni AI suca na kameri, dajte joj naziv, odaberite što sudi i pritisnite Počni suditi. Sudac radi na poslužitelju, pa se nastavlja kad zatvorite stranicu."
+  },
+  {
+   "heading": "Što provjerava kod burpeeja",
+   "points": [
+    "Prsa do tla",
+    "Potpuno ispružene kukove",
+    "Skok, oba stopala od tla",
+    "Ruke iznad ušiju"
+   ],
+   "narration": "Kod burpeeja sudac provjerava četiri stvari: prsa do tla, potpuno ispružene kukove, skok s oba stopala od tla i ruke iznad ušiju. Ponavljanje koje ne zadovolji jedno od toga je no rep."
+  },
+  {
+   "heading": "Isprobajte",
+   "points": [
+    "Odradite nekoliko probnih ponavljanja ispred svake kamere",
+    "Provjerite da se svako broji, a loše ne",
+    "Pomaknite mobitel ako natjecatelj izlazi iz kadra"
+   ],
+   "narration": "Prije dolaska natjecatelja odradite nekoliko probnih ponavljanja ispred svake kamere i provjerite da se broje te da se namjerno loše ponavljanje ne broji. Ako natjecatelj izlazi iz kadra, pomaknite mobitel."
+  }
+ ],
+ "cam-3-2": [
+  {
+   "heading": "Rezultati",
+   "points": [
+    "Rezultati prikazuju sve koji su suđeni",
+    "Pronađi broj natjecatelja pretražuje sve kamere",
+    "Gledaj reproducira natjecatelja sa svakim označenim ponavljanjem i no repom"
+   ],
+   "narration": "Kartica Rezultati prikazuje sve koji su suđeni. Pronađi broj natjecatelja pretražuje sve kamere za jednog natjecatelja. Gledaj ga reproducira sa svakim označenim ponavljanjem i svakim no repom."
+  },
+  {
+   "heading": "Koliko se čuva",
+   "points": [
+    "Snimke i rezultati čuvaju se 7 dana",
+    "Na kraju rezervacije snimke se spremaju, a poslužitelji gase",
+    "Svaki sudac na natjecanju može ih pregledati"
+   ],
+   "narration": "Snimke i rezultati čuvaju se sedam dana. Kad rezervacija završi, snimke se spremaju, a poslužitelji gase. Svaki sudac na natjecanju može ih u tom razdoblju pregledati."
+  }
+ ],
+ "cam-3-3": [
+  {
+   "heading": "Mobiteli i slika",
+   "points": [
+    "Ne spaja se: provjerite signal i ponovno skenirajte kod iz ove rezervacije",
+    "Zastaje ili prekida: signal je preslab za 720p, odaberite nižu kvalitetu",
+    "Kamera je prikazana, ali nema slike: mreža lokacije možda blokira video, probajte mobilne podatke mobitela"
+   ],
+   "narration": "Ako se mobitel ne spaja, provjerite njegov signal i ponovno skenirajte njegov kod iz ove rezervacije. Ako slika zastaje ili se prekida, signal je preslab za 720p: odaberite nižu kvalitetu. Ako se kamera prikazuje, ali bez slike, mreža lokacije možda blokira video: umjesto toga probajte mobilne podatke mobitela."
+  },
+  {
+   "heading": "Poslužitelji i internet",
+   "points": [
+    "Poslužitelj se nije pokrenuo: konzola kaže zašto; ponekad Azure nekoliko minuta nema slobodnog poslužitelja, pa pokušajte ponovno",
+    "Internet lokacije otkazuje: ništa ne stiže do poslužitelja dok se ne vrati",
+    "Samo Larix čuva vlastitu kopiju na mobitelu"
+   ],
+   "narration": "Ako se poslužitelj nije pokrenuo, konzola kaže zašto. Ponekad nekoliko minuta nema slobodnog poslužitelja: pokušajte ponovno. Ako internet lokacije otkaže, ništa ne stiže do poslužitelja dok se ne vrati, a samo Larix čuva vlastitu kopiju videa na mobitelu."
+  }
+ ],
+ "cam-4-1": [
+  {
+   "heading": "Besplatna kamera",
+   "points": [
+    "AI sudac radi u vašem pregledniku, na kameri vašeg mobitela ili računala",
+    "Bez poslužitelja i bez troška, u bilo koje vrijeme",
+    "Naslonite mobitel, odradite nekoliko burpeeja i pogledajte kako se svaki sudi"
+   ],
+   "narration": "Besplatna kamera pokreće AI suca izravno u vašem pregledniku, na kameri vašeg mobitela ili računala, uživo ili na minuti videa. Nema poslužitelja ni troška, a možete je koristiti u bilo koje vrijeme. Naslonite mobitel, odradite nekoliko burpeeja i pogledajte kako se svaki sudi."
+  },
+  {
+   "heading": "Uvježbajte pravu stanicu",
+   "points": [
+    "Glavni suci mogu rezervirati 30-minutni probni poslužitelj",
+    "Mobiteli skeniraju kodove, konzola, sudac i pregled, kao na natjecanju",
+    "Koristi jedan od poslužitelja potrebnih natjecanjima, pa je za glavne suce i administratore"
+   ],
+   "narration": "Glavni suci mogu rezervirati i tridesetominutni probni poslužitelj kako bi uvježbali cijelu stanicu: mobitele koji skeniraju kodove, konzolu, suca i pregled, baš kao na natjecanju. Koristi jedan od poslužitelja koje natjecanja trebaju, pa je za glavne suce i administratore."
+  }
+ ],
+ "ocr-1-1": [
+  {
+   "heading": "Zašto Spartan postoji",
+   "points": [
+    "Spartan postoji da pomogne ljudima prijeći vlastite granice",
+    "Cilj: ljudi koji su jači, tjelesno i mentalno",
+    "Misija: pomoći ljudima da žive bez granica"
+   ],
+   "narration": "Spartan postoji da pomogne ljudima prijeći vlastite granice i postati jači, tjelesno i mentalno. Njegova je misija pomoći ljudima da žive bez granica, gradeći snagu, disciplinu i otpornost potrebne za suočavanje sa životnim izazovima. Svaka Spartan Race zamišljena je tako da natjecatelji učine nešto teško, neugodno i prijelomno. To je okruženje u kojem radite kao sudac. Natjecatelji pred vama odabrali su učiniti nešto teško, a pravila postoje kako bi svi prošli isti test."
+  },
+  {
+   "heading": "Izazov za sve",
+   "points": [
+    "Spartan događanja namijenjena su svim razinama, od onih koji prvi put trče do elitnih natjecatelja",
+    "U njima sudjeluju milijuni ljudi diljem svijeta",
+    "Važna je spremnost da se pojavite, a ne odakle krećete"
+   ],
+   "narration": "Spartan događanja namijenjena su natjecateljima svake razine. Sudjeluju milijuni ljudi diljem svijeta, od onih koji prvi put trče do elitnih natjecatelja. Spartanovo je stajalište da nije važno odakle krećete, nego spremnost da se pojavite, prijeđete preko izlika i suočite se s izazovom. Svatko tko stupi na stazu sudjeluje u istom testu izdržljivosti i odlučnosti. Zato ćete na dan utrke vidjeti širok raspon natjecatelja. Kasnije u ovom tečaju naučit ćete koje od njih sudite najpomnije."
+  },
+  {
+   "heading": "Jedan skup pravila, posvuda",
+   "points": [
+    "Pravila natjecanja vrijede za sva Spartan događanja i natjecanja u svijetu",
+    "Obvezujuća su za svakog natjecatelja na svakom Spartan događanju",
+    "Ciljevi: pošteno i dosljedno natjecanje, globalni standardi, sigurnost natjecatelja"
+   ],
+   "narration": "Spartanova Pravila natjecanja vrijede za sva Spartan događanja i natjecanja diljem svijeta i obvezujuća su za svakog natjecatelja koji sudjeluje. Pravilnik kaže da pravila objašnjavaju kako treba suditi utrku. Cilj im je da svako događanje bude pošteno i dosljedno, vođeno sportskim duhom i integritetom. Daju jasne smjernice kako bi natjecanje bilo standardizirano u cijelom svijetu. I štite zdravlje, sigurnost i dobrobit natjecatelja, koliko se to razumno može postići u utrkama s preprekama."
+  },
+  {
+   "heading": "Vaša uloga u tome",
+   "points": [
+    "Dosljedno primjenjujte pravila natjecanja i postupke suđenja",
+    "Čuvajte poštenje i integritet Spartan događanja u svijetu",
+    "Do kraja tečaja: primjenjujte pravila dosljedno i s povjerenjem"
+   ],
+   "narration": "Ovaj program uvodi u ulogu, odgovornosti i standarde koji se očekuju od Spartan sudaca. Cilj mu je da svaki sudac pravila natjecanja i postupke suđenja primjenjuje na isti način, čuvajući poštenje i integritet Spartan događanja diljem svijeta. Natjecatelj bi na vašoj prepreci trebao dobiti istu odluku kao na istoj prepreci na bilo kojem drugom Spartan događanju. Do kraja tečaja trebali biste moći dosljedno i s povjerenjem primjenjivati Spartan pravila."
+  },
+  {
+   "heading": "Ukratko",
+   "points": [
+    "Spartan postoji da pomogne ljudima prijeći vlastite granice",
+    "Njegova su događanja za sve, od početnika do elitnih natjecatelja",
+    "Jedan pravilnik vrijedi za svako Spartan događanje u svijetu",
+    "Vaš posao: primjenjivati ga dosljedno, da se zaštite poštenje i integritet"
+   ],
+   "narration": "Ukratko. Spartan postoji da pomogne ljudima prijeći vlastite granice i postati jači na tijelu i duhu. Njegova su događanja za sve, od onih koji prvi put trče do elitnih natjecatelja. Jedan skup pravila vrijedi za svako Spartan događanje na svijetu, a cilj mu je natjecanje koje je pošteno, dosljedno i sigurno. Vaš je posao kao suca primjenjivati ta pravila dosljedno, kako bi se zaštitili poštenje i integritet svake utrke."
+  }
+ ],
+ "ocr-1-2": [
+  {
+   "heading": "Trčanje stazom s preprekama",
+   "points": [
+    "Spartan Race je utrka s preprekama (OCR)",
+    "Spaja trčanje stazom s fizičkim preprekama",
+    "Prepreke testiraju mentalnu i fizičku snagu"
+   ],
+   "narration": "Spartan Race je utrka s preprekama: trčanje stazom spojeno s fizičkim preprekama uz stazu. Prepreke su osmišljene da testiraju mentalnu i fizičku snagu i da natjecatelje potaknu preko onoga što su smatrali mogućim. Između prepreka natjecatelji trče. Na svakoj prepreci moraju svladati određeni izazov, a pravilnik točno određuje što to uključuje. Kao sudac obično ste postavljeni na prepreku, pa su ta prepreka i njezina pravila vaš fokus tijekom dana."
+  },
+  {
+   "heading": "Pet vrsta izazova",
+   "points": [
+    "Penjanje: na primjer zidovi i Rope Climb",
+    "Nošenje: na primjer Bucket Carry i Sandbag Carry",
+    "Puzanje: na primjer Barbed Wire Crawl",
+    "Skakanje te vučenje i podizanje: na primjer Fire Jump i Hercules Hoist"
+   ],
+   "narration": "Program izazove grupira u pet vrsta kretanja: penjanje, nošenje, puzanje, skakanje te vučenje i podizanje. Penjanje uključuje zidove i Rope Climb. Nošenje uključuje Bucket Carry i Sandbag Carry. Puzanje uključuje Barbed Wire Crawl. Skakanje uključuje Fire Jump, a vučenje i podizanje uključuje Hercules Hoist, gdje natjecatelj povlači uže da podigne uteg. Svaka prepreka ima vlastiti odjeljak u pravilniku, koji određuje što natjecatelj mora učiniti i kako može pogriješiti."
+  },
+  {
+   "heading": "Dvije vrste prepreka u pravilniku",
+   "points": [
+    "Obvezne prepreke: moraju se svladati prije nastavka staze",
+    "Prepreke s prolazom ili padom: pad znači kaznu, kaznenu petlju ili burpee",
+    "Svaka se prepreka mora pokušati: najmanje dodirnuti"
+   ],
+   "narration": "Pravilnik dijeli prepreke u dvije kategorije. Obvezne prepreke moraju se svladati prije nego natjecatelj ide dalje stazom. Neuspjeh na njima znači diskvalifikaciju, iako direktor utrke može zamijeniti kaznu vremenskom, ovisno o težini. Prepreke s prolazom ili padom mogu se pasti, a pad znači kaznu: kaznenu petlju ili burpee. Prepreke s prolazom ili padom su s jednim pokušajem ili s više pokušaja. Svaka se prepreka mora pokušati, a pokušaj je, najmanje, dodir prepreke. Vrste prepreka imaju vlastiti odjeljak kasnije u ovom tečaju.",
+   "review": "Pod revizijom za 2027: pravilnik (3.17.3) kaže da je kazna kaznena petlja ili 30 burpee, kako Spartan odredi za svako događanje, kategoriju ili skupinu. SOP za suđenje kaže da je to petlja na većini prepreka, a burpee na Spear Throwu; program za 2026. kaže da se burpee koriste samo na Spear Throwu. Do tada upotrijebite kaznu potvrđenu na vašem briefingu, a svaku sumnju uputite glavnom sucu."
+  },
+  {
+   "heading": "Formati utrka",
+   "points": [
+    "Izvori za 2026. navode formate Sprint, Super, Beast, Ultra i Stadion",
+    "Jedan pravilnik pokriva sve, ali neka se pravila razlikuju po formatu",
+    "Stadion: kazna za pad na bilo kojoj prepreci uvijek je 15 burpee",
+    "Najmanji broj sudaca: 10 na Sprintu ili Stadionu, 15 na Superu, 20 na Beastu ili Ultri"
+   ],
+   "narration": "Spartan utrke imaju nekoliko formata. Pravilnik i postupak suđenja za 2026. navode Sprint, Super, Beast, Ultra i Stadion. Isti pravilnik pokriva sve, ali neka se pravila razlikuju po formatu. Na Stadion događanjima, na primjer, kazna za pad na prepreci uvijek je petnaest burpee, za svaku prepreku i svaku skupinu. Spartanov postupak suđenja određuje i najmanji broj sudaca za svaki format: deset za Sprint ili Stadion, petnaest za Super te dvadeset za Beast ili Ultra."
+  },
+  {
+   "heading": "Ukratko",
+   "points": [
+    "Utrka s preprekama: trčanje stazom spojeno s fizičkim preprekama",
+    "Pet vrsta izazova: penjanje, nošenje, puzanje, skakanje, vučenje i podizanje",
+    "Obvezne prepreke moraju se svladati; pad na prepreci s prolazom ili padom znači kaznu",
+    "Formati: Sprint, Super, Beast, Ultra i Stadion"
+   ],
+   "narration": "Ukratko. Spartan Race je utrka s preprekama: trčanje stazom spojeno s fizičkim preprekama koje testiraju mentalnu i fizičku snagu. Izazovi su penjanje, nošenje, puzanje, skakanje te vučenje i podizanje. Pravilnik dijeli prepreke na obvezne, koje se moraju svladati, i prepreke s prolazom ili padom, gdje pad znači kaznu. Svaka se prepreka mora pokušati. Utrke imaju nekoliko formata, među njima Sprint, Super, Beast, Ultra i Stadion."
+  }
+ ],
+ "ocr-2-1": [
+  {
+   "heading": "Što suci štite",
+   "points": [
+    "Poštenje i integritet utrke",
+    "Natjecatelje koji slijede službena pravila natjecanja",
+    "Dosljedno primijenjene kazne",
+    "Vjerodostojnost Elite i natjecateljskog natjecanja"
+   ],
+   "narration": "Suci su važni jer štite poštenje i integritet utrke. Pobrinu se da natjecatelji slijede službena pravila natjecanja i da se kazne primjenjuju jednako za sve. Ta dosljednost daje vjerodostojnost Elite i natjecateljskom natjecanju. Spartanov postupak suđenja to kaže ovako: Spartanovo suđenje uspostavlja i održava integritet utrke dosljednom primjenom pravila i standardnom praksom suđenja, kako bi ishod bio pošten i pravičan za sve natjecatelje."
+  },
+  {
+   "heading": "Što je sudac",
+   "points": [
+    "Službena osoba koju imenuje Spartan i koja brine da se poštuju sva pravila",
+    "Obično postavljena na prepreku ili u šator za pregled videa",
+    "Na vašoj prepreci: provodite njezina pravila i pratite padove",
+    "Odgovarate glavnom sucu"
+   ],
+   "narration": "Pravilnik definira suca kao službenu osobu koju imenuje Spartan, a čiji je zadatak osigurati da se poštuju sva pravila. Suci su obično postavljeni na prepreke i u šator za pregled videa, a odgovaraju glavnom službeniku. Spartanov postupak suđenja opisuje suca kao osobu dodijeljenu prepreci da provodi njezina pravila i prati padove. U pravilniku su službene osobe svi koje Spartan odredi za obavljanje dužnosti na događanju na položaju ovlasti: osoblje, suci i volonteri. Kao sudac, vi ste jedan od njih."
+  },
+  {
+   "heading": "Kome odgovarate",
+   "points": [
+    "Glavni sudac: glavni donositelj odluka o pravilima na događanju",
+    "Pravilnik tu ulogu naziva glavni službenik (Head Official)",
+    "Direktor utrke: odgovoran za cjelokupno odvijanje događanja",
+    "Nejasne ili osporene odluke idu glavnom sucu"
+   ],
+   "narration": "Na svakom događanju jedna je osoba glavni donositelj odluka u svim pitanjima pravila i konačni autoritet za njihovu primjenu i tumačenje. Pravilnik tu osobu naziva glavnim službenikom. Spartanov postupak suđenja i ovaj program zovu je glavnim sucem. To je osoba kojoj odgovarate. Direktor utrke odgovoran je za cjelokupno poslovanje i vođenje događanja. Kad niste sigurni u odluku ili je natjecatelj ospori, ide glavnom sucu."
+  },
+  {
+   "heading": "Vaše odluke stižu do rezultata",
+   "points": [
+    "Lanac: sudac, glavni sudac, zatim direktor utrke ili tim za mjerenje vremena",
+    "Glavni sudac potvrđuje kazne i prosljeđuje ih",
+    "Rezultati su konačni tek nakon službenog pregleda videa",
+    "Vremenske kazne dodaju se natjecateljevu vremenu cilja"
+   ],
+   "narration": "Ono što vidite i zabilježite na svojoj prepreci može promijeniti rezultate. Lanac ide od vas do glavnog suca, pa do direktora utrke ili tima za mjerenje vremena. Glavni sudac vodi pregled videa i prosljeđuje potvrđene kazne i diskvalifikacije direktoru utrke i timu za mjerenje vremena. Pravilnik kaže da bi službeni pregled videa trebao biti proveden prije konačnih rezultata, pa se rezultati možda neće objaviti odmah. Vremenske kazne dodaju se natjecateljevu vremenu cilja, zato je važna točna i jasno zabilježena odluka."
+  },
+  {
+   "heading": "Kako se osposobljavate",
+   "points": [
+    "Temelji se na Spartan pravilniku, SOP-u za suđenje i Globalnim smjernicama za suđenje",
+    "Fokus: provođenje pravila na preprekama, kazne, postupanje s natjecateljima i integritet utrke",
+    "Završetak online obuke obvezan je za certifikaciju sudaca"
+   ],
+   "narration": "Ova obuka postoji kako bi suci pošteno i dosljedno provodili Spartanova pravila natjecanja. Temelji se na tri dokumenta: Spartan pravilniku, Standardnom operativnom postupku suđenja i Globalnim smjernicama za suđenje. Usredotočena je na provođenje pravila na preprekama, kazne, postupanje s natjecateljima i integritet natjecanja. Prema postupku suđenja, završetak online modula obuke obvezan je za certifikaciju suca. Prije svakog događanja glavni sudac također osigurava da je svaki sudac završio obuku prije događanja."
+  },
+  {
+   "heading": "Ukratko",
+   "points": [
+    "Suci štite poštenje, integritet utrke i dosljedne kazne",
+    "Provodite pravila na svojoj prepreci i pratite padove",
+    "Odgovarate glavnom sucu, konačnom autoritetu za pravila",
+    "Vaše odluke ulaze u pregled videa i rezultate"
+   ],
+   "narration": "Ukratko. Suci štite poštenje i integritet utrke i brinu da se kazne primjenjuju dosljedno, što natjecateljskom natjecanju daje vjerodostojnost. Vi ste službena osoba koju imenuje Spartan, obično postavljena na prepreku, da provodi njezina pravila i prati padove. Odgovarate glavnom sucu, kojeg pravilnik naziva glavnim službenikom, a koji ima posljednju riječ o pravilima. Ono što zabilježite prolazi kroz pregled videa i može promijeniti natjecateljevo vrijeme cilja."
+  }
+ ],
+ "ocr-2-2": [
+  {
+   "heading": "Natjecateljska i Open",
+   "points": [
+    "Natjecateljska: Elite i Age Group natjecatelji",
+    "Open: otvorena za sve, kategorija usmjerena na sudjelovanje",
+    "Svaka kategorija startira u skupinama ili valovima, razdvojenima vremenom starta ili tempom"
+   ],
+   "narration": "Pravilnik definira dvije vrste kategorija. Natjecateljska, koja uključuje Elite i Age Group, i Open, koja je otvorena za sve. Ovaj program Open opisuje kao kategoriju usmjerenu na sudjelovanje. Unutar svake kategorije natjecatelji startaju u skupinama i valovima: grupama razdvojenima vremenom starta ili tempom. Znanje koja kategorija prolazi kroz vašu prepreku govori vam koliko pomno morate suditi."
+  },
+  {
+   "heading": "Gdje se suci usredotočuju",
+   "points": [
+    "Suci se prvenstveno usredotočuju na natjecateljske kategorije",
+    "Od natjecateljskih natjecatelja očekuje se da izričito slijede sva pravila",
+    "Provodite pravila jednako za svakog natjecateljskog natjecatelja",
+    "Budite na položaju prije prvog Elite starta"
+   ],
+   "narration": "Suci se prvenstveno usredotočuju na natjecateljske kategorije: Elite i Age Group. Pravilnik očekuje da svaki natjecateljski natjecatelj izričito slijedi sva pravila i da se utrkuje žustro i natjecateljski. Zato vaše provođenje pravila mora biti jednako za svakog natjecateljskog natjecatelja, u svakom Elite i Age Group valu. Spartanov postupak suđenja kaže da glavni sudac potvrđuje da su suci na položaju prije prvog Elite starta te da su suđenje, pregled videa i procjena kazni namijenjeni kategorijama Elite i Age Group."
+  },
+  {
+   "heading": "Open natjecatelji",
+   "points": [
+    "Open natjecatelji također se potiču da slijede pravila",
+    "Atmosfera je opuštenija: sportski duh i osobna odgovornost",
+    "Od Open natjecatelja očekuje se spartanska čast pri kaznenim burpeejima",
+    "Suci mogu pospremiti stazu ili predati volonterima za Open valove"
+   ],
+   "narration": "Open natjecatelji također se potiču da slijede pravila, u duhu sportskog ponašanja i osobne odgovornosti, iako je atmosfera u Open kategoriji opuštenija. Pravilnik očekuje da se natjecatelji Open kategorije vode spartanskom čašću kad rade kaznene burpeeje. U ovom programu raspored sudčeva dana završava pospremanjem staze ili predajom volonterima za Open valove. Briefing vašeg glavnog suca reći će vam što vrijedi na vašem događanju."
+  },
+  {
+   "heading": "Skupine, valovi i mjerenje vremena",
+   "points": [
+    "Natjecatelji moraju startati u dodijeljenoj skupini, valu ili grupi",
+    "Elite natjecatelj koji startira u krivoj skupini prebacuje se u Open",
+    "Elite skupine: pobjeđuje prvi preko ciljne crte (vrijeme od pucnja)",
+    "Age Group, Open i Elite Stadion skupine: vrijeme čipa. Oboje zbraja vremenske kazne"
+   ],
+   "narration": "Svaki natjecatelj mora startati u svojoj dodijeljenoj skupini, valu ili grupi i s njom. Natjecatelj koji startira u krivoj skupini nema pravo na nagrade, a Elite natjecatelj koji startira u krivoj skupini prebacuje se u Open kategoriju. Mjerenje vremena razlikuje se po kategoriji. U Elite skupini pobjednik je onaj koji prvi prijeđe ciljnu crtu, a to se zove vrijeme od pucnja. Age Group i Open skupine te Elite skupine na Stadionu koriste vrijeme čipa: od prelaska startne crte do prelaska cilja. U oba slučaja dodaju se sve vremenske kazne."
+  },
+  {
+   "heading": "Ukratko",
+   "points": [
+    "Natjecateljska znači Elite i Age Group; Open je otvorena za sve",
+    "Suci se prvenstveno usredotočuju na natjecateljske natjecatelje",
+    "Svaki natjecateljski natjecatelj dobiva jednako provođenje pravila",
+    "Open natjecatelji potiču se da slijede pravila, na spartansku čast"
+   ],
+   "narration": "Ukratko. Postoje dvije vrste kategorija: natjecateljska, a to su Elite i Age Group, i Open, koja je otvorena za sve. Suci se prvenstveno usredotočuju na natjecateljske kategorije, u kojima se od natjecatelja očekuje da slijede svako pravilo, a vaše provođenje pravila mora biti jednako za svakog od njih. Open natjecatelji također se potiču da slijede pravila, u opuštenijoj atmosferi i na spartansku čast. Elite skupine odlučuju se vremenom od pucnja, ostale vremenom čipa, uz dodane sve vremenske kazne."
+  }
+ ],
+ "ocr-2-3": [
+  {
+   "heading": "Nepristranost i profesionalnost",
+   "points": [
+    "Budite nepristrani: primjenjujte pravila jednako na svakog natjecatelja",
+    "Budite profesionalni: mirni, neutralni i uljudni",
+    "Poznajte Pravila natjecanja i SOP za suđenje"
+   ],
+   "narration": "Sudački pristup počinje nepristranošću i profesionalnošću. Spartanov postupak suđenja traži da pravila prepreka primjenjujete dosljedno i nepristrano, bez obzira na to tko je natjecatelj. Ostanite mirni, neutralni i uljudni te profesionalno predstavljajte Spartan. Vaša su dva ključna dokumenta Spartanova Pravila natjecanja i Standardni operativni postupak suđenja. Upoznajte oba prije događanja i pazite da poznajete i razumijete pravila za svoju prepreku."
+  },
+  {
+   "heading": "Namjera pravila, poštenje i sigurnost",
+   "points": [
+    "Usredotočite se na namjeru pravila, a ne na manji slučajni dodir",
+    "Pitajte se je li natjecatelj stekao prednost",
+    "Poštenje i sigurnost natjecatelja na prvom mjestu"
+   ],
+   "narration": "Usredotočite se na svrhu pravila, a ne na manji slučajni dodir. Jedan od scenarija u programu je natjecatelj koji nakratko dotakne vrh prepreke, ali ne stekne prednost. Pitanje koje treba razmotriti jest je li stvorena prednost. Poštenje i sigurnost natjecatelja stavite na prvo mjesto. Zaštita zdravlja, sigurnosti i dobrobiti natjecatelja jedan je od navedenih ciljeva pravilnika. Ako na svojoj prepreci primijetite sigurnosni problem, odmah ga prijavite glavnom sucu ili direktoru utrke."
+  },
+  {
+   "heading": "Kad niste sigurni, eskalirajte",
+   "points": [
+    "Eskalirajte svaku situaciju u koju niste sigurni",
+    "Niste sigurni u kaznu ili kako je provesti: odmah kontaktirajte glavnog suca",
+    "Sumnje, sigurnosni problemi ili nedosljednosti: prijavite ih odmah"
+   ],
+   "narration": "Ne očekuje se da svaku situaciju riješite sami. Kad niste sigurni, eskalirajte. Spartanov postupak suđenja kaže da, ako postoji bilo kakva nesigurnost oko vrste kazne ili načina njezina provođenja, odmah kontaktirate glavnog suca. Kad stignete na svoju prepreku, odmah prijavite direktoru utrke ili glavnom sucu sve sumnje, sigurnosne probleme ili nedosljednosti. Glavni sudac konačni je autoritet za pravila na događanju, pa je eskalacija dio dobro obavljenog posla."
+  },
+  {
+   "heading": "Prije dana utrke",
+   "points": [
+    "Završite obuku prije događanja prije nego što sudjelujete",
+    "Pokriva pravilnik, s naglaskom na prepreke s mnogo padova",
+    "Pokriva i sudački tijek rada, burpee standarde i video na Spear Throwu",
+    "Dobivate paket za briefing i pristup videu s uputama"
+   ],
+   "narration": "Vaš raspored počinje prije dana utrke. Glavni sudac brine da svaki sudac prije sudjelovanja završi standardnu obuku prije događanja. Pokriva Spartan pravilnik, s naglaskom na prepreke s mnogo padova, a to su one na kojima natjecatelji najčešće padaju. Pokriva i sudački proces i tijek rada, burpee standarde i kako ih provoditi te snimanje i pregled videa, koji se koristi samo na Spear Throwu. Dobivate i paket za briefing prije događanja te pristup službenim video uputama."
+  },
+  {
+   "heading": "Jutro utrke",
+   "points": [
+    "Prijavite se, potvrdite svoju prepreku i preuzmite opremu",
+    "Prisustvujte obveznom briefingu glavnog suca na lokaciji",
+    "Stignite na prepreku na vrijeme prije prvog natjecateljskog vala",
+    "Pregledajte prepreku, prođite kaznenu petlju i odaberite gdje ćete stajati"
+   ],
+   "narration": "Na jutro utrke javite se u šator koji su vam odredili, prijavite se, potvrdite dodjelu prepreke i preuzmite opremu. Pridružite se komunikacijskom kanalu ako se koristi. Prisustvujte obveznom briefingu glavnog suca na lokaciji. Zatim krenite do svoje prepreke s dovoljno vremena prije prvog natjecateljskog vala. Tamo pregledajte postavu, provjerite s koje strane natjecatelji prilaze, prođite cijelu kaznenu petlju i odlučite gdje ćete stajati kako biste jasno vidjeli pokušaje, završetke i padove."
+  },
+  {
+   "heading": "Tijekom utrke i poslije",
+   "points": [
+    "Sudite Elite i natjecateljske valove",
+    "Zatim pospremite stazu ili predajte volonterima za Open valove",
+    "Po povratku: snimke idu na pregled videa, pisane odluke glavnom sucu",
+    "Natjecatelji prigovor upućuju glavnom sucu, unutar roka za prigovore"
+   ],
+   "narration": "Tijekom utrke sudite Elite i natjecateljske valove na svojoj prepreci. Nakon toga, ovisno o događanju, pospremate stazu ili predajete volonterima za Open valove. Kako se suci vraćaju, glavni sudac vodi pregled videa snimki. Gdje nema videa, vaše se odluke donose na licu mjesta, zapisuju i predaju glavnom sucu kad se vratite. Rezultati su konačni tek nakon službenog pregleda. Natjecatelj koji želi uložiti prigovor na kaznu upućuje ga glavnom sucu tijekom roka za prigovore.",
+   "review": "Pod revizijom za 2027: pravilnik (3.19.1) kaže da rok za prigovore završava 15 minuta prije dodjele nagrada kategorije. SOP za suđenje (4.2) kao primjer granice navodi pola sata prije dodjele. Do tada primjenjujte pravilnik, slijedite rokove za prigovore koje objavi glavni sudac i svakog natjecatelja s prigovorom uputite glavnom sucu."
+  },
+  {
+   "heading": "Ukratko",
+   "points": [
+    "Budite nepristrani, profesionalni i dosljedni",
+    "Mislite na namjeru pravila; poštenje i sigurnost na prvo mjesto",
+    "Kad niste sigurni, eskalirajte glavnom sucu",
+    "Vaš dan: obuka, prijava, briefing, postava, suđenje, predaja"
+   ],
+   "narration": "Ukratko. Budite nepristrani i profesionalni te primjenjujte pravila jednako na svakog natjecatelja. Usredotočite se na namjeru pravila, a ne na manji slučajni dodir, i stavite poštenje i sigurnost natjecatelja na prvo mjesto. Kad niste sigurni, eskalirajte glavnom sucu. Vaš raspored događanja ide od obuke i briefinga prije događanja, preko prijave i opreme, pregleda i postave prepreke, do suđenja natjecateljskih valova i, na kraju, pospremanja ili predaje volonterima za Open valove."
+  }
+ ],
+ "ocr-3-1": [
+  {
+   "heading": "Javljanje na dužnost",
+   "points": [
+    "Javite se u šator za volontere ili sudački šator u dodijeljeno vrijeme javljanja",
+    "Prijavite se kod koordinatora volontera ili glavnog suca",
+    "Potvrdite dodjelu prepreke",
+    "Predstavite se glavnom sucu"
+   ],
+   "narration": "Vaš dan utrke počinje prijavom. Idite u šator za volontere, ili sudački šator ako ga vaše događanje ima, u vrijeme javljanja koje ste dobili. Prijavite se kod koordinatora volontera ili glavnog suca i potvrdite koja vam je prepreka dodijeljena. Čak i ako vas netko drugi prijavi, pobrinite se da glavni sudac zna da ste tu. Prije prvog Elite starta glavni sudac mora potvrditi da su svi suci na položaju."
+  },
+  {
+   "heading": "Što preuzimate pri prijavi",
+   "points": [
+    "Službeni materijali: sudačka majica, kapa, akreditacije ili druga dodijeljena oprema",
+    "Ploča s QR kodom za vašu prepreku, osim ako je već postavljena",
+    "Mjesto u službenom komunikacijskom kanalu, poput WhatsApp grupe"
+   ],
+   "narration": "Pri prijavi dobivate službene materijale za suđenje. To znači sudačku majicu, kapu i akreditacije te svu drugu opremu koja vam je dodijeljena. Preuzmite i ploču s QR kodom za svoju prepreku, osim ako je već postavljena na lokaciji. Vodi na video upute za tu prepreku. Na kraju, pobrinite se da budete dodani u službeni komunikacijski kanal. To može biti WhatsApp grupa, druga platforma za poruke ili izravni kontakt glavnog suca."
+  },
+  {
+   "heading": "Vaša sudačka oprema",
+   "points": [
+    "Sudačka majica ili prsluk",
+    "Ploča za pisanje ili bilježnica, najbolje vodootporna",
+    "Ispisani listovi s pravilima za vašu prepreku",
+    "Video kamera i stativ, samo kad vam je dodijeljena"
+   ],
+   "narration": "Program za 2026. navodi što sucu treba na prepreci. Nosite sudačku majicu ili prsluk. Nosite ploču za pisanje ili bilježnicu, najbolje vodootpornu, jer ćete bilježiti brojeve s traka za glavu i bilješke, ponekad po mokrom vremenu. Ponesite ispisane listove s pravilima za svoju prepreku kako biste mogli odmah provjeriti pravilo. Ako vam je dodijeljena kamera, imat ćete i video kameru i stativ."
+  },
+  {
+   "heading": "Ponesite vlastite osnove",
+   "points": [
+    "Mobitel",
+    "Odjeću prikladnu uvjetima",
+    "Olovke ili kemijske, hranu i vodu",
+    "Sve osobno što vam treba, poput lijekova"
+   ],
+   "narration": "Ponesite i vlastite osnovne stvari. Trebate mobitel, jer se tako preko komunikacijskog kanala održava veza s glavnim sucem. Odjenite odjeću prikladnu uvjetima toga dana. Spakirajte olovke ili kemijske, hranu i vodu te sve osobno što vam treba, poput lijekova. Kad natjecateljski valovi krenu, vaša pažnja pripada vašoj prepreci, zato dođite pripremljeni."
+  },
+  {
+   "heading": "Video oprema",
+   "points": [
+    "Glavni sudac priprema, testira i dijeli opremu za suđenje",
+    "Kamere s baterijom od najmanje 2,5 sata i rezervne baterije prema potrebi",
+    "Podesivi stativi od 7 stopa i SD kartice od najmanje 32 GB za full HD",
+    "Video na preprekama samo je za Spear Throw"
+   ],
+   "narration": "Oprema za suđenje odgovornost je glavnog suca. Priprema je i testira u petak prije događanja te je dijeli na dan utrke uz završne upute. Postupak određuje najmanju opremu: video kamere s baterijom od najmanje dva i pol sata, rezervne baterije, podesive stative od sedam stopa i memorijske kartice od najmanje trideset dva gigabajta, dovoljno brze za full high definition. Video snimanje na preprekama samo je za Spear Throw. Ako tamo dobijete kameru, postavite je i provjerite snima li prije prvog Elite vala."
+  },
+  {
+   "heading": "Ukratko",
+   "points": [
+    "Javite se u šator na vrijeme, prijavite se i potvrdite prepreku",
+    "Preuzmite materijale i QR ploču te se pridružite komunikacijskom kanalu",
+    "Ponesite vodootpornu ploču, listove s pravilima, mobitel, hranu i vodu",
+    "Kamera i stativ samo ako ste određeni za snimanje Spear Throwa"
+   ],
+   "narration": "Ukratko. Javite se u šator u vrijeme javljanja, prijavite se, potvrdite svoju prepreku i dajte glavnom sucu do znanja da ste tu. Preuzmite materijale i ploču s QR kodom za svoju prepreku te se pridružite komunikacijskom kanalu. Ponesite vodootpornu ploču ili bilježnicu, listove s pravilima, mobitel, hranu i vodu. Kameru i stativ nosite samo ako ste određeni za snimanje Spear Throwa."
+  }
+ ],
+ "ocr-3-2": [
+  {
+   "heading": "Briefing je prvi",
+   "points": [
+    "Briefing glavnog suca na lokaciji obvezan je, prije raspoređivanja",
+    "Pokriva dodjele, klasifikacije prepreka, kaznene petlje i burpee standard",
+    "Pokriva i postupke događanja i kako se kazne prijavljuju",
+    "Zatim stignite na prepreku na vrijeme prije prvog natjecateljskog vala"
+   ],
+   "narration": "Prije nego izađete na stazu, prisustvujete briefingu glavnog suca na lokaciji. On je obvezan. Pokriva postupke samog događanja, gdje je koja prepreka i tko je na nju raspoređen, koje su prepreke obvezne, a koje dopuštaju više pokušaja, kaznene petlje, burpee standard, postavljanje kamere na Spear Throwu te kako se kazne utvrđuju, prijavljuju i priopćuju. Nakon briefinga krenite do svoje prepreke s dovoljno vremena za pripremu prije dolaska prvog natjecateljskog vala."
+  },
+  {
+   "heading": "Poznajte pravila svoje prepreke",
+   "points": [
+    "Pročitajte upute prepreke, načine pada i dodatne napomene",
+    "Koristite list s pravilima, list zadatka i video s QR kodom za svoju prepreku",
+    "Provjerite opcije za muškarce i žene: na zidovima je crveni stepenik samo za natjecateljice"
+   ],
+   "narration": "Pregledajte i razumijte pravila za svoju prepreku prije dolaska prvog natjecatelja. U pravilniku svaka prepreka ima upute za natjecatelje, načine pada i dodatne napomene. Pročitajte sva tri dijela. Pomažu i vaš list s pravilima, list zadatka prepreke i video upute s QR kodom. Pazite na različite opcije za muškarce i žene. Na zidovima visine od šest do devet stopa, na primjer, crveni stepenik smiju koristiti samo natjecateljice, a natjecatelj koji ga upotrijebi pada na prepreci."
+  },
+  {
+   "heading": "Pregledajte postavu",
+   "points": [
+    "Pregledajte postavu prepreke i provjerite je li ispravna",
+    "Proučite tok utrke i smjer iz kojeg natjecatelji dolaze",
+    "Sumnje, sigurnosne probleme ili nedosljednosti odmah prijavite direktoru utrke ili glavnom sucu"
+   ],
+   "narration": "Kad stignete, pregledajte prepreku. Provjerite je li ispravno postavljena i u uporabljivom stanju. Pogledajte kako utrka teče kroz nju i iz kojeg će smjera natjecatelji prilaziti, da znate gdje će stizati i gdje odlaziti. Ako vas nešto brine, bilo sumnja u postavu, sigurnosni problem ili nešto nedosljedno, odmah to prijavite direktoru utrke ili glavnom sucu. Ne čekajte da natjecatelji stignu."
+  },
+  {
+   "heading": "Prođite kaznenu petlju",
+   "points": [
+    "Prođite cijelu kaznenu petlju, ako postoji",
+    "Znajte rutu i točno gdje se natjecatelji vraćaju na stazu",
+    "Petlje se razlikuju: trčanje, nošenje, puzanje ili po udaljenosti, kako je potvrđeno za vašu prepreku",
+    "Ista kazna vrijedi za sve u kategoriji ili skupini"
+   ],
+   "narration": "Ako vaša prepreka ima kaznenu petlju, sami prođite cijelu petlju. Trebate razumjeti rutu i točku povratka kako biste mogli jasno uputiti natjecatelja i vidjeti je li je završio. Petlje nisu sve iste. Pravilnik kaže da im se duljina može mijenjati s terenom i da mogu uključivati nošenje, puzanje ili druge elemente. Glavni sudac s direktorom utrke potvrđuje format kazne za svaku prepreku. Kakva god bila, primjenjuje se dosljedno unutar kategorije ili skupine.",
+   "review": "Pod revizijom za 2027: pravilnik (3.17.3) kaže da je kazna petlja ili 30 burpee, kako Spartan odredi za svaku prepreku i događanje. SOP za suđenje kaže da je to petlja na većini prepreka, a burpee na Spear Throwu, a program za 2026. kaže burpee samo na Spear Throwu. Do tada primijenite kaznu koju glavni sudac potvrdi za vašu prepreku, a ako niste sigurni, kontaktirajte glavnog suca."
+  },
+  {
+   "heading": "Gdje stajati",
+   "points": [
+    "Odaberite mjesto s kojeg jasno vidite pokušaje, završetke i padove",
+    "Zadržite nesmetan pogled na prepreku",
+    "Samo na Spear Throwu: postavite kameru kako opisuje postupak za Spear Throw",
+    "Potvrdite da kamera snima prije prvog Elite vala"
+   ],
+   "narration": "Odlučite gdje ćete stajati prije početka utrke. Trebate položaj s kojeg jasno vidite svaki pokušaj, svaki završetak i svaki pad, bez ičega što zaklanja pogled. Razmislite gdje se padovi obično događaju na vašoj prepreci i budite dovoljno blizu da razgovarate s natjecateljem kad se dogodi. Samo na Spear Throwu postavljate i video kameru, prema postupku suđenja za Spear Throw, i potvrđujete da snima prije početka prvog Elite vala. Glavni sudac može doći provjeriti provođenje pravila i položaj kamere."
+  },
+  {
+   "heading": "Ukratko",
+   "points": [
+    "Prisustvujte obveznom briefingu, zatim stignite na prepreku na vrijeme",
+    "Znajte njezine upute, načine pada i napomene",
+    "Pregledajte postavu, prođite kaznenu petlju, svaku brigu odmah prijavite",
+    "Stanite odakle vidite svaki pokušaj; na Spear Throwu provjerite snima li kamera"
+   ],
+   "narration": "Ukratko. Prisustvujte briefingu glavnog suca, zatim stignite na svoju prepreku na vrijeme prije prvog natjecateljskog vala. Znajte njezine upute, načine pada i dodatne napomene, uključujući sve opcije za muškarce i žene. Pregledajte postavu, prođite kaznenu petlju i odmah prijavite svaku sumnju ili sigurnosni problem. Zatim odaberite položaj s kojeg vidite svaki pokušaj, a na Spear Throwu potvrdite da kamera snima prije prvog Elite vala."
+  }
+ ],
+ "ocr-3-3": [
+  {
+   "heading": "Kome odgovarate",
+   "points": [
+    "Sudac, zatim glavni sudac, zatim direktor utrke ili tim za mjerenje vremena",
+    "Odgovarate glavnom sucu: pravilnik tu ulogu naziva glavni službenik (Head Official)",
+    "Glavni sudac je konačni autoritet za provođenje i tumačenje pravila"
+   ],
+   "narration": "Program za 2026. lanac komunikacije sažima u jednom retku: sudac, zatim glavni sudac, zatim direktor utrke ili tim za mjerenje vremena. Kao sudac odgovarate glavnom sucu. Pravilnik tu osobu naziva glavnim službenikom i čini je glavnim donositeljem odluka u svim pitanjima pravila na događanju te konačnim autoritetom za provođenje i tumačenje pravila. Vaše prijave idu glavnom sucu, koji ih prosljeđuje dalje."
+  },
+  {
+   "heading": "Što glavni sudac prosljeđuje",
+   "points": [
+    "Incidenti na utrci idu direktoru utrke, koji vodi cjelokupno poslovanje događanja",
+    "Incidenti natjecatelja, poput varanja ili prečaca, idu mjerenju vremena",
+    "Potvrđene kazne i diskvalifikacije idu direktoru utrke i mjerenju vremena",
+    "Konačne odluke o kaznama mogu potvrditi glavni sudac i tim za mjerenje vremena"
+   ],
+   "narration": "Glavni sudac povezuje vas s ostatkom događanja. Direktora utrke, koji je odgovoran za cjelokupno poslovanje događanja, obavještava o incidentima na utrci. Tim za mjerenje vremena obavještava o incidentima natjecatelja, poput varanja ili prečaca. Nakon pregleda videa priopćuje potvrđene kazne i diskvalifikacije direktoru utrke i timu za mjerenje vremena i tehniku. Vaš je posao provoditi pravila prepreke, upućivati natjecatelje na kazne i bilježiti što se dogodilo. Konačne odluke o kaznama mogu potvrditi glavni sudac i tim za mjerenje vremena."
+  },
+  {
+   "heading": "Kad zvati",
+   "points": [
+    "Pridružite se službenom kanalu pri prijavi: grupni chat, platforma ili izravno glavni sudac",
+    "Niste sigurni u vrstu kazne ili kako je provesti: odmah kontaktirajte glavnog suca",
+    "Sumnje ili sigurnosni problemi na prepreci: direktor utrke ili glavni sudac",
+    "Opasnosti: odmah prijavite glavnom sucu, direktoru utrke ili Spartan osoblju"
+   ],
+   "narration": "Pri prijavi se pridružujete službenom komunikacijskom kanalu. To može biti WhatsApp grupa, druga platforma za poruke ili izravna veza s glavnim sucem. Koristite ga. Ako niste sigurni koja se kazna primjenjuje ili kako je provesti, odmah kontaktirajte glavnog suca umjesto da pogađate. Sumnje, sigurnosne probleme ili nedosljednosti na svojoj prepreci prijavite direktoru utrke ili glavnom sucu. A svaku opasnost prijavite odmah, glavnom sucu, direktoru utrke ili Spartan osoblju."
+  },
+  {
+   "heading": "Prijava spora ili bijega",
+   "points": [
+    "Spor: zabilježite broj s trake za glavu i razlog te prijavite što prije",
+    "Bez broja: prijavite odmah s jasnim opisom, poput odjeće i kategorije",
+    "Pomozite kasnije identificirati natjecatelja na stazi ako se traži",
+    "Bez videa: zapišite svoje odluke o kaznama i predajte ih glavnom sucu"
+   ],
+   "narration": "Većina prijava odnosi se na natjecatelje. Ako natjecatelj ospori odluku, zabilježite broj s njegove trake za glavu, zapišite razlog, na primjer nesvladana prepreka bez kazne, i što prije prijavite glavnom sucu. Ako natjecatelj ode bez odrađene kazne, a ne možete doći do njegova broja, odmah prijavite s jasnim opisom: boja odjeće, posebna obilježja i kategorija utrke. Gdje nema videa, odluke o kaznama donosite na licu mjesta, zapisujete ih i predajete glavnom sucu kad se vratite."
+  },
+  {
+   "heading": "Ukratko",
+   "points": [
+    "Vaša linija ide do glavnog suca, koji obavještava direktora utrke i mjerenje vremena",
+    "Pridružite se kanalu pri prijavi i koristite ga",
+    "Pitajte glavnog suca kad niste sigurni, a opasnosti prijavite odmah",
+    "Zabilježite brojeve s traka za glavu i razloge te prijavite sporove i bjegove"
+   ],
+   "narration": "Ukratko. Odgovarate glavnom sucu, a glavni sudac obavještava direktora utrke i tim za mjerenje vremena. Pridružite se komunikacijskom kanalu pri prijavi i koristite ga. Kad niste sigurni u kaznu, odmah pitajte glavnog suca, a opasnosti prijavite odmah. Za sporove i bjegove zabilježite broj s trake za glavu ili jasan opis, zapišite razlog i prijavite."
+  }
+ ],
+ "ocr-4-1": [
+  {
+   "heading": "Tri vrste prepreka",
+   "points": [
+    "Obvezna: mora se svladati prije nego natjecatelj ide dalje",
+    "S više pokušaja (prolaz ili pad): ponavlja se do uspjeha ili kazne",
+    "S jednim pokušajem (prolaz ili pad): kad se jednom opredijeli, svlada je ili uzima kaznu",
+    "Dio D pravilnika navodi svaku prepreku pod jednom od triju vrsta"
+   ],
+   "narration": "Pravilnik dijeli prepreke na obvezne i na one s prolazom ili padom. Prepreke s prolazom ili padom dolaze u dvije vrste, s više pokušaja i s jednim pokušajem, pa u praksi radite s tri vrste. Obvezna prepreka mora se svladati prije nego natjecatelj ide dalje. Prepreka s više pokušaja može se pokušati koliko god je puta potrebno, dok se ne svlada ili dok se ne izrekne kazna. Prepreka s jednim pokušajem mora se svladati kad se natjecatelj opredijeli, inače se primjenjuje kazna. Pravilnik navodi svaku prepreku pod jednom vrstom, a briefing pokriva klasifikacije.",
+   "review": "Pod revizijom za 2027: pravilnik i program za 2026. različito svrstavaju nekoliko prepreka. Pravilnik ima Monkey Bars, Multi-Rig, Twister, Olympus, Z Wall, Beater i Helix kao prepreke s jednim pokušajem, Atlas Carry, Tire Flip i Stairway to Sparta kao prepreke s više pokušaja, a A-Frame Cargo kao obveznu. Program prvu skupinu navodi kao prepreke s više pokušaja, drugu kao obvezne, a A-Frame Cargo kao prepreku s više pokušaja. Do tada primjenjujte odjeljak pravilnika za svoju prepreku, a osporenu odluku uputite glavnom sucu."
+  },
+  {
+   "heading": "Svaka prepreka mora se pokušati",
+   "points": [
+    "Pokušaj znači najmanje dodir prepreke",
+    "Može uključivati ulazak u vodu ili težak teren da se dođe do prepreke",
+    "Taj se teren ne smije zaobići kaznom osim ako briefing ili osoblje utrke to dopuste",
+    "Nepokušavanje prepreke česta je povreda na koju treba paziti"
+   ],
+   "narration": "Svaka prepreka mora se pokušati. Pravilnik određuje minimum: pokušaj je dodir prepreke. Ponekad pokušaj uključuje i dolazak do prepreke, na primjer ulazak u vodu ili prelazak drugog teškog terena. Taj se teren ne može preskočiti uzimanjem kazne, osim ako su predutrkni briefinzi ili osoblje na dan utrke rekli da je to prihvatljivo. Program za 2026. nepokušavanje prepreke navodi među čestim povredama pravila, zato pazite na natjecatelje koji idu na kaznu ne pokušavši."
+  },
+  {
+   "heading": "Obvezne prepreke",
+   "points": [
+    "Svladavaju se u cijelosti: bez zaobilaženja i bez kazne umjesto toga, osim ako službena osoba kaže drugačije",
+    "Pad znači diskvalifikaciju; direktor utrke može zamijeniti vremensku kaznu",
+    "Primjeri: Bucket Carry, Sandbag Carry, Log Carry, Barbed Wire Crawl",
+    "Bucket Carry: izgubljeni materijal znači ponovno prolaz cijele staze s punom kantom"
+   ],
+   "narration": "Obvezna prepreka mora se svladati u cijelosti prije nego natjecatelj ide dalje. Ne može je zaobići niti zamijeniti kaznom osim ako mu to naloži službena osoba utrke. Prema pravilniku, pad na obveznoj prepreci znači diskvalifikaciju, iako direktor utrke može zamijeniti vremensku kaznu, ovisno o težini prekršaja. Tipična su nošenja i puzanja. Na Bucket Carryju, na primjer, nema opcije s burpeejima, a kanta koja se vrati s manjkom materijala znači da natjecatelj ponavlja cijelu stazu s ispravno napunjenom kantom."
+  },
+  {
+   "heading": "Prepreke s više pokušaja",
+   "points": [
+    "Natjecatelj može ponavljati koliko god je puta potrebno",
+    "Završava svladavanjem ili natjecatelj odustaje i uzima kaznu",
+    "Primjeri: Rope Climb, Bender, Inverted Wall",
+    "Rope Climb: uže se mijenja tek nakon povratka na tlo; jedno uže po pokušaju"
+   ],
+   "narration": "Prepreka s više pokušaja može se pokušavati iznova i iznova. Natjecatelj nastavlja dok je ne svlada ili ne odluči odustati i uzeti kaznu. Pravila svake prepreke kažu što uključuje ponovni pokušaj. Na Rope Climbu, na primjer, natjecatelj može promijeniti uže nakon povratka na tlo i pokušati ponovno, ali korištenje više od jednog užeta tijekom jednog pokušaja je pad. Natjecatelji koji ponavljaju pokušaje trebali bi propustiti one koji pokušavaju prvi put, iako pravilnik kaže da to nije obvezno."
+  },
+  {
+   "heading": "Prepreke s jednim pokušajem: kad počinje opredjeljenje",
+   "points": [
+    "Kad se jednom opredijeli, natjecatelj svladava prepreku ili uzima kaznu: bez ponavljanja",
+    "Pravila svake prepreke određuju kad opredjeljenje počinje",
+    "Spear Throw: kad se koplje otpusti prema naprijed",
+    "Ape Hanger: kad natjecatelj dodirne bilo koju gornju prečku"
+   ],
+   "narration": "Prepreka s jednim pokušajem daje natjecatelju jedan pokušaj nakon što se opredijeli. Poslije toga ili je svlada ili uzima kaznu. Ključno pitanje je kad opredjeljenje počinje, a pravilnik na njega odgovara prepreku po prepreku. Na Spear Throwu pokušaj počinje kad se koplje otpusti prema naprijed. Na Ape Hangeru natjecatelj je opredijeljen čim dodirne bilo koju gornju prečku. Znajte točku opredjeljenja za svoju prepreku: ona određuje može li natjecatelj još početi iznova.",
+   "review": "Pod revizijom za 2027: program za 2026. kaže da opredjeljenje počinje čim počne pokret pokušaja, a na Spear Throwu kad se koplje povuče za bacanje. Pravilnik definira opredjeljenje prepreku po prepreku, a na Spear Throwu to je pri otpuštanju. Do tada primjenjujte pravilo svake prepreke, a osporenu odluku uputite glavnom sucu."
+  },
+  {
+   "heading": "Što se računa kao pad",
+   "points": [
+    "Sudite prema načinima pada u pravilima svoje prepreke",
+    "Udaranje zvona stopalima, nogama ili koljenima je pad, bez ponavljanja",
+    "Pad zbog znatnog ometanja drugog natjecatelja: službena osoba može dopustiti ponovni početak",
+    "Česti padovi uključuju korištenje potporne konstrukcije i neudaranje zvona"
+   ],
+   "narration": "Pad je definiran u pravilima svake prepreke, u popisu načina pada. Sudite prema tom popisu, a ne prema vlastitoj zamisli kako prepreku treba svladati. Dva opća pravila vrijede za sve prepreke. Udaranje zvona stopalima, nogama ili koljenima računa se kao pad: natjecatelj ne može ponoviti i mora odraditi kaznu. A ako znatno fizičko ometanje drugog natjecatelja uzrokuje pad, natjecatelj može početi iznova bez dodatne kazne, kad službena osoba da dopuštenje."
+  },
+  {
+   "heading": "Ukratko",
+   "points": [
+    "Svaka se prepreka mora pokušati: najmanje dodirnuti",
+    "Obvezna: svladajte je u cijelosti ili slijedi diskvalifikacija",
+    "S više pokušaja: ponavlja se do uspjeha ili kazne; s jednim pokušajem: jedan pokušaj nakon opredjeljenja",
+    "Sudite prema načinima pada svake prepreke; koja je prepreka koje vrste, u reviziji je"
+   ],
+   "narration": "Ukratko. Svaka se prepreka mora pokušati, a dodir je minimum. Obvezna prepreka mora se svladati u cijelosti, a pad znači diskvalifikaciju osim ako direktor utrke ne zamijeni vremensku kaznu. Prepreka s više pokušaja može se ponavljati dok se ne svlada ili dok natjecatelj ne uzme kaznu. Prepreka s jednim pokušajem dopušta jedan pokušaj nakon opredjeljenja, u točki koju određuju pravila te prepreke. Svaku prepreku sudite prema njezinim načinima pada i zapamtite da je koja je prepreka koje vrste pod revizijom za 2027."
+  }
+ ],
+ "ocr-4-2": [
+  {
+   "heading": "Prepreka s jednim pokušajem",
+   "points": [
+    "Jedno bacanje: promašaj je pad, a pad znači kaznu",
+    "Vaš posao: vidjeti početak pokušaja, prosuditi rezultat, uputiti natjecatelja na kaznu"
+   ],
+   "narration": "Spear Throw je prepreka s jednim pokušajem, s prolazom ili padom. Svaki natjecatelj ima jedno bacanje. Ako ne uspije, nema drugog pokušaja: ide ravno na kaznu. Vaš je posao na Spear Throwu vidjeti točno kad pokušaj počinje, prosuditi rezultat i uputiti natjecatelja na ispravnu kaznu."
+  },
+  {
+   "heading": "Što natjecatelj mora učiniti",
+   "points": [
+    "Stajati s oba stopala iza barijere",
+    "Baciti koplje na metu u istoj stazi",
+    "Koplje se zabije u označenu metu i ostane u njoj, bez ijednog dijela koji dodiruje tlo"
+   ],
+   "narration": "Prema pravilu 4.2.13, natjecatelj stoji s oba stopala iza barijere i baca na metu u svojoj stazi. Da bi prošao, koplje se mora zabiti u označenu metu i ostati u njoj, bez ijednog dijela koplja koji dodiruje tlo."
+  },
+  {
+   "heading": "Kad pokušaj počinje",
+   "points": [
+    "Pokušaj je kad se koplje otpusti prema naprijed",
+    "Promjena staze dopuštena je, ali samo prije pokušaja",
+    "Zapetljana vrpca koja pokvari bacanje i dalje se računa kao pokušaj"
+   ],
+   "narration": "Pravilnik kaže da pokušaj počinje čim natjecatelj otpusti koplje prema naprijed. Prije toga smije promijeniti stazu. Poslije toga ne može početi iznova. A ako se vrpca zapetlja i pokvari bacanje, i dalje se računa: držati vrpcu slobodnom posao je natjecatelja.",
+   "review": "Pod revizijom za 2027: online program za 2026. kaže da opredjeljenje počinje ranije, kad se koplje povuče za bacanje. Pravilnik kaže pri otpuštanju. Dok voditelj suđenja ne odluči, primjenjujte pravilnik, a osporenu odluku uputite glavnom sucu."
+  },
+  {
+   "heading": "Prolaz ili pad",
+   "points": [
+    "Pad: koplje se ne zabije u označenu metu",
+    "Pad: bilo koji dio koplja dodiruje tlo kad miruje",
+    "Samo po sebi nije pad: okrznuće tla u letu, ako završi u meti čisto od tla"
+   ],
+   "narration": "Postoje dva načina pada. Koplje se ne zabije u označenu metu ili bilo koji njegov dio dodiruje tlo nakon što se zaustavi. Koplje smije okrznuti tlo na putu i to samo po sebi nije pad, sve dok završi u meti i čisto od tla.",
+   "review": "Pod revizijom za 2027: online program za 2026. navodi „koplje dodirne tlo prije mete” kao pad. Pravilo 4.2.13 to dopušta. Primjenjujte pravilnik dok voditelj suđenja ne odluči."
+  },
+  {
+   "heading": "Kad je završeno",
+   "points": [
+    "Završeno je kad se natjecatelj odmaknuo najmanje 2 metra od staze",
+    "Ne smije otići dok koplje nije pogodilo metu, konstrukciju ili tlo",
+    "Pad ili neuspjeh prije nego je 2 metra daleko je nepotpun pokušaj: kazna"
+   ],
+   "narration": "Prepreka je završena kad se natjecatelj odmaknuo najmanje dva metra od svoje staze. Ne smije otići prije nego koplje pogodi metu, konstrukciju ili tlo. Ako koplje ispadne prije nego je natjecatelj dva metra daleko, to je nepotpun pokušaj i primjenjuje se kazna."
+  },
+  {
+   "heading": "Kazna",
+   "points": [
+    "30 burpee (15 na Stadion događanjima)",
+    "U određenoj zoni za burpee: burpee izvan nje ne računaju se",
+    "Svaki prema standardu: prsa do tla, uspravno, zatim skok s rukama iznad ušiju"
+   ],
+   "narration": "Kazna za pad na Spear Throwu je trideset burpee, ili petnaest na Stadion događanjima. Moraju se odraditi u određenoj zoni za burpee, jer se burpee izvan nje ne računaju. Svaki mora zadovoljiti standard: prsa do tla, natrag u uravnotežen uspravan položaj, zatim skok s rukama iznad ušiju.",
+   "review": "Pod revizijom za 2027: vrijeme dodano za propuštene burpee razlikuje se u pravilniku (3.4.2), SOP-u za suđenje i programu za 2026. Ova lekcija ne uči nikakav iznos dok voditelj suđenja ne odluči."
+  },
+  {
+   "heading": "Što radite",
+   "points": [
+    "Stanite odakle vidite otpuštanje, barijeru i metu",
+    "Jasno i mirno izrecite rezultat",
+    "Uputite natjecatelja u zonu za burpee, gdje kamera vidi broj s njegove trake za glavu",
+    "Svaki spor uputite glavnom sucu: ne raspravljajte na prepreci"
+   ],
+   "narration": "Stanite tako da istodobno vidite otpuštanje, barijeru i metu. Jasno i mirno izrecite rezultat. Uputite natjecatelja u zonu za burpee i pazite da kamera vidi broj s njegove trake za glavu. Ako natjecatelj ospori odluku, zabilježite broj i uputite je glavnom sucu. Ne raspravljajte na prepreci."
+  },
+  {
+   "heading": "Ukratko",
+   "points": [
+    "Jedno bacanje: pokušaj počinje kad se koplje otpusti prema naprijed",
+    "Prolaz: u meti, ništa ne dodiruje tlo kad miruje",
+    "Završeno: 2 metra od staze",
+    "Pad: 30 burpee u zoni, svaki prema standardu"
+   ],
+   "narration": "Ukratko. Jedno bacanje, a pokušaj počinje kad se koplje otpusti prema naprijed. Prolaz je koplje u meti bez ičega što dodiruje tlo kad miruje. Natjecatelj je gotov kad je dva metra od staze. Pad je trideset burpee u zoni za burpee, svaki prema standardu."
+  }
+ ],
+ "ocr-5-1": [
+  {
+   "heading": "Dvije vrste prepreka, dvije vrste ishoda",
+   "points": [
+    "Obvezne prepreke moraju se svladati: pad znači diskvalifikaciju",
+    "Direktor utrke može zamijeniti vremensku kaznu, ovisno o težini",
+    "Pad na prepreci s prolazom ili padom znači kaznu: kaznenu petlju ili burpee"
+   ],
+   "narration": "Pravilnik dijeli prepreke u dvije kategorije. Obvezne prepreke moraju se svladati. Pad na njima znači diskvalifikaciju s događanja, iako direktor utrke može zamijeniti vremensku kaznu, ovisno o težini prekršaja. Prepreke s prolazom ili padom drukčije su. Natjecatelj koji padne ostaje u utrci i umjesto toga uzima kaznu. Ta je kazna kaznena petlja ili burpee, a Spartan određuje koja vrijedi za svaku prepreku, događanje, kategoriju ili skupinu.",
+   "review": "Pod revizijom za 2027: pravilo 3.17.3 kaže da je kazna kaznena petlja ili 30 burpee, kako Spartan odredi za svaku prepreku, događanje, kategoriju ili skupinu, a na Stadionu uvijek 15 burpee. SOP za suđenje kaže da je to petlja na većini prepreka, a burpee na Spear Throwu; program za 2026. kaže burpee samo na Spear Throwu. Do tada upotrijebite kaznu koju glavni sudac potvrdi za vašu prepreku, a ako niste sigurni, pitajte glavnog suca."
+  },
+  {
+   "heading": "Kaznena petlja",
+   "points": [
+    "Određeni dio staze koji natjecatelj prolazi nakon pada na prepreci",
+    "Duljina se razlikuje, a može uključivati nošenja, puzanja ili druge izazove",
+    "Primjenjuje se jednako na sve u kategoriji ili skupini",
+    "Prođite cijelu petlju prije početka utrke: znajte rutu i točku povratka"
+   ],
+   "narration": "Kaznena petlja je određeni dio staze koji natjecatelj prolazi nakon pada na prepreci. Njezina se duljina može mijenjati s terenom i može uključivati dodatne izazove poput nošenja ili puzanja. Kako god bila osmišljena, primjenjuje se dosljedno na sve u istoj kategoriji ili skupini. Prije prvog natjecateljskog vala sami prođite cijelu petlju. Trebate znati rutu i točku povratka kako biste mogli ispravno uputiti natjecatelje i vidjeti svakoga tko je skrati."
+  },
+  {
+   "heading": "Manjak burpee",
+   "points": [
+    "Natjecateljima koji ne odrade potrebne burpee dodaje se vrijeme u cilju",
+    "Veći manjak može značiti veliku vremensku kaznu",
+    "Manjak se može utvrditi na stazi ili u pregledu videa, prije dodjele nagrada",
+    "Koliko vremena dodaje svaki propušteni burpee, u reviziji je za 2027."
+   ],
+   "narration": "Gdje su burpee kazna, natjecatelju koji ne odradi potreban broj dodaje se vrijeme na ukupno vrijeme cilja. Program za 2026. kaže jednostavno: veliki manjak burpee može rezultirati velikom vremenskom kaznom. Manjak se može utvrditi tijekom utrke ili u službenom pregledu videa prije dodjele nagrada, zbog čega rezultati možda neće biti konačni odmah. Koliko točno vremena dodaje propušteni burpee, u reviziji je, pa ova lekcija ne uči nikakav iznos.",
+   "review": "Pod revizijom za 2027: pravilo 3.4.2 dodaje 30 sekundi za svaki od prvih 10 propuštenih burpee i ukupno 10 minuta ako je propušteno više od 10. SOP za suđenje dodaje 30 sekundi za svaki i 10 minuta ako je odrađeno manje od 20; program za 2026. kaže da je 11 ili više neispravnih 10 minuta, a manje od 20 diskvalifikacija. Ova lekcija ne uči nikakav iznos dok voditelj suđenja ne odluči: kazne potvrđuje glavni sudac."
+  },
+  {
+   "heading": "Neodrađena kazna",
+   "points": [
+    "Kaznene petlje moraju se proći u cijelosti",
+    "Preskakanje kazne donosi dodatnu kaznu: dodano vrijeme ili diskvalifikaciju",
+    "Što preskakanje petlje košta, u reviziji je za 2027.",
+    "Vaš dio: zabilježite broj s trake za glavu i prijavite glavnom sucu"
+   ],
+   "narration": "Kaznene petlje moraju se proći u cijelosti. Natjecatelj koji padne na prepreci s prolazom ili padom, a ne odradi kaznu, prekršio je pravila i to ga košta. Tijekom službenog pregleda videa službene osobe utrke mogu dodati vremensku kaznu ili diskvalificirati. Izvori za 2026. ne slažu se oko točne kazne za preskakanje petlje, pa je ona u reviziji. Vaš dio se ne mijenja: zabilježite broj natjecatelja s trake za glavu, zabilježite što se dogodilo i prijavite glavnom sucu.",
+   "review": "Pod revizijom za 2027: pravilo 3.4.1 dodaje vremensku kaznu od 10 minuta kad natjecatelj padne na prepreci s prolazom ili padom i ne odradi kaznenu petlju. Program za 2026. kaže da neodrađena kazna može rezultirati diskvalifikacijom, a SOP za suđenje ne određuje iznos. Dok voditelj suđenja ne odluči, primjenjujte pravilnik: zabilježite, prijavite i kaznu prepustite glavnom sucu."
+  },
+  {
+   "heading": "Kad natjecatelj ode bez kazne",
+   "points": [
+    "Zabilježite broj s trake za glavu i razlog, poput pada na prepreci bez kazne",
+    "Nema broja? Dajte glavnom sucu jasan opis: odjeća, obilježja, kategorija",
+    "Prijavite što prije i pomozite kasnije identificirati natjecatelja ako se traži"
+   ],
+   "narration": "Postupak suđenja kaže što učiniti kad natjecatelj ode s vaše prepreke bez odrađene kazne. Zapišite broj s njegove trake za glavu i razlog. Prijavite glavnom sucu čim operativno možete. Ako niste uspjeli doći do broja, ipak odmah prijavite, s jasnim fizičkim opisom natjecatelja: boja odjeće, posebna obilježja i kategorija utrke. Od vas se kasnije na stazi može tražiti da pomognete identificirati natjecatelja."
+  },
+  {
+   "heading": "Ukratko",
+   "points": [
+    "Pad na obveznoj prepreci: diskvalifikacija, osim ako direktor utrke zamijeni vremensku kaznu",
+    "Pad na prepreci s prolazom ili padom: kaznena petlja, u cijelosti prijeđena, ili burpee",
+    "Propušteni burpee i preskočene petlje donose dodatne kazne: iznosi su u reviziji",
+    "Zabilježite broj s trake za glavu i prijavite glavnom sucu"
+   ],
+   "narration": "Ukratko. Pad na obveznoj prepreci znači kaznu diskvalifikacije, osim ako direktor utrke ne zamijeni vremensku kaznu. Pad na prepreci s prolazom ili padom znači da natjecatelj uzima određenu kaznu: kaznenu petlju, u cijelosti prijeđenu, ili burpee. Propušteni burpee i preskočene petlje donose dodatne kazne, a točni iznosi su u reviziji za 2027. Što god se dogodilo, zabilježite broj s trake za glavu i prijavite ga glavnom sucu.",
+   "review": "Pod revizijom za 2027: gdje su burpee kazna (pravilo 3.17.3), vrijeme dodano za propuštene burpee (3.4.2) i kazna za preskakanje petlje (3.4.1) razlikuju se u pravilniku, SOP-u za suđenje i programu za 2026. Dok voditelj suđenja ne odluči, upotrijebite kaznu koju glavni sudac potvrdi za vašu prepreku, ne učite nijedan vremenski iznos, a osporene odluke uputite glavnom sucu."
+  }
+ ],
+ "ocr-5-2": [
+  {
+   "heading": "Vaš posao na prepreci",
+   "points": [
+    "Brinite da natjecatelji slijede upute prepreke",
+    "Pazite na kršenja pravila i znajte uvjete pada na prepreci",
+    "Svakog natjecatelja koji padne uputite na ispravnu kaznu",
+    "Prijavite probleme i nepoštivanje pravila glavnom sucu"
+   ],
+   "narration": "Pravilnik definira suca kao službenu osobu imenovanu da osigura poštivanje pravila, obično postavljenu na prepreku ili u šator za pregled videa, koja odgovara glavnom službeniku, kojeg ovaj program naziva glavnim sucem. Na vašoj prepreci to znači četiri stvari. Brinite da natjecatelji slijede upute. Pazite na povrede, znajući točno što se računa kao pad. Svakoga tko padne uputite na ispravnu kaznu. I prijavite probleme glavnom sucu."
+  },
+  {
+   "heading": "Svaka prepreka mora se pokušati",
+   "points": [
+    "Pokušaj znači najmanje dodir prepreke",
+    "Može uključivati ulazak u vodu ili težak teren da se dođe do prepreke",
+    "Taj se teren ne smije zaobići kaznom osim ako briefing ili osoblje utrke to dopuste"
+   ],
+   "narration": "Svaka prepreka mora se pokušati. Najmanje, pokušaj znači dodir prepreke. Ako je prepreka u vodi ili na drugom teškom terenu, pokušaj može uključivati prolazak tim terenom da se do nje dođe. Natjecatelji taj teren ne mogu zaobići uzimanjem kazne, osim ako su predutrkni briefing ili osoblje na dan utrke rekli da je to prihvatljivo. Dakle, natjecatelj koji ode ravno na kaznu bez dodirivanja prepreke nije zadovoljio pravilo."
+  },
+  {
+   "heading": "Zvona i ometanje",
+   "points": [
+    "Zvona se smiju udarati samo rukama, šakama ili tijelom iznad prsa",
+    "Udaranje zvona nogom je pad: bez ponavljanja, ravno na kaznu",
+    "Pad zbog znatnog ometanja drugog natjecatelja? Službena osoba može dopustiti ponovni početak"
+   ],
+   "narration": "Dva opća pravila vrijede na mnogim preprekama. Zvona se smiju udarati samo rukama, šakama ili drugim dijelom tijela iznad prsa. Natjecatelj koji udari zvono stopalom, nogom ili koljenom pao je na prepreci: ne može ponoviti i mora odraditi kaznu. A ako natjecatelj padne jer ga je drugi natjecatelj znatno fizički ometao, službena osoba može mu dati dopuštenje da počne prepreku iznova bez dodatne kazne. Ako niste sigurni, pitajte glavnog suca."
+  },
+  {
+   "heading": "Upućivanje na kaznu",
+   "points": [
+    "Svakog natjecatelja koji padne uputite na kaznu određenu za vašu prepreku",
+    "Format kazne svake prepreke potvrđuje se prije događanja i pokriva ga briefing",
+    "Niste sigurni koja se kazna primjenjuje? Odmah kontaktirajte glavnog suca"
+   ],
+   "narration": "Kad natjecatelj padne, jasno ga uputite na ispravnu kaznu. Prije događanja glavni sudac s direktorom utrke potvrđuje format kazne za svaku prepreku, bilo da je to petlja trčanja, petlja nošenja, petlja puzanja ili burpee, a briefing na lokaciji pokriva što vrijedi za vašu. Postupak suđenja kaže da većina prepreka koristi kaznenu petlju, a Spear Throw burpee. Ako ikad niste sigurni koja se kazna primjenjuje, odmah kontaktirajte glavnog suca.",
+   "review": "Pod revizijom za 2027: pravilo 3.17.3 kaže da je kazna kaznena petlja ili 30 burpee, kako Spartan odredi za svaku prepreku, događanje, kategoriju ili skupinu, a na Stadionu uvijek 15 burpee. SOP za suđenje kaže da je to petlja na većini prepreka, a burpee na Spear Throwu; program za 2026. kaže burpee samo na Spear Throwu. Do tada upotrijebite kaznu koju glavni sudac potvrdi za vašu prepreku, a ako niste sigurni, pitajte glavnog suca."
+  },
+  {
+   "heading": "Ponašanje natjecatelja na stazi",
+   "points": [
+    "Natjecatelji moraju prijeći cijelu službenu stazu: njihova je odgovornost slijediti je",
+    "Nikakva fizička pomoć osim od Spartan službene osobe i nikakvo zečarenje tempa",
+    "Obavijest o napretku ili vremenima drugih natjecatelja nije pomoć",
+    "Broj na traci za glavu mora u svakom trenutku biti vidljiv i čitljiv"
+   ],
+   "narration": "Natjecatelji moraju prijeći službenu stazu u cijelosti, a njezino ispravno slijeđenje njihova je vlastita odgovornost. Ne smiju prihvatiti fizičku pomoć ni od koga osim Spartan službene osobe. To uključuje hranu i piće izvan službenih okrepnih postaja, opremu, fizičku potporu i određivanje tempa, što znači da netko trči s njima da ih vodi ili im određuje tempo. Obavijest o napretku ili vremenima drugih natjecatelja nije pomoć. Broj utrke na traci za glavu mora biti jasno istaknut i čitljiv u svakom trenutku."
+  },
+  {
+   "heading": "Nesportsko ponašanje i prijavljivanje",
+   "points": [
+    "Natjecatelji moraju s poštovanjem postupati prema svima: bez uvredljivog, prijetećeg ili podrugljivog ponašanja",
+    "Kaznu za ponašanje određuje glavni sudac: vaš je posao prijaviti",
+    "Zabilježite broj s trake za glavu i što se dogodilo te prijavite glavnom sucu",
+    "Mirno objasnite pravilo i ne zaoštravajte sukob na prepreci"
+   ],
+   "narration": "Natjecatelji moraju prema ostalim natjecateljima, Spartan osoblju, volonterima, gledateljima i javnosti postupati pošteno, s poštovanjem i uljudno te ne smiju koristiti uvredljiv, prijeteći ili podrugljiv jezik ili ponašanje. Nesportsko ponašanje može dovesti do kazne koju određuje glavni službenik, glavni sudac. Bez obzira na problem, zapišite broj s trake za glavu i što se dogodilo te prijavite što prije. Prijave idu od vas glavnom sucu, a dalje direktoru utrke ili timu za mjerenje vremena. Ako natjecatelj ospori vašu odluku, mirno objasnite pravilo i izbjegnite svađu."
+  },
+  {
+   "heading": "Ukratko",
+   "points": [
+    "Svaka se prepreka mora pokušati: najmanje dodir",
+    "Znajte uvjete pada: udareno zvono nogom je pad",
+    "Svakog natjecatelja koji padne uputite na kaznu svoje prepreke; ako niste sigurni, pitajte glavnog suca",
+    "Zabilježite broj, prijavite glavnom sucu i ne svađajte se"
+   ],
+   "narration": "Ukratko. Svaka se prepreka mora pokušati, a to najmanje znači dodir. Znajte upute i uvjete pada za svoju prepreku, ali i opće, poput toga da je udareno zvono nogom pad. Svakog natjecatelja koji padne uputite na kaznu određenu za vašu prepreku, a ako niste sigurni, pitajte glavnog suca. Natjecatelji moraju slijediti stazu, ne primati vanjsku pomoć i držati broj vidljivim. Kad nešto krene krivo, zabilježite broj, prijavite i ne svađajte se na prepreci."
+  }
+ ],
+ "ocr-5-3": [
+  {
+   "heading": "Gdje su burpee kazna",
+   "points": [
+    "Spartan određuje petlju ili burpee za svaku prepreku, događanje, kategoriju ili skupinu",
+    "Gdje su određeni burpee, kazna je 30 burpee",
+    "Stadion događanja: uvijek 15 burpee",
+    "Kazna za Spear Throw je 30 burpee"
+   ],
+   "narration": "Prema pravilu 3.17.3, kazna za prepreku s prolazom ili padom je ili kaznena petlja ili burpee, kako Spartan odredi za svaku prepreku, događanje, kategoriju ili skupinu. Gdje su određeni burpee, to je trideset burpee. Na Stadion događanjima kazna svake prepreke je petnaest burpee. Kazna za Spear Throw je trideset burpee. Prije događanja glavni sudac s direktorom utrke potvrđuje format kazne za svaku prepreku, pa vam briefing govori koristi li vaša prepreka burpee.",
+   "review": "Pod revizijom za 2027: pravilo 3.17.3 kaže da je kazna kaznena petlja ili 30 burpee, kako Spartan odredi za svaku prepreku, događanje, kategoriju ili skupinu, a na Stadionu uvijek 15 burpee. SOP za suđenje kaže da je to petlja na većini prepreka, a burpee na Spear Throwu; program za 2026. kaže burpee samo na Spear Throwu. Do tada upotrijebite kaznu koju glavni sudac potvrdi za vašu prepreku, a ako niste sigurni, pitajte glavnog suca."
+  },
+  {
+   "heading": "Zona za burpee",
+   "points": [
+    "Burpee se moraju raditi unutar određene zone za burpee",
+    "Burpee izvan zone ne računaju se u kaznu",
+    "Službene osobe mogu dodati zone kad je jedna puna ili za razdvajanje kategorija",
+    "Vaš posao: pobrinuti se da se burpee rade u ispravnoj zoni"
+   ],
+   "narration": "Burpee se moraju odraditi unutar određene zone za burpee. Svi odrađeni izvan nje ne računaju se u kaznu, pa natjecatelj koji izađe iz zone radi ponavljanja koja mu neće biti priznata. Službene osobe utrke mogu odrediti dodatne zone za burpee kad jednoj ponestane prostora ili da razdvoje kategorije natjecatelja. Dio vašeg posla je pobrinuti se da se burpee rade u ispravnoj zoni, gdje ih vi i kamera vidite."
+  },
+  {
+   "heading": "Traka za glavu ide na tlo",
+   "points": [
+    "Natjecatelj stavlja traku za glavu na tlo izravno ispred sebe",
+    "Izgubljena traka: zabilježite ime natjecatelja ili neka ga kaže na audiozapisu kamere",
+    "Obavijestite glavnog suca o svakom natjecatelju snimljenom bez trake za glavu"
+   ],
+   "narration": "Dok radi burpee, natjecatelj stavlja traku za glavu na tlo izravno ispred sebe. Obavijesti glavnog suca na startnoj crti to pokrivaju, pa bi natjecatelji to trebali znati prije nego dođu do vas. Ako je natjecatelj izgubio traku za glavu, zabilježite njegovo ime ili iskoristite zvuk kamere da kaže tko je. U oba slučaja obavijestite glavnog suca o svakom natjecatelju snimljenom bez trake za glavu, kako bi se snimka mogla povezati s ispravnom osobom."
+  },
+  {
+   "heading": "Pokazivanje natjecatelja kameri",
+   "points": [
+    "Držite traku za glavu oko dvije stope od leće oko dvije sekunde",
+    "Odmah je vratite natjecatelju",
+    "Nikad ne držite dvije trake istodobno i ne dopustite da vam ih natjecatelji predaju",
+    "Nikad ne pomičite tijelo ili lice natjecatelja radi kamere"
+   ],
+   "narration": "Na Spear Throwu video identificira svakog natjecatelja. Držite traku za glavu oko dvije stope od leće kamere oko dvije sekunde, kako bi broj bio jasan pri pregledu. Zatim je odmah vratite natjecatelju. Nikad ne držite dvije trake istodobno i ne dopustite natjecateljima da vam predaju svoje trake. I nikad fizički ne pomičite tijelo ili lice natjecatelja da ga namjestite u kadar: identifikacija dolazi s trake za glavu, jasno podignute."
+  },
+  {
+   "heading": "Pregled videa utvrđuje propuštene burpee",
+   "points": [
+    "Propušteni burpee utvrđuju se u pregledu videa",
+    "Rezultati možda neće biti konačni dok službeni pregled videa nije gotov",
+    "Snimka ostaje kod glavnog suca i nikad se ne daje natjecateljima",
+    "Vaša tri posla: standard pokreta, zona, jasna identifikacija"
+   ],
+   "narration": "Program za 2026. kaže da pregled videa utvrđuje propuštene burpee. Zato se rezultati možda neće objaviti odmah: službeni pregled provodi se prije nego su konačni. Glavni sudac vodi pregled kako se suci vraćaju sa svojih prepreka, čuva snimku do kraja dana događanja i nikad je ne daje natjecateljima. Vaš dio na stazi omogućuje pregled: provodite standard pokreta, držite burpee u zoni i jasno identificirajte svakog natjecatelja za kameru.",
+   "review": "Pod revizijom za 2027: vrijeme dodano za propuštene burpee razlikuje se u pravilu 3.4.2, SOP-u za suđenje i programu za 2026, a SOP dopušta sucu na lokaciji da odluči, pisano, gdje nema videa. Lekcija o vremenskim kaznama za burpee iznosi svaku inačicu. Ova lekcija ne uči nikakav iznos: kazne nakon pregleda potvrđuje glavni sudac."
+  },
+  {
+   "heading": "Ukratko",
+   "points": [
+    "Burpee su kazna gdje ih Spartan odredi: 30, ili 15 na Stadionu",
+    "Računaju se samo burpee unutar zone",
+    "Traka za glavu na tlu ispred; pokaže se kameri, pa odmah natrag",
+    "Pregled videa utvrđuje propuštene burpee"
+   ],
+   "narration": "Ukratko. Burpee su kazna gdje ih Spartan odredi: trideset burpee, ili petnaest na Stadion događanjima, a uvijek na Spear Throwu. Računaju se samo burpee unutar određene zone. Natjecateljeva traka za glavu ide na tlo ispred njega, a vi je pokažete kameri nekoliko sekundi, pa je odmah vratite. Pregled videa zatim utvrđuje propuštene burpee, pa je vaš posao standard, zona i jasna identifikacija.",
+   "review": "Pod revizijom za 2027: pravilo 3.17.3 kaže da je kazna kaznena petlja ili 30 burpee, kako Spartan odredi za svaku prepreku, događanje, kategoriju ili skupinu, a na Stadionu uvijek 15 burpee. SOP za suđenje kaže da je to petlja na većini prepreka, a burpee na Spear Throwu; program za 2026. kaže burpee samo na Spear Throwu. Do tada upotrijebite kaznu koju glavni sudac potvrdi za vašu prepreku, a ako niste sigurni, pitajte glavnog suca."
+  }
+ ],
+ "ocr-6-1": [
+  {
+   "heading": "Jedan potpuni burpee",
+   "points": [
+    "Jedan ciklus između dva položaja: donjeg i gornjeg",
+    "Iz donjeg položaja gore u gornji, zatim skok",
+    "Ponavljanje koje ne zadovolji dio standarda nije potpuni burpee"
+   ],
+   "narration": "Pravilo 3.17.4 definira jedan potpuni burpee. To je jedan ciklus između dva položaja tijela, zvana gornji i donji. Natjecatelj se iz donjeg položaja diže u gornji, a zatim skače. Svako ponavljanje u kaznenim burpeejima mora zadovoljiti ovaj standard. Ponavljanje koje ne zadovolji dio standarda nije potpuni burpee i možete zahtijevati da natjecatelj odradi još jedan. Sljedeći slajdovi obrađuju svaki dio redom."
+  },
+  {
+   "heading": "Donji i gornji položaj",
+   "points": [
+    "Donji: ležeći potrbuške na tlu, s prsima koja dodiruju tlo",
+    "Gornji: uravnotežen i uspravan, stav koji bi svatko mogao držati bez pada",
+    "U gornjem su kukovi i koljena ispruženi, ne savijeni"
+   ],
+   "narration": "Donji položaj je ležanje potrbuške, licem prema tlu, s prsima koja dodiruju tlo. Gornji položaj je uravnotežen, uspravan stav: onaj koji bi svatko mogao dugo držati bez pada naprijed ili natrag. U gornjem položaju natjecateljevi kukovi i koljena trebaju biti ispruženi, ne savijeni. Pazite na oba kraja svakog ponavljanja. Prsa koja se zaustave prije tla ili kukovi koji su u gornjem položaju još savijeni znače da ponavljanje nije zadovoljilo standard."
+  },
+  {
+   "heading": "Skok",
+   "points": [
+    "Kad se vrati u gornji položaj, natjecatelj skače",
+    "Ruke su ispružene prema gore, iznad ušiju",
+    "Bez skoka ili ruke nisu iznad ušiju: ponavljanje nije potpuno"
+   ],
+   "narration": "Kad se natjecatelj iz donjeg vrati u gornji položaj, skače s rukama ispruženim prema gore iznad ušiju. Pravilo stavlja skok nakon dostizanja gornjeg položaja, pa se natjecatelj prvo mora uspraviti. Pazite na ruke kao i na stopala. Ruke koje dosežu samo do ramena ili lica ne zadovoljavaju standard, kao ni ponavljanje bez ikakvog skoka."
+  },
+  {
+   "heading": "Jedan neprekinut pokret",
+   "points": [
+    "Program za 2026.: pokret mora biti neprekinut za svako ponavljanje",
+    "Brza ponavljanja i dalje moraju zadovoljiti svaki dio standarda",
+    "Tipična greška: brzi burpee s nepotpunim ispružanjem u gornjem položaju"
+   ],
+   "narration": "Program za 2026. dodaje da pokret mora biti neprekinut za svako ponavljanje: dolje na tlo, gore u stoj i skok, kao jedan pokret. Daje i tipičan scenarij na koji treba paziti: natjecatelj koji radi brze burpee bez potpunog ispružanja u gornjem položaju. Pitanje je uvijek isto. Je li ponavljanje zadovoljilo standard? Prsa na tlu, kukovi i koljena ispruženi u gornjem položaju, zatim skok s rukama iznad ušiju. Ako nije, nije potpuni burpee."
+  },
+  {
+   "heading": "Ukratko",
+   "points": [
+    "Donji: ležeći potrbuške, prsa dodiruju tlo",
+    "Gornji: uravnotežen i uspravan, kukovi i koljena ispruženi",
+    "Zatim skok s rukama iznad ušiju",
+    "Jedan neprekinut pokret i svako ponavljanje prema standardu, koliko god brzo"
+   ],
+   "narration": "Ukratko. Jedan potpuni burpee ide iz donjeg u gornji položaj, nakon čega slijedi skok. U donjem položaju natjecatelj leži potrbuške s prsima koja dodiruju tlo. U gornjem stoji uravnotežen i uspravan, s ispruženim kukovima i koljenima. Zatim skače s rukama iznad ušiju. Svako ponavljanje je jedan neprekinut pokret i svako ponavljanje mora zadovoljiti standard, koliko god brzo bilo izvedeno."
+  }
+ ],
+ "ocr-6-2": [
+  {
+   "heading": "Natjecatelji broje, vi ne",
+   "points": [
+    "Natjecatelji broje vlastite burpee",
+    "Suci ne broje umjesto njih",
+    "Vaš je posao standard: pratite svako ponavljanje",
+    "Podsjetite natjecatelje da se prate pokret i ponavljanja"
+   ],
+   "narration": "Natjecatelji su odgovorni za brojanje vlastitih burpee. Suci ne broje umjesto njih. To vas oslobađa za posao koji je važan: pratiti zadovoljava li svako ponavljanje standard pokreta. Program za 2026. preporučuje podsjećanje natjecatelja da se prate i standard pokreta i broj ponavljanja. Gdje postoji video, broj i kvaliteta burpee ponovno se provjeravaju u pregledu videa."
+  },
+  {
+   "heading": "Praćenje standarda",
+   "points": [
+    "Stanite gdje vam je pogled na natjecatelja nesmetan",
+    "Provjerite prsa u donjem položaju, kukove i koljena u gornjem, ruke u skoku",
+    "Držite burpee unutar zone, s trakom za glavu na tlu ispred",
+    "Ne dirajte i ne pomičite natjecatelja radi kamere"
+   ],
+   "narration": "Postavite se tako da vam je pogled nesmetan. Trebate vidjeti kako prsa dosežu tlo, kako se kukovi i koljena ispružaju u gornjem položaju i kako ruke idu iznad ušiju u skoku. Pazite i na zonu, jer se burpee izvan nje ne računaju, te na traku za glavu, koja ostaje na tlu ispred natjecatelja. Nikad fizički ne pomičite tijelo ili lice natjecatelja radi kamere."
+  },
+  {
+   "heading": "Traženje dodatnih burpee",
+   "points": [
+    "Ponavljanje ispod standarda: zahtijevajte dodatni burpee",
+    "Jasno i mirno objasnite što je nedostajalo",
+    "Iscrpljeni natjecatelji smiju nastaviti ako je njihov trud iskren"
+   ],
+   "narration": "Kad ponavljanje ne zadovolji standard, zahtijevajte od natjecatelja dodatne burpee, tako da se kazna sastoji od potpunih burpee. Jasno i mirno objasnite što je nedostajalo, na primjer prsa koja nisu dotaknula tlo ili kukove koji su u gornjem položaju još savijeni. Neki će natjecatelji biti iscrpljeni. Program za 2026. kaže da im treba dopustiti nastavak ako je njihov trud iskren. Mogu nastaviti, ali svako ponavljanje i dalje mora zadovoljiti standard."
+  },
+  {
+   "heading": "Kad natjecatelj ospori vašu odluku",
+   "points": [
+    "Ostanite mirni, objasnite pravilo i izbjegnite svađu",
+    "Zabilježite broj s trake za glavu i što je osporeno",
+    "Spor uputite glavnom sucu",
+    "Ne zaoštravajte sukob na prepreci"
+   ],
+   "narration": "Neki natjecatelji neće se složiti kad zatražite dodatne burpee. Ostanite mirni i profesionalni, jasno objasnite pravilo i ne dajte se uvući u svađu. Zabilježite broj natjecatelja s trake za glavu i što je osporeno te prijavite glavnom sucu čim možete. Sporove rješava glavni sudac, a ne vi na prepreci. Dok se time bavite, nastavite pratiti ostale natjecatelje u zoni."
+  },
+  {
+   "heading": "Ukratko",
+   "points": [
+    "Natjecatelji broje; vi pratite standard",
+    "Jasan pogled na prsa, kukove i koljena te ruke",
+    "Ispod standarda: zahtijevajte dodatne burpee, mirno objašnjeno",
+    "Iscrpljeni ali iskreni: neka nastave; sporovi idu glavnom sucu"
+   ],
+   "narration": "Ukratko. Natjecatelji broje vlastite burpee, a vi pratite standard. Stanite tako da jasno vidite prsa u donjem položaju, kukove i koljena u gornjem te ruke u skoku, i držite burpee unutar zone. Ako ponavljanje ne zadovolji, zahtijevajte dodatne burpee i mirno objasnite zašto. Iscrpljenim natjecateljima dopustite nastavak ako je njihov trud iskren. A ako natjecatelj ospori vašu odluku, zabilježite broj i uputite je glavnom sucu."
+  }
+ ],
+ "ocr-6-3": [
+  {
+   "heading": "Propušteni burpee postaju vrijeme",
+   "points": [
+    "Natjecateljima koji ne odrade potrebne burpee dodaje se vrijeme u cilju",
+    "Manjkovi se utvrđuju na stazi ili u pregledu prije dodjele nagrada",
+    "Koliko se vremena dodaje, u reviziji je za 2027."
+   ],
+   "narration": "Gdje su burpee kazna, a natjecatelj ne odradi potreban broj, vrijeme se dodaje njegovu ukupnom vremenu cilja. Propušteni burpee mogu se utvrditi tijekom utrke ili u pregledu nakon utrke prije dodjele nagrada. Sva tri izvora za 2026. slažu se da propušteni burpee koštaju vremena. Ne slažu se koliko, pa ova lekcija ne uči nikakav iznos. Iznosi su u reviziji za 2027., dok voditelj suđenja ne odluči.",
+   "review": "Pod revizijom za 2027: pravilo 3.4.2 dodaje 30 sekundi za svaki od prvih 10 propuštenih burpee i ukupno 10 minuta ako je propušteno više od 10. SOP za suđenje dodaje 30 sekundi za svaki i 10 minuta ako je odrađeno manje od 20; program za 2026. kaže da je 11 ili više neispravnih 10 minuta, a manje od 20 diskvalifikacija. Ova lekcija ne uči nikakav iznos dok voditelj suđenja ne odluči: kazne potvrđuje glavni sudac."
+  },
+  {
+   "heading": "Gdje se izvori za 2026. ne slažu",
+   "points": [
+    "Koliko vremena dodaje svaki propušteni burpee i postoji li gornja granica",
+    "Gdje je prag: propušteni burpee ili odrađeni burpee",
+    "Znači li veliki manjak vremensku kaznu ili diskvalifikaciju",
+    "Stadion, s kaznom od 15 burpee, također je sporan"
+   ],
+   "narration": "Pravilnik, postupak suđenja i program za 2026. svaki drukčije opisuju vremenske kazne za burpee. Razlikuju se u tome koliko vremena dodaje propušteni burpee i postoji li gornja granica. Razlikuju se u tome gdje je prag, računan u propuštenim ili u odrađenim burpeejima. I razlikuju se u tome znači li veliki manjak dugu vremensku kaznu ili diskvalifikaciju. Stadion, gdje je kazna petnaest burpee, ima isti problem. Dok voditelj suđenja ne odluči, svaki iznos smatrajte onim koji je u reviziji.",
+   "review": "Pod revizijom za 2027: pravilo 3.4.2 dodaje 30 sekundi za svaki od prvih 10 propuštenih burpee i ukupno 10 minuta za više od 10 (Stadion: 30 sekundi za svaki od prvih 5, 5 minuta za više od 5). SOP za suđenje dodaje 30 sekundi po propuštenom burpeeju i 10 minuta ako je odrađeno manje od 20 (Stadion: manje od 10). Program za 2026. kaže 30 sekundi za svaki, 10 minuta za 11 ili više neispravnih i diskvalifikaciju za manje od 20. Do tada natjecateljima ne navodite nikakav iznos: pitanja o vremenskim kaznama uputite glavnom sucu."
+  },
+  {
+   "heading": "Što se računa kao propušteni burpee",
+   "points": [
+    "Burpee koji nije odrađen",
+    "Burpee izvan određene zone: ne računa se u kaznu",
+    "Ponavljanje ispod standarda pokreta: nije potpuni burpee",
+    "Pregled gleda i broj i kvalitetu burpee"
+   ],
+   "narration": "Manjak nisu samo burpee koji nikad nisu odrađeni. Burpee odrađeni izvan određene zone ne računaju se u kaznu. Ponavljanje koje ne zadovolji standard pokreta nije potpuni burpee, a program za 2026. propuštene i neispravne burpee tretira jednako. Prema postupku suđenja, pregled odlučuje i o količini i o kvaliteti burpee. Zato je važno provoditi standard na licu mjesta i tražiti dodatna ponavljanja.",
+   "review": "Pod revizijom za 2027: koliko vremena dodaju propušteni ili neispravni burpee razlikuje se u pravilu 3.4.2, SOP-u za suđenje i programu za 2026. Što se računa kao potpuni burpee ne razlikuje se: primjenjujte pravila 3.17.4 i 3.17.5, a vremensku kaznu prepustite glavnom sucu."
+  },
+  {
+   "heading": "Tko određuje kaznu",
+   "points": [
+    "S videom: odluke o burpeejima po broju i kvaliteti donose se u pregledu videa",
+    "Bez videa: odlučujete na licu mjesta, zapišete i predate glavnom sucu",
+    "Glavni sudac šalje potvrđene kazne direktoru utrke i timu za mjerenje vremena",
+    "Kazne se prikazuju u šatoru s rezultatima tijekom pregleda"
+   ],
+   "narration": "Gdje postoji video, odluke o tome koliko je burpee odrađeno i koliko dobro donose se u pregledu videa. Glavni sudac vodi taj pregled kako se suci vraćaju sa svojih prepreka i šalje potvrđene kazne i diskvalifikacije direktoru utrke i timu za mjerenje vremena. Gdje videa nema, postupak suđenja kaže da sudac na lokaciji odlučuje, pisano dokumentira odluku i predaje je glavnom sucu po povratku s prepreke. Kazne se prikazuju u šatoru s rezultatima tijekom pregleda.",
+   "review": "Pod revizijom za 2027: SOP za suđenje (6.iii) kaže da se odluke o kaznama za burpee donose u pregledu videa gdje postoji video, a od strane suca na lokaciji, pisano, gdje ne postoji. Program za 2026. kaže da odluke o kaznama donosi tim za pregled videa. Do tada slijedite SOP za suđenje: bez kamere zapišite svoju odluku i predajte je glavnom sucu."
+  },
+  {
+   "heading": "Ukratko",
+   "points": [
+    "Propušteni ili neispravni burpee dodaju vrijeme natjecateljevu cilju",
+    "Koliko vremena, u reviziji je za 2027.: pitanja uputite glavnom sucu",
+    "Provodite standard i zonu na licu mjesta",
+    "S videom odlučuje pregled; bez njega zapišite svoju odluku"
+   ],
+   "narration": "Ukratko. Propušteni ili neispravni burpee dodaju vrijeme natjecateljevu cilju, ali koliko vremena, u reviziji je za 2027., jer se pravilnik, postupak suđenja i program za 2026. ne slažu. Ne navodite iznos: pitanja uputite glavnom sucu. Ono što kontrolirate je na stazi: standard pokreta i zona. Gdje postoji video, odlučuje pregled. Gdje ne postoji, zapišite svoju odluku i predajte je glavnom sucu.",
+   "review": "Pod revizijom za 2027: vrijeme dodano za propuštene burpee razlikuje se u pravilu 3.4.2, SOP-u za suđenje i programu za 2026. (svaka je inačica na drugom slajdu), a SOP i program razlikuju se u tome tko odlučuje kad nema videa. Dok voditelj suđenja ne odluči, ne učite nikakav iznos, slijedite SOP za suđenje o pisanim odlukama, a osporene odluke uputite glavnom sucu."
+  }
+ ],
+ "ocr-7-1": [
+  {
+   "heading": "Odgovaranje na pitanje natjecatelja",
+   "points": [
+    "Ostanite mirni i profesionalni, kakav god bio ton pitanja",
+    "Jasno objasnite pravilo: što je prepreka tražila i što je propušteno",
+    "Izbjegavajte svađe: pitanje nije rasprava"
+   ],
+   "narration": "Natjecatelji će vas pitati o vašim odlukama, često dok su umorni i frustrirani. Ostanite mirni i profesionalni. Odgovorite objašnjavajući pravilo jasno: što je prepreka tražila od njih i koji dio nisu zadovoljili. Budite kratki, jer drugi natjecatelji još stižu na vašu prepreku. Ako natjecatelj prihvati objašnjenje, uputite ga na kaznu. Ako ne, postalo je spor. Spor se ne rješava svađom na prepreci. Upućuje se glavnom sucu."
+  },
+  {
+   "heading": "Kad postane spor",
+   "points": [
+    "Zabilježite broj natjecatelja s trake za glavu",
+    "Zapišite razlog, na primjer pad na prepreci bez odrađene kazne",
+    "Prijavite glavnom sucu čim možete",
+    "Ne zaoštravajte sukob na prepreci"
+   ],
+   "narration": "Ako natjecatelj ospori vašu odluku, imate tri posla. Prvo, zabilježite broj s njegove trake za glavu. Pravila svakog natjecatelja čine odgovornim da broj utrke na traci za glavu u svakom trenutku bude čitljiv. Drugo, zapišite razlog spora, na primjer da je natjecatelj pao na prepreci i nije odradio kaznu. Treće, prijavite glavnom sucu čim operativno možete. Odluka se ne donosi na vašoj prepreci, pa nema koristi od zaoštravanja. Neka vaše bilješke budu činjenične: glavni sudac osloniti će se na njih."
+  },
+  {
+   "heading": "Kad ne možete doći do broja s trake",
+   "points": [
+    "Odmah prijavite glavnom sucu",
+    "Dajte jasan opis: boja odjeće, posebna obilježja, kategorija utrke",
+    "Pomozite kasnije identificirati natjecatelja na stazi ako se od vas traži"
+   ],
+   "narration": "Ponekad natjecatelj napusti područje prepreke bez odrađene kazne, a vi ne možete pročitati njegov broj. Postupak suđenja to pokriva. Odmah prijavite glavnom sucu, umjesto da čekate povratak s prepreke. Dajte jasan fizički opis: boju odjeće, sve što ga čini lako prepoznatljivim i njegovu kategoriju utrke ako je možete odrediti. Od vas se može tražiti da kasnije na stazi pomognete identificirati natjecatelja. Do tada ostanite usredotočeni na svoju prepreku i natjecatelje koji još stižu."
+  },
+  {
+   "heading": "Ponašanje natjecatelja",
+   "points": [
+    "Natjecatelji moraju postupati prema službenim osobama pošteno, s poštovanjem i uljudno",
+    "Uvredljiv, prijeteći ili podrugljiv jezik ili ponašanje krši pravila",
+    "Kaznu za povredu ponašanja određuje glavni službenik",
+    "Vaš dio: zabilježite broj, zabilježite što se dogodilo, prijavite"
+   ],
+   "narration": "Pravila očekuju da natjecatelji prema svima na događanju, uključujući službene osobe, postupaju pošteno, s poštovanjem i uljudno te da ne koriste uvredljiv, prijeteći ili podrugljiv jezik ili ponašanje. Povreda ponašanja može dovesti do kazne koja ovisi o težini. U pravilniku ta odluka pripada glavnom službeniku, a ne vama. Grubo nesportsko ponašanje ili fizičko nasilje prema službenoj osobi može biti razlog za suspenziju. Vaš je dio isti kao u svakom sporu: ostanite mirni, zabilježite broj s trake za glavu, zabilježite što je rečeno ili učinjeno i prijavite glavnom sucu."
+  },
+  {
+   "heading": "Nakon utrke: prigovori i pregled videa",
+   "points": [
+    "Rezultati nisu konačni dok se ne provede službeni pregled videa",
+    "Natjecatelji prigovore upućuju glavnom službeniku tijekom roka za prigovore",
+    "Službene osobe ne moraju razmatrati snimke natjecatelja ili gledatelja",
+    "Službena video snimka nikad se ne daje natjecateljima"
+   ],
+   "narration": "Osporena odluka ne završava na vašoj prepreci. Prije nego rezultati postanu konačni, provodi se službeni pregled videa. Natjecatelj koji želi osporiti kaznu podnosi prigovor glavnom službeniku tijekom roka za prigovore, koji počinje čim prijeđe ciljnu crtu. Službene osobe nisu dužne razmatrati videe ili fotografije koje su snimili natjecatelji ili gledatelji. Postupak suđenja također kaže da se službena snimka nikad ne daje natjecateljima. Zato, ako vam natjecatelj ponudi snimku sa svog mobitela ili traži da vidi vašu, uputite ga glavnom sucu i postupku prigovora.",
+   "review": "Pod revizijom za 2027: pravilo 3.19.1 završava rok za prigovore 15 minuta prije dodjele nagrada za natjecateljevu kategoriju. SOP za suđenje kao primjer navodi pola sata prije dodjele nagrada i dopušta ispravak sudačkih pogrešaka za natjecatelje izvan postolja do dva sata nakon završnih nagrada. Do tada primjenjujte pravilnik, a pitanja o vremenu uputite glavnom sucu."
+  },
+  {
+   "heading": "Ukratko",
+   "points": [
+    "Ostanite mirni, jasno objasnite pravilo, ne svađajte se",
+    "Spor: broj s trake za glavu, što se dogodilo, prijava glavnom sucu",
+    "Nema broja: odmah prijavite, s jasnim opisom",
+    "Prigovori i pregled videa događaju se nakon utrke, a ne na vašoj prepreci"
+   ],
+   "narration": "Ukratko. Odgovarajte na pitanja mirno i jasno objasnite pravilo, bez svađe. Ako postane spor, zabilježite broj s trake za glavu, zapišite što se dogodilo i prijavite glavnom sucu čim možete. Ako ne možete doći do broja, prijavite odmah s jasnim opisom natjecatelja. Uvredljivo ponašanje bilježi se i prijavljuje na isti način. Konačna odluka dolazi kasnije, kroz pregled videa i rok za prigovore, a ne na vašoj prepreci."
+  }
+ ],
+ "ocr-8-1": [
+  {
+   "heading": "Profesionalno ponašanje na vašoj prepreci",
+   "points": [
+    "Ostanite usredotočeni na svoju prepreku",
+    "Izbjegavajte ometanja i duge razgovore",
+    "Ostanite neutralni i uljudni prema svakom natjecatelju",
+    "Profesionalno predstavljajte Spartan"
+   ],
+   "narration": "Pravila postoje kako bi se svako Spartan događanje vodilo pošteno i dosljedno, u duhu sportskog ponašanja i integriteta. Na svojoj prepreci vi ste način na koji se to događa. Ostanite usredotočeni na prepreku i natjecatelje koji je pokušavaju. Izbjegavajte ometanja i duge razgovore, jer pad koji niste vidjeli je pad koji ne možete prosuditi. Ostanite neutralni i uljudni prema svima, tko god bili. Natjecateljima i gledateljima vi ste Spartan, zato profesionalno predstavljajte Spartan."
+  },
+  {
+   "heading": "Gdje je sudac u pravilima",
+   "points": [
+    "Sudac je službena osoba koju imenuje Spartan i koja brine da se poštuju pravila",
+    "Obično postavljen na prepreku ili u šator za pregled videa",
+    "Glavni službenik je glavni donositelj odluka i konačni autoritet za pravila",
+    "Vaš lanac: vi, glavni sudac, zatim direktor utrke ili tim za mjerenje vremena"
+   ],
+   "narration": "Pravilnik definira suca kao službenu osobu koju imenuje Spartan, a čiji je zadatak osigurati da se poštuju pravila, obično postavljenu na prepreke ili u šator za pregled videa. Suci odgovaraju glavnom službeniku, koji je glavni donositelj odluka u svim pitanjima pravila na događanju i konačni autoritet za njihovu primjenu i tumačenje. U postupku suđenja i ovom programu odgovarate glavnom sucu. Glavni sudac zatim prijavljuje incidente na utrci direktoru utrke, a kazne timu za mjerenje vremena."
+  },
+  {
+   "heading": "O čemu odlučujete",
+   "points": [
+    "Provodite pravila prepreke",
+    "Natjecatelje koji padnu uputite na ispravnu kaznu",
+    "Dokumentirajte povrede",
+    "Niste sigurni u kaznu ili kako je provesti? Odmah kontaktirajte glavnog suca"
+   ],
+   "narration": "Na svojoj prepreci odgovorni ste za tri stvari. Provodite pravila prepreke. Natjecatelja koji padne upućujete na ispravnu kaznu za tu prepreku. I dokumentirate povrede. Gdje nema video dokaza o burpeejima, postupak suđenja odluku o količini i kvaliteti burpee prepušta vama: donosite je na licu mjesta, zapisujete i predajete glavnom sucu po povratku. Ako niste sigurni u vrstu kazne ili kako je provesti, odmah kontaktirajte glavnog suca."
+  },
+  {
+   "heading": "Tko potvrđuje kaznu",
+   "points": [
+    "Konačne odluke o kaznama mogu potvrditi glavni sudac i tim za mjerenje vremena",
+    "U pregledu videa službene osobe i dalje mogu procjenjivati kazne, do diskvalifikacije",
+    "Glavni sudac prosljeđuje potvrđene kazne direktoru utrke i mjerenju vremena",
+    "Vaše bilješke su dokaz na kojem te odluke počivaju"
+   ],
+   "narration": "Vaša odluka pokreće postupak, ali nije uvijek i posljednja riječ. Program kaže da konačne odluke o kaznama mogu potvrditi glavni sudac i tim za mjerenje vremena. Prema pravilniku, glavni službenik u konačnici je odgovoran za očuvanje pravila, a tijekom službenog pregleda videa službene osobe utrke i dalje mogu procjenjivati kazne, uključujući diskvalifikaciju. Glavni sudac vodi taj pregled i prosljeđuje potvrđene kazne i diskvalifikacije direktoru utrke i timu za mjerenje vremena. Zato su vaše bilješke važne: jasni, činjenični zapisi omogućuju potvrdu ispravne odluke."
+  },
+  {
+   "heading": "Ukratko",
+   "points": [
+    "Usredotočeni, neutralni, uljudni i profesionalni",
+    "Provodite pravila, upućujete natjecatelje na kazne i dokumentirate povrede",
+    "Glavni sudac potvrđuje kazne i rješava što mu uputite",
+    "Niste sigurni? Odmah kontaktirajte glavnog suca"
+   ],
+   "narration": "Ukratko. Ostanite usredotočeni na svoju prepreku, neutralni i uljudni te profesionalno predstavljajte Spartan. Provodite pravila prepreke, upućujete natjecatelje koji padnu na ispravnu kaznu i dokumentirate povrede. Glavni službenik ima konačni autoritet za pravila, a glavni sudac potvrđuje kazne, rješava što mu uputite i prosljeđuje ih direktoru utrke i mjerenju vremena. Ako ikad niste sigurni, odmah kontaktirajte glavnog suca."
+  }
+ ],
+ "ocr-8-2": [
+  {
+   "heading": "Sigurnost je dio posla",
+   "points": [
+    "Pravila imaju za cilj zaštititi zdravlje, sigurnost i dobrobit natjecatelja",
+    "Pratite sigurnost svoje prepreke i pazite da se natjecatelji kreću sigurno",
+    "Ne dopuštajte opasne prečace: natjecatelji moraju prijeći cijelu službenu stazu"
+   ],
+   "narration": "Jedna svrha pravila je zaštititi zdravlje, sigurnost i dobrobit natjecatelja, koliko se to razumno može postići u utrkama s preprekama. Program sigurnost natjecatelja stavlja uz poštenje kao vaš prioritet. To znači pratiti sigurnost svoje prepreke, paziti da se natjecatelji kreću sigurno i ne dopuštati opasne prečace. Prečac nikad nije vaš za dopustiti: pravila traže da natjecatelji prijeđu službenu stazu u cijelosti."
+  },
+  {
+   "heading": "Pregledajte i odmah prijavite opasnosti",
+   "points": [
+    "Prije prvog vala pregledajte postavu i provjerite je li ispravna",
+    "Prođite kaznenu petlju i saznajte smjer iz kojeg natjecatelji prilaze",
+    "Opasnosti prijavite odmah: glavni sudac, direktor utrke ili Spartan osoblje"
+   ],
+   "narration": "Sigurnost počinje prije prvog natjecateljskog vala. Kad stignete na prepreku, pregledajte postavu i provjerite je li ispravna. Proučite tok utrke i smjer iz kojeg će natjecatelji prilaziti te prođite cijelu kaznenu petlju kako biste znali njezinu rutu i točku povratka. Ako vas nešto brine, sumnja, sigurnosni problem ili nedosljednost, odmah to prijavite glavnom sucu ili direktoru utrke. Tijekom utrke svaku opasnost odmah prijavite glavnom sucu, direktoru utrke ili Spartan osoblju."
+  },
+  {
+   "heading": "Siguran pokret u pravilima prepreka",
+   "points": [
+    "Rope Climb: spuštajte se sigurno i pod kontrolom, s najmanje jednom rukom na užetu",
+    "Hercules Hoist: spustite uteg pod kontrolom; ispuštanje je pad",
+    "Plivanje ili prelazak vode: bez skakanja na glavu; skok na glavu je pad"
+   ],
+   "narration": "Neka pravila prepreka izravno ugrađuju sigurnost, a vi ih provodite kao i svako drugo pravilo. Na Rope Climbu natjecatelji se moraju vratiti na tlo sigurno i kontrolirano, s najmanje jednom rukom koja u svakom trenutku dodiruje uže. Na Hercules Hoistu uteg se mora spustiti pod kontrolom, a ne u slobodnom padu, a nekontrolirano ispuštanje je pad. Kod plivanja ili prelaska vode skakanje na glavu nije dopušteno i to je način pada. Znajte sigurnosna pravila svoje prepreke prije dolaska prvog natjecatelja."
+  },
+  {
+   "heading": "Isto tumačenje cijelu utrku",
+   "points": [
+    "Primjenjujte pravila jednako na sve natjecatelje",
+    "Koristite isto tumačenje od prvog do posljednjeg vala",
+    "Svaka se kazna primjenjuje dosljedno unutar svoje kategorije ili skupine",
+    "Vaš fokus: natjecateljske kategorije, Elite i Age Group"
+   ],
+   "narration": "Dosljednost je ono što rezultate čini poštenima. Primjenjujte pravila jednako na svakog natjecatelja i koristite isto tumačenje od prvog do posljednjeg vala. Odluka koju donesete za prvog Elite natjecatelja standard je za sve nakon njega. Pravilnik kaže da se svaka kazna primjenjuje dosljedno unutar određene kategorije ili skupine. Vaš je fokus natjecateljske kategorije, Elite i Age Group, od kojih se očekuje da slijede svako pravilo. Open natjecatelji također se potiču da slijede pravila, u opuštenijoj atmosferi."
+  },
+  {
+   "heading": "Držite se pravila i eskalirajte kad niste sigurni",
+   "points": [
+    "Sudite prema napisanim načinima pada prepreke",
+    "Izbjegavajte osobno prosuđivanje izvan pravila",
+    "Kad niste sigurni, eskalirajte odluku glavnom sucu"
+   ],
+   "narration": "Dosljednost znači i da ne dodajete vlastita pravila. Svaki pokušaj sudite prema napisanim načinima pada prepreke, a ne prema onome što osobno smatrate poštenim, i izbjegavajte prosuđivanje izvan onoga što pravilo kaže. Ako situacija nije jasno pokrivena ili niste sigurni koja se kazna primjenjuje ili kako je provesti, odmah kontaktirajte glavnog suca. Odluka koja je eskalirana i donesena jednom može se zatim jednako primijeniti na sve."
+  },
+  {
+   "heading": "Ukratko",
+   "points": [
+    "Pratite sigurnost, tražite siguran pokret, ne dopuštajte prečace",
+    "Pregledajte rano i odmah prijavite opasnosti",
+    "Ista pravila, isto tumačenje, svaki natjecatelj, cijela utrka",
+    "Niste sigurni? Eskalirajte glavnom sucu"
+   ],
+   "narration": "Ukratko. Sigurnost natjecatelja stoji uz poštenje kao vaš prioritet. Pratite svoju prepreku, pazite da se natjecatelji kreću sigurno i ne dopuštajte prečace. Pregledajte prepreku i prođite kaznenu petlju prije prvog vala te opasnosti odmah prijavite glavnom sucu, direktoru utrke ili Spartan osoblju. Primjenjujte ista pravila, s istim tumačenjem, na svakog natjecatelja cijelu utrku. A kad niste sigurni, eskalirajte glavnom sucu."
+  }
+ ],
+ "ocr-9-1": [
+  {
+   "heading": "Pratite ruke i stopala",
+   "points": [
+    "Većina načina pada odnosi se na ono što ruke i stopala dodiruju",
+    "Monkey Bars: samo ruke i podlaktice; stopala ili noge na prečkama je pad",
+    "Olympus: stopala smiju počivati na zidu, ali stopalo na hvatištu ili rupi je pad"
+   ],
+   "narration": "Većina padova na preprekama svodi se na ono što natjecateljeve ruke i stopala dodiruju, pa tamo idu vaše oči. Na Monkey Barsu natjecatelj prelazi samo rukama i podlakticama. Stopala ili noge koje dodiruju prečke su pad, kao i dodirivanje tla radi prednosti. Na Olympusu natjecatelji smiju osloniti stopala i koljena na zid, ali dodirivanje bilo kojeg hvatišta ili rupe stopalima je pad. Znajte točno koje dodire vaša prepreka dopušta."
+  },
+  {
+   "heading": "Usredotočite se na točno pravilo",
+   "points": [
+    "Znajte upute prepreke, načine pada i napomene prije prvog vala",
+    "Helix i Z Wall: pokušaj počinje s četiri točke kontakta",
+    "Monkey Bars, Multi-Rig, Olympus: kad oba stopala napuste početni stepenik"
+   ],
+   "narration": "Svaka prepreka ima vlastito pravilo, s uputama za natjecatelje, načinima pada i dodatnim napomenama. Pratite to pravilo, a ne opću predodžbu dobrog pokušaja. Znajte kad pokušaj počinje, jer je od tada natjecatelj opredijeljen. Na Helixu i Z Wallu počinje kad se ostvare četiri točke kontakta. Na Monkey Barsu, Multi-Rigu i Olympusu počinje kad su oba stopala napustila početni stepenik. Ako propustite početak, ne možete biti sigurni što se računa."
+  },
+  {
+   "heading": "Gdje stajati",
+   "points": [
+    "Mjesto s nesmetanim pogledom na pokušaje, završetke i padove",
+    "Provjerite tok utrke i smjer prilaska natjecatelja",
+    "Predvidite gdje se padovi obično događaju i držite te točke u vidu"
+   ],
+   "narration": "Prije prvog vala odredite najbolje mjesto za stajanje. Trebate nesmetan pogled na pokušaje, završetke i padove. Proučite tok utrke i smjer iz kojeg natjecatelji prilaze. Razmislite gdje se padovi obično događaju na vašoj prepreci i pobrinite se da te točke budu jasno u vidu. Postupak suđenja prepreke s poviješću čestih padova naziva preprekama s mnogo padova. One traže aktivno provođenje pravila, pa je vaš položaj tamo još važniji."
+  },
+  {
+   "heading": "Spremni reagirati na pad",
+   "points": [
+    "Stanite gdje možete razgovarati s natjecateljem koji padne i uputiti ga na kaznu",
+    "Znajte rutu kaznene petlje i točku povratka",
+    "Držite zvono u vidu: udaranje nogom je pad"
+   ],
+   "narration": "Vidjeti pad je pola posla. Druga polovica je reagirati prema natjecatelju, zato se postavite tako da možete razgovarati s njim čim padne i uputiti ga na kaznu. Unaprijed prođite kaznenu petlju kako biste znali njezinu rutu i gdje se vraća na stazu. Držite u vidu i zvono. Prema općem pravilu, zvona se smiju udarati samo rukama, šakama ili drugim dijelom tijela iznad prsa. Udaranje zvona nogom je pad. Provjerite i pravilo svoje prepreke."
+  },
+  {
+   "heading": "Ukratko",
+   "points": [
+    "Pratite ruke i stopala",
+    "Znajte točno pravilo i kad pokušaj počinje",
+    "Stanite s jasnim pogledom na mjesta gdje se padovi događaju",
+    "Budite spremni uputiti natjecatelja na kaznu"
+   ],
+   "narration": "Ukratko. Pratite natjecateljeve ruke i stopala, jer se tamo događa većina padova. Znajte točno pravilo za svoju prepreku, uključujući trenutak kad pokušaj počinje. Stanite gdje vam je pogled nesmetan, a uobičajene točke pada u vidu. I postavite se tako da možete reagirati prema natjecatelju čim padne i uputiti ga na ispravnu kaznu."
+  }
+ ],
+ "ocr-9-2": [
+  {
+   "heading": "Korištenje potporne konstrukcije",
+   "points": [
+    "Zidovi: korištenje potporne konstrukcije, bokova ili remena je pad",
+    "Konstrukcije (rigs): korištenje okomite rešetke kao ljestvi je pad",
+    "Vodoravna rešetka može se koristiti za početak ili prijenos, ako pravilo to dopušta"
+   ],
+   "narration": "Rešetka (truss) je glavna potporna konstrukcija prepreke: metalne dijagonalne, okomite i vodoravne grede. Mnoge prepreke zabranjuju njezino korištenje. Na zidovima je korištenje potporne konstrukcije, bokova zida ili remena za ravnotežu, penjanje ili spuštanje pad. Na Monkey Barsu i drugim konstrukcijama korištenje okomite rešetke kao ljestvi za početak, prijelaz ili završetak je pad. No mnoge konstrukcije dopuštaju natjecateljima da koriste vodoravnu rešetku za početak ili prijenos tijekom prijelaza. Provjerite što vrijedi za vašu prepreku."
+  },
+  {
+   "heading": "Rukovanje izvan dopuštenog područja",
+   "points": [
+    "Multi-Rig: hvatanje užadi, remena ili lanaca koji drže nastavak je pad",
+    "Helix: korištenje prečki iz druge staze je pad",
+    "Olympus: dodirivanje hvatišta ili rupe stopalima je pad"
+   ],
+   "narration": "Rukovanje izvan dopuštenog područja znači korištenje dijela prepreke koji pravilo ne dopušta. Na Multi-Rigu natjecatelji smiju koristiti samo nastavke. Hvatanje užadi, remena ili lanaca koji ih pričvršćuju za konstrukciju je pad, kao i korištenje više od jedne staze. Na Helixu je korištenje prečki iz druge staze pad. Na Olympusu ruke rade na hvatištima, a stopalo na hvatištu ili rupi je pad. Točno znajte dopušteno područje svoje prepreke."
+  },
+  {
+   "heading": "Nepokušavanje i preskakanje petlje",
+   "points": [
+    "Svaka se prepreka mora pokušati: najmanje je natjecatelj dodirne",
+    "Natjecatelj koji padne mora u cijelosti proći kaznenu petlju",
+    "Preskakanje petlje se kažnjava: kazna je u reviziji za 2027."
+   ],
+   "narration": "Svaka prepreka mora se pokušati. Najmanje, pokušaj znači dodir prepreke. Ponekad znači i prolazak kroz vodu ili težak teren da se do nje dođe, a to se ne može zaobići kaznom osim ako briefing ili osoblje utrke to ne kažu. Natjecatelj koji pokuša i padne mora u cijelosti proći kaznenu petlju. Preskakanje je povreda koju bilježite i prijavljujete glavnom sucu. Izvori se razlikuju oko kazne za nju, pa je ona u reviziji.",
+   "review": "Pod revizijom za 2027: pravilo 3.4.1 dodaje vremensku kaznu od 10 minuta kad natjecatelj ne prijeđe kaznenu petlju. Online program za 2026. kaže da to može rezultirati diskvalifikacijom. Do tada primjenjujte pravilnik i slučaj uputite glavnom sucu."
+  },
+  {
+   "heading": "Burpee koji ne zadovoljavaju standard",
+   "points": [
+    "Prsa do tla, uspravno s ispruženim kukovima i koljenima, zatim skok, ruke iznad ušiju",
+    "Burpee izvan određene zone za burpee ne računaju se",
+    "Natjecatelji broje vlastite burpee: vi ne brojite umjesto njih"
+   ],
+   "narration": "Nepravilni burpee jedna su od najčešćih povreda. Jedan potpuni burpee ide iz donjeg položaja, ležeći s prsima na tlu, do uravnoteženog uspravnog položaja s ispruženim kukovima i koljenima, nakon čega slijedi skok s rukama iznad ušiju. Burpee odrađeni izvan određene zone ne računaju se. Natjecatelji broje vlastite burpee, a vi ne brojite umjesto njih. Gdje standard nije zadovoljen, program kaže da zatražite dodatne burpee i podsjetite natjecatelja da se prate njegov pokret i ponavljanja."
+  },
+  {
+   "heading": "Zvono",
+   "points": [
+    "Na konstrukcijama poput Monkey Barsa, neudaranje zvona je pad",
+    "Zvona se smiju udarati rukama, šakama ili tijelom iznad prsa",
+    "Udaranje zvona nogom je pad: bez ponavljanja, natjecatelj uzima kaznu"
+   ],
+   "narration": "Mnoge prepreke završavaju zvonom, a na konstrukcijama poput Monkey Barsa neudaranje zvona je način pada. Natjecatelj koji se otkači prije nego udari zvono pao je, koliko god daleko stigao. Prema općem pravilu, zvona se smiju udarati samo rukama i šakama ili drugim dijelom tijela iznad prsa. Udaranje zvona stopalima, nogama ili koljenima računa se kao pad na prepreci. Natjecatelj ne smije ponoviti i mora odraditi kaznu za tu prepreku."
+  },
+  {
+   "heading": "Ukratko",
+   "points": [
+    "Bez potporne konstrukcije ili okomite rešetke osim ako pravilo dopušta",
+    "Samo dopušteni dijelovi prepreke, u jednoj stazi",
+    "Pokušajte svaku prepreku i svaku kaznenu petlju prijeđite u cijelosti",
+    "Burpee prema standardu, u zoni; zvona se udaraju, nikad ne šutiraju"
+   ],
+   "narration": "Ukratko. Pazite na natjecatelje koji koriste potpornu konstrukciju ili okomitu rešetku kao ljestve tamo gdje to pravilo zabranjuje. Pazite na rukovanje izvan dopuštenog područja, poput hvatanja užadi ili lanaca na konstrukciji ili korištenja druge staze. Svaka se prepreka mora pokušati, a svaka kaznena petlja prijeći u cijelosti. Burpee moraju zadovoljiti standard i biti odrađeni u zoni. A zvono se mora udariti, nikad šutnuti."
+  }
+ ],
+ "ocr-9-3": [
+  {
+   "heading": "Kako odlučiti",
+   "points": [
+    "Pronađite točno pravilo: upute, načine pada i napomene",
+    "Provjerite odgovara li ono što ste vidjeli navedenom načinu pada",
+    "Donesite odluku, uputite natjecatelja, zabilježite i eskalirajte kad niste sigurni"
+   ],
+   "narration": "Ova lekcija daje vam tri situacije iz programa za 2026. Za svaku odlučite što biste učinili prije nego čujete odgovor. Metoda je svaki put ista. Pronađite točno pravilo za prepreku. Provjerite odgovara li ono što ste vidjeli jednom od njezinih navedenih načina pada. Zatim donesite odluku, uputite natjecatelja i zabilježite što se dogodilo. Ako pravilo ne rješava stvar ili niste sigurni, eskalirajte glavnom sucu."
+  },
+  {
+   "heading": "Scenarij 1: kratak dodir vrha",
+   "points": [
+    "Natjecatelj na Helixu nakratko jednom rukom dodirne vrh prepreke",
+    "Dodir traje trenutak i ne daje mu nikakvu prednost",
+    "Nastavlja i udara zvono"
+   ],
+   "narration": "Pravilo 4.2.6 navodi dodirivanje vrha Helixa kao način pada, bez uvjeta o prednosti. Isto vrijedi za Olympus i Z Wall. Zato je odluka koju pravilnik podupire pad, a natjecatelj uzima kaznu, iako dodir nije donio ništa. Prednost je važna gdje pravilo to kaže. Na Monkey Barsu, prema pravilu 4.2.7, stopala koja dodiruju tlo su pad kad stvaraju prednost. Uvijek provjerite formulaciju načina pada prije nego odlučite.",
+   "review": "Pod revizijom za 2027: online program za 2026. traži od sudaca da razmotre je li dodir stvorio prednost i da se usredotoče na namjeru pravila, a ne na manji slučajni dodir. Pravila 4.2.6, 4.2.10 i 4.2.17 navode dodirivanje vrha kao pad bez provjere prednosti. Do tada primjenjujte pravilnik, a osporenu odluku uputite glavnom sucu."
+  },
+  {
+   "heading": "Scenarij 2: brzi burpee, kukovi nisu ispruženi",
+   "points": [
+    "Natjecatelj radi kaznene burpee nakon pada na Spear Throwu",
+    "Kreće se brzo, a u gornjem položaju mnogih ponavljanja kukovi su mu još savijeni"
+   ],
+   "narration": "Ta ponavljanja ne zadovoljavaju standard. Pravilo 3.17.4 definira gornji položaj kao uravnotežen i uspravan, s kukovima i koljenima ispruženima, ne savijenima, prije skoka. Ponavljanje bez toga nije potpuni burpee. Program kaže da zatražite dodatne burpee kad standard nije zadovoljen i da podsjetite natjecatelja da se prate njegov pokret i ponavljanja. Ne brojite umjesto njega. Na Spear Throwu propuštene burpee određuje tim za pregled videa. Bez videa odlučujete na licu mjesta, zapisujete i predajete glavnom sucu.",
+   "review": "Pod revizijom za 2027: vrijeme dodano za propuštene ili neispravne burpee razlikuje se u pravilniku (3.4.2), SOP-u za suđenje i programu za 2026. Ova lekcija ne uči nikakav iznos dok voditelj suđenja ne odluči."
+  },
+  {
+   "heading": "Scenarij 3: trčanje mimo kaznene petlje",
+   "points": [
+    "Natjecatelj padne na prepreci s prolazom ili padom na vašoj stanici",
+    "Upućujete ga na kaznenu petlju, ali on potrči ravno mimo nje i nastavi"
+   ],
+   "narration": "Ovo je jasna povreda. Prema pravilu 3.4.1, natjecatelj koji pokuša i padne na prepreci s prolazom ili padom mora proći kaznenu petlju, a ovaj nije. Ne jurite ga i ne svađajte se. Zabilježite broj s trake za glavu, dokumentirajte što se dogodilo i prijavite glavnom sucu čim možete. Ako niste mogli pročitati broj, odmah prijavite s jasnim opisom: boja odjeće, posebna obilježja i kategorija utrke. O samoj kazni odlučuje se preko glavnog suca, a ne na vašoj prepreci.",
+   "review": "Pod revizijom za 2027: pravilo 3.4.1 dodaje vremensku kaznu od 10 minuta kad se kaznena petlja ne prijeđe. Online program za 2026. kaže da to može rezultirati diskvalifikacijom. Do tada primjenjujte pravilnik i slučaj uputite glavnom sucu."
+  },
+  {
+   "heading": "Ukratko",
+   "points": [
+    "Pročitajte točan tekst načina pada: prednost se računa samo gdje to piše",
+    "Burpee bez potpunog ispružanja u gornjem položaju ne računa se",
+    "Preskočena kaznena petlja: zabilježite broj, dokumentirajte, prijavite",
+    "Niste sigurni? Eskalirajte glavnom sucu"
+   ],
+   "narration": "Ukratko. Kratak dodir vrha Helixa, Olympusa ili Z Walla je pad prema pravilniku, jer način pada nema provjeru prednosti, dok neki drugi načini pada imaju. Burpee bez ispruženih kukova i koljena u gornjem položaju nije potpuni burpee, pa se traže dodatni burpee. Natjecatelj koji protrči mimo kaznene petlje prekršio je pravila: zabilježite broj s trake za glavu, dokumentirajte i prijavite glavnom sucu."
+  }
+ ],
+ "deka-1-1": [
+  {
+   "heading": "Primjer lekcije",
+   "points": [
+    "Ovaj je program rezervirano mjesto",
+    "Njegova lekcija i kviz pokazuju kako radi drugi program",
+    "Ništa od toga nisu DEKA pravila"
+   ],
+   "narration": "Ovo je primjer lekcije u programu rezerviranog mjesta. Pokazuje kako se drugi program nalazi uz OCR program, sa vlastitim lekcijama, kvizom, prolaznom ocjenom i potvrdom. Ništa ovdje nisu stvarna DEKA pravila: ona dolaze od DEKA vlasnika programa."
+  },
+  {
+   "heading": "Brojanje ponavljanja (primjer)",
+   "points": [
+    "Sudac broji svako ponavljanje koje zadovoljava standard",
+    "Ponavljanje koje ne zadovoljava je no rep, jasno izrečen"
+   ],
+   "narration": "U ovom primjeru sudac broji svako ponavljanje koje zadovoljava standard pokreta i jasno izriče no rep kad ga ne zadovoljava. Stvarni standardi i odluke stići će s DEKA vlastitim materijalom."
+  },
+  {
+   "heading": "Ukratko (primjer)",
+   "points": [
+    "Samo sadržaj rezerviranog mjesta",
+    "Kviz koji slijedi također je primjer"
+   ],
+   "narration": "Time završava primjer lekcije. Kviz koji slijedi također je primjer, kako bi pokazao da svaki program ima vlastitu provjeru znanja i potvrdu."
+  }
+ ]
+}
