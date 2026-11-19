@@ -26,6 +26,46 @@ Referees book cameras for something (`api/src/servers.js`, "units"), and each ha
 
 The events come from Spartan's own race list (`api/src/events.js`): the list its "Find a race" page uses (`api-gate.eks.spartan.com/one/v2/races/upcoming`), with each race's timezone from another of Spartan's services (`api2.spartan.com/api/races/upcoming_past_planned`) where it has it, else from the country (and the longitude in countries with several timezones). Neither is a published API, so the sync can break if Spartan changes them: the last good copy is kept, and the admin page says when it last worked and has **Sync now**. It syncs when the copy is more than 6 hours old and someone opens the console or the event list. An event Spartan stops listing stays until a week after it ends (one of Spartan's lists has been seen to leave out the next few weeks' races). Ask Spartan for permission or an official feed before relying on it.
 
+### Invites, the one app, events and progress (19 November 2026)
+
+At the user's request, SpartanReferee became invite-only and one app.
+
+**Joining is by invite only.**
+- An admin uses **Invites** (`learn/invites.js`, server `api/src/learn/invites.js`, migration `007-invites.sql`):
+  - Paste one address or hundreds.
+  - Choose the type of user (referee, regional coordinator with their region, assessor or programme owner or content editor with their programme, technical admin, admin).
+  - Tick the programmes they must complete, with an optional complete-by date and a message.
+- Each person gets an emailed link (`join.html`, valid 30 days; resend makes a new link, cancel stops it).
+- There they give their full name, region and language, then sign in with Google, Microsoft or **Sign in with email**: a 6-digit code emailed to them, valid 10 minutes, 5 tries.
+- Registering puts them on the referee list, gives their roles, enrols them with the date, and keeps their language. The admin page's Referees list no longer adds people.
+- A second sign-in method with the same address is the same person.
+
+**Email.** Email goes through Azure Communication Services:
+- The resources are `spartanreferee-email` (an Azure-managed domain, sending from DoNotReply@…azurecomm.net) and `spartanreferee-comms`.
+- The code is `api/src/mailer.js`, with the site settings `EMAIL_CONNECTION` (a secret) and `EMAIL_FROM`.
+- Locally a pretend mailer keeps messages, readable at `/api/dev/mail`.
+- Emails are in English for now.
+
+**One app (`learn/`).** Everyone lands on **Home**, and `home.html` sends there too. Home shows:
+- the name with the person's badges under it;
+- their next event, which opens the event;
+- their programmes with progress, each opening the programme;
+- a refresher nudge, organiser tools, and the install card.
+
+Tabs: **Home**, **My Learning**, **Events**, **Rules**, plus role tabs (Invites, People, Progress, Assessing, Reviews, Reports, Media, Duplicates, Audit log, Diagnostics, Admin).
+- **My Learning** (was Programmes) shows to do (progress, next lesson, complete-by date), completed, Keep sharp, then other programmes to enrol in.
+- **My profile** is the person icon at the top right.
+
+**Events** (`learn/events.js`, server `api/src/assignments.js`):
+- Everyone sees their own events, upcoming and past. Each event's page has Spartan's page for it, organisers' notes, the referees (names only), and its SpartanReferee cameras.
+- Watch and review is for everyone assigned. Booking is only for those the organisers ticked (a per-person "Books the cameras" tick); a head referee assigned before ticks existed keeps booking.
+- Admins, and regional coordinators for the events in their regions' countries, manage events: they add referees by pasting addresses, set the head referee, tick who books, and write notes. Events now keep their country code for this.
+
+**Progress** (`learn/tracking.js`, server `api/src/learn/tracking.js`): who has done their lessons.
+- Admins see everyone, programme owners and assessors their programmes, and regional coordinators their region.
+- Filter by programme, region, status and name, then tick people or all shown.
+- Email reminders to complete by a date; the date becomes their complete-by date, and when they were reminded is shown.
+
 ### Home page, assigned events and learning
 
 **Where people land:** signing in, and opening the installed app, lead to Learning's overview (`/learn/`), from 19 November 2026 at the user's request. The overview also shows the referee's next events, the ways to the cameras and (admins) the admin page, and the Install card (`learn/landing.js`). Signing in from an event's page or the console still returns there. The home page is still there, from the **Home** link in Learning's header. It is each person's home page (`home.html`, from 19 November 2026; data from `GET /api/home` in `api/src/assignments.js`): their name, the upcoming events they're assigned to (each marked head referee or referee), and the ways to **Learning** (`/learn`) and **Cameras** (the console). Admins also get **Admin**.
