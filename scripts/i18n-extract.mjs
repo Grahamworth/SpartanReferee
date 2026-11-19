@@ -16,7 +16,7 @@ export const FILES = [
   'broadcaster.html', 'camera.js', 'phone.html', 'apptabs.js', 'apptabs-core.js',
   // the website
   'index.html', 'home.html', 'home.js', 'language.js', 'event.html', 'event.js', 'console.html', 'console.js', 'booking.js', 'results.html', 'results.js',
-  'streaming.html', 'email-return.html', 'offline.html', 'offline.js', 'email-signin-web.js', 'email-signin-core.js', 'api-base.js', 'recordings.html', 'recordings.js',
+  'streaming.html', 'email-return.html', 'offline.html', 'offline.js', 'privacy.html', 'email-signin-web.js', 'email-signin-core.js', 'api-base.js', 'recordings.html', 'recordings.js',
   // the learning platform
   'learn/index.html', 'learn/learn.js', 'learn/core.js', 'learn/people.js', 'learn/programmes.js', 'learn/lesson.js', 'learn/assess.js', 'learn/judgement.js',
   'learn/govern.js', 'learn/reports.js', 'learn/diagnostics.js', 'learn/practice.js', 'learn/saved.js', 'learn/sharp.js', 'learn/landing.js',

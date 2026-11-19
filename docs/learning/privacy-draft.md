@@ -1,6 +1,6 @@
 # Privacy: draft notice and procedure (for Spartan to approve)
 
-**Status: draft, written 19 November 2026 for Spartan to review.** Nothing here has been approved. Spartan decides who the data controller is, the lawful basis, how long data is kept and who handles requests; the bracketed parts need their answers.
+**Status: draft, written 19 November 2026 for Spartan to review.** Nothing here has been approved. A public version is on the site at /privacy.html (from 19 November 2026, because Google sign-in needs a privacy page to link to): it says plainly what is still being confirmed and leaves out the bracketed parts. Update both together. Spartan decides who the data controller is, the lawful basis, how long data is kept and who handles requests; the bracketed parts need their answers.
 
 ## Draft notice for referees
 
@@ -8,7 +8,7 @@
 >
 > SpartanReferee is run for [Spartan Race, Inc. / the Spartan entity to confirm] ("Spartan"), who decides how your information is used (the data controller). Contact: [privacy contact].
 >
-> **What we keep.** Your name and email address as your Microsoft account gives them, the region and country an administrator records, and what you do on the learning platform: the programmes you're enrolled in, the lessons you complete, your quick-check and refresher practice (with the weeks you learned and the badges you earned), your assessment answers and results, and the credentials you earn. For the burpee cameras: which events you're assigned to, as head referee or referee, and the bookings you make. Every change an administrator makes is recorded in an audit log.
+> **What we keep.** Your name and email address (and profile picture, if any) as your Microsoft or Google account gives them, the region and country an administrator records, and what you do on the learning platform: the programmes you're enrolled in, the lessons you complete, your quick-check and refresher practice (with the weeks you learned and the badges you earned), your assessment answers and results, and the credentials you earn. For the burpee cameras: which events you're assigned to, as head referee or referee, and the bookings you make. Every change an administrator makes is recorded in an audit log.
 >
 > **Why.** To train and assess referees, to record who is qualified to referee Spartan events, and to run the camera booking for events. [Lawful basis to confirm: e.g. legitimate interests in running a consistent, fair officiating programme, or the agreement under which you referee.]
 >

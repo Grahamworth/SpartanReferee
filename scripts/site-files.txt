@@ -90,3 +90,4 @@ learn/sharp.js
 study.css
 look.js
 learn/landing.js
+privacy.html
