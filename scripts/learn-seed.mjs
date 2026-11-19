@@ -27,6 +27,7 @@ export const PEOPLE = [
   { name: 'Karim Haddad', email: `karim.haddad@${D}`, country: 'AE', region: 'mea', roles: [{ role: 'regional_coordinator', region: 'mea' }], note: 'Middle East and Asia coordinator' },
   { name: 'Claire Martin', email: `claire.martin@${D}`, country: 'FR', region: 'europe', locale: 'fr', roles: [{ role: 'content_editor', programme: 'ocr-referee' }], note: 'content editor and translator' },
   { name: 'Tomas Novak', email: `tomas.novak@${D}`, country: 'CZ', region: 'europe', roles: [{ role: 'assessor', programme: 'ocr-referee' }], note: 'assessor' },
+  { name: 'Sam Okafor', email: `sam.okafor@${D}`, country: 'GB', region: 'europe', roles: [{ role: 'technical_admin' }], note: 'technical administrator: diagnostics only' },
   { name: 'Anna Kowalska', email: `anna.kowalska@${D}`, country: 'PL', region: 'europe', roles: [], note: 'referee: OCR and DEKA' },
   { name: 'Ben Taylor', email: `ben.taylor@${D}`, country: 'GB', region: 'europe', roles: [], note: 'referee: OCR, passed' },
   { name: 'Chaiwat Srisuk', email: `chaiwat.srisuk@${D}`, country: 'TH', region: 'mea', locale: 'th', roles: [], note: 'referee: OCR, due for renewal' },
@@ -74,7 +75,7 @@ for (const prog of PROGRAMMES) {
     for (const m of prog.modules) {
       const mid = crypto.randomUUID(); mseq++;
       await q('INSERT INTO {S}.module (module_id, lineage_id, version_id, code, seq, title, summary, source_section) VALUES (@id, @id, @v, @code, @seq, @t, @s, @src)',
-        { id: mid, v: vid, code: `${prog.id === 'ocr-referee' ? 'ocr' : 'deka'}-${mseq}`, seq: mseq, t: m.title, s: m.summary, src: m.source });
+        { id: mid, v: vid, code: `${prog.code || (prog.id === 'ocr-referee' ? 'ocr' : 'deka')}-${mseq}`, seq: mseq, t: m.title, s: m.summary, src: m.source });
       let lseq = 0;
       for (const l of m.lessons) {
         const lid = crypto.randomUUID(); lseq++;

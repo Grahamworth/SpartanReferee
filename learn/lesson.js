@@ -2,6 +2,7 @@
 // voice, or captions only), captions and a full transcript, keyboard controls, a bookmark, completion, a language switcher with clear
 // Preview translation labels, and for editors the content versions with writing, review and approval (LRN-02..05, LRN-07, AT-04, AT-05).
 import { $, call, esc, toast, fail, badge, day, redraw, act, hooks, runHooks, LANG } from './core.js';
+import { drawAction } from './practice.js';
 
 // ---------------------------------------------------------------- figures: simple drawings, in the page's own colours
 const svg = (body) => `<svg class="fig" viewBox="0 0 240 120" role="img" aria-hidden="true">${body}</svg>`;
@@ -17,6 +18,9 @@ const FIGURES = {
   burpee: svg(`${ground}<g class="f-person"><circle cx="40" cy="92" r="6"/><line x1="46" y1="96" x2="96" y2="100"/></g><text x="30" y="80" class="f-label">chest down</text>${person(140)}<text x="128" y="24" class="f-label">jump, hands up</text><text x="190" y="60" class="f-big">30</text>`),
   referee: svg(`${ground}${person(40)}<g class="f-ref"><circle cx="120" cy="52" r="7"/><line x1="120" y1="59" x2="120" y2="84"/><line x1="120" y1="84" x2="112" y2="104"/><line x1="120" y1="84" x2="128" y2="104"/><line x1="120" y1="66" x2="138" y2="58"/></g><path d="M128 46 q30 -16 56 0" class="f-arrow"/>${target(186, 'none')}<text x="104" y="24" class="f-label">clear view</text>`),
   summary: svg('<g class="f-check"><circle cx="120" cy="58" r="34"/><path d="M104 58 l12 12 l22 -24"/></g>'),
+  camera: svg(`${ground}<g class="f-target"><rect x="28" y="40" width="30" height="18" rx="3"/></g><line x1="43" y1="58" x2="32" y2="104" class="f-barrier"/><line x1="43" y1="58" x2="54" y2="104" class="f-barrier"/><path d="M62 46 L160 28 M62 54 L160 104" class="f-arrow f-flight"/>${person(186)}<text x="86" y="76" class="f-label">3 to 4 m</text>`),
+  qr: svg('<g class="f-target"><rect x="44" y="16" width="44" height="84" rx="7"/><rect x="140" y="28" width="64" height="64"/><rect x="148" y="36" width="14" height="14"/><rect x="182" y="36" width="14" height="14"/><rect x="148" y="70" width="14" height="14"/><rect x="170" y="58" width="6" height="6"/><rect x="186" y="74" width="6" height="6"/></g><path d="M94 60 H130 m-8 -6 l8 6 l-8 6" class="f-arrow"/><text x="98" y="50" class="f-label">scan</text>'),
+  network: svg('<g class="f-target"><rect x="14" y="40" width="26" height="44" rx="4"/><rect x="100" y="34" width="40" height="52" rx="3"/><line x1="106" y1="48" x2="134" y2="48"/><line x1="106" y1="60" x2="134" y2="60"/><rect x="184" y="40" width="46" height="32" rx="3"/><line x1="198" y1="84" x2="216" y2="84"/></g><path d="M46 62 H92 m-8 -6 l8 6 l-8 6 M146 60 H176 m-8 -6 l8 6 l-8 6" class="f-arrow"/><text x="16" y="104" class="f-label">phone</text><text x="102" y="104" class="f-label">server</text><text x="184" y="104" class="f-label">browser</text>'),
   placeholder: svg('<rect x="70" y="24" width="100" height="70" rx="6" class="f-target"/><text x="120" y="64" class="f-label" text-anchor="middle">sample</text>'),
 };
 
@@ -78,7 +82,9 @@ function drawSlide() {
       <ul class="lpPoints">${s.points.map((p) => `<li>${esc(p)}</li>`).join('')}</ul>
       ${s.review ? `<p class="reviewNote"><b>${esc(L.content.locale === 'es' ? 'En revisión' : 'Under review')}</b> ${esc(s.review.replace(/^(Under review for 2027|En revisión para 2027):\s*/, ''))}</p>` : ''}
       ${s.note ? `<p class="note">${esc(s.note)}</p>` : ''}
-      ${s.rules?.length ? `<p class="lpRules"><span>Rules</span>${s.rules.map(ruleChip).join('')}</p>` : ''}</div>`;
+      ${s.rules?.length ? `<p class="lpRules"><span>Rules</span>${s.rules.map(ruleChip).join('')}</p>` : ''}
+      ${s.action ? '<div class="lpAction" id="lpAction"></div>' : ''}</div>`;
+  if (s.action) drawAction($('lpAction'), s.action);
   $('lpCaption').textContent = s.narration || '';
   $('lpCaption').hidden = !captions || !s.narration;
   $('lpDots').innerHTML = c.slides.map((_, i) => `<button type="button" class="dot${i === slide ? ' on' : ''}${i < slide ? ' seen' : ''}" data-slide="${i}" aria-label="Slide ${i + 1}"${i === slide ? ' aria-current="step"' : ''}></button>`).join('');
@@ -113,7 +119,7 @@ function editorPanel() {
         <label>Rules (ids, comma separated)<input name="rules" value="${esc((s.rules || []).join(', '))}"></label>
         <label>Under review note<textarea name="review" rows="2">${esc(s.review || '')}</textarea></label>
         <label>Note under the slide<textarea name="note" rows="2">${esc(s.note || '')}</textarea></label>
-        <input type="hidden" name="figure" value="${esc(s.figure || '')}"></fieldset>`).join('')}
+        <input type="hidden" name="figure" value="${esc(s.figure || '')}"><input type="hidden" name="action" value="${esc(s.action || '')}"></fieldset>`).join('')}
       <label>Sources<input name="sources" value="${esc(c.sources)}" maxlength="1000"></label>
       <div class="btnRow"><button class="small" type="button" id="addSlide">Add a slide</button><button class="primary small" type="submit">Save the draft</button></div></form></details>` : ''}
   </section>`;
@@ -228,7 +234,7 @@ export function wire() {
     editor.addEventListener('submit', (e) => {
       e.preventDefault();
       const slides = [...editor.querySelectorAll('.slideEdit')].map((f) => ({ heading: f.querySelector('[name=heading]').value, points: f.querySelector('[name=points]').value.split('\n').map((x) => x.trim()).filter(Boolean),
-        narration: f.querySelector('[name=narration]').value, rules: f.querySelector('[name=rules]').value.split(',').map((x) => x.trim()).filter(Boolean), review: f.querySelector('[name=review]').value, note: f.querySelector('[name=note]')?.value || '', figure: f.querySelector('[name=figure]').value })).filter((s) => s.heading);
+        narration: f.querySelector('[name=narration]').value, rules: f.querySelector('[name=rules]').value.split(',').map((x) => x.trim()).filter(Boolean), review: f.querySelector('[name=review]').value, note: f.querySelector('[name=note]')?.value || '', figure: f.querySelector('[name=figure]').value, action: f.querySelector('[name=action]')?.value || '' })).filter((s) => s.heading);
       act(async () => { await call(`content/${L.content.id}`, { method: 'PUT', body: { slides, sources: editor.querySelector('[name=sources]').value } }); toast('Draft saved'); redraw(); }, e.submitter);
     });
   }

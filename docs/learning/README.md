@@ -23,15 +23,15 @@ The menu:
 | Overview | everyone | your programmes, progress and credentials |
 | Programmes | everyone | the catalogue; each programme's curriculum, assessment, policy and handbook |
 | My profile | everyone | your details, learning record and credentials |
-| Cameras | everyone | the camera setup guide, and the 30-minute practice camera |
 | Rules | everyone | the rule references lessons and questions cite |
 | Reviews | editors, owners, admins | rule changes and disputes waiting for a decision |
 | Assessing | assessors, owners, admins | answers waiting for an assessor |
 | Reports | admins, owners, coordinators | figures and export, within your scope |
 | People, Duplicates, Audit log | admins (People also coordinators) | profiles, possible duplicates, every privileged change |
 | Media | admins, programme owners | which media provider plays the lessons |
+| Diagnostics | technical admins, admins | database health, migrations, narration use, activity counts and recent errors; nothing personal |
 
-**View as** (admins): the bar under the header switches the page to any invented person, so each role can be shown without real accounts. The server applies that person's permissions; the audit log records both of you.
+**Preview as** (admins): the bar under the header switches the page to a type of user (Learner / referee, Regional coordinator, Programme owner, Content editor / translator, Assessor, Technical admin, Global admin), each shown by one of the invented people, or to any invented person. The server applies that person's permissions; the audit log records both of you.
 
 ### The demonstration people
 
@@ -47,11 +47,13 @@ The menu:
 | Ben Taylor | Europe | Learner | OCR passed: an active credential |
 | Chaiwat Srisuk | Middle East and Asia | Learner | OCR credential due for renewal |
 | Daniyal Khan | Middle East and Asia | Learner | DEKA credential expired |
+| Sam Okafor | Europe | Technical admin | Diagnostics only: no profiles, answers, audit or reports |
 
 ## What's in the demonstration content
 
 - **Spartan OCR Referee 2027**: the nine sections of the 2026 Referee Online Program as nine modules and 22 lessons. One lesson is complete end to end, *Spear Throw: commitment and failure* (rule 4.2.13), in English and in Spanish (a machine translation shown as a Preview translation until reviewed). The rest are shells, shown as "being written".
 - **The OCR knowledge check**: eight questions from sections 4 and 6, each citing its 2026 rule numbers, including a video judgement (a burpee with no jump, drawn by the site's own figure) that an assessor confirms.
+- **Burpee camera station 2027** (19 November 2026): what was the Cameras guide, now a course every referee can take: four modules, nine complete lessons (how the station works, booking, kit, placing and connecting phones, the AI judge, results, problems), an eight-question check and a demonstration credential. Its last lesson holds the free camera and, for head referees and admins, the only place a 30-minute practice server is booked. Old links to  open it.
 - **DEKA Judge (placeholder)**: a sample lesson and quiz with its own pass mark (70%) and credential (24 months), clearly not DEKA material.
 - **Rule references**: eleven sections of the 2026 rulebook, and **seven open review items** where the 2026 rulebook, Officiating SOP and online programme disagree. They're shown as "Under review", never quietly resolved.
 

@@ -245,3 +245,9 @@ h3.sub { font-size: 1rem; text-transform: uppercase; letter-spacing: .04em; marg
   html[dir="rtl"] .learnNav { -webkit-mask-image: linear-gradient(to left, #000 82%, transparent); mask-image: linear-gradient(to left, #000 82%, transparent); }
   .lpControls { position: sticky; bottom: 0; z-index: 5; background: var(--panel); padding: 8px 0 calc(8px + env(safe-area-inset-bottom)); margin-inline: -4px; }
 }
+/* tablets and laptops: the tabs get their own row under the logo, one line, swiping if an admin's many tabs don't fit */
+@media (min-width: 641px) and (max-width: 1599px) {
+  .learnNav { order: 3; width: 100%; margin: 10px 0 0; flex-wrap: nowrap; overflow-x: auto; gap: 0 18px; scrollbar-width: none; }
+  .learnNav::-webkit-scrollbar { display: none; }
+  .learnNav a { flex: none; }
+}

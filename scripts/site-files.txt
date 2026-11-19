@@ -73,7 +73,7 @@ learn/learn.js
 learn/core.js
 learn/people.js
 learn/programmes.js
-learn/cameras.js
+learn/practice.js
 learn/lesson.js
 learn/assess.js
 learn/judgement.js

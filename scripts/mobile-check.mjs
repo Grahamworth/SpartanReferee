@@ -40,7 +40,7 @@ const PAGES = [
   ['event-referee', `event.html?id=${events[0]?.id || ''}`, maria, "!document.getElementById('content').hidden || !document.getElementById('error').hidden"],
   ['event-not-head', `event.html?id=${events[1]?.id || ''}`, maria, "!document.getElementById('content').hidden || !document.getElementById('error').hidden"],
   ['console-not-head', `console.html?unit=e${events[1]?.id || ''}`, maria, "!document.getElementById('whatFor').hidden"],
-  ['learn-cameras-referee', 'learn/#/cameras', maria, "!!document.querySelector('#practice form, #practice .practiceBtn, #practice .error')"],
+  ['learn-camera-course', 'learn/#/cameras', maria, "!!document.querySelector('#view .card') && location.hash.includes('camera-station')"],
   ['learn-referee', 'learn/', maria, "!!document.querySelector('#view .card') || !document.getElementById('error').hidden"],
   ['learn-profile-referee', 'learn/#/profile', maria, "!!document.querySelector('#view .card')"],
   ['learn-people-admin', 'learn/#/people', boss, "!!document.querySelector('#view .card')"],

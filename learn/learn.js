@@ -1,6 +1,6 @@
 // The learning platform's one page (/learn/): signing in, the header and "view as" bar, and which view the part after # asks for.
 // The views themselves are in their areas: programmes.js (overview, catalogue, a programme), people.js (profiles, people,
-// duplicates, audit), cameras.js (the cameras guide), and the later steps' areas. Everything is checked again on the server
+// duplicates, audit), practice.js (the camera course's practice cameras), and the later steps' areas. Everything is checked again on the server
 // (api/src/learn); hiding a link here is only tidiness. An admin can view the page as any invented person: every request then
 // says so (X-Learn-As).
 import { devSignInButton, signedIn, signOut } from '../api-base.js';
@@ -8,18 +8,19 @@ import { microsoftButton } from '../email-signin-web.js';
 import { $, S, show, call, esc, fail, store, AS_KEY, ROLE, has, isAdmin } from './core.js';
 import * as programmes from './programmes.js';
 import * as people from './people.js';
-import * as cameras from './cameras.js';
 import * as lesson from './lesson.js';
 import * as assess from './assess.js';
 import * as govern from './govern.js';
 import * as reports from './reports.js';
 import * as diagnostics from './diagnostics.js';
 
-const AREAS = [programmes, people, cameras, lesson, assess, govern, reports, diagnostics];
+const AREAS = [programmes, people, lesson, assess, govern, reports, diagnostics];
 const views = Object.assign({}, ...AREAS.map((a) => a.views));
 
 async function draw() {
   fail('');
+  // the old Cameras guide is now the Burpee camera station course
+  if (location.hash.startsWith('#/cameras')) { location.replace('#/programmes/camera-station'); return; }
   const [, view = '', rest = ''] = (location.hash.split('?')[0] || '#/').split('/');
   const name = views[view] ? view : 'home';
   for (const a of $('learnNav').querySelectorAll('a')) a.classList.toggle('on', a.dataset.view === name || (a.dataset.also || '').split(' ').includes(name));
@@ -33,6 +34,8 @@ async function draw() {
 }
 window.addEventListener('learn:redraw', () => draw());
 
+// the brief's user types (section 4), in the order the Preview as list shows them
+const TYPES = [['', 'Learner / referee'], ['regional_coordinator', 'Regional coordinator'], ['programme_owner', 'Programme owner'], ['content_editor', 'Content editor / translator'], ['assessor', 'Assessor'], ['technical_admin', 'Technical admin'], ['global_admin', 'Global admin']];
 function drawChrome() {
   const me = S.me;
   $('who').textContent = me.actingAs ? `${me.real.email} as ${me.person.legalName}` : me.person.email;
@@ -42,7 +45,13 @@ function drawChrome() {
   for (const a of $('learnNav').querySelectorAll('[data-show]')) show(a, a.dataset.show.split(' ').some((r) => has(r)));
   show($('viewAsBox'), me.viewAs.length > 0);
   if (me.viewAs.length) {
-    $('viewAs').innerHTML = `<option value="">Yourself (${esc(me.real.legalName)})</option>${me.viewAs.map((p) => `<option value="${esc(p.id)}"${p.id === me.actingAs ? ' selected' : ''}>${esc(p.legalName)}: ${esc(p.roles.map((r) => ROLE[r] || r).join(', ') || 'Learner')}</option>`).join('')}`;
+    // each type of user first, shown by one of the invented people who is that type; then every invented person
+    const types = TYPES.map(([role, label]) => [label, me.viewAs.find((p) => (role ? p.roles.includes(role) : !p.roles.length))]).filter(([, p]) => p);
+    const pick = (p, text, sel) => `<option value="${esc(p.id)}"${sel ? ' selected' : ''}>${esc(text)}</option>`;
+    const typeOn = types.find(([, p]) => p.id === me.actingAs);
+    $('viewAs').innerHTML = `<option value="">Yourself (${esc(me.real.legalName)})</option>
+      <optgroup label="Types of user">${types.map(([label, p]) => pick(p, `${label}: ${p.legalName}`, p === typeOn?.[1])).join('')}</optgroup>
+      <optgroup label="Everyone invented">${me.viewAs.map((p) => pick(p, `${p.legalName}: ${p.roles.map((r) => ROLE[r] || r).join(', ') || 'Learner'}`, p.id === me.actingAs && !typeOn)).join('')}</optgroup>`;
   }
 }
 $('viewAs').addEventListener('change', async () => { store.set(AS_KEY, $('viewAs').value); await loadMe(); location.hash = '#/'; draw(); });

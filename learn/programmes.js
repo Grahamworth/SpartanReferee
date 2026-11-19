@@ -43,7 +43,7 @@ async function overview() {
       <p class="muted">${esc(p.publicId)} · ${esc(regionName(p.regionId))}${p.country ? ` · ${esc(p.country)}` : ''}</p>
       <ul class="chips">${S.me.grants.length ? S.me.grants.map((g) => `<li>${esc(roleText(g))}</li>`).join('') : '<li>Learner</li>'}</ul></section>
     ${await recordSection(p.id, true)}
-    <section class="card"><h2>Cameras: setup and use</h2><p>How to set up the phones at a penalty station, connect them and judge with them, and the free camera to try the AI judge on your own phone.</p><p><a class="btnLink" href="#/cameras">Open the guide</a></p></section>`;
+    <section class="card"><h2>Burpee camera station</h2><p>The course on setting up the phones at the penalty station, connecting them, judging with the AI judge and sorting out problems. It ends with the free camera, to try the judge on your own phone.</p><p><a class="btnLink" href="#/programmes/camera-station">Open the course</a></p></section>`;
 }
 
 // ---------------------------------------------------------------- the catalogue

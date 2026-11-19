@@ -3,6 +3,8 @@
 // The OCR curriculum follows the nine sections of Spartan's 2026 Referee Online Program (the brief's section 6), as a content map
 // for review: none of it is approved 2027 instructional copy, and DEKA is an obvious placeholder until its owners supply material.
 
+import { CAMERA } from './learn-camera-course.mjs';
+
 export const OCR = {
   id: 'ocr-referee', title: 'Spartan OCR Referee', category: 'referee', learnerRole: 'OCR Referee', locales: 'en,es',
   description: 'The online programme for Spartan obstacle course race referees: the rules, the race-day workflow, obstacles, penalties, the burpee standard and conduct. Built from the 2026 programme as a map for the 2027 edition.',
@@ -58,7 +60,7 @@ export const DEKA = {
   ],
 };
 
-export const PROGRAMMES = [OCR, DEKA];
+export const PROGRAMMES = [OCR, DEKA, CAMERA];
 
 // who's enrolled in what, and the state each shows (the design doc's demo data)
 export const ENROLMENTS = [

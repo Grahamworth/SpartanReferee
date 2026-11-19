@@ -2,7 +2,10 @@
 // sections 4 (obstacle types) and 6 (burpee standard), written against the 2026 rule numbers and marked where the 2026 sources
 // disagree. The video judgement uses the site's own animated figure (no third-party footage). DEKA's are placeholders.
 
+import { CAMERA_ASSESSMENT } from './learn-camera-course.mjs';
+
 export const ASSESSMENTS = {
+  'camera-station': CAMERA_ASSESSMENT,
   'ocr-referee': {
     title: 'OCR Referee knowledge check',
     description: 'Eight questions on obstacle types, the Spear Throw and the burpee standard, from the 2026 rulebook. One is a video judgement an assessor confirms.',

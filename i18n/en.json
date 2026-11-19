@@ -919,7 +919,7 @@
  "One camera, this computer's own, with the AI judge run in this browser, live or on a minute of video: no server, no cost": "console.html",
  "The video review with no server: camera 1 is this browser's camera, recorded here; the rest is pretend": "console.html",
  "A test card: these details can't be changed": "console.html",
- "Practice cameras are booked from the <0>cameras guide in Learning</0>, and show here while they run.": "console.html",
+ "Practice cameras are booked from the <0>camera course in Learning</0>, and show here while they run.": "console.html",
  "Your cameras are ready for this time, then the recordings are saved and everything shuts down. You can extend, or stop early and pay only for the time used. Starting takes about 5 minutes, and counts as time used. Recordings are kept for <0>{n}</0> days.": "console.html",
  "Book up to <0>{n}</0> days ahead. The servers start <1>{n}</1> minutes early, so the cameras are ready at the start time. At the end the recordings are saved and everything shuts down. You can extend, or cancel before it starts. Recordings are kept for <2>{n}</2> days.": "console.html",
  "Just trying it out? The <0>free camera</0> uses this computer's own camera and runs the AI judge in your browser, live or on a minute of video. No server, no cost.": "console.html",

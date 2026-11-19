@@ -16,6 +16,7 @@ const crypto = require('node:crypto');
 const { createMedia, PROVIDERS, VOICES } = require('./media');
 
 const MAX_SLIDES = 40;
+const ACTIONS = ['free-camera', 'practice-camera'];
 const hash = (s) => crypto.createHash('sha256').update(s).digest('hex');
 
 function createLessons(ctx, { speech, mediaSigner }) {
@@ -181,6 +182,8 @@ function createLessons(ctx, { speech, mediaSigner }) {
       narration: String(s?.narration ?? '').replace(/[\u0000-\u0008\u000b-\u001f]/g, ' ').trim().slice(0, 3000),
       rules: (Array.isArray(s?.rules) ? s.rules : []).map((r) => text(r, 60)).filter(Boolean).slice(0, 10),
       figure: text(s?.figure, 40) || '', note: text(s?.note, 600) || '', review: text(s?.review, 600) || '',
+      // a box under the slide: the free camera, or booking a practice server (the camera course's last lesson)
+      ...(ACTIONS.includes(s?.action) ? { action: s.action } : {}),
     }));
     if (slides.some((s) => !s.heading)) return { error: 'Every slide needs a heading' };
     return { slides };

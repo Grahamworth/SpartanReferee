@@ -81,13 +81,21 @@ test("an event's page: its cameras (book, open or watch them on the console), it
   assert.match(read('console.html'), /id="headBooks" hidden>The event's head referee books and runs its burpee cameras/);
   assert.match(read('scripts/site-files.txt'), /^event\.js$/m);
 });
-test("a practice camera is booked only from Learning's cameras guide; the console just says where", () => {
-  const learn = read('learn/cameras.js');
+test("camera setup is a course in Learning, whose last lesson is the only place a practice camera is booked; the console just says where", async () => {
+  const learn = read('learn/practice.js');
   assert.ok(learn.includes("call('practice-camera', { method: 'POST'"));
-  assert.ok(learn.includes('<h1>Cameras: setup and use</h1>'));
-  assert.match(read('learn/index.html'), /<a href="#\/cameras" data-view="cameras">Cameras<\/a>/);
+  assert.ok(learn.includes('href="../review-free/"'), 'the free camera for everyone');
+  assert.ok(!fs.existsSync(new URL('../learn/cameras.js', import.meta.url)), 'no separate Cameras area');
+  assert.doesNotMatch(read('learn/index.html'), /data-view="cameras"/);
+  assert.ok(read('learn/learn.js').includes("location.replace('#/programmes/camera-station')"), 'old links land on the course');
+  const { CAMERA, CAMERA_LESSONS, CAMERA_ASSESSMENT } = await import('../scripts/learn-camera-course.mjs');
+  assert.strictEqual(CAMERA.id, 'camera-station');
+  const keys = CAMERA.modules.flatMap((m) => m.lessons.map((l) => l.key));
+  assert.deepStrictEqual(keys.filter((k) => !CAMERA_LESSONS[k]), [], 'every lesson has content');
+  assert.deepStrictEqual(CAMERA_LESSONS['cam-4-1'].en.map((s) => s.action), ['free-camera', 'practice-camera']);
+  assert.ok(CAMERA_ASSESSMENT.questions.every((q) => q.options.some((o) => o.correct)));
   assert.ok(read('console.js').includes("show($('book'), state === 'off' && s.unit?.kind !== 'training' && mine)"));
-  assert.match(read('console.html'), /id="trainingFromLearn" hidden data-i18n>Practice cameras are booked from the <a href="learn\/#\/cameras">/);
+  assert.match(read('console.html'), /id="trainingFromLearn" hidden data-i18n>Practice cameras are booked from the <a href="learn\/#\/programmes\/camera-station">camera course in Learning/);
 });
 test('nothing on the site\'s file list looks like the personal test videos the deploy refuses (clips/, test.mp4, pub*.html)', () => {
   const files = read('scripts/site-files.txt').split('\n').filter(Boolean);

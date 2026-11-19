@@ -4,7 +4,7 @@ The brief's 12 demonstration acceptance tests (section 11): how each passes, the
 
 Automated: `source scripts/learn-env.sh && cd api && npm run test:sql` (26 tests against Azure SQL in a throwaway schema, all passing), plus `node --test test/*.test.js` (88, all passing) and `node --test tests/*.mjs` (245, all passing).
 
-To show them live: sign in at /learn as an admin and use **View as** (the bar under the header) to become each demonstration person.
+To show them live: sign in at /learn as an admin and use **Preview as** (the bar under the header) to become each type of user or demonstration person.
 
 | Test | Result | Automated evidence (api/test/…) | Show it |
 |---|---|---|---|
