@@ -2,6 +2,7 @@
 // programmes they must do (with a date to finish by); each gets an email with a link to register (join.html). Below, every invite, by
 // state, with Resend and Cancel. The server side is api/src/learn/invites.js.
 import { $, call, esc, toast, act, redraw, when, day, t } from './core.js';
+import { peopleTabs } from './people.js';
 
 const TYPE = [
   ['learner', 'Referee'], ['regional_coordinator', 'Regional coordinator'], ['assessor', 'Assessor'], ['programme_owner', 'Programme owner'],
@@ -17,7 +18,7 @@ async function invitesView() {
   const c = data.counts || {};
   const tab = (s) => `<a href="#/invites?state=${s}" class="chipLink${s === state ? ' on' : ''}">${esc(t(STATE[s]))} (${c[s] || 0})</a>`;
   const typeName = (g) => (TYPE.find(([k]) => k === g.role) || [0, g.role])[1];
-  return `<section class="card"><h1>Invite people</h1>
+  return `<section class="card"><p class="crumbs"><a href="#/people">People</a></p><h1>Invite people</h1>${peopleTabs('invites')}
       <p class="note">Everyone joins by invite. Each address gets an email with a link to register: they give their full name, region and language, and sign in with Google, Microsoft or a code emailed to them.</p>
       <form class="form2 inviteForm" id="inviteForm">
         <div class="wide"><label for="iv-emails">Email addresses</label>

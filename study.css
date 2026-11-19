@@ -98,3 +98,9 @@ html[dir="rtl"] .events svg { transform: scaleX(-1); }
   .top:has(.profileBtn:not([hidden])) .menuBtn span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 }
 @media (max-width: 380px) { .top .mark { font-size: 24px; } }
+/* a heading with an icon button beside it (People's "add person") */
+.titleRow { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.titleRow h1 { margin: 0; }
+.iconBtn { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--primary); color: var(--on-primary); }
+.iconBtn svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+.iconBtn:hover { filter: brightness(1.1); }

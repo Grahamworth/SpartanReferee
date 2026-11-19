@@ -28,6 +28,10 @@ async function personView(id, own) {
       <div class="wide"><button class="small" type="submit">Give role</button></div></form>` : ''}</section>`;
 }
 
+// admins: the "add person" icon at the top of People opens the invite form (invites.js); People and Invites switch here
+export const addPersonBtn = '<a class="iconBtn" href="#/invites" title="Invite people" aria-label="Invite people"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="8" r="3.6"/><path d="M3.5 19.5c1.2-3 3.7-4.6 6.5-4.6s5.3 1.6 6.5 4.6"/><path d="M18.5 7.5v6M15.5 10.5h6"/></svg></a>';
+export const peopleTabs = (on) => `<p class="chips inviteTabs"><a class="chipLink${on === 'people' ? ' on' : ''}" href="#/people">People</a><a class="chipLink${on === 'invites' ? ' on' : ''}" href="#/invites">Invites</a></p>`;
+
 export const views = {
   async profile() { return personView(S.me.person.id, true); },
   async people(rest) {
@@ -36,13 +40,13 @@ export const views = {
     const { people } = await call(`people?q=${encodeURIComponent(q.get('q') || '')}&region=${encodeURIComponent(q.get('region') || '')}`);
     const canAdd = isAdmin() || has('regional_coordinator');
     const myRegions = isAdmin() ? S.regions : S.regions.filter((r) => S.me.grants.some((g) => g.role === 'regional_coordinator' && g.regionId === r.id));
-    return `<section class="card"><h1>People</h1>
+    return `<section class="card"><div class="titleRow"><h1>People</h1>${isAdmin() ? addPersonBtn : ''}</div>
+      ${isAdmin() ? peopleTabs('people') : ''}
       <form class="filters2" id="peopleFilter"><input name="q" type="search" placeholder="Name, email or SR number" value="${esc(q.get('q') || '')}" aria-label="Find a person">
         <select name="region" aria-label="Region"><option value="">${isAdmin() ? 'All regions' : 'All my regions'}</option>${myRegions.map((r) => `<option value="${esc(r.id)}"${q.get('region') === r.id ? ' selected' : ''}>${esc(r.name)}</option>`).join('')}</select>
         <button class="small" type="submit">Find</button></form>
       <ul class="rowList">${people.map((p) => `<li><a href="#/people/${esc(p.id)}"><b>${esc(p.legalName)}</b><small>${esc(p.publicId)} · ${esc(p.email)} · ${esc(regionName(p.regionId))}${p.synthetic ? '' : ' · real account'}</small></a></li>`).join('') || '<li class="muted">Nobody found.</li>'}</ul></section>
-      ${canAdd ? `<section class="card"><h2>Adding people</h2><p class="note">Everyone joins by invite: they register from the emailed link with their name, region and language.</p>
-        ${isAdmin() ? '<p><a class="btnLink primaryLink" href="#/invites">Invite people</a></p>' : '<p class="note">Ask an admin to invite them.</p>'}</section>` : ''}`;
+      ${canAdd && !isAdmin() ? '<section class="card"><p class="note">Everyone joins by invite: they register from the emailed link with their name, region and language.</p><p class="note">Ask an admin to invite them.</p></section>' : ''}`;
   },
   async duplicates() {
     const { flags } = await call('duplicates');
