@@ -52,7 +52,7 @@ At the user's request, SpartanReferee became invite-only and one app.
 - their programmes with progress, each opening the programme;
 - a refresher nudge, organiser tools, and the install card.
 
-Tabs: **Home**, **My Learning**, **Events**, **Rules**, plus role tabs (People, Assessing, Reviews, Reports, Media, Duplicates, Audit log, Diagnostics, Config). Which role sees which tab is each tab's `data-show` in `learn/index.html`.
+Tabs: **Home**, **My Learning**, **Events**, **Rules**, plus role tabs (Manage Events, People, Programs, Assessing, Reports, Duplicates, Audit log, Diagnostics, Config). **Events** is now **My Events**. Which role sees which tab is each tab's `data-show` in `learn/index.html`.
 - **My Learning** (was Programmes) shows to do (progress, next lesson, complete-by date), completed, Keep sharp, then other programmes to enrol in.
 - **My profile** is the person icon at the top right.
 
@@ -69,6 +69,15 @@ Tabs: **Home**, **My Learning**, **Events**, **Rules**, plus role tabs (People, 
 **Preview as** (admins only, the bar under the tabs): your own account as a type of user (referee, regional coordinator, assessor, programme owner, content editor, technical admin) with only that type's roles; **Back to yourself** returns. The app sends `X-Learn-As-Role`, the other pages `X-Preview-Role` (localStorage `sr_preview_role`). Everyone else just has their own type. The invented demo people are gone from the live site; `scripts/learn-seed.mjs` makes them only with `DEMO_PEOPLE=1`, and `scripts/learn-remove-invented.mjs` removes them (a dry run unless `--write`).
 
 **Signing in from an invite** says which address to use and fills it in: Google and Microsoft get it as `login_hint`, and the emailed code's box is fixed to it. Registering with another address is refused, naming the invited one.
+
+**Programs** (`learn/authoring.js`, server `api/src/learn/authoring.js`, migration `008-authoring.sql`; admins, programme owners, content editors / translators). Reviews and Media are inside it now. A lesson is edited where it stands:
+- Type straight into its headings, bullet points (Enter adds one, Backspace on an empty one removes it), what the voice says and the note; tap the picture to choose another; move, add or remove slides.
+- Its quick-check questions: the question, the answers (tick the right one), and what shows after answering.
+- Another language shows the English above each line to translate; pictures and right answers come from the English, and a line left empty stays English. Quick-check translations are kept with each question (`tr` in `lesson_check.body`) and shown in the learner's language (`localQ` in `learn/sharp.js`).
+- Everything saves as you type, as a draft (a `content_version` in state `draft`, body `{ slides, checks }`); the lesson order waits in `pending_order`. Learners see none of it until a programme owner or an admin presses **Publish**, which publishes every draft of the programme and its order at once. **Discard** throws drafts away.
+- The lesson player's old form editor is gone: editors get an "Edit this lesson" link to Programs.
+
+**Manage Events** (`#/manage`, admins and regional coordinators): every event they look after, each opening its page to add referees, set the head referee, tick who books the cameras and write notes. Admins also see when Spartan's events were last synced, with Sync now (moved from Config).
 
 **One look, one menu (19 November 2026).** Every page uses the study look (`study.css` with `look.js`: light or dark following the phone, or the Look button). The pages outside the app (Config `customers.html`, the cameras `console.html` and `event.html`, `results.html`, `streaming.html`) get the app's tabs and profile icon in their header from `appnav.js`, which reads the tab list from `learn/index.html` (`<header class="top" data-tab="...">` says which tab is on). Admin is now **Config**. Pages that load slowly show a spinner.
 

@@ -39,8 +39,14 @@ export function celebrate(badges) {
 
 // ---------------------------------------------------------------- the quiz: one question at a time, marked at once
 const WHY = { rule: 'The rule changed', missed: 'Missed last time', due: 'Due for a refresh', extra: 'Extra practice' };
+/** a question in the page's language: the words a translator wrote in Programs (k.tr), where there are some (authoring.js) */
+export const localQ = (k) => {
+  const tr = k.tr?.[(window.SR_I18N && SR_I18N.lang) || 'en'];
+  return tr ? { ...k, prompt: tr.prompt || k.prompt, options: k.options.map((o, i) => tr.options?.[i] || o), feedback: tr.feedback || k.feedback } : k;
+};
 /** draws questions into box; onDone(answers: [{key, choice, right}]) once the last is answered */
 export function quiz(box, questions, onDone, { showLesson = false } = {}) {
+  questions = questions.map(localQ);
   const answers = [];
   const draw = (i) => {
     const k = questions[i];
@@ -90,7 +96,7 @@ export function checkSection(L) {
 function resultHtml(questions, answers) {
   return `<div class="quizResult"><p class="quizScore">${esc(score(answers))}</p>
     <ol class="quizReview">${answers.map((a) => {
-      const k = questions.find((q) => q.key === a.key); if (!k) return '';
+      const k = localQ(questions.find((q) => q.key === a.key) || {}); if (!k.key) return '';
       return `<li class="${a.right ? 'isRight' : 'isWrong'}"><span class="qMark" aria-hidden="true">${a.right ? '✓' : '✗'}</span><span><span class="q">${esc(k.prompt)}</span>
         <small>${esc(t('Your answer: {answer}', { answer: t(k.options[a.choice]) }))}${a.right ? '' : ` · <b>${esc(t('Right answer: {answer}', { answer: t(k.options[k.answer]) }))}</b>`}</small></span></li>`;
     }).join('')}</ol><p class="note" id="lpResultNote">${esc(t('Saving…'))}</p></div>`;

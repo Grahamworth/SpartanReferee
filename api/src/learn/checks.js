@@ -34,7 +34,9 @@ function streakFrom(days, now = Date.now()) {
 
 function createChecks(ctx) {
   const { db, reply, audit, text } = ctx;
-  const parse = (r) => { const b = JSON.parse(r.body); return { key: r.check_key, prompt: b.prompt, options: b.options, answer: b.answer, feedback: b.feedback || '', rules: b.rules || [] }; };
+  // tr: the question in other languages, written in Programs (authoring.js): { fr: { prompt, options, feedback } }
+  const parse = (r) => { const b = JSON.parse(r.body); return { key: r.check_key, prompt: b.prompt, options: b.options, answer: b.answer, feedback: b.feedback || '', rules: b.rules || [], tr: b.tr || {} }; };
+  ctx.checksOf = async (lessonId) => checksOf(lessonId);
   const checksOf = async (lessonId) => (await db.query('SELECT * FROM {S}.lesson_check WHERE lesson_id = @l ORDER BY seq', { l: lessonId })).map(parse);
 
   /** has this person answered every question of this lesson's check? (a lesson with no check: yes) */

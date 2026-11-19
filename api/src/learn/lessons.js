@@ -32,7 +32,7 @@ function createLessons(ctx, { speech, mediaSigner }) {
   const contentView = (c) => c && ({ id: c.content_id, lessonId: c.lesson_id, locale: c.locale, versionNo: c.version_no, state: c.state, preview: isPreview(c),
     translationOf: c.translation_of || '', slides: JSON.parse(c.body).slides || [], sources: c.sources, translatedBy: c.translated_by || '',
     sourceHash: c.source_hash, createdAt: c.created_at, submittedAt: c.submitted_at, approvedAt: c.approved_at });
-  ctx.contentView = contentView; ctx.contentById = contentById; ctx.lessonById = lessonById;
+  ctx.contentView = contentView; ctx.contentById = contentById; ctx.lessonById = lessonById; ctx.hash = hash;
 
   /** content a learner may see for a lesson: published, or a translation in review (a preview) */
   async function learnerContent(lessonId) {
@@ -210,6 +210,7 @@ function createLessons(ctx, { speech, mediaSigner }) {
   }
 
   // ------------------------------------------------------------------ writing and approving content
+  ctx.readSlides = (raw) => readSlides(raw); // authoring.js checks drafts the same way
   function readSlides(raw) {
     if (!Array.isArray(raw) || !raw.length || raw.length > MAX_SLIDES) return { error: `A lesson has 1 to ${MAX_SLIDES} slides` };
     const slides = raw.map((s) => ({

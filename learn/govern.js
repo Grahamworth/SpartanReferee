@@ -1,6 +1,7 @@
 // Governance (step 5): rule references and their versions, what each affects, review items, and the handbook with its PDF
 // (RUL-01..04, LRN-06, AT-06, AT-07). Rule chips on lessons and questions lead here.
 import { $, call, esc, toast, badge, day, when, redraw, act, hooks, loadPdf, LANG } from './core.js';
+import { programsTabs } from './authoring.js';
 
 const KIND = { rule_change: 'Rule change', dispute: 'The sources disagree' };
 const stateBadge = (r) => badge(r.state === 'baseline' ? 'preview' : r.state === 'under_review' ? 'under_review' : r.state === 'draft' ? 'draft' : 'approved', r.stateText);
@@ -64,7 +65,7 @@ async function reviewsView() {
   const q = new URLSearchParams(location.hash.split('?')[1] || ''), pid = q.get('programme') || '', state = q.get('state') || 'open';
   const d = await call(`reviews?state=${state}${pid ? `&programme=${encodeURIComponent(pid)}` : ''}`);
   const tab = (s, label) => `<a class="${s === state ? 'on' : ''}" href="#/reviews?state=${s}${pid ? `&programme=${encodeURIComponent(pid)}` : ''}">${label}</a>`;
-  return `<section class="card"><h1>Review items</h1><p class="note">Raised when a rule changes (listing what it affects) or when the source documents disagree. Nothing published changes by itself: an owner resolves each one.</p>
+  return `<section class="card"><h1>Review items</h1>${programsTabs('reviews')}<p class="note">Raised when a rule changes (listing what it affects) or when the source documents disagree. Nothing published changes by itself: an owner resolves each one.</p>
       <nav class="tabs2">${tab('open', 'Open')}${tab('resolved', 'Resolved')}${tab('dismissed', 'Dismissed')}</nav></section>
     ${d.reviews.map((i) => `<section class="card reviewCard"><p class="badges">${badge(i.state)}${badge(i.kind === 'dispute' ? 'under_review' : 'review', KIND[i.kind])}${i.ruleId ? `<a class="ruleChip" href="#/rules/${encodeURIComponent(i.ruleId)}">${esc(i.ruleId.replace(/^[A-Z]+-\d{4}-/, ''))}</a>` : ''}</p>
       <h2>${esc(i.title)}</h2><p>${esc(i.detail)}</p>

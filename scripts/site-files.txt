@@ -1,6 +1,7 @@
 api-base.js
 app.js
 apptabs-core.js
+appnav.js
 apptabs.js
 booking.js
 brand.js
@@ -94,4 +95,5 @@ learn/invites.js
 join.html
 join.js
 learn/tracking.js
+learn/authoring.js
 info.html

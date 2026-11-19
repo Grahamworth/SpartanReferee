@@ -348,3 +348,62 @@ h3.sub { font-size: 1rem; text-transform: uppercase; letter-spacing: .04em; marg
 .trackRow > span { flex: 1; min-width: 0; display: grid; gap: 2px; }
 @media (min-width: 900px) { .remindCard { position: sticky; bottom: 0; box-shadow: 0 -4px 16px rgba(0, 0, 0, .08); } }
 .certificate .watermark { overflow: hidden; font-size: clamp(1.8rem, 10vw, 6rem) !important; }
+
+/* Programs (learn/authoring.js): a lesson edited where it stands. What you can type into has a faint dashed outline, solid blue while
+   you're in it; an empty one says what goes there. Mobile first: one column, big targets. */
+.progEdList small.draftLine, .draftTag { color: var(--warn); font-weight: 700; }
+.draftTag { display: inline-block; padding: 0 8px; border: 1px solid var(--warn); border-radius: 999px; font-size: .78rem; text-transform: uppercase; letter-spacing: .04em; }
+.publishBar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; margin-top: 12px; padding: 10px 12px; border-radius: 10px; background: var(--soft); border: 1px solid var(--line); }
+.publishBar.isDraft { border-color: var(--warn); }
+.publishBar .btnRow, .edHead .btnRow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0; }
+.edHead .btnRow { margin-top: 10px; }
+.edHead .btnRow .primary { width: auto; margin: 0; }
+.edState { margin: 8px 0 0; }
+.edLangs { margin-top: 10px; }
+.edLessons { list-style: none; padding: 0; }
+.rowList li.edLessonRow { justify-content: flex-start; align-items: center; }
+.edLessonRow > a { flex: 1; min-width: 0; color: var(--text); text-decoration: none; display: grid; gap: 2px; }
+.edLessonRow > a:hover b { text-decoration: underline; }
+.edLessonRow small { color: var(--muted); }
+.moveBtns { display: flex; flex-direction: column; gap: 4px; }
+.iconSmall { display: inline-grid; place-items: center; min-width: 36px; min-height: 36px; padding: 0 6px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); color: var(--text); font: inherit; font-size: .8rem; cursor: pointer; }
+.iconSmall:hover:not(:disabled) { border-color: var(--primary); color: var(--primary-text); }
+.iconSmall:disabled { opacity: .35; cursor: default; }
+.edSlide, .edQ { border: 1px solid var(--line); border-radius: 12px; padding: 12px; margin: 0 0 16px; background: var(--panel); }
+.edBar { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+.edBar .btnRow { display: flex; gap: 6px; margin: 0; }
+.edBar .lpCount { margin: 0; color: var(--muted); font-size: .85rem; }
+.edFig { position: relative; display: block; width: 100%; padding: 0; border: 1px dashed var(--line); border-radius: 10px; background: var(--soft); cursor: pointer; color: inherit; }
+.edFig:disabled { cursor: default; border-style: solid; }
+.edFig:hover:not(:disabled) { border-color: var(--primary); }
+.edFig .fig { display: block; width: 100%; max-height: 180px; }
+.edFigHint { position: absolute; right: 8px; bottom: 8px; padding: 2px 10px; border-radius: 999px; background: var(--primary); color: var(--on-primary); font-size: .8rem; font-weight: 700; }
+.figPick { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; margin: 8px 0; padding: 8px; border: 1px solid var(--line); border-radius: 10px; background: var(--soft); }
+.figOpt { padding: 4px; border: 2px solid transparent; border-radius: 8px; background: var(--panel); cursor: pointer; }
+.figOpt.on, .figOpt:hover { border-color: var(--primary); }
+.figOpt .fig { width: 100%; height: auto; }
+.ce { min-height: 1.6em; padding: 4px 6px; margin: 2px -6px; border: 1px dashed var(--line); border-radius: 6px; outline: none; white-space: pre-wrap; overflow-wrap: anywhere; cursor: text; }
+.ce:hover { border-color: var(--muted); }
+.ce:focus { border: 1px solid var(--primary); box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 20%, transparent); }
+.ce:empty::before { content: attr(data-placeholder); color: var(--muted); font-style: italic; }
+.edHeading { font: 700 1.3rem/1.25 var(--display); }
+.edPoints { margin: 8px 0 0; }
+.edPoints li { margin: 2px 0; }
+.edPoints li::marker { color: var(--primary-text); }
+.addPoint, .addOpt { margin: 4px 0 8px; font-weight: 600; }
+.edVoice { margin-top: 10px; }
+.edLabel { display: block; font-size: .8rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+.edNarr, .edNote { color: var(--muted); }
+.edEn { margin: 6px 0 0; font-size: .85rem; color: var(--muted); }
+.edEn span { font-weight: 700; margin-inline-end: 4px; }
+.edQ .quizQ { font-weight: 700; }
+.edOptions { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 6px; }
+.edOptions li { display: flex; align-items: center; gap: 8px; padding: 4px 8px; border: 1px solid var(--line); border-radius: 10px; }
+.edOptions li.isRightOpt { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, transparent); }
+.optMark { flex: none; display: grid; place-items: center; width: 28px; color: var(--accent); font-weight: 800; }
+.optMark input { width: 20px; height: 20px; accent-color: var(--accent); margin: 0; }
+.optText { flex: 1; min-width: 0; }
+#addSlide, #addQ { margin-top: 4px; }
+.editHere .btnLink { margin-top: 4px; }
+.edBar .btnRow { flex-direction: row; flex-wrap: nowrap; }
+.edBar .iconSmall, .moveBtns .iconSmall, .edOptions .iconSmall { flex: none; width: auto; margin: 0; }

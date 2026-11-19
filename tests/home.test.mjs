@@ -127,3 +127,22 @@ test("the first visit asks for a language (the browser's own suggested first), o
   assert.ok(js.includes("if (saved() && saved() !== h.language) call('home', { method: 'POST', body: { language: saved() } })"), 'a change from the menu is saved back');
   assert.match(read('scripts/site-files.txt'), /^language\.js$/m);
 });
+test('every script and stylesheet a published page loads, and every module the app imports, is in the site\'s file list (so it is deployed)', () => {
+  const listed = new Set(read('scripts/site-files.txt').split('\n').map((s) => s.trim()).filter(Boolean));
+  const missing = [];
+  for (const page of [...listed].filter((f) => f.endsWith('.html'))) {
+    const dir = page.includes('/') ? page.slice(0, page.lastIndexOf('/') + 1) : '';
+    for (const [, src] of read(page).matchAll(/(?:src|href)="([\w./-]+\.(?:js|css))"/g)) {
+      if (/^(https?:)?\/\//.test(src)) continue;
+      const path = src.startsWith('/') ? src.slice(1) : new URL(src, `http://x/${dir}`).pathname.slice(1);
+      if (!listed.has(path)) missing.push(`${page} -> ${path}`);
+    }
+  }
+  for (const js of [...listed].filter((f) => f.startsWith('learn/') && f.endsWith('.js'))) {
+    for (const [, src] of read(js).matchAll(/^import [^'\n]*'(\.\.?\/[\w./-]+\.js)'/gm)) {
+      const path = new URL(src, 'http://x/learn/').pathname.slice(1);
+      if (!listed.has(path)) missing.push(`${js} -> ${path}`);
+    }
+  }
+  assert.deepStrictEqual(missing, []);
+});
