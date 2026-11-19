@@ -60,7 +60,8 @@ function createLessons(ctx, { speech, mediaSigner }) {
     const lessons = await db.query('SELECT l.lesson_id FROM {S}.lesson l JOIN {S}.module m ON m.module_id = l.module_id WHERE l.version_id = @v ORDER BY m.seq, l.seq', { v: v.version_id });
     const lessonNotes = Object.fromEntries(lessons.filter((l) => !countable.has(l.lesson_id)).map((l) => [l.lesson_id, 'being written']));
     const next = lessons.find((l) => countable.has(l.lesson_id) && !done.includes(l.lesson_id));
-    return { ...base, completed: done, lessonNotes, progress: e ? { done: done.filter((id) => countable.has(id)).length, total: countable.size } : null, nextLesson: next?.lesson_id || null };
+    const locked = e && e.version_id === v.version_id && !ctx.editor(w, p.programme_id) ? [...(await locksFor(w.person.person_id, v.version_id))].map(([id, x]) => ({ id, after: x.lessonId })) : [];
+    return { ...base, completed: done, lessonNotes, locked, progress: e ? { done: done.filter((id) => countable.has(id)).length, total: countable.size } : null, nextLesson: next?.lesson_id || null };
   };
   // a new programme version takes the content too: the same published content, carried over to the new lessons
   const prevCopy = ctx.copyVersionExtras;
@@ -110,6 +111,22 @@ function createLessons(ctx, { speech, mediaSigner }) {
     return { ...e, state: 'completed' };
   };
 
+  /** lessons in programme order, and for an enrolled learner which ones are still locked: a lesson opens once the one before it
+   *  (with published content) is completed, which needs its quick check answered (checks.js). Editors and owners open any. */
+  const lessonOrder = async (versionId) => db.query('SELECT l.lesson_id, l.title FROM {S}.lesson l JOIN {S}.module m ON m.module_id = l.module_id WHERE l.version_id = @v ORDER BY m.seq, l.seq', { v: versionId });
+  async function locksFor(personId, versionId) {
+    const countable = new Set(await countableLessons(versionId)), done = new Set(await doneLessons(personId, versionId));
+    const out = new Map(); let prev = null;
+    for (const x of await lessonOrder(versionId)) {
+      if (!countable.has(x.lesson_id)) continue;
+      if (prev && !done.has(x.lesson_id) && !done.has(prev.lesson_id)) out.set(x.lesson_id, { lessonId: prev.lesson_id, title: prev.title });
+      prev = x;
+    }
+    return out;
+  }
+  const lockOf = async (w, l, e) => (e && !ctx.editor(w, l.programme_id) ? (await locksFor(w.person.person_id, l.version_id)).get(l.lesson_id) || null : null);
+  ctx.locksFor = locksFor;
+
   // ------------------------------------------------------------------ one lesson
   async function getLesson(w, id, query) {
     const l = await lessonById(id); if (!l) return reply(404, { error: 'No such lesson' });
@@ -137,7 +154,7 @@ function createLessons(ctx, { speech, mediaSigner }) {
       content: contentView(c), locales, media: c ? await media.plan(c, l.programme_id) : null, rules,
       progress: progress ? { contentId: progress.content_id, slide: progress.slide, locale: progress.locale } : null,
       completions: completions.map((x) => ({ at: x.completed_at, locale: x.locale, preview: !!x.preview, versionNo: x.content_version })),
-      enrolled: !!e, enrolmentState: e?.state || '',
+      enrolled: !!e, enrolmentState: e?.state || '', lock: await lockOf(w, l, e),
       nav: { prev: order[at - 1]?.lesson_id || null, next: order[at + 1]?.lesson_id || null, nextTitle: order[at + 1]?.title || '' },
       drafts: canEdit ? visible.map((x) => ({ id: x.content_id, locale: x.locale, versionNo: x.version_no, state: x.state, preview: isPreview(x), translationOf: x.translation_of || '', submittedBy: x.submitted_by || '', createdAt: x.created_at })) : [],
       can: { edit: canEdit, approve: canApprove },
@@ -162,6 +179,7 @@ function createLessons(ctx, { speech, mediaSigner }) {
     if (!(c.state === 'published' || isPreview(c))) return reply(409, { error: 'Only published content can be completed' });
     const e = (await db.query("SELECT TOP 1 * FROM {S}.enrolment WHERE person_id = @p AND version_id = @v AND state <> 'withdrawn'", { p: w.person.person_id, v: l.version_id }))[0];
     if (!e) return reply(403, { error: 'Enrol in the programme to record your progress' });
+    if (await lockOf(w, l, e)) return reply(409, { error: 'Finish the lesson before this one first' });
     const had = (await db.query('SELECT * FROM {S}.completion WHERE person_id = @p AND lesson_id = @l AND locale = @loc', { p: w.person.person_id, l: l.lesson_id, loc: c.locale }))[0];
     // the lesson's quick check comes first (checks.js): answered, right or wrong
     if (!had && ctx.checksAnswered && !(await ctx.checksAnswered(w.person.person_id, l.lesson_id))) return reply(409, { error: 'Answer the quick check first' });

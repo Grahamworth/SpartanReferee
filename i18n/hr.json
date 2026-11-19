@@ -1691,7 +1691,6 @@
  "Transcript": "Transkript",
  "Keys: ← and → move between slides, space plays or pauses, C turns captions on or off.": "Tipke: ← i → mijenjaju slajd, razmaknica pokreće ili pauzira, C uključuje ili isključuje titlove.",
  "About this lesson": "O ovoj lekciji",
- "Sources: {x8}. {locale} content version {versionNo}{x9}.": "Izvori: {x8}. {locale} verzija sadržaja {versionNo}{x9}.",
  "Azure narration isn't set up on this server: the device's voice stands in.": "Azure naracija nije postavljena na ovom poslužitelju: umjesto nje koristi se glas uređaja.",
  "Uses the default until set here.": "Koristi zadano dok se ovdje ne postavi.",
  "{x} voice": "{x} glas",
@@ -2836,5 +2835,13 @@
  "All your events": "Sva vaša događanja",
  "Your events": "Vaša događanja",
  "Read this slide aloud": "Pročitaj ovaj slajd naglas",
- "Stop reading aloud": "Zaustavi čitanje"
+ "Stop reading aloud": "Zaustavi čitanje",
+ "Opens when you finish the lesson before": "Otvara se kad završite prethodnu lekciju",
+ "This lesson opens once you've finished {title}, with its quick check.": "Ova se lekcija otvara kad završite „{title}”, uz njezinu brzu provjeru.",
+ "Go to that lesson": "Idi na tu lekciju",
+ "Your answer: {answer}": "Vaš odgovor: {answer}",
+ "Right answer: {answer}": "Točan odgovor: {answer}",
+ "Finish the lesson before this one first": "Najprije završite prethodnu lekciju",
+ "Answer the quick check first": "Najprije odgovorite na brzu provjeru",
+ "Sources: {x9}. {locale} content version {versionNo}{x10}.": "Izvori: {x9}. {locale} verzija sadržaja {versionNo}{x10}."
 }

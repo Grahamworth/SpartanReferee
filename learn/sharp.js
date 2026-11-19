@@ -86,25 +86,42 @@ export function checkSection(L) {
     : `<p class="note">${esc(t('{n} questions on what you just learned. They don\'t count towards anything: they help it stick, and they come back as refreshers.', { n: checks.length }))}</p><div id="lpQuiz"></div>`}
     </div>`;
 }
+/** the result after a lesson's quick check: the score, then each question with your answer and (if you missed it) the right one */
+function resultHtml(questions, answers) {
+  return `<div class="quizResult"><p class="quizScore">${esc(score(answers))}</p>
+    <ol class="quizReview">${answers.map((a) => {
+      const k = questions.find((q) => q.key === a.key); if (!k) return '';
+      return `<li class="${a.right ? 'isRight' : 'isWrong'}"><span class="qMark" aria-hidden="true">${a.right ? '✓' : '✗'}</span><span><span class="q">${esc(k.prompt)}</span>
+        <small>${esc(t('Your answer: {answer}', { answer: t(k.options[a.choice]) }))}${a.right ? '' : ` · <b>${esc(t('Right answer: {answer}', { answer: t(k.options[k.answer]) }))}</b>`}</small></span></li>`;
+    }).join('')}</ol><p class="note" id="lpResultNote">${esc(t('Saving…'))}</p></div>`;
+}
+/** the quick check at the end of a lesson: once it's answered (right or wrong) the lesson is completed (enrolled), the result shows,
+ *  and only then does the way to the next lesson (#lpNextWrap) appear */
 export function wireCheck(L) {
   const sec = $('lpCheck'); if (!sec) return;
-  const complete = $('lpComplete');
+  const done = L.completions.some((x) => !x.preview);
   const run = (box) => quiz(box, L.extra.checks, async (answers) => {
-    box.innerHTML = `<p class="quizScore">${esc(score(answers))}</p><p class="note">${esc(t('Saving…'))}</p>`;
+    box.innerHTML = resultHtml(L.extra.checks, answers);
+    const note = $('lpResultNote'), lines = [];
+    let ok = true;
     try {
       const r = await call(`lessons/${L.lesson.id}/checks`, { method: 'POST', body: { answers: answers.map(({ key, choice }) => ({ key, choice })) } });
-      box.querySelector('.note').textContent = r.queued ? t('Saved on this phone: it\'s sent when there\'s signal.') : t('These questions come back as refreshers when they\'re due.');
       celebrate(r.badges);
-    } catch (e) { box.querySelector('.note').textContent = e.message; }
-    if (complete) { complete.hidden = false; if (complete.previousElementSibling?.tagName === 'P') complete.previousElementSibling.hidden = false; complete.focus(); }
+      if (L.enrolled && !done) {
+        const c = await call(`lessons/${L.lesson.id}/complete`, { method: 'POST', body: { contentId: L.content.id } });
+        lines.push(c.queued ? t('Saved on this phone: it goes to your record when there\'s signal') : c.preview ? t('Recorded: done in a preview translation') : c.enrolment?.state === 'completed' ? t('Lesson complete: programme complete!') : t('Lesson complete'));
+        celebrate(c.badges);
+        const h = $('lpFinish')?.querySelector('h2'); if (h) h.textContent = t('You\'ve completed this lesson');
+      } else if (r.queued) lines.push(t('Saved on this phone: it\'s sent when there\'s signal.'));
+      lines.push(t('These questions come back as refreshers when they\'re due.'));
+    } catch (e) { ok = false; lines.push(e.message); }
+    note.innerHTML = lines.map((x) => `<span>${esc(x)}</span>`).join('<br>');
+    const next = $('lpNextWrap');
+    if (ok && next) { next.hidden = false; next.querySelector('a')?.focus(); }
   });
   if (sec.dataset.answered === '1') {
     sec.querySelector('[data-check-again]').onclick = () => { const box = document.createElement('div'); sec.querySelector('.note').replaceWith(box); run(box); };
-  } else {
-    // answered first, then marked complete
-    if (complete) { complete.hidden = true; if (complete.previousElementSibling?.tagName === 'P') complete.previousElementSibling.hidden = true; }
-    run($('lpQuiz'));
-  }
+  } else run($('lpQuiz'));
 }
 
 // ---------------------------------------------------------------- the weekly streak

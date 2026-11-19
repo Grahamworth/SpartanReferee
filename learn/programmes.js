@@ -1,6 +1,7 @@
 // Programmes (step 2): your overview, the catalogue, one programme's page (its versions, policy and curriculum, with editing, review
 // and approval for its editors and owner), and each person's learning record. The server checks everything again.
 import { $, S, call, esc, toast, regionName, roleText, day, formBody, badge, bar, redraw, act, hooks, runHooks, LANG, t } from './core.js';
+import { queuedPaths } from '../offline.js';
 
 const RULE = { lessons: 'Complete every lesson', assessment: 'Pass the assessment', 'lessons+assessment': 'Complete every lesson and pass the assessment' };
 const CATEGORY = { referee: 'Referee', judge: 'Judge', other: 'Other' };
@@ -91,7 +92,11 @@ async function programmePage(id) {
   const d = await call(`programmes/${encodeURIComponent(id)}${q.get('version') ? `?version=${encodeURIComponent(q.get('version'))}` : ''}`);
   const { programme: p, version: v, modules, enrolment: e } = d, editable = v.state === 'draft' && d.can.edit;
   const doneSet = new Set(d.completed || []);
-  const lessonRow = (l) => `<li class="lessonRow"><a href="#/lesson/${esc(l.id)}"><span class="tick${doneSet.has(l.id) ? ' done' : ''}" aria-label="${doneSet.has(l.id) ? 'Completed' : 'Not completed yet'}"></span><span><b>${esc(l.title)}</b><small><span>${l.minutes} min</span>${l.summary ? ` · <span>${esc(l.summary)}</span>` : ''}${d.lessonNotes?.[l.id] ? ` · <span>${esc(d.lessonNotes[l.id])}</span>` : ''}</small></span></a>
+  // a lesson opens once the one before is finished (lessons.js says which are shut); one finished offline counts already
+  const waiting = queuedPaths(), locked = new Set((d.locked || []).filter((x) => !waiting.includes(`lessons/${x.after}/complete`)).map((x) => x.id));
+  const LOCK = '<span class="tick lock" aria-hidden="true"><svg viewBox="0 0 12 12"><rect x="2.5" y="5.5" width="7" height="5" rx="1"/><path d="M4 5.5V4a2 2 0 014 0v1.5"/></svg></span>';
+  const lessonRow = (l) => (locked.has(l.id) ? `<li class="lessonRow locked"><span class="lessonLocked">${LOCK}<span><b>${esc(l.title)}</b><small><span>${l.minutes} min</span> · <span>Opens when you finish the lesson before</span></small></span></span></li>` : lessonRowOpen(l));
+  const lessonRowOpen = (l) => `<li class="lessonRow"><a href="#/lesson/${esc(l.id)}"><span class="tick${doneSet.has(l.id) ? ' done' : ''}" aria-label="${doneSet.has(l.id) ? 'Completed' : 'Not completed yet'}"></span><span><b>${esc(l.title)}</b><small><span>${l.minutes} min</span>${l.summary ? ` · <span>${esc(l.summary)}</span>` : ''}${d.lessonNotes?.[l.id] ? ` · <span>${esc(d.lessonNotes[l.id])}</span>` : ''}</small></span></a>
       ${editable ? `<button class="small" type="button" data-del-lesson="${esc(l.id)}" aria-label="Delete lesson ${esc(l.title)}">Delete</button>` : ''}</li>`;
   return `<section class="card progHead" data-current-version="${esc(v.id)}">
       <p class="crumbs"><a href="#/programmes">Programmes</a></p>

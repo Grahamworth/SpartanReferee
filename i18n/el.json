@@ -1666,7 +1666,6 @@
  "Transcript": "Απομαγνητοφώνηση",
  "Keys: ← and → move between slides, space plays or pauses, C turns captions on or off.": "Πλήκτρα: τα ← και → μετακινούν ανάμεσα στις διαφάνειες, το διάστημα παίζει ή κάνει παύση, το C ενεργοποιεί ή απενεργοποιεί τους υπότιτλους.",
  "About this lesson": "Σχετικά με αυτό το μάθημα",
- "Sources: {x8}. {locale} content version {versionNo}{x9}.": "Πηγές: {x8}. Έκδοση περιεχομένου {locale} {versionNo}{x9}.",
  "Azure narration isn't set up on this server: the device's voice stands in.": "Η αφήγηση Azure δεν έχει ρυθμιστεί σε αυτόν τον διακομιστή: χρησιμοποιείται η φωνή της συσκευής.",
  "Uses the default until set here.": "Χρησιμοποιεί την προεπιλογή μέχρι να οριστεί εδώ.",
  "{x} voice": "Φωνή {x}",
@@ -2809,5 +2808,13 @@
  "All your events": "Όλες οι διοργανώσεις σας",
  "Your events": "Οι διοργανώσεις σας",
  "Read this slide aloud": "Ανάγνωση αυτής της διαφάνειας",
- "Stop reading aloud": "Διακοπή ανάγνωσης"
+ "Stop reading aloud": "Διακοπή ανάγνωσης",
+ "Opens when you finish the lesson before": "Ανοίγει όταν ολοκληρώσετε το προηγούμενο μάθημα",
+ "This lesson opens once you've finished {title}, with its quick check.": "Αυτό το μάθημα ανοίγει μόλις ολοκληρώσετε το «{title}» μαζί με τον γρήγορο έλεγχό του.",
+ "Go to that lesson": "Μετάβαση σε αυτό το μάθημα",
+ "Your answer: {answer}": "Η απάντησή σας: {answer}",
+ "Right answer: {answer}": "Σωστή απάντηση: {answer}",
+ "Finish the lesson before this one first": "Ολοκληρώστε πρώτα το προηγούμενο μάθημα",
+ "Answer the quick check first": "Απαντήστε πρώτα στον γρήγορο έλεγχο",
+ "Sources: {x9}. {locale} content version {versionNo}{x10}.": "Πηγές: {x9}. Έκδοση περιεχομένου {locale} {versionNo}{x10}."
 }

@@ -1657,7 +1657,6 @@
  "Transcript": "Trascrizione",
  "Keys: ← and → move between slides, space plays or pauses, C turns captions on or off.": "Tasti: ← e → per spostarsi tra le slide, spazio per avviare o mettere in pausa, C per attivare o disattivare le didascalie.",
  "About this lesson": "Su questa lezione",
- "Sources: {x8}. {locale} content version {versionNo}{x9}.": "Fonti: {x8}. {locale} versione del contenuto {versionNo}{x9}.",
  "Azure narration isn't set up on this server: the device's voice stands in.": "La narrazione Azure non è configurata su questo server: al suo posto si usa la voce del dispositivo.",
  "Uses the default until set here.": "Usa il valore predefinito finché non viene impostato qui.",
  "{x} voice": "Voce {x}",
@@ -2802,5 +2801,13 @@
  "All your events": "Tutti i tuoi eventi",
  "Your events": "I tuoi eventi",
  "Read this slide aloud": "Leggi ad alta voce questa slide",
- "Stop reading aloud": "Interrompi la lettura"
+ "Stop reading aloud": "Interrompi la lettura",
+ "Opens when you finish the lesson before": "Si apre quando finisci la lezione precedente",
+ "This lesson opens once you've finished {title}, with its quick check.": "Questa lezione si apre quando hai finito «{title}», con la sua verifica rapida.",
+ "Go to that lesson": "Vai a quella lezione",
+ "Your answer: {answer}": "La tua risposta: {answer}",
+ "Right answer: {answer}": "Risposta giusta: {answer}",
+ "Finish the lesson before this one first": "Finisci prima la lezione precedente",
+ "Answer the quick check first": "Rispondi prima alla verifica rapida",
+ "Sources: {x9}. {locale} content version {versionNo}{x10}.": "Fonti: {x9}. {locale} versione del contenuto {versionNo}{x10}."
 }

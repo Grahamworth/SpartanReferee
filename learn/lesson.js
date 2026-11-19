@@ -3,7 +3,7 @@
 // Preview translation labels, and for editors the content versions with writing, review and approval (LRN-02..05, LRN-07, AT-04, AT-05).
 import { $, call, esc, toast, fail, badge, day, redraw, act, hooks, runHooks, LANG, t } from './core.js';
 import { drawAction } from './practice.js';
-import { recallFile } from '../offline.js';
+import { recallFile, queuedPaths } from '../offline.js';
 import { checkSection, wireCheck, celebrate } from './sharp.js';
 
 // ---------------------------------------------------------------- figures: simple drawings, in the page's own colours
@@ -169,6 +169,14 @@ async function lessonView(rest) {
     <p class="badges">${L.version.state !== 'published' ? badge(L.version.state, `${L.version.edition} ${L.version.state}`) : ''}${L.programme.demo ? badge('preview', 'Demonstration content') : ''}${done ? badge('completed', 'Completed') : donePreview ? badge('pending', 'Done in a preview translation') : ''}${c && c.state !== 'published' && !c.preview ? badge(c.state) : ''}</p>
     ${L.extra?.reviews?.length ? `<div class="reviewNote"><b>Under review</b><ul class="reviewTitles">${L.extra.reviews.map((i) => `<li>${esc(i.title)}</li>`).join('')}</ul><a href="#/reviews?programme=${esc(L.programme.id)}">See the review items</a></div>` : ''}
     ${langSwitch()}</section>`;
+  // you move on once the lesson's quick check is answered (right or wrong) and, enrolled, the lesson is complete (which needs the check)
+  const checks = L.extra?.checks || [], st = L.extra?.checkState || {};
+  const answered = checks.length > 0 && checks.every((k) => st[k.key]);
+  const moveOn = L.enrolled ? !!done : !checks.length || answered;
+  // a lesson opens once the one before is finished (the server says which); one finished offline counts already
+  if (L.lock && !queuedPaths().includes(`lessons/${L.lock.lessonId}/complete`)) {
+    return `${head}<section class="card lockedCard"><h2>Not open yet</h2><p>${esc(t('This lesson opens once you\'ve finished {title}, with its quick check.', { title: t(L.lock.title) }))}</p><a class="btnLink primaryLink" href="${lessonUrl(L.lock.lessonId)}">Go to that lesson</a></section>`;
+  }
   if (!c) return `${head}<section class="card"><h2>Being written</h2><p>This lesson's content hasn't been published yet.</p><p><a class="btnLink" href="${back}">Back to the programme</a></p></section>${editorPanel()}`;
   const preview = c.preview ? `<p class="previewBanner" role="note"><b>Preview translation.</b> ${esc(c.translatedBy || 'Not reviewed yet')}. The English is the approved version. Completing the lesson in this language is recorded, but it counts towards your qualification only in an approved language.</p>` : '';
   return `${head}${preview}
@@ -188,10 +196,10 @@ async function lessonView(rest) {
     </section>
     <section class="card" id="lpFinish" hidden><h2>${done ? 'You\'ve completed this lesson' : 'Finish the lesson'}</h2>
       ${checkSection(L)}
-      ${L.enrolled ? (done ? `<p>Completed ${esc(day(done.at))} (${esc(LANG[done.locale] || done.locale)}, content version ${done.versionNo}).</p>` : `<p>Mark it complete to record it against your programme: the record keeps this lesson, its content version (${esc(LANG[c.locale] || c.locale)} v${c.versionNo}) and the date.</p><button class="primary" type="button" id="lpComplete">Mark as complete</button>`)
+      ${L.enrolled ? (done ? `<p>Completed ${esc(day(done.at))} (${esc(LANG[done.locale] || done.locale)}, content version ${done.versionNo}).</p>` : !checks.length || answered ? `<p>Mark it complete to record it against your programme: the record keeps this lesson, its content version (${esc(LANG[c.locale] || c.locale)} v${c.versionNo}) and the date.</p><button class="primary" type="button" id="lpComplete">Mark as complete</button>` : '')
         : `<p>Enrol in ${esc(L.programme.title)} to record your progress.</p><a class="btnLink" href="${back}">Go to the programme</a>`}
       ${await runHooks(hooks.lesson || [], L)}
-      ${L.nav.next ? `<p><a class="btnLink" href="${lessonUrl(L.nav.next)}">Next: ${esc(L.nav.nextTitle)}</a></p>` : `<p><a class="btnLink" href="${back}">Back to the programme</a></p>`}
+      <p class="lpNextWrap" id="lpNextWrap"${moveOn ? '' : ' hidden'}>${L.nav.next ? `<a class="btnLink primaryLink" href="${lessonUrl(L.nav.next)}">Next: ${esc(L.nav.nextTitle)}</a>` : `<a class="btnLink primaryLink" href="${back}">Back to the programme</a>`}</p>
     </section>
     <section class="card"><h2>About this lesson</h2><p>${esc(L.lesson.summary)}</p><p class="note">Sources: ${esc(String(c.sources || 'not given').replace(/\.$/, ''))}. ${esc(LANG[c.locale] || c.locale)} content version ${c.versionNo}${c.approvedAt ? `, approved ${esc(day(c.approvedAt))}` : ''}.</p></section>
     ${editorPanel()}`;

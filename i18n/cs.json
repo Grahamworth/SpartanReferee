@@ -1707,7 +1707,6 @@
  "Transcript": "Přepis",
  "Keys: ← and → move between slides, space plays or pauses, C turns captions on or off.": "Klávesy: ← a → přepínají mezi snímky, mezerník spouští nebo pozastavuje, C zapíná či vypíná titulky.",
  "About this lesson": "O této lekci",
- "Sources: {x8}. {locale} content version {versionNo}{x9}.": "Zdroje: {x8}. Obsah {locale} verze {versionNo}{x9}.",
  "Azure narration isn't set up on this server: the device's voice stands in.": "Vyprávění Azure není na tomto serveru nastaveno: nahrazuje ho hlas zařízení.",
  "Uses the default until set here.": "Používá výchozí, dokud se zde nenastaví.",
  "{x} voice": "Hlas {x}",
@@ -2852,5 +2851,13 @@
  "All your events": "Všechny vaše akce",
  "Your events": "Vaše akce",
  "Read this slide aloud": "Přečíst tento snímek nahlas",
- "Stop reading aloud": "Zastavit čtení"
+ "Stop reading aloud": "Zastavit čtení",
+ "Opens when you finish the lesson before": "Otevře se, až dokončíte předchozí lekci",
+ "This lesson opens once you've finished {title}, with its quick check.": "Tato lekce se otevře, až dokončíte „{title}“ i s rychlou kontrolou.",
+ "Go to that lesson": "Přejít na tuto lekci",
+ "Your answer: {answer}": "Vaše odpověď: {answer}",
+ "Right answer: {answer}": "Správná odpověď: {answer}",
+ "Finish the lesson before this one first": "Nejprve dokončete předchozí lekci",
+ "Answer the quick check first": "Nejprve odpovězte na rychlou kontrolu",
+ "Sources: {x9}. {locale} content version {versionNo}{x10}.": "Zdroje: {x9}. Obsah {locale} verze {versionNo}{x10}."
 }

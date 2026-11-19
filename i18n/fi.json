@@ -1671,7 +1671,6 @@
  "Transcript": "Teksti",
  "Keys: ← and → move between slides, space plays or pauses, C turns captions on or off.": "Näppäimet: ← ja → siirtävät dioja, välilyönti toistaa tai keskeyttää, C kytkee tekstitykset päälle tai pois.",
  "About this lesson": "Tietoa tästä oppitunnista",
- "Sources: {x8}. {locale} content version {versionNo}{x9}.": "Lähteet: {x8}. {locale}-sisältöversio {versionNo}{x9}.",
  "Azure narration isn't set up on this server: the device's voice stands in.": "Azure-selostusta ei ole otettu käyttöön tällä palvelimella: laitteen oma ääni korvaa sen.",
  "Uses the default until set here.": "Käyttää oletusta, kunnes se asetetaan tässä.",
  "{x} voice": "{x}-ääni",
@@ -2816,5 +2815,13 @@
  "All your events": "Kaikki tapahtumasi",
  "Your events": "Tapahtumasi",
  "Read this slide aloud": "Lue tämä dia ääneen",
- "Stop reading aloud": "Lopeta lukeminen"
+ "Stop reading aloud": "Lopeta lukeminen",
+ "Opens when you finish the lesson before": "Avautuu, kun olet suorittanut edellisen oppitunnin",
+ "This lesson opens once you've finished {title}, with its quick check.": "Tämä oppitunti avautuu, kun olet suorittanut oppitunnin ”{title}” pikatesteineen.",
+ "Go to that lesson": "Siirry tähän oppituntiin",
+ "Your answer: {answer}": "Vastauksesi: {answer}",
+ "Right answer: {answer}": "Oikea vastaus: {answer}",
+ "Finish the lesson before this one first": "Suorita ensin edellinen oppitunti",
+ "Answer the quick check first": "Vastaa ensin pikatestiin",
+ "Sources: {x9}. {locale} content version {versionNo}{x10}.": "Lähteet: {x9}. {locale}-sisältöversio {versionNo}{x10}."
 }

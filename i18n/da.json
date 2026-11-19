@@ -1659,7 +1659,6 @@
  "Transcript": "Transskription",
  "Keys: ← and → move between slides, space plays or pauses, C turns captions on or off.": "Taster: ← og → skifter mellem slides, mellemrum afspiller eller sætter på pause, C slår billedtekster til eller fra.",
  "About this lesson": "Om denne lektion",
- "Sources: {x8}. {locale} content version {versionNo}{x9}.": "Kilder: {x8}. {locale}-indholdsversion {versionNo}{x9}.",
  "Azure narration isn't set up on this server: the device's voice stands in.": "Azure-fortælling er ikke sat op på denne server: enhedens egen stemme træder i stedet.",
  "Uses the default until set here.": "Bruger standarden, til den er angivet her.",
  "{x} voice": "{x}-stemme",
@@ -2804,5 +2803,13 @@
  "All your events": "Alle dine stævner",
  "Your events": "Dine stævner",
  "Read this slide aloud": "Læs dette dias højt",
- "Stop reading aloud": "Stop oplæsningen"
+ "Stop reading aloud": "Stop oplæsningen",
+ "Opens when you finish the lesson before": "Åbner, når du har gennemført lektionen før",
+ "This lesson opens once you've finished {title}, with its quick check.": "Denne lektion åbner, når du har gennemført ”{title}” med dens hurtige tjek.",
+ "Go to that lesson": "Gå til den lektion",
+ "Your answer: {answer}": "Dit svar: {answer}",
+ "Right answer: {answer}": "Rigtigt svar: {answer}",
+ "Finish the lesson before this one first": "Gennemfør lektionen før først",
+ "Answer the quick check first": "Besvar det hurtige tjek først",
+ "Sources: {x9}. {locale} content version {versionNo}{x10}.": "Kilder: {x9}. {locale}-indholdsversion {versionNo}{x10}."
 }

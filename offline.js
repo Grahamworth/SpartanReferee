@@ -85,6 +85,8 @@ export function queue(item) {
   return true;
 }
 export const waiting = () => outbox().filter((x) => x.owner === owner()).length;
+/** the addresses of what's waiting to be sent (a lesson finished offline opens the next one already) */
+export const queuedPaths = () => outbox().filter((x) => x.owner === owner()).map((x) => x.path);
 let flushing = null;
 /** send what's waiting: send(item) throws an error with no status when there's still no signal */
 export function flush(send) {

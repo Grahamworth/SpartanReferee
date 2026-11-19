@@ -1644,7 +1644,6 @@
  "Transcript": "Transcription",
  "Keys: ← and → move between slides, space plays or pauses, C turns captions on or off.": "Touches : ← et → pour changer de diapositive, espace pour lancer ou mettre en pause, C pour activer ou désactiver les sous-titres.",
  "About this lesson": "À propos de cette leçon",
- "Sources: {x8}. {locale} content version {versionNo}{x9}.": "Sources : {x8}. Version de contenu {locale} {versionNo}{x9}.",
  "Azure narration isn't set up on this server: the device's voice stands in.": "La narration Azure n'est pas configurée sur ce serveur : la voix de l'appareil la remplace.",
  "Uses the default until set here.": "Utilise la valeur par défaut tant qu'elle n'est pas définie ici.",
  "{x} voice": "Voix {x}",
@@ -2789,5 +2788,13 @@
  "All your events": "Tous vos événements",
  "Your events": "Vos événements",
  "Read this slide aloud": "Lire cette diapositive à voix haute",
- "Stop reading aloud": "Arrêter la lecture"
+ "Stop reading aloud": "Arrêter la lecture",
+ "Opens when you finish the lesson before": "S’ouvre une fois la leçon précédente terminée",
+ "This lesson opens once you've finished {title}, with its quick check.": "Cette leçon s’ouvre une fois que vous avez terminé « {title} », avec son test rapide.",
+ "Go to that lesson": "Aller à cette leçon",
+ "Your answer: {answer}": "Votre réponse : {answer}",
+ "Right answer: {answer}": "Bonne réponse : {answer}",
+ "Finish the lesson before this one first": "Terminez d’abord la leçon précédente",
+ "Answer the quick check first": "Répondez d’abord au test rapide",
+ "Sources: {x9}. {locale} content version {versionNo}{x10}.": "Sources : {x9}. Version de contenu {locale} {versionNo}{x10}."
 }

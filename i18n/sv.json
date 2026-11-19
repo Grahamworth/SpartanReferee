@@ -1656,7 +1656,6 @@
  "Transcript": "Utskrift",
  "Keys: ← and → move between slides, space plays or pauses, C turns captions on or off.": "Tangenter: ← och → går mellan bilderna, mellanslag spelar eller pausar, C slår på eller av textningen.",
  "About this lesson": "Om den här lektionen",
- "Sources: {x8}. {locale} content version {versionNo}{x9}.": "Källor: {x8}. {locale} innehållsversion {versionNo}{x9}.",
  "Azure narration isn't set up on this server: the device's voice stands in.": "Azure-berättarrösten är inte inställd på den här servern: enhetens egen röst används i stället.",
  "Uses the default until set here.": "Använder standardvärdet tills det ställs in här.",
  "{x} voice": "{x}-röst",
@@ -2801,5 +2800,13 @@
  "All your events": "Alla dina evenemang",
  "Your events": "Dina evenemang",
  "Read this slide aloud": "Läs upp den här bilden",
- "Stop reading aloud": "Sluta läsa upp"
+ "Stop reading aloud": "Sluta läsa upp",
+ "Opens when you finish the lesson before": "Öppnas när du har gjort klart lektionen innan",
+ "This lesson opens once you've finished {title}, with its quick check.": "Den här lektionen öppnas när du har gjort klart ”{title}” med dess snabbkoll.",
+ "Go to that lesson": "Gå till den lektionen",
+ "Your answer: {answer}": "Ditt svar: {answer}",
+ "Right answer: {answer}": "Rätt svar: {answer}",
+ "Finish the lesson before this one first": "Gör klart lektionen innan först",
+ "Answer the quick check first": "Svara på snabbkollen först",
+ "Sources: {x9}. {locale} content version {versionNo}{x10}.": "Källor: {x9}. {locale} innehållsversion {versionNo}{x10}."
 }

@@ -1653,7 +1653,6 @@
  "Transcript": "ข้อความถอดเสียง",
  "Keys: ← and → move between slides, space plays or pauses, C turns captions on or off.": "ปุ่ม: ← และ → เลื่อนระหว่างสไลด์ ปุ่มเว้นวรรคเล่นหรือหยุดชั่วคราว ปุ่ม C เปิดหรือปิดคำบรรยาย",
  "About this lesson": "เกี่ยวกับบทเรียนนี้",
- "Sources: {x8}. {locale} content version {versionNo}{x9}.": "แหล่งที่มา: {x8} {locale} เนื้อหาเวอร์ชัน {versionNo}{x9}",
  "Azure narration isn't set up on this server: the device's voice stands in.": "เซิร์ฟเวอร์นี้ยังไม่ได้ตั้งค่าเสียงบรรยายของ Azure: ใช้เสียงของอุปกรณ์แทน",
  "Uses the default until set here.": "ใช้ค่าเริ่มต้นจนกว่าจะตั้งที่นี่",
  "{x} voice": "เสียง {x}",
@@ -2798,5 +2797,13 @@
  "All your events": "งานทั้งหมดของคุณ",
  "Your events": "งานของคุณ",
  "Read this slide aloud": "อ่านสไลด์นี้ออกเสียง",
- "Stop reading aloud": "หยุดอ่าน"
+ "Stop reading aloud": "หยุดอ่าน",
+ "Opens when you finish the lesson before": "จะเปิดเมื่อคุณเรียนบทก่อนหน้าจบ",
+ "This lesson opens once you've finished {title}, with its quick check.": "บทเรียนนี้จะเปิดเมื่อคุณเรียน “{title}” จบพร้อมเช็กความเข้าใจ",
+ "Go to that lesson": "ไปที่บทเรียนนั้น",
+ "Your answer: {answer}": "คำตอบของคุณ: {answer}",
+ "Right answer: {answer}": "คำตอบที่ถูกต้อง: {answer}",
+ "Finish the lesson before this one first": "เรียนบทก่อนหน้าให้จบก่อน",
+ "Answer the quick check first": "ตอบเช็กความเข้าใจก่อน",
+ "Sources: {x9}. {locale} content version {versionNo}{x10}.": "แหล่งที่มา: {x9} {locale} เนื้อหาเวอร์ชัน {versionNo}{x10}"
 }

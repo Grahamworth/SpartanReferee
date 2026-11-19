@@ -91,3 +91,24 @@ test('progress: the streak, every badge earned or not, and what each programme h
   const out = await ok('GET', `learn/people/${learner.id}/export`, boss);
   assert.strictEqual(out.practice.length, 2); assert.strictEqual(out.badges.length, 4); assert.strictEqual(out.learningDays.length, 1);
 });
+
+test('a lesson opens once the one before is completed, which needs its quick check answered; editors open any', { skip }, async () => {
+  const one = (await db.query('SELECT * FROM {S}.lesson WHERE lesson_id = @l', { l: lessonId }))[0];
+  const two = (await db.query("INSERT INTO {S}.lesson (lesson_id, lineage_id, code, module_id, version_id, seq, title) OUTPUT inserted.lesson_id VALUES (NEWID(), NEWID(), 'ocr-1-2', @m, @v, 2, 'Bucket Carry')", { m: one.module_id, v: one.version_id }))[0].lesson_id;
+  const body = JSON.stringify({ slides: [{ heading: 'Carry', points: [], narration: '' }] });
+  const c2 = (await db.query("INSERT INTO {S}.content_version (content_id, lesson_id, locale, version_no, state, body, source_hash) OUTPUT inserted.content_id VALUES (NEWID(), @l, 'en', 1, 'published', @b, REPLICATE('0', 64))", { l: two, b: body }))[0].content_id;
+  const cara = (await ok('POST', 'learn/people', boss, { legalName: 'Cara New', email: 'cara@demo.test', regionId: 'europe' })).person;
+  await ok('POST', 'learn/enrolments', as(cara), { programmeId: 'ocr-referee' });
+  const L2 = await ok('GET', `learn/lessons/${two}`, as(cara));
+  assert.strictEqual(L2.lock.title, 'Spear Throw', 'the lesson before comes first');
+  assert.strictEqual((await call('POST', `learn/lessons/${two}/complete`, as(cara), { contentId: c2 })).status, 409);
+  const page = await ok('GET', 'learn/programmes/ocr-referee', as(cara));
+  assert.deepStrictEqual(page.locked.map((x) => [x.id.toLowerCase(), x.after.toLowerCase()]), [[two.toLowerCase(), lessonId.toLowerCase()]]);
+  assert.strictEqual((await ok('GET', `learn/lessons/${two}`, boss)).lock, null, 'an admin opens any lesson');
+  // the quick check (right or wrong), then completing lesson one, opens lesson two
+  await ok('POST', `learn/lessons/${lessonId}/checks`, as(cara), { answers: [{ key: 'ocr-1-1.1', choice: 2 }, { key: 'ocr-1-1.2', choice: 0 }] });
+  await ok('POST', `learn/lessons/${lessonId}/complete`, as(cara), { contentId });
+  assert.strictEqual((await ok('GET', `learn/lessons/${two}`, as(cara))).lock, null);
+  await ok('POST', `learn/lessons/${two}/complete`, as(cara), { contentId: c2 });
+  assert.deepStrictEqual((await ok('GET', 'learn/programmes/ocr-referee', as(cara))).locked, []);
+});

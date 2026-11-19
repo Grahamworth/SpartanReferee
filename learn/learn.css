@@ -333,3 +333,16 @@ h3.sub { font-size: 1rem; text-transform: uppercase; letter-spacing: .04em; marg
 .lpVoice.on .stop { fill: currentColor; stroke: none; }
 @keyframes lpVoicePulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--primary) 45%, transparent); } 100% { box-shadow: 0 0 0 12px transparent; } }
 @media (prefers-reduced-motion: reduce) { .lpVoice.on { animation: none; } }
+/* the result after a lesson's quick check, and a lesson that isn't open yet */
+.quizReview { list-style: none; margin: 8px 0; padding: 0; display: grid; gap: 8px; }
+.quizReview li { display: flex; gap: 10px; padding: 10px 12px; border-radius: 10px; background: var(--soft); border-inline-start: 4px solid var(--line); }
+.quizReview li.isRight { border-inline-start-color: var(--accent); } .quizReview li.isWrong { border-inline-start-color: var(--bad); }
+.quizReview .qMark { flex: none; font-weight: 700; } .quizReview .isRight .qMark { color: var(--accent); } .quizReview .isWrong .qMark { color: var(--bad); }
+.quizReview .q { display: block; font-weight: 600; font-size: 1rem; line-height: 1.4; }
+.quizReview small { display: block; color: var(--muted); margin-top: 2px; }
+.lpNextWrap { margin: 14px 0 0; }
+.lpNextWrap .btnLink { width: 100%; justify-content: center; }
+.lessonRow.locked .lessonLocked { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; color: var(--muted); }
+.lessonRow.locked b { color: var(--muted); }
+.tick.lock { border-style: dashed; display: grid; place-items: center; }
+.tick.lock svg { width: 12px; height: 12px; fill: none; stroke: var(--muted); stroke-width: 2.4; }

@@ -1651,7 +1651,6 @@
  "Transcript": "Transcriptie",
  "Keys: ← and → move between slides, space plays or pauses, C turns captions on or off.": "Toetsen: ← en → gaan tussen de dia's, spatie speelt af of pauzeert, C zet de ondertiteling aan of uit.",
  "About this lesson": "Over deze les",
- "Sources: {x8}. {locale} content version {versionNo}{x9}.": "Bronnen: {x8}. {locale} inhoudsversie {versionNo}{x9}.",
  "Azure narration isn't set up on this server: the device's voice stands in.": "De voorlezing van Azure is niet ingesteld op deze server: de stem van het apparaat springt in.",
  "Uses the default until set here.": "Gebruikt de standaard tot het hier is ingesteld.",
  "{x} voice": "{x} stem",
@@ -2795,5 +2794,13 @@
  "All your events": "Al je evenementen",
  "Your events": "Je evenementen",
  "Read this slide aloud": "Deze dia voorlezen",
- "Stop reading aloud": "Stoppen met voorlezen"
+ "Stop reading aloud": "Stoppen met voorlezen",
+ "Opens when you finish the lesson before": "Gaat open als je de les ervoor hebt afgerond",
+ "This lesson opens once you've finished {title}, with its quick check.": "Deze les gaat open zodra je ‘{title}’ hebt afgerond, met de snelle check.",
+ "Go to that lesson": "Naar die les",
+ "Your answer: {answer}": "Jouw antwoord: {answer}",
+ "Right answer: {answer}": "Juiste antwoord: {answer}",
+ "Finish the lesson before this one first": "Rond eerst de les ervoor af",
+ "Answer the quick check first": "Beantwoord eerst de snelle check",
+ "Sources: {x9}. {locale} content version {versionNo}{x10}.": "Bronnen: {x9}. {locale} inhoudsversie {versionNo}{x10}."
 }
