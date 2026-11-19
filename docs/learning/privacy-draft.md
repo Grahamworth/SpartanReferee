@@ -8,7 +8,7 @@
 >
 > SpartanReferee is run for [Spartan Race, Inc. / the Spartan entity to confirm] ("Spartan"), who decides how your information is used (the data controller). Contact: [privacy contact].
 >
-> **What we keep.** Your name and email address as your Microsoft account gives them, the region and country an administrator records, and what you do on the learning platform: the programmes you're enrolled in, the lessons you complete, your assessment answers and results, and the credentials you earn. For the burpee cameras: which events you're assigned to, as head referee or referee, and the bookings you make. Every change an administrator makes is recorded in an audit log.
+> **What we keep.** Your name and email address as your Microsoft account gives them, the region and country an administrator records, and what you do on the learning platform: the programmes you're enrolled in, the lessons you complete, your quick-check and refresher practice (with the weeks you learned and the badges you earned), your assessment answers and results, and the credentials you earn. For the burpee cameras: which events you're assigned to, as head referee or referee, and the bookings you make. Every change an administrator makes is recorded in an audit log.
 >
 > **Why.** To train and assess referees, to record who is qualified to referee Spartan events, and to run the camera booking for events. [Lawful basis to confirm: e.g. legitimate interests in running a consistent, fair officiating programme, or the agreement under which you referee.]
 >

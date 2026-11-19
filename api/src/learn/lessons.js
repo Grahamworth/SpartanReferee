@@ -76,6 +76,10 @@ function createLessons(ctx, { speech, mediaSigner }) {
                VALUES (@id, @l, @loc, @no, @state, @tr, @body, @hash, @src, @tb, @a, @ab, @at, @sb, @sat)`,
       { id: nid, l: lessonMap.get(c.lesson_id), loc: c.locale, no: c.version_no, state: c.state, tr: c.translation_of ? ids.get(c.translation_of) || englishFor(c) : null, body: c.body, hash: c.source_hash, src: c.sources, tb: c.translated_by, a: c.author_id, ab: c.approved_by, at: c.approved_at, sb: c.submitted_by, sat: c.submitted_at });
     }
+    // and the quick checks (their keys stay the same, so practice carries over)
+    for (const k of await q('SELECT * FROM {S}.lesson_check WHERE lesson_id IN (SELECT lesson_id FROM {S}.lesson WHERE version_id = @v)', { v: from.version_id })) {
+      await q('INSERT INTO {S}.lesson_check (check_id, lesson_id, check_key, seq, body) VALUES (@id, @l, @k, @s, @b)', { id: uuid(), l: lessonMap.get(k.lesson_id), k: k.check_key, s: k.seq, b: k.body });
+    }
   };
   const prevDelete = ctx.beforeDeleteLessons;
   ctx.beforeDeleteLessons = async (q, ids) => {
@@ -85,6 +89,7 @@ function createLessons(ctx, { speech, mediaSigner }) {
       await q('DELETE FROM {S}.lesson_progress WHERE lesson_id = @id', { id });
       await q('DELETE FROM {S}.completion WHERE lesson_id = @id', { id });
       await q('DELETE FROM {S}.content_version WHERE lesson_id = @id', { id });
+      await q('DELETE FROM {S}.lesson_check WHERE lesson_id = @id', { id });
     }
   };
 
@@ -147,6 +152,7 @@ function createLessons(ctx, { speech, mediaSigner }) {
     await db.query(`MERGE {S}.lesson_progress AS t USING (SELECT @p AS person_id, @l AS lesson_id) AS s ON t.person_id = s.person_id AND t.lesson_id = s.lesson_id
       WHEN MATCHED THEN UPDATE SET content_id = @c, locale = @loc, slide = @slide, updated_at = SYSUTCDATETIME()
       WHEN NOT MATCHED THEN INSERT (person_id, lesson_id, content_id, locale, slide) VALUES (@p, @l, @c, @loc, @slide);`, { p: w.person.person_id, l: l.lesson_id, c: c.content_id, loc: c.locale, slide });
+    await ctx.markDay?.(w.person.person_id);
     return reply(200, { ok: true });
   }
 
@@ -157,6 +163,8 @@ function createLessons(ctx, { speech, mediaSigner }) {
     const e = (await db.query("SELECT TOP 1 * FROM {S}.enrolment WHERE person_id = @p AND version_id = @v AND state <> 'withdrawn'", { p: w.person.person_id, v: l.version_id }))[0];
     if (!e) return reply(403, { error: 'Enrol in the programme to record your progress' });
     const had = (await db.query('SELECT * FROM {S}.completion WHERE person_id = @p AND lesson_id = @l AND locale = @loc', { p: w.person.person_id, l: l.lesson_id, loc: c.locale }))[0];
+    // the lesson's quick check comes first (checks.js): answered, right or wrong
+    if (!had && ctx.checksAnswered && !(await ctx.checksAnswered(w.person.person_id, l.lesson_id))) return reply(409, { error: 'Answer the quick check first' });
     let enrolment = e;
     await db.tx(async (q) => {
       if (had && had.preview && !isPreview(c)) {
@@ -172,7 +180,9 @@ function createLessons(ctx, { speech, mediaSigner }) {
       }
       enrolment = await ctx.checkCompletion(q, e.enrolment_id, w);
     });
-    return reply(200, { completed: true, preview: isPreview(c), enrolment: { id: e.enrolment_id, state: enrolment?.state || e.state } });
+    await ctx.markDay?.(w.person.person_id);
+    const badges = ctx.award ? await ctx.award(w.person) : [];
+    return reply(200, { completed: true, preview: isPreview(c), enrolment: { id: e.enrolment_id, state: enrolment?.state || e.state }, badges });
   }
 
   // ------------------------------------------------------------------ writing and approving content

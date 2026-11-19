@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <script src="i18n.js"></script>
 <title>Home: SpartanReferee</title>
-<meta name="theme-color" content="#0b0b0b">
+<meta name="theme-color" content="#1a1e24" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <link rel="icon" href="icons/spartanreferee/icon-192.png">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/spartanreferee/icon-180.png">
@@ -37,6 +38,9 @@
   .tile svg { flex: none; width: 34px; height: 34px; fill: none; stroke: var(--primary-text); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
   .tile h2 { margin: 0 0 4px; font-size: 1.5rem; }
   .tile p { margin: 0; color: var(--muted); }
+  .sharpHome { border-left: 4px solid var(--primary); }
+  .sharpHome p { margin: 6px 0 12px; }
+  .sharpGo { display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 10px; background: var(--primary); color: var(--on-primary); font-weight: 700; text-decoration: none; }
   .installCard:not([hidden]) { display: flex; gap: 16px; align-items: flex-start; border-left: 4px solid var(--primary); }
   .installCard svg { flex: none; width: 34px; height: 34px; fill: none; stroke: var(--primary-text); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
   .installCard h2 { margin: 0 0 4px; }
@@ -52,6 +56,8 @@
     .tile p { display: none; }
   }
 </style>
+<link rel="stylesheet" href="study.css">
+<script src="look.js"></script>
 <script type="module" src="home.js"></script>
 </head>
 <body>
@@ -85,6 +91,12 @@
       <h2>Your upcoming events</h2>
       <ul class="events" id="eventList"></ul>
       <p class="note" id="noEvents" hidden>No events assigned to you yet. An admin assigns referees to Spartan's events, and they'll show here. Tap one to see it and its burpee cameras.</p>
+    </section>
+
+    <section class="card sharpHome" id="sharpCard" hidden>
+      <h2>Keep sharp</h2>
+      <p id="sharpText"></p>
+      <a class="sharpGo" id="sharpGo" href="learn/#/refresh">Start a refresher</a>
     </section>
 
     <nav class="tiles" aria-label="Your areas">

@@ -40,6 +40,12 @@ test('Home and Learning register the app, and Sign out clears what it kept', () 
   assert.match(read('api-base.js'), /import\('\.\/offline\.js'\)\)\.clearAll\(\)/);
   assert.match(read('home.html'), /id="installCard"/);
 });
+test('Home, Learning and the offline page have the study look, with its Look button, and the app keeps both', () => {
+  for (const f of ['home.html', 'learn/index.html', 'offline.html']) { assert.match(read(f), /study\.css"/, f); assert.match(read(f), /look\.js"><\/script>/, f); }
+  const sw = read('sw.js');
+  for (const f of ['/study.css', '/look.js', '/learn/sharp.js']) assert.ok(sw.includes(`'${f}'`), f);
+  assert.doesNotMatch(read('judge.html'), /study\.css/, 'the event-day pages keep their own look');
+});
 test('saving for offline asks for lessons by the same address the player does, so the player finds them', () => {
   assert.match(read('learn/lesson.js'), /call\(lessonPath\(id, q\.get\('locale'\) \|\| pageLang, q\.get\('content'\)\)\)/);
   assert.match(read('learn/saved.js'), /get\(lessonPath\(l\.id, lang\)\)/);

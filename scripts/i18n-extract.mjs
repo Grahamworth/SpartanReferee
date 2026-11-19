@@ -19,11 +19,11 @@ export const FILES = [
   'streaming.html', 'email-return.html', 'offline.html', 'offline.js', 'email-signin-web.js', 'email-signin-core.js', 'api-base.js', 'recordings.html', 'recordings.js',
   // the learning platform
   'learn/index.html', 'learn/learn.js', 'learn/core.js', 'learn/people.js', 'learn/programmes.js', 'learn/lesson.js', 'learn/assess.js', 'learn/judgement.js',
-  'learn/govern.js', 'learn/reports.js', 'learn/diagnostics.js', 'learn/practice.js', 'learn/saved.js',
+  'learn/govern.js', 'learn/reports.js', 'learn/diagnostics.js', 'learn/practice.js', 'learn/saved.js', 'learn/sharp.js',
   // what the server says that people see: its error messages and labels (shown in the page, so translated there like the rest)
   'api/src/core.js', 'api/src/assignments.js', 'api/src/servers.js', 'api/src/events.js', 'api/src/companies.js', 'api/src/recordings.js',
   'api/src/learn/index.js', 'api/src/learn/programmes.js', 'api/src/learn/lessons.js', 'api/src/learn/media.js', 'api/src/learn/assess.js',
-  'api/src/learn/govern.js', 'api/src/learn/reports.js', 'api/src/learn/privacy.js', 'api/src/learn/diagnostics.js', 'api/src/learn/permissions.js',
+  'api/src/learn/govern.js', 'api/src/learn/reports.js', 'api/src/learn/privacy.js', 'api/src/learn/diagnostics.js', 'api/src/learn/permissions.js', 'api/src/learn/checks.js',
 ];
 
 const norm = (s) => String(s).replace(/\s+/g, ' ').trim();
@@ -191,9 +191,11 @@ export function fromScript(src) {
 const { PROGRAMMES } = await import('./learn-content.mjs');
 const { ASSESSMENTS } = await import('./learn-questions.mjs');
 const { DISPUTES } = await import('./learn-rules.mjs');
+const CHECKS = JSON.parse(fs.readFileSync(new URL('./learn-checks.json', import.meta.url), 'utf8')); // the lessons' quick checks
 export function contentTexts() {
   const out = [];
   const add = (s) => { const t = norm(s || ''); if (t && wordy(t)) out.push(t); };
+  for (const q of Object.values(CHECKS).flat()) [q.prompt, q.feedback, ...q.options].forEach(add);
   for (const p of PROGRAMMES) {
     [p.title, p.description, p.learnerRole, p.version.qualification, p.version.policyNote].forEach(add);
     for (const m of p.modules) { [m.title, m.summary, m.source].forEach(add); for (const l of m.lessons) [l.title, l.summary].forEach(add); }

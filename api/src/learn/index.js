@@ -24,6 +24,7 @@ const { createGovern } = require('./govern');
 const { createReports } = require('./reports');
 const { createPrivacy } = require('./privacy');
 const { createDiagnostics } = require('./diagnostics');
+const { createChecks } = require('./checks');
 
 const EMAIL = /^[^\s@/#?\\]+@[^\s@/#?\\]+\.[^\s@/#?\\]+$/;
 const LOCALES = ['en', 'fr', 'de', 'nl', 'es', 'it', 'el', 'hr', 'cs', 'pl', 'fi', 'sv', 'da', 'ar', 'th'];
@@ -248,7 +249,7 @@ function createLearn({ db, session, isAdminEmail = () => false, member = null, r
   // ------------------------------------------------------------------ the rest of the platform, one module each, sharing this context
   // (each can add hooks to it that the others call: programmes asks for a version's extras, progress and so on)
   const ctx = { db, reply, P, audit, uuid, text, isUuid, personById, personView, LOCALES };
-  const areas = [createProgrammes(ctx), createLessons(ctx, { speech, mediaSigner }), createAssess(ctx), createGovern(ctx), createReports(ctx), createPrivacy(ctx), createDiagnostics(ctx, { speech, mediaSigner })];
+  const areas = [createProgrammes(ctx), createLessons(ctx, { speech, mediaSigner }), createAssess(ctx), createGovern(ctx), createChecks(ctx), createReports(ctx), createPrivacy(ctx), createDiagnostics(ctx, { speech, mediaSigner })];
 
   // ------------------------------------------------------------------ routing
   async function handle(method, parts, body, h, query = {}) {

@@ -33,3 +33,18 @@ test('every lesson is in all 14 other languages, slide for slide and point for p
     t.forEach((s, i) => { assert.strictEqual(s.points.length, l.en[i].points.length, `${loc} ${k} slide ${i + 1}`); assert.strictEqual(!!s.review, !!l.en[i].review, `${loc} ${k} slide ${i + 1} review`); assert.ok(s.heading && s.narration); });
   }
 });
+test('every lesson but the DEKA placeholder has a quick check: 2 or 3 questions, one right answer each, citing only rules its slides cite', async () => {
+  const fs = await import('node:fs');
+  const CHECKS = JSON.parse(fs.readFileSync(new URL('../scripts/learn-checks.json', import.meta.url), 'utf8'));
+  assert.deepStrictEqual(Object.keys(CHECKS).sort(), Object.keys(LESSONS).filter((k) => !k.startsWith('deka')).sort());
+  for (const [k, qs] of Object.entries(CHECKS)) {
+    assert.ok(qs.length >= 2 && qs.length <= 3, k);
+    const cited = new Set(LESSONS[k].en.flatMap((s) => s.rules || []));
+    for (const q of qs) {
+      assert.ok(q.options.length >= 3 && q.options.length <= 4 && Number.isInteger(q.answer) && q.answer >= 0 && q.answer < q.options.length, `${k}: ${q.prompt}`);
+      assert.strictEqual(new Set(q.options).size, q.options.length, `${k}: options differ`);
+      for (const r of q.rules) assert.ok(cited.has(r), `${k} cites ${r}`);
+      assert.doesNotMatch([q.prompt, q.feedback, ...q.options].join(' '), /[–—]/, `${k}: ${q.prompt}`);
+    }
+  }
+});

@@ -62,8 +62,8 @@ For other systems (event assignment, officiating, AI review) to read a person's 
 
 The site's own pages use these; they're listed here because they're the procedure in [privacy-draft.md](privacy-draft.md).
 
-- `GET /api/learn/people/{id}/export`: everything held about one person (their record, logins, roles, enrolments, progress, attempts, credentials and the audit entries about them), as JSON. The person themselves, or an admin. Audited as `person.export`.
-- `POST /api/learn/people/{id}/erase` with `{ "confirm": "ERASE" }`: an admin, as themselves (not viewing as someone), and not their own record. Replaces the name and email, removes the country, sign-in links, roles and lesson progress, and sets the status to `erased` so they can't sign in. Their attempts and credentials stay, anonymised. Audited as `person.erase`. Older audit entries that mention the address are cleaned by `scripts/learn-erase.mjs`.
+- `GET /api/learn/people/{id}/export`: everything held about one person (their record, logins, roles, enrolments, progress, attempts, credentials, quick-check practice, learning days, badges and the audit entries about them), as JSON. The person themselves, or an admin. Audited as `person.export`.
+- `POST /api/learn/people/{id}/erase` with `{ "confirm": "ERASE" }`: an admin, as themselves (not viewing as someone), and not their own record. Replaces the name and email, removes the country, sign-in links, roles, lesson progress, quick-check practice, learning days and badges, and sets the status to `erased` so they can't sign in. Their attempts and credentials stay, anonymised. Audited as `person.erase`. Older audit entries that mention the address are cleaned by `scripts/learn-erase.mjs`.
 
 ## Diagnostics (not part of v1)
 

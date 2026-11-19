@@ -86,3 +86,6 @@ manifest.webmanifest
 offline.js
 offline.html
 learn/saved.js
+learn/sharp.js
+study.css
+look.js

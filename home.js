@@ -31,6 +31,23 @@ function draw(h) {
   show($('adminTile'), !!h.admin);
   show($('content'), true);
   installCard($('installCard'));
+  if (h.learn) keepSharp(h).catch(() => {});
+}
+const t = (text, values) => (window.SR_I18N ? SR_I18N.t(text, values) : text);
+/** a nudge from Learning (api/src/learn/checks.js): a refresher before an event in the next 10 days, refreshers that are due, or
+ *  the streak to keep going */
+async function keepSharp(h) {
+  const p = await viaCache('site/learn-progress', () => call('learn/progress'));
+  const due = p.refresher.reduce((n, r) => n + r.due, 0), practised = p.refresher.reduce((n, r) => n + r.practised, 0);
+  const now = Date.now(), soon = h.events.find((e) => e.from > now && e.from - now < 10 * 864e5);
+  let text = '', go = 'learn/#/refresh', label = 'Start a refresher';
+  if (soon && practised) { text = t('Your next event is {date}: a five-minute refresher keeps the rules fresh.', { date: datesOf(soon) }); if (!due) go += '?more=1'; }
+  else if (due) text = t('{n} refresher questions are due.', { n: due });
+  else if (p.streak.weeks && !p.streak.thisWeek) { text = t('{n} weeks in a row so far. A lesson or a refresher this week keeps it going.', { n: p.streak.weeks }); go = 'learn/'; label = 'Go to Learning'; }
+  if (!text) return;
+  $('sharpText').textContent = text;
+  $('sharpGo').href = go; $('sharpGo').textContent = label;
+  show($('sharpCard'), true);
 }
 
 async function enter() {

@@ -1,0 +1,46 @@
+/* The study look (19 November 2026): Home and Learning, where referees read and practise, are calmer than the event-day pages.
+   - Light or dark, following the phone (or the Look button: data-look on <html>, kept in localStorage sr_look). Light reads best
+     outdoors in sunshine; dark at night.
+   - Spartan red stays as the brand (the header line, the name); actions are blue, so red only ever means "wrong" or "expired" and
+     green "right": the quick checks' marking is never confused with a button.
+   - Sentence-case headings in Barlow, not italic capitals; rounder cards; a little more space between lines.
+   Loaded after headjudge.css (and learn.css), on home.html, learn/ and offline.html only. */
+:root {
+  --brand: #e2231a; --bg: #111418; --panel: #1a1e24; --text: #eef1f4; --muted: #a5adb8; --line: #333a43;
+  --primary: #3566d6; --on-primary: #ffffff; --primary-text: #92b2ff; --accent: #3ddc97; --bad: #ff8a80; --warn: #f2b33d;
+  --soft: #232933; --display: Barlow, -apple-system, "Segoe UI", system-ui, sans-serif; color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-look="dark"]) {
+    --bg: #f4f5f7; --panel: #ffffff; --text: #1b1f24; --muted: #59626e; --line: #d8dce2;
+    --primary: #2457c5; --on-primary: #ffffff; --primary-text: #1f4fb8; --accent: #17784a; --bad: #b3261e; --warn: #8a5300;
+    --soft: #eef1f5; color-scheme: light;
+  }
+}
+:root[data-look="light"] {
+  --bg: #f4f5f7; --panel: #ffffff; --text: #1b1f24; --muted: #59626e; --line: #d8dce2;
+  --primary: #2457c5; --on-primary: #ffffff; --primary-text: #1f4fb8; --accent: #17784a; --bad: #b3261e; --warn: #8a5300;
+  --soft: #eef1f5; color-scheme: light;
+}
+
+body { line-height: 1.6; }
+h1, h2, legend { font-family: var(--display); font-weight: 700; text-transform: none; letter-spacing: 0; font-style: normal; }
+h1 { font-size: clamp(1.6rem, 5vw, 2.1rem); line-height: 1.2; }
+.card h2 { font-size: 1.3rem; }
+html .hello h1 { font-style: normal; text-transform: none; line-height: 1.15; }
+.card { border-radius: 12px; }
+.top { border-bottom-color: var(--brand); background: var(--panel); }
+.mark span { color: var(--brand); }
+.primary, .ghost { font: 700 1.05rem var(--display); text-transform: none; font-style: normal; border-radius: 10px; }
+.small, .btnLink, button.small { border-radius: 8px; }
+.tile { border-radius: 12px; border-left-color: var(--primary); }
+.tile h2 { font-size: 1.25rem; }
+.chip.head, .chip.now { border-radius: 999px; }
+.chip { border-radius: 999px; }
+input:not([type=color]):not([type=radio]):not([type=file]):not([type=checkbox]), textarea, select { border-radius: 8px; }
+@media (prefers-color-scheme: light) { :root:not([data-look="dark"]) .card { box-shadow: 0 1px 2px rgba(20, 30, 50, .06); } }
+:root[data-look="light"] .card { box-shadow: 0 1px 2px rgba(20, 30, 50, .06); }
+
+/* the Look button in the header */
+.lookBtn { display: inline-flex; align-items: center; gap: 6px; font: inherit; font-size: .9rem; font-weight: 600; color: var(--text); background: none; border: 1px solid var(--line); border-radius: 999px; padding: 4px 10px; cursor: pointer; min-height: 36px; }
+.lookBtn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }

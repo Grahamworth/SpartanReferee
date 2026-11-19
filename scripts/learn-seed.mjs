@@ -8,6 +8,9 @@ import { PROGRAMMES, ENROLMENTS } from './learn-content.mjs';
 import { LESSONS, TRANSLATIONS } from './learn-lessons.mjs';
 import { ASSESSMENTS, OUTCOMES } from './learn-questions.mjs';
 import { DOCUMENTS, RULES, DISPUTES } from './learn-rules.mjs';
+import fs from 'node:fs';
+
+const CHECKS = JSON.parse(fs.readFileSync(new URL('./learn-checks.json', import.meta.url), 'utf8'));
 
 const require = createRequire(import.meta.url);
 const { dbFromEnv } = require('../api/src/learn/db.js');
@@ -153,6 +156,23 @@ for (const [locale, lessons] of Object.entries(TRANSLATIONS)) {
       await q(`INSERT INTO {S}.audit_event (action, entity_type, entity_id, summary) VALUES ('content.seed', 'content_version', @id, @s)`, { id, s: JSON.stringify({ lesson: code, locale, translation: 'machine, published for the demo' }) });
     });
     summary.translations++;
+  }
+}
+
+// ---------------------------------------------------------------- quick checks (19 November 2026)
+// each lesson's quick-check questions (scripts/learn-checks.json, written by Claude from the lesson's own slides): kept up to date with
+// the file, on the lesson in the programme's published version. Their keys (the lesson's code and a number) never change, so what
+// people have practised stays with them.
+summary.checks = 0;
+for (const [code, checks] of Object.entries(CHECKS)) {
+  const l = await lessonByCode(code); if (!l) continue;
+  for (const [i, k] of checks.entries()) {
+    const key = `${code}.${i + 1}`, body = JSON.stringify({ prompt: k.prompt, options: k.options, answer: k.answer, feedback: k.feedback, rules: k.rules });
+    const had = (await db.query('SELECT body FROM {S}.lesson_check WHERE lesson_id = @l AND check_key = @k', { l: l.lesson_id, k: key }))[0];
+    if (had?.body === body) continue;
+    if (had) await db.query('UPDATE {S}.lesson_check SET body = @b, seq = @s WHERE lesson_id = @l AND check_key = @k', { b: body, s: i + 1, l: l.lesson_id, k: key });
+    else await db.query('INSERT INTO {S}.lesson_check (check_id, lesson_id, check_key, seq, body) VALUES (@id, @l, @k, @s, @b)', { id: crypto.randomUUID(), l: l.lesson_id, k: key, s: i + 1, b: body });
+    summary.checks++;
   }
 }
 

@@ -5,7 +5,7 @@
    The audit log can't be changed by the site's own login; scripts/learn-erase.mjs (with the admin login) removes the address from
    any older audit entries. The draft privacy notice and procedure: docs/learning/privacy-draft.md.
 
-   GET  /api/learn/people/<id>/export           -> { exportedAt, person, logins, roles, enrolments, completions, attempts, credentials, audit }
+   GET  /api/learn/people/<id>/export           -> { exportedAt, person, logins, roles, enrolments, completions, attempts, credentials, practice, learningDays, badges, audit }
                                                    yourself, or an admin
    POST /api/learn/people/<id>/erase {confirm: 'ERASE'}   admins only; not yourself */
 function createPrivacy(ctx) {
@@ -29,6 +29,9 @@ function createPrivacy(ctx) {
       completions: await q('SELECT * FROM {S}.completion WHERE person_id = @p'),
       attempts: parse(await q('SELECT * FROM {S}.attempt WHERE person_id = @p'), ['answers']),
       credentials: await q('SELECT * FROM {S}.credential WHERE person_id = @p'),
+      practice: await q('SELECT check_key, programme_id, box, answered, right_count, last_right, last_at, due_at FROM {S}.check_state WHERE person_id = @p'),
+      learningDays: (await q('SELECT day FROM {S}.learning_day WHERE person_id = @p ORDER BY day')).map((r) => r.day),
+      badges: await q('SELECT badge_id, programme_id, earned_at FROM {S}.badge WHERE person_id = @p'),
       audit: parse(await q("SELECT at, action, entity_type, entity_id, summary FROM {S}.audit_event WHERE actor_id = @p OR acting_as = @p OR (entity_type = 'person' AND entity_id = CONVERT(NVARCHAR(64), @p)) ORDER BY audit_id"), ['summary']),
     };
     await audit(db.query, w, 'person.export', 'person', p.person_id, { by: self ? 'themselves' : 'an admin' }, { regionId: p.region_id });
@@ -47,6 +50,8 @@ function createPrivacy(ctx) {
       await q('DELETE FROM {S}.person_login WHERE person_id = @p', { p: p.person_id });
       await q('DELETE FROM {S}.role_grant WHERE person_id = @p', { p: p.person_id });
       await q('DELETE FROM {S}.lesson_progress WHERE person_id = @p', { p: p.person_id });
+      // practice, the streak and badges: not part of the learning record
+      for (const t of ['check_state', 'learning_day', 'badge']) await q(`DELETE FROM {S}.${t} WHERE person_id = @p`, { p: p.person_id });
       await q("UPDATE {S}.duplicate_flag SET state = 'not_duplicate' WHERE (person_a = @p OR person_b = @p) AND state = 'open'", { p: p.person_id });
       await audit(q, w, 'person.erase', 'person', p.person_id, { publicId: p.public_id }, { regionId: p.region_id });
     });

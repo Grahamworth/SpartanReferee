@@ -42,6 +42,7 @@ async function overview() {
   return `<section class="card hello"><h1>${esc(p.preferredName || p.legalName)}</h1>
       <p class="muted">${esc(p.publicId)} · ${esc(regionName(p.regionId))}${p.country ? ` · ${esc(p.country)}` : ''}</p>
       <ul class="chips">${S.me.grants.length ? S.me.grants.map((g) => `<li>${esc(roleText(g))}</li>`).join('') : '<li>Learner</li>'}</ul></section>
+    ${await runHooks(hooks.overview, S.me)}
     ${await recordSection(p.id, true)}
     <section class="card"><h2>Burpee camera station</h2><p>The course on setting up the phones at the penalty station, connecting them, judging with the AI judge and sorting out problems. It ends with the free camera, to try the judge on your own phone.</p><p><a class="btnLink" href="#/programmes/camera-station">Open the course</a></p></section>`;
 }

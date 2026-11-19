@@ -31,7 +31,7 @@ export async function call(path, { method = 'GET', body } = {}) {
   }
 }
 // what can wait for signal: where you are in a lesson, and finishing it
-const QUEUED = /^lessons\/[^/]+\/(progress|complete)$/;
+const QUEUED = /^(lessons\/[^/]+\/(progress|complete|checks)|refresher)$/;
 export const sendWaiting = () => flush((item) => send(item.path, item.method, item.body));
 if (typeof window !== 'undefined') addEventListener('online', sendWaiting);
 async function send(path, method = 'GET', body) {
@@ -66,7 +66,7 @@ export async function act(fn, btn) {
 }
 /** later areas add sections to pages drawn by earlier ones: each is async (data) -> html. programme: a programme's page (its data);
  *  record: a person's learning record (the record); lesson: the end of a lesson (the lesson) */
-export const hooks = { programme: [], record: [], lesson: [], wire: [] };
+export const hooks = { programme: [], record: [], lesson: [], wire: [], overview: [] };
 export const runHooks = async (list, data) => (await Promise.all(list.map((f) => f(data)))).join('');
 /** jsPDF, loaded the first time a PDF is made (certificates, the handbook) */
 let jspdf = null;

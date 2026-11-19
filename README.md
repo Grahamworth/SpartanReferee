@@ -51,6 +51,23 @@ What the server says is kept by the pages, in `offline.js` (Cache Storage `sr-da
 - Lesson progress and completion made offline wait in an outbox and are sent when there's signal again. Anything else that changes data says it needs a connection.
 - Assessments stay online only.
 
+### Keeping sharp: quick checks, refreshers, streak and badges
+
+Added 19 November 2026. The server side is `api/src/learn/checks.js` (migration `006-checks.sql`) and the pages are in `learn/sharp.js`. All of it is practice: none of it counts towards a credential, which only the assessment gives.
+- **Quick check:** every lesson ends with 2 or 3 questions on what it just taught: 84 questions in all, in `scripts/learn-checks.json`. Claude wrote them from each lesson's own slides, keeping clear of the exam's questions. A lesson is marked complete once its check is answered, right or wrong. Each answer is marked at once, with a short explanation and links to the rules it's about.
+- **Refreshers:** answered questions come back as refreshers, 5 at a time. Each right answer moves a question to a longer gap (1, 3, 7, 21, 60, then 120 days) and a wrong one sends it back to 1 day. A question comes back at once if a rule it cites gets a new approved version. Learning's overview and each programme's page show what's due. Home suggests a refresher when an assigned event is less than 10 days away.
+- **Streak:** it counts weeks, not days, because referees train between events.
+- **Badges:** per programme there are First lesson, Halfway, All lessons done, Sharp eye (every quick check right) and Qualified. Overall there are four and twelve weeks running, and five refreshers. Badges are kept once earned. There's no leaderboard.
+- **Offline:** quick-check and refresher answers made offline wait in the outbox, like lesson progress.
+- **Data:** practice, the streak and badges are in a person's data export and are deleted when they're erased.
+
+**The study look** (`study.css`, `look.js`): Home, Learning and the offline page are calmer than the event-day pages.
+- **Light or dark:** it follows the phone, or the **Look** button in the header.
+- **Colours:** Spartan red is kept for the header line and the name, actions are blue, and red and green only ever mean wrong and right.
+- **Text:** headings are in sentence case, not italic capitals, and cards are rounder.
+
+The camera, judge and admin pages keep the original black and red look.
+
 ### Languages
 
 Every page, the judge, the server's video review and the Broadcaster app come in English, French, German, Dutch, Spanish, Italian, Greek, Croatian, Czech, Polish, Finnish, Swedish, Danish, Arabic (right to left) and Thai, for the World Championships (France, Greece, Croatia, UAE, Finland, Thailand), next year's Euros (Netherlands) and the rest. The language is the browser's, or the one picked in the menu at the top (remembered), and the console opens a server's review in it. The translations were made by Claude, not checked by native speakers yet: check each before an event in that country.

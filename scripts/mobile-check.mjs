@@ -71,6 +71,8 @@ if (me) {
     ['learn-rules', 'learn/#/rules', boss, ready, anna],
     ['learn-rule', 'learn/#/rules/OCR-2026-4.2.13', boss, ready],
     ['learn-reviews', 'learn/#/reviews?programme=ocr-referee', boss, ready],
+    ['learn-refresh', 'learn/#/refresh?more=1', boss, ready],
+    ['learn-badges', 'learn/#/badges', boss, ready],
     ['learn-reports', 'learn/#/reports', boss, ready],
     ['learn-handbook', 'learn/#/handbook/ocr-referee?locale=es', boss, ready, anna],
     ['learn-media', 'learn/#/media', boss, ready],

@@ -1,0 +1,1174 @@
+{
+ "cam-1-1": [
+  {
+   "prompt": "You're a referee on the event but not its head referee. What can you do with the camera station?",
+   "options": [
+    "Book the cameras for an extra day",
+    "Stop the servers when racing ends",
+    "Watch the cameras live and review the results",
+    "Extend the booking if racing runs late"
+   ],
+   "answer": 2,
+   "feedback": "Every referee assigned to the event can watch the cameras live and review the results. Booking and running the station is the head referee's job, and admins can book, extend or stop it.",
+   "rules": []
+  },
+  {
+   "prompt": "Where does the AI judge run during an event?",
+   "options": [
+    "On a SpartanReferee server",
+    "On each camera phone",
+    "In each referee's browser",
+    "On the venue's Wi-Fi router"
+   ],
+   "answer": 0,
+   "feedback": "The phones only film and send their picture. The SpartanReferee server records it and runs the AI judge on every camera, and referees watch in a browser.",
+   "rules": []
+  }
+ ],
+ "cam-1-2": [
+  {
+   "prompt": "You plan to film with 6 cameras. How many servers does that need?",
+   "options": [
+    "2",
+    "6",
+    "12",
+    "3"
+   ],
+   "answer": 3,
+   "feedback": "Each server takes 2 cameras, so 6 cameras need 3 servers. The number of cameras sets the number of servers.",
+   "rules": []
+  },
+  {
+   "prompt": "You're booking from another country. Which time do you enter for the camera hours?",
+   "options": [
+    "Your own local time",
+    "The event's own local time",
+    "UTC, whatever the venue",
+    "The time set on the camera phones"
+   ],
+   "answer": 1,
+   "feedback": "Booking times are always in the event's own local time, wherever you book from. The cameras run from 07:00 to 18:00 local time on each event day.",
+   "rules": []
+  }
+ ],
+ "cam-1-3": [
+  {
+   "prompt": "A referee brings an iPhone to use as a camera. Which app does it need?",
+   "options": [
+    "SpartanReferee Broadcaster",
+    "The iPhone's own Camera app",
+    "Larix Broadcaster, from the App Store",
+    "None: it streams from a browser"
+   ],
+   "answer": 2,
+   "feedback": "iPhones use Larix Broadcaster, from the App Store. SpartanReferee Broadcaster is the app for Android phones.",
+   "rules": []
+  },
+  {
+   "prompt": "What do you need to install on a tablet to watch the cameras and judge?",
+   "options": [
+    "SpartanReferee Broadcaster",
+    "Larix Broadcaster",
+    "The console app for tablets",
+    "Nothing: a browser is enough"
+   ],
+   "answer": 3,
+   "feedback": "Any phone, tablet or computer with a browser can watch and judge, with nothing to install. The apps are only for the phones doing the filming.",
+   "rules": []
+  }
+ ],
+ "cam-2-1": [
+  {
+   "prompt": "The station is judging push-ups and sit-ups. Where should the phone go?",
+   "options": [
+    "Side-on, at floor level",
+    "Straight on, at chest height",
+    "High up, looking down on the lane",
+    "Behind the athletes, at hip height"
+   ],
+   "answer": 0,
+   "feedback": "For push-ups and sit-ups, put the phone side-on at floor level, so it sees the body close to the ground.",
+   "rules": []
+  },
+  {
+   "prompt": "You need to stand near the lanes while the cameras run. What should you do?",
+   "options": [
+    "Take off your hi-vis so the judge isn't distracted",
+    "Stand in front of the cameras so athletes see you",
+    "Wear your hi-vis yellow top and keep out of shot",
+    "Stand well back, as anyone nearby gets counted"
+   ],
+   "answer": 2,
+   "feedback": "Officials in hi-vis yellow tops are never counted as athletes, but anyone standing in front of a camera blocks its view. Stand where you can see the athletes without getting in the way.",
+   "rules": []
+  }
+ ],
+ "cam-2-2": [
+  {
+   "prompt": "Installing SpartanReferee Broadcaster, the Android phone warns you about the app. What do you do?",
+   "options": [
+    "Cancel and look for it on the Play Store",
+    "Allow installing from this source, then install",
+    "Install Larix Broadcaster on it instead",
+    "Switch to aeroplane mode and try again"
+   ],
+   "answer": 1,
+   "feedback": "The phone warns you because the app isn't from the Play Store. Tap Settings, allow installing from this source, go back and install it.",
+   "rules": []
+  },
+  {
+   "prompt": "On an iPhone you've imported the camera into Larix. What's left before it goes live?",
+   "options": [
+    "Scan the QR code again inside Larix",
+    "Ask the head referee to approve the phone",
+    "Restart the iPhone so Larix finds the camera",
+    "Settings, Connections, tick the camera, red button"
+   ],
+   "answer": 3,
+   "feedback": "After tapping Import, go to Settings, Connections in Larix, tick the camera, then press the red button to start sending.",
+   "rules": []
+  }
+ ],
+ "cam-3-1": [
+  {
+   "prompt": "You start the AI judge on a camera, then close the console page. What happens?",
+   "options": [
+    "Judging stops until you reopen the page",
+    "The judge keeps running on the server",
+    "The camera stops sending its picture",
+    "The results so far are lost"
+   ],
+   "answer": 1,
+   "feedback": "The judge runs on the server, not in your browser, so it carries on when you close the page.",
+   "rules": []
+  },
+  {
+   "prompt": "Before athletes arrive you do test reps in front of a camera. What should you check?",
+   "options": [
+    "Good reps count and a deliberately bad one doesn't",
+    "Every rep is counted, good or bad",
+    "The judge names each athlete correctly",
+    "The picture stays in portrait"
+   ],
+   "answer": 0,
+   "feedback": "Do a few good reps and a deliberately bad one: the good ones should be counted and the bad one shouldn't. If the athlete leaves the picture, move the phone.",
+   "rules": []
+  }
+ ],
+ "cam-3-2": [
+  {
+   "prompt": "An athlete queries their reps, but you don't know which camera filmed them. What do you use?",
+   "options": [
+    "Each camera's Live tab, one by one",
+    "A new booking from the head referee",
+    "The phone that filmed them",
+    "Find athlete number, which searches every camera"
+   ],
+   "answer": 3,
+   "feedback": "Find athlete number searches every camera for one athlete. Watch then plays them back with every rep and every no rep marked.",
+   "rules": []
+  },
+  {
+   "prompt": "What happens when the camera booking ends?",
+   "options": [
+    "Recordings are deleted along with the servers",
+    "The servers run on until an admin stops them",
+    "Recordings are saved and the servers shut down",
+    "Only the head referee keeps the recordings"
+   ],
+   "answer": 2,
+   "feedback": "At the end of the booking the recordings are saved and the servers shut down. Every referee on the event can still review them.",
+   "rules": []
+  }
+ ],
+ "cam-3-3": [
+  {
+   "prompt": "A camera shows on the console but with no picture. What should you try?",
+   "options": [
+    "Pick a higher quality on the phone",
+    "Switch that phone to its mobile data",
+    "Book another server for it",
+    "Move the phone closer to the lane"
+   ],
+   "answer": 1,
+   "feedback": "A camera with no picture can mean the venue's network is blocking video. Try the phone's mobile data instead.",
+   "rules": []
+  },
+  {
+   "prompt": "The venue's internet fails during the event. What happens to the video?",
+   "options": [
+    "Phones save it and upload it later",
+    "The server judges from its last picture",
+    "Nothing reaches the server; only Larix keeps a copy",
+    "The AI judge carries on inside each phone"
+   ],
+   "answer": 2,
+   "feedback": "Until the internet is back, nothing reaches the server. Only Larix keeps its own copy of the video on the phone.",
+   "rules": []
+  }
+ ],
+ "cam-4-1": [
+  {
+   "prompt": "A head referee books a 30-minute practice server. What can they rehearse on it?",
+   "options": [
+    "The whole station: codes, console, judge and review",
+    "Only the AI judge, in their own browser",
+    "Only scanning the phones' QR codes",
+    "A full event day of live judging"
+   ],
+   "answer": 0,
+   "feedback": "A practice server rehearses the whole station as at an event: phones scanning their codes, the console, the judge and the review.",
+   "rules": []
+  },
+  {
+   "prompt": "What can the free camera judge?",
+   "options": [
+    "Only footage from an event booking",
+    "Only a phone sending through Larix",
+    "Your own device's camera, live or a minute of video",
+    "Only live burpees on a practice server"
+   ],
+   "answer": 2,
+   "feedback": "The free camera runs the AI judge in your own browser, on your phone's or computer's camera, live or on a minute of video, with no server and no cost.",
+   "rules": []
+  }
+ ],
+ "ocr-1-1": [
+  {
+   "prompt": "Where do the Spartan Rules of Competition apply?",
+   "options": [
+    "Only at Elite and championship races",
+    "Wherever the Race Director chooses",
+    "At all Spartan events and competitions worldwide",
+    "Only at events with Competitive categories"
+   ],
+   "answer": 2,
+   "feedback": "The Rules of Competition apply to all Spartan events and competitions globally, and they are binding on every competitor taking part.",
+   "rules": [
+    "OCR-2026-1.1.1"
+   ]
+  },
+  {
+   "prompt": "Which of these is one of the rulebook's stated aims?",
+   "options": [
+    "Protecting competitors' health, safety and well-being",
+    "Letting each event set its own standards",
+    "Making each race harder than the last",
+    "Giving first-time racers easier rules"
+   ],
+   "answer": 0,
+   "feedback": "The rules aim for fair, consistent racing, standards that are the same around the world, and the protection of competitors' health, safety and well-being.",
+   "rules": [
+    "OCR-2026-1.2.1"
+   ]
+  },
+  {
+   "prompt": "How should your call compare with one at the same obstacle at another Spartan event?",
+   "options": [
+    "It may vary with local conditions",
+    "It should be the same decision",
+    "It depends on the local referee's view",
+    "It can be softer for first-time racers"
+   ],
+   "answer": 1,
+   "feedback": "The goal is consistency: an athlete should get the same decision at your obstacle as at the same obstacle at any other Spartan event.",
+   "rules": []
+  }
+ ],
+ "ocr-1-2": [
+  {
+   "prompt": "An athlete fails a pass/fail obstacle. What follows?",
+   "options": [
+    "Disqualification from the race",
+    "They must retry until they succeed",
+    "Nothing, as long as they touched it",
+    "A penalty: a penalty loop or burpees"
+   ],
+   "answer": 3,
+   "feedback": "Pass/fail obstacles can be failed, and a fail means a penalty: a penalty loop or burpees. Disqualification is for failing a mandatory obstacle.",
+   "rules": [
+    "OCR-2026-3.17.1",
+    "OCR-2026-3.17.3"
+   ]
+  },
+  {
+   "prompt": "You're refereeing at a Stadion event. What is the penalty for failing an obstacle?",
+   "options": [
+    "30 burpees",
+    "15 burpees",
+    "The obstacle's penalty loop",
+    "It depends on the obstacle"
+   ],
+   "answer": 1,
+   "feedback": "At Stadion events the penalty for failing an obstacle is always 15 burpees, for every obstacle and every heat.",
+   "rules": [
+    "OCR-2026-3.17.3"
+   ]
+  },
+  {
+   "prompt": "An athlete heads straight for the penalty without touching the obstacle. Is that allowed?",
+   "options": [
+    "No: every obstacle must be attempted, at least touched",
+    "Yes, as long as they do the full penalty",
+    "Yes, but only at pass/fail obstacles",
+    "Only if the obstacle is too busy to use"
+   ],
+   "answer": 0,
+   "feedback": "Every obstacle must be attempted, and the minimum attempt is touching it. Taking the penalty doesn't replace the attempt.",
+   "rules": [
+    "OCR-2026-3.17.6"
+   ]
+  }
+ ],
+ "ocr-2-1": [
+  {
+   "prompt": "You're unsure about a call, or an athlete disputes one. Who does it go to?",
+   "options": [
+    "The Race Director",
+    "The timing team",
+    "The Head Referee",
+    "The nearest Spartan staff member"
+   ],
+   "answer": 2,
+   "feedback": "The Head Referee, whom the rulebook calls the Head Official, is the chief decision maker on the rules. The Race Director runs the event's overall operations.",
+   "rules": [
+    "OCR-2026-2.1.2"
+   ]
+  },
+  {
+   "prompt": "When are race results final?",
+   "options": [
+    "As soon as athletes cross the finish",
+    "Once the official video review is done",
+    "When the Race Director posts them",
+    "When every referee has handed in notes"
+   ],
+   "answer": 1,
+   "feedback": "The rulebook says an official video review should take place before results are final, so results may not be posted straight away.",
+   "rules": [
+    "OCR-2026-3.18.1"
+   ]
+  },
+  {
+   "prompt": "What happens to a confirmed time penalty?",
+   "options": [
+    "It's added to the athlete's finish time",
+    "It's served at the next obstacle",
+    "It's turned into burpees at the finish",
+    "It only counts for Elite racers"
+   ],
+   "answer": 0,
+   "feedback": "Time penalties are added to the athlete's finish time, which is why an accurate, clearly recorded call matters.",
+   "rules": []
+  }
+ ],
+ "ocr-2-2": [
+  {
+   "prompt": "Which racers do referees focus on primarily?",
+   "options": [
+    "Open racers, as there are most of them",
+    "Elite only, not Age Group",
+    "First-time racers, who need most help",
+    "Competitive: Elite and Age Group"
+   ],
+   "answer": 3,
+   "feedback": "Referees focus primarily on the Competitive categories, Elite and Age Group, whose racers are expected to follow every rule explicitly.",
+   "rules": [
+    "OCR-2026-3.2"
+   ]
+  },
+  {
+   "prompt": "An Elite racer starts in the wrong heat. What happens to them?",
+   "options": [
+    "They're disqualified from the race",
+    "They're moved to the Open category",
+    "They get a time penalty",
+    "Nothing, if they finish the course"
+   ],
+   "answer": 1,
+   "feedback": "Racers must start in their assigned heat. One who doesn't isn't eligible for awards, and an Elite racer is moved to the Open category.",
+   "rules": [
+    "OCR-2026-3.9.1",
+    "OCR-2026-3.9.2"
+   ]
+  },
+  {
+   "prompt": "Outside Stadion, how is the winner of an Elite heat decided?",
+   "options": [
+    "Fastest from start line to finish (chip time)",
+    "Fewest penalties across the whole course",
+    "First across the finish line (gun time)",
+    "Chip time, with time penalties ignored"
+   ],
+   "answer": 2,
+   "feedback": "Elite heats use gun time: the first across the finish line wins. Age Group, Open and Elite Stadion heats use chip time. Either way, time penalties are added.",
+   "rules": [
+    "OCR-2026-3.22.1",
+    "OCR-2026-3.22.2"
+   ]
+  }
+ ],
+ "ocr-2-3": [
+  {
+   "prompt": "An athlete briefly touches the top of an obstacle but gains no advantage. What should guide your call?",
+   "options": [
+    "Any contact is an automatic fail",
+    "Whether an advantage was created",
+    "Whether other athletes noticed",
+    "How quickly the athlete was moving"
+   ],
+   "answer": 1,
+   "feedback": "Focus on the intent of the rule, not on minor accidental contact. The question to ask is whether the athlete gained an advantage.",
+   "rules": []
+  },
+  {
+   "prompt": "You aren't sure which penalty applies at your obstacle. What do you do?",
+   "options": [
+    "Give the lighter penalty to be fair",
+    "Let the athlete choose",
+    "Raise it after the race",
+    "Contact the Head Referee at once"
+   ],
+   "answer": 3,
+   "feedback": "If there is any uncertainty about the penalty type or how to enforce it, contact the Head Referee immediately. Escalating is part of doing the job well.",
+   "rules": [
+    "OCR-2026-2.1.2"
+   ]
+  },
+  {
+   "prompt": "An athlete wants to protest a penalty. Where should they take it?",
+   "options": [
+    "To the Head Referee, within the protest period",
+    "To you, at the obstacle, straight away",
+    "To the timing team at the finish",
+    "To the Race Director, at any time"
+   ],
+   "answer": 0,
+   "feedback": "An athlete who wants to protest a penalty takes it to the Head Referee during the protest period, not to the referee at the obstacle.",
+   "rules": [
+    "OCR-2026-3.19.1",
+    "OCR-2026-3.19.3"
+   ]
+  }
+ ],
+ "ocr-3-1": [
+  {
+   "prompt": "Someone else signs you in at check-in. What should you still make sure of?",
+   "options": [
+    "That the Race Director has your number",
+    "That the Head Referee knows you are there",
+    "That your obstacle's camera is charged",
+    "That the timing team has your name"
+   ],
+   "answer": 1,
+   "feedback": "Even if someone else signs you in, make yourself known to the Head Referee, who has to confirm every referee is in position before the first Elite start.",
+   "rules": []
+  },
+  {
+   "prompt": "When do you carry a video camera and tripod?",
+   "options": [
+    "At every obstacle with a penalty loop",
+    "At every mandatory obstacle",
+    "Whenever the Head Referee has spares",
+    "Only if you're assigned to film the Spear Throw"
+   ],
+   "answer": 3,
+   "feedback": "Video at the obstacles is for the Spear Throw only, so you carry a camera and tripod only when you are assigned to film it.",
+   "rules": []
+  },
+  {
+   "prompt": "You collect a QR code sign at check-in. What does it do?",
+   "options": [
+    "Links to the video tutorial for your obstacle",
+    "Lets athletes log their own penalties",
+    "Signs you in for the day",
+    "Starts the camera at the Spear Throw"
+   ],
+   "answer": 0,
+   "feedback": "The QR code sign for your obstacle links to that obstacle's video tutorial. Collect it unless it is already in place on site.",
+   "rules": []
+  }
+ ],
+ "ocr-3-2": [
+  {
+   "prompt": "A male athlete uses the red step on a 6 to 9 foot wall. What's the call?",
+   "options": [
+    "Fine, if he gains no advantage",
+    "He must climb again without it",
+    "He fails the obstacle",
+    "A warning, as it's his first time"
+   ],
+   "answer": 2,
+   "feedback": "On the 6 to 9 foot walls the red step may be used by female athletes only, so a male athlete who uses it fails the obstacle.",
+   "rules": [
+    "OCR-2026-4.1.1",
+    "OCR-2026-3.17.9"
+   ]
+  },
+  {
+   "prompt": "On arrival you spot a safety problem with the obstacle setup. When do you report it?",
+   "options": [
+    "Straight away, to the Race Director or Head Referee",
+    "When the first athlete arrives",
+    "Once the Elite waves have passed",
+    "In your written notes after the race"
+   ],
+   "answer": 0,
+   "feedback": "Report doubts, safety concerns or inconsistencies immediately to the Race Director or the Head Referee. Don't wait until the athletes arrive.",
+   "rules": []
+  },
+  {
+   "prompt": "Why do you walk the whole penalty loop before racing starts?",
+   "options": [
+    "To time how long it takes",
+    "To shorten it if the ground is hard",
+    "To mark it out for spectators",
+    "To know the route and where athletes rejoin"
+   ],
+   "answer": 3,
+   "feedback": "Walking the loop shows you its route and return point, so you can direct athletes clearly and see whether they complete it.",
+   "rules": [
+    "OCR-2026-3.17.3"
+   ]
+  }
+ ],
+ "ocr-3-3": [
+  {
+   "prompt": "An athlete leaves without doing the penalty and you can't read their number. What do you do?",
+   "options": [
+    "Let it go: it can't be reported",
+    "Leave your obstacle to follow them",
+    "Report it at once with a clear description",
+    "Mention it after the race"
+   ],
+   "answer": 2,
+   "feedback": "Report it straight away with a clear description: clothing colour, distinguishing features and race category. You may be asked to help identify them later.",
+   "rules": []
+  },
+  {
+   "prompt": "Who tells the Timing team about competitor incidents such as shortcuts?",
+   "options": [
+    "You, directly, by phone",
+    "The Head Referee",
+    "The Race Director only",
+    "The Volunteer Coordinator"
+   ],
+   "answer": 1,
+   "feedback": "Your reports go to the Head Referee, who tells Timing about competitor incidents and keeps the Race Director informed of race incidents.",
+   "rules": []
+  },
+  {
+   "prompt": "An athlete disputes your call. What should you write down?",
+   "options": [
+    "Nothing: you settle it there",
+    "Their name and finish time",
+    "Only the time it happened",
+    "Their headband number and the reason"
+   ],
+   "answer": 3,
+   "feedback": "Record the headband number and the reason, such as a failed obstacle without the penalty, and report it to the Head Referee as soon as you can.",
+   "rules": []
+  }
+ ],
+ "ocr-4-1": [
+  {
+   "prompt": "At the Bucket Carry, an athlete returns with material missing. What happens?",
+   "options": [
+    "They do burpees instead",
+    "They redo the course with a correctly filled bucket",
+    "They top it up and carry on",
+    "Nothing, if the lid is still on"
+   ],
+   "answer": 1,
+   "feedback": "The Bucket Carry is a mandatory obstacle with no burpee option. Material missing means redoing the whole course with a correctly filled bucket.",
+   "rules": [
+    "OCR-2026-4.3.3"
+   ]
+  },
+  {
+   "prompt": "At the Ape Hanger, when is the athlete committed?",
+   "options": [
+    "When their feet leave the ground",
+    "When they reach halfway across",
+    "When they touch any of the overhead bars",
+    "When they ring the bell"
+   ],
+   "answer": 2,
+   "feedback": "Each single attempt obstacle defines its own commitment point. At the Ape Hanger it is touching any overhead bar, and after that there is no reset.",
+   "rules": [
+    "OCR-2026-4.2.2",
+    "OCR-2026-2.1.7"
+   ]
+  },
+  {
+   "prompt": "An athlete fails because another competitor significantly interfered. What can happen?",
+   "options": [
+    "They take the penalty, as with any failure",
+    "The other competitor does the penalty instead",
+    "They skip the obstacle and carry on penalty-free",
+    "They may restart, with no extra penalty, if an official allows"
+   ],
+   "answer": 3,
+   "feedback": "When significant physical interference from another competitor causes the failure, the athlete may restart with no extra penalty once an official gives permission.",
+   "rules": [
+    "OCR-2026-3.17.8"
+   ]
+  }
+ ],
+ "ocr-5-1": [
+  {
+   "prompt": "An athlete fails a mandatory obstacle. What is the outcome?",
+   "options": [
+    "A penalty loop or burpees, as set for that obstacle",
+    "Disqualification, unless the Race Director substitutes a time penalty",
+    "A second attempt, then the penalty loop if they fail again",
+    "A time penalty that you set at the obstacle"
+   ],
+   "answer": 1,
+   "feedback": "Mandatory obstacles must be completed, so failing one means disqualification. Only the Race Director may substitute a time penalty; penalty loops and burpees are for pass/fail obstacles.",
+   "rules": [
+    "OCR-2026-3.17.1",
+    "OCR-2026-3.17.2"
+   ]
+  },
+  {
+   "prompt": "When should you walk your obstacle's penalty loop?",
+   "options": [
+    "Once the first wave arrives, alongside the lead athlete",
+    "Only if an athlete questions the route",
+    "Before the first competitive wave, from start to return point",
+    "After racing ends, to check it for damage"
+   ],
+   "answer": 2,
+   "feedback": "Walk the whole loop before racing starts so you know the route and the return point. Then you can direct athletes correctly and spot anyone who cuts it short.",
+   "rules": [
+    "OCR-2026-3.17.3"
+   ]
+  },
+  {
+   "prompt": "An athlete leaves your obstacle without doing the penalty, and you couldn't read their number. What now?",
+   "options": [
+    "Mention it to the Head Referee when you return",
+    "Leave your obstacle and chase them to read it",
+    "Nothing: without a number it can't be reported",
+    "Report it now, describing clothing, features and category"
+   ],
+   "answer": 3,
+   "feedback": "Report it to the Head Referee straight away, even without a number. A clear description of clothing colour, distinguishing features and race category lets the athlete be identified later.",
+   "rules": []
+  }
+ ],
+ "ocr-5-2": [
+  {
+   "prompt": "An athlete walks straight to the penalty without touching the obstacle. Have they met the rules?",
+   "options": [
+    "Yes: taking the penalty replaces the attempt",
+    "Yes, as long as the penalty is completed in full",
+    "No: every obstacle must be attempted, at least by a touch",
+    "Only if the obstacle is a pass/fail obstacle"
+   ],
+   "answer": 2,
+   "feedback": "Every obstacle must be attempted, and at a minimum that means touching it. Going straight to the penalty without a touch doesn't meet the rule.",
+   "rules": [
+    "OCR-2026-3.17.6"
+   ]
+  },
+  {
+   "prompt": "An athlete reaches the bell and strikes it with their knee. What is the call?",
+   "options": [
+    "A failure: no retry, and they take the penalty",
+    "A pass, because the bell was rung",
+    "A retry, ringing it with a hand this time",
+    "A warning for a first offence, then a pass"
+   ],
+   "answer": 0,
+   "feedback": "Bells may only be struck with the arms, the hands or the body above the chest. Using a foot, leg or knee is a failure with no retry, so the athlete goes to the penalty.",
+   "rules": [
+    "OCR-2026-3.17.7"
+   ]
+  },
+  {
+   "prompt": "An athlete fails because another racer barged into them. What can happen?",
+   "options": [
+    "They take the penalty like any other failure",
+    "The other racer takes the penalty instead",
+    "They may skip the obstacle and carry on",
+    "An official may let them restart with no extra penalty"
+   ],
+   "answer": 3,
+   "feedback": "If significant physical interference from another competitor caused the failure, an official can give permission to restart with no extra penalty. If you are unsure, ask the Head Referee.",
+   "rules": [
+    "OCR-2026-3.17.8"
+   ]
+  }
+ ],
+ "ocr-5-3": [
+  {
+   "prompt": "An athlete fails an obstacle at a Stadion event. How many penalty burpees do they owe?",
+   "options": [
+    "30 burpees",
+    "15 burpees",
+    "20 burpees",
+    "10 burpees"
+   ],
+   "answer": 1,
+   "feedback": "At Stadion events, every obstacle's penalty is 15 burpees. Where burpees are designated at other events, the penalty is 30.",
+   "rules": [
+    "OCR-2026-3.17.3"
+   ]
+  },
+  {
+   "prompt": "While an athlete does penalty burpees, where should their headband be?",
+   "options": [
+    "In your hand, until they finish",
+    "On their head, so the camera can read it",
+    "On the ground directly in front of them",
+    "On the ground next to the camera"
+   ],
+   "answer": 2,
+   "feedback": "The athlete places their headband on the ground directly in front of them while doing burpees. The Head Referee's start-line announcements tell athletes this before they reach you.",
+   "rules": []
+  },
+  {
+   "prompt": "At the Spear Throw, how do you show an athlete's headband to the camera?",
+   "options": [
+    "About two feet from the lens for two seconds, then hand it back",
+    "Collect a few headbands and show them together",
+    "Turn the athlete's face towards the lens instead",
+    "Have the athlete hand it to you once their burpees are done"
+   ],
+   "answer": 0,
+   "feedback": "Hold the headband about two feet from the lens for about two seconds so the number is clear, then give it straight back. Never hold two at once, don't let athletes hand them to you, and never move an athlete for the camera.",
+   "rules": []
+  }
+ ],
+ "ocr-6-1": [
+  {
+   "prompt": "At the bottom of a rep, the athlete's chest stops just short of the ground. Does the rep count?",
+   "options": [
+    "Yes, as long as the jump is good",
+    "No: at the bottom the chest must touch the ground",
+    "Yes: hands flat on the ground are enough",
+    "Yes, if the rest of their reps are clean"
+   ],
+   "answer": 1,
+   "feedback": "The bottom position is lying prone with the chest touching the ground. A chest that stops short means the rep hasn't met the standard, so it isn't a complete burpee.",
+   "rules": [
+    "OCR-2026-3.17.4"
+   ]
+  },
+  {
+   "prompt": "An athlete jumps at the top of each rep, but their hands only reach shoulder height. What is your view?",
+   "options": [
+    "The reps count: there was a jump",
+    "The reps count if the hips were extended",
+    "The reps aren't complete: hands must go above the ears",
+    "Only the final rep needs the hands above the ears"
+   ],
+   "answer": 2,
+   "feedback": "The jump must be made with the hands extended upwards above the ears. Hands that only reach the shoulders or face don't meet the standard, even with a jump.",
+   "rules": [
+    "OCR-2026-3.17.4"
+   ]
+  },
+  {
+   "prompt": "An athlete is doing very fast burpees. How does that change the standard?",
+   "options": [
+    "Full extension at the top becomes optional",
+    "The jump can be dropped to keep the pace up",
+    "Fast reps count as half a burpee each",
+    "It doesn't: every rep must still meet the full standard"
+   ],
+   "answer": 3,
+   "feedback": "Speed changes nothing. Each rep is one continuous movement that must meet every part of the standard, and fast burpees without full extension at the top are a typical fault to watch for.",
+   "rules": [
+    "OCR-2026-3.17.4"
+   ]
+  }
+ ],
+ "ocr-6-2": [
+  {
+   "prompt": "A rep falls short of the standard. What do you do?",
+   "options": [
+    "Require an extra burpee and calmly explain what was missing",
+    "Stop the athlete and send them to the Head Referee",
+    "Let it go, because the video review will catch it",
+    "Make the athlete start their count again from zero"
+   ],
+   "answer": 0,
+   "feedback": "When a rep doesn't meet the standard, require extra burpees so the penalty is made up of complete ones. Explain clearly and calmly what was missing, such as the chest not reaching the ground.",
+   "rules": [
+    "OCR-2026-3.17.4"
+   ]
+  },
+  {
+   "prompt": "An athlete is exhausted but clearly trying hard. What does the 2026 programme say to do?",
+   "options": [
+    "Stop them for their own safety and record it",
+    "Let them continue, with every rep still to the standard",
+    "Halve their remaining burpees to help them finish",
+    "Accept looser reps from that point on"
+   ],
+   "answer": 1,
+   "feedback": "The programme says to let exhausted athletes continue if their effort is genuine. They can keep going, but each rep still has to meet the movement standard.",
+   "rules": [
+    "OCR-2026-3.17.4"
+   ]
+  },
+  {
+   "prompt": "An athlete disputes your call for extra burpees. What do you do?",
+   "options": [
+    "Keep explaining at the zone until they agree with you",
+    "Withdraw the call so the zone isn't held up",
+    "Ask the other athletes in the zone what they saw",
+    "Record the number and the dispute, then refer it to the Head Referee"
+   ],
+   "answer": 3,
+   "feedback": "Stay calm, explain the rule and don't argue. Record the headband number and what was disputed, and report it to the Head Referee, who resolves disputes.",
+   "rules": []
+  }
+ ],
+ "ocr-6-3": [
+  {
+   "prompt": "Which of these adds to an athlete's burpee shortfall?",
+   "options": [
+    "A burpee done slowly but to the standard",
+    "A burpee done with the headband in front",
+    "A burpee done outside the designated zone",
+    "A burpee the athlete counted out loud"
+   ],
+   "answer": 2,
+   "feedback": "Burpees done outside the designated zone don't count towards the penalty, so they leave a shortfall. Reps below the movement standard don't count either.",
+   "rules": [
+    "OCR-2026-3.17.5"
+   ]
+  },
+  {
+   "prompt": "There is no video at your burpee zone. Who decides on the number and quality of burpees?",
+   "options": [
+    "The timing team, using the finish times",
+    "You, on site, in writing for the Head Referee",
+    "The athlete, from their own count",
+    "Nobody: no penalty can apply without video"
+   ],
+   "answer": 1,
+   "feedback": "Without video, the Officiating procedure says the referee on site decides, writes the decision down and gives it to the Head Referee on returning from the obstacle.",
+   "rules": []
+  },
+  {
+   "prompt": "Your burpee zone has video. Where are decisions on burpee number and quality made?",
+   "options": [
+    "In the official video review",
+    "At the obstacle, by you alone",
+    "At the finish, by the timing team",
+    "From the athlete's own count"
+   ],
+   "answer": 0,
+   "feedback": "With video, decisions on how many burpees were done, and how well, are made in the video review that the Head Referee manages. Your part on course is the standard, the zone and a clear identification.",
+   "rules": [
+    "OCR-2026-3.18.1"
+   ]
+  }
+ ],
+ "ocr-7-1": [
+  {
+   "prompt": "A tired athlete asks why you failed them. How do you answer?",
+   "options": [
+    "Tell them to take it up with the Head Referee",
+    "Briefly explain what the obstacle asked and what they missed",
+    "Talk it through for as long as it takes them to accept it",
+    "Show them your notes as proof of the failure"
+   ],
+   "answer": 1,
+   "feedback": "Stay calm and explain the rule clearly and briefly: what the obstacle required and which part they didn't meet. If they don't accept it, it becomes a dispute for the Head Referee, not an argument.",
+   "rules": []
+  },
+  {
+   "prompt": "An athlete offers you their phone video to prove they passed. What do you do?",
+   "options": [
+    "Watch it and change the call if it shows a pass",
+    "Show them the official footage to compare",
+    "Keep the phone for the video review team",
+    "Point them to the Head Referee and the protest process"
+   ],
+   "answer": 3,
+   "feedback": "Officials don't have to consider footage taken by athletes or spectators, and official footage is never given to athletes. Challenges go to the Head Official through the protest process.",
+   "rules": [
+    "OCR-2026-3.18.4",
+    "OCR-2026-3.19.3"
+   ]
+  },
+  {
+   "prompt": "An athlete shouts insults at you over a call. Who decides any penalty for that?",
+   "options": [
+    "You, at the obstacle, straight away",
+    "The timing team, when results are posted",
+    "The Head Official, after you record and report it",
+    "The Race Director, but only for Elite athletes"
+   ],
+   "answer": 2,
+   "feedback": "Conduct penalties are decided by the Head Official, called the Head Referee in this programme. Your part is to stay calm, record the headband number, note what happened and report it.",
+   "rules": [
+    "OCR-2026-3.5.1",
+    "OCR-2026-3.5.2"
+   ]
+  }
+ ],
+ "ocr-8-1": [
+  {
+   "prompt": "Who is the final authority on interpreting the rules at an event?",
+   "options": [
+    "The Head Official",
+    "The referee at each obstacle",
+    "The timing team",
+    "Each category's lead referee"
+   ],
+   "answer": 0,
+   "feedback": "The rulebook makes the Head Official the chief decision maker and final authority on enforcing and interpreting the rules. Referees report to the Head Official, the Head Referee in this programme.",
+   "rules": [
+    "OCR-2026-2.1.2"
+   ]
+  },
+  {
+   "prompt": "Which of these is your job at your obstacle?",
+   "options": [
+    "Confirming final penalties with the timing team",
+    "Hearing athletes' protests once they finish",
+    "Documenting the violations you see",
+    "Choosing the penalty format for the obstacle"
+   ],
+   "answer": 2,
+   "feedback": "You enforce the obstacle rules, direct athletes who fail to the correct penalty and document violations. Penalties are confirmed later by the Head Referee and the timing team.",
+   "rules": []
+  },
+  {
+   "prompt": "Why do your written notes on a violation matter?",
+   "options": [
+    "They replace the need for a video review",
+    "They are given to the athlete as their record",
+    "They settle the penalty with no further checks",
+    "Later penalty decisions rest on them as evidence"
+   ],
+   "answer": 3,
+   "feedback": "Your call starts the process, but penalties can be confirmed later by the Head Referee and the timing team, or assessed in video review. Clear, factual notes are the evidence those decisions rest on.",
+   "rules": []
+  }
+ ],
+ "ocr-8-2": [
+  {
+   "prompt": "At the Hercules Hoist, an athlete lets go and the weight drops in freefall. What is the call?",
+   "options": [
+    "A pass, because the weight reached the top first",
+    "A failure: the weight must be lowered under control",
+    "A pass, as long as nobody was standing nearby",
+    "A warning, then a failure if it happens again"
+   ],
+   "answer": 1,
+   "feedback": "The Hercules Hoist rule requires the weight to be lowered under control, not in freefall. Dropping it in an uncontrolled manner is a failure, whatever happened before.",
+   "rules": [
+    "OCR-2026-4.1.6"
+   ]
+  },
+  {
+   "prompt": "During the race you spot a hazard at your obstacle. What do you do?",
+   "options": [
+    "Report it at once to the Head Referee, Race Director or staff",
+    "Note it down and raise it at the end of the day",
+    "Warn the athletes and leave the obstacle as it is",
+    "Close the obstacle and send everyone to the penalty"
+   ],
+   "answer": 0,
+   "feedback": "During the race, report any hazard straight away to the Head Referee, the Race Director or Spartan staff. Athlete safety sits alongside fairness as your priority.",
+   "rules": []
+  },
+  {
+   "prompt": "You failed an early athlete for a foot on a hold. A later athlete does the same. What do you do?",
+   "options": [
+    "Let it go, since the course is busier now",
+    "Decide by what feels fair for this athlete",
+    "Give a warning, as it is later in the race",
+    "Make the same call: one interpretation all race"
+   ],
+   "answer": 3,
+   "feedback": "Apply the rules equally, with the same interpretation from the first wave to the last. The call you made for the first athlete is the standard for everyone after them.",
+   "rules": []
+  }
+ ],
+ "ocr-9-1": [
+  {
+   "prompt": "On the Monkey Bars, an athlete hooks a leg over a bar to rest. What is the call?",
+   "options": [
+    "No failure: resting is fine if they move on",
+    "No failure, as long as they ring the bell",
+    "A failure: feet or legs on the bars aren't allowed",
+    "A failure only if a foot also touches the ground"
+   ],
+   "answer": 2,
+   "feedback": "At the Monkey Bars the traverse uses only the hands and arms. Feet or legs touching the bars is a failure, whether or not the athlete goes on to ring the bell.",
+   "rules": [
+    "OCR-2026-4.2.7"
+   ]
+  },
+  {
+   "prompt": "At Olympus, an athlete rests their knees against the wall between holds. What is the call?",
+   "options": [
+    "No failure: feet and knees may rest on the wall",
+    "A failure: only the hands may touch the wall",
+    "A failure if they rest there more than once",
+    "A warning first, then a failure next time"
+   ],
+   "answer": 0,
+   "feedback": "At Olympus, athletes may rest their feet and knees against the wall for support. The failure to watch for is a foot touching a hold or hole.",
+   "rules": [
+    "OCR-2026-4.2.10"
+   ]
+  },
+  {
+   "prompt": "When does an attempt start at the Multi-Rig?",
+   "options": [
+    "When the athlete first grips an attachment",
+    "Once both feet have left the starting step",
+    "Once four points of contact are made",
+    "When the athlete reaches the second attachment"
+   ],
+   "answer": 1,
+   "feedback": "At the Monkey Bars, the Multi-Rig and Olympus, the attempt starts once both feet have left the starting step. Four points of contact is the start at the Helix and the Z Wall.",
+   "rules": [
+    "OCR-2026-4.2.8"
+   ]
+  }
+ ],
+ "ocr-9-2": [
+  {
+   "prompt": "On a rig, an athlete uses horizontal truss to transfer mid-traverse. How do you decide?",
+   "options": [
+    "It is a failure: any truss contact is banned",
+    "It is allowed on every obstacle with truss",
+    "It depends on whether they gained time",
+    "Check whether your obstacle's rule allows it"
+   ],
+   "answer": 3,
+   "feedback": "Many rigs let athletes use horizontal truss to start or transfer, while using vertical truss as a ladder is a failure. Your obstacle's own rule decides, so know it before the first wave.",
+   "rules": [
+    "OCR-2026-2.1.10",
+    "OCR-2026-4.2.7"
+   ]
+  },
+  {
+   "prompt": "At the Multi-Rig, an athlete grabs the chain that holds a ring. What is the call?",
+   "options": [
+    "No failure: the chain is part of the attachment",
+    "No failure, as long as they stay in their lane",
+    "A failure: only the attachments may be used",
+    "A warning, as long as they let go quickly"
+   ],
+   "answer": 2,
+   "feedback": "At the Multi-Rig, athletes may use only the attachments. Grabbing the ropes, slings or chains that fix them to the structure is handling outside the permitted area, and a failure.",
+   "rules": [
+    "OCR-2026-4.2.8"
+   ]
+  },
+  {
+   "prompt": "On the Monkey Bars, an athlete drops off one bar short of the bell. What is the call?",
+   "options": [
+    "A failure: they didn't ring the bell",
+    "A pass: they crossed almost every bar",
+    "A retry from the last bar they held",
+    "A pass if they then tap the bell from the ground"
+   ],
+   "answer": 0,
+   "feedback": "On rigs such as the Monkey Bars, failing to ring the bell is a failure mode. An athlete who comes off before ringing it has failed, however far they got.",
+   "rules": [
+    "OCR-2026-4.2.7"
+   ]
+  }
+ ],
+ "ocr-9-3": [
+  {
+   "prompt": "At the Z Wall, an athlete's hand brushes the top for a moment, gaining nothing. What is the call?",
+   "options": [
+    "No failure: the touch gave no advantage",
+    "A failure: touching the top has no advantage test",
+    "No failure, unless it happens a second time",
+    "A retry from the start of the wall"
+   ],
+   "answer": 1,
+   "feedback": "Touching the top is a listed failure mode at the Z Wall, the Helix and Olympus, with no condition about advantage. So even a brief touch that gains nothing is a failure.",
+   "rules": [
+    "OCR-2026-4.2.17"
+   ]
+  },
+  {
+   "prompt": "At the Monkey Bars, when is a foot touching the ground a failure?",
+   "options": [
+    "Whenever it happens, for any reason",
+    "Only if it happens in the last few bars",
+    "Only if the athlete then lets go of the bars",
+    "When the touch creates an advantage"
+   ],
+   "answer": 3,
+   "feedback": "Rule 4.2.7 makes feet touching the ground a failure when it creates an advantage. Advantage only matters where the failure mode says so, so always check the wording.",
+   "rules": [
+    "OCR-2026-4.2.7"
+   ]
+  },
+  {
+   "prompt": "You send an athlete to the penalty loop, but they run straight past it. What do you do?",
+   "options": [
+    "Chase them and bring them back to the loop",
+    "Give them a time penalty on the spot",
+    "Record the number, document it, report to the Head Referee",
+    "Let it go: following the course is their responsibility"
+   ],
+   "answer": 2,
+   "feedback": "Skipping the loop is a clear violation, but don't chase or argue. Record the headband number, write down what happened and report it to the Head Referee, who handles the penalty.",
+   "rules": [
+    "OCR-2026-3.4.1"
+   ]
+  }
+ ],
+ "ocr-4-2": [
+  {
+   "prompt": "The tether tangles and spoils an athlete's throw. What's the call?",
+   "options": [
+    "It counts as their attempt",
+    "They throw again: it wasn't their fault",
+    "They may change lanes and retry",
+    "They wait while you refer it"
+   ],
+   "answer": 0,
+   "feedback": "A tangled tether that spoils the throw still counts as an attempt. Keeping the tether clear is the athlete's job.",
+   "rules": [
+    "OCR-2026-4.2.13"
+   ]
+  },
+  {
+   "prompt": "The spear sticks, then falls out while the athlete is 1 metre from the lane. What's the result?",
+   "options": [
+    "A pass: it stuck in the target",
+    "A rethrow, as it stuck at first",
+    "An incomplete attempt: penalty",
+    "A pass, if it stuck for a moment"
+   ],
+   "answer": 2,
+   "feedback": "The obstacle is only complete once the athlete is at least 2 metres from the lane. A spear that falls out before then is an incomplete attempt, and the penalty applies.",
+   "rules": [
+    "OCR-2026-4.2.13"
+   ]
+  },
+  {
+   "prompt": "You send a failed athlete to the burpee zone. What should you make sure of?",
+   "options": [
+    "That they rethrow after the burpees",
+    "That the camera can see their headband number",
+    "That they do the burpees beside the lane",
+    "That they sign a penalty sheet first"
+   ],
+   "answer": 1,
+   "feedback": "Send the athlete to the burpee zone and make sure the camera can see their headband number. If they dispute the call, note the number and refer it to the Head Referee.",
+   "rules": [
+    "OCR-2026-3.17.5"
+   ]
+  }
+ ]
+}

@@ -4,6 +4,7 @@
 import { $, call, esc, toast, fail, badge, day, redraw, act, hooks, runHooks, LANG, t } from './core.js';
 import { drawAction } from './practice.js';
 import { recallFile } from '../offline.js';
+import { checkSection, wireCheck, celebrate } from './sharp.js';
 
 // ---------------------------------------------------------------- figures: simple drawings, in the page's own colours
 const svg = (body) => `<svg class="fig" viewBox="0 0 240 120" role="img" aria-hidden="true">${body}</svg>`;
@@ -184,12 +185,13 @@ async function lessonView(rest) {
       <div id="lpTranscript" class="lpTranscript" hidden><h3>Transcript</h3>${c.slides.map((s, i) => `<p><b>${i + 1}. ${esc(s.heading)}</b> ${esc(s.narration)}</p>`).join('')}</div>
     </section>
     <section class="card" id="lpFinish" hidden><h2>${done ? 'You\'ve completed this lesson' : 'Finish the lesson'}</h2>
+      ${checkSection(L)}
       ${L.enrolled ? (done ? `<p>Completed ${esc(day(done.at))} (${esc(LANG[done.locale] || done.locale)}, content version ${done.versionNo}).</p>` : `<p>Mark it complete to record it against your programme: the record keeps this lesson, its content version (${esc(LANG[c.locale] || c.locale)} v${c.versionNo}) and the date.</p><button class="primary" type="button" id="lpComplete">Mark as complete</button>`)
         : `<p>Enrol in ${esc(L.programme.title)} to record your progress.</p><a class="btnLink" href="${back}">Go to the programme</a>`}
       ${await runHooks(hooks.lesson || [], L)}
       ${L.nav.next ? `<p><a class="btnLink" href="${lessonUrl(L.nav.next)}">Next: ${esc(L.nav.nextTitle)}</a></p>` : `<p><a class="btnLink" href="${back}">Back to the programme</a></p>`}
     </section>
-    <section class="card"><h2>About this lesson</h2><p>${esc(L.lesson.summary)}</p><p class="note">Sources: ${esc(c.sources || 'not given')}. ${esc(LANG[c.locale] || c.locale)} content version ${c.versionNo}${c.approvedAt ? `, approved ${esc(day(c.approvedAt))}` : ''}.</p></section>
+    <section class="card"><h2>About this lesson</h2><p>${esc(L.lesson.summary)}</p><p class="note">Sources: ${esc(String(c.sources || 'not given').replace(/\.$/, ''))}. ${esc(LANG[c.locale] || c.locale)} content version ${c.versionNo}${c.approvedAt ? `, approved ${esc(day(c.approvedAt))}` : ''}.</p></section>
     ${editorPanel()}`;
 }
 
@@ -235,8 +237,10 @@ export function wire() {
     $('lpComplete')?.addEventListener('click', (e) => act(async () => {
       const r = await call(`lessons/${L.lesson.id}/complete`, { method: 'POST', body: { contentId: L.content.id } });
       toast(r.queued ? 'Saved on this phone: it goes to your record when there\'s signal' : r.preview ? 'Recorded: done in a preview translation' : r.enrolment.state === 'completed' ? 'Lesson complete: programme complete!' : 'Lesson complete');
+      celebrate(r.badges);
       redraw();
     }, e.currentTarget));
+    wireCheck(L);
   }
   $('lpLang')?.addEventListener('change', (e) => { stopVoice(); location.hash = lessonUrl(L.lesson.id, `locale=${e.target.value}`); });
   for (const b of document.querySelectorAll('[data-cstate]')) b.onclick = () => {
