@@ -39,7 +39,7 @@ fieldset.card { padding-top: 8px; }
 
 label, .labelish { display: block; font-weight: 600; margin: 14px 0 5px; }
 label small { font-weight: 400; color: var(--muted); }
-input:not([type=color]):not([type=radio]):not([type=file]), textarea { width: 100%; font: inherit; color: var(--text); background: var(--bg); border: 1px solid var(--line); padding: 10px 12px; border-radius: 0; }
+input:not([type=color]):not([type=radio]):not([type=file]):not([type=checkbox]), textarea { width: 100%; font: inherit; color: var(--text); background: var(--bg); border: 1px solid var(--line); padding: 10px 12px; border-radius: 0; }
 input::placeholder, textarea::placeholder { color: var(--muted); opacity: .8; }
 textarea { resize: vertical; }
 .prefixed { display: flex; align-items: stretch; border: 1px solid var(--line); background: var(--bg); }

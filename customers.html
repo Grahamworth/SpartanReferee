@@ -71,13 +71,10 @@
 
     <section class="card adminsBox">
       <h2>Referees</h2>
-      <p class="note">Who can sign in: each referee signs in with Microsoft using this exact address. They can book and use the servers, cameras and results. Admins don't need to be on this list.</p>
+      <p class="note">Who can sign in: everyone who registered from an invite, by the address they sign in with (Google, Microsoft or email). Admins don't need to be on this list.</p>
+      <p><a class="btn btn-ghost" href="learn/#/invites">Invite people</a></p>
       <input id="findReferee" type="search" placeholder="Find a referee" aria-label="Find a referee" hidden>
       <ul id="refereeList" class="adminList"></ul>
-      <form id="addReferee" class="addAdmin">
-        <label for="refereeEmail">Add a referee</label>
-        <div><input id="refereeEmail" type="email" autocomplete="off" maxlength="200" placeholder="name@example.com" required><button class="small" type="submit">Add</button></div>
-      </form>
       <p class="error" id="refereeError" role="alert" hidden></p>
     </section>
 

@@ -95,3 +95,4 @@ privacy.html
 learn/invites.js
 join.html
 join.js
+learn/tracking.js

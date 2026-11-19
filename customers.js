@@ -114,7 +114,8 @@ async function removeReferee(email) {
   try { referees = (await call('admin/referees', { method: 'POST', body: { email, remove: true } })).people; drawReferees(); toast(`${email} can't sign in any more`); }
   catch (e) { refereeFail(e.message); }
 }
-$('addReferee').addEventListener('submit', async (e) => {
+// referees join by invite now (learn/#/invites): the form is gone, so this only runs if it's ever brought back
+$('addReferee')?.addEventListener('submit', async (e) => {
   e.preventDefault(); refereeFail('');
   const email = $('refereeEmail').value.trim();
   try { referees = (await call('admin/referees', { method: 'POST', body: { email } })).people; drawReferees(); $('refereeEmail').value = ''; toast(`${email} can now sign in`); }

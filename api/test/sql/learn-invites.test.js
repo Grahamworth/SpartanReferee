@@ -98,3 +98,22 @@ test('signing in later another way, with the same address, is the same person', 
   const after = (await db.query("SELECT COUNT(*) AS n FROM {S}.person WHERE email = 'cara@example.com'"))[0].n;
   assert.strictEqual(after, before);
 });
+
+test('progress: admins see everyone, a coordinator only their region; reminders email them and keep the complete-by date', { skip }, async () => {
+  const all = await ok('GET', 'learn/tracking?status=all', boss);
+  const anna = all.rows.find((r) => r.name === 'Anna Kowalska');
+  assert.ok(anna); assert.strictEqual(anna.programmeId, 'ocr-referee'); assert.strictEqual(anna.due, '2027-03-01'); assert.strictEqual(anna.total, 0);
+  const cara = await login('cara');
+  const hers = await ok('GET', 'learn/tracking?status=all', cara);
+  assert.ok(!hers.rows.some((r) => r.name === 'Anna Kowalska'), 'Anna is in Europe; Cara coordinates the Middle East and Asia');
+  assert.strictEqual((await call('GET', 'learn/tracking', await login('anna.k'))).status, 403, 'a referee doesn\'t see others\' progress');
+  const before = mailer.sent.length;
+  const r = await ok('POST', 'learn/tracking/remind', boss, { enrolmentIds: [anna.enrolmentId], due: '2027-02-15', message: 'Before the season, please.' });
+  assert.strictEqual(r.sent, 1);
+  const mail = mailer.sent.at(-1);
+  assert.strictEqual(mailer.sent.length, before + 1); assert.strictEqual(mail.to, 'anna.k@example.com');
+  assert.match(mail.subject, /Please complete OCR Referee by 15 February 2027/); assert.match(mail.text, /Before the season, please\./);
+  const after = (await ok('GET', 'learn/tracking?status=all', boss)).rows.find((x) => x.enrolmentId === anna.enrolmentId);
+  assert.strictEqual(after.due, '2027-02-15'); assert.ok(after.remindedAt);
+  assert.strictEqual((await call('POST', 'learn/tracking/remind', cara, { enrolmentIds: [anna.enrolmentId], due: '2027-02-15' })).status, 400, 'not one of Cara\'s people: nobody to remind');
+});

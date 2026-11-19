@@ -354,3 +354,10 @@ h3.sub { font-size: 1rem; text-transform: uppercase; letter-spacing: .04em; marg
 .dueLabel { margin-top: 6px; }
 .inviteTabs { display: flex; flex-wrap: wrap; gap: 6px; }
 .chipLink.on { background: var(--primary); color: var(--on-primary); border-color: var(--primary); }
+/* progress and reminders (tracking.js) */
+.trackFilter { display: flex; flex-wrap: wrap; gap: 8px; }
+.trackFilter select, .trackFilter input { flex: 1 1 160px; }
+.trackRow { display: flex; gap: 12px; align-items: flex-start; cursor: pointer; }
+.trackRow input { margin-top: 4px; width: 20px; height: 20px; flex: none; accent-color: var(--primary); }
+.trackRow > span { flex: 1; min-width: 0; display: grid; gap: 2px; }
+@media (min-width: 900px) { .remindCard { position: sticky; bottom: 0; box-shadow: 0 -4px 16px rgba(0, 0, 0, .08); } }
