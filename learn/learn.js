@@ -13,8 +13,9 @@ import * as lesson from './lesson.js';
 import * as assess from './assess.js';
 import * as govern from './govern.js';
 import * as reports from './reports.js';
+import * as diagnostics from './diagnostics.js';
 
-const AREAS = [programmes, people, cameras, lesson, assess, govern, reports];
+const AREAS = [programmes, people, cameras, lesson, assess, govern, reports, diagnostics];
 const views = Object.assign({}, ...AREAS.map((a) => a.views));
 
 async function draw() {

@@ -6,7 +6,7 @@
      regional_coordinator  their region: inviting and enrolling people, fixing profiles, seeing progress
      content_editor        drafting lessons, scripts, translations and questions in their programmes; never approving
      assessor              deciding the assessments assigned to them
-     technical_admin       diagnostics; no personal profiles or answers
+     technical_admin       diagnostics (counts, settings, masked errors); no personal profiles or answers
    A learner always sees and partly edits their own profile. */
 const ROLES = ['global_admin', 'programme_owner', 'regional_coordinator', 'content_editor', 'assessor', 'technical_admin'];
 
@@ -34,6 +34,7 @@ function can(grants, action, { regionId, programmeId, personId, selfId } = {}) {
     case 'enrol': return self || admin(grants) || (!!programmeId && has(grants, 'programme_owner', { programmeId })) || (!!regionId && has(grants, 'regional_coordinator', { regionId }));
     case 'assess': return admin(grants) || (!!programmeId && (has(grants, 'programme_owner', { programmeId }) || has(grants, 'assessor', { programmeId })));
     case 'credential.change': return admin(grants) || (!!programmeId && has(grants, 'programme_owner', { programmeId }));
+    case 'diagnostics.read': return admin(grants) || has(grants, 'technical_admin');
     case 'report.read': return admin(grants) || (!!programmeId && has(grants, 'programme_owner', { programmeId })) || (!!regionId && has(grants, 'regional_coordinator', { regionId }));
     default: return false;
   }

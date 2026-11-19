@@ -75,6 +75,7 @@ if (me) {
     ['learn-handbook', 'learn/#/handbook/ocr-referee?locale=es', boss, ready, anna],
     ['learn-media', 'learn/#/media', boss, ready],
     ['learn-assessing', 'learn/#/assessing', boss, ready, tomas],
+    ['learn-diagnostics', 'learn/#/diagnostics', boss, ready],
   );
 }
 

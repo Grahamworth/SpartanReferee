@@ -65,6 +65,10 @@ The site's own pages use these; they're listed here because they're the procedur
 - `GET /api/learn/people/{id}/export`: everything held about one person (their record, logins, roles, enrolments, progress, attempts, credentials and the audit entries about them), as JSON. The person themselves, or an admin. Audited as `person.export`.
 - `POST /api/learn/people/{id}/erase` with `{ "confirm": "ERASE" }`: an admin, as themselves (not viewing as someone), and not their own record. Replaces the name and email, removes the country, sign-in links, roles and lesson progress, and sets the status to `erased` so they can't sign in. Their attempts and credentials stay, anonymised. Audited as `person.erase`. Older audit entries that mention the address are cleaned by `scripts/learn-erase.mjs`.
 
+## Diagnostics (not part of v1)
+
+`GET /api/learn/diagnostics`: for technical administrators and global admins (the brief's section 4). Shows the database's reachability, answer time, login and tier, which migrations are applied or waiting, narration use against the daily limit, the last 7 days' activity as counts per action, row counts per table, and this server's recent errors. Error text has ids, SR and DEMO numbers, addresses and SQL values masked. Nothing names a person or shows an answer. The page is **Diagnostics** in /learn. A technical admin still can't open people, the audit log or reports.
+
 ## Errors
 
 `401` not signed in; `403` signed in but not in the organisation; `404` no such thing, or not in your scope; `503` the database is waking up (try again in a minute). Errors are `{ "apiVersion": "v1", "error": "…" }` where the API version is known.

@@ -146,3 +146,37 @@ test('privacy: a person downloads their own data; an admin exports or erases som
   // no address in a new first sign-in's audit entry
   assert.ok(!(await db.query("SELECT summary FROM {S}.audit_event WHERE action = 'person.first-sign-in'")).some((r) => r.summary.includes('pia@example.com')));
 });
+
+test('diagnostics: for a technical admin and admins only; counts and settings, never anyone\'s name, address or answers', { skip }, async () => {
+  const tech = (await ok('POST', 'learn/people', boss, { legalName: 'Tomas Tech', email: 'tomas@demo.test', regionId: 'europe' })).person;
+  await ok('POST', 'learn/roles', boss, { personId: tech.id, role: 'technical_admin' });
+  const d = await ok('GET', 'learn/diagnostics', as(tech));
+  assert.strictEqual(d.database.ok, true); assert.deepStrictEqual(d.migrations.pending, []);
+  assert.ok(d.tables.person >= 3 && d.tables.audit_event > 0); assert.ok(d.activity.actions.some((a) => a.action === 'role.grant'));
+  const all = JSON.stringify(d);
+  for (const secret of ['ana@demo.test', 'Ana Popescu', 'Elena', 'boss@example.com', 'One plus one', 'tomas@demo.test']) assert.ok(!all.includes(secret), `diagnostics shows ${secret}`);
+  await ok('GET', 'learn/diagnostics', boss);
+  for (const p of [ana, coord]) assert.strictEqual((await call('GET', 'learn/diagnostics', as(p))).status, 403);
+  // and the role opens nothing personal
+  assert.strictEqual((await call('GET', 'learn/people', as(tech))).status, 403);
+  assert.notStrictEqual((await call('GET', `learn/people/${ana.id}`, as(tech))).status, 200);
+  assert.strictEqual((await call('GET', 'learn/audit', as(tech))).status, 403);
+  assert.strictEqual((await call('GET', 'learn/reports', as(tech))).status, 403);
+});
+
+test('diagnostics: errors are kept with ids, numbers and addresses hidden', () => {
+  const { mask } = require('../../src/learn/diagnostics');
+  assert.strictEqual(mask('GET /api/learn/people/0f8fad5b-d9cb-469f-a165-70867728950e'), 'GET /api/learn/people/<id>');
+  assert.strictEqual(mask('Violation of UNIQUE KEY constraint. The duplicate key value is (ana@demo.test).'), 'Violation of UNIQUE KEY constraint. The duplicate key value is (<value>)');
+  assert.strictEqual(mask('No person SR-000123 for x@y.org'), 'No person <number> for <address>');
+});
+
+test('only global admins create programmes: a learner, coordinator or technical admin is refused and not shown the form', { skip }, async () => {
+  await ok('POST', 'admin/referees', boss, { email: 'learner-only@example.com' });
+  const pia = await login('learner-only'); await ok('GET', 'learn/me', pia); // a real referee signing in: a learner
+  for (const h of [pia, as(ana), as(coord)]) {
+    assert.strictEqual((await ok('GET', 'learn/programmes', h)).canCreate, false);
+    assert.strictEqual((await call('POST', 'learn/programmes', h, { id: 'sneaky', title: 'Sneaky', category: 'referee', locales: 'en', edition: '2027' })).status, 403);
+  }
+  assert.strictEqual((await ok('GET', 'learn/programmes', boss)).canCreate, true);
+});

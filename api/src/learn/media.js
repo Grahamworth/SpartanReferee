@@ -74,4 +74,4 @@ function createMedia({ db, speech = null, signer = null, doFetch = fetch, dailyC
   return { configFor, plan, narration, speechOn, PROVIDERS, VOICES };
 }
 
-module.exports = { createMedia, PROVIDERS, VOICES };
+module.exports = { createMedia, PROVIDERS, VOICES, DAILY_CHARS };

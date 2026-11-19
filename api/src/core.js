@@ -204,7 +204,7 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
         if (!learn) r = reply(503, { error: 'The learning platform isn’t set up yet' });
         else {
           try { learnReady = learnReady || learnDb.migrate().catch((e) => { learnReady = null; throw e; }); await learnReady; r = await learn.handle(method, parts, body, h, query); }
-          catch (e) { if (!e.waking) throw e; r = reply(503, { error: 'The learning platform is waking up after a quiet spell: try again in a minute' }); }
+          catch (e) { if (!e.waking) { learn.noteError(e, method, pathOnly); throw e; } learn.noteWaking(); r = reply(503, { error: 'The learning platform is waking up after a quiet spell: try again in a minute' }); }
         }
       }
       if (parts[0] === 'companies' && parts.length <= 3) r = await companies(method, parts[1], parts[2], body, h);
