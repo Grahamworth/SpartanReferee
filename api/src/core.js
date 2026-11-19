@@ -19,6 +19,7 @@ const { createServers } = require('./servers');
 const { createEvents } = require('./events');
 const { createLearn } = require('./learn');
 const { createAssignments } = require('./assignments');
+const { layout } = require('./mailer');
 
 const CORS = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Authorization, Content-Type, X-Session, X-Device, X-Admin-Key, X-Server-Key', 'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS' };
 
@@ -26,7 +27,7 @@ const CORS = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers
  * verifyGoogle(idToken) -> {sub, email, name, picture} (throws when invalid); secret signs our own session tokens.
  * adminEmails: Google accounts that are admins. While neither adminEmails nor adminKey is set, everyone is (the prototype).
  */
-function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], verifyGoogle = null, emailSignIn = null, microsoftSignIn = null, payments = null, secret = '', googleClientId = '', blobSigner = null, putBrand = null, maxRunningServers = 1, serverHourPrice = 0.66, eventFetcher = null, bookingUnits = true, learnDb = null, learnSpeech = null, learnMedia = null }) {
+function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], verifyGoogle = null, emailSignIn = null, microsoftSignIn = null, payments = null, secret = '', googleClientId = '', blobSigner = null, putBrand = null, maxRunningServers = 1, serverHourPrice = 0.66, eventFetcher = null, bookingUnits = true, learnDb = null, learnSpeech = null, learnMedia = null, mailer = null, siteUrl = '' }) {
   const reply = (status, body) => ({ status, body, headers: { 'Content-Type': 'application/json', ...CORS } });
   const admins = adminEmails.map((e) => String(e).trim().toLowerCase()).filter(Boolean);
   // session tokens: base64url(payload).HMAC
@@ -146,7 +147,71 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
     const m = await membership.companyFor(me); if (!m) return null;
     return { admin: m.admin, email: m.email, name: String((await store.get('user', me.uid))?.name || ''), language: (await store.get('lang', m.email))?.lang || '' };
   };
-  const learn = learnDb ? createLearn({ db: learnDb, session, isAdminEmail, member: learnMember, reply, speech: learnSpeech, mediaSigner: learnMedia }) : null;
+  const learn = learnDb ? createLearn({ db: learnDb, session, isAdminEmail, member: learnMember, reply, speech: learnSpeech, mediaSigner: learnMedia, mailer, siteUrl }) : null;
+  const learnUp = async () => { learnReady = learnReady || learnDb.migrate().catch((e) => { learnReady = null; throw e; }); await learnReady; };
+
+  // ---------------------------------------------------------------- signing in with a code emailed to the address (19 November 2026)
+  // For people with no Google or Microsoft account: POST /api/auth/code {email} emails a 6-digit code (only to an address that can sign
+  // in: on the referee list, an admin, or with an open invite; the answer is the same either way, so it says nothing about who's in);
+  // POST /api/auth/code/verify {email, code} gives a session. A code works for 10 minutes and 5 tries; one a minute at most.
+  const codeHash = (email, code) => crypto.createHmac('sha256', secret).update(`${email}|${code}`).digest('hex');
+  async function codeCanGo(email) {
+    if (isAdminEmail(email) || await store.get(`people:spartan`, email)) return true;
+    if (!learn) return false;
+    await learnUp();
+    return learn.invites.pending(email);
+  }
+  async function authCode(body) {
+    if (!mailer || !secret) return reply(503, { error: 'Email sign-in isn’t set up on the server yet' });
+    const email = String(body?.email || '').trim().toLowerCase();
+    if (email.length > 254 || !/^[^\s@/#?\\|]+@[^\s@/#?\\|]+\.[^\s@/#?\\|]+$/.test(email)) return reply(400, { error: 'That doesn\'t look like an email address' });
+    const was = await store.get('logincode', email);
+    if (was && now() - was.sentAt < 60e3) return reply(200, { sent: true }); // one a minute: the last one is still on its way
+    if (await codeCanGo(email)) {
+      const code = String(crypto.randomInt(0, 1e6)).padStart(6, '0');
+      await store.put('logincode', email, { id: email, hash: codeHash(email, code), exp: now() + 10 * 60e3, tries: 0, sentAt: now() });
+      const mail = layout({ title: `Your SpartanReferee sign-in code: ${code}`, lines: [`Type this code on the sign-in page: ${code}`, 'It works for 10 minutes.'], foot: 'If you didn\'t ask to sign in, you can ignore this email.' });
+      try { await mailer.send({ to: email, subject: `Your SpartanReferee sign-in code: ${code}`, ...mail }); }
+      catch (e) { console.error(`sign-in code to an address: ${e.message}`); return reply(502, { error: 'The code couldn\'t be emailed just now: try again in a minute' }); }
+    }
+    return reply(200, { sent: true });
+  }
+  async function authCodeVerify(body) {
+    if (!secret) return reply(503, { error: 'Email sign-in isn’t set up on the server yet' });
+    const email = String(body?.email || '').trim().toLowerCase(), code = String(body?.code || '').replace(/\D/g, '');
+    const row = email && await store.get('logincode', email);
+    const wrong = reply(401, { error: 'That code isn\'t right, or it has expired: ask for a new one' });
+    if (!row || row.exp < now() || row.tries >= 5 || code.length !== 6) return wrong;
+    if (!crypto.timingSafeEqual(Buffer.from(codeHash(email, code)), Buffer.from(row.hash))) { await store.put('logincode', email, { ...row, tries: row.tries + 1 }); return wrong; }
+    await store.remove('logincode', email);
+    const uid = 'c_' + crypto.createHash('sha256').update(email).digest('base64url').slice(0, 22);
+    const user = { ...(await store.get('user', uid) || {}), id: uid, email, emailVerified: true };
+    await store.put('user', uid, user);
+    await touchProfile(uid, { email });
+    return reply(200, { token: sign({ uid, email, exp: now() + 30 * 24 * 3600 * 1000 }), user });
+  }
+
+  // ---------------------------------------------------------------- joining from an invite (learn/invites.js; join.html)
+  // GET /api/invite/<token> -> what the join page shows; POST /api/invite/<token>/accept {name, regionId, locale}, signed in: registers
+  // them (their learning record, roles and programmes), puts the address they signed in with on the referee list, an admin's on the
+  // admins, and keeps their language.
+  async function invite(method, token, action, body, h) {
+    if (!learn) return reply(503, { error: 'Invites aren\'t set up on the server' });
+    await learnUp();
+    if (method === 'GET' && !action) { const r = await learn.invites.info(token); return r.error ? reply(404, { error: 'This invite link isn\'t right' }) : reply(200, r); }
+    if (method !== 'POST' || action !== 'accept') return null;
+    const me = session(h); if (!me) return reply(401, { error: 'Sign in first' });
+    const email = await membership.provenEmail(me);
+    if (!email) return reply(400, { error: 'That account didn\'t give a verified email address: try another way to sign in' });
+    const r = await learn.invites.accept(token, { ...learn.loginOf(me), email }, body || {});
+    if (r.error) return reply(r.error[0], { error: r.error[1] });
+    if (!(await store.get('people:spartan', email))) await store.put('people:spartan', email, { email, role: 'member', addedBy: r.invitedByEmail, at: now(), invited: true });
+    if (r.grants.some((g) => g.role === 'global_admin') && !isAdminEmail(email)) { await store.put('admin', email, { email, addedBy: r.invitedByEmail, at: now() }); await loadAdmins(true); }
+    await store.put('lang', email, { id: email, lang: r.locale });
+    const name = String(body?.name || '').trim().slice(0, 120);
+    if (name) await store.put('name', email, { id: email, name });
+    return reply(200, { ok: true });
+  }
   let learnReady = null;
   const recordings = createRecordings({ store, signer: blobSigner, now, reply, session, isAdmin, membership });
   // Spartan's events (events.js), synced from Spartan's race list; referees book cameras for one
@@ -180,10 +245,13 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
     try {
       let r = null;
       if (parts[0] === 'admin' && parts.length <= 5 && (parts.length < 5 || parts[4] === 'lift')) r = await admin(method, parts[1], parts[2], parts[3], h, body);
-      if (parts[0] === 'config' && method === 'GET') r = reply(200, { googleClientId, signIn: !!(verifyGoogle && secret && googleClientId), emailSignIn: emailSignIn && secret ? emailSignIn.config : null, microsoftSignIn: microsoftSignIn && secret ? microsoftSignIn.config : null });
+      if (parts[0] === 'config' && method === 'GET') r = reply(200, { googleClientId, signIn: !!(verifyGoogle && secret && googleClientId), emailSignIn: emailSignIn && secret ? emailSignIn.config : null, microsoftSignIn: microsoftSignIn && secret ? microsoftSignIn.config : null, codeSignIn: !!(mailer && secret) });
       if (parts[0] === 'auth' && parts[1] === 'google' && method === 'POST') r = await authGoogle(body, h);
       if (parts[0] === 'auth' && parts[1] === 'email' && method === 'POST') r = await authEmail(body);
       if (parts[0] === 'auth' && parts[1] === 'microsoft' && method === 'POST') r = await authMicrosoft(body);
+      if (parts[0] === 'auth' && parts[1] === 'code' && !parts[2] && method === 'POST') r = await authCode(body);
+      if (parts[0] === 'auth' && parts[1] === 'code' && parts[2] === 'verify' && method === 'POST') r = await authCodeVerify(body);
+      if (parts[0] === 'invite' && parts[1] && parts.length <= 3) r = await invite(method, parts[1], parts[2], body, h);
       if (parts[0] === 'me' && method === 'GET') r = await me(h);
       if (parts[0] === 'home' && parts.length === 1) r = await assignments.home(method, h, body);
       if (parts[0] === 'event' && parts.length === 2) r = await assignments.eventPage(method, parts[1], h);

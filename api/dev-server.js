@@ -27,7 +27,11 @@ function learnDatabase() {
   return dbFromEnv(env, env.LEARN_SCHEMA || 'learn_dev');
 }
 let learnSettings = {};
+// email here is pretend: what would be sent is kept, and GET /api/dev/mail shows it (newest last)
+const { memoryMailer } = require('./src/mailer');
+const mailer = memoryMailer();
 const api = createApi({
+  mailer, siteUrl: 'http://localhost:8795',
   learnDb: learnDatabase(),
   // narration (Azure AI Speech) and where it's kept, when the site's settings were read with az
   learnSpeech: learnSettings.LEARN_SPEECH_KEY ? { key: learnSettings.LEARN_SPEECH_KEY, region: learnSettings.LEARN_SPEECH_REGION || 'uksouth' } : null,
@@ -50,6 +54,7 @@ const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/cs
 
 http.createServer(async (req, res) => {
   const url = new URL(req.url, 'http://x');
+  if (url.pathname === '/api/dev/mail') { res.writeHead(200, { 'Content-Type': 'application/json' }); return res.end(JSON.stringify(mailer.sent.slice(-20))); }
   if (url.pathname.startsWith('/api/')) {
     let raw = ''; for await (const c of req) raw += c;
     let body = null; try { body = raw ? JSON.parse(raw) : null; } catch { /* not JSON */ }

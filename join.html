@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<script src="i18n.js"></script>
+<title>Join: SpartanReferee</title>
+<meta name="theme-color" content="#1a1e24" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="robots" content="noindex">
+<link rel="icon" href="icons/spartanreferee/icon-192.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;1,800&family=Barlow:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="headjudge.css">
+<link rel="stylesheet" href="study.css">
+<script src="look.js"></script>
+<style>
+  .join { max-width: 560px; }
+  .join form { display: grid; gap: 6px; }
+  .join label { margin-top: 8px; font-weight: 600; }
+  .join select { width: 100%; font: inherit; padding: 10px 12px; background: var(--bg); color: var(--text); border: 1px solid var(--line); }
+  .joinSteps { list-style: none; padding: 0; margin: 0 0 6px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .joinSteps li { font-size: .85rem; font-weight: 700; padding: 2px 10px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+  .joinSteps li.on { border-color: var(--primary); color: var(--primary-text); }
+  .assigned { margin: 6px 0 0; padding-inline-start: 1.2em; }
+</style>
+</head>
+<body>
+<!-- Joining SpartanReferee from an admin's emailed invite (join.html?t=<token>): your full name, region and language, then sign in with Google,
+     Microsoft or a code emailed to the invited address. Its data is /api/invite/<token> (core.js, learn/invites.js). -->
+<header class="top">
+  <a class="mark" href="./">Spartan<span>Referee</span></a>
+  <span class="topRight"><select class="langPick" data-lang-picker aria-label="Language"></select></span>
+</header>
+<main class="page">
+  <section class="card join" id="joinCard">
+    <p class="muted" id="joinLoading">Opening your invite…</p>
+  </section>
+  <p class="error" id="error" role="alert" hidden></p>
+</main>
+<script type="module" src="join.js"></script>
+</body>
+</html>

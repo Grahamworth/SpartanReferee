@@ -94,6 +94,8 @@ function createMembership(store, { isAdminEmail = () => false } = {}) {
     if (kind === 'g_') return me.email && (await store.get('user', me.uid))?.emailVerified !== false ? String(me.email).toLowerCase() : '';
     if (kind === 'm_') return String(me.email || '').toLowerCase();
     if (kind === 'e_') return String((await store.get('user', me.uid))?.email || '').toLowerCase();
+    // a code emailed to the address (core.js, from 19 November 2026): proved when the code was typed
+    if (kind === 'c_') return String((await store.get('user', me.uid))?.email || '').toLowerCase();
     return '';
   }
   /** { c, role: 'owner', email, row, admin } or null. Everyone in has the role the owner had: they book and start servers. */

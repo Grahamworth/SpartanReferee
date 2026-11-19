@@ -25,6 +25,7 @@ const { createReports } = require('./reports');
 const { createPrivacy } = require('./privacy');
 const { createDiagnostics } = require('./diagnostics');
 const { createChecks } = require('./checks');
+const { createInvites } = require('./invites');
 
 const EMAIL = /^[^\s@/#?\\]+@[^\s@/#?\\]+\.[^\s@/#?\\]+$/;
 const LOCALES = ['en', 'fr', 'de', 'nl', 'es', 'it', 'el', 'hr', 'cs', 'pl', 'fi', 'sv', 'da', 'ar', 'th'];
@@ -43,7 +44,7 @@ const grantView = (g) => ({ id: g.grant_id, role: g.role, programmeId: g.program
  * member(session) -> { admin, email, name } for someone in the organisation (an admin, or a referee an admin added), else null.
  * Without it (the SQL tests), only admins come in, by their session's address.
  */
-function createLearn({ db, session, isAdminEmail = () => false, member = null, reply, speech = null, mediaSigner = null }) {
+function createLearn({ db, session, isAdminEmail = () => false, member = null, reply, speech = null, mediaSigner = null, mailer = null, siteUrl = '' }) {
   const memberOf = member || (async (me) => { const email = String(me.email || '').toLowerCase(); return email && isAdminEmail(email) ? { admin: true, email, name: String(me.name || '') } : null; });
   // ------------------------------------------------------------------ who's asking
   const loginOf = (me) => ({ provider: String(me.uid).startsWith('m_') ? 'microsoft' : 'dev', subject: String(me.uid) });
@@ -65,6 +66,13 @@ function createLearn({ db, session, isAdminEmail = () => false, member = null, r
     const m = await memberOf(me);
     if (!m) return { error: reply(403, { error: 'The learning platform is for Spartan\'s referees: ask an admin to add the address you sign in with' }) };
     const email = m.email;
+    if (!real) {
+      const known = (await db.query("SELECT TOP 1 * FROM {S}.person WHERE synthetic = 0 AND status = 'active' AND LOWER(email) = @e ORDER BY created_at", { e: m.email }))[0];
+      if (known) {
+        try { await db.query('INSERT INTO {S}.person_login (provider, subject, person_id) VALUES (@provider, @subject, @id)', { provider, subject, id: known.person_id }); } catch { /* two requests at once */ }
+        real = known;
+      }
+    }
     if (!real) {
       // their own record is made the first time they come: an admin as a global admin, a referee as a learner
       const id = uuid();
@@ -248,8 +256,8 @@ function createLearn({ db, session, isAdminEmail = () => false, member = null, r
 
   // ------------------------------------------------------------------ the rest of the platform, one module each, sharing this context
   // (each can add hooks to it that the others call: programmes asks for a version's extras, progress and so on)
-  const ctx = { db, reply, P, audit, uuid, text, isUuid, personById, personView, LOCALES };
-  const areas = [createProgrammes(ctx), createLessons(ctx, { speech, mediaSigner }), createAssess(ctx), createGovern(ctx), createChecks(ctx), createReports(ctx), createPrivacy(ctx), createDiagnostics(ctx, { speech, mediaSigner })];
+  const ctx = { db, reply, P, audit, uuid, text, isUuid, personById, personView, LOCALES, mailer, siteUrl, newPublicId, loginOf };
+  const areas = [createProgrammes(ctx), createLessons(ctx, { speech, mediaSigner }), createAssess(ctx), createGovern(ctx), createChecks(ctx), createInvites(ctx), createReports(ctx), createPrivacy(ctx), createDiagnostics(ctx, { speech, mediaSigner })];
 
   // ------------------------------------------------------------------ routing
   async function handle(method, parts, body, h, query = {}) {
@@ -286,7 +294,7 @@ function createLearn({ db, session, isAdminEmail = () => false, member = null, r
     if (!LOCALES.includes(locale)) return;
     await db.query("UPDATE {S}.person SET locale = @l, updated_at = SYSUTCDATETIME() WHERE email = @e AND synthetic = 0 AND status = 'active' AND locale <> @l", { l: locale, e: String(email).toLowerCase() });
   }
-  return { handle, who, setLocale, noteError: (...a) => ctx.noteError?.(...a), noteWaking: () => ctx.noteWaking?.() };
+  return { handle, who, setLocale, invites: ctx.invites, loginOf, noteError: (...a) => ctx.noteError?.(...a), noteWaking: () => ctx.noteWaking?.() };
 }
 
 module.exports = { createLearn, LOCALES };

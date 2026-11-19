@@ -91,3 +91,6 @@ study.css
 look.js
 learn/landing.js
 privacy.html
+learn/invites.js
+join.html
+join.js

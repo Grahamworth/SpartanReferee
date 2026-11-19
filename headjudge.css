@@ -326,3 +326,8 @@ html[lang="ar"] *, html[lang="th"] * { font-style: normal !important; letter-spa
 .langGrid button small { display: block; color: var(--muted); font-weight: 400; font-size: .8rem; }
 /* the installable app: the bar saying a page is a copy kept on this phone (offline.js) */
 .offlineBar { position: sticky; top: 0; z-index: 60; margin: 0; padding: 8px clamp(16px, 4vw, 40px); background: #3a2a00; color: #ffe08a; border-bottom: 1px solid #806000; font-size: .9rem; font-weight: 600; }
+/* "Sign in with email" (email-signin-web.js): the address, then the 6-digit code emailed to it */
+.mailBtn svg { color: #59626e; }
+.codeForm { display: grid; gap: 6px; width: min(320px, 100%); }
+.codeForm label { margin-top: 4px; }
+.codeForm .note { margin: 0; }

@@ -18,8 +18,9 @@ import * as diagnostics from './diagnostics.js';
 import * as saved from './saved.js';
 import * as landing from './landing.js';
 import * as sharp from './sharp.js';
+import * as invites from './invites.js';
 
-const AREAS = [programmes, people, lesson, assess, govern, reports, diagnostics, saved, landing, sharp];
+const AREAS = [programmes, people, lesson, assess, govern, reports, diagnostics, saved, landing, sharp, invites];
 const views = Object.assign({}, ...AREAS.map((a) => a.views));
 
 async function draw() {

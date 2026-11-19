@@ -255,6 +255,18 @@ function createProgrammes(ctx) {
   }
 
   // ------------------------------------------------------------------ enrolment (PRG-04): one person, any number of programmes
+  /** enrols someone in a programme's current version from an invite (invites.js), with its complete-by date; already in: the date only */
+  ctx.enrolPerson = async (q, person, programmeId, byId, due) => {
+    const p = await progById(programmeId), v = p && await currentVersion(programmeId); if (!v) return;
+    const had = (await q("SELECT * FROM {S}.enrolment WHERE person_id = @p AND version_id = @v AND state <> 'withdrawn'", { p: person.person_id, v: v.version_id }))[0];
+    if (had) { if (due) await q('UPDATE {S}.enrolment SET due_date = @d WHERE enrolment_id = @id', { d: due, id: had.enrolment_id }); return; }
+    const id = uuid();
+    await q('INSERT INTO {S}.enrolment (enrolment_id, person_id, programme_id, version_id, enrolled_by, due_date) VALUES (@id, @p, @prog, @v, @by, @d)', { id, p: person.person_id, prog: programmeId, v: v.version_id, by: byId || null, d: due || null });
+    if (!(await q('SELECT 1 AS x FROM {S}.programme_role WHERE person_id = @p AND programme_id = @prog', { p: person.person_id, prog: programmeId })).length) {
+      await q('INSERT INTO {S}.programme_role (person_id, programme_id, role, grade) VALUES (@p, @prog, @role, @grade)', { p: person.person_id, prog: programmeId, role: p.learner_role, grade: 'Trainee' });
+    }
+    await audit(q, { realId: byId || person.person_id }, 'enrolment.create', 'enrolment', id, { programme: programmeId, edition: v.edition, due: due || undefined, by: 'invite' }, { programmeId, regionId: person.region_id });
+  };
   async function enrol(w, b) {
     const p = await progById(b?.programmeId); if (!p || p.status !== 'active') return reply(404, { error: 'No such programme' });
     const person = b?.personId ? await personById(b.personId) : w.person; if (!person) return reply(404, { error: 'No such person' });

@@ -11,7 +11,7 @@ const SHELL = `sr-shell-${VERSION}`, EXTRA = 'sr-extra', DATA = 'sr-data'; // DA
 const FILES = ['/home.html', '/home.js', '/learn/', '/offline.html', '/offline.js', '/api-base.js', '/email-signin-web.js', '/email-signin-core.js',
   '/language.js', '/i18n.js', '/headjudge.css', '/study.css', '/look.js', '/tracked-demos.js', '/exercises.js', '/burpee.js', '/pose-filter.js', '/manifest.webmanifest',
   '/learn/learn.css', '/learn/learn.js', '/learn/core.js', '/learn/programmes.js', '/learn/people.js', '/learn/lesson.js', '/learn/practice.js',
-  '/learn/assess.js', '/learn/judgement.js', '/learn/govern.js', '/learn/reports.js', '/learn/diagnostics.js', '/learn/saved.js', '/learn/sharp.js', '/learn/landing.js',
+  '/learn/assess.js', '/learn/judgement.js', '/learn/govern.js', '/learn/reports.js', '/learn/diagnostics.js', '/learn/saved.js', '/learn/sharp.js', '/learn/landing.js', '/learn/invites.js',
   '/icons/spartanreferee/icon-192.png', '/icons/spartanreferee/icon-512.png'];
 const OURS = new Set(FILES);
 const ours = (path) => OURS.has(path) || path === '/learn/index.html' || path.startsWith('/i18n/') || path.startsWith('/icons/spartanreferee/');

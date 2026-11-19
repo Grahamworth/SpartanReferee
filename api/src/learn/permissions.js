@@ -35,6 +35,10 @@ function can(grants, action, { regionId, programmeId, personId, selfId } = {}) {
     case 'assess': return admin(grants) || (!!programmeId && (has(grants, 'programme_owner', { programmeId }) || has(grants, 'assessor', { programmeId })));
     case 'credential.change': return admin(grants) || (!!programmeId && has(grants, 'programme_owner', { programmeId }));
     case 'diagnostics.read': return admin(grants) || has(grants, 'technical_admin');
+    // invites (invites.js): only admins add people
+    case 'person.invite': return admin(grants);
+    // who's done what, and reminding them (progress.js): admins; a programme's owners and assessors; a region's coordinators
+    case 'progress.read': return admin(grants) || (!!programmeId && (has(grants, 'programme_owner', { programmeId }) || has(grants, 'assessor', { programmeId }))) || (!!regionId && has(grants, 'regional_coordinator', { regionId })) || (!programmeId && !regionId && (has(grants, 'assessor') || has(grants, 'regional_coordinator') || has(grants, 'programme_owner')));
     case 'report.read': return admin(grants) || (!!programmeId && has(grants, 'programme_owner', { programmeId })) || (!!regionId && has(grants, 'regional_coordinator', { regionId }));
     default: return false;
   }

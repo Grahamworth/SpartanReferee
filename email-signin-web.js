@@ -1,11 +1,12 @@
 // "Sign in with Microsoft" (any work, school or personal Microsoft account), the only way to sign in to SpartanReferee's website.
 // Microsoft's page opens in this tab and comes back to email-return.html with a one-time code, which the API swaps for a session.
-import { call } from './api-base.js';
+import { call, esc } from './api-base.js';
 import { randomText, challengeFor, signInAddress, readReturn } from './email-signin-core.js';
 
 const PENDING = 'hj_web_signin', TOKEN = 'sp_token';
 const BACK_TO = new Set(['register.html', 'home.html', 'console.html', 'results.html', 'customers.html', 'learn/']);
-const safeBack = (page) => (BACK_TO.has(page) || /^event\.html\?id=\d{1,12}$/.test(page) ? page : './'); // an event's page too
+// an event's page too, the join page with its invite, and a page of the app
+const safeBack = (page) => (BACK_TO.has(page) || /^event\.html\?id=\d{1,12}$/.test(page) || /^join\.html\?t=[\w-]{20,64}$/.test(page) || /^learn\/#\/[\w/-]{0,80}$/.test(page) ? page : './');
 
 // Off to Microsoft's page, remembering (in this tab only) what's needed to finish when it comes back.
 async function goSignIn(cfg, provider, back, options, onError) {
@@ -19,14 +20,58 @@ async function goSignIn(cfg, provider, back, options, onError) {
 const MS_LOGO = '<svg viewBox="0 0 21 21" width="20" height="20" aria-hidden="true"><path fill="#f25022" d="M1 1h9v9H1z"/><path fill="#7fba00" d="M11 1h9v9h-9z"/><path fill="#00a4ef" d="M1 11h9v9H1z"/><path fill="#ffb900" d="M11 11h9v9h-9z"/></svg>';
 /** Draws the sign-in buttons into el: "Sign in with Microsoft", and "Sign in with Google" (Spartan's own accounts are Google's,
  *  from 19 November 2026) once the site has a Google client id (GOOGLE_CLIENT_ID). Each shows only if it's switched on. */
-export async function microsoftButton(el, back, onError) {
+export async function microsoftButton(el, back, onError, opts = {}) {
   const cfg = await call('config').catch(() => ({}));
   const ms = cfg.microsoftSignIn && cfg.microsoftSignIn.webRedirectUri ? cfg.microsoftSignIn : null;
   const google = cfg.signIn && cfg.googleClientId && cfg.googleClientId !== 'dev' ? cfg.googleClientId : '';
-  if (!ms && !google) return;
-  el.innerHTML = `<div class="signInBtns">${google ? '<div class="gBtn"></div>' : ''}${ms ? `<button class="msBtn" type="button">${MS_LOGO}<span>Sign in with Microsoft</span></button>` : ''}</div>`;
+  const code = !!cfg.codeSignIn;
+  if (!ms && !google && !code) return;
+  el.innerHTML = `<div class="signInBtns">${google ? '<div class="gBtn"></div>' : ''}${ms ? `<button class="msBtn" type="button">${MS_LOGO}<span>Sign in with Microsoft</span></button>` : ''}${code ? '<div class="codeBox"></div>' : ''}</div>`;
   if (ms) el.querySelector('.msBtn').onclick = () => goSignIn(ms, 'microsoft', back, { prompt: 'select_account' }, onError);
   if (google) googleButton(el.querySelector('.gBtn'), google, back, onError);
+  if (code) codeSignIn(el.querySelector('.codeBox'), back, onError, opts);
+}
+const MAIL_ICON = '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6.5l8.5 6.5 8.5-6.5"/></svg>';
+/** "Sign in with email": for people with no Google or Microsoft account. They type their address, we email a 6-digit code
+ *  (POST /api/auth/code), they type it (POST /api/auth/code/verify), and they're in. opts.email fixes the address (the join page). */
+function codeSignIn(box, back, onError, opts = {}) {
+  const draw = () => {
+    box.innerHTML = `<button class="msBtn mailBtn" type="button">${MAIL_ICON}<span>Sign in with email</span></button>`;
+    box.firstChild.onclick = () => askAddress();
+  };
+  const askAddress = () => {
+    box.innerHTML = `<form class="codeForm"><label for="codeEmail">Your email address</label>
+      <input id="codeEmail" type="email" autocomplete="email" required maxlength="254" value="${esc(opts.email || '')}"${opts.email ? ' readonly' : ''}>
+      <button class="small primaryish" type="submit">Email me a code</button></form>`;
+    const f = box.querySelector('form');
+    if (!opts.email) f.codeEmail.focus();
+    f.onsubmit = async (e) => {
+      e.preventDefault();
+      const email = f.codeEmail.value.trim();
+      f.querySelector('button').disabled = true;
+      try { await call('auth/code', { method: 'POST', body: { email } }); askCode(email); }
+      catch (err) { f.querySelector('button').disabled = false; onError(err); }
+    };
+  };
+  const askCode = (email) => {
+    box.innerHTML = `<form class="codeForm"><p class="note"></p>
+      <label for="codeNum">The 6-digit code</label><input id="codeNum" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9 ]{6,7}" maxlength="7" required>
+      <button class="small primaryish" type="submit">Sign in</button> <button class="link" type="button" data-again>Send a new code</button></form>`;
+    box.querySelector('.note').textContent = (window.SR_I18N ? SR_I18N.t('If {email} can sign in, a code is on its way to it. It works for 10 minutes.', { email }) : `If ${email} can sign in, a code is on its way to it. It works for 10 minutes.`);
+    const f = box.querySelector('form');
+    f.codeNum.focus();
+    box.querySelector('[data-again]').onclick = () => askAddress();
+    f.onsubmit = async (e) => {
+      e.preventDefault();
+      f.querySelector('button').disabled = true;
+      try {
+        const r = await call('auth/code/verify', { method: 'POST', body: { email, code: f.codeNum.value } });
+        localStorage.setItem(TOKEN, r.token);
+        location.assign(new URL(safeBack(back), `${location.origin}/`).href);
+      } catch (err) { f.querySelector('button').disabled = false; onError(err); }
+    };
+  };
+  if (opts.email) askAddress(); else draw();
 }
 /** Google's own button (Google Identity Services): it gives an id token, which the API checks (POST /api/auth/google) and swaps for a
  *  session; then on to the page to come back to, as after Microsoft's */

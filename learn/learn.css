@@ -346,3 +346,11 @@ h3.sub { font-size: 1rem; text-transform: uppercase; letter-spacing: .04em; marg
 .lessonRow.locked b { color: var(--muted); }
 .tick.lock { border-style: dashed; display: grid; place-items: center; }
 .tick.lock svg { width: 12px; height: 12px; fill: none; stroke: var(--muted); stroke-width: 2.4; }
+/* invites (invites.js) */
+.inviteForm textarea { width: 100%; }
+.progPick { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; display: grid; gap: 6px; }
+.progTick { display: flex; gap: 10px; align-items: center; min-height: 40px; font-weight: 600; }
+.progTick input { width: 20px; height: 20px; accent-color: var(--primary); }
+.dueLabel { margin-top: 6px; }
+.inviteTabs { display: flex; flex-wrap: wrap; gap: 6px; }
+.chipLink.on { background: var(--primary); color: var(--on-primary); border-color: var(--primary); }

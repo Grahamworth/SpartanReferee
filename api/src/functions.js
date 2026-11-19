@@ -9,6 +9,7 @@ const { createEmailSignIn } = require('./email-signin');
 const { createMicrosoftSignIn } = require('./microsoft-signin');
 const { createPayments } = require('./payments');
 const { dbFromEnv } = require('./learn/db');
+const { createMailer } = require('./mailer');
 
 // Settings: GOOGLE_CLIENT_ID (the web client for Google sign-in), SESSION_SECRET (signs session tokens), ADMIN_EMAILS (comma separated),
 // CIAM_SUBDOMAIN, CIAM_TENANT_ID, CIAM_CLIENT_ID (email sign-in; none is a secret), MICROSOFT_CLIENT_ID (Sign in with Microsoft; not a secret),
@@ -30,6 +31,9 @@ const getApi = () => (api = api || createApi({
   // its narration: Azure AI Speech (LEARN_SPEECH_*), kept in the storage account's learn-media container
   learnSpeech: process.env.LEARN_SPEECH_KEY ? { key: process.env.LEARN_SPEECH_KEY, region: process.env.LEARN_SPEECH_REGION || 'uksouth' } : null,
   learnMedia: blobSigner(process.env.STORAGE_CONNECTION, 'learn-media'),
+  // email: invites, sign-in codes and reminders (Azure Communication Services: EMAIL_CONNECTION, a secret; EMAIL_FROM)
+  mailer: createMailer({ connection: process.env.EMAIL_CONNECTION, from: process.env.EMAIL_FROM }),
+  siteUrl: 'https://brave-forest-022879f03.3.azurestaticapps.net',
 }));
 
 app.http('api', {
