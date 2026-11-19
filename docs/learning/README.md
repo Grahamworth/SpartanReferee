@@ -31,6 +31,8 @@ The menu:
 | Media | admins, programme owners | which media provider plays the lessons |
 | Diagnostics | technical admins, admins | database health, migrations, narration use, activity counts and recent errors; nothing personal |
 
+**Language**: a referee's first visit to the home page asks for their language; it follows them to any device and becomes their learning profile's preferred language.
+
 **Preview as** (admins): the bar under the header switches the page to a type of user (Learner / referee, Regional coordinator, Programme owner, Content editor / translator, Assessor, Technical admin, Global admin), each shown by one of the invented people, or to any invented person. The server applies that person's permissions; the audit log records both of you.
 
 ### The demonstration people
@@ -51,7 +53,7 @@ The menu:
 
 ## What's in the demonstration content
 
-- **Spartan OCR Referee 2027**: the nine sections of the 2026 Referee Online Program as nine modules and 22 lessons. One lesson is complete end to end, *Spear Throw: commitment and failure* (rule 4.2.13), in English and in Spanish (a machine translation shown as a Preview translation until reviewed). The rest are shells, shown as "being written".
+- **Spartan OCR Referee 2027**: the nine sections of the 2026 Referee Online Program as nine modules and 22 lessons, all with content (from 19 November 2026). *Spear Throw: commitment and failure* (rule 4.2.13) is in English and Spanish (a machine translation shown as a Preview translation until reviewed). The other 21 (119 slides, `scripts/learn-ocr-lessons.json`) were written from the 2026 rulebook, Officiating SOP and online programme: they teach the rulebook, cite its sections (53 rule references in all), and where the 2026 sources disagree a slide says "Under review for 2027" instead of settling it (11 open review items). They are demonstration content, published for the demo; the officiating lead reviews them before any real use.
 - **The OCR knowledge check**: eight questions from sections 4 and 6, each citing its 2026 rule numbers, including a video judgement (a burpee with no jump, drawn by the site's own figure) that an assessor confirms.
 - **Burpee camera station 2027** (19 November 2026): what was the Cameras guide, now a course every referee can take: four modules, nine complete lessons (how the station works, booking, kit, placing and connecting phones, the AI judge, results, problems), an eight-question check and a demonstration credential. Its last lesson holds the free camera and, for head referees and admins, the only place a 30-minute practice server is booked. Old links to  open it.
 - **DEKA Judge (placeholder)**: a sample lesson and quiz with its own pass mark (70%) and credential (24 months), clearly not DEKA material.

@@ -119,7 +119,8 @@ try {
       return { scroll: document.documentElement.scrollWidth, W, wide: wide.slice(0, 8), small: small.slice(0, 10), height: document.documentElement.scrollHeight };
     })()`);
     await phone(Math.min(Math.max(report.height, 780), 6000)); await sleep(300);
-    const { result } = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: true });
+    // the viewport, sized to the page up to 6000px: capturing the whole of a very long page (the handbook) stalls Chrome
+    const { result } = await send('Page.captureScreenshot', { format: 'png' });
     fs.writeFileSync(path.join(OUT, `${name}.png`), Buffer.from(result.data, 'base64'));
     const sideways = report.scroll > report.W;
     if (sideways) bad++;
