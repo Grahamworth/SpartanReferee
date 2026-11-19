@@ -1970,8 +1970,6 @@
  "Your learning record is suspended: ask an admin": "Din utbildningsjournal är avstängd: fråga en admin",
  "a site admin": "en webbplatsadmin",
  "no longer a site admin": "inte längre webbplatsadmin",
- "Only admins can view as someone else": "Bara admins kan se webbplatsen som någon annan",
- "No such demo person": "Ingen sådan demoperson",
  "You can only see your own profile": "Du kan bara se din egen profil",
  "That region isn't yours": "Den regionen är inte din",
  "What's their name?": "Vad heter personen?",
@@ -3070,5 +3068,6 @@
  "The order has to list every lesson once, in its own module": "Ordningen måste ta upp varje lektion en gång, i sin egen modul",
  "Only the programme's owner or an admin publishes it": "Bara programmets ägare eller en administratör kan publicera det",
  "Nothing to publish": "Inget att publicera",
- "Not published: {x}": "Inte publicerat: {x}"
+ "Not published: {x}": "Inte publicerat: {x}",
+ "This didn't load. Try again in a moment.": "Det laddades inte. Försök igen om en stund."
 }

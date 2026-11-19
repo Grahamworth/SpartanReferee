@@ -1964,8 +1964,6 @@
  "Your learning record is suspended: ask an admin": "Je leerdossier is geschorst: vraag een beheerder",
  "a site admin": "een sitebeheerder",
  "no longer a site admin": "geen sitebeheerder meer",
- "Only admins can view as someone else": "Alleen beheerders kunnen de site als iemand anders bekijken",
- "No such demo person": "Geen demopersoon met die naam",
  "You can only see your own profile": "Je kunt alleen je eigen profiel zien",
  "That region isn't yours": "Die regio is niet de jouwe",
  "What's their name?": "Hoe heet die persoon?",
@@ -3063,5 +3061,6 @@
  "The order has to list every lesson once, in its own module": "De volgorde moet elke les één keer bevatten, in de eigen module",
  "Only the programme's owner or an admin publishes it": "Alleen de eigenaar van het programma of een beheerder kan het publiceren",
  "Nothing to publish": "Niets te publiceren",
- "Not published: {x}": "Niet gepubliceerd: {x}"
+ "Not published: {x}": "Niet gepubliceerd: {x}",
+ "This didn't load. Try again in a moment.": "Dit is niet geladen. Probeer het zo opnieuw."
 }

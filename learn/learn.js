@@ -72,6 +72,7 @@ async function loadMe() {
   try { S.me = await call('me'); }
   catch (e) { if (store.get(PREVIEW_KEY)) { store.set(PREVIEW_KEY, ''); S.me = await call('me'); } else throw e; }
   if (!S.me.canPreview) store.set(PREVIEW_KEY, ''); // not an admin (any more): no preview
+  if (store.get(AS_KEY) && !S.me.actingAs) store.set(AS_KEY, ''); // an invented person who's gone: be yourself again
   // what's kept on the phone for offline use is this person's (offline.js)
   if (!S.me.actingAs && !S.me.previewRole) { setOwner(S.me.person.email); keep('me', S.me); }
   drawChrome();
@@ -82,8 +83,10 @@ async function enter() {
   try { await loadMe(); }
   catch (e) {
     if (e.status === 401) { signOut(); return start(); }
-    if (e.status === 403) { $('closedText').textContent = e.message; show($('closed'), true); return; }
-    fail(e.message); return; // e.g. the database waking up: try again in a minute
+    if (e.status === 403) { $('view').innerHTML = ''; $('closedText').textContent = e.message; show($('closed'), true); return; }
+    // e.g. the database waking up: say so, with a way to try again, instead of the loading spinner going round for ever
+    $('view').innerHTML = `<section class="card"><p>${esc(t('This didn\'t load. Try again in a moment.'))}</p><button class="small" type="button" onclick="location.reload()">${esc(t('Try again'))}</button></section>`;
+    fail(e.message); return;
   }
   // the first visit asks for a language, as the home page does (someone may come here first)
   try { if (language(await viaCache('site/home', () => siteCall('home')), $('langCard'))) return; } catch { /* the page still works in this language */ }

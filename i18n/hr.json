@@ -2005,8 +2005,6 @@
  "Your learning record is suspended: ask an admin": "Vaš je zapis o učenju suspendiran: obratite se administratoru",
  "a site admin": "administrator web-mjesta",
  "no longer a site admin": "više nije administrator web-mjesta",
- "Only admins can view as someone else": "Samo administratori mogu pregledavati kao netko drugi",
- "No such demo person": "Nema takve demo osobe",
  "You can only see your own profile": "Možete vidjeti samo svoj profil",
  "That region isn't yours": "Ta regija nije vaša",
  "What's their name?": "Kako se zovu?",
@@ -3104,5 +3102,6 @@
  "The order has to list every lesson once, in its own module": "Redoslijed mora navesti svaku lekciju jednom, u njezinu modulu",
  "Only the programme's owner or an admin publishes it": "Program može objaviti samo njegov vlasnik ili administrator",
  "Nothing to publish": "Nema ničega za objavu",
- "Not published: {x}": "Nije objavljeno: {x}"
+ "Not published: {x}": "Nije objavljeno: {x}",
+ "This didn't load. Try again in a moment.": "Ovo se nije učitalo. Pokušajte ponovno za trenutak."
 }

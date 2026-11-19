@@ -62,8 +62,9 @@ test('an admin creates demo people, gives roles, and views as them; a coordinato
   assert.deepStrictEqual(mine.body.editable, ['preferred_name', 'locale']);
   assert.strictEqual((await call('PUT', `learn/people/${anna.id}`, asAnna, { preferredName: 'Annie', locale: 'fr' })).status, 200);
   assert.strictEqual((await call('PUT', `learn/people/${anna.id}`, asAnna, { email: 'x@y.z' })).status, 403);
-  // only demo people can be viewed as; someone who isn't an admin can't view as anyone
-  assert.strictEqual((await call('GET', 'learn/me', { ...boss, 'x-learn-as': '00000000-0000-0000-0000-000000000000' })).status, 404);
+  // only demo people can be viewed as: asking for someone who isn't there (a phone remembering a removed demo person) is just you
+  const gone = await call('GET', 'learn/me', { ...boss, 'x-learn-as': '00000000-0000-0000-0000-000000000000' });
+  assert.strictEqual(gone.status, 200); assert.strictEqual(gone.body.actingAs, null);
 });
 
 test('a possible duplicate is flagged for review, never merged; the audit log says who did what, as whom', { skip }, async () => {

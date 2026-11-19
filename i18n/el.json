@@ -1978,8 +1978,6 @@
  "Your learning record is suspended: ask an admin": "Το αρχείο εκπαίδευσής σας βρίσκεται σε αναστολή: ζητήστε από έναν διαχειριστή",
  "a site admin": "διαχειριστής του ιστότοπου",
  "no longer a site admin": "δεν είναι πια διαχειριστής του ιστότοπου",
- "Only admins can view as someone else": "Μόνο οι διαχειριστές μπορούν να δουν τον ιστότοπο ως κάποιος άλλος",
- "No such demo person": "Δεν υπάρχει τέτοιο demo πρόσωπο",
  "You can only see your own profile": "Μπορείτε να δείτε μόνο το δικό σας προφίλ",
  "That region isn't yours": "Αυτή η περιοχή δεν είναι δική σας",
  "What's their name?": "Ποιο είναι το όνομά τους;",
@@ -3077,5 +3075,6 @@
  "The order has to list every lesson once, in its own module": "Η σειρά πρέπει να περιλαμβάνει κάθε μάθημα μία φορά, στη δική του ενότητα",
  "Only the programme's owner or an admin publishes it": "Μόνο ο ιδιοκτήτης του προγράμματος ή ένας διαχειριστής μπορεί να το δημοσιεύσει",
  "Nothing to publish": "Δεν υπάρχει τίποτα για δημοσίευση",
- "Not published: {x}": "Δεν δημοσιεύτηκε: {x}"
+ "Not published: {x}": "Δεν δημοσιεύτηκε: {x}",
+ "This didn't load. Try again in a moment.": "Δεν φορτώθηκε. Δοκιμάστε ξανά σε λίγο."
 }

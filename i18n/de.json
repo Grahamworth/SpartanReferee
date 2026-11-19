@@ -1964,8 +1964,6 @@
  "Your learning record is suspended: ask an admin": "Ihr Lernnachweis ist ausgesetzt: Fragen Sie einen Admin",
  "a site admin": "ein Site-Admin",
  "no longer a site admin": "kein Site-Admin mehr",
- "Only admins can view as someone else": "Nur Admins können die Seite als jemand anderes ansehen",
- "No such demo person": "Keine solche Demo-Person",
  "You can only see your own profile": "Sie können nur Ihr eigenes Profil sehen",
  "That region isn't yours": "Diese Region ist nicht Ihre",
  "What's their name?": "Wie heißt die Person?",
@@ -3063,5 +3061,6 @@
  "The order has to list every lesson once, in its own module": "Die Reihenfolge muss jede Lektion einmal enthalten, in ihrem eigenen Modul",
  "Only the programme's owner or an admin publishes it": "Nur der Eigentümer des Programms oder ein Admin kann es veröffentlichen",
  "Nothing to publish": "Nichts zu veröffentlichen",
- "Not published: {x}": "Nicht veröffentlicht: {x}"
+ "Not published: {x}": "Nicht veröffentlicht: {x}",
+ "This didn't load. Try again in a moment.": "Das hat nicht geladen. Versuchen Sie es gleich noch einmal."
 }

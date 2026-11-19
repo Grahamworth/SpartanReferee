@@ -1973,8 +1973,6 @@
  "Your learning record is suspended: ask an admin": "Din læringsjournal er suspenderet: spørg en admin",
  "a site admin": "en webstedsadmin",
  "no longer a site admin": "ikke længere webstedsadmin",
- "Only admins can view as someone else": "Kun admins kan se som en anden",
- "No such demo person": "Ingen sådan demoperson",
  "You can only see your own profile": "Du kan kun se din egen profil",
  "That region isn't yours": "Den region er ikke din",
  "What's their name?": "Hvad hedder vedkommende?",
@@ -3073,5 +3071,6 @@
  "The order has to list every lesson once, in its own module": "Rækkefølgen skal nævne hver lektion én gang, i dens eget modul",
  "Only the programme's owner or an admin publishes it": "Kun programmets ejer eller en administrator kan udgive det",
  "Nothing to publish": "Intet at udgive",
- "Not published: {x}": "Ikke udgivet: {x}"
+ "Not published: {x}": "Ikke udgivet: {x}",
+ "This didn't load. Try again in a moment.": "Det blev ikke indlæst. Prøv igen om lidt."
 }

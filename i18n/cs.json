@@ -2021,8 +2021,6 @@
  "Your learning record is suspended: ask an admin": "Váš vzdělávací záznam je pozastaven: obraťte se na správce",
  "a site admin": "správce webu",
  "no longer a site admin": "už není správce webu",
- "Only admins can view as someone else": "Zobrazit jako někdo jiný mohou jen správci",
- "No such demo person": "Taková demo osoba neexistuje",
  "You can only see your own profile": "Vidět můžete jen svůj vlastní profil",
  "That region isn't yours": "Tento region není váš",
  "What's their name?": "Jak se jmenuje?",
@@ -3120,5 +3118,6 @@
  "The order has to list every lesson once, in its own module": "Pořadí musí obsahovat každou lekci jednou, ve vlastním modulu",
  "Only the programme's owner or an admin publishes it": "Program může zveřejnit jen jeho vlastník nebo správce",
  "Nothing to publish": "Není co zveřejnit",
- "Not published: {x}": "Nezveřejněno: {x}"
+ "Not published: {x}": "Nezveřejněno: {x}",
+ "This didn't load. Try again in a moment.": "Nenačetlo se to. Zkuste to za chvíli znovu."
 }

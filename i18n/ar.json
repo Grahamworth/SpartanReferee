@@ -2047,8 +2047,6 @@
  "Your learning record is suspended: ask an admin": "سجل تعلّمك معلّق: اسأل مسؤولًا",
  "a site admin": "مسؤول الموقع",
  "no longer a site admin": "لم يعد مسؤولًا عن الموقع",
- "Only admins can view as someone else": "يستطيع المسؤولون فقط العرض بصفة شخص آخر",
- "No such demo person": "لا يوجد شخص تجريبي بهذا الاسم",
  "You can only see your own profile": "لا يمكنك رؤية إلا ملفك الشخصي",
  "That region isn't yours": "هذا الإقليم ليس إقليمك",
  "What's their name?": "ما اسمه؟",
@@ -3147,5 +3145,6 @@
  "The order has to list every lesson once, in its own module": "يجب أن يذكر الترتيب كل درس مرة واحدة، في وحدته الخاصة",
  "Only the programme's owner or an admin publishes it": "فقط مالك البرنامج أو المسؤول يمكنه نشره",
  "Nothing to publish": "لا شيء للنشر",
- "Not published: {x}": "غير منشور: {x}"
+ "Not published: {x}": "غير منشور: {x}",
+ "This didn't load. Try again in a moment.": "لم يتم التحميل. حاول مرة أخرى بعد لحظة."
 }

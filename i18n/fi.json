@@ -1985,8 +1985,6 @@
  "Your learning record is suspended: ask an admin": "Oppimistietosi on keskeytetty: kysy ylläpitäjältä",
  "a site admin": "sivuston ylläpitäjä",
  "no longer a site admin": "ei enää sivuston ylläpitäjä",
- "Only admins can view as someone else": "Vain ylläpitäjät voivat katsoa sivustoa jonkun toisen näkökulmasta",
- "No such demo person": "Tuollaista esittelyhenkilöä ei ole",
  "You can only see your own profile": "Näet vain oman profiilisi",
  "That region isn't yours": "Tuo alue ei ole sinun",
  "What's their name?": "Mikä hänen nimensä on?",
@@ -3084,5 +3082,6 @@
  "The order has to list every lesson once, in its own module": "Järjestyksessä on oltava jokainen oppitunti kerran, omassa moduulissaan",
  "Only the programme's owner or an admin publishes it": "Vain ohjelman omistaja tai ylläpitäjä voi julkaista sen",
  "Nothing to publish": "Ei mitään julkaistavaa",
- "Not published: {x}": "Ei julkaistu: {x}"
+ "Not published: {x}": "Ei julkaistu: {x}",
+ "This didn't load. Try again in a moment.": "Tämä ei latautunut. Yritä hetken päästä uudelleen."
 }

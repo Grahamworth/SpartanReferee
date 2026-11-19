@@ -113,11 +113,11 @@ function createLearn({ db, session, isAdminEmail = () => false, member = null, r
       realGrants = await grantsOf(real.person_id);
     }
     const asId = h['x-learn-as'];
-    if (asId && asId !== real.person_id) {
-      if (!P.can(realGrants, 'view-as')) return { error: reply(403, { error: 'Only admins can view as someone else' }) };
-      const as = await personById(asId);
-      if (!as || !as.synthetic || as.status !== 'active') return { error: reply(404, { error: 'No such demo person' }) };
-      return { person: as, grants: await grantsOf(as.person_id), realId: real.person_id, actingAs: as.person_id, real };
+    // viewing as an invented person (admins only). A phone may still ask for one that has since been removed, or for an account
+    // that's no longer an admin: then it's simply you, and the page forgets it (learn.js), rather than refusing to open (19 Nov 2026)
+    if (asId && asId !== real.person_id && P.can(realGrants, 'view-as')) {
+      const as = isUuid(asId) ? await personById(asId) : null;
+      if (as && as.synthetic && as.status === 'active') return { person: as, grants: await grantsOf(as.person_id), realId: real.person_id, actingAs: as.person_id, real };
     }
     // an admin previewing a type of user (X-Learn-As-Role): their own account, with only that type's roles (19 November 2026)
     const asRole = String(h['x-learn-as-role'] || h['x-preview-role'] || ''); // X-Preview-Role: the same, from the pages outside the app (appnav.js)

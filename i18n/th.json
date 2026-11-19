@@ -1967,8 +1967,6 @@
  "Your learning record is suspended: ask an admin": "บันทึกการเรียนรู้ของคุณถูกระงับ: สอบถามผู้ดูแลระบบ",
  "a site admin": "ผู้ดูแลระบบของไซต์",
  "no longer a site admin": "ไม่ได้เป็นผู้ดูแลระบบของไซต์อีกต่อไป",
- "Only admins can view as someone else": "เฉพาะผู้ดูแลระบบเท่านั้นที่ดูในฐานะคนอื่นได้",
- "No such demo person": "ไม่มีบุคคลสาธิตนี้",
  "You can only see your own profile": "คุณดูได้เฉพาะโปรไฟล์ของตัวเอง",
  "That region isn't yours": "ภูมิภาคนั้นไม่ใช่ของคุณ",
  "What's their name?": "เขาชื่ออะไร",
@@ -3067,5 +3065,6 @@
  "The order has to list every lesson once, in its own module": "ลำดับต้องมีทุกบทเรียนอย่างละหนึ่งครั้ง ในโมดูลของตัวเอง",
  "Only the programme's owner or an admin publishes it": "เฉพาะเจ้าของโปรแกรมหรือผู้ดูแลระบบเท่านั้นที่เผยแพร่ได้",
  "Nothing to publish": "ไม่มีอะไรให้เผยแพร่",
- "Not published: {x}": "ไม่ได้เผยแพร่: {x}"
+ "Not published: {x}": "ไม่ได้เผยแพร่: {x}",
+ "This didn't load. Try again in a moment.": "โหลดไม่สำเร็จ ลองอีกครั้งในอีกสักครู่"
 }
