@@ -37,3 +37,11 @@ site-extras/
 
 # Spartan's referee material as supplied: kept on this PC, never committed or deployed as is
 material/
+
+# the promo video's working files (promo/render-spartanreferee.mjs, promo/shoot.mjs, promo/peek.mjs): made again on demand
+promo/frames/
+promo/out/
+promo/shots/
+promo/peek*.jpg
+promo/contact.jpg
+promo/peeks.jpg

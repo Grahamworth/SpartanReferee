@@ -1534,5 +1534,264 @@
    ],
    "narration": "To je konec ukázkové lekce. Kvíz, který následuje, je také ukázkový, aby ukázal, jak každý program uchovává vlastní hodnocení a osvědčení."
   }
+ ],
+ "ess-1-1": [
+  {
+   "heading": "Jeden závod, jedna norma",
+   "points": [
+    "Spartan zkouší každého závodníka",
+    "Rozhodčí chrání férovost této zkoušky",
+    "Chraňte integritu, jednejte se všemi stejně, dbejte na férovost"
+   ],
+   "narration": "Spartan zkouší každého závodníka, který vyběhne na start. Vaším úkolem rozhodčího je chránit férovost této zkoušky: chránit integritu závodu, jednat se všemi závodníky stejně a dbát na to, aby byl závod férový."
+  },
+  {
+   "heading": "Váš kodex rozhodčího",
+   "points": [
+    "Buďte nestranní: posuzujte jednání, nikdy závodníka",
+    "Bezpečnost na prvním místě: všimněte si nebezpečí a hned ho nahlaste",
+    "Dodržujte pravidla: pokaždé stejná norma",
+    "Pochybnosti předejte dál: hlavnímu rozhodčímu"
+   ],
+   "narration": "Čtyři věci nejsou k diskusi. Buďte nestranní: posuzujte jednání, nikdy závodníka. Na prvním místě je bezpečnost: nebezpečí si všimněte a hned ho nahlaste. Dodržujte pravidla a pokaždé uplatňujte stejnou normu. A když máte pochybnosti, předejte je hlavnímu rozhodčímu."
+  },
+  {
+   "heading": "Vězte, koho posuzujete",
+   "points": [
+    "Dvě kategorie: soutěžní (Elite a Age Group) a Open",
+    "Open je o účasti",
+    "Vždy se řiďte pokyny události pro danou kategorii"
+   ],
+   "narration": "Závodníci startují ve dvou kategoriích. Soutěžní jsou závodníci Elite a Age Group. Open je o účasti. Obě kategorie se mohou jet odlišně, proto se vždy řiďte pokyny události pro kategorii, kterou máte před sebou."
+  },
+  {
+   "heading": "Ve zkratce",
+   "points": [
+    "Chráníte férovou zkoušku pro všechny",
+    "Nestranně, bezpečně, jednotně a pochybnosti předávejte dál",
+    "Znejte kategorii a řiďte se pokyny události"
+   ],
+   "narration": "Ve zkratce. Chráníte férovou zkoušku pro každého závodníka. Buďte nestranní, dbejte na bezpečnost, postupujte jednotně a pochybnosti předávejte dál. Vězte, kterou kategorii posuzujete, a řiďte se pokyny události."
+  }
+ ],
+ "ess-2-1": [
+  {
+   "heading": "Od prezence po předání",
+   "points": [
+    "Briefing",
+    "Prezence",
+    "Kontrola",
+    "Rozhodování",
+    "Předání",
+    "Hlášení"
+   ],
+   "narration": "Den závodu má šest kroků a jednu nepřetržitou odpovědnost: briefing, prezenci, kontrolu vaší překážky, rozhodování, předání a hlášení."
+  },
+  {
+   "heading": "Přijďte připraveni",
+   "points": [
+    "Přihlaste se a potvrďte své přidělení",
+    "Převezměte vybavení a pravidla",
+    "Připojte se k vysílačce nebo chatu události, pokud existuje",
+    "Hlaste se hlavnímu rozhodčímu"
+   ],
+   "narration": "Přijďte připraveni na závod. Přihlaste se a potvrďte, kam jste přidělen. Převezměte vybavení a pravidla. Připojte se k vysílačce nebo chatu události, pokud ji má, a hlaste se hlavnímu rozhodčímu."
+  },
+  {
+   "heading": "Převezměte svou překážku",
+   "points": [
+    "Znejte pravidlo: splnění, nesplnění a trest",
+    "Zkontrolujte bezpečnost: sestavení a případná rizika",
+    "Projděte trasu: jak závodníci postupují a trestný okruh",
+    "Zvolte si místo s dobrým výhledem a poučte případné pořadatele"
+   ],
+   "narration": "Připravte svou překážku dřív, než dorazí první závodník. Znejte její pravidlo: co je splnění, co je nesplnění a jaký je trest. Zkontrolujte ji z hlediska bezpečnosti. Projděte trasu, včetně trestného okruhu. Pak si zvolte, kde budete stát, a poučte případné pořadatele."
+  },
+  {
+   "heading": "Při pochybnostech předejte dál",
+   "points": [
+    "Rozhodčí: pozoruje, uplatní pravidlo, zapíše",
+    "Hlavní rozhodčí: přezkoumá, řídí, vykládá",
+    "Ředitel závodu nebo časomíra: další kroky, kde je to potřeba"
+   ],
+   "narration": "Dodržujte postup. Vy pozorujete, uplatníte pravidlo a zapíšete, co se stalo. Hlavní rozhodčí přezkoumává, řídí a vykládá. Ředitel závodu nebo časomíra podnikne další kroky tam, kde je to potřeba. Když máte pochybnosti, předejte věc dál."
+  },
+  {
+   "heading": "Ve zkratce",
+   "points": [
+    "Šest kroků, jedna odpovědnost",
+    "Znejte pravidlo, zkontrolujte, projděte trasu, zvolte místo",
+    "Předávejte věci přes hlavního rozhodčího"
+   ],
+   "narration": "Ve zkratce. Den závodu je šest kroků a jedna odpovědnost. Znejte pravidlo své překážky, zkontrolujte ji, projděte trasu a zvolte si místo. A věci předávejte přes hlavního rozhodčího."
+  }
+ ],
+ "ess-3-1": [
+  {
+   "heading": "Tři druhy, tři cesty pravidel",
+   "points": [
+    "Povinná: musí se splnit",
+    "S více pokusy: závodník to může zkusit znovu",
+    "S jedním pokusem: záleží, kdy pokus začíná"
+   ],
+   "narration": "Než rozhodnete, poznejte druh překážky. Povinná překážka se musí splnit. U překážky s více pokusy to může závodník zkusit znovu. U překážky s jedním pokusem mění rozhodnutí okamžik, kdy pokus začíná."
+  },
+  {
+   "heading": "Povinná: splnit, nebo diskvalifikace",
+   "points": [
+    "Závodník ji musí dokončit, než půjde dál",
+    "Například nošení břemen, barbed wire crawl a fire jump",
+    "Ředitel závodu může místo diskvalifikace dát časový trest"
+   ],
+   "narration": "Povinnou překážku je nutné splnit, než závodník půjde dál. Příkladem jsou nošení břemen, barbed wire crawl a fire jump. Nesplnění obvykle znamená diskvalifikaci, i když ředitel závodu může místo toho dát časový trest."
+  },
+  {
+   "heading": "S více pokusy: zkusit znovu, nebo trest",
+   "points": [
+    "Například Rope Climb, Hercules Hoist a stěny",
+    "Závodník to může zkoušet, dokud se mu to nepodaří",
+    "Nebo to vzdá a vykoná trest"
+   ],
+   "narration": "U překážky s více pokusy, například Rope Climb, Hercules Hoist nebo stěn, může závodník zkoušet, dokud se mu to nepodaří, nebo to vzdá a vykoná trest."
+  },
+  {
+   "heading": "S jedním pokusem: zavázání mění rozhodnutí",
+   "points": [
+    "Pravidlo každé překážky říká, kdy pokus začíná",
+    "Před tímto bodem může závodník ještě začít znovu",
+    "Po něm znamená nezdar trest",
+    "Například Monkey Bars, Multi-Rig a Z Wall"
+   ],
+   "narration": "U překážky s jedním pokusem pravidlo každé překážky říká, kdy pokus začíná. Před tímto bodem může závodník ještě začít znovu. Po něm znamená nezdar trest. Příkladem jsou Monkey Bars, Multi-Rig a Z Wall."
+  },
+  {
+   "heading": "Spear Throw: čtyři věci ke sledování",
+   "points": [
+    "Obě chodidla za zábranou",
+    "Hod na terč ve stejném pruhu",
+    "Kopí se zabodne do terče a zůstane v něm",
+    "Závodník odejde 2 metry stranou, než se to počítá"
+   ],
+   "narration": "Spear Throw je překážka s jedním pokusem. Sledujte čtyři věci: obě chodidla za zábranou, hod na terč ve vlastním pruhu závodníka, kopí zabodnuté v terči, které v něm zůstane, a závodníka, který odejde dva metry stranou, než se to počítá. Jakmile se kopí zastaví, nesmí se žádná jeho část dotýkat země."
+  },
+  {
+   "heading": "Ve zkratce",
+   "points": [
+    "Povinná: splnit, jinak obvykle diskvalifikace",
+    "S více pokusy: zkusit znovu, nebo trest",
+    "S jedním pokusem: vězte, kdy pokus začíná"
+   ],
+   "narration": "Ve zkratce. Povinnou překážku je nutné splnit, jinak obvykle následuje diskvalifikace. U překážky s více pokusy může závodník zkusit znovu, nebo vykonat trest. U překážky s jedním pokusem přesně vězte, kdy pokus začíná."
+  }
+ ],
+ "ess-4-1": [
+  {
+   "heading": "Trest musí odpovídat",
+   "points": [
+    "Určený trestný okruh, celý",
+    "Nebo, pokud to událost stanoví, 30 burpees (15 na událostech Stadion)",
+    "Nikdy nedávejte vlastní trest",
+    "Nesplnění povinné překážky obvykle znamená diskvalifikaci, ne okruh"
+   ],
+   "narration": "Trest musí být ten, který stanoví událost. Tedy celý určený trestný okruh nebo, pokud to událost stanoví, třicet burpees, na událostech Stadion patnáct. Nikdy nedávejte vlastní trest. A nesplnění povinné překážky obvykle znamená diskvalifikaci, ne okruh."
+  },
+  {
+   "heading": "Vynechání trestného okruhu",
+   "points": [
+    "Závodník nesplní překážku splněno/nesplněno a okruh vynechá",
+    "K jeho cílovému času se přičte 10 minut",
+    "Zjistit se to může na trati nebo při kontrole před vyhlášením výsledků"
+   ],
+   "narration": "Pokud závodník nesplní překážku splněno nebo nesplněno a nevykoná trestný okruh, přičte se k jeho cílovému času deset minut. Zjistit se to může na trati nebo při kontrole před vyhlášením výsledků."
+  },
+  {
+   "heading": "Sledujte celé opakování",
+   "points": [
+    "Hrudník na zemi dole",
+    "Boky a kolena úplně natažené nahoře",
+    "Výskok s rukama nad ušima"
+   ],
+   "narration": "Burpee se počítá, když vidíte všechny tři části: hrudník na zemi dole, boky a kolena úplně natažené nahoře a výskok s rukama nad ušima."
+  },
+  {
+   "heading": "Pozorujte, netrénujte",
+   "points": [
+    "Závodník si burpees počítá sám",
+    "Může zopakovat to, o němž si není jistý",
+    "Vy sledujete normu a pomáháte při kontrole videa"
+   ],
+   "narration": "Závodník si burpees počítá sám a může zopakovat to, o němž si není jistý. Vaším úkolem je sledovat normu a pomáhat při kontrole videa, ne trénovat."
+  },
+  {
+   "heading": "Nezdařená burpees: znejte stupnici",
+   "points": [
+    "30 sekund za každé z prvních 10 nezdařených",
+    "Více než 10 nezdařených: celkem 10 minut",
+    "Stadion: 30 sekund za každé z prvních 5; více než 5 je 5 minut"
+   ],
+   "narration": "Podle pravidla 3.4.2 přidává každé z prvních deseti nezdařených burpees třicet sekund. Více než deset nezdařených přidává celkem deset minut. Na událostech Stadion je to třicet sekund za každé z prvních pěti a pět minut za více než pět.",
+   "review": "Ke kontrole pro 2027: Officiating SOP a program 2026 uvádějí u nezdařených burpees různé hodnoty. Uplatněte pravidla a každý trest potvrzuje hlavní rozhodčí."
+  },
+  {
+   "heading": "Ve zkratce",
+   "points": [
+    "Trest události, celý, a nikdy vlastní",
+    "Vynechání okruhu přidá 10 minut",
+    "Hrudník dole, úplně vzpřímeně, výskok s rukama nad ušima"
+   ],
+   "narration": "Ve zkratce. Dávejte trest události, celý, a nikdy vlastní. Vynechání okruhu přidá deset minut. A burpee je hrudník dole, úplně vzpřímený stoj a pak výskok s rukama nad ušima."
+  }
+ ],
+ "ess-5-1": [
+  {
+   "heading": "Buďte jasní a klidní",
+   "points": [
+    "Vysvětlete pravidlo stručně, uctivě a přesně",
+    "Nehádejte se: námitku předejte hlavnímu rozhodčímu"
+   ],
+   "narration": "Profesionální rozhovor brání tomu, aby spory rostly. Vysvětlete pravidlo stručně, uctivě a přesně. Nehádejte se: námitku předejte hlavnímu rozhodčímu."
+  },
+  {
+   "heading": "Důkazy porazí názor",
+   "points": [
+    "Číslo na čelence",
+    "Překážka a její umístění",
+    "Co jste viděli",
+    "Kdy se to stalo",
+    "Komu jste to řekli"
+   ],
+   "narration": "Dejte hlavnímu rozhodčímu přesný záznam: číslo na čelence, překážku a její umístění, co jste viděli, kdy se to stalo a komu jste to řekli."
+  },
+  {
+   "heading": "Soustřeďte se a zůstaňte neutrální",
+   "points": [
+    "Sledujte dění",
+    "Vyvarujte se jakékoli zaujatosti",
+    "Chraňte bezpečnost",
+    "Nikdy závodníka během pokusu netrénujte"
+   ],
+   "narration": "Vaše pozice je postavená na důvěře. Sledujte dění, vyvarujte se jakékoli zaujatosti a chraňte bezpečnost. Nikdy závodníka během pokusu netrénujte."
+  },
+  {
+   "heading": "Uvidíte rozhodující okamžik",
+   "points": [
+    "Příchod: znejte vstup a hranice pruhů",
+    "Akce: všimněte si nepovoleného kontaktu nebo nezdaru",
+    "Cíl: uvidíte podmínku splnění, například zvonek",
+    "Očekávejte místa nezdaru a mějte volný výhled"
+   ],
+   "narration": "Dobré rozhodnutí začíná jasným výhledem. Vězte, kudy závodníci vstupují a kde jsou hranice pruhů. Sledujte nepovolený kontakt nebo nezdar. Uvidíte podmínku splnění, například zvonek. Očekávejte, kde dochází k nezdarům, a mějte volný výhled."
+  },
+  {
+   "heading": "Pět pravidel pro den závodu",
+   "points": [
+    "Bezpečnost na prvním místě",
+    "Vždy jednotně",
+    "Znejte překážku",
+    "Dávejte správný trest",
+    "Nejistotu předávejte dál"
+   ],
+   "narration": "Pět pravidel, která si vezměte na závod. Bezpečnost na prvním místě. Vždy jednotně. Znejte překážku. Dávejte správný trest. A nejistotu předávejte dál."
+  }
  ]
 }

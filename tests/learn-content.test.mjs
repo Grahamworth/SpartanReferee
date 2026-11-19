@@ -122,10 +122,10 @@ test('slide animations point at real slides and real scenes', async () => {
   const b = SCENES.burpee();
   assert.strictEqual(b.good.marks.length, 3); assert.strictEqual(b.fails.length, 3);
 });
-test('Referee Essentials: five modules from the mobile prototype, in English and German, each lesson with its quick check', async () => {
+test('Referee Essentials: five modules from the mobile prototype, in all 15 languages, each lesson with its quick check', async () => {
   const { ESSENTIALS, ESSENTIALS_LESSONS } = await import('../scripts/learn-essentials.mjs');
   assert.ok(PROGRAMMES.includes(ESSENTIALS));
-  assert.strictEqual(ESSENTIALS.locales, 'en,de');
+  assert.strictEqual(ESSENTIALS.locales.split(',').length, 15);
   assert.strictEqual(ESSENTIALS.modules.length, 5);
   for (const k of Object.keys(ESSENTIALS_LESSONS)) { assert.ok(LESSONS[k]); assert.ok(TRANSLATIONS.de[k], k); }
 });

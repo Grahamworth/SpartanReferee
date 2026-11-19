@@ -1,11 +1,11 @@
 // Referee Essentials (19 November 2026): a short course for new referees, from the "Spartan Referee 2026 Mobile Prototype" deck: five
 // modules (welcome, race day, obstacle logic, penalty logic, conduct), each one lesson, its "make the call" questions as the lessons'
 // quick checks (scripts/learn-checks.json). Written in our own words and checked against the 2026 rulebook; where the 2026 sources
-// disagree (the time for missed burpees) the slide says it's under review, as the OCR programme does. English and German.
+// disagree (the time for missed burpees) the slide says it's under review, as the OCR programme does. In all 15 languages.
 
 const R = (n) => `OCR-2026-${n}`;
 export const ESSENTIALS = {
-  id: 'referee-essentials', code: 'ess', title: 'Referee Essentials', category: 'referee', learnerRole: 'Referee', locales: 'en,de',
+  id: 'referee-essentials', code: 'ess', title: 'Referee Essentials', category: 'referee', learnerRole: 'Referee', locales: 'en,fr,de,nl,es,it,el,hr,cs,pl,fi,sv,da,ar,th',
   description: 'A short course for new referees: what a referee is for, race day, the three kinds of obstacle, penalties and the burpee standard, and conduct. From the Spartan Referee 2026 mobile prototype.',
   version: {
     edition: '2027', completionRule: 'lessons', passMark: 80, maxAttempts: null, retakeWaitHours: 0, validityMonths: 12, renewalDueDays: 60,

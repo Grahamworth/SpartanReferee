@@ -89,6 +89,10 @@ Tabs: **Home**, **My Learning**, **Events**, **Rules**, **Obstacles**, plus role
 
 **Referee Essentials** (19 November 2026): a new programme from the *Spartan Referee 2026 Mobile Prototype* deck, in English and German (`scripts/learn-essentials.mjs`): five modules (welcome, race day, obstacle logic, penalty logic, conduct), one lesson each with animations, and the deck's "make the call" questions as quick checks. Completion is the lessons (no assessment). The time for missed burpees is taught from rule 3.4.2 with an "under review" note, as the OCR programme flags the sources' disagreement.
 
+**All 15 languages** (19 November 2026): the obstacles pages, videos, calls to make, animations and the lesson editor's picker are translated into every language the site offers, and Referee Essentials is in all 15 (machine translations, not yet reviewed).
+
+**Promo video** (`promo/`): `promo/spartanreferee.html` is the video as a page that draws any moment (the older `promo/promo.html` is the HeadJudge Broadcaster promo); `node promo/shoot.mjs` takes phone screenshots of the local site (`node api/dev-server.js 8795`), `node promo/peek.mjs 3 14 30` shows a few stills, and `node promo/render-spartanreferee.mjs` draws every frame in headless Chrome and makes `promo/out/spartanreferee-promo.mp4` with ffmpeg (1920 × 1080, 49 s, no sound). The frames, shots and video aren't kept in git.
+
 **One look, one menu (19 November 2026).** Every page uses the study look (`study.css` with `look.js`: light or dark following the phone, or the Look button). The pages outside the app (Config `customers.html`, the cameras `console.html` and `event.html`, `results.html`, `streaming.html`) get the app's tabs and profile icon in their header from `appnav.js`, which reads the tab list from `learn/index.html` (`<header class="top" data-tab="...">` says which tab is on). Admin is now **Config**. Pages that load slowly show a spinner.
 
 ### Home page, assigned events and learning
