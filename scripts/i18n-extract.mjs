@@ -15,7 +15,7 @@ export const FILES = [
   'judge.html', 'app.js', 'burpee.js', 'exercises.js', 'multi.js', 'cones.js', 'judge-gate.js', 'readers.js',
   'broadcaster.html', 'camera.js', 'phone.html', 'apptabs.js', 'apptabs-core.js',
   // the website
-  'index.html', 'home.html', 'home.js', 'language.js', 'event.html', 'event.js', 'console.html', 'console.js', 'booking.js', 'results.html', 'results.js',
+  'index.html', 'info.html', 'home.html', 'home.js', 'language.js', 'event.html', 'event.js', 'console.html', 'console.js', 'booking.js', 'results.html', 'results.js',
   'streaming.html', 'email-return.html', 'offline.html', 'offline.js', 'privacy.html', 'email-signin-web.js', 'email-signin-core.js', 'api-base.js', 'recordings.html', 'recordings.js',
   // the learning platform
   'learn/index.html', 'learn/learn.js', 'learn/core.js', 'learn/people.js', 'learn/programmes.js', 'learn/lesson.js', 'learn/assess.js', 'learn/judgement.js',

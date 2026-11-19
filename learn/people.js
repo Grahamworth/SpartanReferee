@@ -41,13 +41,8 @@ export const views = {
         <select name="region" aria-label="Region"><option value="">${isAdmin() ? 'All regions' : 'All my regions'}</option>${myRegions.map((r) => `<option value="${esc(r.id)}"${q.get('region') === r.id ? ' selected' : ''}>${esc(r.name)}</option>`).join('')}</select>
         <button class="small" type="submit">Find</button></form>
       <ul class="rowList">${people.map((p) => `<li><a href="#/people/${esc(p.id)}"><b>${esc(p.legalName)}</b><small>${esc(p.publicId)} · ${esc(p.email)} · ${esc(regionName(p.regionId))}${p.synthetic ? '' : ' · real account'}</small></a></li>`).join('') || '<li class="muted">Nobody found.</li>'}</ul></section>
-      ${canAdd ? `<section class="card"><h2>Add a person</h2><p class="note">Invented people only, for the prototype.</p>
-        <form class="form2" id="addPerson">
-          <div><label for="np-name">Legal name</label><input id="np-name" name="legalName" required maxlength="120"></div>
-          <div><label for="np-email">Email</label><input id="np-email" name="email" type="email" required maxlength="254" placeholder="name@demo.spartanreferee.test"></div>
-          <div><label for="np-country">Country (two letters)</label><input id="np-country" name="country" maxlength="2" placeholder="GB"></div>
-          <div><label for="np-region">Region</label><select id="np-region" name="regionId" required>${myRegions.map((r) => `<option value="${esc(r.id)}">${esc(r.name)}</option>`).join('')}</select></div>
-          <div class="wide"><button class="primary" type="submit">Add</button></div></form></section>` : ''}`;
+      ${canAdd ? `<section class="card"><h2>Adding people</h2><p class="note">Everyone joins by invite: they register from the emailed link with their name, region and language.</p>
+        ${isAdmin() ? '<p><a class="btnLink primaryLink" href="#/invites">Invite people</a></p>' : '<p class="note">Ask an admin to invite them.</p>'}</section>` : ''}`;
   },
   async duplicates() {
     const { flags } = await call('duplicates');

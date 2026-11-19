@@ -8,16 +8,21 @@ const read = (f) => fs.readFileSync(new URL(`../${f}`, import.meta.url), 'utf8')
 const hrefs = (html) => [...html.matchAll(/href="([^"]+)"/g)].map((m) => m[1]);
 const SPARTANS = 'https://mango-glacier-03e711403.4.azurestaticapps.net';
 
-test('the home page is SpartanReferee\'s, and leads to signing in, not registering', () => {
+test('the front page is only signing in (to the app\'s Home); what SpartanReferee is moved to info.html', () => {
   const home = read('index.html');
   assert.match(home, /<title>SpartanReferee/);
   assert.ok(!hrefs(home).includes('register.html'));
-  assert.ok(hrefs(home).includes('learn/') && !hrefs(home).includes('home.html'), 'signing in leads to Learning\'s overview, where everyone lands');
-  assert.ok(hrefs(home).includes(`${SPARTANS}/`), 'and on to the Spartans site');
-  assert.doesNotMatch(home, /hub\.js/, 'with none of the Spartans app in it');
+  assert.match(home, /<div id="msBtn"><\/div>\s*<div id="devBtn">/);
+  assert.ok(home.includes("microsoftButton(document.getElementById('msBtn'), 'learn/', failed)"), 'signing in leads to the app\'s Home');
+  assert.ok(home.includes("if (signedIn()) location.replace('learn/')"), 'signed in already: straight there');
+  assert.deepStrictEqual(hrefs(home).filter((h) => !h.startsWith('http') && !h.startsWith('/') && !h.startsWith('icons/') && !h.endsWith('.css')), ['./', 'info.html', 'streaming.html', 'privacy.html']);
+  const info = read('info.html');
+  assert.match(info, /Every rep judged, <span>for Spartan<\/span>/);
+  assert.ok(hrefs(info).includes(`${SPARTANS}/`), 'and on to the Spartans site');
+  assert.doesNotMatch(info + home, /hub\.js/, 'with none of the Spartans app in it');
 });
-test('every page the home page links to exists', () => {
-  for (const h of hrefs(read('index.html'))) {
+test('every page the front and info pages link to exists', () => {
+  for (const h of [...hrefs(read('index.html')), ...hrefs(read('info.html'))]) {
     if (/^(https?:|\.\/$)/.test(h)) continue;
     assert.ok(fs.existsSync(new URL(`../${h}`, import.meta.url)), h);
   }

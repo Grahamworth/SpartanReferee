@@ -75,14 +75,14 @@ test('Sign out is at the top right of every page with an account, from the share
   const base = read('api-base.js');
   assert.ok(base.includes("button.className = 'link signOut'"));
   assert.ok(base.includes("querySelector('header.top, [data-account-bar]')"));
-  for (const f of ['index.html', 'home.html', 'console.html', 'results.html', 'customers.html', 'streaming.html', 'phone.html']) {
+  for (const f of ['info.html', 'home.html', 'console.html', 'results.html', 'customers.html', 'streaming.html', 'phone.html']) {
     const page = read(f);
     assert.match(page, /<header class="top">/, f);
     const js = { 'home.html': 'home.js', 'console.html': 'console.js', 'results.html': 'results.js', 'customers.html': 'customers.js' }[f];
     assert.ok(page.includes('src="api-base.js"') || (js && read(js).includes("from './api-base.js'")), `${f} loads api-base.js`);
   }
   assert.match(read('recordings.html'), /data-account-bar/);
-  assert.match(read('index.html'), /data-signin-link>Sign in</, 'the home page\'s Sign in becomes My home');
+  assert.match(read('info.html'), /data-signin-link>Sign in</, 'the home page\'s Sign in becomes My home');
   // and the video review on the server
   assert.match(read('server/review/index.html'), /id="signOut" class="signout" href="logout"/);
 });
