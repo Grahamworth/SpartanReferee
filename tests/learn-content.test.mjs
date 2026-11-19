@@ -129,3 +129,19 @@ test('Referee Essentials: five modules from the mobile prototype, in all 15 lang
   assert.strictEqual(ESSENTIALS.modules.length, 5);
   for (const k of Object.keys(ESSENTIALS_LESSONS)) { assert.ok(LESSONS[k]); assert.ok(TRANSLATIONS.de[k], k); }
 });
+
+// every animation is something a person can do (scripts/check-motion.mjs, frame by frame): no knee or elbow bent backwards, no hip past
+// what it bends, nothing below the ground or faster than a sprinter; hands and feet reach what they hold (within 6 px, about 12 cm, in a
+// good run; within 10 px in a fail, where the athlete is often stretching for something)
+test('every animation moves as a person can', async () => {
+  const { checkScene } = await import('../scripts/check-motion.mjs');
+  const { SCENES } = await import('../learn/obstacle-scenes.js');
+  const bad = [];
+  for (const [id, make] of Object.entries(SCENES)) {
+    for (const r of checkScene(id, make())) {
+      const limit = r.timeline === 'good' ? 6 : 10;
+      if (r.kind !== 'reach' || r.worst >= limit) bad.push(`${id} ${r.timeline} ${r.kind} ${r.side} ${r.from.toFixed(2)}s ${r.worst}`);
+    }
+  }
+  assert.deepStrictEqual(bad, []);
+});

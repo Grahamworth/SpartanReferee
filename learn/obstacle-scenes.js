@@ -14,8 +14,8 @@ const flag = (x) => `${ln(x, G, x, G - 60, 'pr')}${pg([[x, G - 60], [x + 18, G -
 /** landing from a hang or a jump, then standing */
 const land = (o, x, f = 1) => {
   const w = f ? 0 : 11;
-  fly(o, { x, y: G - 33, a: f ? 14 : 4, f, lf: [x - 8 * f - w, G], rf: [x + 8 * f + w, G], lh: [x + 4 * f - w, G - 50], rh: [x + 8 * f + w, G - 47], ring: 1 });
-  return o.to(0.14, { y: G - 28, a: f ? 22 : 6 }).to(0.4, stand(x, f));
+  fly(o, { x, y: G - 35, a: f ? 12 : 4, f, lf: [x - 9 * f - w, G], rf: [x + 7 * f + w, G], lh: [x + 4 * f - w, G - 52], rh: [x + 8 * f + w, G - 49], ring: 1 });
+  return o.to(0.14, { y: G - 32, a: f ? 16 : 6 }).to(0.4, stand(x, f));
 };
 /** a jump: up to an apex pose rise pixels above the take-off, then down to the landing pose, both halves under gravity */
 const leap = (o, apex, landing, rise) => {
@@ -34,11 +34,11 @@ function overWall(o, x0, top, th, { stepFoot, faultFar, good = 'Over the top and
   fly(o, { x: x0 - 24, y: top + 56, a: 8, lh: [x0 + 1, top], rh: [x0 + 4, top], lf: stepFoot || [x0 - 1, top + 84], rf: [x0 - 1, top + 72] }, Math.max(6, o.s.y - (top + 56)) + 4);
   if (stepFoot) o.mark('A man using the red step: it’s for women only.', 'lf', { kind: 'bad', hl: ['step'] });
   o.to(0.35, { x: x0 - 22, y: top + 30, a: 22, lf: [x0 - 1, top + 58], rf: [x0 - 1, top + 50] });
-  o.to(0.35, { x: x0 - 10, y: top + 12, a: 55, lh: [x0 + 3, top], rh: [x0 + 7, top], rf: [x0 + 4, top - 3], lf: [x0 - 2, top + 38] });
-  o.to(0.4, { x: x0 + th / 2, y: top - 7, a: 80, lh: [x0 + 1, top], rh: [bx - 1, top], rf: [bx + 23, top + 28], lf: [x0 - 16, top + 26] });
+  o.to(0.35, { x: x0 - 8, y: top + 14, a: 50, lh: [x0 + 3, top], rh: [x0 + 7, top], rf: [x0 - 1, top + 32], lf: [x0 - 1, top + 44] });
+  o.to(0.4, { x: x0 + th / 2, y: top - 5, a: 86, lh: [x0 + 1, top], rh: [bx - 1, top], rf: [x0 - 24, top + 24], lf: [x0 - 30, top + 30] });
   if (good) o.mark(good, 'hip');
-  if (faultFar) { o.to(0.5, { x: bx + 24, y: top + 58, a: 10, f: -1, lh: [bx - 1, top], rh: [bx - 4, top], lf: faultFar.foot, rf: [bx + 1, top + 74] }); o.mark(faultFar.text, 'lf', { kind: 'bad', hl: [faultFar.hl] }); }
-  else o.to(0.5, { x: bx + 24, y: top + 56, a: 8, f: -1, lh: [bx - 1, top], rh: [bx - 4, top], lf: [bx + 1, top + 84], rf: [bx + 1, top + 72] });
+  if (faultFar) { o.to(0.5, { x: bx + 24, y: top + 58, a: 10, f: -1, lh: [bx - 1, top], rh: [bx - 4, top], lf: faultFar.foot, rf: [bx + 1, top + 84] }); o.mark(faultFar.text, 'lf', { kind: 'bad', hl: [faultFar.hl] }); }
+  else o.to(0.5, { x: bx + 24, y: top + 56, a: 8, f: -1, lh: [bx - 1, top], rh: [bx - 4, top], lf: [bx + 1, top + 92], rf: [bx + 1, top + 84] });
   o.to(0.3, { y: Math.min(G - HIP, top + 80), lh: [bx - 1, top + 6], rh: [bx - 3, top + 8] });
   return land(o, bx + 26, -1);
 }
@@ -67,8 +67,8 @@ function inverted() {
     const o = timeline(stand(30));
     walk(o, x0 - 70, { run: true });
     fly(o, { x: x0 - 16, y: top + 62, a: 0, lh: [x0 - 1, top], rh: [x0 + 2, top], lf: [x0 - 20, top + 104], rf: [x0 - 14, top + 102] }, Math.max(6, o.s.y - (top + 62)) + 4);
-    o.to(0.4, { x: x0 - 14, y: top + 38, a: -15, rf: [x0 + 3, top - 3], lf: [x0 - 18, top + 76] });
-    o.to(0.4, { x: x0 + 5, y: top - 7, a: 82, lh: [x0 + 1, top], rh: [x0 + 8, top], rf: [x0 + 28, top + 30], lf: [x0 - 16, top + 24] });
+    o.to(0.4, { x: x0 - 10, y: top + 32, a: 10, rf: [x0 - 14, top + 74], lf: [x0 - 20, top + 70] });
+    o.to(0.4, { x: x0 + 5, y: top - 5, a: 86, lh: [x0 + 1, top], rh: [x0 + 8, top], rf: [x0 - 24, top + 24], lf: [x0 - 30, top + 30] });
     o.mark('Over the top and down the far side.', 'hip');
     const foot = fault ? [post, top + 70] : [faceX(top + 78) + th, top + 78];
     o.to(0.5, { x: x0 + th + 30, y: top + 54, a: 6, f: -1, lh: [x0 + th, top], rh: [x0 + th - 3, top], lf: foot, rf: [faceX(top + 66) + th, top + 66] });
@@ -88,8 +88,10 @@ function inverted() {
 function mantle(o, ex, ey, gy, { pre } = {}) {
   const d = gy - ey;
   o.to(0.35, { x: ex - 20, y: Math.min(gy - HIP, ey + 56), a: 8, lh: [ex + 1, ey], rh: [ex + 4, ey], lf: pre || [ex - 1, Math.min(gy, ey + 70)], rf: [ex - 4, gy] });
-  o.to(0.35, { x: ex - 16, y: ey + 22, a: 30, lf: [ex - 1, ey + Math.min(46, d)], rf: [ex - 1, ey + Math.min(34, d)] });
-  o.to(0.3, { x: ex - 6, y: ey + 6, a: 55, lh: [ex + 4, ey], rh: [ex + 8, ey], rf: [ex + 6, ey], lf: [ex - 2, ey + 30] });
+  o.to(0.35, { x: ex - 16, y: ey + 18, a: 30, lf: [ex - 1, ey + Math.min(52, d)], rf: [ex - 1, ey + Math.min(44, d)] });
+  o.to(0.3, { x: ex + 4, y: ey - 5, a: 86, lh: [ex + 18, ey], rh: [ex + 22, ey], rf: [ex - 18, ey + 24], lf: [ex - 24, ey + 30] });
+  o.to(0.25, { x: ex + 6, y: ey - 14, a: 66, rf: [ex - 10, ey + 26], lf: [ex - 16, ey + 30] });
+  o.to(0.3, { x: ex + 8, y: ey - 27, a: 30, lh: [ex + 26, ey], rh: [ex + 29, ey], rf: [ex + 12, ey], lf: [ex - 2, ey + 6] });
   return o.to(0.35, stand(ex + 10, 1, ey));
 }
 
@@ -127,8 +129,8 @@ function rungs(o, grips, { faceX, off = -18, fault } = {}) {
   // grips: points the hands use in order; the feet use the grips two to three below the hands
   for (let i = 2; i < grips.length; i++) {
     const g = grips[i], lo = grips[i - 2], hand = i % 2 ? 'lh' : 'rh', foot = i % 2 ? 'rf' : 'lf';
-    const hx = (g[0] + lo[0]) / 2 + off, hy = (g[1] + lo[1]) / 2 + 30;
-    const fp = fault && fault.at === i ? fault.foot : [grips[Math.max(0, i - 4)][0], grips[Math.max(0, i - 4)][1] + 6];
+    const hx = (g[0] + lo[0]) / 2 + off, hy = Math.min((g[1] + lo[1]) / 2 + 30, G - 36);
+    const fp = fault && fault.at === i ? fault.foot : [grips[Math.max(0, i - 4)][0], Math.min(G, grips[Math.max(0, i - 4)][1] + 6)];
     o.to(0.32, { x: hx, y: hy, a: 14, [hand]: g, [foot]: fp });
     if (fault && fault.at === i) o.mark(fault.text, fault.limb || 'lf', { kind: 'bad', hl: [fault.hl] });
   }
@@ -142,11 +144,15 @@ function bender() {
   const run = (fault) => {
     const o = timeline(stand(40));
     walk(o, 170, {});
-    o.to(0.35, { x: 188, y: G - 70, a: -10, lh: R[2], rh: R[3], lf: R[0], rf: [180, G] });
+    const u = [(tip[0] - base[0]) / 150, (tip[1] - base[1]) / 150], nrm = [u[1], -u[0]]; // up the rungs, and out from under them
+    const under = (hand, foot) => { const h = lerpP(foot, hand, 0.4); return { x: h[0] + nrm[0] * 14, y: h[1] + nrm[1] * 14, a: Math.atan2(u[0], -u[1]) * 180 / Math.PI }; };
+    walk(o, 214, {});
+    o.to(0.4, { ...under(R[2], [218, G]), lh: R[1], rh: R[2], lf: R[0], rf: [212, G] });
     o.mark('Feet on the rungs.', 'lf');
-    for (let i = 4; i < n; i++) o.to(0.4, { x: R[i - 2][0] - 26, y: R[i - 2][1] + 26, a: -18, [i % 2 ? 'rh' : 'lh']: R[i], [i % 2 ? 'lf' : 'rf']: R[i - 3] });
-    if (fault) { o.to(0.35, { rh: [pole[0], pole[1] - 16] }); o.mark('Using the structure, straps or flag poles.', 'rh', { kind: 'bad', hl: ['pole'] }); }
-    o.to(0.4, { x: tip[0] + 6, y: tip[1] - 6, a: 80, lh: tip, rh: [tip[0] + 6, tip[1]], rf: [back + 18, tip[1] + 28], lf: [tip[0] - 20, tip[1] + 24] });
+    for (let i = 3; i < n; i++) o.to(0.4, { ...under(R[i], R[Math.max(0, i - 3)]), [i % 2 ? 'rh' : 'lh']: R[i], [i % 2 ? 'lf' : 'rf']: R[Math.max(0, i - 3)] });
+    if (fault) { o.to(0.35, { rh: [pole[0] - 2, pole[1] - 10] }); o.mark('Using the structure, straps or flag poles.', 'rh', { kind: 'bad', hl: ['pole'] }); }
+    o.to(0.2, (st) => ({ lf: [st.x - 6 * st.f, st.y + 40], rf: [st.x + 2 * st.f, st.y + 41] }));
+    o.to(0.4, { x: tip[0] + 6, y: tip[1] - 5, a: 86, lh: tip, rh: [tip[0] + 6, tip[1]], rf: [tip[0] - 24, tip[1] + 20], lf: [tip[0] - 30, tip[1] + 26] });
     o.to(0.5, { x: back + 22, y: tip[1] + 56, a: 6, f: -1, lh: [back, tip[1] + 4], rh: [back, tip[1] + 10], lf: [back + 1, tip[1] + 90], rf: [back + 1, tip[1] + 76] });
     o.to(0.6, { y: G - 70, lh: [back, G - 110], rh: [back, G - 98], lf: [back + 1, G - 26], rf: [back + 1, G - 40] });
     land(o, back + 24, -1);
@@ -163,13 +169,13 @@ function bender() {
 function slip() {
   // a slope with ropes from the top, a platform, a ladder down the back
   const x0 = 140, x1 = 250, top = G - 110, back = 262;
-  const slopeY = (x) => G - (x - x0) * (G - top) / (x1 - x0);
+  const slopeY = (x) => Math.min(G, G - (x - x0) * (G - top) / (x1 - x0));
   const run = (fault) => {
     const o = timeline(stand(30));
     walk(o, x0 - 14, {});
     for (let k = 0; k <= 6; k++) {
       const fx = x0 + 6 + k * 15, hx = fx + 6;
-      o.to(0.36, { x: hx - 16, y: slopeY(fx) - 30, a: -24, f: 1, lf: [fx - (k % 2 ? 0 : 10), slopeY(fx - (k % 2 ? 0 : 10))], rf: [fx + (k % 2 ? 10 : 0), slopeY(fx + (k % 2 ? 10 : 0))], lh: [hx + 14, slopeY(hx + 14) - 40], rh: [hx + 22, slopeY(hx + 22) - 44] });
+      o.to(0.36, { x: hx - 16, y: slopeY(fx) - 30, a: -14, f: 1, lf: [fx - (k % 2 ? 0 : 10), slopeY(fx - (k % 2 ? 0 : 10))], rf: [fx + (k % 2 ? 10 : 0), slopeY(fx + (k % 2 ? 10 : 0))], lh: [hx + 14, slopeY(hx + 14) - 40], rh: [hx + 22, slopeY(hx + 22) - 44] });
       if (k === 3) o.mark('Using the ropes, and swapping from one rope to another.', 'rh');
     }
     o.to(0.4, stand(x1 + 4, 1, top));
@@ -198,7 +204,7 @@ function cargo() {
     o.to(0.35, { x: ax - half - 12, y: G - 52, a: 18, lh: up[2], rh: up[3], lf: up[0], rf: [ax - half - 6, G] });
     rungs(o, up, { off: -16 });
     if (fault) { o.to(0.3, { rh: [ax, ay + 40] }); o.mark('Using the side or middle uprights.', 'rh', { kind: 'bad', hl: ['upright'] }); }
-    o.to(0.4, { x: ax, y: ay - 8, a: 80, lh: [ax - 2, ay], rh: [ax + 2, ay], lf: [ax - 22, ay + 24], rf: [ax + 22, ay + 24] });
+    o.to(0.4, { x: ax, y: ay - 6, a: 84, lh: [ax - 2, ay], rh: [ax + 2, ay], lf: [ax - 34, ay + 14], rf: [ax - 30, ay + 20] });
     o.mark('Using the net, the horizontal bars at the base and the top, and horizontal pipes.', 'rh');
     const down = up.map(([x, y]) => [2 * ax - x, y]).reverse();
     o.to(0.45, { x: down[2][0] + 14, y: down[2][1] - 4, a: -10, f: -1, lh: down[0], rh: down[1], lf: down[3], rf: down[4] });
@@ -228,8 +234,8 @@ function cargoplus() {
     if (fault) o.mark('Using the sides of the shelf.', 'lf', { kind: 'bad', hl: ['shelf'], dt: -1 });
     walk(o, nx - 20, { v: 50, gy: sy });
     o.mark('Using the webbing, the shelf, the horizontal bars at the base and the top, and horizontal pipes.', 'rf');
-    for (let i = 2; i < net.length; i++) o.to(0.32, { x: nx - 18, y: net[i - 1][1] + 32, a: 6, [i % 2 ? 'lh' : 'rh']: net[i], [i % 2 ? 'rf' : 'lf']: [nx - 1, Math.min(sy, net[i - 1][1] + 66)] });
-    o.to(0.4, { x: nx + 2, y: ty - 8, a: 80, lh: [nx, ty], rh: [nx + 3, ty], lf: [nx - 22, ty + 24], rf: [nx + 22, ty + 24] });
+    for (let i = 5; i < net.length; i++) { const hy = Math.min(net[i][1] + 50, sy - 44); o.to(0.34, { x: nx - 22, y: hy, a: 6, [i % 2 ? 'lh' : 'rh']: net[i], [i % 2 ? 'rf' : 'lf']: [nx - 1, Math.min(sy, hy + 34)] }); }
+    o.to(0.4, { x: nx + 2, y: ty - 5, a: 86, lh: [nx, ty], rh: [nx + 3, ty], lf: [nx - 30, ty + 26], rf: [nx - 24, ty + 20] });
     o.to(0.45, { x: nx + 20, y: ty + 52, a: 6, f: -1, lh: [nx + 1, ty + 2], rh: [nx + 1, ty + 8], lf: [nx + 2, ty + 84], rf: [nx + 2, ty + 70] });
     o.to(0.9, { y: G - 72, lh: [nx + 1, G - 110], rh: [nx + 1, G - 96], lf: [nx + 2, G - 28], rf: [nx + 2, G - 40] });
     land(o, nx + 24, -1);
@@ -250,16 +256,16 @@ function hurdles() {
     const o = timeline(stand(20));
     H3.forEach((x, i) => {
       walk(o, x - 30, { run: true });
-      o.to(0.25, { x: x - 14, y: top + 14, a: 40, lh: [x, top], rh: [x + 3, top], lf: fault && i === 1 ? [x + 18, G - 30] : [x - 20, top + 40], rf: [x - 1, top + 26] });
+      o.to(0.25, { x: x - 14, y: top + 18, a: 40, lh: [x, top], rh: [x + 3, top], lf: fault && i === 1 ? [x - 10, G - 30] : [x - 26, top + 46], rf: [x - 20, top + 50] });
       if (fault && i === 1) o.mark('Using the supports, the sides or straps.', 'lf', { kind: 'bad', hl: ['sup'] });
-      o.to(0.3, { x: x + 4, y: top - 10, a: 70, rf: [x + 26, top + 18], lf: [x - 14, top + 4] });
+      o.to(0.3, { x: x + 4, y: top - 8, a: 84, rf: [x - 34, top - 2], lf: [x - 38, top + 4] });
       if (i === 2 && !fault) o.mark('Over every one of them.', 'hip');
       o.to(0.3, { x: x + 26, y: G - 32, a: 14, lh: [x + 12, top + 26], rh: [x + 14, top + 30], lf: [x + 20, G], rf: [x + 34, G] });
     });
     return walk(o, 390, { run: true });
   };
   return {
-    back: (s, H) => `${ground()}${H3.map((x, i) => `${ln(x + 18, top + 20, x + 18, G, hl(H.has('sup') && i === 1, 'pr'))}${ln(x + 4, top + 12, x + 18, top + 20, hl(H.has('sup') && i === 1, 'pr'))}${rc(x, top, 6, h, 'prF prWood')}`).join('')}`,
+    back: (s, H) => `${ground()}${H3.map((x, i) => `${ln(x - 12, top + 20, x - 12, G, hl(H.has('sup') && i === 1, 'pr'))}${ln(x, top + 12, x - 12, top + 20, hl(H.has('sup') && i === 1, 'pr'))}${rc(x, top, 6, h, 'prF prWood')}`).join('')}`,
     good: run(), fails: [run('sup')],
   };
 }
@@ -270,13 +276,14 @@ function out() {
   const run = (fault) => {
     const o = timeline(stand(10));
     walk(o, w1 - 30, { run: true });
-    o.to(0.25, { x: w1 - 14, y: G - 72, a: 40, lh: [w1, G - 86], rh: [w1 + 3, G - 86], lf: [w1 - 20, G - 46], rf: [w1 - 1, G - 60] });
-    o.to(0.3, { x: w1 + 4, y: G - 96, a: 70, rf: [w1 + 26, G - 68], lf: [w1 - 14, G - 82] });
+    o.to(0.25, { x: w1 - 14, y: G - 68, a: 40, lh: [w1, G - 86], rh: [w1 + 3, G - 86], lf: [w1 - 26, G - 40], rf: [w1 - 20, G - 36] });
+    o.to(0.3, { x: w1 + 4, y: G - 94, a: 84, rf: [w1 - 34, G - 88], lf: [w1 - 38, G - 82] });
     o.to(0.3, { x: w1 + 26, y: G - 32, a: 14, lh: [w1 + 12, G - 60], rh: [w1 + 14, G - 56], lf: [w1 + 20, G], rf: [w1 + 34, G] });
     walk(o, w2 - 40, {});
     if (fault) {
       o.to(0.35, { x: w2 - 22, y: G - 86, a: 10, lh: [w2 + 1, G - 120], rh: [w2 + 4, G - 120], lf: [w2 - 1, G - 50], rf: [w2 - 1, G - 62] });
-      o.to(0.4, { x: w2 + 4, y: G - 128, a: 80, rf: [w2 + 26, G - 100], lf: [w2 - 14, G - 104] });
+      o.to(0.2, (st) => ({ lf: [st.x - 6 * st.f, st.y + 40], rf: [st.x + 2 * st.f, st.y + 41] }));
+      o.to(0.4, { x: w2 + 4, y: G - 126, a: 86, rf: [w2 - 26, G - 116], lf: [w2 - 32, G - 110] });
       o.mark('Taking a wall the wrong way, over instead of under or the other way round.', 'hip', { kind: 'bad', hl: ['w2'] });
       land(o, w2 + 26, 1);
     } else {
@@ -286,8 +293,8 @@ function out() {
       o.to(0.5, { ...stand(w2 + 40, 1), kp: undefined });
     }
     walk(o, w3 - 24, {});
-    o.to(0.35, { x: w3 - 12, y: win[1] - 30, a: 60, lh: [w3 + 2, win[1]], rh: [w3 + 5, win[1]], lf: [w3 - 22, G], rf: [w3 - 4, win[1]] });
-    o.to(0.4, { x: w3 + 10, y: win[1] - 18, a: 75, lh: [w3 + 30, G - 30], rh: [w3 + 34, G - 26], rf: [w3 + 2, win[1]], lf: [w3 - 14, win[1] - 2] });
+    o.to(0.35, { x: w3 - 12, y: G - 52, a: 50, lh: [w3 + 2, win[1]], rh: [w3 + 5, win[1]], lf: [w3 - 22, G], rf: [w3 - 12, G] });
+    o.to(0.4, { x: w3 + 10, y: win[1] - 18, a: 105, lh: [w3 + 30, G - 30], rh: [w3 + 34, G - 26], rf: [w3 - 26, win[1] - 26], lf: [w3 - 30, win[1] - 20] });
     land(o, w3 + 34, 1);
     return walk(o, 395, {});
   };
@@ -313,9 +320,9 @@ function rope() {
       o.to(0.4, { y: y - 36, lf: [rx, y - 36 + 30], rf: [rx - 2, y - 36 + 40] });
       y -= 36;
     }
-    if (fault === 'kick') {
-      o.to(0.45, { rf: [bx, by], ring: 0 }).to(0.5, { ring: 1 });
-      o.mark('Ringing it with the body below the waist.', 'rf', { kind: 'bad', hl: ['bell'] });
+    if (fault === 'nobell') {
+      o.hold(0.6);
+      o.mark('Not ringing the bell.', [bx, by], { kind: 'bad', hl: ['bell'] });
     } else {
       ringBell(o, [bx, by + 2]);
       o.mark('The bell rung with any part of the body above the waist.', 'rh');
@@ -336,7 +343,7 @@ function rope() {
   return {
     back: (s, H) => `${ground()}${ln(150, top - 10, 300, top - 10, 'pr prThick')}${ln(160, top - 10, 160, G, 'pr prThick')}${ln(290, top - 10, 290, G, 'pr prThick')}
       ${ln(rx, top - 10, rx, G - 4, 'pr')}${ln(rx + 18, top - 10, rx + 18, G - 4, hl(H.has('rope2'), 'pr'))}${ln(bx, top - 10, bx, by - 14, 'pr prThin')}${bell(bx, by, s.ring, H.has('bell'))}`,
-    good: run(), fails: [run('kick'), run('drop'), run('tworopes')],
+    good: run(), fails: [run('nobell'), run('drop'), run('tworopes')],
   };
 }
 
@@ -353,12 +360,14 @@ function traverse(o, grips, { R = 60, bellAt, fault, noBell } = {}) {
   for (let i = 1; i < grips.length; i++) {
     const g = grips[i], p = grips[i - 1], lead = i % 2 ? 'rh' : 'lh';
     // swing forward on the last grip, reach the next at the front of the swing, then hang between the two
-    o.to(0.3, hang(p, -16));
+    o.to(0.3, { ...hang(p, -16), [lead]: [g[0] - 7, g[1] + 5] });
     const st = { ...hang([(p[0] + g[0]) / 2, (p[1] + g[1]) / 2], 6), [lead]: g };
+    if (fault && fault.at === i && fault.pre) o.to(0.22, fault.pre(st.x, st.y, g));
     if (fault && fault.at === i) Object.assign(st, fault.pose(st.x, st.y, g));
     o.to(0.32, st);
     if (fault && fault.at === i) o.mark(fault.text, fault.limb, { kind: 'bad', hl: fault.hl || [], body: fault.body });
     if (fault && fault.at === i && fault.end) return fault.end(o, st.x, st.y);
+    if (fault && fault.at === i && fault.pre) o.to(0.22, fault.pre(st.x, st.y, g));
   }
   const last = grips[grips.length - 1];
   o.to(0.35, { ...hang(last, 0), lh: last, rh: [last[0] + 3, last[1]] });
@@ -369,9 +378,9 @@ function traverse(o, grips, { R = 60, bellAt, fault, noBell } = {}) {
 }
 
 const rig = (kind) => () => {
-  const y = G - ({ rings: 162, hydra: 158, twister: 140, monkey: 136, tilting: 138, mitm: 140 }[kind]), xs = Array.from({ length: 8 }, (_, i) => 108 + i * 30), bx = 348, by = y + 22;
+  const y = G - ({ rings: 150, hydra: 158, twister: 140, monkey: 136, tilting: 138, mitm: 140 }[kind]), xs = Array.from({ length: 8 }, (_, i) => 108 + i * 30), bx = 348, by = y + 22;
   const mid = (i) => kind === 'mitm' && i >= 3 && i <= 5;
-  const drop = { rings: 26, hydra: 20, twister: 6, monkey: 0, tilting: 0, mitm: 8 }[kind];
+  const drop = { rings: 34, hydra: 20, twister: 6, monkey: 0, tilting: 0, mitm: 8 }[kind];
   const tilt = kind === 'tilting' ? (i) => (i - 3.5) * 3 : () => 0;
   const grips = xs.map((x, i) => [x, y + (mid(i) ? 0 : drop) + tilt(i)]);
   const ups = [96, 330];
@@ -383,10 +392,10 @@ const rig = (kind) => () => {
     return walk(o, 392, {});
   };
   const FAULTS = {
-    feet: { at: 4, pose: (hx, hy, g) => ({ lf: [g[0] - 18, g[1] + 3], rf: [g[0] - 12, g[1] + 3], y: hy - 14, a: -40, kp: [0, -1] }), text: kind === 'mitm' ? 'Feet or legs touching the handles or bars, or going over the top.' : kind === 'tilting' ? 'Feet on the bars.' : kind === 'twister' ? 'Feet on the handles.' : kind === 'hydra' ? 'Feet on the attachments.' : kind === 'rings' ? 'Feet on the attachments.' : 'Feet or legs touching the bars.', limb: 'lf' },
-    ground: { at: 4, pose: (hx, hy) => ({ lf: [hx + 2, G], rf: [hx - 8, G - 14], kp: [1, 0.2] }), text: 'Feet touching the ground to gain an advantage.', limb: 'lf' },
+    feet: { at: 4, pre: (hx, hy, g) => ({ lf: [g[0] + 34, g[1] + 46], rf: [g[0] + 32, g[1] + 50], x: g[0] + 4, y: g[1] + 56, a: -18 }), pose: (hx, hy, g) => ({ lf: [g[0] + 30, g[1] + 3], rf: [g[0] + 26, g[1] + 4], x: g[0] + 10, y: g[1] + 50, a: -35 }), text: kind === 'mitm' ? 'Feet or legs touching the handles or bars, or going over the top.' : kind === 'tilting' ? 'Feet on the bars.' : kind === 'twister' ? 'Feet on the handles.' : kind === 'hydra' ? 'Feet on the attachments.' : kind === 'rings' ? 'Feet on the attachments.' : 'Feet or legs touching the bars.', limb: 'lf' },
+    ground: { at: 4, pose: (hx, hy) => ({ lf: [hx + 2, G], rf: [hx - 8, G - 12], y: hy + 8 }), text: 'Feet touching the ground to gain an advantage.', limb: 'lf' },
     truss: { at: 1, pose: (hx, hy) => ({ lf: [ups[0] + 1, hy + 24], rf: [ups[0] + 1, hy + 36] }), text: kind === 'tilting' ? 'Using the uprights as a ladder.' : 'Using the vertical truss as a ladder.', limb: 'lf', hl: ['truss'] },
-    rope: { at: 3, pose: (hx, hy, g) => ({ rh: [g[0], y + 8] }), text: kind === 'hydra' ? 'Grabbing the tubing that holds the attachments.' : 'Grabbing the ropes, slings or chains that hold the rings and handles.', limb: 'rh', hl: ['rope'] },
+    rope: { at: 3, pose: (hx, hy, g) => ({ rh: [g[0] + 2, g[1] - 18], y: hy - 18, rf: [hx + 4, hy + 22], lf: [hx - 2, hy + 26] }), text: kind === 'hydra' ? 'Grabbing the tubing that holds the attachments.' : 'Grabbing the ropes, slings or chains that hold the rings and handles.', limb: 'rh', hl: ['rope'] },
     fall: { at: 5, pose: (hx, hy, g) => ({ lh: [hx - 12, hy - 52], rh: [hx + 10, hy - 54], y: hy + 6 }), text: 'Falling off.', limb: 'hip', body: true, end: (o, hx) => land(o, hx, 1) },
   };
   const fails = { monkey: ['feet', 'truss', 'nobell'], rings: ['rope', 'ground', 'nobell'], twister: ['fall', 'feet'], hydra: ['rope', 'fall'], tilting: ['truss', 'feet'], mitm: ['feet', 'fall'] }[kind];
@@ -415,7 +424,7 @@ function ape() {
     o.mark('Trying the climb up to the bars again: that part can be retried.', 'rh');
     for (let i = 0; i < 2; i++) { o.to(0.4, { lh: [rx - 1, hy - 70], rh: [rx + 1, hy - 58], y: hy - 6 }); o.to(0.4, { y: hy - 36, lf: [rx, hy - 6], rf: [rx - 2, hy + 4] }); hy -= 36; }
     o.to(0.4, { lh: [rx - 1, y + 6], rh: [rx + 1, y + 16], y: y + 52 });
-    traverse(o, grips, { bellAt: [bx, by + 2], fault: fault === 'feet' ? { at: 3, pose: (hx, h2, g) => ({ lf: [g[0] - 18, g[1] + 3], rf: [g[0] - 12, g[1] + 3], y: h2 - 14, a: -40, kp: [0, -1] }), text: 'Feet touching the bars.', limb: 'lf' }
+    traverse(o, grips, { bellAt: [bx, by + 2], fault: fault === 'feet' ? { at: 3, pre: (hx, h2, g) => ({ lf: [g[0] + 34, g[1] + 46], rf: [g[0] + 32, g[1] + 50], x: g[0] + 4, y: g[1] + 56, a: -18 }), pose: (hx, h2, g) => ({ lf: [g[0] + 30, g[1] + 3], rf: [g[0] + 26, g[1] + 4], x: g[0] + 10, y: g[1] + 50, a: -35 }), text: 'Feet touching the bars.', limb: 'lf' }
       : fault === 'fall' ? { at: 4, pose: (hx, h2) => ({ lh: [hx - 12, h2 - 52], rh: [hx + 10, h2 - 54], y: h2 + 6 }), text: 'Not finishing once a bar has been touched: from then on the athlete is committed.', limb: 'hip', body: true, end: (o2, hx) => land(o2, hx, 1) } : undefined });
     return walk(o, 392, {});
   };
@@ -429,14 +438,15 @@ function ape() {
 function tyrolean() {
   // a rope across water: hanging under it, legs hooked over, hand over hand to the bell
   const ry = G - 100, x0 = 60, x1 = 330, bx = 340, by = ry + 2;
-  const pose = (x, k, fault) => ({ x, y: ry + 22, a: 72, f: 1, lh: [x + 36 + (k % 2 ? 8 : 0), ry], rh: [x + 30 + (k % 2 ? 0 : 8), ry], lf: [x - 34, ry], rf: [x - 30, ry], kp: [0, -1], ep: [0, 1] });
+  const pose = (x, k, fault) => ({ x, y: ry + 20, a: -74, f: -1, lh: [x + 34 + (k % 2 ? 8 : 0), ry], rh: [x + 28 + (k % 2 ? 0 : 8), ry], lf: [x - 30, ry], rf: [x - 26, ry] });
   const run = (fault) => {
     const o = timeline({ ...stand(20), ring: 0 });
-    walk(o, x0 - 6, {});
-    o.to(0.4, { ...pose(x0 + 30, 0), kp: [0, -1] });
+    walk(o, x0 + 6, {});
+    o.to(0.35, { ...stand(x0 + 8, -1), lh: [x0 + 4, ry], rh: [x0 + 12, ry] });
+    o.to(0.45, pose(x0 + 30, 0));
     for (let k = 1; k <= 8; k++) {
       const st = pose(x0 + 30 + k * 26, k);
-      if (fault && k === 4) { st.lf = [st.x - 10, G + 6]; st.y += 8; }
+      if (fault && k === 4) { st.lf = [st.x - 2, G + 6]; st.rf = [st.x - 12, ry + 8]; st.a = -20; st.y += 36; }
       o.to(0.45, st, 'lin');
       if (fault && k === 4) o.mark('Using the ground or the water below to help.', 'lf', { kind: 'bad', hl: ['water'] });
     }
@@ -469,15 +479,15 @@ function lateral(o, hands, feet, { fault, bellAt } = {}) {
   return land(o, o.s.x + 6, 0);
 }
 const wallTraverse = (kind) => () => {
-  const x0 = 70, x1 = 330, n = 9, step = (x1 - x0) / (n - 1), top = G - 150, bx = x1 + 16, by = G - 140;
-  const hands = Array.from({ length: n }, (_, i) => [x0 + i * step, G - 125 + (kind === 'helix' ? Math.sin(i * 1.3) * 6 : 0)]);
-  const feet = Array.from({ length: n }, (_, i) => [x0 + i * step + 4, G - 44 + (kind === 'helix' ? Math.sin(i * 1.3) * 8 : 0)]);
+  const x0 = 70, x1 = 330, n = 9, step = (x1 - x0) / (n - 1), top = G - 134, bx = x1 + 16, by = G - 124;
+  const hands = Array.from({ length: n }, (_, i) => [x0 + i * step, G - 108 + (kind === 'helix' ? Math.sin(i * 1.3) * 6 : 0)]);
+  const feet = Array.from({ length: n }, (_, i) => [x0 + i * step + 4, G - 30 + (kind === 'helix' ? Math.sin(i * 1.3) * 6 : 0)]);
   const F = {
-    ground: { at: 4, pose: (h, f) => ({ lf: [f[0], G], y: G - 46 }), text: kind === 'hanging' ? 'Feet on the ground after starting.' : 'Touching the ground.', limb: 'lf', hl: [] },
-    top: { at: 4, pose: (h) => ({ lh: [h[0], top], y: top + 58 }), text: kind === 'zwall' ? 'Touching the top of the wall or any of the braces.' : kind === 'olympus' ? 'Touching the top of the wall.' : 'Touching the top.', limb: 'lh', hl: ['top'] },
+    ground: { at: 4, pose: (h, f) => ({ lf: [f[0], G], rh: [h[0] + 14, G - 68], y: G - 46 }), text: kind === 'hanging' ? 'Feet on the ground after starting.' : 'Touching the ground.', limb: 'lf', hl: [] },
+    top: { at: 4, pose: (h) => ({ lh: [h[0], top], y: top + 62 }), text: kind === 'zwall' ? 'Touching the top of the wall or any of the braces.' : kind === 'olympus' ? 'Touching the top of the wall.' : 'Touching the top.', limb: 'lh', hl: ['top'] },
     holdfoot: { at: 4, pose: (h) => ({ lf: [h[0] + 12, h[1] + 14] }), text: 'Feet or knees on or in any of the holds or holes.', limb: 'lf', hl: ['hold'] },
     grey: { at: 4, pose: (h) => ({ lh: [h[0] + 10, h[1] + 16] }), text: 'Using holds that aren’t red, or the other face.', limb: 'lh', hl: ['grey'] },
-    lane: { at: 4, pose: (h) => ({ lh: [h[0], G - 146], y: G - 98 }), text: 'Using bars from another lane.', limb: 'lh', hl: ['lane'] },
+    lane: { at: 4, pose: (h) => ({ lh: [h[0], G - 130], y: G - 78 }), text: 'Using bars from another lane.', limb: 'lh', hl: ['lane'] },
     cut: { at: 3, pose: (h) => ({ lh: [x0 + 3 * step + 2, G - 75] }), text: 'Touching the top or bottom of any cut-out.', limb: 'lh', hl: ['cut'] },
   };
   const fails = { olympus: ['ground', 'holdfoot', 'top'], zwall: ['ground', 'top', 'cut'], hanging: ['grey', 'ground'], helix: ['lane', 'top', 'ground'] }[kind];
@@ -497,7 +507,7 @@ const wallTraverse = (kind) => () => {
       if (kind === 'olympus') w += `${rc(x0 - 20, top, x1 - x0 + 40, G - top - 10, hl(H.has('top'), 'prF prWood'))}${hands.map(([x, y]) => `${ci(x, y, 4, 'prRed')}${ci(x + 12, y + 14, 3.2, hl(H.has('hold'), 'prF'))}`).join('')}${feet.map(([x, y]) => ci(x, y + 3, 2.5, 'prF')).join('')}`;
       if (kind === 'zwall') w += `${pg([[x0 - 20, top], [x0 + 2.5 * step, top], [x0 + 2.5 * step, top + 18], [x0 + 5.5 * step, top + 18], [x0 + 5.5 * step, top], [x1 + 20, top], [x1 + 20, G - 12], [x0 - 20, G - 12]], hl(H.has('top'), 'prF prWood'))}${rc(x0 + 3 * step - 12, G - 80, 24, 26, hl(H.has('cut'), 'gnd'))}${hands.map(([x, y]) => rc(x - 4, y - 3, 8, 6, 'prMetal')).join('')}${feet.map(([x, y]) => rc(x - 5, y - 3, 10, 6, 'prMetal')).join('')}`;
       if (kind === 'hanging') w += `${[0, 1, 2].map((k) => rc(x0 - 20 + k * 96, top + 14, 90, 92, 'prF prWood')).join('')}${ln(x0 - 30, top, x1 + 30, top, 'pr prThick')}${[0, 1, 2].map((k) => `${ln(x0 + 25 + k * 96, top, x0 + 25 + k * 96, top + 14, 'pr prThin')}`).join('')}${hands.map(([x, y]) => `${ci(x, y, 4, 'prRed')}${ci(x + 10, y + 16, 3.4, hl(H.has('grey'), 'prMetal'))}`).join('')}`;
-      if (kind === 'helix') w += `${ln(x0 - 30, top, x1 + 30, top, hl(H.has('top'), 'pr prThick'))}${hands.map(([x, y]) => `${ln(x - 8, y, x + 8, y, 'pr prThick')}${ln(x - 8, G - 146, x + 8, G - 146, hl(H.has('lane'), 'pr'))}`).join('')}${feet.map(([x, y]) => ln(x - 8, y, x + 8, y, 'pr prThick')).join('')}`;
+      if (kind === 'helix') w += `${ln(x0 - 30, top, x1 + 30, top, hl(H.has('top'), 'pr prThick'))}${hands.map(([x, y]) => `${ln(x - 8, y, x + 8, y, 'pr prThick')}${ln(x - 8, G - 130, x + 8, G - 130, hl(H.has('lane'), 'pr'))}`).join('')}${feet.map(([x, y]) => ln(x - 8, y, x + 8, y, 'pr prThick')).join('')}`;
       return `${w}${ln(bx, top - 4, bx, by - 14, 'pr prThin')}${bell(bx, by, s.ring)}`;
     },
     good: run(), fails: fails.map(run),
@@ -598,7 +608,7 @@ function tireflip() {
   // the tyre lies flat (1.2 m across); it turns about the middle of its far edge, so a half turn lands it flat beyond, and back again
   const NX = 120, W = 64, TH = 16, PV = [NX + W, G - TH / 2];
   const edge = (deg) => { const r = deg * D, c = Math.cos(r), sn = Math.sin(r); return [PV[0] - W * c + (TH / 2) * sn, PV[1] - W * sn - (TH / 2) * c]; };
-  const grip = (deg, f) => { const e = edge(deg); return { lh: [e[0] - f * 2, e[1] + 2], rh: [e[0] + f * 2, e[1]] }; };
+  const grip = (deg, f) => { const e = edge(deg); return { lh: [e[0] - f * 2, Math.min(G - 1, e[1] + 2)], rh: [e[0] + f * 2, Math.min(G - 1, e[1])] }; };
   const run = (fault) => {
     const o = timeline({ ...stand(40), tr: 0 });
     walk(o, NX - 16, {});
@@ -608,7 +618,7 @@ function tireflip() {
     o.to(0.45, { tr: 64, x: NX + 16, y: G - 42, a: 22, lf: [NX + 2, G], rf: [NX + 24, G], ...grip(64, 1) });
     o.to(0.4, { tr: 88, x: PV[0] - 30, y: G - 43, a: 26, lf: [PV[0] - 46, G], rf: [PV[0] - 24, G], ...grip(88, 1) });
     if (fault === 'touch') {
-      o.to(0.45, { tr: 150, x: PV[0] - 14, a: 40, ...grip(150, 1) }, { g: { tr: 1 } });
+      o.to(0.45, { tr: 150, x: PV[0] - 4, y: G - 50, a: 30, lf: [PV[0] - 14, G], rf: [PV[0] + 2, G], ...grip(150, 1) }, { g: { tr: 1 } });
       o.mark('Touching it before it has come to rest after the first flip.', 'rh', { kind: 'bad', hl: ['tyre'] });
       o.to(0.2, { tr: 180 }, { g: { tr: 1 } });
       return o.to(0.4, stand(PV[0] - 20, 1));
@@ -619,7 +629,7 @@ function tireflip() {
     // round to the other side, and flip it back
     walk(o, PV[0] + W + 16, {});
     o.to(0.3, { f: -1 });
-    o.to(0.5, { x: PV[0] + W + 12, y: G - 26, a: 42, lf: [PV[0] + W + 18, G], rf: [PV[0] + W + 6, G], ...grip(180, -1) });
+    o.to(0.5, { x: PV[0] + W + 20, y: G - 27, a: 68, lf: [PV[0] + W + 26, G], rf: [PV[0] + W + 15, G], ...grip(180, -1) });
     o.to(0.5, { tr: 145, x: PV[0] + W + 8, y: G - 38, a: 24, ...grip(145, -1) });
     o.to(0.45, { tr: 116, x: PV[0] + W - 16, y: G - 42, a: 22, lf: [PV[0] + W - 2, G], rf: [PV[0] + W - 24, G], ...grip(116, -1) });
     o.to(0.4, { tr: 92, x: PV[0] + 30, y: G - 43, a: 26, lf: [PV[0] + 46, G], rf: [PV[0] + 24, G], ...grip(92, -1) });
@@ -669,7 +679,7 @@ function hoist() {
   // the athlete behind a low barrier pulls a rope that runs over a pulley at the top of a tower to the weight
   const BAR = 196, PUL = [300, G - 208], WX = 300, KNOT = PUL[1] + 6, WH = 18;
   const top = (w) => G - WH - w, wMax = G - WH - (KNOT + 12);
-  const pullPose = (k) => ({ lh: k % 2 ? [192, G - 108] : [186, G - 78], rh: k % 2 ? [186, G - 80] : [192, G - 106] });
+  const pullPose = (k) => ({ lh: k % 2 ? [178, G - 96] : [172, G - 70], rh: k % 2 ? [172, G - 68] : [178, G - 94] });
   const run = (fault) => {
     const o = timeline({ ...stand(150), w: 0, cam: [235, 98, 0.84] });
     walk(o, 168, {});
@@ -771,6 +781,7 @@ function swim() {
       o.mark('Diving.', 'head', { kind: 'bad', body: true });
       o.to(0.35, { ...stroke(x0 + 50, 0) });
     } else {
+      o.to(0.3, { x: x0 - 4, lf: [x0 - 8, G], rf: [x0 + 6, G - 6] });
       o.to(0.6, { x: x0 + 14, y: wy - 20, a: 30, lf: [x0 + 6, wy + 18], rf: [x0 + 18, wy + 18] });
       o.to(0.5, stroke(x0 + 40, 0));
     }
@@ -801,8 +812,8 @@ function balance() {
       o.to(0.42, st, 'lin');
       if (fault && k === 5) { o.mark('Touching the ground, or using anything but the feet.', 'lf', { kind: 'bad' }); return o.to(0.4, stand(x + 8, 1)); }
     }
-    o.to(0.3, { x: c1 + 6, y: G - 70, a: 6, lf: [c1 - 2, beamY(c1 - 2)], rf: [c1 + 14, G - 30] });
-    o.to(0.35, { x: line + 14, y: G - 32, a: 14, lf: [line + 8, G], rf: [line + 20, G] });
+    o.to(0.3, { x: c1 + 6, y: G - 70, a: 6, lf: [c1 - 2, beamY(c1 - 2)], rf: [c1 + 14, G - 30], lh: [c1 - 18, G - 98], rh: [c1 + 32, G - 98] });
+    o.to(0.35, { x: line + 14, y: G - 34, a: 14, lf: [line + 7, G], rf: [line + 21, G], lh: [line + 6, G - 64], rh: [line + 30, G - 66] });
     o.mark('Touching the last (descending) beam before getting off, and landing past the line.', 'lf');
     return o.to(0.4, stand(line + 16, 1));
   };
@@ -819,7 +830,7 @@ function slackline() {
   const run = (fault) => {
     const o = timeline(stand(40));
     walk(o, a0 - 6, {});
-    o.to(0.4, { x: a0 + 4, y: ay - HIP, rf: [a0 + 6, ay], lf: [a0 - 8, G], ...arms({ x: a0 + 4, y: ay - HIP, a: 4, f: 1 }) });
+    o.to(0.4, { x: a0 + 4, y: ay - HIP, rf: [a0 + 6, ay], lf: [a0 - 4, ay + 2], ...arms({ x: a0 + 4, y: ay - HIP, a: 4, f: 1 }) });
     let x = a0 + 4;
     for (let k = 0; x < a1 - 12; k++) {
       x += 20;
@@ -828,7 +839,7 @@ function slackline() {
       o.to(0.45, st, 'lin');
       if (fault && k === 5) { o.mark('Stepping down before the finish line.', 'lf', { kind: 'bad' }); return o.to(0.4, stand(x + 8, 1)); }
     }
-    o.to(0.4, { x: line + 14, y: G - 32, a: 14, lf: [line + 8, G], rf: [line + 20, G] });
+    o.to(0.4, { x: line + 14, y: G - 34, a: 14, lf: [line + 7, G], rf: [line + 21, G], lh: [line + 6, G - 64], rh: [line + 30, G - 66] });
     o.mark('Stepping down beyond the finish line.', 'lf');
     return o.to(0.4, stand(line + 16, 1));
   };
@@ -951,7 +962,8 @@ function burpee() {
     if (fault === 'chest') { o.to(0.32, { y: G - 15, a: 78, ep: [-0.4, -1] }); o.mark('Chest not touching the ground.', [X + 12, G - 4], { kind: 'bad', body: true }); }
     else { o.to(0.32, { y: G - 8, a: 88, ep: [-0.4, -1] }); o.mark('Chest to the ground at the bottom.', [X + 12, G - 4]); }
     o.to(0.3, { ...plank, ep: undefined });
-    o.to(0.28, { x: X + 2, y: G - 27, a: 52, lf: [X + 2, G], rf: [X + 9, G], kp: undefined });
+    o.to(0.16, { x: X - 6, y: G - 36, a: 122 });
+    o.to(0.28, { x: X - 2, y: G - 34, a: 45, lf: [X + 2, G], rf: [X + 9, G], lh: [X + 14, G - 40], rh: [X + 16, G - 38], kp: undefined });
     if (fault === 'hips') { o.to(0.3, { x: X + 4, y: G - 36, a: 30, lh: [X + 14, G - 30], rh: [X + 18, G - 28], lf: [X - 2, G], rf: [X + 8, G] }); o.mark('Hips not extended at the top.', 'hip', { kind: 'bad', body: true }); }
     else { o.to(0.3, { ...stand(X + 4), a: 0 }); o.mark('Hips and knees fully extended at the top.', 'hip'); }
     const top = G - HIP - 18, sh = top - 29;

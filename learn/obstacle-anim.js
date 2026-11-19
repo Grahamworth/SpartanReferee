@@ -51,6 +51,12 @@ const num = (v) => typeof v === 'number';
 function interp(a, b, ap, bn, hp, h, hn, x) {
   if (num(a) && num(b)) return herm(a, b, tangent(num(ap) ? ap : a, a, b, num(ap) ? hp : 0, h), tangent(a, b, num(bn) ? bn : b, h, num(bn) ? hn : 0), h, x);
   if (Array.isArray(a) && Array.isArray(b)) return a.map((v, i) => interp(v, b[i], ap?.[i], bn?.[i], hp, h, hn, x));
+  // a whole state: each of its values moves on its own curve (what only one side has, or isn't a number, switches at the end)
+  if (a && b && typeof a === 'object' && typeof b === 'object') {
+    const o = {};
+    for (const k of new Set([...Object.keys(a), ...Object.keys(b)])) o[k] = k in a && k in b ? interp(a[k], b[k], ap?.[k], bn?.[k], hp, h, hn, x) : x < 1 ? a[k] : b[k];
+    return o;
+  }
   return x < 1 ? a : b;
 }
 /** a value thrown from v0 that lands on v1 after T seconds, at time tau, with gravity of sign sg (+1: pulled towards larger values) */
@@ -64,7 +70,11 @@ export function sample(tl, time) {
     const p = k[i - 2], q = k[i + 1];
     const s = interp(a, b, p?.[1], q?.[1], p ? t1 - p[0] : 0, h, q ? q[0] - t2 : 0, x);
     if (ez === 'lin') for (const f of Object.keys(b)) { if (num(a[f]) && num(b[f])) s[f] = lerp(a[f], b[f], x); }
-    if (ez === 'g') { s.y = ballistic(a.y, b.y, h, x * h, 1); s.x = lerp(a.x, b.x, x); }
+    if (ez === 'g') {
+      const y = ballistic(a.y, b.y, h, x * h, 1), dy = y - lerp(a.y, b.y, x);
+      s.y = y; s.x = lerp(a.x, b.x, x);
+      for (const k of ['lf', 'rf', 'lh', 'rh']) if (Array.isArray(s[k])) s[k] = [lerp(a[k][0], b[k][0], x), lerp(a[k][1], b[k][1], x) + dy];
+    }
     else if (ez && ez.g) for (const [f, sg] of Object.entries(ez.g)) s[f] = ballistic(a[f], b[f], h, x * h, sg);
     return s;
   }
@@ -105,12 +115,14 @@ export function walk(o, x1, opt = {}) {
 export const settle = (o, dt = 0.25, extra = {}) => o.to(dt, (s) => ({ ...stand(s.x, s.f), ...extra }));
 
 // ------------------------------------------------------------------------------------------------ the figure
-function ik(root, target, a, b, pref) {
+/** a two-bone limb from root towards target; of the two ways it can bend, pick(m1, m2, root, end) chooses (or the one nearer pref) */
+function ik(root, target, a, b, pref, pick) {
   let dx = target[0] - root[0], dy = target[1] - root[1], d = Math.hypot(dx, dy) || 0.001;
   const max = a + b - 0.01;
   if (d > max) { dx *= max / d; dy *= max / d; d = max; }
   const end = [root[0] + dx, root[1] + dy], base = Math.atan2(dy, dx), A = Math.acos(Math.max(-1, Math.min(1, (a * a + d * d - b * b) / (2 * a * d))));
   const m1 = [root[0] + a * Math.cos(base + A), root[1] + a * Math.sin(base + A)], m2 = [root[0] + a * Math.cos(base - A), root[1] + a * Math.sin(base - A)];
+  if (pick) return [root, pick(m1, m2, root, end), end];
   const c = [(root[0] + end[0]) / 2, (root[1] + end[1]) / 2], dot = (m) => (m[0] - c[0]) * pref[0] + (m[1] - c[1]) * pref[1];
   return [root, dot(m1) >= dot(m2) ? m1 : m2, end];
 }
@@ -119,12 +131,33 @@ const add = (p, v, k = 1) => [p[0] + v[0] * k, p[1] + v[1] * k];
 /** where everything is: hips, shoulders, head, each limb's points, and which way each foot points */
 export function solve(s) {
   const f = s.f, side = 1 - Math.min(1, Math.abs(f)), a = s.a * D, d = [Math.sin(a) * Math.max(-1, Math.min(1, f * 1.5)), -Math.cos(a)];
-  const hip = [s.x, s.y], sh = add(hip, d, L.T), head = add(hip, d, L.T + L.NECK + L.HEAD);
   const fs = Math.sign(f) || 1;
+  // the body moves to what it holds and stands on: if a hand or foot can't reach where it's put, the hips shift towards it (as a person
+  // leans or sinks to reach), sharing the shift between the limbs that are short, up to about 0.45 m
+  let hip = [s.x, s.y];
+  const off = (p, k) => [p[0] + k * side, p[1]];
+  for (let it = 0; it < 4; it++) {
+    const shp = add(hip, d, L.T), need = [0, 0];
+    let n = 0;
+    for (const [root, t, max] of [[off(hip, -5), [s.lf[0], s.lf[1] - L.ANK], L.TH + L.SH], [off(hip, 5), [s.rf[0], s.rf[1] - L.ANK], L.TH + L.SH], [off(shp, -8), s.lh, L.U + L.F], [off(shp, 8), s.rh, L.U + L.F]]) {
+      const v = [t[0] - root[0], t[1] - root[1]], dist = Math.hypot(v[0], v[1]);
+      if (dist > max - 0.3) { const k = (dist - max + 0.3) / dist; need[0] += v[0] * k; need[1] += v[1] * k; n++; }
+    }
+    if (!n) break;
+    hip = [hip[0] + (need[0] / n) * 0.9, hip[1] + (need[1] / n) * 0.9];
+  }
+  const shift = Math.hypot(hip[0] - s.x, hip[1] - s.y);
+  if (shift > 24) hip = [s.x + (hip[0] - s.x) * 24 / shift, s.y + (hip[1] - s.y) * 24 / shift];
+  const sh = add(hip, d, L.T), head = add(hip, d, L.T + L.NECK + L.HEAD);
   const kn = (lr) => s.kp || [lerp(fs, lr, side), lerp(0.15, 0.2, side)], el = (lr) => s.ep || [lerp(-fs * 0.8, lr, side), lerp(0.6, 0.3, side)];
   const o = (p, k) => [p[0] + k * side, p[1]];
+  // seen from the side, a knee only bends one way and an elbow the other, whatever the limb's angle: facing right, the shin turns
+  // clockwise from the thigh (cross > 0) and the forearm anticlockwise from the upper arm. Seen from behind, they bend outwards.
+  const bend = (m, root, end) => { const u = [m[0] - root[0], m[1] - root[1]], v = [end[0] - m[0], end[1] - m[1]]; return (u[0] * v[1] - u[1] * v[0]) * fs; };
+  const knee = side < 0.5 ? (m1, m2, r, e) => (bend(m1, r, e) >= bend(m2, r, e) ? m1 : m2) : null;
+  const elbow = side < 0.5 ? (m1, m2, r, e) => (bend(m1, r, e) <= bend(m2, r, e) ? m1 : m2) : null;
   const leg = (root, sole, pref) => {
-    const l = ik(root, [sole[0], sole[1] - L.ANK], L.TH, L.SH, pref), shin = unit([l[2][0] - l[1][0], l[2][1] - l[1][1]]);
+    const l = ik(root, [sole[0], sole[1] - L.ANK], L.TH, L.SH, pref, knee), shin = unit([l[2][0] - l[1][0], l[2][1] - l[1][1]]);
     // the foot: flat when the shin is near upright, at a right angle to the shin when it's far from it (on a wall, a rung, in the air)
     const tilt = Math.abs(Math.atan2(shin[0], shin[1])) / D, k = Math.max(0, Math.min(1, (tilt - 35) / 40));
     const perp = [shin[1] * fs, -shin[0] * fs], toe = unit([lerp(fs, perp[0], k), lerp(0, perp[1], k)]);
@@ -133,7 +166,7 @@ export function solve(s) {
   return {
     hip, sh, head, d, side, f: fs,
     ll: leg(o(hip, -5), s.lf, kn(-1)), rl: leg(o(hip, 5), s.rf, kn(1)),
-    la: ik(o(sh, -8), s.lh, L.U, L.F, el(-1)), ra: ik(o(sh, 8), s.rh, L.U, L.F, el(1)),
+    la: ik(o(sh, -8), s.lh, L.U, L.F, el(-1), elbow), ra: ik(o(sh, 8), s.rh, L.U, L.F, el(1), elbow),
   };
 }
 const n1 = (v) => v.toFixed(1);
