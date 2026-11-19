@@ -3338,5 +3338,12 @@
  "It only counts once the athlete has moved at least 2 m away from the lane: if the spear falls out before then, it’s a fail. Releasing the spear forwards is the attempt.": "Es zählt erst, wenn sich der Athlet mindestens 2 m von der Bahn entfernt hat: Fällt der Speer vorher heraus, ist es ein Fehlversuch. Das Loslassen des Speers nach vorne ist der Versuch.",
  "Stand inside the shooting area, 1 m behind the table, with both feet on the ground and not leaning on anything, and shoot at the athlete’s own numbered target.": "Im Schießbereich 1 m hinter dem Tisch stehen, beide Füße auf dem Boden und nirgends angelehnt, und auf die eigene nummerierte Zielscheibe schießen.",
  "Search obstacles": "Hindernisse suchen",
- "the rulebook as a PDF": "das Regelwerk als PDF"
+ "the rulebook as a PDF": "das Regelwerk als PDF",
+ "Good run at real speed": "Guter Lauf in Echtzeit",
+ "Slow motion: what counts": "Zeitlupe: Was zählt",
+ "Slow motion: a fail": "Zeitlupe: ein Fehlversuch",
+ "A good run, at real speed. Then it plays slowly, stopping on what counts and on what would be a fail.": "Ein guter Lauf in Echtzeit. Danach läuft er langsam und hält an, wo etwas zählt und wo es ein Fehlversuch wäre.",
+ "Animation: {title}": "Animation: {title}",
+ "Real speed": "Echtzeit",
+ "A fail": "Ein Fehlversuch"
 }

@@ -97,7 +97,7 @@ export const OBSTACLES = [
     bad: ['Falling off.', 'Grabbing the tubing that holds the attachments.', 'Feet on the attachments.', 'Going over the top.', 'Using another lane.', 'Not ringing the bell.'] },
   { id: 'helix', title: 'Helix', group: 'hang', type: 'single', section: '4.2.6',
     how: ['Move sideways along the obstacle using only the bars in one lane, and ring the bell.'],
-    good: ['Only that lane’s bars, all the way to the bell.'],
+    good: ['Only that lane’s bars, all the way to the bell.', 'The bell rung at the end.'],
     bad: ['Touching the ground.', 'Touching the top.', 'Using bars from another lane.'],
     note: 'The athlete is committed once they have four points of contact.' },
   { id: 'olympus', title: 'Olympus', group: 'hang', type: 'single', section: '4.2.10', programme: 'multi',
@@ -111,7 +111,7 @@ export const OBSTACLES = [
     note: 'The athlete is committed once they have four points of contact.' },
   { id: 'hanging', title: 'Hanging Walls', group: 'hang', type: 'single', section: '4.2.24',
     how: ['Traverse the hanging panels on the red holds only, on one face, and ring the bell.'],
-    good: ['Red holds only, on one face, all the way to the bell.', 'The vertical truss to get started.'],
+    good: ['Red holds only, on one face, all the way to the bell.', 'The vertical truss to get started.', 'The bell rung at the end.'],
     bad: ['Feet on the ground after starting.', 'Using holds that aren’t red, or the other face.', 'Using any other truss.', 'Grabbing the ropes, slings or chains that hold the panels.', 'Not ringing the bell.'],
     note: 'The athlete is committed once both feet leave the starting bar or step.' },
   { id: 'tilting', title: 'Tilting Ladder', group: 'hang', type: 'single', section: '4.2.14',
@@ -242,12 +242,13 @@ function obstacleView(id) {
   const o = OBSTACLES[k], prev = OBSTACLES[k - 1], next = OBSTACLES[k + 1];
   const list = (items, cls) => `<ul class="obMarks ${cls}">${items.map((x) => `<li>${esc(t(x))}</li>`).join('')}</ul>`;
   return `<section class="card" id="obPage"><p class="crumbs"><a href="#/obstacles">Obstacles</a></p>
-      <div class="obHead"><span class="obIcon big">${icon(o.group)}</span><div><h1>${esc(t(o.title))}</h1><p class="obMeta">${typeChip(o.type)} <span class="muted">${esc(t(GROUPS.find(([g]) => g === o.group)[1]))}</span></p></div></div>
-      <p>${esc(t(TYPE[o.type].text))}</p>
+      <div class="obHead"><span class="obIcon big">${icon(o.group)}</span><div><h1>${esc(t(o.title))}</h1><p class="obMeta">${typeChip(o.type)} <span class="muted">${esc(t(GROUPS.find(([g]) => g === o.group)[1]))}</span></p></div></div></section>
+    <div id="obAnimSlot" data-id="${esc(o.id)}" data-title="${esc(o.title)}"></div>
+    <section class="card"><p>${esc(t(TYPE[o.type].text))}</p>
       ${o.penalty ? `<p><b>${esc(t('Penalty for a fail:'))}</b> ${esc(t(o.penalty))}</p>` : ''}
       ${o.note ? `<p class="obNote">${esc(t(o.note))}</p>` : ''}
-      ${o.programme ? `<p class="obReview">${esc(t(REVIEW, { type: t(TYPE[o.programme].label) }))}</p>` : ''}</section>
-    <section class="card"><h2>How it’s done</h2><ol class="obHow">${o.how.map((x) => `<li>${esc(t(x))}</li>`).join('')}</ol></section>
+      ${o.programme ? `<p class="obReview">${esc(t(REVIEW, { type: t(TYPE[o.programme].label) }))}</p>` : ''}
+      <h2>How it’s done</h2><ol class="obHow">${o.how.map((x) => `<li>${esc(t(x))}</li>`).join('')}</ol></section>
     <div class="obVerdicts">
       <section class="card obGood"><h2><span aria-hidden="true">✓</span> Good: it counts</h2>${list(o.good, 'good')}</section>
       <section class="card obBad"><h2><span aria-hidden="true">✗</span> Bad: it’s a fail</h2>${list(o.bad, 'bad')}</section>
@@ -275,7 +276,18 @@ function filter() {
 
 export function wire() {
   // an obstacle opens at its top, also from Previous / Next at the bottom of the one before
-  if ($('obPage')) { scrollTo(0, 0); return; }
+  if ($('obPage')) {
+    scrollTo(0, 0);
+    // its animation, loaded only on an obstacle's page (obstacle-scenes.js); an obstacle without one just has no player
+    const slot = $('obAnimSlot');
+    if (slot) Promise.all([import('./obstacle-anim.js'), import('./obstacle-scenes.js')]).then(([A, S]) => {
+      const make = S.SCENES[slot.dataset.id];
+      if (!make || !slot.isConnected) return;
+      slot.innerHTML = A.playerHtml(slot.dataset.title);
+      A.play(slot.querySelector('.obAnim'), make());
+    }).catch(() => { /* the page still works without it */ });
+    return;
+  }
   if (!$('obQ')) return;
   $('obQ').addEventListener('input', filter);
   for (const b of document.querySelectorAll('[data-ob-type]')) b.addEventListener('click', () => {

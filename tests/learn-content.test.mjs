@@ -70,3 +70,23 @@ test('every obstacle has how, good and bad; ids are unique; its rule references 
   // the tab is for everyone, next to Rules
   assert.match(fs.readFileSync(new URL('../learn/index.html', import.meta.url), 'utf8'), /data-view="rules"[^\n]*\n\s*<a href="#\/obstacles" data-view="obstacles">Obstacles<\/a>/);
 });
+
+// the obstacle animations (learn/obstacle-scenes.js): every obstacle but the event's own has one, with a good run and at least one fail,
+// and every caption is one of that obstacle's own lines (so it's translated with them); every frame poses the figure without gaps
+test('every obstacle has an animation whose captions are its own lines, with a good run and a fail', async () => {
+  globalThis.location ??= { protocol: 'file:', hostname: '', port: '', hash: '' };
+  const { OBSTACLES } = await import('../learn/obstacles.js');
+  const { SCENES } = await import('../learn/obstacle-scenes.js');
+  const { sample, solve } = await import('../learn/obstacle-anim.js');
+  assert.deepStrictEqual(OBSTACLES.filter((o) => !SCENES[o.id]).map((o) => o.id), ['iconic']);
+  for (const [id, make] of Object.entries(SCENES)) {
+    const o = OBSTACLES.find((x) => x.id === id), s = make(), lines = [...o.how, ...o.good, ...o.bad, o.note].filter(Boolean);
+    assert.ok(o, id);
+    assert.ok(s.good.marks.some((m) => !m.kind), `${id}: the good run shows what counts`);
+    assert.ok(s.fails.length && s.fails.every((f) => f.marks.some((m) => m.kind === 'bad')), `${id}: each fail shows what goes wrong`);
+    for (const tl of [s.good, ...s.fails]) {
+      for (const m of tl.marks) assert.ok(lines.includes(m.text), `${id}: "${m.text}" is one of its lines`);
+      for (let t = 0; t <= tl.end; t += 0.25) { const st = sample(tl, t); assert.ok(!JSON.stringify(solve(st)).includes('null'), `${id} at ${t}`); assert.strictEqual(typeof s.back(st, new Set(), solve(st), 0), 'string'); }
+    }
+  }
+});

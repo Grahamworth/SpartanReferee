@@ -449,3 +449,51 @@ h3.sub { font-size: 1rem; text-transform: uppercase; letter-spacing: .04em; marg
 .obPager { display: flex; justify-content: space-between; gap: 10px; margin-top: 12px; }
 .obPager .btnLink { max-width: 48%; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block; line-height: 40px; }
 @media (max-width: 520px) { .obType { font-size: .7rem; padding: 2px 8px; } .obList small { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; } }
+
+/* the obstacle animations (obstacle-anim.js): a figure and the obstacle drawn from the side, in the page's colours */
+.obAnim { padding-bottom: 12px; }
+.obStage { position: relative; aspect-ratio: 16 / 9; background: var(--bg); border-radius: 12px; overflow: hidden; }
+.obStage svg { display: block; width: 100%; height: 100%; }
+.obPhase { position: absolute; left: 10px; top: 8px; padding: 2px 10px; border-radius: 999px; font-size: .78rem; font-weight: 700; background: var(--panel); color: var(--text); border: 1px solid var(--line); }
+.obCaption { min-height: 3.1em; margin: 10px 0 8px; font-weight: 600; line-height: 1.45; }
+.obCaption span { font-weight: 800; }
+.obCaption.good span { color: var(--accent); }
+.obCaption.bad span { color: var(--bad); }
+.obControls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.obChips { display: flex; flex-wrap: wrap; gap: 6px; }
+.obChips button { border-radius: 999px; }
+.obChips button.on { background: var(--primary); border-color: var(--primary); color: var(--on-primary); }
+.obWorld .fLimb { fill: none; stroke: var(--text); stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
+.obWorld .fFar { opacity: .45; }
+.obWorld .fTorso { stroke: var(--brand); stroke-width: 8; stroke-linecap: round; }
+.obWorld .fHead { fill: var(--text); }
+.obWorld .hlFig .fLimb, .obWorld .hlFig .fHead { stroke: var(--bad); }
+.obWorld .gnd { fill: var(--panel); }
+.obWorld .gndLine { stroke: var(--line); stroke-width: 2; }
+.obWorld .pr { fill: none; stroke: var(--muted); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.obWorld .prThick { stroke-width: 5; }
+.obWorld .prThin { stroke-width: 1.5; }
+.obWorld .prF { fill: var(--soft); stroke: var(--muted); stroke-width: 1.5; }
+.obWorld .prWood { fill: #9a6b3f; stroke: #6e4a29; }
+.obWorld .prRed { fill: #d93a2b; stroke: #8d2116; stroke-width: 1; }
+.obWorld .prFlag { fill: var(--brand); }
+.obWorld .prBag { fill: #8a7a52; stroke: #5d5134; stroke-width: 1.5; }
+.obWorld .prMetal { fill: #8f99a6; stroke: #5f6873; stroke-width: 1.5; }
+.obWorld .prWater { fill: #2f7fbf; opacity: .45; }
+.obWorld .prFire { fill: #f28c28; }
+.obWorld .prBell { fill: #e0b52f; stroke: #8a6a10; stroke-width: 1.5; }
+.obWorld .prT { fill: var(--muted); font: 700 9px system-ui, sans-serif; }
+.obWorld .hlBad { stroke: var(--bad) !important; }
+.obWorld .prF.hlBad, .obWorld .prWood.hlBad, .obWorld .prBag.hlBad, .obWorld .prMetal.hlBad, .obWorld .prRed.hlBad { fill: var(--bad) !important; }
+.obWorld .obRing { fill: none; stroke-width: 3; }
+.obWorld .obRing.good { stroke: var(--accent); }
+.obWorld .obRing.bad { stroke: var(--bad); }
+.obWorld .fDim { opacity: .35; }
+.obWorld .fOfficial .fTorso { stroke: #f2c230; }
+.obWorld .prDash { stroke-dasharray: 4 3; }
+.obWorld .prBlack { fill: #111; }
+.obWorld .prHit { fill: #ff3b30; }
+.obWorld .prBubble { fill: var(--panel); stroke: var(--line); stroke-width: 1; }
+.obWorld .prLine { stroke: var(--bad); stroke-width: 2; }
+.obWorld .prSpear { stroke: #c9ad7f; stroke-width: 2.5; stroke-linecap: round; }
+.obWorld .prGhost { fill: none; stroke: var(--muted); stroke-width: 1.5; stroke-dasharray: 3 3; }

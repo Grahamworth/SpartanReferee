@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Obstacle frames</title>
+<link rel="stylesheet" href="../study.css"><link rel="stylesheet" href="learn.css">
+<style>body{background:var(--bg);color:var(--text);margin:8px;font:12px system-ui} .grid{display:grid;grid-template-columns:repeat(6,1fr);gap:4px} .grid div{background:var(--panel);border-radius:6px} .grid svg{width:100%;display:block} h2{margin:10px 0 4px;font-size:14px}</style>
+</head><body><div id="out"></div>
+<script type="module">
+// A development page (not deployed): every frame of an obstacle's timelines, for checking the poses. obstacle-sheet.html?id=walls&step=0.25
+import { sample, solve, figure, pointOf } from './obstacle-anim.js';
+import { SCENES } from './obstacle-scenes.js';
+const q = new URLSearchParams(location.search), ids = (q.get('id') || Object.keys(SCENES).join(',')).split(','), step = +(q.get('step') || 0.25);
+const only = q.get('tl'), from = +(q.get('from') || 0), to = +(q.get('to') || 999), vb = q.get('vb') || '0 0 400 225';
+document.head.insertAdjacentHTML('beforeend', `<style>.grid{grid-template-columns:repeat(${q.get('cols') || 4},1fr)}</style>`);
+let html = '';
+for (const id of ids) {
+  const sc = SCENES[id]();
+  [['good', sc.good], ...sc.fails.map((f, i) => [`fail ${i + 1}`, f])].forEach(([name, tl], i) => {
+    if (only !== null && +only !== i) return;
+    html += `<h2>${id}: ${name} (${tl.end.toFixed(1)} s)</h2><div class="grid">`;
+    for (let t = from; t <= Math.min(to, tl.end) + 0.001; t += step) {
+      const s = sample(tl, t), P = solve(s), m = tl.marks.find((k) => Math.abs(k.t - t) < step / 2);
+      const H = new Set(m?.hl || []), ring = m ? (() => { const p = typeof m.at === 'function' ? m.at(s, P) : pointOf(P, m.at); return `<circle class="obRing ${m.kind || 'good'}" cx="${p[0]}" cy="${p[1]}" r="12"/>`; })() : '';
+      const c = s.cam;
+      html += `<div><svg viewBox="${vb}"><g class="obWorld" transform="translate(200 112) scale(${c[2]}) translate(${-c[0]} ${-c[1]})">${sc.back(s, H, P)}${figure(P)}${sc.front ? sc.front(s, H, P) : ''}${ring}</g></svg><small>${t.toFixed(2)}</small></div>`;
+    }
+    html += '</div>';
+  });
+}
+document.getElementById('out').innerHTML = html;
+</script></body></html>
