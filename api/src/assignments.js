@@ -39,10 +39,16 @@ function createAssignments({ store, now, reply, session, isAdmin, isAdminEmail, 
     const me = session(h); if (!me) return { error: reply(401, { error: 'Sign in first' }) };
     const m = await membership.companyFor(me);
     if (!m) return { error: reply(403, { error: "This account isn't on the list of referees. Ask an admin to add the address you sign in with." }) };
+    // an admin previewing a type of user (X-Preview-Role, Learning's Preview as): treated as that type here too
+    const preview = String(h['x-preview-role'] || '');
+    if (preview && (m.admin || isAdmin(h))) return { me, m: { ...m, admin: false, preview } };
     return { me, m };
   }
   /** what this person manages: { admin, countries } (a coordinator's regions' countries) */
-  async function scope(h, m) { return m.admin || isAdmin(h) ? { admin: true, countries: [] } : { admin: false, countries: (await scopeOf(m.email)).countries || [] }; }
+  async function scope(h, m) {
+    if (m.preview) return { admin: false, countries: (await scopeOf(m.email, m.preview)).countries || [] };
+    return m.admin || isAdmin(h) ? { admin: true, countries: [] } : { admin: false, countries: (await scopeOf(m.email)).countries || [] };
+  }
   const manages = (sc, ev) => sc.admin || (!!ev.countryCode && sc.countries.includes(ev.countryCode));
   const nameOf = async (email) => (await store.get('name', email))?.name || '';
 

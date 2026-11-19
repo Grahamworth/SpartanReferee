@@ -22,7 +22,8 @@ export async function openServer(tab, n = 1) {
   let unit = ''; try { unit = localStorage.getItem('sr_unit') || ''; } catch { /* private mode */ } // the booking chosen on the console
   const { url } = await call('servers/mine/open', { method: 'POST', body: { n, tab, ...(unit ? { unit } : {}) } });
   const lang = window.SR_I18N ? SR_I18N.lang : 'en'; // the server's review opens in the language picked here
-  location.assign(lang === 'en' ? url : `${url}&lang=${lang}`);
+  let look = ''; try { look = localStorage.getItem('sr_look') || ''; } catch { /* private mode */ } // and in the Look picked here (look.js)
+  location.assign(`${url}${lang === 'en' ? '' : `&lang=${lang}`}${look === 'light' || look === 'dark' ? `&look=${look}` : '&look=auto'}`);
 }
 
 let drawn = '';

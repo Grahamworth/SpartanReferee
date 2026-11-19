@@ -9,12 +9,13 @@
 <style>
   html, body { margin: 0; height: 100%; background: #0b0b0b; color: #f4f6f8; font-family: Barlow, system-ui, sans-serif; overflow: hidden; }
   body { display: grid; place-content: center; text-align: center; gap: 6px; }
-  b { font: italic 800 clamp(48px, 18vw, 160px)/1 "Barlow Condensed", "Arial Narrow", sans-serif; color: #e2231a; letter-spacing: .02em; }
-  span { color: #a6a6a6; font-size: clamp(13px, 2.4vw, 18px); }
+  /* in the video review's colours (review.css): on the black of a picture, TEST in the caution amber of the test-mode banner */
+  b { font: 700 clamp(48px, 18vw, 160px)/1 Barlow, system-ui, sans-serif; color: #f2b33d; letter-spacing: .02em; }
+  span { color: #c4cad2; font-size: clamp(13px, 2.4vw, 18px); }
   video { display: none; }
   body.seen { display: block; }
   body.seen video { display: block; position: fixed; inset: 0; width: 100%; height: 100%; object-fit: contain; background: #000; }
-  body.seen .tag { position: fixed; left: 10px; top: 10px; display: flex; align-items: baseline; gap: 10px; background: rgba(0, 0, 0, .7); padding: 6px 12px; text-align: left; }
+  body.seen .tag { position: fixed; left: 10px; top: 10px; display: flex; align-items: baseline; gap: 10px; background: rgba(0, 0, 0, .7); padding: 6px 12px; border-radius: 8px; text-align: left; }
   body.seen b { font-size: clamp(22px, 4vw, 34px); }
   body.seen span { color: #f4f6f8; font-size: clamp(12px, 1.8vw, 15px); }
 </style>

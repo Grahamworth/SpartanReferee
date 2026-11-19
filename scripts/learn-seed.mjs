@@ -43,7 +43,9 @@ for (const r of REGIONS) {
   const had = (await db.query('SELECT 1 AS x FROM {S}.region WHERE region_id = @id', { id: r.id })).length;
   if (!had) { await db.query('INSERT INTO {S}.region (region_id, name, countries) VALUES (@id, @name, @countries)', r); summary.regions++; }
 }
-for (const p of PEOPLE) {
+// the invented demo people only when asked (DEMO_PEOPLE=1): the live site has none (removed 19 November 2026, at the user's request)
+const DEMO_PEOPLE = process.env.DEMO_PEOPLE === '1';
+for (const p of DEMO_PEOPLE ? PEOPLE : []) {
   let row = (await db.query('SELECT person_id FROM {S}.person WHERE email = @email AND synthetic = 1', { email: p.email }))[0];
   if (!row) {
     const id = crypto.randomUUID();

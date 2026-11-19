@@ -29,6 +29,8 @@ const { createInvites } = require('./invites');
 const { createTracking } = require('./tracking');
 
 const EMAIL = /^[^\s@/#?\\]+@[^\s@/#?\\]+\.[^\s@/#?\\]+$/;
+// the types of user an admin can preview their own account as (Preview as)
+const PREVIEW_ROLES = ['learner', 'regional_coordinator', 'programme_owner', 'content_editor', 'assessor', 'technical_admin'];
 const LOCALES = ['en', 'fr', 'de', 'nl', 'es', 'it', 'el', 'hr', 'cs', 'pl', 'fi', 'sv', 'da', 'ar', 'th'];
 const text = (s, max) => String(s ?? '').replace(/[\u0000-\u001f<>]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, max);
 const uuid = () => crypto.randomUUID();
@@ -116,7 +118,20 @@ function createLearn({ db, session, isAdminEmail = () => false, member = null, r
       if (!as || !as.synthetic || as.status !== 'active') return { error: reply(404, { error: 'No such demo person' }) };
       return { person: as, grants: await grantsOf(as.person_id), realId: real.person_id, actingAs: as.person_id, real };
     }
+    // an admin previewing a type of user (X-Learn-As-Role): their own account, with only that type's roles (19 November 2026)
+    const asRole = String(h['x-learn-as-role'] || h['x-preview-role'] || ''); // X-Preview-Role: the same, from the pages outside the app (appnav.js)
+    if (asRole && P.can(realGrants, 'view-as')) {
+      if (!PREVIEW_ROLES.includes(asRole)) return { error: reply(400, { error: 'No such type of user' }) };
+      return { person: real, grants: await previewGrants(asRole, real), realId: real.person_id, actingAs: null, previewRole: asRole, real };
+    }
     return { person: real, grants: realGrants, realId: real.person_id, actingAs: null, real };
+  }
+  /** the roles a type of user has, as if granted to this person: a coordinator coordinates their own region (or the first), the
+   *  programme roles cover every programme */
+  async function previewGrants(role, person) {
+    if (role === 'learner') return [];
+    const region = role === 'regional_coordinator' ? person.region_id || (await db.query('SELECT TOP 1 region_id FROM {S}.region ORDER BY name'))[0]?.region_id || null : null;
+    return [{ grant_id: `preview-${role}`, person_id: person.person_id, role, programme_id: null, region_id: region, granted_by: null, granted_at: new Date() }];
   }
 
   // ------------------------------------------------------------------ people
@@ -128,7 +143,7 @@ function createLearn({ db, session, isAdminEmail = () => false, member = null, r
     if (regions !== 'all') { where.push(`p.region_id IN (${regions.map((r, i) => `@r${i}`).join(', ') || 'NULL'})`); regions.forEach((r, i) => { params[`r${i}`] = r; }); }
     if (region) { where.push('p.region_id = @region'); params.region = region; }
     if (q) { where.push('(LOWER(p.legal_name) LIKE @q OR LOWER(p.email) LIKE @q OR LOWER(p.public_id) LIKE @q)'); params.q = `%${q.replace(/[%_[]/g, '')}%`; }
-    const rows = await db.query(`SELECT TOP 200 p.* FROM {S}.person p WHERE ${where.join(' AND ')} ORDER BY p.legal_name`, params);
+    const rows = await db.query(`SELECT TOP 2000 p.* FROM {S}.person p WHERE ${where.join(' AND ')} ORDER BY p.legal_name`, params);
     return reply(200, { people: rows.map(personView) });
   }
   function readPersonInput(b, fields) {
@@ -266,11 +281,12 @@ function createLearn({ db, session, isAdminEmail = () => false, member = null, r
     const w = await who(h); if (w.error) return w.error;
     w.correlation = crypto.randomBytes(8).toString('hex');
     if (a === 'me' && method === 'GET') {
-      const viewAs = P.can(await grantsOf(w.realId), 'view-as')
+      const canPreview = P.can(await grantsOf(w.realId), 'view-as');
+      const viewAs = canPreview && h['x-learn-as-invented'] === '1'
         ? (await db.query('SELECT p.*, (SELECT STRING_AGG(role, \',\') FROM {S}.role_grant g WHERE g.person_id = p.person_id) AS roles FROM {S}.person p WHERE p.synthetic = 1 AND p.status <> \'merged\' ORDER BY p.legal_name'))
           .map((p) => ({ ...personView(p), roles: (p.roles || '').split(',').filter(Boolean) }))
         : [];
-      return reply(200, { person: personView(w.person), grants: w.grants.map(grantView), actingAs: w.actingAs, real: personView(w.real), viewAs });
+      return reply(200, { person: personView(w.person), grants: w.grants.map(grantView), actingAs: w.actingAs, real: personView(w.real), viewAs, canPreview, previewRole: w.previewRole || '' });
     }
     if (a === 'regions' && method === 'GET') return reply(200, { regions: (await db.query('SELECT * FROM {S}.region ORDER BY name')).map((r) => ({ id: r.region_id, name: r.name, countries: r.countries ? r.countries.split(',') : [] })) });
     if (a === 'people' && !b && method === 'GET') return listPeople(w, query);
@@ -296,7 +312,13 @@ function createLearn({ db, session, isAdminEmail = () => false, member = null, r
     await db.query("UPDATE {S}.person SET locale = @l, updated_at = SYSUTCDATETIME() WHERE email = @e AND synthetic = 0 AND status = 'active' AND locale <> @l", { l: locale, e: String(email).toLowerCase() });
   }
   /** what someone coordinates, for events management (assignments.js): the countries of the regions they're regional coordinator for */
-  async function scopeOf(email) {
+  async function scopeOf(email, previewRole = '') {
+    if (previewRole) {
+      if (previewRole !== 'regional_coordinator') return { countries: [] };
+      const r = (await db.query("SELECT TOP 1 r.countries FROM {S}.person p JOIN {S}.region r ON r.region_id = p.region_id WHERE p.synthetic = 0 AND LOWER(p.email) = @e", { e: String(email).toLowerCase() }))[0]
+        || (await db.query('SELECT TOP 1 countries FROM {S}.region ORDER BY name'))[0];
+      return { countries: String(r?.countries || '').split(',').filter(Boolean) };
+    }
     const rows = await db.query(`SELECT r.countries FROM {S}.person p JOIN {S}.role_grant g ON g.person_id = p.person_id AND g.role = 'regional_coordinator'
       JOIN {S}.region r ON r.region_id = g.region_id WHERE p.synthetic = 0 AND p.status = 'active' AND LOWER(p.email) = @e`, { e: String(email).toLowerCase() });
     return { countries: [...new Set(rows.flatMap((r) => String(r.countries || '').split(',').filter(Boolean)))] };

@@ -11,6 +11,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;1,800&family=Barlow:wght@400;600;700&display=swap">
 <link rel="stylesheet" href="headjudge.css">
+<link rel="stylesheet" href="study.css">
+<script src="look.js"></script>
 <script src="brand.js"></script>
 <script type="module" src="results.js"></script>
 <style>
@@ -40,10 +42,11 @@
   .pastActions a, .pastActions button { text-decoration: none; }
   section.card h2 { font-size: 1.4rem; margin-bottom: 8px; }
 </style>
+<script type="module" src="appnav.js"></script>
 </head>
 <body>
-<header class="top">
-  <a class="mark" href="console.html" id="company">Spartan<span>Referee</span></a>
+<header class="top" data-tab="events">
+  <a class="mark" href="learn/" id="company">Spartan<span>Referee</span></a>
   <nav id="appTabs" class="appTabs" aria-label="Your pages" hidden></nav>
   <span class="topRight"><select class="langPick" data-lang-picker aria-label="Language"></select><span id="who" class="muted"></span></span>
 </header>

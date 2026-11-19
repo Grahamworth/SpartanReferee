@@ -11,6 +11,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;1,800&family=Barlow:wght@400;600;700&display=swap">
 <link rel="stylesheet" href="headjudge.css">
+<link rel="stylesheet" href="study.css">
+<script src="look.js"></script>
 <style>
   .back { display: inline-flex; align-items: center; min-height: 44px; font-weight: 700; text-decoration: none; margin-bottom: 6px; }
   .evHead h1 { font-size: clamp(1.8rem, 6vw, 2.8rem); line-height: 1.05; margin: 0 0 8px; overflow-wrap: anywhere; }
@@ -32,13 +34,14 @@
   @media (min-width: 900px) { .evGrid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0 18px; align-items: start; } }
 </style>
 <script type="module" src="event.js"></script>
+<script type="module" src="appnav.js"></script>
 </head>
 <body>
 <!-- One Spartan event: its days and camera hours, who's refereeing it (head referees first) and its cameras, with the way to book
      or watch them. Anyone in the organisation can open any event. Its data is /api/event/<id> (api/src/assignments.js). -->
-<header class="top">
-  <a class="mark" href="home.html">Spartan<span>Referee</span></a>
-  <span class="topRight"><select class="langPick" data-lang-picker aria-label="Language"></select><a href="home.html">Home</a><span id="who" class="muted"></span></span>
+<header class="top" data-tab="events">
+  <a class="mark" href="learn/">Spartan<span>Referee</span></a>
+  <span class="topRight"><select class="langPick" data-lang-picker aria-label="Language"></select><span id="who" class="muted"></span></span>
 </header>
 <main class="page">
   <section id="signIn" class="card narrow" hidden>

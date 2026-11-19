@@ -54,22 +54,25 @@ test('an admin invites many at once, with a user type and programmes; each gets 
   assert.strictEqual((await call('GET', 'learn/invites', ref)).status, 403);
 });
 
-test('registering from the link: name, region and language; any sign-in works; roles, programmes and the referee list follow', { skip }, async () => {
+test('registering from the link: name, region and language; with the invited address (any way of signing in); roles, programmes and the referee list follow', { skip }, async () => {
   const mail = mailer.sent.find((m) => m.to === 'ann@example.com'), token = tokenIn(mail);
   const info = await ok('GET', `invite/${token}`);
   assert.strictEqual(info.state, 'pending'); assert.strictEqual(info.email, 'ann@example.com'); assert.deepStrictEqual(info.programmes.map((p) => [p.id, p.due]), [['ocr-referee', '2027-03-01']]);
   assert.strictEqual((await call('GET', 'invite/not-a-real-token-at-all-xx')).status, 404);
-  // Ann signs in with a Google account under another address: still her invite (the link proves it)
-  const ann = await login('anna.k');
+  // she must sign in with the address the invite went to: another account is refused, saying which address
+  const other = await login('anna.k');
+  const refused = await call('POST', `invite/${token}/accept`, other, { name: 'Anna Kowalska', regionId: 'europe' });
+  assert.strictEqual(refused.status, 403); assert.match(refused.body.error, /ann@example.com/);
+  const ann = await login('ann');
   assert.strictEqual((await call('GET', 'learn/me', ann)).status, 403, 'not in yet');
   assert.strictEqual((await call('POST', `invite/${token}/accept`, ann, { name: 'A', regionId: 'europe' })).status, 400, 'a full name');
   await ok('POST', `invite/${token}/accept`, ann, { name: 'Anna Kowalska', regionId: 'europe', locale: 'pl' });
   const me = await ok('GET', 'learn/me', ann);
-  assert.strictEqual(me.person.legalName, 'Anna Kowalska'); assert.strictEqual(me.person.regionId, 'europe'); assert.strictEqual(me.person.locale, 'pl'); assert.strictEqual(me.person.email, 'anna.k@example.com');
+  assert.strictEqual(me.person.legalName, 'Anna Kowalska'); assert.strictEqual(me.person.regionId, 'europe'); assert.strictEqual(me.person.locale, 'pl'); assert.strictEqual(me.person.email, 'ann@example.com');
   const e = (await db.query('SELECT * FROM {S}.enrolment WHERE person_id = @p', { p: me.person.id }))[0];
   assert.strictEqual(e.version_id.toLowerCase(), versionId.toLowerCase()); assert.strictEqual(e.due_date.toISOString().slice(0, 10), '2027-03-01');
-  assert.ok(await store.get('people:spartan', 'anna.k@example.com'), 'on the referee list');
-  assert.strictEqual((await store.get('lang', 'anna.k@example.com')).lang, 'pl');
+  assert.ok(await store.get('people:spartan', 'ann@example.com'), 'on the referee list');
+  assert.strictEqual((await store.get('lang', 'ann@example.com')).lang, 'pl');
   // the same link again, by her: fine; by someone else: no
   await ok('POST', `invite/${token}/accept`, ann, { name: 'Anna Kowalska', regionId: 'europe' });
   assert.strictEqual((await call('POST', `invite/${token}/accept`, await login('other'), { name: 'Someone Else', regionId: 'europe' })).status, 409);
@@ -106,12 +109,12 @@ test('progress: admins see everyone, a coordinator only their region; reminders 
   const cara = await login('cara');
   const hers = await ok('GET', 'learn/tracking?status=all', cara);
   assert.ok(!hers.rows.some((r) => r.name === 'Anna Kowalska'), 'Anna is in Europe; Cara coordinates the Middle East and Asia');
-  assert.strictEqual((await call('GET', 'learn/tracking', await login('anna.k'))).status, 403, 'a referee doesn\'t see others\' progress');
+  assert.strictEqual((await call('GET', 'learn/tracking', await login('ann'))).status, 403, 'a referee doesn\'t see others\' progress');
   const before = mailer.sent.length;
   const r = await ok('POST', 'learn/tracking/remind', boss, { enrolmentIds: [anna.enrolmentId], due: '2027-02-15', message: 'Before the season, please.' });
   assert.strictEqual(r.sent, 1);
   const mail = mailer.sent.at(-1);
-  assert.strictEqual(mailer.sent.length, before + 1); assert.strictEqual(mail.to, 'anna.k@example.com');
+  assert.strictEqual(mailer.sent.length, before + 1); assert.strictEqual(mail.to, 'ann@example.com');
   assert.match(mail.subject, /Please complete OCR Referee by 15 February 2027/); assert.match(mail.text, /Before the season, please\./);
   const after = (await ok('GET', 'learn/tracking?status=all', boss)).rows.find((x) => x.enrolmentId === anna.enrolmentId);
   assert.strictEqual(after.due, '2027-02-15'); assert.ok(after.remindedAt);

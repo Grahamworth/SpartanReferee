@@ -1,19 +1,44 @@
-/* Race-day look: black, Spartan red and white, heavy condensed italic caps.
-   Single dark theme on purpose: it sits over a live camera feed and must read in sunlight. */
+/* The AI judge (judge.html) and Cloud recordings (recordings.html).
+   Its own pages (home, results, settings, What counts?) have SpartanReferee's study look (study.css), as Home, Learning and the
+   video review do: light or dark following the phone, or the Look picked on the website (look.js: <html data-look>, localStorage
+   sr_look). Actions are blue; Spartan red is the brand, and otherwise means wrong (a no rep).
+   Judging itself keeps the race-day look whatever the Look: black, red and white, heavy condensed italic caps, over the live camera,
+   reading in sunlight (#stage, .hud and the whole-screen tick or cross, below). The names are the race-day ones: --black is the page,
+   --ink a card, --white the writing. */
 :root {
-  --black: #0b0b0b;
-  --ink: #161616;
-  --steel: #2b2b2b;
-  --line: #3a3a3a;
-  --white: #ffffff;
-  --muted: #a6a6a6;
+  --black: #111418;
+  --ink: #1a1e24;
+  --steel: #232933;
+  --line: #333a43;
+  --white: #eef1f4;
+  --muted: #a5adb8;
   --red: #e2231a;
   --red-deep: #a8150f;
   --good: #22c55e;
   --warn: #ffb020;
+  --primary: #3566d6;
+  --on-primary: #ffffff;
+  --primary-text: #92b2ff;
+  --bad: #ff8a80;
   --display: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", Impact, sans-serif;
   --body: "Barlow", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --heading: Barlow, -apple-system, "Segoe UI", system-ui, sans-serif;
   color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-look="dark"]) {
+    --black: #f4f5f7; --ink: #ffffff; --steel: #eef1f5; --line: #d8dce2; --white: #1b1f24; --muted: #59626e;
+    --primary: #2457c5; --primary-text: #1f4fb8; --bad: #b3261e; --warn: #8a5300; color-scheme: light;
+  }
+}
+:root[data-look="light"] {
+  --black: #f4f5f7; --ink: #ffffff; --steel: #eef1f5; --line: #d8dce2; --white: #1b1f24; --muted: #59626e;
+  --primary: #2457c5; --primary-text: #1f4fb8; --bad: #b3261e; --warn: #8a5300; color-scheme: light;
+}
+/* the race-day look, over the camera: always dark. As is the whole judge inside a camera or an analysis in the video review. */
+#stage, .hud, .done-screen, .rep-flash, .loader, .exit-btn, .mute-btn, html:root.embedded, html:root.analysis {
+  --black: #0b0b0b; --ink: #161616; --steel: #2b2b2b; --line: #3a3a3a; --white: #ffffff; --muted: #a6a6a6; --warn: #ffb020;
+  color-scheme: dark; color: var(--white);
 }
 
 * { box-sizing: border-box; }
@@ -82,7 +107,8 @@ h1 {
 
 .panel {
   background: var(--ink);
-  border-top: 4px solid var(--red);
+  border: 1px solid var(--line);
+  border-radius: 12px;
   padding: 18px 16px;
   display: flex;
   flex-direction: column;
@@ -97,16 +123,16 @@ input[type="text"], input[type="number"], select, textarea {
   color: var(--white);
   background: var(--black);
   border: 1px solid var(--line);
-  border-radius: 2px;
+  border-radius: 8px;
   padding: 12px;
   width: 100%;
 }
 input:focus-visible, select:focus-visible, textarea:focus-visible, .btn:focus-visible {
-  outline: 3px solid var(--red);
+  outline: 3px solid var(--primary);
   outline-offset: 2px;
 }
 .check { display: flex; align-items: center; gap: 10px; }
-.check input { width: 22px; height: 22px; accent-color: var(--red); }
+.check input { width: 22px; height: 22px; accent-color: var(--primary); }
 
 .seg { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 .seg button {
@@ -115,11 +141,11 @@ input:focus-visible, select:focus-visible, textarea:focus-visible, .btn:focus-vi
   background: var(--black);
   border: 1px solid var(--line);
   padding: 12px 8px;
-  border-radius: 2px;
+  border-radius: 8px;
   cursor: pointer;
 }
 .seg-big button { font: italic 800 1.7rem var(--display); text-transform: uppercase; padding: 10px 6px; }
-.seg button[aria-checked="true"] { color: var(--white); border-color: var(--red); background: var(--red-deep); }
+.seg button[aria-checked="true"] { color: var(--on-primary); border-color: var(--primary); background: var(--primary); }
 
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
@@ -128,16 +154,18 @@ input:focus-visible, select:focus-visible, textarea:focus-visible, .btn:focus-vi
   letter-spacing: 0.06em;
   padding: 12px 20px;
   border: 2px solid transparent;
-  border-radius: 2px;
+  border-radius: 8px;
   cursor: pointer;
   color: var(--white);
   background: transparent;
   text-decoration: none;
   user-select: none;
 }
-.btn-red { background: var(--red); border-color: var(--red); }
-.btn-red:active { background: var(--red-deep); }
-.btn-ghost { border-color: var(--line); background: rgba(11, 11, 11, 0.6); }
+/* the main action ("red" from the race-day look): blue, as everywhere on SpartanReferee */
+.btn-red { background: var(--primary); border-color: var(--primary); color: var(--on-primary); }
+.btn-red:active { filter: brightness(0.9); }
+.btn-red:hover:not([disabled]) { filter: brightness(1.1); }
+.btn-ghost { border-color: var(--line); background: color-mix(in srgb, var(--black) 60%, transparent); }
 .btn-ghost:active { border-color: var(--white); }
 .btn-big {
   font-size: 1.7rem;
@@ -150,9 +178,10 @@ input:focus-visible, select:focus-visible, textarea:focus-visible, .btn:focus-vi
 .badge {
   font-family: var(--body);
   font-size: 0.8rem;
-  background: var(--red);
+  background: var(--primary);
+  color: var(--on-primary);
   padding: 1px 7px;
-  border-radius: 2px;
+  border-radius: 999px;
   font-variant-numeric: tabular-nums;
 }
 
@@ -161,11 +190,11 @@ input:focus-visible, select:focus-visible, textarea:focus-visible, .btn:focus-vi
 .btn-results .badge { font-size: 1.1rem; padding: 2px 12px; font-style: normal; }
 .cog-btn {
   position: absolute; top: 22px; right: 0; width: 56px; height: 56px; padding: 10px;
-  border: 2px solid var(--line); background: var(--ink); color: var(--white); cursor: pointer;
+  border: 2px solid var(--line); border-radius: 12px; background: var(--ink); color: var(--white); cursor: pointer;
 }
 .cog-btn:active { border-color: var(--white); }
 .cog-btn svg { width: 100%; height: 100%; display: block; }
-.saved-note { margin: 0; padding: 10px 12px; background: var(--good); color: var(--black); font-weight: 700; }
+.saved-note { margin: 0; padding: 10px 12px; background: var(--good); color: #0b0b0b; font-weight: 700; border-radius: 8px; }
 .video-cell { display: flex; gap: 6px; }
 .player-card { width: min(100%, 720px); max-height: 100%; overflow-y: auto; gap: 12px; }
 .player-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
@@ -173,13 +202,13 @@ input:focus-visible, select:focus-visible, textarea:focus-visible, .btn:focus-vi
 .player-head .rules-x { position: static; flex: none; }
 #playerVideo { width: 100%; max-height: 65vh; background: #000; display: block; }
 .status { margin: 0; color: var(--muted); font-size: 0.92rem; }
-.error { margin: 0; color: var(--white); background: var(--red-deep); padding: 10px 12px; }
+.error { margin: 0; color: #fff; background: var(--red-deep); padding: 10px 12px; border-radius: 8px; }
 .warn { margin: 0; color: var(--warn); font-size: 0.92rem; flex-basis: 100%; }
 .empty { color: var(--muted); }
 
 .tips h2 { font-size: 1.4rem; font-weight: 700; letter-spacing: 0.04em; margin-bottom: 8px; }
 .tips ol { margin: 0; padding-left: 1.3em; color: var(--muted); display: grid; gap: 6px; }
-.tips li::marker { color: var(--red); font-family: var(--display); font-weight: 700; }
+.tips li::marker { color: var(--primary-text); font-family: var(--display); font-weight: 700; }
 
 .page-head { display: flex; align-items: center; gap: 14px; }
 .page-head h2 { font-size: 2.4rem; font-style: italic; font-weight: 900; }
@@ -189,9 +218,9 @@ input:focus-visible, select:focus-visible, textarea:focus-visible, .btn:focus-vi
 table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; font-size: 0.95rem; }
 th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--steel); white-space: nowrap; }
 th { font: 700 0.85rem var(--display); text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
-.pill { font: 700 0.8rem var(--display); text-transform: uppercase; letter-spacing: 0.08em; padding: 2px 8px; border-radius: 2px; }
-.pill.ok { background: var(--good); color: var(--black); }
-.pill.bad { background: var(--red); color: var(--white); }
+.pill { font: 700 0.8rem var(--display); text-transform: uppercase; letter-spacing: 0.08em; padding: 2px 8px; border-radius: 999px; }
+.pill.ok { background: var(--good); color: #0b0b0b; }
+.pill.bad { background: var(--red); color: #fff; }
 .pill.test { background: var(--steel); color: var(--white); }
 td .btn { font-size: 0.9rem; padding: 4px 10px; }
 
@@ -345,7 +374,7 @@ td .btn { font-size: 0.9rem; padding: 4px 10px; }
 
 /* ---------- attempt detail ---------- */
 .subhead { font-size: 1.4rem; font-weight: 700; letter-spacing: 0.04em; }
-.facts { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px 16px; margin: 0; background: var(--ink); border-top: 4px solid var(--red); padding: 14px 16px; }
+.facts { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px 16px; margin: 0; background: var(--ink); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
 .facts dt { font: 700 0.8rem var(--display); text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
 .facts dd { margin: 0; font-weight: 600; overflow-wrap: anywhere; }
 .reps-table td:last-child { white-space: normal; min-width: 14ch; }
@@ -366,7 +395,7 @@ td .btn { font-size: 0.9rem; padding: 4px 10px; }
 .exit-btn svg { width: 20px; height: 20px; display: block; color: var(--red); }
 /* Keep the camera screens' top text clear of the exit button. */
 .hud-top, .hud-bar { padding-right: 104px; }
-.modal-card { background: var(--ink); border-top: 4px solid var(--red); padding: 20px; width: min(100%, 400px); display: flex; flex-direction: column; gap: 16px; }
+.modal-card { background: var(--ink); color: var(--white); border: 1px solid var(--line); border-radius: 12px; padding: 20px; width: min(100%, 400px); display: flex; flex-direction: column; gap: 16px; }
 .modal-card p { margin: 0; font-size: 1.1rem; }
 
 /* ---------- "What counts?" button and panel ---------- */
@@ -375,14 +404,13 @@ td .btn { font-size: 0.9rem; padding: 4px 10px; }
   right: max(16px, env(safe-area-inset-right)); bottom: max(16px, env(safe-area-inset-bottom));
   display: flex; align-items: center; gap: 8px; min-height: 48px;
   padding: 6px 18px 6px 8px; border: 0; cursor: pointer;
-  background: var(--red); color: var(--white);
-  font: 700 1.1rem var(--display); text-transform: uppercase; letter-spacing: 0.06em;
-  clip-path: polygon(0 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+  background: var(--primary); color: var(--on-primary); border-radius: 999px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  font: 700 1.1rem var(--heading);
 }
-.rules-btn:active { background: var(--red-deep); }
+.rules-btn:active { filter: brightness(0.9); }
 .rules-q {
   display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%;
-  background: var(--white); color: var(--red); font-size: 1.3rem; font-weight: 900;
+  background: #fff; color: var(--primary); font-size: 1.3rem; font-weight: 900;
 }
 /* Keep the button clear of the station's own buttons. */
 body.has-rules-btn .hud-bottom, body.has-rules-btn .page { padding-bottom: 72px; }
@@ -396,7 +424,7 @@ body.has-rules-btn .done-screen { padding-bottom: max(88px, env(safe-area-inset-
 }
 .rules-card {
   width: min(100%, 560px); margin-top: auto;
-  background: var(--ink); border-top: 6px solid var(--red); padding: 18px 18px 14px;
+  background: var(--ink); color: var(--white); border: 1px solid var(--line); border-radius: 12px; padding: 18px 18px 14px;
   display: flex; flex-direction: column; gap: 10px; position: relative;
   transform-origin: bottom right; animation: rules-pop 0.2s ease-out;
 }
@@ -404,26 +432,26 @@ body.has-rules-btn .done-screen { padding-bottom: max(88px, env(safe-area-inset-
 .rules-card h2 { font-size: clamp(1.8rem, 7vw, 2.4rem); font-style: italic; font-weight: 900; line-height: 0.95; }
 .rules-flow { margin: 0; color: var(--muted); }
 .std-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; counter-reset: std; }
-.std-list li { background: var(--black); padding: 10px; display: flex; flex-direction: column; gap: 6px; counter-increment: std; }
+.std-list li { background: var(--black); border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 6px; counter-increment: std; }
 .std-list h3 { font-size: 1.25rem; font-weight: 700; line-height: 1; }
-.std-list h3::before { content: counter(std) ". "; color: var(--red); }
+.std-list h3::before { content: counter(std) ". "; color: var(--primary-text); }
 .std-list p { margin: 0; font-size: 0.9rem; color: var(--muted); line-height: 1.3; }
 .std-fig { width: 100%; max-height: 110px; display: block; }
 .std-fig .ground { stroke: var(--line); stroke-width: 3; }
 .std-fig .body { fill: none; stroke: var(--white); stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
 .std-fig .body circle { fill: var(--white); stroke: none; }
-.std-fig .mark { fill: none; stroke: var(--red); stroke-width: 4; stroke-linecap: round; }
-.std-fig .mark circle { fill: var(--red); stroke: none; }
+.std-fig .mark { fill: none; stroke: var(--primary-text); stroke-width: 4; stroke-linecap: round; }
+.std-fig .mark circle { fill: var(--primary-text); stroke: none; }
 .rules-note { margin: 0; font-weight: 600; }
 .std-plain { grid-template-columns: 1fr; }
 .std-plain li { gap: 4px; }
-.exercise-banner { margin: 0; padding: 10px 12px; background: var(--steel); border-left: 4px solid var(--red); font-weight: 600; }
-.exercise-banner.practice { background: var(--red-deep); border-left-color: var(--white); }
+.exercise-banner { margin: 0; padding: 10px 12px; background: var(--steel); border-left: 4px solid var(--primary); border-radius: 8px; font-weight: 600; }
+.exercise-banner.practice { background: var(--primary); color: var(--on-primary); border-left-color: var(--on-primary); }
 .rules-x {
   position: absolute; top: 8px; right: 8px; width: 52px; height: 52px; padding: 12px;
-  border: 0; background: var(--red); color: var(--white); cursor: pointer;
+  border: 0; border-radius: 50%; background: var(--steel); color: var(--white); cursor: pointer;
 }
-.rules-x:active { background: var(--red-deep); }
+.rules-x:hover { background: var(--line); }
 .rules-x svg { width: 100%; height: 100%; display: block; }
 .rules-card .eyebrow, .rules-card h2 { padding-right: 56px; }
 
@@ -432,7 +460,7 @@ body.has-rules-btn .done-screen { padding-bottom: max(88px, env(safe-area-inset-
 }
 
 /* Judging strictness slider */
-.strict-field input[type=range] { width: 100%; accent-color: var(--red, #e2231a); margin: 10px 0 2px; }
+.strict-field input[type=range] { width: 100%; accent-color: var(--primary); margin: 10px 0 2px; }
 .strict-ends { display: flex; justify-content: space-between; font-size: 0.8rem; opacity: 0.75; }
 .strict-more { margin-top: 10px; font-size: 0.9rem; }
 .strict-more summary { cursor: pointer; font-weight: 600; }
@@ -474,7 +502,7 @@ body.has-rules-btn .done-screen { padding-bottom: max(88px, env(safe-area-inset-
 .seek { display: flex; align-items: center; gap: 10px; width: 100%; pointer-events: auto; background: rgba(0,0,0,0.55); padding: 6px 10px; }
 .seek[hidden] { display: none; }
 .seek-play { min-width: 48px; min-height: 40px; padding: 4px 10px; font-size: 1rem; }
-.seek input[type="range"] { flex: 1; min-width: 0; accent-color: var(--red); height: 32px; }
+.seek input[type="range"] { flex: 1; min-width: 0; accent-color: var(--primary); height: 32px; }
 .seek-time { font-variant-numeric: tabular-nums; font-weight: 700; white-space: nowrap; }
 .test-info { margin: 0; font-size: 0.9rem; font-weight: 600; background: rgba(0,0,0,0.55); padding: 3px 8px; }
 .test-info[hidden] { display: none; }
@@ -561,7 +589,7 @@ html.hide-tracking #stage #canvas { opacity: 0; }
 .ex-tabs { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; margin: 10px -16px 4px; padding: 0 16px; }
 .ex-tabs::-webkit-scrollbar { display: none; }
 .ex-tabs button { flex: 0 0 auto; padding: 9px 14px; border: 0; border-bottom: 3px solid transparent; background: transparent; color: var(--muted); font: italic 800 1.15rem var(--display); text-transform: uppercase; cursor: pointer; }
-.ex-tabs button[aria-pressed="true"] { color: var(--white); border-bottom-color: var(--red); }
+.ex-tabs button[aria-pressed="true"] { color: var(--white); border-bottom-color: var(--primary); }
 .ex-pager { display: flex; align-items: flex-start; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
 .ex-pager::-webkit-scrollbar { display: none; }
 .ex-panel { flex: 0 0 100%; min-width: 0; box-sizing: border-box; scroll-snap-align: start; scroll-snap-stop: always; }
@@ -579,7 +607,7 @@ html.hide-tracking #stage #canvas { opacity: 0; }
 .board td { padding: 10px 8px; border-bottom: 1px solid var(--line); }
 .board td.rank { width: 2.5em; color: var(--muted); font-weight: 700; }
 .board td.reps { text-align: right; font: 800 1.4rem var(--display); }
-.board tr.mine td { background: color-mix(in srgb, var(--red) 16%, transparent); }
+.board tr.mine td { background: color-mix(in srgb, var(--primary) 16%, transparent); }
 .board tr.mine td.name::after { content: " (you)"; color: var(--muted); font-weight: 600; }
 .board tr.gap td { border: 0; color: var(--muted); text-align: center; padding: 2px; }
 .board tr:nth-child(1) td.rank { color: #f2c94c; } .board tr:nth-child(2) td.rank { color: #c0c6cc; } .board tr:nth-child(3) td.rank { color: #d08b52; }
@@ -590,12 +618,31 @@ html.practice-mode .of { display: none !important; }
 .name-gate { z-index: 50; }
 .name-gate h2 { margin: 0; font: italic 800 1.8rem var(--display); text-transform: uppercase; }
 .name-field { display: grid; gap: 6px; font-weight: 700; }
-.name-field input { font: inherit; padding: 12px; background: #222; color: #fff; border: 1px solid #555; }
+.name-field input { font: inherit; padding: 12px; background: var(--black); color: var(--white); border: 1px solid var(--line); border-radius: 8px; }
 .name-gate .btn { justify-content: center; }
-.name-gate .error { margin: 0; color: #ff8a84; font-size: 1rem; }
+.name-gate .error { margin: 0; color: var(--bad); background: none; padding: 0; font-size: 1rem; }
 
 /* the language menu on the judge's home screen (i18n.js fills it) */
-.masthead .langPick { position: relative; z-index: 1; margin-top: 12px; font: inherit; font-size: .9rem; color: var(--white); background: var(--ink); border: 1px solid var(--line); padding: 5px 8px; border-radius: 4px; }
+.masthead .langPick { position: relative; z-index: 1; margin-top: 12px; font: inherit; font-size: .9rem; color: var(--white); background: var(--ink); border: 1px solid var(--line); padding: 5px 8px; border-radius: 8px; width: auto; }
 
 /* Arabic and Thai (i18n.js sets <html lang>): no slanted lettering or added letter spacing, which break Arabic's joined letters */
 html[lang="ar"] *, html[lang="th"] * { font-style: normal !important; letter-spacing: 0 !important; }
+/* ---------- the study look on the judge's own pages (home, results, an attempt, settings) and its dialogs ----------
+   Sentence-case headings in Barlow, as on Home and Learning: the heavy italic capitals stay on the judging screens. */
+.page :is(h1, h2, h3, .eyebrow, .btn, .seg-big button), .modal :is(h2, h3, .btn), .rules :is(h2, h3, .eyebrow) {
+  font-family: var(--heading); text-transform: none; font-style: normal; letter-spacing: 0;
+}
+.page h1 { font-weight: 700; font-size: clamp(1.9rem, 7vw, 2.4rem); line-height: 1.15; margin: 6px 0 10px; }
+.page h2, .page .page-head h2, .page .tips h2, .modal .player-head h2 { font-weight: 700; font-size: 1.45rem; line-height: 1.2; }
+.page h3, .page .panel h3, .page .subhead { font-weight: 700; font-size: 1.2rem; }
+.page .eyebrow, .rules .eyebrow { color: var(--muted); font-weight: 600; font-size: 0.95rem; }
+.page .btn, .modal .btn { font-size: 1.05rem; }
+.page .btn-big { clip-path: none; font-weight: 700; font-size: 1.2rem; border-radius: 10px; padding: 14px 20px; }
+.page .seg-big button { font-weight: 700; font-size: 1.35rem; }
+.rules-card h2 { font-weight: 700; font-size: clamp(1.5rem, 6vw, 1.9rem); line-height: 1.15; }
+.rules-card .std-list h3 { font-weight: 700; font-size: 1.1rem; line-height: 1.2; }
+/* the line along the top of the judge's home: Spartan red, as the website's header line */
+.masthead .slash { height: 3px; clip-path: none; }
+.page a:not(.btn):not(.home-link) { color: var(--primary-text); }
+@media (prefers-color-scheme: light) { :root:not([data-look="dark"]) :is(.panel, .facts, .modal-card, .rules-card) { box-shadow: 0 1px 2px rgba(20, 30, 50, .06); } }
+:root[data-look="light"] :is(.panel, .facts, .modal-card, .rules-card) { box-shadow: 0 1px 2px rgba(20, 30, 50, .06); }

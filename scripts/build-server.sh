@@ -14,7 +14,7 @@ cp "$SRC"/server/setup/* "$BUILD/setup/"
 
 # the judge (served at /judge/)
 SITE="judge.html styles.css app.js judge-gate.js api-base.js burpee.js exercises.js pose-filter.js multi.js finder.js
-  cones.js ocr-prep.js readers.js digit-model.js digit-model.json rtmo-s.onnx looks.css looks.js brand.js i18n.js"
+  cones.js ocr-prep.js readers.js digit-model.js digit-model.json rtmo-s.onnx look.js i18n.js"
 for f in $SITE; do cp "$SRC/$f" "$BUILD/site/"; done
 cp -r "$SRC/icons" "$BUILD/site/"
 mkdir -p "$BUILD/site/i18n" && cp "$SRC"/i18n/[a-z][a-z].json "$BUILD/site/i18n/" && rm -f "$BUILD/site/i18n/en.json" # the translations (en.json is only the list to translate)

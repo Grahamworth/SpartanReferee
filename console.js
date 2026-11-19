@@ -8,7 +8,6 @@ import { microsoftButton } from './email-signin-web.js';
 import { drawTracked } from './tracked-demos.js';
 import { drawAppTabs, openServer as openTab } from './apptabs.js';
 
-const { applyTheme } = window.HeadJudgeBrand;
 const { quote, timeLeft, money, plural } = window.HeadJudgeBooking;
 const $ = (id) => document.getElementById(id);
 const show = (el, on) => { el.hidden = !on; };
@@ -365,7 +364,7 @@ $('stop').onclick = () => {
 
 
 function enterBrand(c) {
-  applyTheme(c.theme);
+  // the look is the site's own (study.css): one organisation, so no company colours (19 November 2026)
   document.title = `${c.name}: SpartanReferee`;
   // the name stays SpartanReferee (the organisation is called Spartan): only a logo, if one is set, changes
   if (c.logo) { $('logo').src = c.logo; show($('logo'), true); }

@@ -1,56 +1,85 @@
-// Progress (#/progress): who has done their lessons, for admins (everyone), programme owners and assessors (their programmes) and
-// regional coordinators (their region). Filter, tick people (or everyone shown) and email them a reminder to complete by a date.
-// The server side is api/src/learn/tracking.js.
-import { $, call, esc, t, toast, act, bar, day, when } from './core.js';
+// People (#/people), one list since 19 November 2026 (it was People and Progress): each person once, with how far they are in each
+// programme under their name. Admins see everyone, regional coordinators their region, programme owners and assessors their
+// programmes' people. Filter, tick people (or everyone shown) and email them a reminder to complete by a date.
+// The server side is api/src/learn/tracking.js (progress) and api/src/learn/people.js (the people list, admins and coordinators).
+import { $, S, call, esc, t, toast, act, bar, day, when, has, isAdmin, regionName } from './core.js';
 
-const STATUS = [['todo', 'Still to do'], ['overdue', 'Overdue'], ['completed', 'Completed'], ['all', 'Everyone']];
-let ROWS = [];
+const STATUS = [['all', 'Everyone'], ['todo', 'Still to do'], ['overdue', 'Overdue'], ['completed', 'Completed']];
+let PEOPLE = [];
 
-async function progressView() {
+// the people list (admins and coordinators) adds the people with no training yet, and SR numbers; progress (all four) the rest
+export async function peopleList({ title, tabs = '', addBtn = '' }) {
   const q = new URLSearchParams(location.hash.split('?')[1] || '');
-  const f = { programme: q.get('programme') || '', region: q.get('region') || '', status: q.get('status') || 'todo', q: q.get('q') || '' };
-  const d = await call(`tracking?${new URLSearchParams(f)}`);
-  ROWS = d.rows;
-  const sel = (name, list, value, all) => `<select name="${name}" aria-label="${esc(all)}"><option value="">${esc(t(all))}</option>${list.map(([v, n]) => `<option value="${esc(v)}"${v === value ? ' selected' : ''}>${esc(n)}</option>`).join('')}</select>`;
-  const rowStatus = (r) => (r.status === 'completed' ? '<span class="badge s-completed">Completed</span>' : r.status === 'overdue' ? '<span class="badge s-expired">Overdue</span>' : '');
-  return `<section class="card"><h1>Progress</h1>
-      <p class="note">Who has done their lessons. Tick people, or everyone shown, to email them a reminder with a date to complete by.</p>
+  const f = { programme: q.get('programme') || '', region: q.get('region') || '', status: q.get('status') || 'all', q: q.get('q') || '' };
+  const canList = isAdmin() || has('regional_coordinator');
+  const canProgress = canList || has('assessor') || has('programme_owner');
+  const [list, d] = await Promise.all([
+    canList ? call(`people?q=${encodeURIComponent(f.q)}&region=${encodeURIComponent(f.region)}`).then((r) => r.people.filter((p) => !p.synthetic || S.me.viewAs)) : null,
+    canProgress ? call(`tracking?${new URLSearchParams(f)}`) : { rows: [], programmes: [], regions: [] },
+  ]);
+  // one entry per person, in name order: their programmes under them
+  const byId = new Map();
+  for (const p of list || []) byId.set(p.id, { id: p.id, name: p.preferredName || p.legalName, email: p.email, regionId: p.regionId, publicId: p.publicId, rows: [] });
+  for (const r of d.rows) {
+    if (!byId.has(r.personId)) {
+      if (list && !f.programme && f.status === 'all') continue; // outside the people list's search (an SR number, say)
+      byId.set(r.personId, { id: r.personId, name: r.name, email: r.email, regionId: r.regionId, rows: [] });
+    }
+    byId.get(r.personId).rows.push(r);
+  }
+  // with a programme or a status chosen, only the people it matches
+  PEOPLE = [...byId.values()].filter((p) => p.rows.length || (!f.programme && f.status === 'all')).sort((a, b) => a.name.localeCompare(b.name));
+  const regions = d.regions.length ? d.regions.map((r) => [r.id, r.name]) : S.regions.map((r) => [r.id, r.name]);
+  const sel = (name, opts, value, all) => `<select name="${name}" aria-label="${esc(t(all))}"><option value="">${esc(t(all))}</option>${opts.map(([v, n]) => `<option value="${esc(v)}"${v === value ? ' selected' : ''}>${esc(n)}</option>`).join('')}</select>`;
+  const badge = (r) => (r.status === 'completed' ? '<span class="badge s-completed">Completed</span>' : r.status === 'overdue' ? '<span class="badge s-expired">Overdue</span>' : '');
+  const programme = (r) => `<div class="personProg"><small><b>${esc(r.title)}</b> ${badge(r)}</small>${bar(r.done, r.total)}
+      <small><span>${esc(t('{done} of {total} lessons', { done: r.done, total: r.total }))}</span>${r.due ? ` · <span>${esc(t('complete by {date}', { date: day(r.due) }))}</span>` : ''}${r.remindedAt ? ` · <span>${esc(t('reminded {date}', { date: when(r.remindedAt) }))}</span>` : ''}${r.lastLesson ? ` · <span>${esc(t('last lesson {date}', { date: day(r.lastLesson) }))}</span>` : ''}</small></div>`;
+  const person = (p, i) => {
+    const open = p.rows.some((r) => r.status !== 'completed');
+    const name = canList ? `<a href="#/people/${esc(p.id)}"><b>${esc(p.name)}</b></a>` : `<b>${esc(p.name)}</b>`;
+    return `<li class="personRow">${canProgress ? `<input type="checkbox" data-person="${i}" aria-label="${esc(p.name)}"${open ? '' : ' disabled'}>` : ''}
+      <div>${name}<small>${p.publicId ? `${esc(p.publicId)} · ` : ''}${esc(p.email)}${p.regionId ? ` · ${esc(regionName(p.regionId))}` : ''}</small>
+      ${p.rows.map(programme).join('') || `<small class="muted">${esc(t('No training assigned yet'))}</small>`}</div></li>`;
+  };
+  return `<section class="card"><div class="titleRow"><h1>${esc(t(title))}</h1>${addBtn}</div>${tabs}
+      <p class="note">Everyone you look after, and how far they are with their training. Tick people, or everyone shown, to email them a reminder with a date to complete by.</p>
       <form class="filters2 trackFilter" id="trackFilter">
-        ${sel('programme', d.programmes.map((p) => [p.id, p.title]), f.programme, 'All programmes')}
-        ${sel('region', d.regions.map((r) => [r.id, r.name]), f.region, 'All regions')}
-        <select name="status" aria-label="Status">${STATUS.map(([v, n]) => `<option value="${v}"${v === f.status ? ' selected' : ''}>${esc(t(n))}</option>`).join('')}</select>
-        <input name="q" type="search" placeholder="Name or email" value="${esc(f.q)}" aria-label="Find a person">
-        <button class="small" type="submit">Show</button>
+        <input name="q" type="search" placeholder="Name, email or SR number" value="${esc(f.q)}" aria-label="Find a person">
+        ${sel('region', regions, f.region, isAdmin() ? 'All regions' : 'All my regions')}
+        ${canProgress ? sel('programme', d.programmes.map((p) => [p.id, p.title]), f.programme, 'All programmes') : ''}
+        ${canProgress ? `<select name="status" aria-label="Status">${STATUS.map(([v, n]) => `<option value="${v}"${v === f.status ? ' selected' : ''}>${esc(t(n))}</option>`).join('')}</select>` : ''}
+        <button class="small" type="submit">Find</button>
       </form>
-      <p class="trackCount"><label class="tickLabel"><input type="checkbox" id="tickAll"> <span>${esc(t('Tick all {n} shown', { n: d.rows.length }))}</span></label></p>
-      <ul class="rowList trackList">${d.rows.map((r, i) => `<li><label class="trackRow"><input type="checkbox" data-row="${i}"${r.status === 'completed' ? ' disabled' : ''}>
-          <span><b>${esc(r.name)}</b> ${rowStatus(r)}<small><span>${esc(r.title)}</span> · ${esc(r.email)}</small>
-          ${bar(r.done, r.total)}<small><span>${esc(t('{done} of {total} lessons', { done: r.done, total: r.total }))}</span>${r.due ? ` · <span>${esc(t('complete by {date}', { date: day(r.due) }))}</span>` : ''}${r.remindedAt ? ` · <span>${esc(t('reminded {date}', { date: when(r.remindedAt) }))}</span>` : ''}${r.lastLesson ? ` · <span>${esc(t('last lesson {date}', { date: day(r.lastLesson) }))}</span>` : ''}</small></span></label></li>`).join('') || `<li class="muted">${esc(t('Nobody here.'))}</li>`}</ul>
+      ${canProgress && PEOPLE.length ? `<p class="trackCount"><label class="tickLabel"><input type="checkbox" id="tickAll"> <span>${esc(t('Tick all {n} shown', { n: PEOPLE.length }))}</span></label></p>` : `<p class="trackCount muted">${esc(t('{n} shown', { n: PEOPLE.length }))}</p>`}
+      <ul class="rowList trackList">${PEOPLE.map(person).join('') || `<li class="muted">${esc(t('Nobody found.'))}</li>`}</ul>
     </section>
-    <section class="card remindCard" id="remindCard"><h2>Email a reminder</h2>
+    ${canProgress ? `<section class="card remindCard" id="remindCard"><h2>Email a reminder</h2>
+      <p class="note">Goes to the people ticked, for each programme they haven't finished.</p>
       <form class="form2" id="remindForm">
         <div><label for="rm-due">Complete by</label><input id="rm-due" name="due" type="date" required></div>
         <div class="wide"><label for="rm-msg">A message (optional)</label><textarea id="rm-msg" name="message" rows="2" maxlength="1000"></textarea></div>
         <div class="wide"><button class="primary" type="submit" id="rm-go" disabled>Email the people ticked</button></div>
-      </form><div id="rm-result" aria-live="polite"></div></section>`;
+      </form><div id="rm-result" aria-live="polite"></div></section>` : ''}`;
 }
 
-export const views = { progress: progressView };
+// the old Progress tab's address opens People with the same filters
+export const views = { progress: async () => { location.replace(location.hash.replace('#/progress', '#/people')); return ''; } };
 export function wire() {
   const form = $('trackFilter'); if (!form) return;
-  form.onsubmit = (e) => { e.preventDefault(); location.hash = `#/progress?${new URLSearchParams([...new FormData(form)].filter(([, v]) => v))}`; };
+  form.onsubmit = (e) => { e.preventDefault(); location.hash = `#/people?${new URLSearchParams([...new FormData(form)].filter(([, v]) => v))}`; };
   for (const s of form.querySelectorAll('select')) s.onchange = () => form.requestSubmit();
-  const boxes = () => [...document.querySelectorAll('input[data-row]:not(:disabled)')];
+  if (!$('remindForm')) return;
+  const boxes = () => [...document.querySelectorAll('input[data-person]:not(:disabled)')];
   const count = () => {
     const n = boxes().filter((b) => b.checked).length;
     $('rm-go').disabled = !n;
     $('rm-go').textContent = n ? t(n === 1 ? 'Email 1 person' : 'Email {n} people', { n }) : t('Email the people ticked');
   };
-  $('tickAll').onchange = (e) => { for (const b of boxes()) b.checked = e.target.checked; count(); };
+  if ($('tickAll')) $('tickAll').onchange = (e) => { for (const b of boxes()) b.checked = e.target.checked; count(); };
   for (const b of boxes()) b.onchange = count;
   $('remindForm').onsubmit = (e) => {
     e.preventDefault();
-    const ids = boxes().filter((b) => b.checked).map((b) => ROWS[Number(b.dataset.row)].enrolmentId);
+    const ids = boxes().filter((b) => b.checked).flatMap((b) => PEOPLE[Number(b.dataset.person)].rows.filter((r) => r.status !== 'completed').map((r) => r.enrolmentId));
     if (!ids.length) return;
     act(async () => {
       const r = await call('tracking/remind', { method: 'POST', body: { enrolmentIds: ids, due: e.target.due.value, message: e.target.message.value } });

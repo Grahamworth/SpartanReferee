@@ -4,7 +4,6 @@ import { call, devSignInButton, signedIn, getMe, signOut, esc } from './api-base
 import { microsoftButton } from './email-signin-web.js';
 import { drawAppTabs } from './apptabs.js';
 
-const { applyTheme } = window.HeadJudgeBrand;
 const $ = (id) => document.getElementById(id);
 const show = (el, on) => { el.hidden = !on; };
 const POINTS = [0, 7, 8, 11, 12, 13, 14, 15, 16, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32];
@@ -194,7 +193,7 @@ async function enter() {
   }
   $('who').textContent = me.user.email;
   show($('signIn'), false);
-  if (c) { applyTheme(c.theme); $('company').textContent = c.name; document.title = `Results: ${c.name}`; }
+  if (c) document.title = `Results: ${c.name}`; // the site's own look and name (study.css), not company colours
   // the console's tabs: this is Results while the servers are off (while they're on, Results is the video review's)
   Promise.all([call('servers/mine'), call('servers/mine/history')]).then(([{ server }, { bookings }]) => {
     drawAppTabs($('appTabs'), { active: 'results', server, hasBookings: bookings.length > 0, onError: fail });

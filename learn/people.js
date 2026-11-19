@@ -2,6 +2,7 @@
 // Each profile ends with the person's learning record (programmes.js).
 import { $, S, call, esc, toast, has, isAdmin, regionName, roleText, when, formBody, ROLE, LANG, redraw, act, t } from './core.js';
 import { recordSection, wireRecord } from './programmes.js';
+import { peopleList } from './tracking.js';
 
 const FIELD = { legal_name: ['legalName', 'Legal name'], preferred_name: ['preferredName', 'Preferred name'], email: ['email', 'Email'], country: ['country', 'Country (two letters)'], region_id: ['regionId', 'Region'], locale: ['locale', 'Language'], status: ['status', 'Status'] };
 async function personView(id, own) {
@@ -36,17 +37,9 @@ export const views = {
   async profile() { return personView(S.me.person.id, true); },
   async people(rest) {
     if (rest) return personView(rest, false);
-    const q = new URLSearchParams(location.hash.split('?')[1] || '');
-    const { people } = await call(`people?q=${encodeURIComponent(q.get('q') || '')}&region=${encodeURIComponent(q.get('region') || '')}`);
-    const canAdd = isAdmin() || has('regional_coordinator');
-    const myRegions = isAdmin() ? S.regions : S.regions.filter((r) => S.me.grants.some((g) => g.role === 'regional_coordinator' && g.regionId === r.id));
-    return `<section class="card"><div class="titleRow"><h1>People</h1>${isAdmin() ? addPersonBtn : ''}</div>
-      ${isAdmin() ? peopleTabs('people') : ''}
-      <form class="filters2" id="peopleFilter"><input name="q" type="search" placeholder="Name, email or SR number" value="${esc(q.get('q') || '')}" aria-label="Find a person">
-        <select name="region" aria-label="Region"><option value="">${isAdmin() ? 'All regions' : 'All my regions'}</option>${myRegions.map((r) => `<option value="${esc(r.id)}"${q.get('region') === r.id ? ' selected' : ''}>${esc(r.name)}</option>`).join('')}</select>
-        <button class="small" type="submit">Find</button></form>
-      <ul class="rowList">${people.map((p) => `<li><a href="#/people/${esc(p.id)}"><b>${esc(p.legalName)}</b><small>${esc(p.publicId)} · ${esc(p.email)} · ${esc(regionName(p.regionId))}${p.synthetic ? '' : ' · real account'}</small></a></li>`).join('') || '<li class="muted">Nobody found.</li>'}</ul></section>
-      ${canAdd && !isAdmin() ? '<section class="card"><p class="note">Everyone joins by invite: they register from the emailed link with their name, region and language.</p><p class="note">Ask an admin to invite them.</p></section>' : ''}`;
+    // one list: everyone you look after and how far they are with their training (tracking.js)
+    const html = await peopleList({ title: 'People', tabs: isAdmin() ? peopleTabs('people') : '', addBtn: isAdmin() ? addPersonBtn : '' });
+    return `${html}${has('regional_coordinator') && !isAdmin() ? '<section class="card"><p class="note">Everyone joins by invite: they register from the emailed link with their name, region and language.</p><p class="note">Ask an admin to invite them.</p></section>' : ''}`;
   },
   async duplicates() {
     const { flags } = await call('duplicates');
@@ -76,7 +69,7 @@ export function wire({ reloadMe }) {
     if (!confirm(t('Erase this person? Their name, address and sign-in link are removed for good.'))) return;
     act(async () => { const r = await call(`people/${e.target.dataset.id}/erase`, { method: 'POST', body: { confirm: e.target.confirm.value.trim() } }); toast(`${r.erased} erased`); alert(r.note); redraw(); }, e.submitter);
   });
-  $('peopleFilter')?.addEventListener('submit', (e) => { e.preventDefault(); location.hash = `#/people?${new URLSearchParams(formBody(e.target))}`; });
+
   $('addPerson')?.addEventListener('submit', (e) => {
     e.preventDefault();
     act(async () => {

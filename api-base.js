@@ -20,6 +20,7 @@ export async function call(path, { method = 'GET', body, admin } = {}) {
   } else {
     const headers = { 'X-Device': deviceId() };
     if (token) headers['X-Session'] = token; // not Authorization: Azure Static Web Apps replaces that on the way to the API
+    if (ls.get('sr_preview_role')) headers['X-Preview-Role'] = ls.get('sr_preview_role'); // an admin's Preview as (learn/)
     if (body !== undefined) headers['Content-Type'] = 'application/json';
     if (key) headers['X-Admin-Key'] = key;
     r = await fetch(`${API}/${path}`, { method, headers, body: body === undefined ? undefined : JSON.stringify(body) });

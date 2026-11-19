@@ -36,7 +36,8 @@ test('Spartans has left: its pages are gone, and their old addresses go to the S
 });
 test('SpartanReferee\'s pages go back to SpartanReferee\'s home, and what the judge still links to of Spartans is on the Spartans site', () => {
   assert.match(read('recordings.html'), /href="\.\/"[^>]*>‹ Home/);
-  for (const f of ['customers', 'streaming', 'phone']) assert.match(read(`${f}.html`), /class="mark" href="\.\/"/, f);
+  for (const f of ['streaming', 'phone']) assert.match(read(`${f}.html`), /class="mark" href="\.\/"/, f);
+  assert.match(read('customers.html'), /class="mark" href="learn\/"/, 'Config goes to the app');
   // the camera guides are SpartanReferee's, and up to date
   for (const f of ['streaming', 'phone']) {
     const p = read(`${f}.html`);
@@ -65,7 +66,13 @@ test('a referee\'s home page: their name, their events (each with Book cameras),
   // the console takes the event it's given, and leads back home (home.html now sends anyone to the app's Home tab); in the app the
   // logo and the Home tab go to Home, and My profile is the icon at the top right
   assert.ok(read('console.js').includes("new URLSearchParams(location.search).get('unit')"));
-  assert.match(read('console.html'), /<a href="home.html">Home<\/a>/);
+  // the pages outside the app (Config, the cameras, results, the setup guide) have the app's tabs in their header (appnav.js)
+  for (const f of ['console', 'event', 'customers', 'results', 'streaming']) {
+    assert.match(read(`${f}.html`), /<header class="top" data-tab="\w+">/, f);
+    assert.ok(read(`${f}.html`).includes('<script type="module" src="appnav.js"></script>'), f);
+  }
+  assert.match(read('learn/index.html'), /<a href="\.\.\/customers.html" data-view="config" data-show="global_admin" hidden>Config<\/a>/);
+  assert.ok(read('appnav.js').includes("new URL('learn/index.html', root)"), 'the tabs come from the app: one list');
   assert.match(read('home.html'), /location\.replace\('learn\/' \+ location\.hash\)/);
   assert.match(read('learn/index.html'), /<a class="mark" href="#\/">/);
   assert.match(read('learn/index.html'), /<a href="#\/" data-view="home">Home<\/a>/);

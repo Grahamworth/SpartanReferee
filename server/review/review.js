@@ -131,13 +131,12 @@ function showTimeLeft(until) {
   $('timeLeft').hidden = !on;
   if (on) $('timeLeftText').textContent = left > 60e3 ? `This server shuts down in ${Math.ceil(left / 60e3)} minutes. Extend it from your account to keep going.` : 'This server is shutting down now. Recordings are being saved.';
 }
-// the company's name, logo and colours (this page stays dark whichever background they chose: it's mostly video)
+// the company's name and logo. Not its colours: SpartanReferee is Spartan's alone, so the page keeps the website's study look
+// (review.css), light or dark as the website's is.
 let branded = false;
 function applyBrand(b) {
   if (branded || !b) return; branded = true;
   document.title = `${b.name}: video review`;
-  const on = window.HeadJudgeBrand, css = document.documentElement.style;
-  if (on && b.theme?.primary) { css.setProperty('--red', on.readable(b.theme.primary, '#1f2328', 3)); css.setProperty('--brand', b.theme.primary); css.setProperty('--on-brand', on.on(b.theme.primary)); }
   if (b.logo) { const img = $('brandLogo'); img.src = b.logo; img.alt = b.name; img.hidden = false; }
 }
 // ---------------------------------------------------------------- the Cameras tab: what each phone scans

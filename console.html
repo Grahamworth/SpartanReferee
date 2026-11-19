@@ -10,6 +10,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;1,800&family=Barlow:wght@400;600;700&display=swap">
 <link rel="stylesheet" href="headjudge.css">
+<link rel="stylesheet" href="study.css">
+<script src="look.js"></script>
 <script src="brand.js"></script>
 <script src="booking.js"></script>
 <script type="module" src="console.js"></script>
@@ -19,12 +21,13 @@
   a.brandline { text-decoration: none; color: inherit; display: inline-flex; align-items: center; min-height: 44px; }
   #company::before { content: ""; display: inline-block; width: 1.15em; height: 1.15em; margin-inline-end: .35em; vertical-align: -.22em; border-radius: 50%; background: url(icons/spartanreferee/icon-192.png) center / 118% no-repeat; }
 </style>
+<script type="module" src="appnav.js"></script>
 </head>
 <body>
-<header class="top">
-  <a class="brandline" href="home.html"><img id="logo" class="toplogo" alt="" hidden><span id="company" class="mark">Spartan<span>Referee</span></span></a>
+<header class="top" data-tab="events">
+  <a class="brandline" href="learn/"><img id="logo" class="toplogo" alt="" hidden><span id="company" class="mark">Spartan<span>Referee</span></span></a>
   <nav id="appTabs" class="appTabs" aria-label="Your pages" hidden></nav>
-  <span class="topRight"><select class="langPick" data-lang-picker aria-label="Language"></select><a href="home.html">Home</a><a id="freeLink" href="review-free/" hidden title="One camera, this computer's own, with the AI judge run in this browser, live or on a minute of video: no server, no cost">Free camera</a><a id="testReviewLink" href="review-test/" hidden title="The video review with no server: camera 1 is this browser's camera, recorded here; the rest is pretend">Test review</a><a id="adminLink" href="customers.html" hidden>Admin</a><span id="who" class="muted"></span></span>
+  <span class="topRight"><select class="langPick" data-lang-picker aria-label="Language"></select><a id="freeLink" href="review-free/" hidden title="One camera, this computer's own, with the AI judge run in this browser, live or on a minute of video: no server, no cost">Free camera</a><a id="testReviewLink" href="review-test/" hidden title="The video review with no server: camera 1 is this browser's camera, recorded here; the rest is pretend">Test review</a><a id="adminLink" href="customers.html" hidden>Config</a><span id="who" class="muted"></span></span>
 </header>
 <main class="page console">
   <section id="signIn" class="card narrow" hidden>

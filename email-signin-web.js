@@ -27,8 +27,9 @@ export async function microsoftButton(el, back, onError, opts = {}) {
   const code = !!cfg.codeSignIn;
   if (!ms && !google && !code) return;
   el.innerHTML = `<div class="signInBtns">${google ? '<div class="gBtn"></div>' : ''}${ms ? `<button class="msBtn" type="button">${MS_LOGO}<span>Sign in with Microsoft</span></button>` : ''}${code ? '<div class="codeBox"></div>' : ''}</div>`;
-  if (ms) el.querySelector('.msBtn').onclick = () => goSignIn(ms, 'microsoft', back, { prompt: 'select_account' }, onError);
-  if (google) googleButton(el.querySelector('.gBtn'), google, back, onError);
+  // opts.email (the join page): the invited address, filled in on Microsoft's and Google's sign-in
+  if (ms) el.querySelector('.msBtn').onclick = () => goSignIn(ms, 'microsoft', back, { prompt: 'select_account', ...(opts.email ? { loginHint: opts.email } : {}) }, onError);
+  if (google) googleButton(el.querySelector('.gBtn'), google, back, onError, opts.email);
   if (code) codeSignIn(el.querySelector('.codeBox'), back, onError, opts);
 }
 const MAIL_ICON = '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6.5l8.5 6.5 8.5-6.5"/></svg>';
@@ -71,11 +72,11 @@ function codeSignIn(box, back, onError, opts = {}) {
       } catch (err) { f.querySelector('button').disabled = false; onError(err); }
     };
   };
-  if (opts.email) askAddress(); else draw();
+  draw();
 }
 /** Google's own button (Google Identity Services): it gives an id token, which the API checks (POST /api/auth/google) and swaps for a
  *  session; then on to the page to come back to, as after Microsoft's */
-async function googleButton(box, clientId, back, onError) {
+async function googleButton(box, clientId, back, onError, hint = '') {
   const loaded = await new Promise((res) => {
     if (window.google?.accounts?.id) { res(true); return; }
     const s = document.createElement('script'); s.src = 'https://accounts.google.com/gsi/client'; s.async = true;
@@ -83,7 +84,7 @@ async function googleButton(box, clientId, back, onError) {
   });
   if (!loaded || !window.google?.accounts?.id) { box.remove(); return; } // offline, or blocked: Microsoft's button still works
   window.google.accounts.id.initialize({
-    client_id: clientId, ux_mode: 'popup',
+    client_id: clientId, ux_mode: 'popup', ...(hint ? { login_hint: hint } : {}),
     callback: async (resp) => {
       try {
         const r = await call('auth/google', { method: 'POST', body: { idToken: resp.credential } });

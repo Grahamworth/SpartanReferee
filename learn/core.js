@@ -9,6 +9,8 @@ export const show = (el, on) => { if (el) el.hidden = !on; };
 const API = location.protocol.startsWith('http') && (location.hostname.endsWith('azurestaticapps.net') || location.port === '8795') ? '/api' : 'https://brave-forest-022879f03.3.azurestaticapps.net/api';
 export const store = { get: (k) => { try { return localStorage.getItem(k) || ''; } catch { return ''; } }, set: (k, v) => { try { if (v) localStorage.setItem(k, v); else localStorage.removeItem(k); } catch { /* private mode */ } } };
 export const AS_KEY = 'sr_learn_as';
+/** an admin's Preview as: the type of user their own account is shown as (also sent to the site's API by api-base.js) */
+export const PREVIEW_KEY = 'sr_preview_role';
 export const ROLE = { global_admin: 'Global admin', programme_owner: 'Programme owner', regional_coordinator: 'Regional coordinator', content_editor: 'Content editor', assessor: 'Assessor', technical_admin: 'Technical admin' };
 export const LANG = { en: 'English', fr: 'Français', de: 'Deutsch', nl: 'Nederlands', es: 'Español', it: 'Italiano', el: 'Ελληνικά', hr: 'Hrvatski', cs: 'Čeština', pl: 'Polski', fi: 'Suomi', sv: 'Svenska', da: 'Dansk', ar: 'العربية', th: 'ไทย' };
 /** the page's state: who's signed in (and who they're viewing as), and the regions */
@@ -19,7 +21,7 @@ export const S = { me: null, regions: [] };
 /** the API. A GET is kept on the phone for offline use (offline.js), except while previewing as someone else. A change made with
  *  no signal fails with a clear message, but lesson progress waits in the outbox and goes when there's signal. */
 export async function call(path, { method = 'GET', body } = {}) {
-  if (method === 'GET' && !store.get(AS_KEY) && !/\/narration\//.test(path)) { // a narration link is short-lived: never kept
+  if (method === 'GET' && !store.get(AS_KEY) && !store.get(PREVIEW_KEY) && !/\/narration\//.test(path)) { // a narration link is short-lived: never kept
     const data = await viaCache(path, () => send(path));
     sendWaiting();
     return data;
@@ -37,6 +39,7 @@ if (typeof window !== 'undefined') addEventListener('online', sendWaiting);
 async function send(path, method = 'GET', body) {
   const headers = { 'X-Session': store.get('sp_token') };
   if (store.get(AS_KEY)) headers['X-Learn-As'] = store.get(AS_KEY);
+  if (store.get(PREVIEW_KEY)) headers['X-Learn-As-Role'] = store.get(PREVIEW_KEY);
   if (body !== undefined) headers['Content-Type'] = 'application/json';
   const r = await fetch(`${API}/learn/${path}`, { method, headers, body: body === undefined ? undefined : JSON.stringify(body) });
   let data = null; try { data = await r.json(); } catch { /* empty */ }

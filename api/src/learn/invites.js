@@ -182,6 +182,8 @@ function createInvites(ctx) {
       if (had && String(had.person_id).toLowerCase() === String(inv.person_id).toLowerCase()) return done(inv, inv.person_id, form.locale);
       return { error: [409, 'This invite has already been used: sign in instead'] };
     }
+    // registering is with the address the invite went to (Google, Microsoft or a code to it), so the account matches the invite
+    if (String(login.email || '').toLowerCase() !== String(inv.email).toLowerCase()) return { error: [403, `Sign in with ${inv.email}, the address your invite was sent to. You signed in as ${login.email || 'another account'}.`] };
     const name = text(form?.name, 120);
     if (name.length < 2) return { error: [400, 'Give your full name'] };
     const regionId = String(form?.regionId || '');

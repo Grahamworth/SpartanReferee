@@ -77,7 +77,7 @@ test('Sign out is at the top right of every page with an account, from the share
   assert.ok(base.includes("querySelector('header.top, [data-account-bar]')"));
   for (const f of ['info.html', 'home.html', 'console.html', 'results.html', 'customers.html', 'streaming.html', 'phone.html']) {
     const page = read(f);
-    assert.match(page, /<header class="top">/, f);
+    assert.match(page, /<header class="top"( data-tab="\w+")?>/, f);
     const js = { 'home.html': 'home.js', 'console.html': 'console.js', 'results.html': 'results.js', 'customers.html': 'customers.js' }[f];
     assert.ok(page.includes('src="api-base.js"') || (js && read(js).includes("from './api-base.js'")), `${f} loads api-base.js`);
   }

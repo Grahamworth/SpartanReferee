@@ -73,7 +73,7 @@ test('every page loads i18n.js first and has a language menu; the review page lo
   }
   assert.match(read('server/review/index.html'), /<script src="\/judge\/i18n\.js"><\/script>/);
   assert.match(read('scripts/site-files.txt'), /^i18n\.js$/m);
-  assert.match(read('scripts/build-server.sh'), /brand\.js i18n\.js"/);
+  assert.match(read('scripts/build-server.sh'), /look\.js i18n\.js"/);
   assert.match(read('scripts/build-broadcaster.sh'), /i18n\.js/);
 });
 

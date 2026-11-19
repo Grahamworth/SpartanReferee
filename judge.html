@@ -4,7 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <script src="i18n.js"></script>
-<meta name="theme-color" content="#0b0b0b">
+<meta name="theme-color" content="#1a1e24" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <title>AI Judge</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,17 +14,9 @@
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js" defer></script>
 <script type="module" src="judge-gate.js"></script>
 <script type="module" src="app.js"></script>
-<link rel="stylesheet" href="looks.css">
-<script src="looks.js" data-dark-only></script>
-<script>
-  // Opened as a camera's settings (from SpartanReferee's video review, or its test mode): in SpartanReferee's colours, Spartan red on black.
-  // Judging itself keeps red, where it means a no rep.
-  if (new URLSearchParams(location.search).get('settings')) document.documentElement.classList.add('hj-settings');
-</script>
-<style>
-  html.hj-settings[data-look], html.hj-settings { --black: #0b0b0b; --ink: #161616; --steel: #2b2b2b; --line: #3a3a3a; --white: #f4f6f8; --muted: #a6a6a6; --red: #e2231a; --red-deep: #b81a12; }
-  html.hj-settings .btn-red, html.hj-settings .btn-red:active { color: #101010; }
-</style>
+<!-- SpartanReferee's Look (light, dark, or following the phone), as on the website and in the video review: styles.css has the
+     colours. Judging itself, over the camera, stays dark. -->
+<script src="look.js"></script>
 </head>
 <body>
 

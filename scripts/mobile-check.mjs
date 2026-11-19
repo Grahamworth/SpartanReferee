@@ -50,7 +50,7 @@ const PAGES = [
   ['signed-out-home', 'home.html', '', "!document.getElementById('signIn').hidden"],
 ];
 // the learning platform's pages (when it's on: LEARN_FROM_AZ=1), as the demo people who'd see them ("view as")
-const learnApi = async (p, asId = '') => { const r = await fetch(`${SITE}/api/learn/${p}`, { headers: { 'X-Session': boss, ...(asId ? { 'X-Learn-As': asId } : {}) } }); return r.ok ? r.json() : null; };
+const learnApi = async (p, asId = '') => { const r = await fetch(`${SITE}/api/learn/${p}`, { headers: { 'X-Session': boss, 'X-Learn-As-Invented': '1', ...(asId ? { 'X-Learn-As': asId } : {}) } }); return r.ok ? r.json() : null; };
 const me = await learnApi('me');
 if (me) {
   const who = (n) => me.viewAs.find((p) => p.legalName === n)?.id || '';

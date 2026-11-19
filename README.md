@@ -52,7 +52,7 @@ At the user's request, SpartanReferee became invite-only and one app.
 - their programmes with progress, each opening the programme;
 - a refresher nudge, organiser tools, and the install card.
 
-Tabs: **Home**, **My Learning**, **Events**, **Rules**, plus role tabs (Invites, People, Progress, Assessing, Reviews, Reports, Media, Duplicates, Audit log, Diagnostics, Admin).
+Tabs: **Home**, **My Learning**, **Events**, **Rules**, plus role tabs (People, Assessing, Reviews, Reports, Media, Duplicates, Audit log, Diagnostics, Config). Which role sees which tab is each tab's `data-show` in `learn/index.html`.
 - **My Learning** (was Programmes) shows to do (progress, next lesson, complete-by date), completed, Keep sharp, then other programmes to enrol in.
 - **My profile** is the person icon at the top right.
 
@@ -61,10 +61,16 @@ Tabs: **Home**, **My Learning**, **Events**, **Rules**, plus role tabs (Invites,
 - Watch and review is for everyone assigned. Booking is only for those the organisers ticked (a per-person "Books the cameras" tick); a head referee assigned before ticks existed keeps booking.
 - Admins, and regional coordinators for the events in their regions' countries, manage events: they add referees by pasting addresses, set the head referee, tick who books, and write notes. Events now keep their country code for this.
 
-**Progress** (`learn/tracking.js`, server `api/src/learn/tracking.js`): who has done their lessons.
+**People** (`learn/tracking.js`, servers `api/src/learn/tracking.js` and the people list in `api/src/learn/index.js`): one list, each person once with how far they are in each programme under their name (People and Progress were merged on 19 November 2026; `#/progress` opens People). Admins invite from the "add person" icon at its top (People and Invites switch there).
 - Admins see everyone, programme owners and assessors their programmes, and regional coordinators their region.
 - Filter by programme, region, status and name, then tick people or all shown.
 - Email reminders to complete by a date; the date becomes their complete-by date, and when they were reminded is shown.
+
+**Preview as** (admins only, the bar under the tabs): your own account as a type of user (referee, regional coordinator, assessor, programme owner, content editor, technical admin) with only that type's roles; **Back to yourself** returns. The app sends `X-Learn-As-Role`, the other pages `X-Preview-Role` (localStorage `sr_preview_role`). Everyone else just has their own type. The invented demo people are gone from the live site; `scripts/learn-seed.mjs` makes them only with `DEMO_PEOPLE=1`, and `scripts/learn-remove-invented.mjs` removes them (a dry run unless `--write`).
+
+**Signing in from an invite** says which address to use and fills it in: Google and Microsoft get it as `login_hint`, and the emailed code's box is fixed to it. Registering with another address is refused, naming the invited one.
+
+**One look, one menu (19 November 2026).** Every page uses the study look (`study.css` with `look.js`: light or dark following the phone, or the Look button). The pages outside the app (Config `customers.html`, the cameras `console.html` and `event.html`, `results.html`, `streaming.html`) get the app's tabs and profile icon in their header from `appnav.js`, which reads the tab list from `learn/index.html` (`<header class="top" data-tab="...">` says which tab is on). Admin is now **Config**. Pages that load slowly show a spinner.
 
 ### Home page, assigned events and learning
 

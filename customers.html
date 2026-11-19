@@ -4,21 +4,24 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <script src="i18n.js"></script>
-<title>SpartanReferee admin</title>
+<title>Config: SpartanReferee</title>
 <meta name="theme-color" content="#0b0b0b">
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;1,800&family=Barlow:wght@400;600;700&display=swap">
 <link rel="stylesheet" href="headjudge.css">
+<link rel="stylesheet" href="study.css">
+<script src="look.js"></script>
 <script src="brand.js"></script>
 <script src="booking.js"></script>
 <script type="module" src="customers.js"></script>
+<script type="module" src="appnav.js"></script>
 </head>
 <body>
-<header class="top">
-  <a class="mark" href="./">Spartan<span>Referee</span> admin</a>
-  <span class="topRight"><select class="langPick" data-lang-picker aria-label="Language"></select><a href="home.html">Home</a><a href="console.html">My console</a><a href="review-test/">Test review</a><span id="who" class="muted"></span></span>
+<header class="top" data-tab="config">
+  <a class="mark" href="learn/">Spartan<span>Referee</span></a>
+  <span class="topRight"><select class="langPick" data-lang-picker aria-label="Language"></select><a href="review-test/">Test review</a><span id="who" class="muted"></span></span>
 </header>
 <main class="page admin">
   <section id="signIn" class="card narrow" hidden>
@@ -47,26 +50,8 @@
     </section>
 
     <section class="card adminsBox">
-      <h2>Spartan's events</h2>
-      <p class="note" id="syncLine"></p>
-      <p class="error" id="syncError" hidden></p>
-      <button class="small" id="syncNow" type="button">Sync now</button>
-      <p class="note">Synced from Spartan's race list every 6 hours, when someone opens the console. Referees book an event's cameras from 07:00 to 18:00 local time on its days; admins can book any time.</p>
-    </section>
-
-    <section class="card adminsBox">
-      <h2>Who's refereeing each event</h2>
-      <p class="note">Each referee sees the events they're assigned to on their home page, as head referee or referee. Each event's head referee books and runs its burpee cameras (admins can too); every referee can watch them and review the results.</p>
-      <label for="assignEvent">Event</label>
-      <select id="assignEvent"><option value="">Loading the events…</option></select>
-      <ul id="assignList" class="adminList"></ul>
-      <form id="addAssign" class="addAdmin">
-        <label for="assignEmail">Assign a referee</label>
-        <div><input id="assignEmail" type="email" list="refereeEmails" autocomplete="off" maxlength="200" placeholder="name@example.com" required></div>
-        <div class="assignAs"><select id="assignRole" aria-label="As"><option value="referee">Referee</option><option value="head">Head referee</option></select><button class="small" type="submit">Assign</button></div>
-        <datalist id="refereeEmails"></datalist>
-      </form>
-      <p class="error" id="assignError" role="alert" hidden></p>
+      <h2>Events</h2>
+      <p class="note">Syncing Spartan's events and choosing who referees each one are in <a href="learn/#/manage">Manage Events</a>.</p>
     </section>
 
     <section class="card adminsBox">

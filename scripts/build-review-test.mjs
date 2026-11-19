@@ -22,16 +22,17 @@ const swapper = (what, text) => {
 const gate = (who, admit, refused) => `<script type="module">
   import { getMe, call } from '/api-base.js';
   const cover = document.createElement('div');
-  cover.style.cssText = 'position:fixed;inset:0;z-index:9999;background:#0b0b0b;color:#f4f6f8;display:grid;place-content:center;text-align:center;padding:24px;font:16px/1.5 Barlow,system-ui,sans-serif';
-  cover.innerHTML = '<p style="color:#a6a6a6">Checking…</p>';
+  cover.style.cssText = 'position:fixed;inset:0;z-index:9999;background:var(--bg);color:var(--text);display:grid;place-content:center;text-align:center;padding:24px;font:16px/1.5 Barlow,system-ui,sans-serif';
+  cover.innerHTML = '<p style="color:var(--muted)">Checking…</p>';
   document.body.append(cover);
   (async () => {
     const me = await getMe(true);
     ${admit}
-    cover.innerHTML = '<div style="max-width:420px"><p style="font:italic 800 32px Barlow Condensed,sans-serif;text-transform:uppercase;margin:0 0 8px">${who}</p><p>${refused}</p><p><a style="color:#e2231a;font-weight:700" href="/console.html">Go to my console</a></p></div>';
-  })().catch(() => { cover.innerHTML = '<p>Can\\'t check who you are right now. <a style="color:#e2231a" href="/console.html">Go to my console</a></p>'; });
+    cover.innerHTML = '<div style="max-width:420px"><p style="font:700 30px/1.2 Barlow,sans-serif;margin:0 0 8px">${who}</p><p>${refused}</p><p><a style="color:var(--primary-text);font-weight:700" href="/console.html">Go to my console</a></p></div>';
+  })().catch(() => { cover.innerHTML = '<p>Can\\'t check who you are right now. <a style="color:var(--primary-text);font-weight:700" href="/console.html">Go to my console</a></p>'; });
 </script>`;
-const banner = (text) => `<div id="testBanner" style="position:fixed;left:10px;bottom:10px;z-index:40;background:#e2231a;color:#ffffff;font:700 14px/1.3 Barlow,system-ui,sans-serif;padding:7px 14px;box-shadow:0 2px 12px rgba(0,0,0,.5);pointer-events:none">${text}</div>
+// amber, as a caution: red would say something's wrong, and blue looks like a button
+const banner = (text) => `<div id="testBanner" style="position:fixed;left:10px;bottom:10px;z-index:40;background:#f2b33d;color:#111418;font:700 14px/1.3 Barlow,system-ui,sans-serif;padding:7px 14px;border-radius:8px;box-shadow:0 2px 12px rgba(0,0,0,.35);pointer-events:none">${text}</div>
 <style>@media (max-width: 760px) { #testBanner { bottom: calc(72px + env(safe-area-inset-bottom)) !important; font-size: 12px !important; padding: 4px 9px !important; } #testBanner .tmMore { display: none; } }</style>`;
 
 function build(folder, { first, end, more = (s) => s }) {
@@ -43,7 +44,7 @@ function build(folder, { first, end, more = (s) => s }) {
   const h = swapper('The review page', read('server/review/index.html'));
   // the stand-in for the server goes in first, before the page asks it anything
   h.swap('<link rel="stylesheet" href="review.css">', `${first}<script src="test-mode.js"></script>\n<link rel="stylesheet" href="review.css">`)
-    ('<script src="/judge/brand.js" defer></script>', '<script src="/brand.js" defer></script>')
+    ('<script src="/judge/look.js"></script>', '<script src="/look.js"></script>')
     ('</body>', `${end}\n</body>`);
   more(h.swap);
   fs.writeFileSync(path.join(out, 'index.html'), h.done());

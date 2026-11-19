@@ -7,7 +7,7 @@ import { devSignInButton, signedIn, signOut, call as siteCall } from '../api-bas
 import { language } from '../language.js';
 import { microsoftButton } from '../email-signin-web.js';
 import { setOwner, keep, viaCache, registerApp } from '../offline.js';
-import { $, S, show, call, esc, fail, store, AS_KEY, ROLE, has, isAdmin } from './core.js';
+import { $, S, show, call, esc, fail, store, AS_KEY, PREVIEW_KEY, has, isAdmin, t } from './core.js';
 import * as programmes from './programmes.js';
 import * as people from './people.js';
 import * as lesson from './lesson.js';
@@ -36,39 +36,43 @@ async function draw() {
   // on a phone the tabs are a row to swipe along: bring the one you're on into view
   const on = $('learnNav').querySelector('a.on'), nav = $('learnNav');
   if (on && nav.scrollWidth > nav.clientWidth) nav.scrollLeft = Math.max(0, on.offsetLeft - (nav.clientWidth - on.offsetWidth) / 2);
+  // a page that takes more than a moment shows it's loading (the database can be slow to wake)
+  const slow = setTimeout(() => { $('view').innerHTML = LOADER; }, 150);
   try {
-    $('view').innerHTML = await views[name](decodeURIComponent(rest));
+    const html = await views[name](decodeURIComponent(rest));
+    clearTimeout(slow);
+    $('view').innerHTML = html;
     for (const a of AREAS) a.wire?.({ reloadMe: loadMe });
-  } catch (e) { $('view').innerHTML = ''; fail(e.message); }
+  } catch (e) { clearTimeout(slow); $('view').innerHTML = ''; fail(e.message); }
 }
+const LOADER = '<div class="loader" role="status"><span class="spin" aria-hidden="true"></span><span>Loading…</span></div>';
 window.addEventListener('learn:redraw', () => draw());
 
 // the brief's user types (section 4), in the order the Preview as list shows them
-const TYPES = [['', 'Learner / referee'], ['regional_coordinator', 'Regional coordinator'], ['programme_owner', 'Programme owner'], ['content_editor', 'Content editor / translator'], ['assessor', 'Assessor'], ['technical_admin', 'Technical admin'], ['global_admin', 'Global admin']];
+// Preview as (admins only): your own account as a type of user, with only that type's roles; Yourself goes back (19 November 2026)
+const TYPES = [['learner', 'Referee'], ['regional_coordinator', 'Regional coordinator'], ['assessor', 'Assessor'], ['programme_owner', 'Programme owner'], ['content_editor', 'Content editor / translator'], ['technical_admin', 'Technical admin']];
 function drawChrome() {
   const me = S.me;
-  $('who').textContent = me.actingAs ? `${me.real.email} as ${me.person.legalName}` : me.person.email;
+  const typeName = (r) => (TYPES.find(([k]) => k === r) || [0, r])[1];
+  $('who').textContent = me.person.email;
   show($('learnNav'), true); show($('demoBar'), true); show($('profileBtn'), true);
-  const showNav = { people: isAdmin() || has('regional_coordinator'), duplicates: isAdmin(), audit: isAdmin() };
-  for (const [v, on] of Object.entries(showNav)) show($('learnNav').querySelector(`[data-view="${v}"]`), on);
   for (const a of $('learnNav').querySelectorAll('[data-show]')) show(a, a.dataset.show.split(' ').some((r) => has(r)));
-  show($('viewAsBox'), me.viewAs.length > 0);
-  if (me.viewAs.length) {
-    // each type of user first, shown by one of the invented people who is that type; then every invented person
-    const types = TYPES.map(([role, label]) => [label, me.viewAs.find((p) => (role ? p.roles.includes(role) : !p.roles.length))]).filter(([, p]) => p);
-    const pick = (p, text, sel) => `<option value="${esc(p.id)}"${sel ? ' selected' : ''}>${esc(text)}</option>`;
-    const typeOn = types.find(([, p]) => p.id === me.actingAs);
-    $('viewAs').innerHTML = `<option value="">Yourself (${esc(me.real.legalName)})</option>
-      <optgroup label="Types of user">${types.map(([label, p]) => pick(p, `${label}: ${p.legalName}`, p === typeOn?.[1])).join('')}</optgroup>
-      <optgroup label="Everyone invented">${me.viewAs.map((p) => pick(p, `${p.legalName}: ${p.roles.map((r) => ROLE[r] || r).join(', ') || 'Learner'}`, p.id === me.actingAs && !typeOn)).join('')}</optgroup>`;
+  show($('viewAsBox'), !!me.canPreview);
+  show($('previewBack'), !!me.previewRole);
+  $('previewLine').textContent = me.previewRole ? t('Previewing as: {type}', { type: t(typeName(me.previewRole)) }) : '';
+  if (me.canPreview) {
+    $('viewAs').innerHTML = `<option value="">Yourself (admin)</option>${TYPES.map(([k, n]) => `<option value="${k}"${k === me.previewRole ? ' selected' : ''}>${esc(n)}</option>`).join('')}`;
   }
 }
-$('viewAs').addEventListener('change', async () => { store.set(AS_KEY, $('viewAs').value); await loadMe(); location.hash = '#/'; draw(); });
+const setPreview = (role) => { store.set(PREVIEW_KEY, role); store.set(AS_KEY, ''); location.hash = '#/'; location.reload(); };
+$('viewAs').addEventListener('change', () => setPreview($('viewAs').value));
+$('previewBack').addEventListener('click', () => setPreview(''));
 async function loadMe() {
   try { S.me = await call('me'); }
-  catch (e) { if (store.get(AS_KEY)) { store.set(AS_KEY, ''); S.me = await call('me'); } else throw e; }
+  catch (e) { if (store.get(PREVIEW_KEY)) { store.set(PREVIEW_KEY, ''); S.me = await call('me'); } else throw e; }
+  if (!S.me.canPreview) store.set(PREVIEW_KEY, ''); // not an admin (any more): no preview
   // what's kept on the phone for offline use is this person's (offline.js)
-  if (!S.me.actingAs) { setOwner(S.me.person.email); keep('me', S.me); }
+  if (!S.me.actingAs && !S.me.previewRole) { setOwner(S.me.person.email); keep('me', S.me); }
   drawChrome();
 }
 
@@ -88,6 +92,7 @@ async function enter() {
 }
 async function start() {
   if (signedIn()) return enter();
+  $('view').innerHTML = ''; // no loader: there's nothing to load until they sign in
   show($('signIn'), true);
   const failed = (e) => { $('signInError').textContent = e.message || 'Sign-in didn\'t work: try again'; show($('signInError'), true); };
   microsoftButton($('msBtn'), 'learn/', failed);

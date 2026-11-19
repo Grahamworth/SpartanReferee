@@ -1,10 +1,12 @@
-/* The Spartans home page and chat (on top of styles.css's colours and fonts). */
+/* The Spartans home page and chat (on top of styles.css's colours and fonts). On SpartanReferee only Cloud recordings
+   (recordings.html) uses it: its name, headings, notes and form have the study look (sentence case, rounded), as styles.css's pages do. */
 html, body { margin: 0; background: var(--black); color: var(--white); font-family: var(--body); }
 .hub { max-width: 760px; margin: 0 auto; padding: calc(14px + env(safe-area-inset-top)) 16px calc(28px + env(safe-area-inset-bottom)); box-sizing: border-box; }
+.hub .btn { font-family: var(--heading); text-transform: none; letter-spacing: 0; font-size: 1.05rem; }
 .hub-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.brand { font-family: var(--display); font-weight: 900; font-style: italic; font-size: 34px; letter-spacing: .01em; text-transform: uppercase; margin: 0; line-height: 1; }
+.brand { font-family: var(--heading); font-weight: 700; font-style: normal; text-transform: none; letter-spacing: 0; font-size: clamp(1.9rem, 7vw, 2.4rem); margin: 6px 0 4px; line-height: 1.15; overflow-wrap: anywhere; }
 .brand span { color: var(--red); }
-.hub h2 { font-family: var(--display); font-weight: 800; font-style: italic; text-transform: uppercase; font-size: 22px; letter-spacing: .02em; margin: 26px 0 10px; display: flex; align-items: center; justify-content: space-between; }
+.hub h2 { font-family: var(--heading); font-weight: 700; font-style: normal; text-transform: none; letter-spacing: 0; font-size: 1.45rem; line-height: 1.2; margin: 26px 0 10px; display: flex; align-items: center; justify-content: space-between; }
 .edit-btn { font: 600 13px var(--body); background: transparent; color: var(--muted); border: 1px solid var(--line); padding: 6px 10px; cursor: pointer; font-style: normal; text-transform: none; letter-spacing: 0; }
 .race { background: linear-gradient(135deg, #1d1d1d, #111); border-left: 6px solid var(--red); padding: 16px; position: relative; overflow: hidden; }
 .race::after { content: ""; position: absolute; right: -40px; top: -40px; width: 160px; height: 160px; background: var(--red); transform: rotate(35deg); opacity: .12; }
@@ -40,7 +42,7 @@ html, body { margin: 0; background: var(--black); color: var(--white); font-fami
 .news h3 { margin: 0 0 4px; font-size: 17px; }
 .news time { color: var(--muted); font-size: 12px; }
 .news p { margin: 6px 0 0; color: #ddd; white-space: pre-wrap; line-height: 1.4; }
-.empty { color: var(--muted); background: var(--ink); padding: 14px; font-size: 14px; }
+.empty { color: var(--muted); background: var(--ink); border: 1px solid var(--line); border-radius: 12px; padding: 14px; font-size: 14px; }
 .winners { width: 100%; border-collapse: collapse; font-size: 14px; }
 .winners th { text-align: left; color: var(--muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; padding: 6px 8px; border-bottom: 1px solid var(--line); }
 .winners td { padding: 8px; border-bottom: 1px solid #222; vertical-align: top; }
@@ -49,7 +51,7 @@ html, body { margin: 0; background: var(--black); color: var(--white); font-fami
 .get-app .card b { font-family: var(--display); font-size: 20px; text-transform: uppercase; }
 .get-app .card p { color: var(--muted); font-size: 13px; margin: 6px 0 10px; line-height: 1.4; }
 .get-app ol { color: #ddd; font-size: 13px; padding-left: 18px; margin: 6px 0 0; line-height: 1.5; }
-.foot { color: #666; font-size: 12px; margin-top: 28px; }
+.foot { color: var(--muted); font-size: 13px; margin-top: 28px; }
 
 /* editor */
 .ed-bg { position: fixed; inset: 0; background: rgba(0,0,0,.7); display: grid; place-items: center; z-index: 50; padding: 12px; }

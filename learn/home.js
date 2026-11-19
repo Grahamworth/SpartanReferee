@@ -33,9 +33,9 @@ async function homeView() {
   const soon = next && next.from > Date.now() && next.from - Date.now() < 10 * 864e5;
   const tools = [
     isAdmin() ? ['#/invites', 'Invite people'] : null,
-    isAdmin() || has('regional_coordinator') ? ['#/events?manage=1', 'Manage events'] : null,
-    isAdmin() || has('regional_coordinator') || has('assessor') || has('programme_owner') ? ['#/progress', 'Progress and reminders'] : null,
-    isAdmin() ? ['../customers.html', 'Admin'] : null,
+    isAdmin() || has('regional_coordinator') ? ['#/manage', 'Manage Events'] : null,
+    isAdmin() || has('regional_coordinator') || has('assessor') || has('programme_owner') ? ['#/people', 'People and their progress'] : null,
+    isAdmin() ? ['#/config', 'Config'] : null,
   ].filter(Boolean);
   return `<section class="homeHello"><h1>${esc(p.preferredName || p.legalName)}</h1>
       ${earned.length ? `<a class="homeBadges" href="#/badges" aria-label="${esc(t('Your badges'))}">${earned.slice(-10).map((b) => badgeIcon(b, 'sm')).join('')}</a>` : ''}</section>

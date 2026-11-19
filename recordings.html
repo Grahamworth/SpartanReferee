@@ -4,7 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <script src="i18n.js"></script>
-<meta name="theme-color" content="#0b0b0b">
+<meta name="theme-color" content="#1a1e24" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <title>Spartans Cloud Recordings</title>
 <link rel="icon" href="icons/spartanreferee/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,17 +15,16 @@
 <link rel="stylesheet" href="hub.css">
 <link rel="stylesheet" href="hub-pages.css">
 <style>
-  .rec-player { width: 100%; max-height: 70vh; background: #000; display: block; margin: 8px 0 14px; }
+  .rec-player { width: 100%; max-height: 70vh; background: #000; display: block; margin: 8px 0 14px; border-radius: 12px; }
   .rec-filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
   .rec-filters select { min-width: 150px; }
-  .rec-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 10px 0; border-top: 1px solid rgba(255, 255, 255, .12); }
+  .rec-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 10px 0; border-top: 1px solid var(--line); }
   .rec-row > div { flex: 1 1 200px; min-width: 0; }
   [data-account-bar] .signOut { background: none; border: 0; padding: 0; color: inherit; font: inherit; font-weight: 700; text-decoration: underline; cursor: pointer; }
-  .rec-key { word-break: break-all; font-family: monospace; background: #000; padding: 10px; display: block; margin: 8px 0; }
+  .rec-key { word-break: break-all; font-family: monospace; background: var(--black); border: 1px solid var(--line); border-radius: 8px; padding: 10px; display: block; margin: 8px 0; }
 </style>
 <script type="module" src="recordings.js"></script>
-<link rel="stylesheet" href="looks.css">
-<script src="looks.js"></script>
+<script src="look.js"></script>
 </head>
 <body>
 <main class="hub">

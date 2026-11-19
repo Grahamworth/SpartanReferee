@@ -8,11 +8,13 @@ export async function challengeFor(verifier) {
 }
 /** Microsoft's page. prompt=create opens on sign-up; prompt=login always asks again, so a shared phone is safe. "Sign in with
  *  Microsoft" passes select_account instead, so whoever signed out can pick another account. */
-export function signInAddress(cfg, { create, state, challenge, prompt }) {
+export function signInAddress(cfg, { create, state, challenge, prompt, loginHint }) {
   const q = new URLSearchParams({
     client_id: cfg.clientId, response_type: 'code', response_mode: 'query', redirect_uri: cfg.redirectUri, scope: 'openid profile email',
     state, code_challenge: challenge, code_challenge_method: 'S256', prompt: prompt || (create ? 'create' : 'login'),
   });
+  // the address to sign in with, filled in on Microsoft's page (the join page: the invited one)
+  if (loginHint) q.set('login_hint', loginHint);
   return `${cfg.authorizeUrl}?${q}`;
 }
 /** What came back from Microsoft's page: null when it isn't a link for this sign-in. */

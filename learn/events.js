@@ -1,28 +1,36 @@
-// Events (#/events): your events, upcoming and past; each event's page (#/events/<id>): its days and place, Spartan's own page for it,
+// My Events (#/events): your events, upcoming and past; each event's page (#/events/<id>): its days and place, Spartan's own page for it,
 // notes from its organisers, who's refereeing it, and its burpee cameras: everyone assigned watches and reviews them, and those ticked
 // for it book them (on the event's camera page, event.html). Admins, and regional coordinators for their region, also manage events
 // here: every event they look after with how many referees it has, and on each one, adding referees (paste many addresses), head
 // referee, the camera tick, and notes. The server side is api/src/assignments.js (GET /api/my/events, /api/event/<id>, /api/manage/events).
-import { $, call, esc, t, toast, act, redraw, has, isAdmin, when } from './core.js';
+import { $, call, esc, t, toast, act, redraw, isAdmin, when } from './core.js';
 import { call as siteCall } from '../api-base.js';
 import { viaCache } from '../offline.js';
 import { datesOf, eventRow } from './home.js';
 
-const managerish = () => isAdmin() || has('regional_coordinator');
 
-async function eventsList() {
-  const q = new URLSearchParams(location.hash.split('?')[1] || ''), manage = q.get('manage') === '1' && managerish(), find = q.get('q') || '';
-  const mine = await viaCache('site/my/events', () => siteCall('my/events')).catch(() => ({ upcoming: [], past: [] }));
-  const tabs = managerish() ? `<p class="chips inviteTabs"><a class="chipLink${manage ? '' : ' on'}" href="#/events">Your events</a><a class="chipLink${manage ? ' on' : ''}" href="#/events?manage=1">Manage events</a></p>` : '';
-  if (manage) {
-    const m = await siteCall(`manage/events?q=${encodeURIComponent(find)}`);
-    return `<section class="card"><h1>Events</h1>${tabs}
+// Manage Events (#/manage, admins and regional coordinators; its own tab since 19 November 2026): the events they look after, each
+// opening its page here (#/manage/<id>) to set its referees; admins also sync Spartan's events (it was on the Config page)
+async function manageList() {
+  const q = new URLSearchParams(location.hash.split('?')[1] || ''), find = q.get('q') || '';
+  const [m, sync] = await Promise.all([siteCall(`manage/events?q=${encodeURIComponent(find)}`), isAdmin() ? siteCall('events').catch((e) => ({ error: e.message, events: [] })) : null]);
+  // admins: when Spartan's events were last synced, and Sync now, at the top (not under hundreds of events)
+  const syncBox = sync ? `<div class="syncBox"><p class="note" id="syncLine">${esc(sync.syncedAt ? t('{n} upcoming events, last synced {date}', { n: sync.events.length, date: when(sync.syncedAt) }) : t('Not synced yet.'))}</p>
+      ${sync.error ? `<p class="badText">${esc(t('The last sync didn\'t work: {error}. The events from the last good one are still used.', { error: sync.error }))}</p>` : ''}
+      <p class="note">Synced from Spartan's race list every 6 hours, when someone opens the cameras. Referees book an event's cameras from 07:00 to 18:00 local time on its days; admins can book any time.</p>
+      <div class="btnRow"><button class="small" type="button" id="syncNow">Sync now</button></div></div>` : '';
+  return `<section class="card"><h1>Manage Events</h1>
+      ${syncBox}
       <p class="note">${esc(m.admin ? t('Every upcoming Spartan event. Open one to add its referees, choose its head referee, tick who books its cameras and leave notes for its referees.') : t('The upcoming events in your regions. Open one to add its referees, choose its head referee, tick who books its cameras and leave notes for its referees.'))}</p>
       <form class="filters2" id="eventFind"><input name="q" type="search" placeholder="Find an event, city or country" value="${esc(find)}" aria-label="Find an event"><button class="small" type="submit">Find</button></form>
-      <ul class="rowList manageList">${m.events.map((e) => `<li><a href="#/events/${esc(e.id)}"><b>${esc(e.name)}</b><small>${esc([datesOf(e), [e.city, e.country].filter(Boolean).join(', ')].filter(Boolean).join(' · '))}</small>
+      <ul class="rowList manageList">${m.events.map((e) => `<li><a href="#/manage/${esc(e.id)}"><b>${esc(e.name)}</b><small>${esc([datesOf(e), [e.city, e.country].filter(Boolean).join(', ')].filter(Boolean).join(' · '))}</small>
         <small class="${e.referees ? '' : 'badText'}">${esc(t('{n} referees', { n: e.referees }))} · ${esc(e.heads ? t('head referee set') : t('no head referee'))} · ${esc(t('{n} may book the cameras', { n: e.canBook }))}</small></a></li>`).join('') || `<li class="muted">${esc(t('No events found.'))}</li>`}</ul></section>`;
-  }
-  return `<section class="card"><h1>Events</h1>${tabs}
+}
+
+// My Events (#/events): your own events, upcoming and past
+async function eventsList() {
+  const mine = await viaCache('site/my/events', () => siteCall('my/events')).catch(() => ({ upcoming: [], past: [] }));
+  return `<section class="card"><h1>My Events</h1>
       <h2>Coming up</h2><ul class="events">${mine.upcoming.map((e) => eventRow(e)).join('') || `<li class="muted">${esc(t('No events assigned to you yet.'))}</li>`}</ul>
       ${mine.past.length ? `<details class="pastEvents"><summary>${esc(t('Past events ({n})', { n: mine.past.length }))}</summary><ul class="events">${mine.past.map((e) => eventRow(e)).join('')}</ul></details>` : ''}</section>`;
 }
@@ -37,7 +45,7 @@ async function eventPage(id) {
         <button class="small" type="button" data-role="${r.role === 'head' ? 'referee' : 'head'}" data-email="${esc(r.email)}">${r.role === 'head' ? 'Make referee' : 'Make head referee'}</button>
         <label class="tickLabel"><input type="checkbox" data-book="${esc(r.email)}"${r.canBook ? ' checked' : ''}> <span>Books the cameras</span></label>
         <button class="small" type="button" data-remove="${esc(r.email)}">Remove</button></span>` : ''}</li>`).join('');
-  return `<section class="card"><p class="crumbs"><a href="#/events${d.canManage && !d.you ? '?manage=1' : ''}">Events</a></p>
+  return `<section class="card"><p class="crumbs">${location.hash.startsWith('#/manage') ? '<a href="#/manage">Manage Events</a>' : '<a href="#/events">My Events</a>'}</p>
       <h1>${esc(e.name)}</h1>
       <p>${esc([datesOf(e), [e.city, e.country].filter(Boolean).join(', ')].filter(Boolean).join(' · '))}${e.over ? ` · <span class="muted">${esc(t('over'))}</span>` : ''}</p>
       ${d.you ? `<p>${d.you.role === 'head' ? '<span class="chip head">You\'re its head referee</span>' : '<span class="chip">You\'re refereeing it</span>'}</p>` : ''}
@@ -62,9 +70,13 @@ async function eventPage(id) {
       <div class="btnRow"><button class="small primaryish" type="submit">Save the notes</button></div></form></section>` : ''}`;
 }
 
-export const views = { async events(rest) { return rest ? eventPage(rest) : eventsList(); } };
+export const views = {
+  async events(rest) { if (/[?&]manage=1/.test(location.hash)) { location.replace('#/manage'); return ''; } return rest ? eventPage(rest) : eventsList(); },
+  async manage(rest) { return rest ? eventPage(rest) : manageList(); },
+};
 export function wire() {
-  $('eventFind')?.addEventListener('submit', (e) => { e.preventDefault(); location.hash = `#/events?manage=1&q=${encodeURIComponent(e.target.q.value.trim())}`; });
+  $('eventFind')?.addEventListener('submit', (e) => { e.preventDefault(); location.hash = `#/manage?q=${encodeURIComponent(e.target.q.value.trim())}`; });
+  $('syncNow')?.addEventListener('click', (e) => act(async () => { await siteCall('admin/events/sync', { method: 'POST', body: {} }); toast(t('Events synced')); redraw(); }, e.currentTarget));
   if (!PAGE || !$('addRefs') && !document.querySelector('[data-remove]')) return;
   const id = PAGE.event.id;
   const send = (body) => siteCall(`event/${encodeURIComponent(id)}/referees`, { method: 'POST', body });

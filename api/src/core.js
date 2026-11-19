@@ -222,7 +222,7 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
   const assignments = createAssignments({ store, now, reply, session, isAdmin, isAdminEmail, membership, events: eventList, bookingStatus, learnOn: !!learnDb,
     onLanguage: learn ? async (email, language) => { await (learnReady || learnDb.migrate()); await learn.setLocale(email, language); } : null,
     // a regional coordinator manages the events in their regions' countries (their roles are in the learning database)
-    scopeOf: learn ? async (email) => { await learnUp(); return learn.scopeOf(email); } : async () => ({ countries: [] }) });
+    scopeOf: learn ? async (email, preview) => { await learnUp(); return learn.scopeOf(email, preview); } : async () => ({ countries: [] }) });
   const { companies, adminCompanies, referees } = createCompanies({ store, now, reply, session, isAdmin, putBrand, membership, onBlocked: stopCompany });
 
   async function handle({ method, path, headers = {}, body, query: extraQuery = {} }) {

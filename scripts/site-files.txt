@@ -35,8 +35,6 @@ icons/spartanreferee/icon-maskable-512.png
 index.html
 judge-gate.js
 judge.html
-looks.css
-looks.js
 multi.js
 ocr-prep.js
 phone.html

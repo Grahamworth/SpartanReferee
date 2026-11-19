@@ -5,10 +5,19 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <script src="/judge/i18n.js"></script>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#0b0b0b">
+<meta name="theme-color" content="#1a1e24" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <title>Video review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;700&display=swap">
 <link rel="stylesheet" href="review.css">
-<script src="/judge/brand.js" defer></script>
+<script>
+  // the Look picked on the website (Auto, Light or Dark) comes along as ?look=, as the language does: a server is another address,
+  // which can't see what the website kept. Kept here for next time, then look.js draws the page in it.
+  try { const l = new URLSearchParams(location.search).get('look'); if (l === 'auto') localStorage.removeItem('sr_look'); else if (l === 'light' || l === 'dark') localStorage.setItem('sr_look', l); } catch { /* private mode: it follows the phone */ }
+</script>
+<script src="/judge/look.js"></script>
 <script src="counts.js" defer></script>
 <script src="review.js" defer></script>
 </head>

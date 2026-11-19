@@ -2,6 +2,7 @@
 import test from 'node:test';
 import assert from 'node:assert';
 import fs from 'node:fs';
+import { createRequire } from 'node:module';
 
 const read = (f) => fs.readFileSync(new URL(`../${f}`, import.meta.url), 'utf8');
 const exists = (f) => fs.existsSync(new URL(`../${f}`, import.meta.url));
@@ -44,7 +45,32 @@ test('Home, Learning and the offline page have the study look, with its Look but
   for (const f of ['home.html', 'learn/index.html', 'offline.html']) { assert.match(read(f), /study\.css"/, f); assert.match(read(f), /look\.js"><\/script>/, f); }
   const sw = read('sw.js');
   for (const f of ['/study.css', '/look.js', '/learn/sharp.js']) assert.ok(sw.includes(`'${f}'`), f);
-  assert.doesNotMatch(read('judge.html'), /study\.css/, 'the event-day pages keep their own look');
+  assert.doesNotMatch(read('judge.html'), /study\.css/, 'the judge has its own stylesheet (styles.css), in the same colours');
+});
+test('the video review, the AI judge and Cloud recordings have the website\'s Look: one look system, study.css\'s colours', () => {
+  // the review's colours are study.css's, dark and light (copied: the camera servers don't have study.css)
+  const tokens = (css) => { const out = []; for (const m of css.matchAll(/(:root(?:\[data-look="light"\])?)\s*\{([^}]*)\}/g)) out.push(m[1] + ' ' + [...m[2].matchAll(/(--[\w-]+):\s*([^;]+);/g)].filter(([, k]) => !/^--(btn|field|bar|lift|ink|green|amber)/.test(k)).map(([, k, v]) => `${k}=${v.trim()}`).join(' ')); return out; };
+  assert.deepStrictEqual(tokens(read('server/review/review.css')), tokens(read('study.css')));
+  assert.match(read('server/review/review.css'), /:root:not\(\[data-look="dark"\]\)/, 'light when the phone is, unless Dark was picked');
+  // look.js on every one of them; the old three looks (classic, slate, light) are gone
+  assert.match(read('server/review/index.html'), /<script src="\/judge\/look\.js"><\/script>/);
+  assert.ok(read('server/review/index.html').indexOf("localStorage.setItem('sr_look'") < read('server/review/index.html').indexOf('/judge/look.js'), 'the website\'s Look is kept before look.js reads it');
+  for (const f of ['judge.html', 'recordings.html']) assert.match(read(f), /<script src="look\.js"><\/script>/, f);
+  for (const f of ['looks.js', 'looks.css']) { assert.ok(!exists(f), f); assert.ok(!siteFiles.includes(f), f); }
+  assert.match(read('scripts/build-server.sh'), / look\.js /, 'the servers have look.js, at /judge/look.js');
+  assert.match(read('scripts/build-review-test.mjs'), /'<script src="\/judge\/look\.js"><\/script>', '<script src="\/look\.js"><\/script>'/);
+  // SpartanReferee is Spartan's alone: the review doesn't take a company's colours
+  assert.doesNotMatch(read('server/review/index.html'), /brand\.js/);
+  assert.doesNotMatch(read('server/review/review.js'), /HeadJudgeBrand|setProperty\('--(red|brand|on-brand)'/);
+  // the Look picked on the website goes along to a server's review, through its sign-in
+  assert.match(read('apptabs.js'), /localStorage\.getItem\('sr_look'\)/);
+  const { landing } = createRequire(import.meta.url)('../server/auth.js');
+  assert.strictEqual(landing(new URLSearchParams('tab=live&n=1&of=1&look=light')), '/?tab=live&n=1&of=1&look=light');
+  assert.strictEqual(landing(new URLSearchParams('tab=live&look=<x>')), '/?tab=live&n=1&of=1');
+  // actions are blue; judging over the camera keeps its race-day black whatever the Look
+  assert.match(read('server/review/review.css'), /\.btn\.red \{ background: var\(--primary\)/);
+  assert.match(read('styles.css'), /\.btn-red \{ background: var\(--primary\)/);
+  assert.match(read('styles.css'), /#stage, \.hud, \.done-screen, \.rep-flash[^{]*\{\s*--black: #0b0b0b;/);
 });
 test('saving for offline asks for lessons by the same address the player does, so the player finds them', () => {
   assert.match(read('learn/lesson.js'), /call\(lessonPath\(id, q\.get\('locale'\) \|\| pageLang, q\.get\('content'\)\)\)/);

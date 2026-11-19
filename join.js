@@ -24,6 +24,7 @@ async function register(form) {
     location.replace('learn/');
   } catch (e) {
     fail(e.message);
+    try { localStorage.removeItem('sp_token'); } catch { /* fine */ }
     $('joinCard').innerHTML = `<p><a class="btnLink" href="join.html?t=${encodeURIComponent(token)}">Try again</a></p>`;
     try { sessionStorage.removeItem(KEY); } catch { /* fine */ }
   }
@@ -32,14 +33,13 @@ async function register(form) {
 function drawSignIn(inv, form) {
   $('joinCard').innerHTML = `<ol class="joinSteps"><li>1. About you</li><li class="on">2. Sign in</li></ol>
     <h1>Sign in to finish</h1>
-    <p class="note">${esc(t('Use your Google or Microsoft account, or your email address ({email}) with a code we email you. Use the same way each time you sign in.', { email: inv.email }))}</p>
+    <p class="mustUse"><span>${esc(t('Sign in with the address your invite was sent to:'))}</span> <b>${esc(inv.email)}</b></p>
+    <p class="note">${esc(t('Choose Google or Microsoft if that is the address of your account there. If not, choose Sign in with email and we email a code to it. Use the same way each time you sign in.'))}</p>
     <div id="msBtn"></div><p class="error" id="signInError" role="alert" hidden></p>
     <p><button class="link" type="button" id="back">‹ Back</button></p>`;
   $('back').onclick = () => drawForm(inv, form);
-  microsoftButton($('msBtn'), `join.html?t=${token}`, (e) => { $('signInError').textContent = e.message || t('Sign-in didn\'t work: try again'); $('signInError').hidden = false; }, { email: '' });
-  // the code box asks for the address: the invited one is filled in when they choose it
-  const fill = () => { const i = document.getElementById('codeEmail'); if (i && !i.value) i.value = inv.email; };
-  new MutationObserver(fill).observe($('msBtn'), { childList: true, subtree: true });
+  // the code box is filled in with the invited address, and can't be changed
+  microsoftButton($('msBtn'), `join.html?t=${token}`, (e) => { $('signInError').textContent = e.message || t('Sign-in didn\'t work: try again'); $('signInError').hidden = false; }, { email: inv.email });
 }
 
 function drawForm(inv, was = {}) {

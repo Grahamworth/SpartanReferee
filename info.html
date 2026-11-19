@@ -12,9 +12,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;1,800&family=Barlow:wght@400;600;700&display=swap">
 <link rel="stylesheet" href="headjudge.css">
+<link rel="stylesheet" href="study.css">
+<script src="look.js"></script>
 <style>
   .hero { max-width: 760px; padding: clamp(16px, 5vw, 56px) 0 clamp(24px, 5vw, 48px); }
-  .hero h1 { font-size: clamp(2.6rem, 8vw, 4.6rem); line-height: .98; font-style: italic; margin: 0; }
+  .hero h1 { font-size: clamp(2.6rem, 8vw, 4.6rem); line-height: .98; margin: 0; }
   .hero h1 span { color: var(--primary-text); }
   .hero p { color: var(--muted); font-size: clamp(1.05rem, 2.4vw, 1.25rem); margin: 18px 0 0; }
   .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
@@ -24,7 +26,7 @@
   .actions .second:hover { border-color: var(--primary-text); }
   .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; margin: 0; padding: 0; list-style: none; counter-reset: step; }
   .steps li { background: var(--panel); border: 1px solid var(--line); padding: 20px; counter-increment: step; }
-  .steps li::before { content: counter(step); display: block; font: italic 800 2.2rem/1 var(--display); color: var(--primary-text); margin-bottom: 8px; }
+  .steps li::before { content: counter(step); display: block; font: 700 2.2rem/1 var(--display); color: var(--primary-text); margin-bottom: 8px; }
   .steps h3 { margin: 0 0 6px; font-size: 1.1rem; }
   .steps p { margin: 0; color: var(--muted); }
   section > h2 { font-size: 1.8rem; margin: 40px 0 14px; }
