@@ -80,11 +80,17 @@ function createReports(ctx) {
         (SELECT COUNT(*) FROM {S}.completion c WHERE c.enrolment_id = e.enrolment_id AND c.preview = 0) AS lessons,
         (SELECT TOP 1 CASE WHEN t.max_score > 0 THEN 100 * t.score / t.max_score END FROM {S}.attempt t WHERE t.enrolment_id = e.enrolment_id AND t.result IN ('pass', 'fail') ORDER BY t.submitted_at DESC) AS last_score
       FROM {S}.enrolment e JOIN {S}.person p ON p.person_id = e.person_id JOIN {S}.programme_version v ON v.version_id = e.version_id WHERE ${where.join(' AND ')} ORDER BY e.programme_id, p.legal_name`, params);
-    const creds = await db.query(`${ctx.credQuery} WHERE c.status <> 'superseded'`);
-    const cell = (v) => { const s = v === null || v === undefined ? '' : v instanceof Date ? v.toISOString().slice(0, 10) : String(v); return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; };
+    // the credentials of the same people only (the credential query calls the person r and the programme p), indexed by person and programme
+    const cp = {}, cw = [scopeWhere(scope, cp, { prog: 'c.programme_id', region: 'r.region_id' })];
+    if (query.programme) { cw.push('c.programme_id = @prog'); cp.prog = text(query.programme, 32); }
+    if (query.region) { cw.push('r.region_id = @region'); cp.region = text(query.region, 32); }
+    const latest = new Map();
+    for (const c of await db.query(`${ctx.credQuery} WHERE ${cw.join(' AND ')} AND c.status <> 'superseded' ORDER BY c.issued_at`, cp)) latest.set(`${c.person_public_id}|${c.programme_id}`, c);
+    // a value a spreadsheet would run as a formula (= + - @, or a tab or return first) starts with ' instead
+    const cell = (v) => { let s = v === null || v === undefined ? '' : v instanceof Date ? v.toISOString().slice(0, 10) : String(v); if (/^[=+\-@\t\r]/.test(s)) s = `'${s}`; return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; };
     const head = ['person', 'name', 'email', 'region', 'invented', 'programme', 'edition', 'enrolment', 'enrolled', 'completed', 'lessons completed', 'last score %', 'credential', 'credential status', 'expires'];
     const lines = rows.map((r) => {
-      const c = creds.filter((x) => x.public_id && x.person_public_id === r.public_id && x.programme_id === r.programme_id).sort((a, b) => new Date(b.issued_at) - new Date(a.issued_at))[0];
+      const c = latest.get(`${r.public_id}|${r.programme_id}`);
       const v = c ? ctx.credView(c) : null;
       return [r.public_id, r.legal_name, r.email, r.region_id, r.synthetic ? 'yes' : 'no', r.programme_id, r.edition, r.state, r.enrolled_at, r.completed_at, r.lessons, r.last_score, v?.publicId, v?.status, v?.expiresAt ? new Date(v.expiresAt) : ''].map(cell).join(',');
     });

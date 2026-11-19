@@ -66,11 +66,13 @@ function createLessons(ctx, { speech, mediaSigner }) {
     if (prevCopy) await prevCopy(q, from, vid, moduleMap, lessonMap);
     const contents = await q("SELECT * FROM {S}.content_version WHERE lesson_id IN (SELECT lesson_id FROM {S}.lesson WHERE version_id = @v) AND state IN ('published', 'review')", { v: from.version_id });
     const ids = new Map();
+    // a translation whose English wasn't copied (it was superseded) points at the copied published English of its lesson
+    const englishFor = (c) => { const en = contents.find((x) => x.lesson_id === c.lesson_id && x.locale === 'en' && x.state === 'published'); return en ? ids.get(en.content_id) || null : null; };
     for (const c of contents.sort((a, b) => (a.translation_of ? 1 : 0) - (b.translation_of ? 1 : 0))) {
       const nid = uuid(); ids.set(c.content_id, nid);
       await q(`INSERT INTO {S}.content_version (content_id, lesson_id, locale, version_no, state, translation_of, body, source_hash, sources, translated_by, author_id, approved_by, approved_at, submitted_by, submitted_at)
-               VALUES (@id, @l, @loc, 1, @state, @tr, @body, @hash, @src, @tb, @a, @ab, @at, @sb, @sat)`,
-      { id: nid, l: lessonMap.get(c.lesson_id), loc: c.locale, state: c.state, tr: c.translation_of ? ids.get(c.translation_of) || null : null, body: c.body, hash: c.source_hash, src: c.sources, tb: c.translated_by, a: c.author_id, ab: c.approved_by, at: c.approved_at, sb: c.submitted_by, sat: c.submitted_at });
+               VALUES (@id, @l, @loc, @no, @state, @tr, @body, @hash, @src, @tb, @a, @ab, @at, @sb, @sat)`,
+      { id: nid, l: lessonMap.get(c.lesson_id), loc: c.locale, no: c.version_no, state: c.state, tr: c.translation_of ? ids.get(c.translation_of) || englishFor(c) : null, body: c.body, hash: c.source_hash, src: c.sources, tb: c.translated_by, a: c.author_id, ab: c.approved_by, at: c.approved_at, sb: c.submitted_by, sat: c.submitted_at });
     }
   };
   const prevDelete = ctx.beforeDeleteLessons;
@@ -94,7 +96,8 @@ function createLessons(ctx, { speech, mediaSigner }) {
     const assessOk = ctx.assessmentPassed ? await ctx.assessmentPassed(q, e) : false;
     const complete = rule === 'lessons' ? lessonsOk : rule === 'assessment' ? assessOk : lessonsOk && assessOk;
     if (!complete) return e;
-    await q("UPDATE {S}.enrolment SET state = 'completed', completed_at = SYSUTCDATETIME() WHERE enrolment_id = @id", { id: e.enrolment_id });
+    const moved = await q("UPDATE {S}.enrolment SET state = 'completed', completed_at = SYSUTCDATETIME() OUTPUT inserted.enrolment_id WHERE enrolment_id = @id AND state = 'active'", { id: e.enrolment_id });
+    if (!moved.length) return { ...e, state: 'completed' }; // someone else's request completed it just now
     await audit(q, w, 'enrolment.complete', 'enrolment', e.enrolment_id, { rule }, { programmeId: e.programme_id });
     if (ctx.onComplete) await ctx.onComplete(q, { ...e, state: 'completed' }, w);
     return { ...e, state: 'completed' };
@@ -154,6 +157,10 @@ function createLessons(ctx, { speech, mediaSigner }) {
     const had = (await db.query('SELECT * FROM {S}.completion WHERE person_id = @p AND lesson_id = @l AND locale = @loc', { p: w.person.person_id, l: l.lesson_id, loc: c.locale }))[0];
     let enrolment = e;
     await db.tx(async (q) => {
+      if (had && had.preview && !isPreview(c)) {
+        await q('UPDATE {S}.completion SET preview = 0, content_id = @c, content_version = @cv, source_hash = @hash, completed_at = SYSUTCDATETIME() WHERE completion_id = @id', { c: c.content_id, cv: c.version_no, hash: c.source_hash, id: had.completion_id });
+        await audit(q, w, 'lesson.complete', 'completion', had.completion_id, { lesson: l.title, locale: c.locale, contentVersion: c.version_no, preview: false, wasPreview: true }, { programmeId: l.programme_id });
+      }
       if (!had) {
         const cid = uuid();
         await q(`INSERT INTO {S}.completion (completion_id, person_id, enrolment_id, programme_id, version_id, lesson_id, content_id, content_version, source_hash, locale, preview)
@@ -238,11 +245,14 @@ function createLessons(ctx, { speech, mediaSigner }) {
   async function narrationLink(w, id, slide, query) {
     const c = await contentById(id); if (!c) return reply(404, { error: 'No such content' });
     const l = await lessonById(c.lesson_id);
-    if (!(c.state === 'published' || isPreview(c) || ctx.editor(w, l.programme_id))) return reply(404, { error: 'No such content' });
+    const editor = ctx.editor(w, l.programme_id);
+    if (!editor && !((c.state === 'published' || isPreview(c)) && ['published', 'superseded'].includes(l.version_state))) return reply(404, { error: 'No such content' });
     const plan = await media.plan(c, l.programme_id), voice = String(query.voice || plan.voice);
-    if (!/^[a-z]{2}-[A-Z]{2}-\w{2,40}$/.test(voice)) return reply(400, { error: 'No such voice' });
-    try { return reply(200, { url: await media.narration(c, Math.floor(Number(slide) || 0), voice), voice }); }
-    catch (e) { return reply(e.status || 502, { error: e.message }); }
+    if (!(VOICES[c.locale] || []).includes(voice)) return reply(400, { error: 'No such voice for this language' });
+    const n = Math.floor(Number(slide) || 0);
+    if (n < 0 || n >= MAX_SLIDES) return reply(404, { error: 'No such slide' });
+    try { return reply(200, { url: await media.narration(c, n, voice), voice }); }
+    catch (e) { return reply(e.status || 502, { error: e.status ? e.message : 'The narration couldn\'t be made just now: the captions are below' }); }
   }
   async function mediaSettings(w, method, scope, b) {
     if (method === 'GET') {

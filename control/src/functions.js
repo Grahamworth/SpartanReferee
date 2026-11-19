@@ -3,6 +3,7 @@
 const { app } = require('@azure/functions');
 const { tableStore } = require('./store');
 const { reconcile } = require('./reconcile');
+const { backup } = require('./backup');
 const { createArm, health } = require('./arm');
 const cameraSplit = require('./cameras'); // api/src/cameras.js, copied in when this is published
 
@@ -18,6 +19,17 @@ const bookedOn = (server, want) => {
   const { cameras, first } = cameraSplit.bookedOn(server.n, want?.bookedCameras);
   return { stations: cameras, bookedCameras: cameras, firstCamera: first };
 };
+
+// every night at 03:30 UTC: the site's table data to the private backups container, kept 30 days (backup.js)
+app.timer('backup', {
+  schedule: '0 30 3 * * *',
+  handler: async (_timer, context) => {
+    const { TableClient } = require('@azure/data-tables');
+    const table = TableClient.fromConnectionString(E.STORAGE_CONNECTION, 'spartans');
+    const r = await backup({ connection: E.STORAGE_CONNECTION, listEntities: () => table.listEntities() });
+    context.log(`backup: ${r.name}, ${r.rows} rows, ${r.bytes} bytes${r.removed ? `; removed ${r.removed}` : ''}`);
+  },
+});
 
 app.timer('reconcile', {
   schedule: '0 * * * * *',

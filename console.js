@@ -34,8 +34,23 @@ function fillHours(sel, max, chosen) {
 }
 // ---------------------------------------------------------------- when: now for some hours, or a start and end chosen ahead
 const HOUR = 3600e3;
-const localInput = (t) => { const d = new Date(t); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 16); };
-const fromInput = (v) => (v ? new Date(v).getTime() : NaN); // a datetime-local value is in this computer's own time
+// The start and end fields are in the event's own local time when booking an event (so 07:00 means 07:00 at the race, wherever the
+// head referee books from), and in this device's time otherwise. inputTz is the event's timezone, or '' for this device's.
+let inputTz = '';
+const wallParts = (t, tz) => Object.fromEntries(new Intl.DateTimeFormat('en-GB', { timeZone: tz, hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' })
+  .formatToParts(new Date(t)).filter((p) => p.type !== 'literal').map((p) => [p.type, p.value]));
+const localInput = (t) => {
+  if (!inputTz) { const d = new Date(t); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 16); }
+  const p = wallParts(t, inputTz); return `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}`;
+};
+const fromInput = (v) => {
+  if (!v) return NaN;
+  if (!inputTz) return new Date(v).getTime(); // a datetime-local value is in this device's own time
+  const wall = Date.parse(`${v}:00Z`); if (!Number.isFinite(wall)) return NaN;
+  let t = wall;
+  for (let i = 0; i < 2; i++) { const p = wallParts(t, inputTz); t = wall - (Date.UTC(+p.year, +p.month - 1, +p.day, +p.hour, +p.minute) - Math.floor(t / 60e3) * 60e3); }
+  return t;
+};
 const choosingTimes = () => document.querySelector('input[name="when"]:checked')?.value === 'times';
 const longDay = (t) => new Date(t).toLocaleString([], { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
 const span = (from, until) => (new Date(from).toDateString() === new Date(until).toDateString() ? `${longDay(from)} to ${clock(until)}` : `${longDay(from)} to ${longDay(until)}`);
@@ -179,6 +194,10 @@ function eventNote(ev) {
 }
 function drawUnit(s, state) {
   const u = s.unit; if (!u) return;
+  // an event's times are entered in its own local time
+  const tzNow = u.kind === 'event' && u.event?.tz ? u.event.tz : '';
+  if (tzNow !== inputTz) { const was = [fromInput($('fromAt').value), fromInput($('untilAt').value)]; inputTz = tzNow; if (Number.isFinite(was[0])) $('fromAt').value = localInput(was[0]); if (Number.isFinite(was[1])) $('untilAt').value = localInput(was[1]); }
+  $('tzNote').textContent = !inputTz ? '' : u.event.city ? `Times are local time in ${u.event.city}.` : "Times are the event's local time."; show($('tzNote'), !!inputTz);
   if (unit !== u.id) { unit = u.id; remember(unit); }
   if ($('unitPick').value !== u.id && [...$('unitPick').options].some((o) => o.value === u.id)) $('unitPick').value = u.id;
   const kind = u.kind, ev = u.event, ws = ev?.windows || [];
@@ -348,7 +367,7 @@ $('stop').onclick = () => {
 function enterBrand(c) {
   applyTheme(c.theme);
   document.title = `${c.name}: SpartanReferee`;
-  $('company').textContent = c.name;
+  // the name stays SpartanReferee (the organisation is called Spartan): only a logo, if one is set, changes
   if (c.logo) { $('logo').src = c.logo; show($('logo'), true); }
 }
 async function cameBackFromStripe() {

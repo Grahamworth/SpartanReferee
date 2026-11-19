@@ -24,7 +24,9 @@ const PROVIDERS = {
 };
 const xml = (s) => String(s).replace(/[<>&'"]/g, (c) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', "'": '&apos;', '"': '&quot;' }[c]));
 
-function createMedia({ db, speech = null, signer = null, doFetch = fetch }) {
+const DAILY_CHARS = 200000; // new narration a day, across the platform: about 1.5 hours of speech, a few dollars at most
+
+function createMedia({ db, speech = null, signer = null, doFetch = fetch, dailyChars = DAILY_CHARS }) {
   const speechOn = !!(speech && speech.key && speech.region && signer);
   async function configFor(programmeId) {
     const rows = await db.query("SELECT * FROM {S}.media_config WHERE scope IN (@p, 'default')", { p: programmeId || '' });
@@ -47,9 +49,12 @@ function createMedia({ db, speech = null, signer = null, doFetch = fetch }) {
     const slides = JSON.parse(content.body).slides || [];
     const text = String(slides[slide]?.narration || '').trim();
     if (!text) throw Object.assign(new Error('That slide has no narration'), { status: 404 });
+    const wanted = `narration/${String(content.content_id).toLowerCase()}/${voice}/${slide}-${crypto.createHash('sha256').update(text).digest('hex').slice(0, 12)}.mp3`;
     const had = (await db.query('SELECT * FROM {S}.media_asset WHERE content_id = @c AND provider = @p AND voice = @v AND slide = @s', { c: content.content_id, p: 'azure-speech', v: voice, s: slide }))[0];
-    let blob = had?.blob;
+    let blob = had?.blob === wanted ? wanted : null;
     if (!blob) {
+      const today = (await db.query("SELECT ISNULL(SUM(chars), 0) AS n FROM {S}.media_asset WHERE created_at > DATEADD(day, -1, SYSUTCDATETIME())"))[0].n;
+      if (today + text.length > dailyChars) throw Object.assign(new Error('Today\'s narration limit is reached: the captions are below, and the device can read them aloud'), { status: 429 });
       const ssml = `<speak version="1.0" xml:lang="${xml(voice.slice(0, 5))}"><voice name="${xml(voice)}"><prosody rate="-4%">${xml(text)}</prosody></voice></speak>`;
       const r = await doFetch(`https://${speech.region}.tts.speech.microsoft.com/cognitiveservices/v1`, {
         method: 'POST', body: ssml,
@@ -57,9 +62,10 @@ function createMedia({ db, speech = null, signer = null, doFetch = fetch }) {
       });
       if (!r.ok) throw Object.assign(new Error(`The narration service said ${r.status}`), { status: 502 });
       const audio = Buffer.from(await r.arrayBuffer());
-      blob = `narration/${String(content.content_id).toLowerCase()}/${voice}/${slide}-${crypto.createHash('sha256').update(text).digest('hex').slice(0, 12)}.mp3`;
+      blob = wanted;
       const put = await doFetch(signer({ blob, perm: 'cw', minutes: 5 }), { method: 'PUT', body: audio, headers: { 'x-ms-blob-type': 'BlockBlob', 'x-ms-blob-content-type': 'audio/mpeg' } });
       if (!put.ok) throw Object.assign(new Error(`Storage said ${put.status}`), { status: 502 });
+      await db.query('DELETE FROM {S}.media_asset WHERE content_id = @c AND provider = @p AND voice = @v AND slide = @s', { c: content.content_id, p: 'azure-speech', v: voice, s: slide }); // the old words' audio
       await db.query('INSERT INTO {S}.media_asset (asset_id, content_id, provider, voice, slide, blob, chars) VALUES (@id, @c, @p, @v, @s, @b, @n)',
         { id: crypto.randomUUID(), c: content.content_id, p: 'azure-speech', v: voice, s: slide, b: blob, n: text.length });
     }

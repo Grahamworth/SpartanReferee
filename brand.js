@@ -22,7 +22,7 @@
     return {
       '--bg': bg, '--panel': panel, '--text': text, '--muted': muted, '--line': line,
       '--primary': t.primary, '--on-primary': on(t.primary),
-      '--primary-text': readable(t.primary, panel, 3), '--accent': readable(t.accent, panel, 3),
+      '--primary-text': readable(t.primary, panel, 4.5), '--accent': readable(t.accent, panel, 3),
     };
   }
   function applyTheme(theme, el) { const r = el || document.documentElement; for (const [k, v] of Object.entries(themeVars(theme))) r.style.setProperty(k, v); r.dataset.mode = theme && theme.mode === 'light' ? 'light' : 'dark'; }

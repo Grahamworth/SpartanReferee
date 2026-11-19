@@ -15,11 +15,13 @@ BUNDLE=$(az storage blob generate-sas --account-name spartanreferee --account-ke
 IMG=$(az sig image-definition show -g $SERVERS --gallery-name spartanreferee_gallery --gallery-image-definition receiver --subscription $SUB --query id -o tsv | tr -d '\r')
 SUBNET=$(az network vnet subnet show -g $SERVERS --vnet-name sr-vnet -n servers --subscription $SUB --query id -o tsv | tr -d '\r')
 NSG=$(az network nsg show -g $SERVERS -n sr-nsg --subscription $SUB --query id -o tsv | tr -d '\r')
+# its errors and timers go to Application Insights (spartanreferee-insights), when it exists
+INSIGHTS=$(az monitor app-insights component show --app spartanreferee-insights -g $RG --subscription $SUB --query connectionString -o tsv 2>/dev/null | tr -d '\r' || true)
 
 # the settings go up through a file so that none of them ever appears on a command line or in a log
 BODY=$(mktemp)
 # (the first two stop Git Bash on Windows rewriting these Azure addresses as if they were file paths)
-MSYS_NO_PATHCONV=1 MSYS2_ENV_CONV_EXCL='*' CONN="$CONN" BUNDLE="$BUNDLE" IMG="$IMG" SUBNET="$SUBNET" NSG="$NSG" SUB="$SUB" SERVERS="$SERVERS" SITE="$SITE" KEY="$(cat "$SRC/server/setup/fixed-login-key.pub")" node -e "
+MSYS_NO_PATHCONV=1 MSYS2_ENV_CONV_EXCL='*' INSIGHTS="$INSIGHTS" CONN="$CONN" BUNDLE="$BUNDLE" IMG="$IMG" SUBNET="$SUBNET" NSG="$NSG" SUB="$SUB" SERVERS="$SERVERS" SITE="$SITE" KEY="$(cat "$SRC/server/setup/fixed-login-key.pub")" node -e "
 const e = process.env;
 for (const k of ['IMG', 'SUBNET', 'NSG']) if (!e[k].startsWith('/subscriptions/')) throw new Error(k + ' is not an Azure address: ' + e[k]);
 console.log(JSON.stringify({ properties: {
@@ -27,6 +29,7 @@ console.log(JSON.stringify({ properties: {
   AzureWebJobsStorage: e.CONN, WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: e.CONN, WEBSITE_CONTENTSHARE: 'spartanreferee-control',
   STORAGE_CONNECTION: e.CONN, SITE: e.SITE, BUNDLE_URL: e.BUNDLE,
   SERVERS_SUBSCRIPTION: e.SUB, SERVERS_GROUP: e.SERVERS, SERVERS_REGION: 'italynorth', SERVERS_IMAGE: e.IMG, SERVERS_SUBNET: e.SUBNET, SERVERS_NSG: e.NSG, SERVERS_SSH_KEY: e.KEY.trim(),
+  ...(e.INSIGHTS ? { APPLICATIONINSIGHTS_CONNECTION_STRING: e.INSIGHTS } : {}),
 } }));
 " > "$BODY"
 az rest --method put --url "$ARM/config/appsettings?api-version=2023-12-01" --body "@$(cygpath -w "$BODY")" -o none

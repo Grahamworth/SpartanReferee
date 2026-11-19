@@ -22,6 +22,7 @@ const { createLessons } = require('./lessons');
 const { createAssess } = require('./assess');
 const { createGovern } = require('./govern');
 const { createReports } = require('./reports');
+const { createPrivacy } = require('./privacy');
 
 const EMAIL = /^[^\s@/#?\\]+@[^\s@/#?\\]+\.[^\s@/#?\\]+$/;
 const LOCALES = ['en', 'fr', 'de', 'nl', 'es', 'it', 'el', 'hr', 'cs', 'pl', 'fi', 'sv', 'da', 'ar', 'th'];
@@ -65,21 +66,43 @@ function createLearn({ db, session, isAdminEmail = () => false, member = null, r
     if (!real) {
       // their own record is made the first time they come: an admin as a global admin, a referee as a learner
       const id = uuid();
-      real = await db.tx(async (q) => {
-        await q(`INSERT INTO {S}.person (person_id, public_id, legal_name, email, locale, synthetic) VALUES (@id, @pub, @name, @email, 'en', 0)`,
-          { id, pub: await newPublicId(q), name: text(m.name, 120) || email, email });
-        await q('INSERT INTO {S}.person_login (provider, subject, person_id) VALUES (@provider, @subject, @id)', { provider, subject, id });
-        if (m.admin) await q(`INSERT INTO {S}.role_grant (grant_id, person_id, role) VALUES (@g, @id, 'global_admin')`, { g: uuid(), id });
-        await audit(q, { realId: id }, 'person.first-sign-in', 'person', id, { email, role: m.admin ? 'global_admin' : 'learner' });
-        return (await q('SELECT * FROM {S}.person WHERE person_id = @id', { id }))[0];
-      });
+      try {
+        real = await db.tx(async (q) => {
+          await q(`INSERT INTO {S}.person (person_id, public_id, legal_name, email, locale, synthetic) VALUES (@id, @pub, @name, @email, 'en', 0)`,
+            { id, pub: await newPublicId(q), name: text(m.name, 120) || email, email });
+          await q('INSERT INTO {S}.person_login (provider, subject, person_id) VALUES (@provider, @subject, @id)', { provider, subject, id });
+          await audit(q, { realId: id }, 'person.first-sign-in', 'person', id, { role: m.admin ? 'global_admin' : 'learner' });
+          return (await q('SELECT * FROM {S}.person WHERE person_id = @id', { id }))[0];
+        });
+      } catch (e) {
+        // two first requests at once: the other one made the record
+        real = (await db.query('SELECT p.* FROM {S}.person_login l JOIN {S}.person p ON p.person_id = l.person_id WHERE l.provider = @provider AND l.subject = @subject', { provider, subject }))[0];
+        if (!real) throw e;
+      }
     }
-    const realGrants = await grantsOf(real.person_id);
+    if (real.status !== 'active') return { error: reply(403, { error: 'Your learning record is suspended: ask an admin' }) };
+    // learning's global admin follows the site's admins, every time: given when someone becomes a site admin, taken away when they stop.
+    // (Only the grant made this way: one an admin gave by hand stays until they remove it.)
+    let realGrants = await grantsOf(real.person_id);
+    const auto = realGrants.find((g) => g.role === 'global_admin' && !g.granted_by && !g.programme_id && !g.region_id);
+    if (m.admin && !realGrants.some((g) => g.role === 'global_admin')) {
+      await db.tx(async (q) => {
+        await q("INSERT INTO {S}.role_grant (grant_id, person_id, role) VALUES (@g, @id, 'global_admin')", { g: uuid(), id: real.person_id });
+        await audit(q, { realId: real.person_id }, 'role.grant', 'person', real.person_id, { role: 'global_admin', reason: 'a site admin' });
+      });
+      realGrants = await grantsOf(real.person_id);
+    } else if (!m.admin && auto) {
+      await db.tx(async (q) => {
+        await q('DELETE FROM {S}.role_grant WHERE grant_id = @g', { g: auto.grant_id });
+        await audit(q, { realId: real.person_id }, 'role.remove', 'person', real.person_id, { role: 'global_admin', reason: 'no longer a site admin' });
+      });
+      realGrants = await grantsOf(real.person_id);
+    }
     const asId = h['x-learn-as'];
     if (asId && asId !== real.person_id) {
       if (!P.can(realGrants, 'view-as')) return { error: reply(403, { error: 'Only admins can view as someone else' }) };
       const as = await personById(asId);
-      if (!as || !as.synthetic) return { error: reply(404, { error: 'No such demo person' }) };
+      if (!as || !as.synthetic || as.status !== 'active') return { error: reply(404, { error: 'No such demo person' }) };
       return { person: as, grants: await grantsOf(as.person_id), realId: real.person_id, actingAs: as.person_id, real };
     }
     return { person: real, grants: realGrants, realId: real.person_id, actingAs: null, real };
@@ -155,7 +178,7 @@ function createLearn({ db, session, isAdminEmail = () => false, member = null, r
     const v = input.values, keys = Object.keys(v);
     if (!keys.length) return reply(200, { person: personView(p) });
     // a coordinator can't move someone out of their own regions
-    if ('region_id' in v && v.region_id && !P.can(w.grants, 'person.create', { regionId: v.region_id })) return reply(403, { error: 'You can\'t move people to that region' });
+    if ('region_id' in v && (v.region_id ? !P.can(w.grants, 'person.create', { regionId: v.region_id }) : !P.can(w.grants, 'programme.create'))) return reply(403, { error: v.region_id ? 'You can\'t move people to that region' : 'Only an admin takes someone out of every region' });
     const out = await db.tx(async (q) => {
       if ('region_id' in v && !(await regionExists(q, v.region_id))) return { error: 'No such region' };
       await q(`UPDATE {S}.person SET ${keys.map((k) => `${k} = @${k}`).join(', ')}, updated_at = SYSUTCDATETIME() WHERE person_id = @id`, { ...v, id: p.person_id });
@@ -224,7 +247,7 @@ function createLearn({ db, session, isAdminEmail = () => false, member = null, r
   // ------------------------------------------------------------------ the rest of the platform, one module each, sharing this context
   // (each can add hooks to it that the others call: programmes asks for a version's extras, progress and so on)
   const ctx = { db, reply, P, audit, uuid, text, isUuid, personById, personView, LOCALES };
-  const areas = [createProgrammes(ctx), createLessons(ctx, { speech, mediaSigner }), createAssess(ctx), createGovern(ctx), createReports(ctx)];
+  const areas = [createProgrammes(ctx), createLessons(ctx, { speech, mediaSigner }), createAssess(ctx), createGovern(ctx), createReports(ctx), createPrivacy(ctx)];
 
   // ------------------------------------------------------------------ routing
   async function handle(method, parts, body, h, query = {}) {
@@ -247,7 +270,13 @@ function createLearn({ db, session, isAdminEmail = () => false, member = null, r
     if (a === 'roles' && b && method === 'DELETE') return removeRole(w, b);
     if (a === 'duplicates') return duplicates(w, method, b, body);
     if (a === 'audit' && method === 'GET') return auditLog(w, query);
-    for (const area of areas) { const r = await area.route(w, method, parts, body, query); if (r) return r; }
+    for (const area of areas) {
+      const r = await area.route(w, method, parts, body, query);
+      if (!r) continue;
+      // what cites each rule follows changes to content and questions (in the background, one rebuild at a time)
+      if (method !== 'GET' && r.status === 200 && ['lessons', 'content', 'questions', 'assessments', 'programmes', 'versions', 'modules'].includes(a)) ctx.syncLinks?.();
+      return r;
+    }
     return null;
   }
   return { handle, who };

@@ -862,7 +862,6 @@
  "Get added": "Laat je toevoegen",
  "An admin adds the Microsoft address you sign in with.": "Een beheerder voegt het Microsoft-adres toe waarmee je inlogt.",
  "Book your cameras": "Boek je camera's",
- "Choose how many cameras and how many hours, and see what the servers cost before you start.": "Kies hoeveel camera’s en hoeveel uur, en zie wat de servers kosten voordat je begint.",
  "Film on phones": "Filmen met telefoons",
  "Android phones use the SpartanReferee Broadcaster app, and iPhones use Larix. Scan your camera's code to connect.": "Android-telefoons gebruiken de app SpartanReferee Broadcaster, iPhones gebruiken Larix. Scan de code van je camera om te verbinden.",
  "Judge and review": "Beoordelen en terugkijken",
@@ -874,7 +873,6 @@
  "The video review with no server: camera 1 is this browser's camera, recorded here; the rest is pretend": "De videoreview zonder server: camera 1 is de camera van deze browser, hier opgenomen; de rest is nep",
  "A test card: these details can't be changed": "Een testkaart: deze gegevens kunnen niet worden gewijzigd",
  "Your cameras are ready for this time, then the recordings are saved and everything shuts down. You can extend, or stop early and pay only for the time used. Starting takes about 5 minutes, and counts as time used. Recordings are kept for <0>{n}</0> days.": "Je camera's staan klaar voor deze tijd, daarna worden de opnamen opgeslagen en wordt alles afgesloten. Je kunt verlengen, of eerder stoppen en alleen de gebruikte tijd betalen. Opstarten duurt ongeveer 5 minuten en telt als gebruikte tijd. Opnamen worden <0>{n}</0> dagen bewaard.",
- "Book up to <0>{n}</0> days ahead. We start your servers <1>{n}</1> minutes early at no cost, so the cameras are ready at the start time. At the end the recordings are saved and everything shuts down. You can extend, or cancel before it starts and pay nothing. Recordings are kept for <2>{n}</2> days.": "Boek tot <0>{n}</0> dagen vooruit. We starten je servers kosteloos <1>{n}</1> minuten eerder, zodat de camera's klaarstaan op de starttijd. Aan het eind worden de opnamen opgeslagen en wordt alles afgesloten. Je kunt verlengen, of annuleren voordat het begint en niets betalen. Opnamen worden <2>{n}</2> dagen bewaard.",
  "Just trying it out? The <0>free camera</0> uses this computer's own camera and runs the AI judge in your browser, live or on a minute of video. No server, no cost.": "Wil je het gewoon proberen? De <0>gratis camera</0> gebruikt de eigen camera van deze computer en laat de AI-judge in je browser draaien, live of op een minuut video. Geen server, geen kosten.",
  "This is a pretend payment page, so you can try booking end to end. Nothing is charged, and no card details are asked for or kept. It's held for <0>{n}</0> minutes.": "Dit is een nep-betaalpagina, zodat je het boeken van begin tot eind kunt uitproberen. Er wordt niets afgeschreven en er worden geen kaartgegevens gevraagd of bewaard. De boeking wordt <0>{n}</0> minuten vastgehouden.",
  "Book your cameras: SpartanReferee": "Boek je camera's: SpartanReferee",
@@ -1142,5 +1140,11 @@
  "The head referee books them. Once they're on, you can watch them live and review the results.": "De hoofdscheidsrechter boekt ze. Zodra ze aanstaan, kun je ze live bekijken en de resultaten controleren.",
  "Book the burpee cameras": "Boek de burpeecamera's",
  "See the booking": "Bekijk de boeking",
- "The event's head referee books and runs its burpee cameras. Once they're on, every referee can watch them live, see the cameras and review the results here.": "De hoofdscheidsrechter van het evenement boekt en beheert de burpeecamera's. Zodra ze aanstaan, kan elke scheidsrechter ze hier live bekijken, de camera's zien en de resultaten controleren."
+ "The event's head referee books and runs its burpee cameras. Once they're on, every referee can watch them live, see the cameras and review the results here.": "De hoofdscheidsrechter van het evenement boekt en beheert de burpeecamera's. Zodra ze aanstaan, kan elke scheidsrechter ze hier live bekijken, de camera's zien en de resultaten controleren.",
+ "The head referee books the cameras": "De hoofdscheidsrechter boekt de camera's",
+ "For each event, its head referee books the burpee camera station for the hours they need. Every referee can watch it live and review the results.": "Voor elk evenement boekt de hoofdscheidsrechter het burpee-camerastation voor de uren die nodig zijn. Elke scheidsrechter kan live meekijken en de resultaten bekijken.",
+ "No head referee yet: an admin assigns one, who books them. Once they're on, you can watch them live and review the results.": "Nog geen hoofdscheidsrechter: een beheerder wijst er een aan, die ze boekt. Zodra ze aan staan, kun je live meekijken en de resultaten bekijken.",
+ "Book up to <0>{n}</0> days ahead. The servers start <1>{n}</1> minutes early, so the cameras are ready at the start time. At the end the recordings are saved and everything shuts down. You can extend, or cancel before it starts. Recordings are kept for <2>{n}</2> days.": "Boek tot <0>{n}</0> dagen vooruit. De servers starten <1>{n}</1> minuten eerder, zodat de camera's klaar zijn op de starttijd. Aan het eind worden de opnames bewaard en wordt alles uitgeschakeld. Je kunt verlengen, of annuleren voordat het begint. Opnames worden <2>{n}</2> dagen bewaard.",
+ "Times are local time in {city}.": "Tijden zijn de lokale tijd in {city}.",
+ "Times are the event's local time.": "Tijden zijn de lokale tijd van het evenement."
 }

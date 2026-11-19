@@ -1,5 +1,5 @@
 /* SpartanReferee's own pages (registration, and each company's pages). brand.js sets these from the company's colours. */
-:root { --bg: #0b0b0b; --panel: #161616; --text: #f4f6f8; --muted: #a6a6a6; --line: #3a3a3a; --primary: #e2231a; --on-primary: #ffffff; --primary-text: #e2231a; --accent: #3ddc97; --bad: #ff8a80; --display: "Barlow Condensed", "Arial Narrow", sans-serif; }
+:root { --bg: #0b0b0b; --panel: #161616; --text: #f4f6f8; --muted: #a6a6a6; --line: #3a3a3a; --primary: #e2231a; --on-primary: #ffffff; --primary-text: #ff5247; --accent: #3ddc97; --bad: #ff8a80; --display: "Barlow Condensed", "Arial Narrow", sans-serif; }
 [data-mode="light"] { --bad: #b3261e; }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
@@ -12,7 +12,7 @@ h1, h2, legend { font-family: var(--display); font-weight: 800; text-transform: 
 
 .top { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 14px clamp(16px, 4vw, 40px); border-bottom: 3px solid var(--primary); }
 .mark { font: italic 800 28px var(--display); text-transform: uppercase; color: var(--text); text-decoration: none; }
-.mark span { color: var(--primary-text); }
+.mark span { color: var(--primary); }
 /* the Spartans helmet before the SpartanReferee name (not before a company's own name, which takes its place once signed in) */
 .mark:not(#company)::before { content: ""; display: inline-block; width: 1.15em; height: 1.15em; margin-inline-end: .35em; vertical-align: -.22em; border-radius: 50%; background: url(icons/spartanreferee/icon-192.png) center / 118% no-repeat; }
 .topRight { display: flex; align-items: center; justify-content: flex-end; gap: 6px 14px; flex-wrap: wrap; min-width: 0; margin-left: auto; } /* wrapped under the name on a phone, it stays on the right */

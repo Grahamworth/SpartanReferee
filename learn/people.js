@@ -17,6 +17,10 @@ async function personView(id, own) {
     <form class="form2" id="editPerson" data-id="${esc(p.id)}">${['legal_name', 'preferred_name', 'email', 'country', 'region_id', 'locale', 'status'].map(input).join('')}
       ${editable.length ? '<div class="wide"><button class="primary" type="submit">Save</button></div>' : '<p class="note wide">You can\'t change this profile.</p>'}</form></section>
     ${await recordSection(p.id, own)}
+    ${own && !S.me.actingAs ? `<section class="card"><h2>Your data</h2><p class="note">Download everything the learning platform holds about you, as a file.</p><button class="small" type="button" data-export="${esc(p.id)}">Download my data</button></section>`
+      : !own && isAdmin() && !S.me.actingAs ? `<section class="card"><h2>Their data</h2><p class="note">Export everything held about this person, or erase them: their name, address and sign-in link go, and their learning records stay, anonymised. Erasing can't be undone.</p>
+        <div class="btnRow"><button class="small" type="button" data-export="${esc(p.id)}">Export their data</button></div>
+        ${p.status === 'erased' ? '<p class="muted">Erased.</p>' : `<form class="inlineForm" id="erasePerson" data-id="${esc(p.id)}"><label for="er-c">To erase, type ERASE</label><input id="er-c" name="confirm" autocomplete="off" maxlength="10"><button class="small" type="submit">Erase this person</button></form>`}</section>` : ''}
     <section class="card"><h2>Roles</h2><ul class="rowList">${grants.map((g) => `<li><span><b>${esc(roleText(g))}</b><small>since ${esc(when(g.grantedAt))}</small></span>${isAdmin() ? `<button class="small" type="button" data-remove-role="${esc(g.id)}">Remove</button>` : ''}</li>`).join('') || '<li class="muted">Learner only.</li>'}</ul>
     ${isAdmin() ? `<form class="form2" id="addRole" data-id="${esc(p.id)}"><div><label for="r-role">Give a role</label><select id="r-role" name="role">${Object.entries(ROLE).map(([k, n]) => `<option value="${k}">${n}</option>`).join('')}</select></div>
       <div><label for="r-prog">Programme (if any)</label><input id="r-prog" name="programmeId" placeholder="ocr-referee"></div>
@@ -63,6 +67,16 @@ export const views = {
 
 export function wire({ reloadMe }) {
   wireRecord();
+  for (const b of document.querySelectorAll('[data-export]')) b.onclick = () => act(async () => {
+    const data = await call(`people/${b.dataset.export}/export`);
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }));
+    a.download = `learning-data-${data.person?.public_id || 'person'}.json`; a.click(); URL.revokeObjectURL(a.href); toast('Downloaded');
+  }, b);
+  $('erasePerson')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (!confirm('Erase this person? Their name, address and sign-in link are removed for good.')) return;
+    act(async () => { const r = await call(`people/${e.target.dataset.id}/erase`, { method: 'POST', body: { confirm: e.target.confirm.value.trim() } }); toast(`${r.erased} erased`); alert(r.note); redraw(); }, e.submitter);
+  });
   $('peopleFilter')?.addEventListener('submit', (e) => { e.preventDefault(); location.hash = `#/people?${new URLSearchParams(formBody(e.target))}`; });
   $('addPerson')?.addEventListener('submit', (e) => {
     e.preventDefault();

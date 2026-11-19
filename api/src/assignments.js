@@ -59,6 +59,7 @@ function createAssignments({ store, now, reply, session, isAdmin, isAdminEmail, 
       booking: await bookingStatus(`e${id}`),
       // its burpee cameras are booked and run by its head referee (and admins); every referee watches them
       canBook: m.admin || (you && roleOf(you) === 'head') || false,
+      hasHead: rows.some((r) => roleOf(r) === 'head'),
     });
   }
 

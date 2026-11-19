@@ -29,7 +29,7 @@ export const isAdmin = () => has('global_admin');
 export const regionName = (id) => S.regions.find((r) => r.id === id)?.name || id || 'No region';
 export const roleText = (g) => `${ROLE[g.role] || g.role}${g.programmeId ? ` · ${g.programmeId}` : ''}${g.regionId ? ` · ${regionName(g.regionId)}` : ''}`;
 export const when = (t) => (t ? new Date(t).toLocaleString([], { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '');
-export const day = (t) => (t ? new Date(t).toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric' }) : '');
+export const day = (t) => (t ? new Date(t).toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric', ...(/^\d{4}-\d{2}-\d{2}(T00:00:00(\.000)?Z)?$/.test(String(t)) ? { timeZone: 'UTC' } : {}) }) : '');
 export const formBody = (form) => Object.fromEntries([...new FormData(form)].filter(([, v]) => v !== ''));
 /** a version's or a credential's state, as a coloured label */
 const STATE_LABEL = { draft: 'Draft', review: 'In review', published: 'Published', superseded: 'Superseded', archived: 'Archived', active: 'Active', due: 'Due for renewal', expired: 'Expired', suspended: 'Suspended', revoked: 'Revoked', completed: 'Completed', withdrawn: 'Withdrawn', pass: 'Passed', fail: 'Not passed', pending: 'Awaiting assessor', approved: 'Approved', open: 'Open', resolved: 'Resolved', preview: 'Preview translation', under_review: 'Under review' };

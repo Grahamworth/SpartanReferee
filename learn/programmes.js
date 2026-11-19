@@ -43,7 +43,7 @@ async function overview() {
       <p class="muted">${esc(p.publicId)} · ${esc(regionName(p.regionId))}${p.country ? ` · ${esc(p.country)}` : ''}</p>
       <ul class="chips">${S.me.grants.length ? S.me.grants.map((g) => `<li>${esc(roleText(g))}</li>`).join('') : '<li>Learner</li>'}</ul></section>
     ${await recordSection(p.id, true)}
-    <section class="card"><h2>Cameras: setup and use</h2><p>How to set up the phones at a penalty station, connect them and judge with them, and a 30-minute practice camera to try it.</p><p><a class="btnLink" href="#/cameras">Open the guide</a></p></section>`;
+    <section class="card"><h2>Cameras: setup and use</h2><p>How to set up the phones at a penalty station, connect them and judge with them, and the free camera to try the AI judge on your own phone.</p><p><a class="btnLink" href="#/cameras">Open the guide</a></p></section>`;
 }
 
 // ---------------------------------------------------------------- the catalogue
@@ -103,6 +103,7 @@ async function programmePage(id) {
     <section class="card"><h2>${e ? 'Your progress' : 'Take part'}</h2>
       ${e ? `<p>${badge(e.state)} Enrolled ${esc(day(e.enrolledAt))}${e.versionId !== v.id ? ' on another version' : ''}.</p>${d.progress ? `${bar(d.progress.done, d.progress.total)}<p class="note">${d.progress.done} of ${d.progress.total} lessons done.${d.nextLesson ? ` <a href="#/lesson/${esc(d.nextLesson)}">Continue</a>` : ''}</p>` : ''}`
     : d.can.enrol && v.state === 'published' ? `<p>Enrol to start the lessons, take the assessment and earn ${esc(v.qualification)}.</p><button class="primary" type="button" data-enrol="${esc(p.id)}">Enrol</button>` : '<p class="muted">Not open for enrolment.</p>'}
+      ${d.newer ? `<p class="reviewNote"><b>A newer edition</b> The ${esc(d.newer.edition)} edition is published. Your progress here stays on your record. <button class="small" type="button" data-enrol="${esc(p.id)}">Move to ${esc(d.newer.edition)}</button></p>` : ''}
       ${await runHooks(hooks.programme, { ...d, slot: 'progress' })}
     </section>
     <section class="card"><h2>Curriculum</h2>

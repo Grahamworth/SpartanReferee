@@ -44,9 +44,11 @@ test('an admin adds a referee, who is then in, and books and starts servers with
   assert.strictEqual(s.needsCard, false); assert.strictEqual(s.paysFirst, false); assert.strictEqual(s.bookingsOpen, true);
   // with no booking chosen it's their own training, which is booked from Learning (30 minutes, not extended), not here
   assert.strictEqual((await call('POST', 'servers/mine/start', h, { cameras: 2, hours: 2 })).status, 403);
-  const r = await call('POST', 'learn/practice-camera', h, { cameras: 2 });
+  // a practice server is for head referees and admins; a referee who isn't a head referee anywhere uses the free camera
+  assert.strictEqual((await call('POST', 'learn/practice-camera', h, { cameras: 2 })).status, 403);
+  const r = await call('POST', 'learn/practice-camera', boss, { cameras: 2 });
   assert.strictEqual(r.status, 200); assert.strictEqual(r.body.server.bookedHours, 0.5); assert.strictEqual(r.body.server.unit.kind, 'training');
-  assert.strictEqual((await call('POST', 'servers/mine/extend', h, { hours: 1 })).status, 409);
+  assert.strictEqual((await call('POST', 'servers/mine/extend', boss, { hours: 1 })).status, 409);
 });
 
 test('admins are in without being on the list of referees', async () => {

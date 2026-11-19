@@ -873,7 +873,6 @@
  "Get added": "Pyydä lisäämään sinut",
  "An admin adds the Microsoft address you sign in with.": "Ylläpitäjä lisää Microsoft-osoitteen, jolla kirjaudut.",
  "Book your cameras": "Varaa kamerat",
- "Choose how many cameras and how many hours, and see what the servers cost before you start.": "Valitse kameroiden ja tuntien määrä, ja näe ennen aloitusta, mitä palvelimet maksavat.",
  "Film on phones": "Kuvaa puhelimilla",
  "Android phones use the SpartanReferee Broadcaster app, and iPhones use Larix. Scan your camera's code to connect.": "Android-puhelimet käyttävät SpartanReferee Broadcaster -sovellusta ja iPhonet Larixia. Yhdistä skannaamalla kamerasi koodi.",
  "Judge and review": "Tuomaroi ja tarkista",
@@ -885,7 +884,6 @@
  "The video review with no server: camera 1 is this browser's camera, recorded here; the rest is pretend": "Videotarkistus ilman palvelinta: kamera 1 on tämän selaimen kamera, joka tallennetaan tänne; loput ovat leikkiä",
  "A test card: these details can't be changed": "Testikortti: näitä tietoja ei voi muuttaa",
  "Your cameras are ready for this time, then the recordings are saved and everything shuts down. You can extend, or stop early and pay only for the time used. Starting takes about 5 minutes, and counts as time used. Recordings are kept for <0>{n}</0> days.": "Kamerasi ovat valmiina tämän ajan, minkä jälkeen nauhoitukset tallennetaan ja kaikki sammuu. Voit jatkaa aikaa tai lopettaa aikaisemmin ja maksaa vain käytetystä ajasta. Käynnistys kestää noin 5 minuuttia ja lasketaan käytetyksi ajaksi. Nauhoitukset säilytetään <0>{n}</0> päivää.",
- "Book up to <0>{n}</0> days ahead. We start your servers <1>{n}</1> minutes early at no cost, so the cameras are ready at the start time. At the end the recordings are saved and everything shuts down. You can extend, or cancel before it starts and pay nothing. Recordings are kept for <2>{n}</2> days.": "Varaa enintään <0>{n}</0> päivää etukäteen. Käynnistämme palvelimesi <1>{n}</1> minuuttia etuajassa veloituksetta, joten kamerat ovat valmiina alkamisaikaan. Lopuksi nauhoitukset tallennetaan ja kaikki sammuu. Voit jatkaa aikaa tai peruuttaa ennen alkua maksamatta mitään. Nauhoitukset säilytetään <2>{n}</2> päivää.",
  "Just trying it out? The <0>free camera</0> uses this computer's own camera and runs the AI judge in your browser, live or on a minute of video. No server, no cost.": "Haluatko vain kokeilla? <0>Ilmainen kamera</0> käyttää tämän tietokoneen omaa kameraa ja ajaa AI-tuomaria selaimessasi, livenä tai minuutin videolla. Ei palvelinta, ei kuluja.",
  "This is a pretend payment page, so you can try booking end to end. Nothing is charged, and no card details are asked for or kept. It's held for <0>{n}</0> minutes.": "Tämä on leikkimaksusivu, jotta voit kokeilla varausta alusta loppuun. Mitään ei veloiteta, eikä korttitietoja kysytä tai säilytetä. Varaus pidetään voimassa <0>{n}</0> minuuttia.",
  "Book your cameras: SpartanReferee": "Varaa kamerat: SpartanReferee",
@@ -1162,5 +1160,11 @@
  "The head referee books them. Once they're on, you can watch them live and review the results.": "Päätuomari varaa ne. Kun ne ovat käynnissä, voit katsoa niitä suorana ja tarkistaa tulokset.",
  "Book the burpee cameras": "Varaa burpeekamerat",
  "See the booking": "Näytä varaus",
- "The event's head referee books and runs its burpee cameras. Once they're on, every referee can watch them live, see the cameras and review the results here.": "Tapahtuman päätuomari varaa ja hallinnoi sen burpeekameroita. Kun ne ovat käynnissä, jokainen tuomari voi katsoa niitä täällä suorana, nähdä kamerat ja tarkistaa tulokset."
+ "The event's head referee books and runs its burpee cameras. Once they're on, every referee can watch them live, see the cameras and review the results here.": "Tapahtuman päätuomari varaa ja hallinnoi sen burpeekameroita. Kun ne ovat käynnissä, jokainen tuomari voi katsoa niitä täällä suorana, nähdä kamerat ja tarkistaa tulokset.",
+ "The head referee books the cameras": "Päätuomari varaa kamerat",
+ "For each event, its head referee books the burpee camera station for the hours they need. Every referee can watch it live and review the results.": "Jokaiseen tapahtumaan päätuomari varaa burpee-kamera-aseman tarvittaviksi tunneiksi. Jokainen tuomari voi seurata sitä suorana ja tarkastella tuloksia.",
+ "No head referee yet: an admin assigns one, who books them. Once they're on, you can watch them live and review the results.": "Päätuomaria ei vielä ole: ylläpitäjä nimeää sellaisen, joka varaa ne. Kun ne ovat päällä, voit seurata niitä suorana ja tarkastella tuloksia.",
+ "Book up to <0>{n}</0> days ahead. The servers start <1>{n}</1> minutes early, so the cameras are ready at the start time. At the end the recordings are saved and everything shuts down. You can extend, or cancel before it starts. Recordings are kept for <2>{n}</2> days.": "Varaa enintään <0>{n}</0> päivää etukäteen. Palvelimet käynnistyvät <1>{n}</1> minuuttia aikaisemmin, jotta kamerat ovat valmiina aloitusaikana. Lopuksi tallenteet tallennetaan ja kaikki sammutetaan. Voit jatkaa aikaa tai perua ennen alkua. Tallenteita säilytetään <2>{n}</2> päivää.",
+ "Times are local time in {city}.": "Ajat ovat paikallista aikaa: {city}.",
+ "Times are the event's local time.": "Ajat ovat tapahtuman paikallista aikaa."
 }

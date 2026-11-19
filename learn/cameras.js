@@ -45,7 +45,9 @@ const CAMERA_GUIDE = `
     <li><b>The server didn't start:</b> the console says why. Sometimes Azure has no servers free for a few minutes: try again.</li>
     <li><b>The venue's internet fails:</b> nothing reaches the server until it's back. Only Larix keeps its own copy on the phone.</li></ul></section>
   <section class="card guide" id="g-practice"><h2>7. Practise</h2>
-    <p>Try it all before an event with a practice camera: 30 minutes on a real server, at any time, just for you. Point a phone at yourself doing a few burpees and see them judged. It can't be extended: book another when it ends.</p>
+    <p><b>The free camera</b>: the AI judge runs right here in your browser, on this phone's or computer's own camera, live or on a minute of video. No server and no cost, at any time. Prop the phone up, do a few burpees, and see each one judged.</p>
+    <p><a class="practiceBtn" href="../review-free/">Open the free camera</a></p>
+    <h3>Rehearsing the real station (head referees)</h3>
     <div id="practice"><p class="muted">Checking for a practice camera…</p></div></section>`;
 
 export const views = { async cameras() { return CAMERA_GUIDE; } };
@@ -55,6 +57,8 @@ async function drawPractice() {
   const box = $('practice'); if (!box) return;
   if (S.me.actingAs) { box.innerHTML = '<p class="note">Practice cameras are booked as yourself: switch View as back to yourself.</p>'; return; }
   let r; try { r = await call('practice-camera'); } catch (e) { box.innerHTML = `<p class="error">${esc(e.message)}</p>`; return; }
+  // a practice server is for head referees and admins (it uses one of the servers events need); everyone else has the free camera
+  if (!r.canPractise && r.server?.wanted !== 'on') { box.innerHTML = '<p class="note">Head referees can also book a practice server for 30 minutes, to rehearse the whole station: phones scanning their codes, the console and the review. It uses one of the servers events need, so it\'s for head referees and admins.</p>'; return; }
   const s = r.server || {}, open = `../console.html?unit=${encodeURIComponent(r.unit)}`, clock = (t) => new Date(t).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   if (s.wanted === 'on') {
     box.innerHTML = `<p class="practiceState"><b>${s.state === 'on' ? `Your practice camera is on until ${esc(clock(s.until))}.` : 'Your practice camera is starting: about 5 minutes.'}</b></p>
@@ -63,7 +67,7 @@ async function drawPractice() {
   }
   box.innerHTML = `<form id="practiceForm" class="practiceForm"><label for="pc-cams">Cameras</label>
     <select id="pc-cams" name="cameras"><option value="1">1 camera</option><option value="2">2 cameras</option></select>
-    <button class="practiceBtn" type="submit">Start a 30-minute practice camera</button></form><p class="note">It starts now and takes about 5 minutes to be ready.</p>`;
+    <button class="practiceBtn" type="submit">Start a 30-minute practice server</button></form><p class="note">A real server, as at an event: it starts now, takes about 5 minutes to be ready, and can't be extended.</p>`;
   $('practiceForm').addEventListener('submit', async (e) => {
     e.preventDefault(); const btn = e.target.querySelector('button'); btn.disabled = true;
     try { await call('practice-camera', { method: 'POST', body: { cameras: Number($('pc-cams').value) } }); toast('Practice camera starting'); drawPractice(); }

@@ -890,7 +890,6 @@
  "Get added": "Nechte se přidat",
  "An admin adds the Microsoft address you sign in with.": "Administrátor přidá adresu Microsoft, kterou se přihlašujete.",
  "Book your cameras": "Zarezervujte kamery",
- "Choose how many cameras and how many hours, and see what the servers cost before you start.": "Zvolte, kolik kamer a kolik hodin, a před začátkem uvidíte, kolik servery stojí.",
  "Film on phones": "Natáčejte na telefony",
  "Android phones use the SpartanReferee Broadcaster app, and iPhones use Larix. Scan your camera's code to connect.": "Telefony s Androidem používají aplikaci SpartanReferee Broadcaster, iPhony Larix. Pro připojení naskenujte kód své kamery.",
  "Judge and review": "Hodnoťte a kontrolujte",
@@ -902,7 +901,6 @@
  "The video review with no server: camera 1 is this browser's camera, recorded here; the rest is pretend": "Kontrola videa bez serveru: kamera 1 je kamera tohoto prohlížeče a nahrává se tady; zbytek je jen naoko",
  "A test card: these details can't be changed": "Testovací karta: tyto údaje nelze změnit",
  "Your cameras are ready for this time, then the recordings are saved and everything shuts down. You can extend, or stop early and pay only for the time used. Starting takes about 5 minutes, and counts as time used. Recordings are kept for <0>{n}</0> days.": "Vaše kamery jsou připravené na tuto dobu, pak se záznamy uloží a vše se vypne. Můžete prodloužit, nebo skončit dřív a zaplatit jen využitý čas. Spuštění trvá asi 5 minut a počítá se do využitého času. Záznamy se uchovávají <0>{n}</0> dní.",
- "Book up to <0>{n}</0> days ahead. We start your servers <1>{n}</1> minutes early at no cost, so the cameras are ready at the start time. At the end the recordings are saved and everything shuts down. You can extend, or cancel before it starts and pay nothing. Recordings are kept for <2>{n}</2> days.": "Rezervovat můžete až <0>{n}</0> dní předem. Vaše servery spouštíme <1>{n}</1> minut předem zdarma, aby byly kamery v čas začátku připravené. Na konci se záznamy uloží a vše se vypne. Můžete prodloužit, nebo zrušit před začátkem a nezaplatit nic. Záznamy se uchovávají <2>{n}</2> dní.",
  "Just trying it out? The <0>free camera</0> uses this computer's own camera and runs the AI judge in your browser, live or on a minute of video. No server, no cost.": "Jen to zkoušíte? <0>Bezplatná kamera</0> používá vlastní kameru tohoto počítače a spouští AI rozhodčího ve vašem prohlížeči, živě nebo na minutě videa. Bez serveru, zdarma.",
  "This is a pretend payment page, so you can try booking end to end. Nothing is charged, and no card details are asked for or kept. It's held for <0>{n}</0> minutes.": "Toto je jen naoko platební stránka, abyste si mohli vyzkoušet rezervaci od začátku do konce. Nic se neúčtuje a žádné údaje karty se nevyžadují ani neukládají. Rezervace se drží <0>{n}</0> minut.",
  "Book your cameras: SpartanReferee": "Zarezervujte kamery: SpartanReferee",
@@ -1198,5 +1196,11 @@
  "The head referee books them. Once they're on, you can watch them live and review the results.": "Rezervuje je hlavní rozhodčí. Jakmile budou zapnuté, můžete je sledovat živě a kontrolovat výsledky.",
  "Book the burpee cameras": "Rezervovat burpee kamery",
  "See the booking": "Zobrazit rezervaci",
- "The event's head referee books and runs its burpee cameras. Once they're on, every referee can watch them live, see the cameras and review the results here.": "Hlavní rozhodčí závodu rezervuje a spravuje jeho burpee kamery. Jakmile budou zapnuté, může je zde každý rozhodčí sledovat živě, prohlížet kamery a kontrolovat výsledky."
+ "The event's head referee books and runs its burpee cameras. Once they're on, every referee can watch them live, see the cameras and review the results here.": "Hlavní rozhodčí závodu rezervuje a spravuje jeho burpee kamery. Jakmile budou zapnuté, může je zde každý rozhodčí sledovat živě, prohlížet kamery a kontrolovat výsledky.",
+ "The head referee books the cameras": "Hlavní rozhodčí rezervuje kamery",
+ "For each event, its head referee books the burpee camera station for the hours they need. Every referee can watch it live and review the results.": "Pro každou akci rezervuje hlavní rozhodčí stanoviště kamer pro angličáky na potřebné hodiny. Každý rozhodčí ho může sledovat živě a procházet výsledky.",
+ "No head referee yet: an admin assigns one, who books them. Once they're on, you can watch them live and review the results.": "Zatím žádný hlavní rozhodčí: správce nějakého určí a ten je rezervuje. Jakmile poběží, můžete je sledovat živě a procházet výsledky.",
+ "Book up to <0>{n}</0> days ahead. The servers start <1>{n}</1> minutes early, so the cameras are ready at the start time. At the end the recordings are saved and everything shuts down. You can extend, or cancel before it starts. Recordings are kept for <2>{n}</2> days.": "Rezervujte až <0>{n}</0> dní předem. Servery se spouštějí o <1>{n}</1> minut dříve, aby byly kamery připravené v čase začátku. Na konci se záznamy uloží a vše se vypne. Můžete prodloužit nebo zrušit před začátkem. Záznamy se uchovávají <2>{n}</2> dní.",
+ "Times are local time in {city}.": "Časy jsou v místním čase: {city}.",
+ "Times are the event's local time.": "Časy jsou v místním čase akce."
 }

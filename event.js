@@ -32,7 +32,7 @@ function draw(p) {
   $('camLight').dataset.state = b ? b.state : 'off';
   $('camState').textContent = b ? STATE[b.state] : e.over ? 'This event is over' : 'Not booked yet';
   // whole sentences, so each translates
-  $('camMore').textContent = !b ? (e.over ? '' : p.canBook ? 'You book them as the head referee: they run from 07:00 to 18:00 local time on each day you choose.' : 'The head referee books them. Once they\'re on, you can watch them live and review the results.')
+  $('camMore').textContent = !b ? (e.over ? '' : p.canBook ? 'You book them as the head referee: they run from 07:00 to 18:00 local time on each day you choose.' : p.hasHead ? 'The head referee books them. Once they\'re on, you can watch them live and review the results.' : 'No head referee yet: an admin assigns one, who books them. Once they\'re on, you can watch them live and review the results.')
     : b.state === 'booked' ? `${b.cameras} cameras, ${when(b.from)} to ${clock(b.until)}.`
       : b.state === 'stopping' ? 'Saving the recordings, then shutting down.'
         : `${b.cameras} cameras, until ${clock(b.until)}.`;

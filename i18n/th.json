@@ -864,7 +864,6 @@
  "Get added": "ขอให้เพิ่มคุณ",
  "An admin adds the Microsoft address you sign in with.": "ผู้ดูแลระบบจะเพิ่มที่อยู่ Microsoft ที่คุณใช้ลงชื่อเข้าใช้",
  "Book your cameras": "จองกล้อง",
- "Choose how many cameras and how many hours, and see what the servers cost before you start.": "เลือกจำนวนกล้องและจำนวนชั่วโมง แล้วดูค่าใช้จ่ายของเซิร์ฟเวอร์ก่อนเริ่ม",
  "Film on phones": "ถ่ายด้วยโทรศัพท์",
  "Android phones use the SpartanReferee Broadcaster app, and iPhones use Larix. Scan your camera's code to connect.": "โทรศัพท์ Android ใช้แอป SpartanReferee Broadcaster ส่วน iPhone ใช้ Larix สแกนโค้ดกล้องเพื่อเชื่อมต่อ",
  "Judge and review": "ตัดสินและรีวิว",
@@ -876,7 +875,6 @@
  "The video review with no server: camera 1 is this browser's camera, recorded here; the rest is pretend": "รีวิววิดีโอแบบไม่มีเซิร์ฟเวอร์: กล้อง 1 คือกล้องของเบราว์เซอร์นี้ บันทึกที่นี่ ส่วนที่เหลือเป็นข้อมูลจำลอง",
  "A test card: these details can't be changed": "บัตรทดสอบ: เปลี่ยนข้อมูลเหล่านี้ไม่ได้",
  "Your cameras are ready for this time, then the recordings are saved and everything shuts down. You can extend, or stop early and pay only for the time used. Starting takes about 5 minutes, and counts as time used. Recordings are kept for <0>{n}</0> days.": "กล้องของคุณพร้อมสำหรับช่วงเวลานี้ จากนั้นวิดีโอจะถูกบันทึกและทุกอย่างจะปิด คุณขยายเวลาได้ หรือหยุดก่อนและจ่ายเฉพาะเวลาที่ใช้ การเริ่มใช้เวลาประมาณ 5 นาที และนับเป็นเวลาที่ใช้ วิดีโอจะเก็บไว้ <0>{n}</0> วัน",
- "Book up to <0>{n}</0> days ahead. We start your servers <1>{n}</1> minutes early at no cost, so the cameras are ready at the start time. At the end the recordings are saved and everything shuts down. You can extend, or cancel before it starts and pay nothing. Recordings are kept for <2>{n}</2> days.": "จองล่วงหน้าได้ถึง <0>{n}</0> วัน เราเปิดเซิร์ฟเวอร์ของคุณก่อนเวลา <1>{n}</1> นาทีโดยไม่มีค่าใช้จ่าย กล้องจึงพร้อมตอนเริ่ม เมื่อจบ วิดีโอจะถูกบันทึกและทุกอย่างจะปิด คุณขยายเวลาได้ หรือยกเลิกก่อนเริ่มโดยไม่ต้องจ่าย วิดีโอจะเก็บไว้ <2>{n}</2> วัน",
  "Just trying it out? The <0>free camera</0> uses this computer's own camera and runs the AI judge in your browser, live or on a minute of video. No server, no cost.": "แค่อยากลองใช้? <0>กล้องฟรี</0> ใช้กล้องของคอมพิวเตอร์เครื่องนี้และใช้กรรมการ AI ในเบราว์เซอร์ของคุณ แบบสดหรือกับวิดีโอหนึ่งนาที ไม่ต้องใช้เซิร์ฟเวอร์ ไม่มีค่าใช้จ่าย",
  "This is a pretend payment page, so you can try booking end to end. Nothing is charged, and no card details are asked for or kept. It's held for <0>{n}</0> minutes.": "นี่คือหน้าชำระเงินจำลอง เพื่อให้คุณลองจองได้ครบทุกขั้นตอน ไม่มีการเรียกเก็บเงิน ไม่มีการขอหรือเก็บข้อมูลบัตร การจองนี้จะถูกกันไว้ <0>{n}</0> นาที",
  "Book your cameras: SpartanReferee": "จองกล้อง: SpartanReferee",
@@ -1144,5 +1142,11 @@
  "The head referee books them. Once they're on, you can watch them live and review the results.": "หัวหน้ากรรมการเป็นผู้จองกล้อง เมื่อกล้องเปิดใช้งานแล้ว คุณสามารถดูสดและตรวจสอบผลลัพธ์ได้",
  "Book the burpee cameras": "จองกล้อง burpees",
  "See the booking": "ดูการจอง",
- "The event's head referee books and runs its burpee cameras. Once they're on, every referee can watch them live, see the cameras and review the results here.": "หัวหน้ากรรมการของงานแข่งเป็นผู้จองและดูแลกล้อง burpees เมื่อกล้องเปิดใช้งานแล้ว กรรมการทุกคนสามารถดูสด ดูกล้อง และตรวจสอบผลลัพธ์ได้ที่นี่"
+ "The event's head referee books and runs its burpee cameras. Once they're on, every referee can watch them live, see the cameras and review the results here.": "หัวหน้ากรรมการของงานแข่งเป็นผู้จองและดูแลกล้อง burpees เมื่อกล้องเปิดใช้งานแล้ว กรรมการทุกคนสามารถดูสด ดูกล้อง และตรวจสอบผลลัพธ์ได้ที่นี่",
+ "The head referee books the cameras": "หัวหน้ากรรมการเป็นผู้จองกล้อง",
+ "For each event, its head referee books the burpee camera station for the hours they need. Every referee can watch it live and review the results.": "สำหรับแต่ละงาน หัวหน้ากรรมการจะจองสถานีกล้องเบอร์พีตามชั่วโมงที่ต้องการ กรรมการทุกคนดูสดและตรวจผลได้",
+ "No head referee yet: an admin assigns one, who books them. Once they're on, you can watch them live and review the results.": "ยังไม่มีหัวหน้ากรรมการ: ผู้ดูแลระบบจะแต่งตั้งคนหนึ่งซึ่งจะเป็นผู้จอง เมื่อกล้องเปิดแล้ว คุณดูสดและตรวจผลได้",
+ "Book up to <0>{n}</0> days ahead. The servers start <1>{n}</1> minutes early, so the cameras are ready at the start time. At the end the recordings are saved and everything shuts down. You can extend, or cancel before it starts. Recordings are kept for <2>{n}</2> days.": "จองล่วงหน้าได้สูงสุด <0>{n}</0> วัน เซิร์ฟเวอร์จะเริ่มก่อน <1>{n}</1> นาที เพื่อให้กล้องพร้อมตอนเวลาเริ่ม เมื่อจบ การบันทึกจะถูกเก็บไว้และทุกอย่างจะปิดลง คุณขยายเวลา หรือยกเลิกก่อนเริ่มได้ การบันทึกเก็บไว้ <2>{n}</2> วัน",
+ "Times are local time in {city}.": "เวลาเป็นเวลาท้องถิ่นของ {city}",
+ "Times are the event's local time.": "เวลาเป็นเวลาท้องถิ่นของงาน"
 }

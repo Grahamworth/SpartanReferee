@@ -882,7 +882,6 @@
  "Get added": "Neka vas dodaju",
  "An admin adds the Microsoft address you sign in with.": "Administrator dodaje Microsoft adresu s kojom se prijavljujete.",
  "Book your cameras": "Rezervirajte kamere",
- "Choose how many cameras and how many hours, and see what the servers cost before you start.": "Odaberite koliko kamera i koliko sati te prije početka pogledajte koliko koštaju poslužitelji.",
  "Film on phones": "Snimajte mobitelima",
  "Android phones use the SpartanReferee Broadcaster app, and iPhones use Larix. Scan your camera's code to connect.": "Android mobiteli koriste aplikaciju SpartanReferee Broadcaster, a iPhonei Larix. Za spajanje skenirajte kod svoje kamere.",
  "Judge and review": "Sudite i pregledajte",
@@ -894,7 +893,6 @@
  "The video review with no server: camera 1 is this browser's camera, recorded here; the rest is pretend": "Pregled videa bez poslužitelja: kamera 1 je kamera ovog preglednika i snima se ovdje; ostalo je simulirano",
  "A test card: these details can't be changed": "Testna kartica: ti se podaci ne mogu mijenjati",
  "Your cameras are ready for this time, then the recordings are saved and everything shuts down. You can extend, or stop early and pay only for the time used. Starting takes about 5 minutes, and counts as time used. Recordings are kept for <0>{n}</0> days.": "Vaše su kamere spremne za ovo vrijeme, a zatim se snimke spremaju i sve se gasi. Možete produljiti ili prekinuti ranije i platiti samo iskorišteno vrijeme. Pokretanje traje oko 5 minuta i računa se kao iskorišteno vrijeme. Snimke se čuvaju <0>{n}</0> dana.",
- "Book up to <0>{n}</0> days ahead. We start your servers <1>{n}</1> minutes early at no cost, so the cameras are ready at the start time. At the end the recordings are saved and everything shuts down. You can extend, or cancel before it starts and pay nothing. Recordings are kept for <2>{n}</2> days.": "Rezervirajte do <0>{n}</0> dana unaprijed. Vaše poslužitelje pokrećemo <1>{n}</1> minuta ranije bez naknade, kako bi kamere bile spremne u vrijeme početka. Na kraju se snimke spremaju i sve se gasi. Možete produljiti ili otkazati prije početka i ne platiti ništa. Snimke se čuvaju <2>{n}</2> dana.",
  "Just trying it out? The <0>free camera</0> uses this computer's own camera and runs the AI judge in your browser, live or on a minute of video. No server, no cost.": "Samo isprobavate? <0>Besplatna kamera</0> koristi kameru ovog računala i pokreće AI suca u vašem pregledniku, uživo ili na minuti videa. Bez poslužitelja, bez troškova.",
  "This is a pretend payment page, so you can try booking end to end. Nothing is charged, and no card details are asked for or kept. It's held for <0>{n}</0> minutes.": "Ovo je simulirana stranica za plaćanje, kako biste mogli isprobati rezervaciju od početka do kraja. Ništa se ne naplaćuje i ne traže se niti čuvaju podaci kartice. Rezervacija se drži <0>{n}</0> minuta.",
  "Book your cameras: SpartanReferee": "Rezervirajte kamere: SpartanReferee",
@@ -1182,5 +1180,11 @@
  "The head referee books them. Once they're on, you can watch them live and review the results.": "Glavni sudac ih rezervira. Kada se uključe, možete ih gledati uživo i pregledati rezultate.",
  "Book the burpee cameras": "Rezervirajte burpee kamere",
  "See the booking": "Pogledajte rezervaciju",
- "The event's head referee books and runs its burpee cameras. Once they're on, every referee can watch them live, see the cameras and review the results here.": "Glavni sudac natjecanja rezervira i vodi njegove burpee kamere. Kada se uključe, svaki ih sudac ovdje može gledati uživo, vidjeti kamere i pregledati rezultate."
+ "The event's head referee books and runs its burpee cameras. Once they're on, every referee can watch them live, see the cameras and review the results here.": "Glavni sudac natjecanja rezervira i vodi njegove burpee kamere. Kada se uključe, svaki ih sudac ovdje može gledati uživo, vidjeti kamere i pregledati rezultate.",
+ "The head referee books the cameras": "Glavni sudac rezervira kamere",
+ "For each event, its head referee books the burpee camera station for the hours they need. Every referee can watch it live and review the results.": "Za svaki događaj glavni sudac rezervira stanicu kamera za burpeeje za potrebne sate. Svaki sudac je može pratiti uživo i pregledati rezultate.",
+ "No head referee yet: an admin assigns one, who books them. Once they're on, you can watch them live and review the results.": "Još nema glavnog suca: administrator ga određuje, a on ih rezervira. Kad budu uključene, možete ih pratiti uživo i pregledati rezultate.",
+ "Book up to <0>{n}</0> days ahead. The servers start <1>{n}</1> minutes early, so the cameras are ready at the start time. At the end the recordings are saved and everything shuts down. You can extend, or cancel before it starts. Recordings are kept for <2>{n}</2> days.": "Rezervirajte do <0>{n}</0> dana unaprijed. Poslužitelji se pokreću <1>{n}</1> minuta ranije, kako bi kamere bile spremne u vrijeme početka. Na kraju se snimke spremaju i sve se isključuje. Možete produžiti ili otkazati prije početka. Snimke se čuvaju <2>{n}</2> dana.",
+ "Times are local time in {city}.": "Vremena su po lokalnom vremenu: {city}.",
+ "Times are the event's local time.": "Vremena su po lokalnom vremenu događaja."
 }

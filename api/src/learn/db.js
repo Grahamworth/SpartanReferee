@@ -12,22 +12,27 @@ const SCHEMA = /^[a-z_]{1,32}$/;
 /** Azure's "the database isn't available yet" (40613), as it says while a paused database wakes */
 const asleep = (e) => /\b40613\b|not currently available/i.test(`${e && e.number} ${e && e.message} ${e && e.originalError && e.originalError.message}`);
 
-function createDb({ server, database, user, password, schema = 'learn', sql = require('mssql'), wakeTries = 6, wakeEveryMs = 5000 }) {
+function createDb({ server, database, user, password, schema = 'learn', sql = require('mssql'), wakeTries = 8, wakeEveryMs = 3000, wakeBudgetMs = 38000, now = Date.now }) {
   if (!SCHEMA.test(schema)) throw new Error('bad schema name');
   const S = `[${schema}]`;
   let pool = null;
-  const open = () => new sql.ConnectionPool({
+  const open = (timeout) => new sql.ConnectionPool({
     server, database, user, password,
     options: { encrypt: true, trustServerCertificate: false },
     pool: { max: 5, min: 0, idleTimeoutMillis: 30000 },
-    connectionTimeout: 60000, requestTimeout: 30000,
+    connectionTimeout: timeout, requestTimeout: 30000,
   }).connect();
-  // The free database pauses after an hour unused. The first connection wakes it, and until it's up (usually under a minute)
-  // Azure refuses at once with error 40613: try again every few seconds, for as long as a web request can wait.
+  // The free database pauses after an hour unused. The first connection wakes it, and until it's up (usually under a minute) Azure
+  // either refuses at once (40613) or the connection just waits. Keep trying within a budget that fits a web request (45 s in all),
+  // then say it's waking, and the page asks again.
+  const stillWaking = (e) => asleep(e) || e?.code === 'ETIMEOUT' || /Failed to connect/i.test(String(e?.message));
   async function wake() {
+    const until = now() + wakeBudgetMs;
     for (let i = 0; ; i++) {
-      try { return await open(); } catch (e) {
-        if (!asleep(e) || i >= wakeTries) throw asleep(e) ? Object.assign(new Error('The learning platform is waking up'), { waking: true }) : e;
+      const left = until - now();
+      try { return await open(Math.max(5000, Math.min(20000, left))); } catch (e) {
+        if (!stillWaking(e)) throw e;
+        if (i >= wakeTries || until - now() < wakeEveryMs + 5000) throw Object.assign(new Error('The learning platform is waking up'), { waking: true });
         await new Promise((r) => setTimeout(r, wakeEveryMs));
       }
     }
@@ -36,13 +41,20 @@ function createDb({ server, database, user, password, schema = 'learn', sql = re
   const text = (q) => q.replace(/\{S\}/g, S);
   const bind = (req, params = {}) => { for (const [k, v] of Object.entries(params)) req.input(k, v === undefined ? null : v); return req; };
   /** rows of a query: query('SELECT * FROM {S}.person WHERE person_id = @id', { id }) */
+  // it can pause again later, while this process keeps its connections: then a query is refused, and it's woken again, once
+  async function again(run) {
+    try { return await run(await connect()); } catch (e) {
+      if (!asleep(e)) throw e;
+      const old = pool; pool = null; try { (await old)?.close(); } catch { /* gone anyway */ }
+      return run(await connect());
+    }
+  }
   async function query(q, params) {
-    const p = await connect();
-    return (await bind(p.request(), params).query(text(q))).recordset || [];
+    return again(async (p) => (await bind(p.request(), params).query(text(q))).recordset || []);
   }
   /** several statements that succeed or fail together: tx(async (q) => { await q(...); await q(...); }) */
   async function tx(fn) {
-    const p = await connect(), t = new sql.Transaction(p);
+    const p = await again(async (x) => { await x.request().query('SELECT 1'); return x; }), t = new sql.Transaction(p); // awake first
     await t.begin();
     try {
       const out = await fn(async (q, params) => (await bind(new sql.Request(t), params).query(text(q))).recordset || []);

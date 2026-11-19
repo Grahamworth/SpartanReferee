@@ -39,9 +39,17 @@ function createAssess(ctx) {
 
   // ------------------------------------------------------------------ hooks into the other areas
   /** has this enrolment passed an assessment of its version? */
-  ctx.assessmentPassed = async (q, e) => (await q("SELECT 1 AS x FROM {S}.attempt WHERE enrolment_id = @e AND result = 'pass'", { e: e.enrolment_id })).length > 0;
+  ctx.assessmentPassed = async (q, e) => {
+    // every assessment of the version, each passed at least once
+    const all = await q('SELECT assessment_id FROM {S}.assessment WHERE version_id = @v', { v: e.version_id });
+    const passed = new Set((await q("SELECT DISTINCT assessment_id FROM {S}.attempt WHERE enrolment_id = @e AND result = 'pass'", { e: e.enrolment_id })).map((r) => String(r.assessment_id).toLowerCase()));
+    return all.length > 0 && all.every((a) => passed.has(String(a.assessment_id).toLowerCase()));
+  };
   /** completing a programme earns its credential: a DEMONSTRATION one, expiring by the version's policy; it supersedes earlier ones */
   ctx.onComplete = async (q, e, w) => {
+    if ((await q('SELECT 1 AS x FROM {S}.credential WHERE enrolment_id = @e', { e: e.enrolment_id })).length) return; // issued for this enrolment already
+    const blocked = (await q("SELECT TOP 1 public_id, status FROM {S}.credential WHERE person_id = @p AND programme_id = @prog AND status IN ('suspended', 'revoked')", { p: e.person_id, prog: e.programme_id }))[0];
+    if (blocked) { await audit(q, w, 'credential.withheld', 'enrolment', e.enrolment_id, { reason: `${blocked.public_id} is ${blocked.status}` }, { programmeId: e.programme_id }); return; }
     const v = (await q('SELECT * FROM {S}.programme_version WHERE version_id = @v', { v: e.version_id }))[0];
     const attempt = (await q("SELECT TOP 1 attempt_id FROM {S}.attempt WHERE enrolment_id = @e AND result = 'pass' ORDER BY submitted_at DESC", { e: e.enrolment_id }))[0];
     const n = (await q('SELECT NEXT VALUE FOR {S}.credential_seq AS n'))[0].n, id = uuid();
@@ -111,7 +119,7 @@ function createAssess(ctx) {
     if (!right) return { error: 'Mark the right answer' };
     if (type !== 'multiple' && right !== 1) return { error: 'A single-choice question has exactly one right answer' };
     const clip = type === 'video' ? { anim: 'burpee', variant: ['good', 'noJump', 'shallow', 'noExtension'].includes(b?.clip?.variant) ? b.clip.variant : 'good' } : null;
-    const rules = (Array.isArray(b?.rules) ? b.rules : String(b?.rules || '').split(',')).map((r) => text(r, 60)).filter(Boolean).slice(0, 10).join(',');
+    const rules = [...new Set((Array.isArray(b?.rules) ? b.rules : String(b?.rules || '').split(',')).map((r) => text(r, 60)).filter(Boolean))].slice(0, 10).join(',');
     return { type, prompt, options, clip, rules, feedback: text(b?.feedback, 1000), needsAssessor: type === 'video' && !!b?.needsAssessor };
   }
   async function addQuestion(w, aid, b) {
@@ -152,6 +160,7 @@ function createAssess(ctx) {
       if (left) return { ok: false, why: `Complete the ${left === 1 ? 'lesson' : `${left} lessons`} first (in an approved language)` };
     }
     const failed = tries.filter((t) => t.result === 'fail');
+    if (a.max_attempts && !a.retake_wait_hours && failed.length >= a.max_attempts) return { ok: false, why: `All ${a.max_attempts} attempts used: ask the programme's owner` };
     if (a.max_attempts && failed.length && failed.length % a.max_attempts === 0) {
       const last = new Date(failed[failed.length - 1].submitted_at).getTime(), until = last + a.retake_wait_hours * 3600e3;
       if (until > Date.now()) return { ok: false, why: `${a.max_attempts} attempts used: you can try again after ${new Date(until).toISOString().slice(0, 16).replace('T', ' ')} UTC`, waitUntil: until };
@@ -232,13 +241,16 @@ function createAssess(ctx) {
       const chosen = (Array.isArray(raw.chosen) ? raw.chosen : []).map(String).filter((x) => options.includes(x)).slice(0, q.type === 'multiple' ? 8 : 1);
       return { questionId: q.question_id, lineageId: q.lineage_id, versionNo: q.version_no, rules: q.rules.split(',').filter(Boolean), type: q.type, chosen, reason: text(raw.reason, 1000), correct: mark(q, chosen), provisional: mark({ ...q, needs_assessor: 0 }, chosen) };
     });
-    let out, enrolment;
+    let out, enrolment, late = false;
     await db.tx(async (q) => {
-      await q('UPDATE {S}.attempt SET submitted_at = SYSUTCDATETIME() WHERE attempt_id = @id', { id: t.attempt_id });
+      // submitted once: a second submit (a double tap) finds it no longer open and changes nothing
+      const took = await q("UPDATE {S}.attempt SET submitted_at = SYSUTCDATETIME() OUTPUT inserted.attempt_id WHERE attempt_id = @id AND result = 'open' AND submitted_at IS NULL", { id: t.attempt_id });
+      if (!took.length) { late = true; return; }
       out = await score(q, t, answers);
       await audit(q, w, 'attempt.submit', 'attempt', t.attempt_id, { assessment: t.assessment_title, result: out.result, percent: out.percent, passMark: t.pass_mark }, { programmeId: t.programme_id });
       if (out.result === 'pass') enrolment = await ctx.checkCompletion(q, t.enrolment_id, w);
     });
+    if (late) return reply(409, { error: 'That attempt has been submitted: its answers can\'t change' });
     const r = await getAttempt(w, t.attempt_id);
     return reply(200, { ...r.body, enrolment: enrolment ? { state: enrolment.state } : null });
   }
@@ -263,16 +275,19 @@ function createAssess(ctx) {
       if (typeof d !== 'boolean') return reply(400, { error: 'Decide every answer that needs it' });
       a.correct = d; a.decided = true;
     }
-    let out, enrolment;
+    let out, enrolment, late = false;
     await db.tx(async (q) => {
+      // decided once: a second assessor at the same moment finds it no longer pending
+      const took = await q("UPDATE {S}.attempt SET assessor_id = @by, assessor_note = @note, decided_at = SYSUTCDATETIME() OUTPUT inserted.attempt_id WHERE attempt_id = @id AND result = 'pending' AND decided_at IS NULL", { by: w.person.person_id, note: text(b?.note, 1000) || null, id: t.attempt_id });
+      if (!took.length) { late = true; return; }
       out = await score(q, t, answers);
-      await q('UPDATE {S}.attempt SET assessor_id = @by, assessor_note = @note, decided_at = SYSUTCDATETIME() WHERE attempt_id = @id', { by: w.person.person_id, note: text(b?.note, 1000) || null, id: t.attempt_id });
       await audit(q, w, 'attempt.decide', 'attempt', t.attempt_id, { person: t.public_id, decisions, result: out.result, percent: out.percent }, { programmeId: t.programme_id, regionId: t.region_id });
       if (out.result === 'pass') {
         // the credential is issued as the learner's, by the assessor's decision
         enrolment = await ctx.checkCompletion(q, t.enrolment_id, w);
       }
     });
+    if (late) return reply(409, { error: 'That attempt has just been decided' });
     return reply(200, { result: out.result, percent: out.percent, enrolment: enrolment ? { state: enrolment.state } : null });
   }
 
@@ -291,6 +306,7 @@ function createAssess(ctx) {
     if (!['active', 'suspended', 'revoked'].includes(status)) return reply(400, { error: 'A credential can be made active, suspended or revoked' });
     if (!reason) return reply(400, { error: 'Say why: it\'s kept in the audit log' });
     if (c.status === 'revoked') return reply(409, { error: 'A revoked credential stays revoked' });
+    if (c.status === 'superseded') return reply(409, { error: 'A newer credential replaced this one: change that one instead' });
     await db.tx(async (q) => {
       await q('UPDATE {S}.credential SET status = @s, status_reason = @r, updated_at = SYSUTCDATETIME() WHERE credential_id = @id', { s: status, r: reason, id: c.credential_id });
       await audit(q, w, 'credential.status', 'credential', c.credential_id, { publicId: c.public_id, before: c.status, after: status, reason }, { programmeId: c.programme_id, regionId: c.region_id });

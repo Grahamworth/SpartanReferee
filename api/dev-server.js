@@ -17,6 +17,8 @@ function learnDatabase() {
     try {
       const out = require('node:child_process').execSync('az staticwebapp appsettings list --name spartanreferee -g rg-spartanreferee-uksouth --subscription 65c0ccca-69f7-43eb-9246-3bd6a6a06b24 -o json --query properties', { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], shell: true });
       Object.assign(env, JSON.parse(out));
+      // here (its own learn_dev schema, made by migrations) the admin login, as the site's learn_app login can't make tables
+      if (env.LEARN_SQL_ADMIN_USER) { env.LEARN_SQL_USER = env.LEARN_SQL_ADMIN_USER; env.LEARN_SQL_PASSWORD = env.LEARN_SQL_ADMIN_PASSWORD; }
       // narration's storage, for /learn's audio only (never the recordings): the storage account's connection, read the same way
       try { env.LEARN_STORAGE = require('node:child_process').execSync('az storage account show-connection-string -n spartanreferee -g rg-spartanreferee-uksouth --subscription 65c0ccca-69f7-43eb-9246-3bd6a6a06b24 -o tsv', { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], shell: true }).trim(); } catch { /* no narration here */ }
     } catch { console.log('The learning platform\'s settings couldn\'t be read with az: /learn is off'); }
@@ -64,4 +66,4 @@ http.createServer(async (req, res) => {
     res.writeHead(200, { 'Content-Type': types[path.extname(p)] || 'application/octet-stream', 'Cache-Control': 'no-store' });
     res.end(data);
   });
-}).listen(port, () => console.log(`http://localhost:${port}`));
+}).listen(port, '127.0.0.1', () => console.log(`http://localhost:${port}`));

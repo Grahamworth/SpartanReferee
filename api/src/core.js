@@ -151,7 +151,7 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
   // Spartan's events (events.js), synced from Spartan's race list; referees book cameras for one
   // bookingUnits false: one booking for the whole organisation, as before events (older tests)
   const eventList = createEvents({ store, now, reply, ...(eventFetcher ? { fetcher: eventFetcher } : {}) });
-  const { servers, adminPricing, adminCustomers, stopCompany, bookingStatus, trainingUnit } = createServers({ store, now, reply, session, isAdmin, membership, payments, freeBooking: true, events: bookingUnits ? eventList : null, maxRunning: maxRunningServers, hourPrice: serverHourPrice });
+  const { servers, adminPricing, adminCustomers, stopCompany, bookingStatus, trainingUnit, rehearses } = createServers({ store, now, reply, session, isAdmin, membership, payments, freeBooking: true, events: bookingUnits ? eventList : null, maxRunning: maxRunningServers, hourPrice: serverHourPrice });
   // which referees are assigned to which events, and each referee's home page
   const assignments = createAssignments({ store, now, reply, session, isAdmin, isAdminEmail, membership, events: eventList, bookingStatus, learnOn: !!learnDb });
   const { companies, adminCompanies, referees } = createCompanies({ store, now, reply, session, isAdmin, putBrand, membership, onBlocked: stopCompany });
@@ -193,7 +193,7 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
           const unit = trainingUnit(me.uid);
           r = method === 'GET' ? await servers('GET', 'mine', undefined, null, h, { unit })
             : method === 'POST' ? await servers('POST', 'mine', 'start', { cameras: Number(body?.cameras), unit }, h, {}, { fromLearn: true }) : reply(405, { error: 'Not allowed' });
-          if (r && r.status === 200) r.body = { ...r.body, unit };
+          if (r && r.status === 200) r.body = { ...r.body, unit, canPractise: await rehearses(me, h) };
         }
       }
       if (parts[0] === 'recordings' && parts.length <= 3) r = await recordings(method, parts[1], parts[2], body, h);

@@ -22,6 +22,9 @@ async function draw() {
   const [, view = '', rest = ''] = (location.hash.split('?')[0] || '#/').split('/');
   const name = views[view] ? view : 'home';
   for (const a of $('learnNav').querySelectorAll('a')) a.classList.toggle('on', a.dataset.view === name || (a.dataset.also || '').split(' ').includes(name));
+  // on a phone the tabs are a row to swipe along: bring the one you're on into view
+  const on = $('learnNav').querySelector('a.on'), nav = $('learnNav');
+  if (on && nav.scrollWidth > nav.clientWidth) nav.scrollLeft = Math.max(0, on.offsetLeft - (nav.clientWidth - on.offsetWidth) / 2);
   try {
     $('view').innerHTML = await views[name](decodeURIComponent(rest));
     for (const a of AREAS) a.wire?.({ reloadMe: loadMe });

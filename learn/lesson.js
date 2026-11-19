@@ -112,6 +112,7 @@ function editorPanel() {
         <label>Narration (also the captions)<textarea name="narration" rows="4">${esc(s.narration)}</textarea></label>
         <label>Rules (ids, comma separated)<input name="rules" value="${esc((s.rules || []).join(', '))}"></label>
         <label>Under review note<textarea name="review" rows="2">${esc(s.review || '')}</textarea></label>
+        <label>Note under the slide<textarea name="note" rows="2">${esc(s.note || '')}</textarea></label>
         <input type="hidden" name="figure" value="${esc(s.figure || '')}"></fieldset>`).join('')}
       <label>Sources<input name="sources" value="${esc(c.sources)}" maxlength="1000"></label>
       <div class="btnRow"><button class="small" type="button" id="addSlide">Add a slide</button><button class="primary small" type="submit">Save the draft</button></div></form></details>` : ''}
@@ -227,7 +228,7 @@ export function wire() {
     editor.addEventListener('submit', (e) => {
       e.preventDefault();
       const slides = [...editor.querySelectorAll('.slideEdit')].map((f) => ({ heading: f.querySelector('[name=heading]').value, points: f.querySelector('[name=points]').value.split('\n').map((x) => x.trim()).filter(Boolean),
-        narration: f.querySelector('[name=narration]').value, rules: f.querySelector('[name=rules]').value.split(',').map((x) => x.trim()).filter(Boolean), review: f.querySelector('[name=review]').value, figure: f.querySelector('[name=figure]').value })).filter((s) => s.heading);
+        narration: f.querySelector('[name=narration]').value, rules: f.querySelector('[name=rules]').value.split(',').map((x) => x.trim()).filter(Boolean), review: f.querySelector('[name=review]').value, note: f.querySelector('[name=note]')?.value || '', figure: f.querySelector('[name=figure]').value })).filter((s) => s.heading);
       act(async () => { await call(`content/${L.content.id}`, { method: 'PUT', body: { slides, sources: editor.querySelector('[name=sources]').value } }); toast('Draft saved'); redraw(); }, e.submitter);
     });
   }

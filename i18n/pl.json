@@ -900,7 +900,6 @@
  "Get added": "Poproś o dodanie",
  "An admin adds the Microsoft address you sign in with.": "Administrator dodaje adres Microsoft, którym się logujesz.",
  "Book your cameras": "Zarezerwuj kamery",
- "Choose how many cameras and how many hours, and see what the servers cost before you start.": "Wybierz, ile kamer i ile godzin, i zobacz, ile kosztują serwery, zanim zaczniesz.",
  "Film on phones": "Filmuj telefonami",
  "Android phones use the SpartanReferee Broadcaster app, and iPhones use Larix. Scan your camera's code to connect.": "Telefony z Androidem używają aplikacji SpartanReferee Broadcaster, a iPhone'y – Larix. Zeskanuj kod kamery, aby się połączyć.",
  "Judge and review": "Sędziuj i przeglądaj",
@@ -912,7 +911,6 @@
  "The video review with no server: camera 1 is this browser's camera, recorded here; the rest is pretend": "Przegląd wideo bez serwera: kamera 1 to kamera tej przeglądarki, nagrywana tutaj; reszta jest na niby",
  "A test card: these details can't be changed": "Karta testowa: tych danych nie można zmienić",
  "Your cameras are ready for this time, then the recordings are saved and everything shuts down. You can extend, or stop early and pay only for the time used. Starting takes about 5 minutes, and counts as time used. Recordings are kept for <0>{n}</0> days.": "Twoje kamery są gotowe na ten czas, potem nagrania są zapisywane i wszystko się wyłącza. Możesz przedłużyć albo zatrzymać wcześniej i zapłacić tylko za wykorzystany czas. Uruchomienie trwa około 5 minut i liczy się jako wykorzystany czas. Nagrania są przechowywane przez <0>{n}</0> dni.",
- "Book up to <0>{n}</0> days ahead. We start your servers <1>{n}</1> minutes early at no cost, so the cameras are ready at the start time. At the end the recordings are saved and everything shuts down. You can extend, or cancel before it starts and pay nothing. Recordings are kept for <2>{n}</2> days.": "Rezerwuj do <0>{n}</0> dni naprzód. Uruchamiamy twoje serwery <1>{n}</1> minut wcześniej bez opłat, więc kamery są gotowe o godzinie startu. Na koniec nagrania są zapisywane i wszystko się wyłącza. Możesz przedłużyć albo anulować przed startem i nic nie płacić. Nagrania są przechowywane przez <2>{n}</2> dni.",
  "Just trying it out? The <0>free camera</0> uses this computer's own camera and runs the AI judge in your browser, live or on a minute of video. No server, no cost.": "Tylko próbujesz? <0>Darmowa kamera</0> używa kamery tego komputera i uruchamia sędziego AI w twojej przeglądarce, na żywo lub na minucie filmu. Bez serwera, bez kosztów.",
  "This is a pretend payment page, so you can try booking end to end. Nothing is charged, and no card details are asked for or kept. It's held for <0>{n}</0> minutes.": "To strona płatności na niby, więc możesz wypróbować rezerwację od początku do końca. Nic nie jest pobierane, a dane karty nie są ani zbierane, ani przechowywane. Rezerwacja jest trzymana przez <0>{n}</0> minut.",
  "Book your cameras: SpartanReferee": "Zarezerwuj kamery: SpartanReferee",
@@ -1196,5 +1194,11 @@
  "The head referee books them. Once they're on, you can watch them live and review the results.": "Sędzia główny je rezerwuje. Gdy zostaną włączone, możesz oglądać je na żywo i przeglądać wyniki.",
  "Book the burpee cameras": "Zarezerwuj kamery burpees",
  "See the booking": "Zobacz rezerwację",
- "The event's head referee books and runs its burpee cameras. Once they're on, every referee can watch them live, see the cameras and review the results here.": "Sędzia główny zawodów rezerwuje i obsługuje kamery burpees. Gdy zostaną włączone, każdy sędzia może tutaj oglądać je na żywo, zobaczyć kamery i przeglądać wyniki."
+ "The event's head referee books and runs its burpee cameras. Once they're on, every referee can watch them live, see the cameras and review the results here.": "Sędzia główny zawodów rezerwuje i obsługuje kamery burpees. Gdy zostaną włączone, każdy sędzia może tutaj oglądać je na żywo, zobaczyć kamery i przeglądać wyniki.",
+ "The head referee books the cameras": "Sędzia główny rezerwuje kamery",
+ "For each event, its head referee books the burpee camera station for the hours they need. Every referee can watch it live and review the results.": "Na każde wydarzenie sędzia główny rezerwuje stanowisko kamer do burpees na potrzebne godziny. Każdy sędzia może je oglądać na żywo i przeglądać wyniki.",
+ "No head referee yet: an admin assigns one, who books them. Once they're on, you can watch them live and review the results.": "Nie ma jeszcze sędziego głównego: administrator go wyznacza, a on je rezerwuje. Gdy będą włączone, możesz je oglądać na żywo i przeglądać wyniki.",
+ "Book up to <0>{n}</0> days ahead. The servers start <1>{n}</1> minutes early, so the cameras are ready at the start time. At the end the recordings are saved and everything shuts down. You can extend, or cancel before it starts. Recordings are kept for <2>{n}</2> days.": "Rezerwuj do <0>{n}</0> dni wcześniej. Serwery startują <1>{n}</1> minut wcześniej, aby kamery były gotowe o godzinie rozpoczęcia. Na koniec nagrania są zapisywane i wszystko się wyłącza. Możesz przedłużyć lub anulować przed rozpoczęciem. Nagrania są przechowywane przez <2>{n}</2> dni.",
+ "Times are local time in {city}.": "Godziny podano w czasie lokalnym: {city}.",
+ "Times are the event's local time.": "Godziny podano w czasie lokalnym wydarzenia."
 }

@@ -102,6 +102,12 @@ function createServers({ store, now, reply, session, isAdmin = () => false, memb
     return { serverHours: Math.round(out.serverHours * 10) / 10, cameraHours: Math.round(out.cameraHours * 10) / 10, charge: pounds(out.charge), azure: pounds(out.azure), profit: pounds(out.charge - out.azure) };
   }
   const { companyFor, provenEmail } = membership || createMembership(store); // owner, or one of its people
+  /** may this person book a practice server? Admins, and anyone who is head referee at an event */
+  async function rehearses(me, h) {
+    if (isAdmin(h)) return true;
+    const email = me && provenEmail ? await provenEmail(me) : '';
+    return !!email && (await store.list('assignment')).some((a) => a.email === email && a.role === 'head');
+  }
   /** may this person book, extend and stop this unit? An event's: its head referee, or an admin. Your own training: you. Testing: admins */
   async function manages(me, h, u) {
     if (isAdmin(h)) return true;
@@ -449,7 +455,11 @@ function createServers({ store, now, reply, session, isAdmin = () => false, memb
     // Customers go through the payment page: checkout says what the booking comes to and holds it for a while, and paying for it makes it.
     // For now the payment is pretend: nothing is charged, and it's marked so on the booking.
     if (['checkout', 'pay', 'start', 'extend', 'stop'].includes(b) && c.kind === 'event' && !(await manages(me, h, c))) return reply(403, { error: 'The event\'s head referee books and runs its burpee cameras: you can watch them once they\'re on' });
+    // SpartanReferee has no payment step: the pay-first route would skip an event's hours, so it's closed (everyone books with start)
+    if (events && (b === 'checkout' || b === 'pay')) return reply(410, { error: 'There is no payment step: book with Start' });
     if ((b === 'checkout' || b === 'start') && c.kind === 'training' && !fromLearn) return reply(403, { error: 'Practice cameras are booked from the cameras guide in Learning' });
+    // a practice server is for head referees (and admins), who rehearse the real station; everyone else uses the free camera, with no server
+    if (b === 'start' && c.kind === 'training' && !(await rehearses(me, h))) return reply(403, { error: 'Practice servers are for head referees: try the free camera instead, which needs no server' });
     if (b === 'checkout') {
       const a = asked(body); if (a.error) return reply(400, { error: a.error });
       const no = await cantBook(c, h, a); if (no) return no;
@@ -509,7 +519,7 @@ function createServers({ store, now, reply, session, isAdmin = () => false, memb
     }
     return null;
   }
-  return { servers, adminPricing, adminCustomers, stopCompany, bookingStatus, trainingUnit: trainingId };
+  return { servers, adminPricing, adminCustomers, stopCompany, bookingStatus, trainingUnit: trainingId, rehearses };
 }
 
 module.exports = { createServers, signFor, serversFor };

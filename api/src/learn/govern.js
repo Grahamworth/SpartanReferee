@@ -33,11 +33,19 @@ function createGovern(ctx) {
     const keep = new Set();
     for (const w of want) {
       const k = `${w.rule}|${w.type}|${String(w.target).toLowerCase()}`; keep.add(k);
-      if (!have.has(k)) await q('INSERT INTO {S}.rule_link (rule_id, rule_version, target_type, target_id, lesson_id, version_id) VALUES (@r, @rv, @t, @id, @l, @v)', { r: w.rule, rv: current.get(w.rule) || latest.get(w.rule) || 0, t: w.type, id: w.target, l: w.lesson, v: w.version });
+      if (!have.has(k)) {
+        have.add(k);
+        try { await q('INSERT INTO {S}.rule_link (rule_id, rule_version, target_type, target_id, lesson_id, version_id) VALUES (@r, @rv, @t, @id, @l, @v)', { r: w.rule, rv: current.get(w.rule) || latest.get(w.rule) || 0, t: w.type, id: w.target, l: w.lesson, v: w.version }); }
+        catch (e) { if (e.number !== 2627) throw e; } // there already (another rebuild got there first)
+      }
     }
     for (const k of have) if (!keep.has(k)) { const [r, t, id] = k.split('|'); await q('DELETE FROM {S}.rule_link WHERE rule_id = @r AND target_type = @t AND target_id = @id', { r, t, id }); }
   }
-  ctx.syncLinks = syncLinks;
+  // one rebuild at a time, after anything that changes content or questions (index.js), and once when this process first shows rules
+  let syncing = Promise.resolve(), firstSync = null;
+  const syncLinksSafe = () => (syncing = syncing.then(() => syncLinks()).catch((e) => console.error(`rule links: ${e.message}`)));
+  ctx.syncLinks = syncLinksSafe;
+  const linksReady = () => (firstSync = firstSync || syncLinksSafe());
   /** everything that teaches or tests a rule, with where it sits */
   async function affectedBy(ruleId, q = db.query) {
     const content = await q(`SELECT k.rule_version, c.content_id, c.locale, c.version_no, c.state, l.lesson_id, l.title, v.version_id, v.edition, v.state AS vstate, v.programme_id
@@ -75,6 +83,7 @@ function createGovern(ctx) {
   // ------------------------------------------------------------------ rules
   async function listRules(w, query) {
     const pid = text(query.programme, 32) || 'ocr-referee';
+    await linksReady();
     const docs = await db.query('SELECT * FROM {S}.rule_document WHERE programme_id = @p ORDER BY doc_id', { p: pid });
     const rows = await db.query("SELECT r.*, (SELECT COUNT(*) FROM {S}.rule_link k WHERE k.rule_id = r.rule_id) AS links, (SELECT COUNT(*) FROM {S}.review_item i WHERE i.rule_id = r.rule_id AND i.state = 'open') AS open_reviews FROM {S}.rule_ref r WHERE r.programme_id = @p AND r.state IN ('approved', 'draft') ORDER BY r.rule_id, r.version_no", { p: pid });
     const byId = new Map();
@@ -88,7 +97,7 @@ function createGovern(ctx) {
     });
   }
   async function getRule(w, ruleId) {
-    await syncLinks();
+    await linksReady();
     const versions = await db.query('SELECT * FROM {S}.rule_ref WHERE rule_id = @r ORDER BY version_no DESC', { r: ruleId });
     if (!versions.length) return reply(404, { error: 'No such rule reference' });
     const doc = (await db.query('SELECT * FROM {S}.rule_document WHERE doc_id = @d', { d: versions[0].doc_id }))[0];
@@ -125,7 +134,7 @@ function createGovern(ctx) {
     if (!note) return reply(400, { error: 'Say what changed: it goes on the review item' });
     if (b?.effectiveDate && !/^\d{4}-\d{2}-\d{2}$/.test(b.effectiveDate)) return reply(400, { error: 'A date like 2027-01-01' });
     const key = uuid(), reviewId = uuid();
-    await syncLinks();
+    await syncLinksSafe();
     await db.tx(async (q) => {
       await q(`INSERT INTO {S}.rule_ref (rule_key, rule_id, version_no, programme_id, doc_id, section, title, excerpt, citation, effective_date, change_note, created_by)
                VALUES (@k, @r, @n, @p, @d, @s, @t, @e, @c, @eff, @note, @by)`,
@@ -159,6 +168,8 @@ function createGovern(ctx) {
     state: i.state, createdAt: i.created_at, resolvedAt: i.resolved_at, resolution: i.resolution || '' });
   async function listReviews(w, query) {
     const pid = text(query.programme, 32), state = ['open', 'resolved', 'dismissed'].includes(query.state) ? query.state : 'open';
+    const mayRead = (prog) => P.can(w.grants, 'content.draft', { programmeId: prog }) || P.can(w.grants, 'content.approve', { programmeId: prog });
+    if (pid ? !mayRead(pid) : !w.grants.some((g) => ['global_admin', 'programme_owner', 'content_editor'].includes(g.role))) return reply(403, { error: 'Review items are for the programme\'s editors and owners' });
     const rows = await db.query(`SELECT * FROM {S}.review_item WHERE state = @s${pid ? ' AND programme_id = @p' : ''} ORDER BY created_at DESC`, { s: state, p: pid });
     return reply(200, { reviews: rows.map(reviewView), can: { decide: rows.length ? P.can(w.grants, 'content.approve', { programmeId: rows[0].programme_id }) : P.can(w.grants, 'programme.create') } });
   }

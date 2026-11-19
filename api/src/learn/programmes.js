@@ -103,14 +103,16 @@ function createProgrammes(ctx) {
   async function getProgramme(w, id, query) {
     const p = await progById(id); if (!p) return reply(404, { error: 'No such programme' });
     const canEdit = editor(w, id);
+    const e = (await db.query("SELECT TOP 1 * FROM {S}.enrolment WHERE person_id = @p AND programme_id = @id AND state <> 'withdrawn' ORDER BY enrolled_at DESC", { p: w.person.person_id, id }))[0];
     const versions = (await db.query('SELECT * FROM {S}.programme_version WHERE programme_id = @id ORDER BY created_at', { id: p.programme_id }))
-      .filter((v) => canEdit || v.state === 'published');
+      .filter((v) => canEdit || v.state === 'published' || (e && v.version_id === e.version_id));
     if (!versions.length) return reply(404, { error: 'No such programme' });
     const asked = query.version && versions.find((v) => v.version_id.toLowerCase() === String(query.version).toLowerCase());
-    const e = (await db.query("SELECT TOP 1 * FROM {S}.enrolment WHERE person_id = @p AND programme_id = @id AND state <> 'withdrawn' ORDER BY enrolled_at DESC", { p: w.person.person_id, id }))[0];
     // what you're enrolled on, else the published one, else (editors) the newest
     const v = asked || (e && versions.find((x) => x.version_id === e.version_id)) || versions.filter((x) => x.state === 'published').pop() || versions[versions.length - 1];
     const extra = ctx.programmeExtras ? await ctx.programmeExtras(w, p, v, e) : {};
+    const newest = versions.filter((x) => x.state === 'published').pop();
+    extra.newer = e && newest && newest.version_id !== e.version_id && p.status === 'active' ? { id: newest.version_id, edition: newest.edition } : null;
     return reply(200, {
       programme: progView(p), versions: versions.map(versionView), version: versionView(v), modules: await curriculum(v.version_id),
       enrolment: e ? { id: e.enrolment_id, state: e.state, versionId: e.version_id, enrolledAt: e.enrolled_at, completedAt: e.completed_at } : null,
@@ -262,6 +264,10 @@ function createProgrammes(ctx) {
     if (had && had.state !== 'withdrawn') return reply(409, { error: 'Already enrolled on this version' });
     const id = had ? had.enrolment_id : uuid();
     await db.tx(async (q) => {
+      for (const old of await q("SELECT enrolment_id FROM {S}.enrolment WHERE person_id = @p AND programme_id = @prog AND version_id <> @v AND state = 'active'", { p: person.person_id, prog: p.programme_id, v: v.version_id })) {
+        await q("UPDATE {S}.enrolment SET state = 'withdrawn' WHERE enrolment_id = @id", { id: old.enrolment_id });
+        await audit(q, w, 'enrolment.withdraw', 'enrolment', old.enrolment_id, { person: person.public_id, programme: p.programme_id, reason: `moved to the ${v.edition} edition` }, { programmeId: p.programme_id, regionId: person.region_id });
+      }
       if (had) await q("UPDATE {S}.enrolment SET state = 'active', enrolled_by = @by, enrolled_at = SYSUTCDATETIME() WHERE enrolment_id = @id", { id, by: w.person.person_id });
       else await q('INSERT INTO {S}.enrolment (enrolment_id, person_id, programme_id, version_id, enrolled_by) VALUES (@id, @p, @prog, @v, @by)', { id, p: person.person_id, prog: p.programme_id, v: v.version_id, by: w.person.person_id });
       if (!(await q('SELECT 1 AS x FROM {S}.programme_role WHERE person_id = @p AND programme_id = @prog', { p: person.person_id, prog: p.programme_id })).length) {
@@ -275,6 +281,9 @@ function createProgrammes(ctx) {
     const e = isUuid(id) && (await db.query('SELECT * FROM {S}.enrolment WHERE enrolment_id = @id', { id }))[0]; if (!e) return reply(404, { error: 'No such enrolment' });
     const person = await personById(e.person_id);
     if (!P.can(w.grants, 'enrol', { programmeId: e.programme_id, regionId: person?.region_id || undefined, personId: e.person_id, selfId: w.person.person_id })) return reply(403, { error: 'You can\'t change that enrolment' });
+    // a completed enrolment is the record behind a credential: it stays (only its owner or an admin can close it, and that never re-issues)
+    if (e.state === 'completed' && !P.can(w.grants, 'credential.change', { programmeId: e.programme_id })) return reply(409, { error: 'A completed programme stays on your record' });
+    if (e.state === 'withdrawn') return reply(409, { error: 'Already withdrawn' });
     await db.tx(async (q) => {
       await q("UPDATE {S}.enrolment SET state = 'withdrawn' WHERE enrolment_id = @id", { id });
       await audit(q, w, 'enrolment.withdraw', 'enrolment', id, { person: person?.public_id, programme: e.programme_id }, { programmeId: e.programme_id, regionId: person?.region_id });

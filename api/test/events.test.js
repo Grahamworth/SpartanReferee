@@ -138,9 +138,15 @@ test('each event has its own booking, by its head referee: two events book at on
   assert.notStrictEqual((await call('POST', 'servers/mine/open', kim, { unit: 'e10664', n: 1 })).status, 403, 'opening the review is for everyone');
 });
 
-test('training: everyone, 30 minutes, started from Learning only, not extended, and each referee has their own', async () => {
-  const { call, referee, store } = setup();
-  const sam = await referee('sam'), pat = await referee('pat');
+test('training: head referees and admins, 30 minutes, started from Learning only, not extended, each their own; other referees use the free camera', async () => {
+  const { call, referee, head, store } = setup();
+  const sam = await referee('sam'), pat = await referee('pat'), kim = await referee('kim');
+  await call('GET', 'events', sam);
+  await head('sam', '10664'); await head('pat', '20002');
+  const plain = await call('POST', 'learn/practice-camera', kim, { cameras: 1 });
+  assert.strictEqual(plain.status, 403); assert.match(plain.body.error, /free camera/);
+  assert.strictEqual((await call('GET', 'learn/practice-camera', kim)).body.canPractise, false);
+  assert.strictEqual((await call('GET', 'learn/practice-camera', sam)).body.canPractise, true);
   const refused = await call('POST', 'servers/mine/start', sam, { cameras: 1 });
   assert.strictEqual(refused.status, 403); assert.match(refused.body.error, /cameras guide in Learning/);
   assert.ok(!(await call('GET', 'servers/units', sam)).body.units.some((u) => u.kind === 'training'), 'not offered on the console');

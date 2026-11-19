@@ -165,4 +165,6 @@ async function start() {
   microsoftButton($('msBtn'), 'customers.html', (e) => { $('signInError').textContent = e.message; show($('signInError'), true); });
   await devSignInButton($('devBtn'), () => enter(), (e) => { $('signInError').textContent = e.message || 'Sign-in didn\'t work: try again'; show($('signInError'), true); });
 }
+// which commit is live (written by scripts/deploy-site.sh)
+fetch('version.json', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).then((v) => { if (v) $('liveVersion').textContent = `Live: ${v.commit}, deployed ${v.deployedAt.replace('T', ' ')} UTC`; }).catch(() => {});
 start();

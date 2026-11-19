@@ -864,7 +864,6 @@
  "Get added": "Bliv tilføjet",
  "An admin adds the Microsoft address you sign in with.": "En administrator tilføjer den Microsoft-adresse, du logger ind med.",
  "Book your cameras": "Book dine kameraer",
- "Choose how many cameras and how many hours, and see what the servers cost before you start.": "Vælg hvor mange kameraer og hvor mange timer, og se hvad serverne koster, før du starter.",
  "Film on phones": "Film med telefoner",
  "Android phones use the SpartanReferee Broadcaster app, and iPhones use Larix. Scan your camera's code to connect.": "Android-telefoner bruger appen SpartanReferee Broadcaster, og iPhones bruger Larix. Scan dit kameras kode for at forbinde.",
  "Judge and review": "Døm og gennemgå",
@@ -876,7 +875,6 @@
  "The video review with no server: camera 1 is this browser's camera, recorded here; the rest is pretend": "Videogennemgangen uden server: kamera 1 er denne browsers kamera, optaget her; resten er for sjov",
  "A test card: these details can't be changed": "Et testkort: disse oplysninger kan ikke ændres",
  "Your cameras are ready for this time, then the recordings are saved and everything shuts down. You can extend, or stop early and pay only for the time used. Starting takes about 5 minutes, and counts as time used. Recordings are kept for <0>{n}</0> days.": "Dine kameraer er klar i dette tidsrum, derefter gemmes optagelserne, og alt lukker ned. Du kan forlænge, eller stoppe tidligt og kun betale for den brugte tid. Opstart tager cirka 5 minutter og tæller som brugt tid. Optagelser gemmes i <0>{n}</0> dage.",
- "Book up to <0>{n}</0> days ahead. We start your servers <1>{n}</1> minutes early at no cost, so the cameras are ready at the start time. At the end the recordings are saved and everything shuts down. You can extend, or cancel before it starts and pay nothing. Recordings are kept for <2>{n}</2> days.": "Book op til <0>{n}</0> dage frem. Vi starter dine servere <1>{n}</1> minutter før uden beregning, så kameraerne er klar ved starttidspunktet. Til sidst gemmes optagelserne, og alt lukker ned. Du kan forlænge, eller annullere før start og ikke betale noget. Optagelser gemmes i <2>{n}</2> dage.",
  "Just trying it out? The <0>free camera</0> uses this computer's own camera and runs the AI judge in your browser, live or on a minute of video. No server, no cost.": "Vil du bare prøve det? Det <0>gratis kamera</0> bruger computerens eget kamera og kører AI-dommeren i din browser, live eller på et minuts video. Ingen server, ingen udgift.",
  "This is a pretend payment page, so you can try booking end to end. Nothing is charged, and no card details are asked for or kept. It's held for <0>{n}</0> minutes.": "Dette er en øvelsesbetalingsside, så du kan prøve at booke hele vejen igennem. Intet trækkes, og der bliver hverken bedt om eller gemt kortoplysninger. Den holdes i <0>{n}</0> minutter.",
  "Book your cameras: SpartanReferee": "Book dine kameraer: SpartanReferee",
@@ -1150,5 +1148,11 @@
  "The head referee books them. Once they're on, you can watch them live and review the results.": "Hoveddommeren booker dem. Når de er tændt, kan du se dem live og gennemgå resultaterne.",
  "Book the burpee cameras": "Book burpeekameraerne",
  "See the booking": "Se bookingen",
- "The event's head referee books and runs its burpee cameras. Once they're on, every referee can watch them live, see the cameras and review the results here.": "Stævnets hoveddommer booker og styrer dets burpeekameraer. Når de er tændt, kan alle dommere se dem live her, se kameraerne og gennemgå resultaterne."
+ "The event's head referee books and runs its burpee cameras. Once they're on, every referee can watch them live, see the cameras and review the results here.": "Stævnets hoveddommer booker og styrer dets burpeekameraer. Når de er tændt, kan alle dommere se dem live her, se kameraerne og gennemgå resultaterne.",
+ "The head referee books the cameras": "Hoveddommeren booker kameraerne",
+ "For each event, its head referee books the burpee camera station for the hours they need. Every referee can watch it live and review the results.": "Til hvert event booker hoveddommeren burpee-kamerastationen i de timer, der skal bruges. Alle dommere kan følge den live og gennemgå resultaterne.",
+ "No head referee yet: an admin assigns one, who books them. Once they're on, you can watch them live and review the results.": "Ingen hoveddommer endnu: en administrator udpeger en, som booker dem. Når de kører, kan du følge dem live og gennemgå resultaterne.",
+ "Book up to <0>{n}</0> days ahead. The servers start <1>{n}</1> minutes early, so the cameras are ready at the start time. At the end the recordings are saved and everything shuts down. You can extend, or cancel before it starts. Recordings are kept for <2>{n}</2> days.": "Book op til <0>{n}</0> dage i forvejen. Serverne starter <1>{n}</1> minutter før, så kameraerne er klar til starttidspunktet. Til sidst gemmes optagelserne, og alt lukkes ned. Du kan forlænge eller aflyse, før det starter. Optagelser gemmes i <2>{n}</2> dage.",
+ "Times are local time in {city}.": "Tiderne er lokal tid i {city}.",
+ "Times are the event's local time.": "Tiderne er eventets lokale tid."
 }
