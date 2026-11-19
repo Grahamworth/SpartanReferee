@@ -2814,5 +2814,7 @@
  "Overall": "Yleiset",
  "No events assigned to you yet. An admin assigns referees to Spartan's events, and they'll show here.": "Sinulle ei ole vielä määritetty tapahtumia. Ylläpitäjä määrittää tuomarit Spartanin tapahtumiin, ja ne näkyvät täällä.",
  "All your events": "Kaikki tapahtumasi",
- "Your events": "Tapahtumasi"
+ "Your events": "Tapahtumasi",
+ "Read this slide aloud": "Lue tämä dia ääneen",
+ "Stop reading aloud": "Lopeta lukeminen"
 }

@@ -85,12 +85,14 @@ function go(i, keepPlaying = false) {
   if (was) speak(slide);
 }
 function drawControls() {
+  $('lpCc')?.setAttribute('aria-pressed', String(captions));
   const p = $('lpPlay'); if (!p) return;
-  const off = L.media.kind === 'text';
-  p.hidden = off;
-  p.textContent = playing ? 'Pause' : 'Play';
+  // the voice button by the slide's text: a speaker; while it reads, it's filled in with a stop square, and a tap stops it
+  const label = playing ? t('Stop reading aloud') : t('Read this slide aloud');
+  p.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true"><path class="spk" d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/>${playing ? '<rect class="stop" x="15.5" y="9" width="6" height="6" rx="1"/>' : '<path class="wave w1" d="M15.5 9.5a3.5 3.5 0 010 5"/><path class="wave w2" d="M18 7a7 7 0 010 10"/>'}</svg>`;
+  p.setAttribute('aria-label', label); p.title = label;
   p.setAttribute('aria-pressed', String(playing));
-  $('lpCc').setAttribute('aria-pressed', String(captions));
+  p.classList.toggle('on', playing);
 }
 function ruleChip(id) {
   const r = (L.rules || []).find((x) => x.id === id);
@@ -104,13 +106,14 @@ function reviewNote(text) {
 function drawSlide() {
   const c = L.content, s = c.slides[slide], n = c.slides.length;
   $('lpStage').innerHTML = `<div class="lpFig">${FIGURES[s.figure] || FIGURES.placeholder}</div>
-    <div class="lpText"><p class="lpCount"><span dir="ltr">${slide + 1} / ${n}</span></p><h2>${esc(s.heading)}</h2>
+    <div class="lpText"><p class="lpCount"><span dir="ltr">${slide + 1} / ${n}</span></p><div class="lpHeadRow"><h2>${esc(s.heading)}</h2>${L.media.kind !== 'text' && s.narration ? '<button type="button" id="lpPlay" class="lpVoice" aria-pressed="false"></button>' : ''}</div>
       <ul class="lpPoints">${s.points.map((p) => `<li>${esc(p)}</li>`).join('')}</ul>
       ${s.review ? reviewNote(s.review) : ''}
       ${s.note ? `<p class="note">${esc(s.note)}</p>` : ''}
       ${s.rules?.length ? `<p class="lpRules"><span>Rules</span>${s.rules.map(ruleChip).join('')}</p>` : ''}
       ${s.action ? '<div class="lpAction" id="lpAction"></div>' : ''}</div>`;
   if (s.action) drawAction($('lpAction'), s.action);
+  if ($('lpPlay')) $('lpPlay').onclick = () => { if (playing) { stopVoice(); drawControls(); } else speak(slide); };
   $('lpCaption').textContent = s.narration || '';
   $('lpCaption').hidden = !captions || !s.narration;
   $('lpDots').innerHTML = c.slides.map((_, i) => `<button type="button" class="dot${i === slide ? ' on' : ''}${i < slide ? ' seen' : ''}" data-slide="${i}" aria-label="Slide ${i + 1}"${i === slide ? ' aria-current="step"' : ''}></button>`).join('');
@@ -175,8 +178,7 @@ async function lessonView(rest) {
       <div class="lpDots" id="lpDots"></div>
       <div class="lpControls">
         <button type="button" id="lpPrev" class="lpBtn" aria-label="Previous slide">‹ Back</button>
-        <button type="button" id="lpPlay" class="lpBtn lpMain" aria-pressed="false">Play</button>
-        <button type="button" id="lpNext" class="lpBtn" aria-label="Next slide">Next ›</button>
+        <button type="button" id="lpNext" class="lpBtn lpMain" aria-label="Next slide">Next ›</button>
         <button type="button" id="lpEnd" class="lpBtn lpMain" hidden>${done ? 'Done' : 'Finish'}</button>
       </div>
       <div class="lpTools"><button type="button" class="link" id="lpCc" aria-pressed="true">Captions</button><button type="button" class="link" id="lpTx" aria-expanded="false">Transcript</button>
@@ -230,7 +232,6 @@ export function wire() {
     drawSlide();
     $('lpPrev').onclick = () => go(slide - 1);
     $('lpNext').onclick = () => go(slide + 1);
-    $('lpPlay').onclick = () => { if (playing) { stopVoice(); drawControls(); } else speak(slide); };
     $('lpEnd').onclick = () => { stopVoice(); drawControls(); $('lpFinish').hidden = false; $('lpFinish').scrollIntoView({ behavior: 'smooth', block: 'start' }); };
     $('lpCc').onclick = () => { captions = !captions; drawSlide(); };
     $('lpTx').onclick = () => { const t = $('lpTranscript'); t.hidden = !t.hidden; $('lpTx').setAttribute('aria-expanded', String(!t.hidden)); };

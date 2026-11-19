@@ -2807,5 +2807,7 @@
  "Overall": "Γενικά",
  "No events assigned to you yet. An admin assigns referees to Spartan's events, and they'll show here.": "Δεν σας έχουν ανατεθεί ακόμη διοργανώσεις. Ένας διαχειριστής αναθέτει διαιτητές στις διοργανώσεις της Spartan, και θα εμφανίζονται εδώ.",
  "All your events": "Όλες οι διοργανώσεις σας",
- "Your events": "Οι διοργανώσεις σας"
+ "Your events": "Οι διοργανώσεις σας",
+ "Read this slide aloud": "Ανάγνωση αυτής της διαφάνειας",
+ "Stop reading aloud": "Διακοπή ανάγνωσης"
 }

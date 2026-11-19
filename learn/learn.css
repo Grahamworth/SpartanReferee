@@ -149,7 +149,7 @@ details.edit > summary { display: flex; align-items: center; min-height: 44px; f
 .lpBtn:disabled { opacity: .4; cursor: default; }
 .lpBtn.lpMain { background: var(--primary); color: var(--on-primary); border-color: var(--primary); }
 .lpBtn[hidden] { display: none; }
-.lpControls:has(#lpPlay[hidden]) { grid-template-columns: 1fr 1fr; }
+.lpControls { grid-template-columns: 1fr 1fr; }
 .lpTools { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 16px; margin-top: 10px; }
 .lpTools .link { min-height: 44px; }
 .lpTools .link[aria-pressed="false"] { color: var(--muted); }
@@ -322,3 +322,14 @@ h3.sub { font-size: 1rem; text-transform: uppercase; letter-spacing: .04em; marg
 .badgeList li.on { opacity: 1; border-color: var(--primary); }
 .badgeList small { display: block; color: var(--muted); }
 .progSharp { border-top: 1px solid var(--line); margin-top: 16px; padding-top: 12px; }
+/* the voice button by the slide's heading (lesson.js): a speaker to read the slide aloud; filled in, with a stop square, while it reads */
+.lpHeadRow { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.lpHeadRow h2 { flex: 1; min-width: 0; }
+.lpVoice { flex: none; width: 48px; height: 48px; margin-top: 2px; display: grid; place-items: center; border-radius: 50%; border: 2px solid var(--primary); background: var(--panel); color: var(--primary-text); cursor: pointer; padding: 0; }
+.lpVoice svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.lpVoice .spk { fill: currentColor; }
+.lpVoice:hover { background: var(--soft); }
+.lpVoice.on { background: var(--primary); color: var(--on-primary); animation: lpVoicePulse 1.6s ease-out infinite; }
+.lpVoice.on .stop { fill: currentColor; stroke: none; }
+@keyframes lpVoicePulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--primary) 45%, transparent); } 100% { box-shadow: 0 0 0 12px transparent; } }
+@media (prefers-reduced-motion: reduce) { .lpVoice.on { animation: none; } }

@@ -2796,5 +2796,7 @@
  "Overall": "ทั่วไป",
  "No events assigned to you yet. An admin assigns referees to Spartan's events, and they'll show here.": "ยังไม่มีงานที่มอบหมายให้คุณ ผู้ดูแลระบบจะมอบหมายกรรมการให้กับงานของ Spartan และงานจะแสดงที่นี่",
  "All your events": "งานทั้งหมดของคุณ",
- "Your events": "งานของคุณ"
+ "Your events": "งานของคุณ",
+ "Read this slide aloud": "อ่านสไลด์นี้ออกเสียง",
+ "Stop reading aloud": "หยุดอ่าน"
 }

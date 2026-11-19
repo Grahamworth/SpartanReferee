@@ -227,9 +227,15 @@
             fetch('/api/home', { method: 'POST', keepalive: true, headers: { 'Content-Type': 'application/json', 'X-Session': token }, body: JSON.stringify({ language: sel.value }) }).catch(() => {});
           }
         } catch { /* storage blocked: the home page saves it next time */ }
+        // the page comes back in the new language. A lesson's or the handbook's own language in the address (#/lesson/<id>?locale=)
+        // goes, so they follow it too; and an address that only differs after the # (Learning's pages) needs a reload, as the browser
+        // treats that as a move within the page.
         const u = new URL(location.href);
         u.searchParams.delete('lang');
-        location.replace(u.href);
+        const [path, q = ''] = u.hash.split('?');
+        if (q) { const p = new URLSearchParams(q); p.delete('locale'); u.hash = p.toString() ? `${path}?${p}` : path; }
+        const same = u.href.split('#')[0] === location.href.split('#')[0];
+        if (same) { history.replaceState(null, '', u.href); location.reload(); } else location.replace(u.href);
       });
     }
   }
