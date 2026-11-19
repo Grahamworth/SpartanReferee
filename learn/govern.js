@@ -21,7 +21,7 @@ const fold = (s) => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toL
 /** shows only the rules with every word typed (in the number, name, text or source), as you type */
 function filterRules() {
   const input = $('ruleQ'), list = $('ruleList'); if (!input || !list) return;
-  const words = fold(input.value).split(/s+/).filter(Boolean), items = [...list.querySelectorAll('li[data-q]')];
+  const words = fold(input.value).split(/\s+/).filter(Boolean), items = [...list.querySelectorAll('li[data-q]')];
   let shown = 0;
   for (const li of items) { const hit = words.every((w) => li.dataset.q.includes(w)); li.classList.toggle('off', !hit); if (hit) shown++; }
   list.classList.toggle('searching', words.length > 0);

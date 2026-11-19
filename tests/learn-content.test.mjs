@@ -1,6 +1,7 @@
 // The learning platform's seeded programmes (scripts/learn-*.mjs): every lesson has content, and every rule a slide cites is defined.
 import test from 'node:test';
 import assert from 'node:assert';
+import fs from 'node:fs';
 import { PROGRAMMES } from '../scripts/learn-content.mjs';
 import { LESSONS, TRANSLATIONS } from '../scripts/learn-lessons.mjs';
 import { RULES, DISPUTES } from '../scripts/learn-rules.mjs';
@@ -47,4 +48,25 @@ test('every lesson but the DEKA placeholder has a quick check: 2 or 3 questions,
       assert.doesNotMatch([q.prompt, q.feedback, ...q.options].join(' '), /[–—]/, `${k}: ${q.prompt}`);
     }
   }
+});
+
+// the Obstacles tab (learn/obstacles.js): every obstacle says how it's done, what's good and what's bad, and links only to rules that exist
+test('every obstacle has how, good and bad; ids are unique; its rule references and the "at every obstacle" ones are defined rules', async () => {
+  globalThis.location ??= { protocol: 'file:', hostname: '', port: '', hash: '' };
+  const { OBSTACLES, LINKED } = await import('../learn/obstacles.js');
+  const src = fs.readFileSync(new URL('../learn/obstacles.js', import.meta.url), 'utf8');
+  assert.ok(OBSTACLES.length >= 36);
+  assert.strictEqual(new Set(OBSTACLES.map((o) => o.id)).size, OBSTACLES.length, 'no obstacle twice');
+  const ids = RULES.map((r) => r.id);
+  for (const o of OBSTACLES) {
+    assert.ok(o.how.length && o.good.length && o.bad.length, o.id);
+    assert.ok(['multi', 'single', 'must'].includes(o.type), o.id);
+    assert.ok(!o.programme || ['multi', 'single', 'must'].includes(o.programme), o.id);
+    assert.ok(o.section ? /^4\.[123]\.\d+$/.test(o.section) : o.id === 'iconic', `${o.id} has its rulebook section`);
+    if (o.section) assert.strictEqual(o.section[2], { multi: '1', single: '2', must: '3' }[o.type], `${o.id}: the section's part matches how many tries`);
+  }
+  for (const s of LINKED) assert.ok(ids.includes(`OCR-2026-${s}`), `rule ${s} is a rule reference`);
+  for (const [, r] of src.matchAll(/'(OCR-2026-[\d.]+)'/g)) assert.ok(ids.includes(r), r);
+  // the tab is for everyone, next to Rules
+  assert.match(fs.readFileSync(new URL('../learn/index.html', import.meta.url), 'utf8'), /data-view="rules"[^\n]*\n\s*<a href="#\/obstacles" data-view="obstacles">Obstacles<\/a>/);
 });

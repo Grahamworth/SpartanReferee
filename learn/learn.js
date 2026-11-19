@@ -22,8 +22,9 @@ import * as sharp from './sharp.js';
 import * as invites from './invites.js';
 import * as tracking from './tracking.js';
 import * as authoring from './authoring.js';
+import * as obstacles from './obstacles.js';
 
-const AREAS = [programmes, people, lesson, assess, govern, reports, diagnostics, saved, home, events, sharp, invites, tracking, authoring];
+const AREAS = [programmes, people, lesson, assess, govern, reports, diagnostics, saved, home, events, sharp, invites, tracking, authoring, obstacles];
 const views = Object.assign({}, ...AREAS.map((a) => a.views));
 
 async function draw() {

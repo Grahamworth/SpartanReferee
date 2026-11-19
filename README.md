@@ -52,7 +52,7 @@ At the user's request, SpartanReferee became invite-only and one app.
 - their programmes with progress, each opening the programme;
 - a refresher nudge, organiser tools, and the install card.
 
-Tabs: **Home**, **My Learning**, **Events**, **Rules**, plus role tabs (Manage Events, People, Programs, Assessing, Reports, Duplicates, Audit log, Diagnostics, Config). **Events** is now **My Events**. Which role sees which tab is each tab's `data-show` in `learn/index.html`.
+Tabs: **Home**, **My Learning**, **Events**, **Rules**, **Obstacles**, plus role tabs (Manage Events, People, Programs, Assessing, Reports, Duplicates, Audit log, Diagnostics, Config). **Events** is now **My Events**. Which role sees which tab is each tab's `data-show` in `learn/index.html`.
 - **My Learning** (was Programmes) shows to do (progress, next lesson, complete-by date), completed, Keep sharp, then other programmes to enrol in.
 - **My profile** is the person icon at the top right.
 
@@ -78,6 +78,8 @@ Tabs: **Home**, **My Learning**, **Events**, **Rules**, plus role tabs (Manage E
 - The lesson player's old form editor is gone: editors get an "Edit this lesson" link to Programs.
 
 **Manage Events** (`#/manage`, admins and regional coordinators): every event they look after, each opening its page to add referees, set the head referee, tick who books the cameras and write notes. Admins also see when Spartan's events were last synced, with Sync now (moved from Config).
+
+**Obstacles** (`#/obstacles`, everyone; 19 November 2026): every obstacle type a referee may stand at, grouped by kind with a small drawing each, searchable and filtered by how many tries (multiple attempts, one attempt, mandatory). Each obstacle's page says how it's done, **Good: it counts** and **Bad: it's a fail**, any note (when the athlete is committed, the penalty), and links to its rule reference where there is one. Where the 2026 programme sorts an obstacle differently from the rulebook it says it's under review for 2027. The text is a summary in our own words of Spartan's 2026 Rules of Competition, taken from the Spartans app's Course Run rules (`course-rules.js` there) and checked line by line against Part D of the rulebook; every obstacle shows its rulebook section. It all lives in `learn/obstacles.js` (no database). When Spartan updates the rules, update it there. Languages: English and German so far; translations into the other 12 were drafted (not merged) and are to be added later.
 
 **One look, one menu (19 November 2026).** Every page uses the study look (`study.css` with `look.js`: light or dark following the phone, or the Look button). The pages outside the app (Config `customers.html`, the cameras `console.html` and `event.html`, `results.html`, `streaming.html`) get the app's tabs and profile icon in their header from `appnav.js`, which reads the tab list from `learn/index.html` (`<header class="top" data-tab="...">` says which tab is on). Admin is now **Config**. Pages that load slowly show a spinner.
 
