@@ -17,6 +17,8 @@ while IFS= read -r f; do [ -n "$f" ] || continue; mkdir -p "$OUT/$(dirname "$f")
 [ -d site-extras ] && cp -r site-extras/. "$OUT/"
 mkdir -p "$OUT/downloads"
 node scripts/build-review-test.mjs "$OUT" > /dev/null
+# the app's service worker names this deploy, so phones fetch its files afresh
+sed -i "s/__VERSION__/$COMMIT/" "$OUT/sw.js"
 printf '{"commit":"%s","deployedAt":"%s"}\n' "$COMMIT" "$(date -u +%Y-%m-%dT%H:%MZ)" > "$OUT/version.json"
 # the learning database's tables, before the code that needs them
 (source scripts/learn-env.sh && node scripts/learn-migrate.mjs)

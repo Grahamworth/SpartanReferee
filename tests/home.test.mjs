@@ -14,7 +14,7 @@ test('the home page is SpartanReferee\'s, and leads to signing in, not registeri
   assert.ok(!hrefs(home).includes('register.html'));
   assert.ok(hrefs(home).includes('home.html'), 'signing in leads to the referee home page');
   assert.ok(hrefs(home).includes(`${SPARTANS}/`), 'and on to the Spartans site');
-  assert.doesNotMatch(home, /hub\.js|manifest/, 'with none of the Spartans app in it');
+  assert.doesNotMatch(home, /hub\.js/, 'with none of the Spartans app in it');
 });
 test('every page the home page links to exists', () => {
   for (const h of hrefs(read('index.html'))) {
@@ -24,12 +24,10 @@ test('every page the home page links to exists', () => {
 });
 test('Spartans has left: its pages are gone, and their old addresses go to the Spartans site', () => {
   for (const f of ['app', 'chat', 'course', 'profile', 'news', 'past', 'scoreboard', 'admin', 'judging', 'camera']) assert.ok(!fs.existsSync(new URL(`../${f}.html`, import.meta.url)), f);
-  for (const f of ['manifest.webmanifest', 'hub.js', 'scripts/build-app.sh', 'courses']) assert.ok(!fs.existsSync(new URL(`../${f}`, import.meta.url)), f);
+  for (const f of ['hub.js', 'scripts/build-app.sh', 'courses']) assert.ok(!fs.existsSync(new URL(`../${f}`, import.meta.url)), f);
   const routes = JSON.parse(read('staticwebapp.config.json')).routes;
   assert.deepStrictEqual(routes.find((r) => r.route === '/app'), { route: '/app', redirect: `${SPARTANS}/`, statusCode: 301 });
   assert.strictEqual(routes.find((r) => r.route === '/downloads/spartans.apk').redirect, `${SPARTANS}/downloads/spartans.apk`);
-  // a browser that installed the Spartans app from here has its offline copy cleared
-  assert.match(read('sw.js'), /registration\.unregister\(\)/);
 });
 test('SpartanReferee\'s pages go back to SpartanReferee\'s home, and what the judge still links to of Spartans is on the Spartans site', () => {
   assert.match(read('recordings.html'), /href="\.\/"[^>]*>‹ Home/);
@@ -107,7 +105,7 @@ test("the first visit asks for a language (the browser's own suggested first), o
   assert.match(read('home.html'), /id="langCard" hidden>\s*<h2>Choose your language<\/h2>/);
   assert.match(read('learn/index.html'), /id="langCard" hidden>\s*<h2>Choose your language<\/h2>/);
   assert.ok(read('home.js').includes("if (language(h, $('langCard'))) return;"));
-  assert.ok(read('learn/learn.js').includes("if (language(await siteCall('home'), $('langCard'))) return;"));
+  assert.ok(read('learn/learn.js').includes("if (language(await viaCache('site/home', () => siteCall('home')), $('langCard'))) return;"));
   assert.ok(js.includes("call('home', { method: 'POST', body: { language: b.dataset.lang } })"));
   assert.ok(js.includes('if (!saved() && h.language !== I.lang) { keep(h.language); location.reload(); return true; }'), 'a new device');
   assert.ok(js.includes("if (saved() && saved() !== h.language) call('home', { method: 'POST', body: { language: saved() } })"), 'a change from the menu is saved back');

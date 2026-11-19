@@ -90,7 +90,7 @@ async function programmePage(id) {
   const d = await call(`programmes/${encodeURIComponent(id)}${q.get('version') ? `?version=${encodeURIComponent(q.get('version'))}` : ''}`);
   const { programme: p, version: v, modules, enrolment: e } = d, editable = v.state === 'draft' && d.can.edit;
   const doneSet = new Set(d.completed || []);
-  const lessonRow = (l) => `<li class="lessonRow"><a href="#/lesson/${esc(l.id)}"><span class="tick${doneSet.has(l.id) ? ' done' : ''}" aria-label="${doneSet.has(l.id) ? 'Completed' : 'Not completed yet'}"></span><span><b>${esc(l.title)}</b><small>${l.minutes} min${l.summary ? ` · ${esc(l.summary)}` : ''}${d.lessonNotes?.[l.id] ? ` · ${esc(d.lessonNotes[l.id])}` : ''}</small></span></a>
+  const lessonRow = (l) => `<li class="lessonRow"><a href="#/lesson/${esc(l.id)}"><span class="tick${doneSet.has(l.id) ? ' done' : ''}" aria-label="${doneSet.has(l.id) ? 'Completed' : 'Not completed yet'}"></span><span><b>${esc(l.title)}</b><small><span>${l.minutes} min</span>${l.summary ? ` · <span>${esc(l.summary)}</span>` : ''}${d.lessonNotes?.[l.id] ? ` · <span>${esc(d.lessonNotes[l.id])}</span>` : ''}</small></span></a>
       ${editable ? `<button class="small" type="button" data-del-lesson="${esc(l.id)}" aria-label="Delete lesson ${esc(l.title)}">Delete</button>` : ''}</li>`;
   return `<section class="card progHead" data-current-version="${esc(v.id)}">
       <p class="crumbs"><a href="#/programmes">Programmes</a></p>

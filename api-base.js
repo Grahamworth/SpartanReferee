@@ -67,8 +67,10 @@ export function drawSignOut() {
   if (!right) { right = document.createElement('span'); right.className = 'topRight'; top.appendChild(right); }
   button = document.createElement('button');
   button.type = 'button'; button.className = 'link signOut'; button.textContent = 'Sign out';
-  button.onclick = () => {
+  button.onclick = async () => {
     signOut();
+    // what the app kept on this phone for offline use goes too (offline.js)
+    try { await (await import('./offline.js')).clearAll(); } catch { /* nothing kept */ }
     location.reload();
   };
   right.appendChild(button);

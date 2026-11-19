@@ -71,7 +71,15 @@ function createMedia({ db, speech = null, signer = null, doFetch = fetch, dailyC
     }
     return signer({ blob, perm: 'r', minutes: 120 });
   }
-  return { configFor, plan, narration, speechOn, PROVIDERS, VOICES };
+  /** the narration file itself (base64), for the app to keep on the phone: the storage account has no CORS for the page to fetch it */
+  async function narrationFile(content, slide, voice) {
+    const r = await doFetch(await narration(content, slide, voice));
+    if (!r.ok) throw Object.assign(new Error(`Storage said ${r.status}`), { status: 502 });
+    const audio = Buffer.from(await r.arrayBuffer());
+    if (audio.length > 4e6) throw Object.assign(new Error('That narration is too long to save'), { status: 413 });
+    return audio.toString('base64');
+  }
+  return { configFor, plan, narration, narrationFile, speechOn, PROVIDERS, VOICES };
 }
 
 module.exports = { createMedia, PROVIDERS, VOICES, DAILY_CHARS };

@@ -7,6 +7,10 @@
 <title>Home: SpartanReferee</title>
 <meta name="theme-color" content="#0b0b0b">
 <link rel="icon" href="icons/spartanreferee/icon-192.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/spartanreferee/icon-180.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="SpartanReferee">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;1,800&family=Barlow:wght@400;600;700&display=swap">
@@ -33,6 +37,10 @@
   .tile svg { flex: none; width: 34px; height: 34px; fill: none; stroke: var(--primary-text); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
   .tile h2 { margin: 0 0 4px; font-size: 1.5rem; }
   .tile p { margin: 0; color: var(--muted); }
+  .installCard:not([hidden]) { display: flex; gap: 16px; align-items: flex-start; border-left: 4px solid var(--primary); }
+  .installCard svg { flex: none; width: 34px; height: 34px; fill: none; stroke: var(--primary-text); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .installCard h2 { margin: 0 0 4px; }
+  .installCard .btnRow { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
   /* phones: the ways in come first, as compact buttons side by side, then the events; each event's Book cameras is full width */
   @media (max-width: 640px) {
     #content:not([hidden]) { display: flex; flex-direction: column; }
@@ -93,6 +101,16 @@
         <span><h2>Admin</h2><p>Referees, admins, Spartan's events and who's assigned to each.</p></span>
       </a>
     </nav>
+
+    <section class="card installCard" id="installCard" hidden>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M12 7v7M9 11l3 3 3-3M10 18h4"/></svg>
+      <div>
+        <h2>Install the app</h2>
+        <p class="note">SpartanReferee on your home screen, full screen. Lessons, the rules and the handbook you save keep working with no signal at the venue.</p>
+        <p class="note" data-how hidden>On an iPhone or iPad: tap Share in Safari, then Add to Home Screen.</p>
+        <div class="btnRow"><button class="small primaryish" type="button" data-install hidden>Install</button><button class="small" type="button" data-later>Not now</button></div>
+      </div>
+    </section>
   </div>
 </main>
 </body>

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<script src="/i18n.js"></script>
+<title>Offline: SpartanReferee</title>
+<meta name="theme-color" content="#0b0b0b">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/icons/spartanreferee/icon-192.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;1,800&family=Barlow:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="/headjudge.css">
+</head>
+<body>
+<!-- Shown by the app's service worker (sw.js) when a page that needs a connection is opened with no signal. -->
+<header class="top">
+  <a class="mark" href="/home.html">Spartan<span>Referee</span></a>
+</header>
+<main class="page">
+  <section class="card narrow">
+    <h2>You're offline</h2>
+    <p>This page needs a connection. It opens when there's signal again.</p>
+    <p class="note">What works with no signal: your home page, and in Learning the lessons, rules and handbook saved on this phone.</p>
+    <p><a href="/home.html">My home</a> · <a href="/learn/">Learning</a></p>
+    <button class="small" type="button" onclick="location.reload()">Try again</button>
+  </section>
+</main>
+</body>
+</html>

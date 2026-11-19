@@ -3,6 +3,7 @@
 // Preview translation labels, and for editors the content versions with writing, review and approval (LRN-02..05, LRN-07, AT-04, AT-05).
 import { $, call, esc, toast, fail, badge, day, redraw, act, hooks, runHooks, LANG, t } from './core.js';
 import { drawAction } from './practice.js';
+import { recallFile } from '../offline.js';
 
 // ---------------------------------------------------------------- figures: simple drawings, in the page's own colours
 const svg = (body) => `<svg class="fig" viewBox="0 0 240 120" role="img" aria-hidden="true">${body}</svg>`;
@@ -33,6 +34,10 @@ const FIGURES = {
 // ---------------------------------------------------------------- the player
 let L = null, slide = 0, playing = false, captions = true, audio = null, saveTimer = null;
 const lessonUrl = (id, q = '') => `#/lesson/${id}${q ? `?${q}` : ''}`;
+/** the API address of a lesson in a language: the same for the player and for saving it for offline use (saved.js) */
+export const lessonPath = (id, locale, content) => `lessons/${encodeURIComponent(id)}?${new URLSearchParams([...(locale ? [['locale', locale]] : []), ...(content ? [['content', content]] : [])])}`;
+/** where a slide's narration is kept on the phone (saved.js) */
+export const audioPath = (contentId, voice, i) => `audio/${contentId}/${voice}/${i}`;
 function stopVoice() {
   playing = false;
   if (audio) { audio.pause(); audio.src = ''; audio = null; }
@@ -45,7 +50,13 @@ async function speak(i) {
   const next = () => { if (!playing) return; if (slide < c.slides.length - 1) { go(slide + 1, true); } else { playing = false; drawControls(); } };
   if (m.kind === 'audio') {
     try {
-      const { url } = await call(`content/${c.id}/narration/${i}`);
+      // saved on this phone (saved.js), or from the server; with no signal and nothing saved, the device reads it instead
+      const kept = await recallFile(audioPath(c.id, m.voice, i));
+      let url = kept ? URL.createObjectURL(kept) : '';
+      if (!url) {
+        try { ({ url } = await call(`content/${c.id}/narration/${i}`)); }
+        catch (e) { if (e.status || !('speechSynthesis' in window)) throw e; return deviceVoice(text, m.lang, next); }
+      }
       if (!playing || slide !== i) return;
       audio = new Audio(url); audio.onended = next; audio.onerror = () => { playing = false; drawControls(); fail('The narration couldn\'t play: the captions are below'); };
       await audio.play();
@@ -54,8 +65,11 @@ async function speak(i) {
   }
   // the device reads it aloud itself
   if (!('speechSynthesis' in window)) { playing = false; drawControls(); fail('This device can\'t read aloud: the captions are below'); return; }
-  const u = new SpeechSynthesisUtterance(text); u.lang = m.lang; u.rate = 1;
-  const v = speechSynthesis.getVoices().find((x) => x.lang.replace('_', '-').startsWith(m.lang.slice(0, 2)));
+  deviceVoice(text, m.lang, next);
+}
+function deviceVoice(text, lang, next) {
+  const u = new SpeechSynthesisUtterance(text); u.lang = lang; u.rate = 1;
+  const v = speechSynthesis.getVoices().find((x) => x.lang.replace('_', '-').startsWith(lang.slice(0, 2)));
   if (v) u.voice = v;
   u.onend = next; speechSynthesis.cancel(); speechSynthesis.speak(u);
 }
@@ -142,7 +156,7 @@ async function lessonView(rest) {
   stopVoice();
   // the language picked at the top of the page, unless this address names one (the lesson's own language switch)
   const pageLang = (window.SR_I18N && SR_I18N.lang) || '';
-  L = await call(`lessons/${encodeURIComponent(id)}?${new URLSearchParams([...(q.get('locale') ? [['locale', q.get('locale')]] : pageLang ? [['locale', pageLang]] : []), ...(q.get('content') ? [['content', q.get('content')]] : [])])}`);
+  L = await call(lessonPath(id, q.get('locale') || pageLang, q.get('content')));
   const c = L.content, back = `#/programmes/${encodeURIComponent(L.programme.id)}`;
   slide = c && L.progress && L.progress.contentId === c.id ? Math.min(L.progress.slide, c.slides.length - 1) : 0;
   const done = L.completions.find((x) => !x.preview), donePreview = L.completions.find((x) => x.preview);
@@ -220,7 +234,7 @@ export function wire() {
     $('lpTx').onclick = () => { const t = $('lpTranscript'); t.hidden = !t.hidden; $('lpTx').setAttribute('aria-expanded', String(!t.hidden)); };
     $('lpComplete')?.addEventListener('click', (e) => act(async () => {
       const r = await call(`lessons/${L.lesson.id}/complete`, { method: 'POST', body: { contentId: L.content.id } });
-      toast(r.preview ? 'Recorded: done in a preview translation' : r.enrolment.state === 'completed' ? 'Lesson complete: programme complete!' : 'Lesson complete');
+      toast(r.queued ? 'Saved on this phone: it goes to your record when there\'s signal' : r.preview ? 'Recorded: done in a preview translation' : r.enrolment.state === 'completed' ? 'Lesson complete: programme complete!' : 'Lesson complete');
       redraw();
     }, e.currentTarget));
   }

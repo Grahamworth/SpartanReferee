@@ -9,6 +9,7 @@
    PUT  /api/learn/content/<id> {slides, sources}               a draft only
    POST /api/learn/content/<id>/state {to}                      draft -> review -> published (owner; never the one who sent it), -> draft
    GET  /api/learn/content/<id>/narration/<slide>               -> { url }   that slide's narration (Azure AI Speech), made once
+        ...?file=1                                              -> { audio (base64), type, voice }   the file, for the app's offline copy
    GET  /api/learn/media                                        -> { configs, providers, voices }   PUT /api/learn/media/<scope> {provider, voices}
    Learners see published content; a translation sent for review shows as a Preview translation (NFR-06), and completing a lesson
    in one is recorded but doesn't count towards a credential until done in an approved language. */
@@ -254,6 +255,11 @@ function createLessons(ctx, { speech, mediaSigner }) {
     if (!(VOICES[c.locale] || []).includes(voice)) return reply(400, { error: 'No such voice for this language' });
     const n = Math.floor(Number(slide) || 0);
     if (n < 0 || n >= MAX_SLIDES) return reply(404, { error: 'No such slide' });
+    // ?file=1: the audio itself, for the app to keep for offline use
+    if (query.file === '1') {
+      try { return reply(200, { audio: await media.narrationFile(c, n, voice), type: 'audio/mpeg', voice }); }
+      catch (e) { return reply(e.status || 502, { error: e.status ? e.message : 'The narration couldn\'t be saved just now' }); }
+    }
     try { return reply(200, { url: await media.narration(c, n, voice), voice }); }
     catch (e) { return reply(e.status || 502, { error: e.status ? e.message : 'The narration couldn\'t be made just now: the captions are below' }); }
   }

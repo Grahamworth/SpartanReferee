@@ -40,6 +40,17 @@ The learning platform (`/learn`, `api/src/learn`) is open to everyone in the org
 
 Spartan's Learning & Competence Platform prototype (from their requirements v0.2): one profile, any number of programmes, lessons with narration and a Spanish pilot, assessments with assessors, demonstration credentials, versioned rule references with review items, a handbook PDF, reports and a read API. It has its own Azure SQL database and its own documentation: [docs/learning/README.md](docs/learning/README.md) (setup, demo people, tests), [architecture](docs/learning/architecture.md), [decisions](docs/learning/decisions.md), [read API](docs/learning/api.md), [acceptance tests](docs/learning/acceptance.md) (all 12 pass) and [backlog](docs/learning/backlog.md).
 
+### The installable app (offline)
+
+Added 19 November 2026. Home and Learning install as an app: Android and desktop Chrome or Edge offer **Install** on the home page, and on an iPhone the card explains Share → Add to Home Screen. `manifest.webmanifest` opens the app on `home.html`. The service worker `sw.js` keeps Home and Learning's own files: it takes them from the network when there's signal and from its copy when there isn't, and leaves the API and the camera pages alone. Any other page opened offline shows `offline.html`. `scripts/deploy-site.sh` stamps the commit into `sw.js`, so each deploy refreshes the phone's copy.
+
+What the server says is kept by the pages, in `offline.js` (Cache Storage `sr-data`):
+- Every Learning answer is kept as it arrives. Copies belong to the signed-in person: another sign-in on the same phone can't read them, and **Sign out** deletes them.
+- With no signal, or no answer within 8 seconds, the page shows the kept copy, and a bar says which and from when.
+- On a programme's page, **Save for offline** (`learn/saved.js`) fetches every lesson in the page's language, the rules, the handbook and the PDF maker. It also fetches each slide's Azure narration, passed through the API (`…/narration/<slide>?file=1`) because the storage account has no CORS setting. Saving the camera course takes about 2 MB, and narration that wasn't saved falls back to the device's own voice.
+- Lesson progress and completion made offline wait in an outbox and are sent when there's signal again. Anything else that changes data says it needs a connection.
+- Assessments stay online only.
+
 ### Languages
 
 Every page, the judge, the server's video review and the Broadcaster app come in English, French, German, Dutch, Spanish, Italian, Greek, Croatian, Czech, Polish, Finnish, Swedish, Danish, Arabic (right to left) and Thai, for the World Championships (France, Greece, Croatia, UAE, Finland, Thailand), next year's Euros (Netherlands) and the rest. The language is the browser's, or the one picked in the menu at the top (remembered), and the console opens a server's review in it. The translations were made by Claude, not checked by native speakers yet: check each before an event in that country.

@@ -6,6 +6,7 @@
 import { devSignInButton, signedIn, signOut, call as siteCall } from '../api-base.js';
 import { language } from '../language.js';
 import { microsoftButton } from '../email-signin-web.js';
+import { setOwner, keep, viaCache, registerApp } from '../offline.js';
 import { $, S, show, call, esc, fail, store, AS_KEY, ROLE, has, isAdmin } from './core.js';
 import * as programmes from './programmes.js';
 import * as people from './people.js';
@@ -14,8 +15,9 @@ import * as assess from './assess.js';
 import * as govern from './govern.js';
 import * as reports from './reports.js';
 import * as diagnostics from './diagnostics.js';
+import * as saved from './saved.js';
 
-const AREAS = [programmes, people, lesson, assess, govern, reports, diagnostics];
+const AREAS = [programmes, people, lesson, assess, govern, reports, diagnostics, saved];
 const views = Object.assign({}, ...AREAS.map((a) => a.views));
 
 async function draw() {
@@ -59,6 +61,8 @@ $('viewAs').addEventListener('change', async () => { store.set(AS_KEY, $('viewAs
 async function loadMe() {
   try { S.me = await call('me'); }
   catch (e) { if (store.get(AS_KEY)) { store.set(AS_KEY, ''); S.me = await call('me'); } else throw e; }
+  // what's kept on the phone for offline use is this person's (offline.js)
+  if (!S.me.actingAs) { setOwner(S.me.person.email); keep('me', S.me); }
   drawChrome();
 }
 
@@ -71,7 +75,7 @@ async function enter() {
     fail(e.message); return; // e.g. the database waking up: try again in a minute
   }
   // the first visit asks for a language, as the home page does (someone may come here first)
-  try { if (language(await siteCall('home'), $('langCard'))) return; } catch { /* the page still works in this language */ }
+  try { if (language(await viaCache('site/home', () => siteCall('home')), $('langCard'))) return; } catch { /* the page still works in this language */ }
   ({ regions: S.regions } = await call('regions'));
   addEventListener('hashchange', draw);
   draw();
@@ -84,3 +88,4 @@ async function start() {
   await devSignInButton($('devBtn'), () => enter(), failed);
 }
 start();
+registerApp();

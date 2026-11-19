@@ -3,6 +3,7 @@
 import { call, devSignInButton, signedIn, signOut, esc } from './api-base.js';
 import { microsoftButton } from './email-signin-web.js';
 import { language } from './language.js';
+import { viaCache, setOwner, installCard, registerApp } from './offline.js';
 
 const $ = (id) => document.getElementById(id);
 const show = (el, on) => { el.hidden = !on; };
@@ -29,11 +30,13 @@ function draw(h) {
   show($('learnTile'), !!h.learn);
   show($('adminTile'), !!h.admin);
   show($('content'), true);
+  installCard($('installCard'));
 }
 
 async function enter() {
   show($('signIn'), false);
-  try { draw(await call('home')); }
+  // kept on the phone for the app's offline use (offline.js)
+  try { draw(await viaCache('site/home', async () => { const h = await call('home'); setOwner(h.email); return h; })); }
   catch (e) {
     if (e.status === 401 || e.status === 403) { signOut(); start(e.status === 403 ? e.message : ''); return; }
     $('error').textContent = e.message; show($('error'), true);
@@ -48,3 +51,4 @@ async function start(why = '') {
   await devSignInButton($('devBtn'), () => enter(), failed);
 }
 start();
+registerApp();

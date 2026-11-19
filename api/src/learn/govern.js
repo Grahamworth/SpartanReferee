@@ -30,14 +30,22 @@ function createGovern(ctx) {
       for (const id of qu.rules.split(',').filter(Boolean)) want.push({ rule: id, type: 'question', target: qu.question_id, lesson: null, version: qu.version_id });
     }
     const have = new Set((await q('SELECT rule_id, target_type, target_id FROM {S}.rule_link')).map((r) => `${r.rule_id}|${r.target_type}|${String(r.target_id).toLowerCase()}`));
-    const keep = new Set();
+    const keep = new Set(), add = [];
     for (const w of want) {
       const k = `${w.rule}|${w.type}|${String(w.target).toLowerCase()}`; keep.add(k);
-      if (!have.has(k)) {
-        have.add(k);
-        try { await q('INSERT INTO {S}.rule_link (rule_id, rule_version, target_type, target_id, lesson_id, version_id) VALUES (@r, @rv, @t, @id, @l, @v)', { r: w.rule, rv: current.get(w.rule) || latest.get(w.rule) || 0, t: w.type, id: w.target, l: w.lesson, v: w.version }); }
-        catch (e) { if (e.number !== 2627) throw e; } // there already (another rebuild got there first)
-      }
+      if (!have.has(k)) { have.add(k); add.push(w); }
+    }
+    // new links go in batches (every translation of a lesson cites its rules, so there can be thousands), each row on its own only
+    // when a batch meets one that's there already (another rebuild got there first)
+    const one = async (w) => {
+      try { await q('INSERT INTO {S}.rule_link (rule_id, rule_version, target_type, target_id, lesson_id, version_id) VALUES (@r, @rv, @t, @id, @l, @v)', { r: w.rule, rv: current.get(w.rule) || latest.get(w.rule) || 0, t: w.type, id: w.target, l: w.lesson, v: w.version }); }
+      catch (e) { if (e.number !== 2627) throw e; }
+    };
+    for (let i = 0; i < add.length; i += 300) {
+      const batch = add.slice(i, i + 300), p = {};
+      const rows = batch.map((w, j) => { Object.assign(p, { [`r${j}`]: w.rule, [`rv${j}`]: current.get(w.rule) || latest.get(w.rule) || 0, [`t${j}`]: w.type, [`id${j}`]: w.target, [`l${j}`]: w.lesson, [`v${j}`]: w.version }); return `(@r${j}, @rv${j}, @t${j}, @id${j}, @l${j}, @v${j})`; });
+      try { await q(`INSERT INTO {S}.rule_link (rule_id, rule_version, target_type, target_id, lesson_id, version_id) VALUES ${rows.join(', ')}`, p); }
+      catch (e) { if (e.number !== 2627) throw e; for (const w of batch) await one(w); }
     }
     for (const k of have) if (!keep.has(k)) { const [r, t, id] = k.split('|'); await q('DELETE FROM {S}.rule_link WHERE rule_id = @r AND target_type = @t AND target_id = @id', { r, t, id }); }
   }

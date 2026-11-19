@@ -1,6 +1,7 @@
 // What every part of the learning page shares: the signed-in person (S.me), the regions, calling the API, messages and small helpers.
 // Each area (people.js, programmes.js, lesson.js, assess.js, govern.js, reports.js, cameras.js) exports its views and a wire().
 import { esc } from '../api-base.js';
+import { viaCache, queue, flush } from '../offline.js';
 
 export { esc };
 export const $ = (id) => document.getElementById(id);
@@ -15,7 +16,25 @@ export const LANG = { en: 'English', fr: 'Français', de: 'Deutsch', nl: 'Nederl
 export const t = (text, values) => (window.SR_I18N ? window.SR_I18N.t(text, values) : text);
 export const S = { me: null, regions: [] };
 
+/** the API. A GET is kept on the phone for offline use (offline.js), except while previewing as someone else. A change made with
+ *  no signal fails with a clear message, but lesson progress waits in the outbox and goes when there's signal. */
 export async function call(path, { method = 'GET', body } = {}) {
+  if (method === 'GET' && !store.get(AS_KEY) && !/\/narration\//.test(path)) { // a narration link is short-lived: never kept
+    const data = await viaCache(path, () => send(path));
+    sendWaiting();
+    return data;
+  }
+  try { return await send(path, method, body); } catch (e) {
+    if (e.status || store.get(AS_KEY)) throw e;
+    if (QUEUED.test(path) && queue({ path, method, body, key: method === 'PUT' ? path : '' })) return { queued: true };
+    throw new Error(t('You\'re offline: this needs a connection. Try again when there\'s signal.'));
+  }
+}
+// what can wait for signal: where you are in a lesson, and finishing it
+const QUEUED = /^lessons\/[^/]+\/(progress|complete)$/;
+export const sendWaiting = () => flush((item) => send(item.path, item.method, item.body));
+if (typeof window !== 'undefined') addEventListener('online', sendWaiting);
+async function send(path, method = 'GET', body) {
   const headers = { 'X-Session': store.get('sp_token') };
   if (store.get(AS_KEY)) headers['X-Learn-As'] = store.get(AS_KEY);
   if (body !== undefined) headers['Content-Type'] = 'application/json';

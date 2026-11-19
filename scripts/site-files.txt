@@ -82,3 +82,7 @@ learn/govern.js
 learn/reports.js
 learn/diagnostics.js
 learn/learn.css
+manifest.webmanifest
+offline.js
+offline.html
+learn/saved.js
