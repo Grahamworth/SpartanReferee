@@ -368,10 +368,11 @@ function traverse(o, grips, { R = 60, bellAt, fault, noBell } = {}) {
 }
 
 const rig = (kind) => () => {
-  const y = G - ({ rings: 162, hydra: 158, twister: 140, monkey: 136, tilting: 138 }[kind]), xs = Array.from({ length: 8 }, (_, i) => 108 + i * 30), bx = 348, by = y + 22;
-  const drop = { rings: 26, hydra: 20, twister: 6, monkey: 0, tilting: 0 }[kind];
+  const y = G - ({ rings: 162, hydra: 158, twister: 140, monkey: 136, tilting: 138, mitm: 140 }[kind]), xs = Array.from({ length: 8 }, (_, i) => 108 + i * 30), bx = 348, by = y + 22;
+  const mid = (i) => kind === 'mitm' && i >= 3 && i <= 5;
+  const drop = { rings: 26, hydra: 20, twister: 6, monkey: 0, tilting: 0, mitm: 8 }[kind];
   const tilt = kind === 'tilting' ? (i) => (i - 3.5) * 3 : () => 0;
-  const grips = xs.map((x, i) => [x, y + drop + tilt(i)]);
+  const grips = xs.map((x, i) => [x, y + (mid(i) ? 0 : drop) + tilt(i)]);
   const ups = [96, 330];
   const run = (fault) => {
     const o = timeline({ ...stand(36), ring: 0 });
@@ -381,18 +382,19 @@ const rig = (kind) => () => {
     return walk(o, 392, {});
   };
   const FAULTS = {
-    feet: { at: 4, pose: (hx, hy, g) => ({ lf: [g[0] - 18, g[1] + 3], rf: [g[0] - 12, g[1] + 3], y: hy - 14, a: -40, kp: [0, -1] }), text: kind === 'tilting' ? 'Feet on the bars.' : kind === 'twister' ? 'Feet on the handles.' : kind === 'hydra' ? 'Feet on the attachments.' : kind === 'rings' ? 'Feet on the attachments.' : 'Feet or legs touching the bars.', limb: 'lf' },
+    feet: { at: 4, pose: (hx, hy, g) => ({ lf: [g[0] - 18, g[1] + 3], rf: [g[0] - 12, g[1] + 3], y: hy - 14, a: -40, kp: [0, -1] }), text: kind === 'mitm' ? 'Feet or legs touching the handles or bars, or going over the top.' : kind === 'tilting' ? 'Feet on the bars.' : kind === 'twister' ? 'Feet on the handles.' : kind === 'hydra' ? 'Feet on the attachments.' : kind === 'rings' ? 'Feet on the attachments.' : 'Feet or legs touching the bars.', limb: 'lf' },
     ground: { at: 4, pose: (hx, hy) => ({ lf: [hx + 2, G], rf: [hx - 8, G - 14], kp: [1, 0.2] }), text: 'Feet touching the ground to gain an advantage.', limb: 'lf' },
     truss: { at: 1, pose: (hx, hy) => ({ lf: [ups[0] + 1, hy + 24], rf: [ups[0] + 1, hy + 36] }), text: kind === 'tilting' ? 'Using the uprights as a ladder.' : 'Using the vertical truss as a ladder.', limb: 'lf', hl: ['truss'] },
     rope: { at: 3, pose: (hx, hy, g) => ({ rh: [g[0], y + 8] }), text: kind === 'hydra' ? 'Grabbing the tubing that holds the attachments.' : 'Grabbing the ropes, slings or chains that hold the rings and handles.', limb: 'rh', hl: ['rope'] },
     fall: { at: 5, pose: (hx, hy, g) => ({ lh: [hx - 12, hy - 52], rh: [hx + 10, hy - 54], y: hy + 6 }), text: 'Falling off.', limb: 'hip', body: true, end: (o, hx) => land(o, hx, 1) },
   };
-  const fails = { monkey: ['feet', 'truss', 'nobell'], rings: ['rope', 'ground', 'nobell'], twister: ['fall', 'feet'], hydra: ['rope', 'fall'], tilting: ['truss', 'feet'] }[kind];
+  const fails = { monkey: ['feet', 'truss', 'nobell'], rings: ['rope', 'ground', 'nobell'], twister: ['fall', 'feet'], hydra: ['rope', 'fall'], tilting: ['truss', 'feet'], mitm: ['feet', 'fall'] }[kind];
   return {
     back: (s, H) => {
       let st = `${ground()}${rc(56, G - 24, 34, 24, 'prF prWood')}${ups.map((x) => ln(x, y - 8, x, G, hl(H.has('truss') && x === ups[0], 'pr prThick'))).join('')}${ln(ups[0], y - 8, ups[1] + 24, y - 8, 'pr prThick')}`;
       if (kind === 'monkey' || kind === 'tilting') st += `${ln(xs[0] - 12, grips[0][1] - 4, xs[7] + 12, grips[7][1] - 4, 'pr')}${grips.map(([x, gy]) => ci(x, gy, 2.6, 'prMetal')).join('')}`;
       if (kind === 'rings' || kind === 'hydra') st += grips.map(([x, gy], i) => `${ln(x, y - 8, x, gy - 5, hl(H.has('rope') && i === 3, kind === 'hydra' ? 'pr prThick' : 'pr prThin'))}${kind === 'hydra' ? rc(x - 5, gy - 4, 10, 6, 'prMetal', 2) : `<circle class="pr" cx="${x}" cy="${gy}" r="5"/>`}`).join('');
+      if (kind === 'mitm') st += `${ln(xs[0] - 12, y - 2, xs[7] + 12, y - 2, 'pr prThick')}${grips.map(([x, gy], i) => (mid(i) ? ci(x, gy, 2.6, 'prMetal') : `${ln(x, y - 2, x, gy - 3, 'pr')}${ln(x - 4, gy, x + 4, gy, 'pr prThick')}`)).join('')}`;
       if (kind === 'twister') st += `${ln(xs[0] - 12, y - 2, xs[7] + 12, y - 2, 'pr prThick')}${grips.map(([x, gy], i) => ln(x, y - 2, x + (i % 2 ? 5 : -5), gy + 2, 'pr')).join('')}`;
       return `${st}${ln(bx, y - 8, bx, by - 14, 'pr prThin')}${bell(bx, by, s.ring, H.has('bell'))}`;
     },
@@ -590,6 +592,44 @@ const carry = (kind) => () => {
     good: run(), fails: FAILS[kind].map(([k]) => run(k)),
   };
 };
+
+function tireflip() {
+  // the tyre lies flat (1.2 m across); it turns about the middle of its far edge, so a half turn lands it flat beyond, and back again
+  const NX = 120, W = 64, TH = 16, PV = [NX + W, G - TH / 2];
+  const edge = (deg) => { const r = deg * D, c = Math.cos(r), sn = Math.sin(r); return [PV[0] - W * c + (TH / 2) * sn, PV[1] - W * sn - (TH / 2) * c]; };
+  const grip = (deg, f) => { const e = edge(deg); return { lh: [e[0] - f * 2, e[1] + 2], rh: [e[0] + f * 2, e[1]] }; };
+  const run = (fault) => {
+    const o = timeline({ ...stand(40), tr: 0 });
+    walk(o, NX - 16, {});
+    // the first flip: squat, hands under the near edge, drive it up and push it over
+    o.to(0.5, { x: NX - 12, y: G - 26, a: 42, lf: [NX - 18, G], rf: [NX - 6, G], ...grip(0, 1) });
+    o.to(0.5, { tr: 35, x: NX - 8, y: G - 38, a: 24, ...grip(35, 1) });
+    o.to(0.45, { tr: 64, x: NX + 16, y: G - 42, a: 22, lf: [NX + 2, G], rf: [NX + 24, G], ...grip(64, 1) });
+    o.to(0.4, { tr: 88, x: PV[0] - 30, y: G - 43, a: 26, lf: [PV[0] - 46, G], rf: [PV[0] - 24, G], ...grip(88, 1) });
+    if (fault === 'touch') {
+      o.to(0.45, { tr: 150, x: PV[0] - 14, a: 40, ...grip(150, 1) }, { g: { tr: 1 } });
+      o.mark('Touching it before it has come to rest after the first flip.', 'rh', { kind: 'bad', hl: ['tyre'] });
+      o.to(0.2, { tr: 180 }, { g: { tr: 1 } });
+      return o.to(0.4, stand(PV[0] - 20, 1));
+    }
+    // let go: it falls the rest of the way on its own, under gravity
+    o.to(0.5, { tr: 180, ...stand(PV[0] - 34, 1) }, { g: { tr: 1 } });
+    o.mark('Let go of it completely, hands and feet, then flip it back over to where it started.', [PV[0] + W / 2, G - 10]);
+    // round to the other side, and flip it back
+    walk(o, PV[0] + W + 16, {});
+    o.to(0.3, { f: -1 });
+    o.to(0.5, { x: PV[0] + W + 12, y: G - 26, a: 42, lf: [PV[0] + W + 18, G], rf: [PV[0] + W + 6, G], ...grip(180, -1) });
+    o.to(0.5, { tr: 145, x: PV[0] + W + 8, y: G - 38, a: 24, ...grip(145, -1) });
+    o.to(0.45, { tr: 116, x: PV[0] + W - 16, y: G - 42, a: 22, lf: [PV[0] + W - 2, G], rf: [PV[0] + W - 24, G], ...grip(116, -1) });
+    o.to(0.4, { tr: 92, x: PV[0] + 30, y: G - 43, a: 26, lf: [PV[0] + 46, G], rf: [PV[0] + 24, G], ...grip(92, -1) });
+    o.to(0.5, { tr: 0, ...stand(PV[0] + 34, -1) }, { g: { tr: -1 } });
+    return o.hold(0.4);
+  };
+  return {
+    back: (s, H) => `${ground()}<g transform="rotate(${s.tr.toFixed(1)} ${PV[0]} ${PV[1]})"><rect class="${hl(H.has('tyre'), 'prTyre')}" x="${NX}" y="${G - TH}" width="${W}" height="${TH}" rx="7"/><rect class="prTyreIn" x="${NX + 14}" y="${G - TH + 4}" width="${W - 28}" height="${TH - 8}" rx="3"/></g>`,
+    good: run(), fails: [run('touch')],
+  };
+}
 
 function drag() {
   // the plate starts at the left; the stake on the right; pull it in with the rope, torso behind the stake, then drag it back
@@ -902,7 +942,7 @@ export const SCENES = {
   walls, inverted, slip, stairway, bender, rope, cargoplus, cargo, hurdles, out,
   monkey: rig('monkey'), ape, multirig: rig('rings'), twister: rig('twister'), hydra: rig('hydra'), helix: wallTraverse('helix'),
   olympus: wallTraverse('olympus'), zwall: wallTraverse('zwall'), hanging: wallTraverse('hanging'), tilting: rig('tilting'), tyrolean,
-  hoist, atlas: carry('atlas'), sandbag: carry('sandbag'), bucket: carry('bucket'), log: carry('log'), chain: carry('chain'), armer: carry('armer'), drag,
+  hoist, atlas: carry('atlas'), tireflip, mitm: rig('mitm'), sandbag: carry('sandbag'), bucket: carry('bucket'), log: carry('log'), chain: carry('chain'), armer: carry('armer'), drag,
   crawl, fire, swim, balance, slackline,
   spear, laser, memory,
 };

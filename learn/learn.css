@@ -516,3 +516,22 @@ h3.sub { font-size: 1rem; text-transform: uppercase; letter-spacing: .04em; marg
 .obWorld .prLine { stroke: var(--bad); stroke-width: 2; }
 .obWorld .prSpear { stroke: #c9ad7f; stroke-width: 2.5; stroke-linecap: round; }
 .obWorld .prGhost { fill: none; stroke: var(--muted); stroke-width: 1.5; stroke-dasharray: 3 3; }
+.obWorld .prTyre { fill: #30343b; stroke: #a7b0bb; stroke-width: 2; }
+.obWorld .prTyre.hlBad { fill: var(--bad); }
+.obWorld .prTyreIn { fill: #565d68; }
+
+/* an obstacle's video: its picture with a play button until tapped, then YouTube's player (video.js) */
+.ytFacade { position: relative; display: block; width: 100%; aspect-ratio: 16 / 9; padding: 0; border: 0; border-radius: 12px; overflow: hidden; background: #000; cursor: pointer; }
+.ytFacade img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ytPlay { position: absolute; left: 50%; top: 50%; width: 68px; height: 48px; margin: -24px 0 0 -34px; border-radius: 14px; background: #e2231a; }
+.ytPlay::after { content: ''; position: absolute; left: 27px; top: 14px; border-style: solid; border-width: 10px 0 10px 17px; border-color: transparent transparent transparent #fff; }
+.ytFacade:hover .ytPlay, .ytFacade:focus-visible .ytPlay { background: #ff3b30; }
+.ytBox { aspect-ratio: 16 / 9; border-radius: 12px; overflow: hidden; background: #000; }
+.ytBox iframe { width: 100%; height: 100%; border: 0; display: block; }
+/* make the call: three answers, the right one shown green and a wrong pick red */
+.obCallOptions { display: grid; gap: 8px; }
+.obCallBtn { text-align: left; min-height: 48px; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--text); font: inherit; cursor: pointer; }
+.obCallBtn:disabled { cursor: default; }
+.obCallBtn.right { border-color: var(--accent); box-shadow: inset 4px 0 0 var(--accent); }
+.obCallBtn.wrong { border-color: var(--bad); box-shadow: inset 4px 0 0 var(--bad); }
+.obCallWhy { margin: 10px 0 0; font-weight: 600; }

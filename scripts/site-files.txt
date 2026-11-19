@@ -81,6 +81,7 @@ learn/govern.js
 learn/obstacles.js
 learn/obstacle-anim.js
 learn/obstacle-scenes.js
+learn/video.js
 learn/reports.js
 learn/diagnostics.js
 learn/learn.css

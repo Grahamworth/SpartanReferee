@@ -19,7 +19,7 @@ export const FILES = [
   'streaming.html', 'email-return.html', 'offline.html', 'offline.js', 'privacy.html', 'email-signin-web.js', 'email-signin-core.js', 'api-base.js', 'recordings.html', 'recordings.js',
   // the learning platform
   'learn/index.html', 'learn/learn.js', 'learn/core.js', 'learn/people.js', 'learn/programmes.js', 'learn/lesson.js', 'learn/assess.js', 'learn/judgement.js',
-  'learn/govern.js', 'learn/reports.js', 'learn/diagnostics.js', 'learn/practice.js', 'learn/saved.js', 'learn/sharp.js', 'learn/home.js', 'learn/events.js', 'learn/invites.js', 'learn/tracking.js', 'learn/authoring.js', 'learn/obstacles.js', 'learn/obstacle-anim.js', 'learn/obstacle-scenes.js', 'join.html', 'join.js',
+  'learn/govern.js', 'learn/reports.js', 'learn/diagnostics.js', 'learn/practice.js', 'learn/saved.js', 'learn/sharp.js', 'learn/home.js', 'learn/events.js', 'learn/invites.js', 'learn/tracking.js', 'learn/authoring.js', 'learn/obstacles.js', 'learn/obstacle-anim.js', 'learn/obstacle-scenes.js', 'learn/video.js', 'join.html', 'join.js',
   // what the server says that people see: its error messages and labels (shown in the page, so translated there like the rest)
   'api/src/core.js', 'api/src/assignments.js', 'api/src/servers.js', 'api/src/events.js', 'api/src/companies.js', 'api/src/recordings.js',
   'api/src/learn/index.js', 'api/src/learn/programmes.js', 'api/src/learn/lessons.js', 'api/src/learn/media.js', 'api/src/learn/assess.js',
@@ -49,6 +49,7 @@ export function wordy(s) {
   if (/^(UTC|GMT)$/.test(t)) return false;
   if (/^[A-Z]{2,}-\d{4}-([\d.]+|\{\w+\})$/.test(t)) return false; // rule ids: OCR-2026-4.1.8, OCR-2026-{s}
   if (/^(translate|rotate|scale|matrix)\(/.test(t)) return false; // SVG transforms
+  if (/^[\w-]{11}$/.test(t) && /\d/.test(t) && /[A-Z]/.test(t) && /[a-z]/.test(t)) return false; // YouTube video ids: LvV76-1eYIc
   if (t.split(' ').every((w) => /^(\{\w+\}|[a-z]+([A-Z][a-z]*)*)$/.test(w)) && /[a-z][A-Z]/.test(t.replace(/\{\w+\}/g, ''))) return false; // class lists: "pr prThin", "{c} hlBad"
   if (/^[A-Z0-9 ]+$/.test(t) && /\d/.test(t) && /[A-Z]{2}/.test(t)) return false; // codes shown as they are: "17 GOLF 735"
   if (/\bpx\b.*(Arial|sans-serif|Barlow)|^rgba?\(|^\w+\[|^X-[A-Z]|^(NFKD|SHA-256|localhost)$|@|\.com$/.test(t)) return false; // fonts, colours, selectors, headers

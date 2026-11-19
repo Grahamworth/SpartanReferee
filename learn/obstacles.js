@@ -3,6 +3,7 @@
 // Course Run (course-rules.js there) and checked against the rule references here (scripts/learn-ocr-lessons.json). Where a rule
 // reference exists, the obstacle links to it. When Spartan updates the rules, update these too. Everyone signed in can see them.
 import { $, esc, t } from './core.js';
+import { videoHtml, wireVideos } from './video.js';
 
 export const RULES_PAGE = 'https://spartanrace.zendesk.com/hc/en-us/articles/203602743-Official-Rules-Guidelines-and-Penalties-for-Spartan-Race-Obstacles';
 export const RULEBOOK_PDF = 'https://d1lqw0hc39usuh.cloudfront.net/public/production/images/538372.pdf';
@@ -28,7 +29,8 @@ const GROUPS = [
 // the rulebook and the 2026 programme sort some obstacles differently (the lessons' review item says so too)
 const REVIEW = 'Under review for 2027: the 2026 programme lists this as {type}. Until it’s settled, apply the rulebook (as here) and refer a disputed call to the Head Referee.';
 
-/** id, title, kind, how many tries, its rulebook section (Part 4), how it's done, good (it counts), bad (a fail); optionally a note, the penalty, and the programme's differing type */
+/** id, title, kind, how many tries, its rulebook section (Part 4), how it's done, good (it counts), bad (a fail); optionally a note, the penalty,
+ * the programme's differing type, a demonstration video (YouTube id; from the 2026 penalty obstacles videos) and a call to make (call) */
 export const OBSTACLES = [
   { id: 'walls', title: 'Walls (6–10 ft)', group: 'climb', type: 'multi', section: '4.1.1',
     how: ['Climb up and over the wall, and come down the other side.'],
@@ -43,7 +45,8 @@ export const OBSTACLES = [
     how: ['Climb the sloping ramp, go over the top and come down.'],
     good: ['Using the ropes, and swapping from one rope to another.'],
     bad: ['Not getting up, over and down the other side.', 'Using the supports or the sides of the wall.'] },
-  { id: 'stairway', title: 'Stairway to Sparta', group: 'climb', type: 'multi', section: '4.1.13', programme: 'must',
+  { id: 'stairway', title: 'Stairway to Sparta', group: 'climb', type: 'multi', section: '4.1.13', programme: 'must', video: 'LvV76-1eYIc',
+    call: { q: 'An athlete uses the step to start the climb. Is that allowed?', options: ['Only for Open athletes.', 'Only for a smaller athlete.', 'Yes, for everyone.'], answer: 2, why: 'Anyone may use the step.' },
     how: ['Up and over the stepped wall, and down the other side.'],
     good: ['Anyone using the step.'],
     bad: ['Not getting over the wall.', 'Using the bracing, the sides or straps.'] },
@@ -82,12 +85,17 @@ export const OBSTACLES = [
     how: ['Climb the rope or rope ladder, move onto the bars, cross on the hands only and ring the bell.'],
     good: ['Trying the climb up to the bars again: that part can be retried.', 'Using the horizontal truss in the middle.', 'The bell rung at the end.'],
     bad: ['Feet touching the bars.', 'Using the support structure or straps.', 'Going over the top.', 'Not ringing the bell.', 'Not finishing once a bar has been touched: from then on the athlete is committed.'] },
-  { id: 'multirig', title: 'Multi-Rig', group: 'hang', type: 'single', section: '4.2.8', programme: 'multi',
+  { id: 'multirig', title: 'Multi-Rig', group: 'hang', type: 'single', section: '4.2.8', programme: 'multi', video: 'G1G441WUKfU',
     how: ['Cross the rings and handles on hands and arms only, in one lane, and ring the bell.'],
     good: ['Using the horizontal truss to start or to change over.', 'Staying in one lane all the way.', 'The bell rung at the end.'],
     bad: ['Grabbing the ropes, slings or chains that hold the rings and handles.', 'Feet on the attachments.', 'Using another lane.', 'Using the vertical truss as a ladder.', 'Feet touching the ground to gain an advantage.', 'Not ringing the bell.'],
     note: 'It counts as an attempt once both feet have left the starting step.' },
-  { id: 'twister', title: 'Twister', group: 'hang', type: 'single', section: '4.2.15', programme: 'multi',
+  { id: 'mitm', title: 'Monkey in the Middle', group: 'hang', type: 'single', section: '4.2.19', video: '5VZUAvPxZQg',
+    how: ['Cross the handles (and the truss between them) on the hands, then the monkey bars on hands and arms, and ring the bell.'],
+    good: ['Using the truss between the handles.', 'Using the horizontal truss to start.', 'The bell rung at the end.'],
+    bad: ['Feet or legs touching the handles or bars, or going over the top.', 'Falling off.', 'Using the pipe the handles are fixed to.', 'Feet touching the ground to gain an advantage.', 'Using the vertical truss as a ladder.', 'Not ringing the bell.'],
+    note: 'It counts as an attempt once both feet have left the starting step.' },
+  { id: 'twister', title: 'Twister', group: 'hang', type: 'single', section: '4.2.15', programme: 'multi', video: 'suyCH7qyUX0',
     how: ['Cross using only the handles (and the truss between sections), and ring the bell.'],
     good: ['Using the truss between sections.', 'The bell rung at the end.'],
     bad: ['Falling off.', 'Feet on the handles.', 'Using the pipe the handles are fixed to.', 'Using the vertical truss as a ladder.', 'Not ringing the bell.'] },
@@ -95,16 +103,18 @@ export const OBSTACLES = [
     how: ['Cross on the attachments with hands and arms only, in one lane, and ring the bell.'],
     good: ['Staying in one lane all the way.', 'The bell rung at the end.'],
     bad: ['Falling off.', 'Grabbing the tubing that holds the attachments.', 'Feet on the attachments.', 'Going over the top.', 'Using another lane.', 'Not ringing the bell.'] },
-  { id: 'helix', title: 'Helix', group: 'hang', type: 'single', section: '4.2.6',
+  { id: 'helix', title: 'Helix', group: 'hang', type: 'single', section: '4.2.6', video: '2KC2HzEDYnM',
     how: ['Move sideways along the obstacle using only the bars in one lane, and ring the bell.'],
     good: ['Only that lane’s bars, all the way to the bell.', 'The bell rung at the end.'],
     bad: ['Touching the ground.', 'Touching the top.', 'Using bars from another lane.'],
     note: 'The athlete is committed once they have four points of contact.' },
-  { id: 'olympus', title: 'Olympus', group: 'hang', type: 'single', section: '4.2.10', programme: 'multi',
+  { id: 'olympus', title: 'Olympus', group: 'hang', type: 'single', section: '4.2.10', programme: 'multi', video: 'kog25l_YesY',
+    call: { q: 'The athlete presses a knee against the flat wall, not a hold or a hole. What is your call?', options: ['Allowed: resting against the wall.', 'A fail.', 'They restart in a new lane.'], answer: 0, why: 'Feet and knees may rest against the wall; only feet or knees on or in the holds and holes are a fail.' },
     how: ['Move sideways along the angled wall, hands only on and in the holds and holes of one lane, and ring the bell.'],
     good: ['Feet and knees resting against the wall.', 'The bell rung at the end.'],
     bad: ['Touching the ground.', 'Touching the top of the wall.', 'Feet or knees on or in any of the holds or holes.'] },
-  { id: 'zwall', title: 'Z Wall', group: 'hang', type: 'single', section: '4.2.17', programme: 'multi',
+  { id: 'zwall', title: 'Z Wall', group: 'hang', type: 'single', section: '4.2.17', programme: 'multi', video: '3mf7TsA3QzE',
+    call: { q: 'The athlete has four points on the starting blocks, loses their position and steps down. What is your call?', options: ['Let them restart.', 'A failed attempt: the penalty.', 'Nothing until the bell.'], answer: 1, why: 'Four points of contact commits the athlete, so stepping down after that is a fail.' },
     how: ['Move sideways using only the hand and foot blocks (and the upright supports) in one lane, starting on the first blocks, and ring the bell.'],
     good: ['Using the upright supports.', 'The bell rung at the end.'],
     bad: ['Touching the ground.', 'Touching the top of the wall or any of the braces.', 'Touching the top or bottom of any cut-out.'],
@@ -118,7 +128,7 @@ export const OBSTACLES = [
     how: ['Cross on hands and arms only, and ring the bell.'],
     good: ['Using the monkey bar between the ladders.', 'Using the horizontal truss to start.', 'The bell rung at the end.'],
     bad: ['Feet on the bars.', 'Using the uprights as a ladder.', 'Feet touching the ground to gain an advantage.'] },
-  { id: 'tyrolean', title: 'Tyrolean Traverse', group: 'hang', type: 'single', section: '4.2.16',
+  { id: 'tyrolean', title: 'Tyrolean Traverse', group: 'hang', type: 'single', section: '4.2.16', video: '15e1cNVi-nQ',
     how: ['Get on the rope at the start, travel along it, and ring the bell with the hands.'],
     good: ['Getting off once the bell is rung.'],
     bad: ['Using the ground or the water below to help.', 'Not ringing the bell with the hands.', 'Getting on the rope too far from the start.'],
@@ -132,6 +142,12 @@ export const OBSTACLES = [
     how: ['Pick up the stone, carry it past the far flags, turn, and set it back down at the start.'],
     good: ['Putting the stone down to rest.', 'If it moves, picking it up again from exactly the spot where it stopped.'],
     bad: ['Not carrying it past the far flags, or not returning it to the start.', 'Rolling the stone.', 'Carrying on from anywhere but where it came to rest.'] },
+  { id: 'tireflip', title: 'Tire Flip', group: 'carry', type: 'multi', section: '4.1.14', video: '2lpCYmQso3M',
+    call: { q: 'The tyre drops before the athlete has completed one full flip. Is that a fail?', options: ['Yes, always.', 'No: they may try again.', 'Only if it makes a noise.'], answer: 1, why: 'They aren’t committed to the tyre until one full flip, and dropping it by accident or from tiredness isn’t a fail.' },
+    how: ['Flip the tyre over once and let it come to rest on the ground.', 'Let go of it completely, hands and feet, then flip it back over to where it started.'],
+    good: ['Changing tyres and trying again, before the first full flip.', 'Dropping the tyre by accident or from tiredness: it isn’t a fail.'],
+    bad: ['Not flipping it twice.', 'Touching it before it has come to rest after the first flip.', 'Not getting it back to where it started.', 'Standing inside the tyre to flip it.'],
+    note: 'The athlete is committed to a tyre once they have completed one full flip.' },
   { id: 'sandbag', title: 'Sandbag Carry', group: 'carry', type: 'must', section: '4.3.8',
     how: ['Carry the bag round the whole marked course, and return it.'],
     good: ['Putting it down to rest, then setting off again from wherever it landed.'],
@@ -244,6 +260,8 @@ function obstacleView(id) {
   return `<section class="card" id="obPage"><p class="crumbs"><a href="#/obstacles">Obstacles</a></p>
       <div class="obHead"><span class="obIcon big">${icon(o.group)}</span><div><h1>${esc(t(o.title))}</h1><p class="obMeta">${typeChip(o.type)} <span class="muted">${esc(t(GROUPS.find(([g]) => g === o.group)[1]))}</span></p></div></div></section>
     <div id="obAnimSlot" data-id="${esc(o.id)}" data-title="${esc(o.title)}"></div>
+    ${o.video ? `<section class="card obVideo"><h2>Watch it</h2>${videoHtml(o.video, o.title)}<p class="note">${esc(t('A demonstration of the obstacle, with captions in your language where YouTube can translate them. The rulebook always takes precedence over a video.'))}</p></section>` : ''}
+    ${o.call ? `<section class="card obCall" id="obCall"><h2>Make the call</h2><p>${esc(t(o.call.q))}</p><div class="obCallOptions">${o.call.options.map((x, i) => `<button type="button" class="obCallBtn" data-i="${i}">${esc(t(x))}</button>`).join('')}</div><p class="obCallWhy" hidden></p></section>` : ''}
     <section class="card"><p>${esc(t(TYPE[o.type].text))}</p>
       ${o.penalty ? `<p><b>${esc(t('Penalty for a fail:'))}</b> ${esc(t(o.penalty))}</p>` : ''}
       ${o.note ? `<p class="obNote">${esc(t(o.note))}</p>` : ''}
@@ -278,6 +296,18 @@ export function wire() {
   // an obstacle opens at its top, also from Previous / Next at the bottom of the one before
   if ($('obPage')) {
     scrollTo(0, 0);
+    wireVideos($('view'));
+    // make the call: tap an answer, see whether it's right and why
+    const call = $('obCall');
+    if (call) {
+      const o = OBSTACLES.find((x) => x.id === $('obAnimSlot').dataset.id);
+      for (const b of call.querySelectorAll('.obCallBtn')) b.addEventListener('click', () => {
+        const right = +b.dataset.i === o.call.answer;
+        for (const x of call.querySelectorAll('.obCallBtn')) { x.classList.toggle('right', +x.dataset.i === o.call.answer); x.classList.toggle('wrong', x === b && !right); x.disabled = true; }
+        const why = call.querySelector('.obCallWhy');
+        why.textContent = `${right ? t('Right.') : t('Not quite.')} ${t(o.call.why)}`; why.hidden = false;
+      });
+    }
     // its animation, loaded only on an obstacle's page (obstacle-scenes.js); an obstacle without one just has no player
     const slot = $('obAnimSlot');
     if (slot) Promise.all([import('./obstacle-anim.js'), import('./obstacle-scenes.js')]).then(([A, S]) => {

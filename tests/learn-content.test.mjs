@@ -90,3 +90,16 @@ test('every obstacle has an animation whose captions are its own lines, with a g
     }
   }
 });
+
+// the demonstration videos and the calls to make (from the 2026 penalty obstacles videos): nine videos, each a YouTube id, on its own obstacle;
+// each call has three answers and one right one; the videos play from youtube-nocookie.com with captions in the site's language
+test('the obstacle videos and calls to make', async () => {
+  globalThis.location ??= { protocol: 'file:', hostname: '', port: '', hash: '' };
+  const { OBSTACLES } = await import('../learn/obstacles.js');
+  const vids = OBSTACLES.filter((o) => o.video);
+  assert.deepStrictEqual(vids.map((o) => o.id).sort(), ['helix', 'mitm', 'multirig', 'olympus', 'stairway', 'tireflip', 'twister', 'tyrolean', 'zwall']);
+  for (const o of vids) assert.match(o.video, /^[\w-]{11}$/, o.id);
+  for (const o of OBSTACLES.filter((x) => x.call)) { assert.strictEqual(o.call.options.length, 3, o.id); assert.ok(o.call.answer >= 0 && o.call.answer < 3 && o.call.why, o.id); }
+  const v = fs.readFileSync(new URL('../learn/video.js', import.meta.url), 'utf8');
+  assert.match(v, /youtube-nocookie\.com/); assert.match(v, /cc_load_policy: 1, cc_lang_pref: l, hl: l/); assert.match(v, /translationLanguage/);
+});
