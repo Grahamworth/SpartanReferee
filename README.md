@@ -20,7 +20,8 @@ There's no registration, no customers and no card (from 18 November 2026). Spart
 Referees book cameras for something (`api/src/servers.js`, "units"), and each has its own booking and servers, so two events on the same weekend don't block each other (within the shared limit of 5 servers):
 
 - **A Spartan event**: the burpee camera station, from 07:00 to 18:00 local time on each of its days (`EVENT_DAY` in `api/src/events.js`). Booking now is only possible during those hours, and a booking or extension stops at 18:00. The event's **head referee** (assigned on the admin page) books, extends and stops it, and admins can too; every referee can open it to watch Live, the Cameras and the Results (from 19 November 2026). An admin can tick "Any time" to ignore the event's hours.
-- **Training** (a practice camera): everyone, 30 minutes, any time, can't be extended. Each referee has their own. Booked only from the end of Learning's **Cameras: setup and use** guide (`/learn/#/cameras`, `POST /api/learn/practice-camera`); the console refuses it and lists it only while it's booked, so it can be watched there.
+- **Practice**: every referee practises with the **free camera** (`/review-free/`, HeadJudge's in-browser judge: no server, no cost), linked from the end of Learning's **Cameras: setup and use** guide.
+- **Training** (a real server, to rehearse the station): head referees and admins only (from 19 November 2026), 30 minutes, any time, can't be extended. Each has their own. Booked only from that same guide (`/learn/#/cameras`, `POST /api/learn/practice-camera`); the console refuses it and lists it only while it's booked, so it can be watched there.
 - **Testing**: admins only, any time, as bookings always were. Each admin has their own.
 
 The events come from Spartan's own race list (`api/src/events.js`): the list its "Find a race" page uses (`api-gate.eks.spartan.com/one/v2/races/upcoming`), with each race's timezone from another of Spartan's services (`api2.spartan.com/api/races/upcoming_past_planned`) where it has it, else from the country (and the longitude in countries with several timezones). Neither is a published API, so the sync can break if Spartan changes them: the last good copy is kept, and the admin page says when it last worked and has **Sync now**. It syncs when the copy is more than 6 hours old and someone opens the console or the event list. An event Spartan stops listing stays until a week after it ends (one of Spartan's lists has been seen to leave out the next few weeks' races). Ask Spartan for permission or an official feed before relying on it.
@@ -106,7 +107,7 @@ A shut-down server is deleted with its disk and address once it has said everyth
 
 ## Publishing
 
-Tests: `node --test tests/*.mjs`, `cd api && node --test test/*.test.js`, `cd control && node --test test/*.test.js`. The site and API run locally with `node api/dev-server.js 8795`.
+Tests: `node --test tests/*.mjs`, `cd api && node --test test/*.test.js`, `cd control && node --test test/*.test.js`, and the learning database's (`source scripts/learn-env.sh && cd api && npm run test:sql`, in the `learn_test` schema). The site and API run locally with `node api/dev-server.js 8795`.
 
 ```bash
 bash scripts/deploy-site.sh   # the files in scripts/site-files.txt, plus the media in site-extras/ (kept on this PC, not in git)
@@ -116,6 +117,10 @@ bash scripts/deploy-site.sh   # the files in scripts/site-files.txt, plus the me
 - Control app: `bash scripts/deploy-control.sh`.
 - Shared server pieces (network, firewall, image store): `bash scripts/setup-servers.sh`.
 - Broadcaster app: `bash scripts/build-broadcaster.sh`, then upload `downloads/spartans-broadcaster.apk` to the `downloads` container.
+
+`deploy-site.sh` refuses to run with uncommitted site or API files, applies any new learning-database migrations (`scripts/learn-migrate.mjs`), writes `/version.json` with the commit and time, and checks the live site serves that commit. That file is the record of what's live.
+
+**Operations** (from 19 November 2026): errors and timers go to Application Insights `spartanreferee-insights`, with an alert on API failures and a £100 monthly budget alert. The site signs in to the learning database as `learn_app`, which can read and write the `learn` schema but can't change tables or audit entries (`scripts/learn-app-user.mjs`); the admin login is only for migrations and scripts. The database bills for use beyond the free allowance instead of pausing. The control app backs up the table data every night to the private `backups` container (30 days). What to do when something breaks, and how to restore: [docs/runbook.md](docs/runbook.md). Personal data requests: [docs/learning/privacy-draft.md](docs/learning/privacy-draft.md) (a draft for Spartan).
 
 Personal test videos (`clips/`, `test.mp4`) stay on this PC: they're never deployed or uploaded. Cloud tests use public footage.
 
