@@ -26,9 +26,11 @@ test('lesson text: no dashes, and a disagreement is flagged as under review rath
     if (s.review) assert.match(s.review, /^(Under review for 2027|En revisión para 2027): /, `${k}: ${s.heading}`);
   }
 });
-test('every lesson is in all 14 other languages, slide for slide and point for point with its English', () => {
+test("every lesson is in each of its programme's languages, slide for slide and point for point with its English", () => {
   assert.deepStrictEqual(Object.keys(TRANSLATIONS).sort(), ['ar', 'cs', 'da', 'de', 'el', 'es', 'fi', 'fr', 'hr', 'it', 'nl', 'pl', 'sv', 'th']);
+  const localesOf = Object.fromEntries(PROGRAMMES.flatMap((p) => p.modules.flatMap((m) => m.lessons.map((l) => [l.key, p.locales.split(',')]))));
   for (const [loc, lessons] of Object.entries(TRANSLATIONS)) for (const [k, l] of Object.entries(LESSONS)) {
+    if (!(localesOf[k] || []).includes(loc) && !k.startsWith('deka')) continue;
     const t = lessons[k]; assert.ok(t, `${loc} ${k}`);
     assert.strictEqual(t.length, l.en.length, `${loc} ${k} slides`);
     t.forEach((s, i) => { assert.strictEqual(s.points.length, l.en[i].points.length, `${loc} ${k} slide ${i + 1}`); assert.strictEqual(!!s.review, !!l.en[i].review, `${loc} ${k} slide ${i + 1} review`); assert.ok(s.heading && s.narration); });
@@ -76,10 +78,11 @@ test('every obstacle has how, good and bad; ids are unique; its rule references 
 test('every obstacle has an animation whose captions are its own lines, with a good run and a fail', async () => {
   globalThis.location ??= { protocol: 'file:', hostname: '', port: '', hash: '' };
   const { OBSTACLES } = await import('../learn/obstacles.js');
-  const { SCENES } = await import('../learn/obstacle-scenes.js');
+  const { SCENES, MOVEMENTS } = await import('../learn/obstacle-scenes.js');
   const { sample, solve } = await import('../learn/obstacle-anim.js');
   assert.deepStrictEqual(OBSTACLES.filter((o) => !SCENES[o.id]).map((o) => o.id), ['iconic']);
   for (const [id, make] of Object.entries(SCENES)) {
+    if (MOVEMENTS.includes(id)) continue;
     const o = OBSTACLES.find((x) => x.id === id), s = make(), lines = [...o.how, ...o.good, ...o.bad, o.note].filter(Boolean);
     assert.ok(o, id);
     assert.ok(s.good.marks.some((m) => !m.kind), `${id}: the good run shows what counts`);
@@ -102,4 +105,27 @@ test('the obstacle videos and calls to make', async () => {
   for (const o of OBSTACLES.filter((x) => x.call)) { assert.strictEqual(o.call.options.length, 3, o.id); assert.ok(o.call.answer >= 0 && o.call.answer < 3 && o.call.why, o.id); }
   const v = fs.readFileSync(new URL('../learn/video.js', import.meta.url), 'utf8');
   assert.match(v, /youtube-nocookie\.com/); assert.match(v, /cc_load_policy: 1, cc_lang_pref: l, hl: l/); assert.match(v, /translationLanguage/);
+});
+
+// animations on lesson slides (scripts/learn-visuals.mjs and the lessons' own media): each names a slide that exists and a scene that exists;
+// the burpee (a movement, not an obstacle) has a good rep and a fail for each part of the standard; every scene is in the editor's list
+test('slide animations point at real slides and real scenes', async () => {
+  globalThis.location ??= { protocol: 'file:', hostname: '', port: '', hash: '' };
+  const { VISUALS } = await import('../scripts/learn-visuals.mjs');
+  const { SCENES } = await import('../learn/obstacle-scenes.js');
+  const { ANIMS } = await import('../learn/slide-visual.js');
+  for (const [k, bySlide] of Object.entries(VISUALS)) for (const [h, a] of Object.entries(bySlide)) {
+    assert.ok(LESSONS[k].en.some((s) => s.heading === h), `${k}: "${h}"`); assert.ok(SCENES[a], a);
+  }
+  for (const [k, l] of Object.entries(LESSONS)) for (const s of l.en) if (s.media) { assert.strictEqual(s.media.type, 'anim', k); assert.ok(SCENES[s.media.src], `${k}: ${s.media.src}`); }
+  assert.deepStrictEqual(ANIMS.map(([k]) => k).sort(), Object.keys(SCENES).sort(), 'the editor offers every animation');
+  const b = SCENES.burpee();
+  assert.strictEqual(b.good.marks.length, 3); assert.strictEqual(b.fails.length, 3);
+});
+test('Referee Essentials: five modules from the mobile prototype, in English and German, each lesson with its quick check', async () => {
+  const { ESSENTIALS, ESSENTIALS_LESSONS } = await import('../scripts/learn-essentials.mjs');
+  assert.ok(PROGRAMMES.includes(ESSENTIALS));
+  assert.strictEqual(ESSENTIALS.locales, 'en,de');
+  assert.strictEqual(ESSENTIALS.modules.length, 5);
+  for (const k of Object.keys(ESSENTIALS_LESSONS)) { assert.ok(LESSONS[k]); assert.ok(TRANSLATIONS.de[k], k); }
 });

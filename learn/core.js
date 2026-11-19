@@ -6,7 +6,7 @@ import { viaCache, queue, flush } from '../offline.js';
 export { esc };
 export const $ = (id) => document.getElementById(id);
 export const show = (el, on) => { if (el) el.hidden = !on; };
-const API = location.protocol.startsWith('http') && (location.hostname.endsWith('azurestaticapps.net') || location.port === '8795') ? '/api' : 'https://brave-forest-022879f03.3.azurestaticapps.net/api';
+export const API = location.protocol.startsWith('http') && (location.hostname.endsWith('azurestaticapps.net') || location.port === '8795') ? '/api' : 'https://brave-forest-022879f03.3.azurestaticapps.net/api';
 export const store = { get: (k) => { try { return localStorage.getItem(k) || ''; } catch { return ''; } }, set: (k, v) => { try { if (v) localStorage.setItem(k, v); else localStorage.removeItem(k); } catch { /* private mode */ } } };
 export const AS_KEY = 'sr_learn_as';
 /** an admin's Preview as: the type of user their own account is shown as (also sent to the site's API by api-base.js) */

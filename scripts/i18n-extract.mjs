@@ -19,7 +19,7 @@ export const FILES = [
   'streaming.html', 'email-return.html', 'offline.html', 'offline.js', 'privacy.html', 'email-signin-web.js', 'email-signin-core.js', 'api-base.js', 'recordings.html', 'recordings.js',
   // the learning platform
   'learn/index.html', 'learn/learn.js', 'learn/core.js', 'learn/people.js', 'learn/programmes.js', 'learn/lesson.js', 'learn/assess.js', 'learn/judgement.js',
-  'learn/govern.js', 'learn/reports.js', 'learn/diagnostics.js', 'learn/practice.js', 'learn/saved.js', 'learn/sharp.js', 'learn/home.js', 'learn/events.js', 'learn/invites.js', 'learn/tracking.js', 'learn/authoring.js', 'learn/obstacles.js', 'learn/obstacle-anim.js', 'learn/obstacle-scenes.js', 'learn/video.js', 'join.html', 'join.js',
+  'learn/govern.js', 'learn/reports.js', 'learn/diagnostics.js', 'learn/practice.js', 'learn/saved.js', 'learn/sharp.js', 'learn/home.js', 'learn/events.js', 'learn/invites.js', 'learn/tracking.js', 'learn/authoring.js', 'learn/obstacles.js', 'learn/obstacle-anim.js', 'learn/obstacle-scenes.js', 'learn/video.js', 'learn/slide-visual.js', 'join.html', 'join.js',
   // what the server says that people see: its error messages and labels (shown in the page, so translated there like the rest)
   'api/src/core.js', 'api/src/assignments.js', 'api/src/servers.js', 'api/src/events.js', 'api/src/companies.js', 'api/src/recordings.js',
   'api/src/learn/index.js', 'api/src/learn/programmes.js', 'api/src/learn/lessons.js', 'api/src/learn/media.js', 'api/src/learn/assess.js',

@@ -34,6 +34,15 @@ function createLessons(ctx, { speech, mediaSigner }) {
     sourceHash: c.source_hash, createdAt: c.created_at, submittedAt: c.submitted_at, approvedAt: c.approved_at });
   ctx.contentView = contentView; ctx.contentById = contentById; ctx.lessonById = lessonById; ctx.hash = hash;
 
+  /** a translation shows the English slides' drawings, pictures, videos and animations: they're set once, in English, for every language */
+  async function withEnglishVisuals(view) {
+    if (!view || !view.translationOf) return view;
+    const en = await contentById(view.translationOf); if (!en) return view;
+    const es = JSON.parse(en.body).slides || [];
+    view.slides = view.slides.map((s, i) => { if (!es[i]) return s; const { media: _old, ...rest } = s; return { ...rest, figure: es[i].figure || '', ...(es[i].media ? { media: es[i].media } : {}) }; });
+    return view;
+  }
+  ctx.withEnglishVisuals = withEnglishVisuals;
   /** content a learner may see for a lesson: published, or a translation in review (a preview) */
   async function learnerContent(lessonId) {
     return db.query("SELECT * FROM {S}.content_version WHERE lesson_id = @l AND (state = 'published' OR (state = 'review' AND translation_of IS NOT NULL)) ORDER BY version_no DESC", { l: lessonId });
@@ -157,7 +166,7 @@ function createLessons(ctx, { speech, mediaSigner }) {
       lesson: ctx.lessonView(l), module: { title: l.module_title, code: l.module_code || '', seq: l.module_seq },
       programme: { id: l.programme_id, title: l.programme_title, demo: !!l.demo, locales: String(l.locales).split(',') },
       version: { id: l.version_id, edition: l.edition, state: l.version_state },
-      content: contentView(c), locales, media: c ? await media.plan(c, l.programme_id) : null, rules,
+      content: await withEnglishVisuals(contentView(c)), locales, media: c ? await media.plan(c, l.programme_id) : null, rules,
       progress: progress ? { contentId: progress.content_id, slide: progress.slide, locale: progress.locale } : null,
       completions: completions.map((x) => ({ at: x.completed_at, locale: x.locale, preview: !!x.preview, versionNo: x.content_version })),
       enrolled: !!e, enrolmentState: e?.state || '', lock: await lockOf(w, l, e),
@@ -211,6 +220,9 @@ function createLessons(ctx, { speech, mediaSigner }) {
 
   // ------------------------------------------------------------------ writing and approving content
   ctx.readSlides = (raw) => readSlides(raw); // authoring.js checks drafts the same way
+  // what a slide can show instead of its drawing: an uploaded picture or video (slidemedia.js keeps them), a YouTube video, or an animation
+  const MEDIA = { image: /^[0-9a-f-]{36}\.(jpg|jpeg|png|webp|gif)$/, video: /^[0-9a-f-]{36}\.(mp4|webm|mov)$/, youtube: /^[\w-]{11}$/, anim: /^[a-z]{2,24}$/ };
+  const readMedia = (m) => (m && MEDIA[m.type] && MEDIA[m.type].test(String(m.src || '')) ? { type: m.type, src: String(m.src) } : null);
   function readSlides(raw) {
     if (!Array.isArray(raw) || !raw.length || raw.length > MAX_SLIDES) return { error: `A lesson has 1 to ${MAX_SLIDES} slides` };
     const slides = raw.map((s) => ({
@@ -220,6 +232,7 @@ function createLessons(ctx, { speech, mediaSigner }) {
       figure: text(s?.figure, 40) || '', note: text(s?.note, 600) || '', review: text(s?.review, 600) || '',
       // a box under the slide: the free camera, or booking a practice server (the camera course's last lesson)
       ...(ACTIONS.includes(s?.action) ? { action: s.action } : {}),
+      ...(readMedia(s?.media) ? { media: readMedia(s.media) } : {}),
     }));
     if (slides.some((s) => !s.heading)) return { error: 'Every slide needs a heading' };
     return { slides };

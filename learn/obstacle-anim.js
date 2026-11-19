@@ -241,8 +241,9 @@ export function play(root, scene) {
   btn.textContent = t(paused ? 'Play' : 'Pause'); btn.setAttribute('aria-pressed', String(!paused));
   go(0); requestAnimationFrame(tick);
 }
-export const playerHtml = (title) => `<section class="card obAnim" id="obAnim">
+/** the player's markup: a card on an obstacle's page, or (inline) just the player, for a lesson slide */
+export const playerHtml = (title, inline = false) => `<${inline ? 'div' : 'section'} class="${inline ? 'obInline ' : 'card '}obAnim"${inline ? '' : ' id="obAnim"'}>
   <div class="obStage"><svg viewBox="0 0 400 225" role="img" aria-label="${esc(t('Animation: {title}', { title: t(title) }))}"><g class="obWorld"></g></svg><span class="obPhase"></span></div>
   <p class="obCaption" aria-live="polite">&nbsp;</p>
   <div class="obControls"><button type="button" class="small obPlay"></button>
-    <span class="obChips"><button type="button" class="small" data-phase="0">${esc(t('Real speed'))}</button><button type="button" class="small" data-phase="1">${esc(t('What counts'))}</button><button type="button" class="small" data-phase="2">${esc(t('A fail'))}</button></span></div></section>`;
+    <span class="obChips"><button type="button" class="small" data-phase="0">${esc(t('Real speed'))}</button><button type="button" class="small" data-phase="1">${esc(t('What counts'))}</button><button type="button" class="small" data-phase="2">${esc(t('A fail'))}</button></span></div></${inline ? 'div' : 'section'}>`;

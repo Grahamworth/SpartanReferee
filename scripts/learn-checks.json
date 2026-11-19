@@ -1170,5 +1170,161 @@
     "OCR-2026-3.17.5"
    ]
   }
+ ],
+ "ess-1-1": [
+  {
+   "prompt": "An athlete you know well arrives at your obstacle. What do you judge?",
+   "options": [
+    "Their effort",
+    "The action against the rule, as for anyone",
+    "Whether they are likely to win"
+   ],
+   "answer": 1,
+   "feedback": "Be impartial: judge the action, never the athlete.",
+   "rules": []
+  },
+  {
+   "prompt": "Which two categories do athletes race in?",
+   "options": [
+    "Competitive and Open",
+    "Elite and Beginner",
+    "Ultra and Sprint"
+   ],
+   "answer": 0,
+   "feedback": "Competitive (Elite and Age Group) and Open.",
+   "rules": [
+    "OCR-2026-2.1.1"
+   ]
+  }
+ ],
+ "ess-2-1": [
+  {
+   "prompt": "You notice your wall's structure may be unsafe, and athletes are coming. What do you do?",
+   "options": [
+    "Keep the race moving and mention it later",
+    "Alert event staff at once and follow the safety escalation",
+    "Ask the next athlete to test it"
+   ],
+   "answer": 1,
+   "feedback": "Safety first: report a hazard at once, through the chain.",
+   "rules": []
+  },
+  {
+   "prompt": "Who do you take a call you are unsure about to?",
+   "options": [
+    "The athlete",
+    "The Head Referee",
+    "The nearest spectator"
+   ],
+   "answer": 1,
+   "feedback": "If in doubt, escalate: the Head Referee reviews, directs and interprets.",
+   "rules": []
+  }
+ ],
+ "ess-3-1": [
+  {
+   "prompt": "At the Spear Throw, the athlete has picked up the spear but not released it. May they reset or change lanes?",
+   "options": [
+    "Yes, before a forward release",
+    "No: picking up the spear commits them",
+    "Only if the referee allows it"
+   ],
+   "answer": 0,
+   "feedback": "The attempt starts when the spear is released forward. Before that, they may change lanes.",
+   "rules": [
+    "OCR-2026-4.2.13"
+   ]
+  },
+  {
+   "prompt": "The spear brushes the ground in flight, then sticks in the target, and nothing touches the ground once it stops. What now?",
+   "options": [
+    "A fail: it touched the ground",
+    "Judge it on everything else: touching the ground in flight isn't a fail on its own",
+    "A pass, whatever else happened"
+   ],
+   "answer": 1,
+   "feedback": "Only touching the ground once it has stopped is a fail. Check the other conditions as usual.",
+   "rules": [
+    "OCR-2026-4.2.13"
+   ]
+  },
+  {
+   "prompt": "An athlete fails a mandatory obstacle. What normally follows?",
+   "options": [
+    "A penalty loop",
+    "Disqualification, unless the Race Director gives a time penalty",
+    "30 burpees"
+   ],
+   "answer": 1,
+   "feedback": "Mandatory obstacles have no penalty to take instead: failing one normally means disqualification.",
+   "rules": [
+    "OCR-2026-3.17.2"
+   ]
+  }
+ ],
+ "ess-4-1": [
+  {
+   "prompt": "An athlete fails a pass/fail obstacle and runs past the penalty loop. What applies?",
+   "options": [
+    "Nothing, if their attempt was close",
+    "A 10 minute time penalty",
+    "Disqualification straight away"
+   ],
+   "answer": 1,
+   "feedback": "Rule 3.4.1: skipping the penalty loop adds 10 minutes to the finish time.",
+   "rules": [
+    "OCR-2026-3.4.1"
+   ]
+  },
+  {
+   "prompt": "After review, an athlete at a standard OCR race missed 12 of their 30 burpees. What does the rulebook add?",
+   "options": [
+    "6 minutes",
+    "10 minutes in total",
+    "Disqualification"
+   ],
+   "answer": 1,
+   "feedback": "Rule 3.4.2: more than 10 missed is 10 minutes in total. The Head Referee confirms the penalty.",
+   "rules": [
+    "OCR-2026-3.4.2"
+   ]
+  },
+  {
+   "prompt": "Which three things make a burpee count?",
+   "options": [
+    "Chest to the ground, fully upright, a jump with the hands above the ears",
+    "Hands on the ground, a squat, a clap",
+    "Ten in a row without stopping"
+   ],
+   "answer": 0,
+   "feedback": "Chest down at the bottom, hips and knees extended at the top, then the jump with the hands above the ears.",
+   "rules": [
+    "OCR-2026-3.17.4"
+   ]
+  }
+ ],
+ "ess-5-1": [
+  {
+   "prompt": "Your view was blocked at the moment the athlete may have rung the bell. What is the professional response?",
+   "options": [
+    "Assume they rang it: they looked confident",
+    "Assume they didn't: you didn't hear it",
+    "Record what you saw and ask the Head Referee to decide"
+   ],
+   "answer": 2,
+   "feedback": "Report the facts you saw, and let the Head Referee decide with any evidence.",
+   "rules": []
+  },
+  {
+   "prompt": "What goes in your report of an incident?",
+   "options": [
+    "Your opinion of the athlete",
+    "The headband number, the obstacle, what you saw, when, and who you told",
+    "Only the penalty you gave"
+   ],
+   "answer": 1,
+   "feedback": "Evidence beats opinion: the facts the Head Referee needs.",
+   "rules": []
+  }
  ]
 }

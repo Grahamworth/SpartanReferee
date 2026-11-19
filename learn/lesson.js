@@ -1,6 +1,7 @@
 // The lesson player (step 3), phone first: slides with a figure, narration through the media adapter (Azure narration, the device's own
 // voice, or captions only), captions and a full transcript, keyboard controls, a bookmark, completion, a language switcher with clear
 // Preview translation labels, and for editors the content versions with writing, review and approval (LRN-02..05, LRN-07, AT-04, AT-05).
+import { visualHtml, wireVisual } from './slide-visual.js';
 import { $, call, esc, toast, fail, badge, day, redraw, act, hooks, runHooks, LANG, t } from './core.js';
 import { programsTabs } from './authoring.js';
 import { drawAction } from './practice.js';
@@ -106,13 +107,14 @@ function reviewNote(text) {
 }
 function drawSlide() {
   const c = L.content, s = c.slides[slide], n = c.slides.length;
-  $('lpStage').innerHTML = `<div class="lpFig">${FIGURES[s.figure] || FIGURES.placeholder}</div>
+  $('lpStage').innerHTML = `<div class="lpFig${s.media ? ' lpFigMedia' : ''}" data-media="${esc(s.media?.type || '')}">${visualHtml(s, FIGURES)}</div>
     <div class="lpText"><p class="lpCount"><span dir="ltr">${slide + 1} / ${n}</span></p><div class="lpHeadRow"><h2>${esc(s.heading)}</h2>${L.media.kind !== 'text' && s.narration ? '<button type="button" id="lpPlay" class="lpVoice" aria-pressed="false"></button>' : ''}</div>
       <ul class="lpPoints">${s.points.map((p) => `<li>${esc(p)}</li>`).join('')}</ul>
       ${s.review ? reviewNote(s.review) : ''}
       ${s.note ? `<p class="note">${esc(s.note)}</p>` : ''}
       ${s.rules?.length ? `<p class="lpRules"><span>Rules</span>${s.rules.map(ruleChip).join('')}</p>` : ''}
       ${s.action ? '<div class="lpAction" id="lpAction"></div>' : ''}</div>`;
+  wireVisual($('lpStage').querySelector('.lpFig'));
   if (s.action) drawAction($('lpAction'), s.action);
   if ($('lpPlay')) $('lpPlay').onclick = () => { if (playing) { stopVoice(); drawControls(); } else speak(slide); };
   $('lpCaption').textContent = s.narration || '';

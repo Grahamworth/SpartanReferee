@@ -27,6 +27,7 @@ const { createDiagnostics } = require('./diagnostics');
 const { createChecks } = require('./checks');
 const { createInvites } = require('./invites');
 const { createTracking } = require('./tracking');
+const { createSlideMedia } = require('./slidemedia');
 const { createAuthoring } = require('./authoring');
 
 const EMAIL = /^[^\s@/#?\\]+@[^\s@/#?\\]+\.[^\s@/#?\\]+$/;
@@ -274,11 +275,14 @@ function createLearn({ db, session, isAdminEmail = () => false, member = null, r
   // ------------------------------------------------------------------ the rest of the platform, one module each, sharing this context
   // (each can add hooks to it that the others call: programmes asks for a version's extras, progress and so on)
   const ctx = { db, reply, P, audit, uuid, text, isUuid, personById, personView, LOCALES, mailer, siteUrl, newPublicId, loginOf };
-  const areas = [createProgrammes(ctx), createLessons(ctx, { speech, mediaSigner }), createAssess(ctx), createGovern(ctx), createChecks(ctx), createInvites(ctx), createTracking(ctx), createAuthoring(ctx), createReports(ctx), createPrivacy(ctx), createDiagnostics(ctx, { speech, mediaSigner })];
+  const slideMedia = createSlideMedia(ctx, { signer: mediaSigner });
+  const areas = [slideMedia, createProgrammes(ctx), createLessons(ctx, { speech, mediaSigner }), createAssess(ctx), createGovern(ctx), createChecks(ctx), createInvites(ctx), createTracking(ctx), createAuthoring(ctx), createReports(ctx), createPrivacy(ctx), createDiagnostics(ctx, { speech, mediaSigner })];
 
   // ------------------------------------------------------------------ routing
   async function handle(method, parts, body, h, query = {}) {
     const [, a, b, c] = parts; // parts[0] === 'learn'
+    // a slide's picture or video, shown by <img> and <video>, which can't send a sign-in: its random name is the key
+    if (a === 'slide-media' && b && !c && method === 'GET') return slideMedia.serve(b);
     const w = await who(h); if (w.error) return w.error;
     w.correlation = crypto.randomBytes(8).toString('hex');
     if (a === 'me' && method === 'GET') {

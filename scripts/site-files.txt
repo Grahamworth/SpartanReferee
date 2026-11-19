@@ -82,6 +82,7 @@ learn/obstacles.js
 learn/obstacle-anim.js
 learn/obstacle-scenes.js
 learn/video.js
+learn/slide-visual.js
 learn/reports.js
 learn/diagnostics.js
 learn/learn.css

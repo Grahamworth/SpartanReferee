@@ -4,6 +4,7 @@
 // translate. Everything is saved as a draft as you go; learners see nothing until a programme owner (or an admin) presses Publish,
 // which publishes every draft of the programme and its new lesson order at once. Reviews and Media live here too.
 // The server side is api/src/learn/authoring.js.
+import { ANIMS, animName, mediaUrl, youtubeId, upload } from './slide-visual.js';
 import { $, call, esc, t, toast, act, redraw, has, isAdmin, LANG } from './core.js';
 import { FIGURES } from './lesson.js';
 
@@ -59,13 +60,22 @@ let ED = null; // { pid, lessonId, locale, data, timer, saving }
 const ce = (field, value, cls = '', label = '') => `<div class="ce ${cls}" contenteditable="plaintext-only" spellcheck="true" data-f="${field}" role="textbox" aria-label="${esc(t(label || field))}" data-placeholder="${esc(t(label || field))}">${esc(value || '')}</div>`;
 const enLine = (text) => (ED.locale !== 'en' && text ? `<p class="edEn" lang="en"><span>${esc(t('English'))}</span> ${esc(text)}</p>` : '');
 
+/** what the picture box shows while editing: the drawing, or a still of the media (an animation or a video plays in the lesson itself) */
+function previewHtml(s) {
+  const m = s.media;
+  if (m?.type === 'image') return `<img class="edPrev" src="${esc(mediaUrl(m.src))}" alt="">`;
+  if (m?.type === 'video') return `<video class="edPrev" src="${esc(mediaUrl(m.src))}#t=0.5" muted playsinline preload="metadata"></video><span class="edTag">${esc(t('Video'))}</span>`;
+  if (m?.type === 'youtube') return `<img class="edPrev" src="https://i.ytimg.com/vi/${esc(m.src)}/hqdefault.jpg" alt=""><span class="edTag">YouTube</span>`;
+  if (m?.type === 'anim') return `<span class="edAnimTag"><b>▶</b> ${esc(t('Animation: {title}', { title: t(animName(m.src)) }))}</span>`;
+  return FIGURES[s.figure] || FIGURES.placeholder;
+}
 function slideHtml(s, i, n, en) {
   const tr = ED.locale !== 'en';
   const points = s.points.length ? s.points : [''];
   return `<article class="edSlide" data-i="${i}">
     <header class="edBar"><span class="lpCount">${esc(t('Slide {n} of {total}', { n: i + 1, total: n }))}</span>
       ${tr ? '' : `<span class="btnRow"><button class="iconSmall" type="button" data-slide-move="-1" aria-label="${esc(t('Move up'))}"${i === 0 ? ' disabled' : ''}>▲</button><button class="iconSmall" type="button" data-slide-move="1" aria-label="${esc(t('Move down'))}"${i === n - 1 ? ' disabled' : ''}>▼</button><button class="iconSmall" type="button" data-slide-del aria-label="${esc(t('Remove this slide'))}"${n === 1 ? ' disabled' : ''}>✕</button></span>`}</header>
-    <button class="lpFig edFig" type="button" data-fig="${esc(s.figure || '')}"${tr ? ' disabled' : ''} aria-label="${esc(t('Change the picture'))}">${FIGURES[s.figure] || FIGURES.placeholder}${tr ? '' : `<span class="edFigHint">${esc(t('Change the picture'))}</span>`}</button>
+    <button class="lpFig edFig" type="button" data-fig="${esc(s.figure || '')}" data-media="${esc(s.media ? JSON.stringify(s.media) : '')}"${tr ? ' disabled' : ''} aria-label="${esc(t('Change the picture'))}">${previewHtml(s)}${tr ? '' : `<span class="edFigHint">${esc(t('Change the picture'))}</span>`}</button>
     <div class="figPick" hidden></div>
     <div class="lpText">
       ${enLine(en?.heading)}${ce('heading', s.heading, 'edHeading', 'Heading')}
@@ -128,6 +138,7 @@ function collect() {
     const or = (x, e) => (ED.locale === 'en' ? x : x || e || '');
     return { heading: or(val(a.querySelector('[data-f=heading]')), en.heading), points: [...a.querySelectorAll('[data-f=point]')].map((p, j) => or(val(p), en.points?.[j])).filter(Boolean),
       narration: or(val(a.querySelector('[data-f=narration]')), en.narration), note: or(val(a.querySelector('[data-f=note]')), en.note), figure: a.querySelector('.edFig').dataset.fig || '',
+      ...(ED.locale === 'en' ? (a.querySelector('.edFig').dataset.media ? { media: JSON.parse(a.querySelector('.edFig').dataset.media) } : {}) : (en.media ? { media: en.media } : {})),
       // what only the English sets: rules, a review note, a box under the slide
       ...(ED.locale === 'en' ? { rules: ED.base?.[i]?.rules || [], review: ED.base?.[i]?.review || '', action: ED.base?.[i]?.action } : { rules: en.rules || [], review: '', action: en.action }) };
   });
@@ -176,13 +187,51 @@ function renumber() {
   });
 }
 function figurePicker(slide) {
-  const box = slide.querySelector('.figPick');
+  const box = slide.querySelector('.figPick'), fig = slide.querySelector('.edFig');
   if (!box.hidden) { box.hidden = true; return; }
-  box.innerHTML = Object.entries(FIGURES).map(([k, f]) => `<button type="button" class="figOpt${slide.querySelector('.edFig').dataset.fig === k || (!slide.querySelector('.edFig').dataset.fig && k === 'placeholder') ? ' on' : ''}" data-pick="${esc(k)}" aria-label="${esc(k)}">${f}</button>`).join('');
+  const media = fig.dataset.media ? JSON.parse(fig.dataset.media) : null;
+  const set = (figure, m) => {
+    fig.dataset.fig = figure ?? fig.dataset.fig; fig.dataset.media = m ? JSON.stringify(m) : '';
+    fig.innerHTML = `${previewHtml({ figure: fig.dataset.fig, media: m })}<span class="edFigHint">${esc(t('Change the picture'))}</span>`;
+    box.hidden = true; changed();
+  };
+  const tab = media?.type === 'anim' ? 'anim' : media?.type === 'youtube' ? 'yt' : media ? 'file' : 'draw';
+  const tabs = [['draw', 'Drawing'], ['anim', 'Animation'], ['file', 'Picture or video'], ['yt', 'YouTube link']];
+  box.innerHTML = `<div class="figTabs" role="tablist">${tabs.map(([k, l]) => `<button type="button" role="tab" class="small${k === tab ? ' on' : ''}" data-tab="${k}" aria-selected="${k === tab}">${esc(t(l))}</button>`).join('')}</div>
+    <div class="figPane" data-pane="draw"${tab === 'draw' ? '' : ' hidden'}><div class="figGrid">${Object.entries(FIGURES).map(([k, f]) => `<button type="button" class="figOpt${!media && (fig.dataset.fig === k || (!fig.dataset.fig && k === 'placeholder')) ? ' on' : ''}" data-pick="${esc(k)}" aria-label="${esc(k)}">${f}</button>`).join('')}</div></div>
+    <div class="figPane" data-pane="anim"${tab === 'anim' ? '' : ' hidden'}><p class="note">${esc(t('It plays a good run, then slows down on what counts and on a fail, with captions.'))}</p>
+      <div class="animList">${ANIMS.map(([k, l]) => `<button type="button" class="small${media?.type === 'anim' && media.src === k ? ' on' : ''}" data-anim="${esc(k)}">${esc(t(l))}</button>`).join('')}</div></div>
+    <div class="figPane" data-pane="file"${tab === 'file' ? '' : ' hidden'}><p class="note">${esc(t('A picture (JPG, PNG, WebP, GIF, up to 15 MB) or a video (MP4, WebM, MOV, up to 500 MB).'))}</p>
+      <label class="btnLink figUpload">${esc(t('Choose a file'))}<input type="file" accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime" hidden></label>
+      <span class="bar figBar" hidden><span style="width:0"></span></span><span class="muted figMsg" aria-live="polite"></span></div>
+    <div class="figPane" data-pane="yt"${tab === 'yt' ? '' : ' hidden'}><label class="figYt"><span>${esc(t('Paste a YouTube link'))}</span>
+      <input type="url" inputmode="url" placeholder="https://www.youtube.com/watch?v=…" value="${media?.type === 'youtube' ? esc(`https://www.youtube.com/watch?v=${media.src}`) : ''}"></label>
+      <button type="button" class="small" data-yt-use>${esc(t('Use this video'))}</button><span class="muted figMsg" aria-live="polite"></span>
+      <p class="note">${esc(t('Captions show in the learner’s language where YouTube can translate them.'))}</p></div>
+    ${media ? `<p class="figRemove"><button type="button" class="link" data-media-off>${esc(t('Use the drawing instead'))}</button></p>` : ''}`;
   box.hidden = false;
-  for (const b of box.querySelectorAll('[data-pick]')) b.onclick = () => {
-    const fig = slide.querySelector('.edFig'), k = b.dataset.pick === 'placeholder' ? '' : b.dataset.pick;
-    fig.dataset.fig = k; fig.firstElementChild.outerHTML = FIGURES[k] || FIGURES.placeholder; box.hidden = true; changed();
+  for (const b of box.querySelectorAll('[data-tab]')) b.onclick = () => {
+    for (const x of box.querySelectorAll('[data-tab]')) { x.classList.toggle('on', x === b); x.setAttribute('aria-selected', String(x === b)); }
+    for (const p of box.querySelectorAll('[data-pane]')) p.hidden = p.dataset.pane !== b.dataset.tab;
+  };
+  for (const b of box.querySelectorAll('[data-pick]')) b.onclick = () => set(b.dataset.pick === 'placeholder' ? '' : b.dataset.pick, null);
+  for (const b of box.querySelectorAll('[data-anim]')) b.onclick = () => set(null, { type: 'anim', src: b.dataset.anim });
+  box.querySelector('[data-media-off]')?.addEventListener('click', () => set(null, null));
+  const ytPane = box.querySelector('[data-pane=yt]');
+  ytPane.querySelector('[data-yt-use]').onclick = () => {
+    const id = youtubeId(ytPane.querySelector('input').value);
+    if (!id) { ytPane.querySelector('.figMsg').textContent = t('That isn’t a YouTube link'); return; }
+    set(null, { type: 'youtube', src: id });
+  };
+  const filePane = box.querySelector('[data-pane=file]'), input = filePane.querySelector('input[type=file]');
+  input.onchange = async () => {
+    const f = input.files[0]; if (!f) return;
+    const bar = filePane.querySelector('.figBar'), msg = filePane.querySelector('.figMsg');
+    bar.hidden = false; msg.textContent = t('Uploading {name}…', { name: f.name });
+    try {
+      const m = await upload(f, call, { programmeId: ED.pid, progress: (k) => { bar.firstElementChild.style.width = `${Math.round(k * 100)}%`; } });
+      set(null, m);
+    } catch (e) { msg.textContent = e.message || t('The upload didn’t work: try again'); bar.hidden = true; }
   };
 }
 function wireLesson() {

@@ -8,6 +8,7 @@ import { PROGRAMMES, ENROLMENTS } from './learn-content.mjs';
 import { LESSONS, TRANSLATIONS } from './learn-lessons.mjs';
 import { ASSESSMENTS, OUTCOMES } from './learn-questions.mjs';
 import { DOCUMENTS, RULES, DISPUTES } from './learn-rules.mjs';
+import { VISUALS } from './learn-visuals.mjs';
 import fs from 'node:fs';
 
 const CHECKS = JSON.parse(fs.readFileSync(new URL('./learn-checks.json', import.meta.url), 'utf8'));
@@ -159,6 +160,27 @@ for (const [locale, lessons] of Object.entries(TRANSLATIONS)) {
     });
     summary.translations++;
   }
+}
+
+// ---------------------------------------------------------------- animations on slides (19 November 2026)
+// scripts/learn-visuals.mjs: the slides that show an animation instead of their drawing, put on each lesson's published English once (the
+// translations show the English slide's visual). Once per lesson: if an editor later changes or removes one, it stays as they left it.
+summary.visuals = 0;
+for (const [code, bySlide] of Object.entries(VISUALS)) {
+  const l = await lessonByCode(code); if (!l) continue;
+  if ((await db.query("SELECT TOP 1 1 AS x FROM {S}.audit_event WHERE action = 'content.visuals' AND summary LIKE @k", { k: `%"lesson":"${code}"%` })).length) continue;
+  const en = (await db.query("SELECT TOP 1 * FROM {S}.content_version WHERE lesson_id = @l AND locale = 'en' AND state = 'published' ORDER BY version_no DESC", { l: l.lesson_id }))[0];
+  if (!en) continue;
+  const body = JSON.parse(en.body);
+  let added = 0;
+  for (const sl of body.slides) { const a = bySlide[sl.heading]; if (a && !sl.media) { sl.media = { type: 'anim', src: a }; added++; } }
+  if (!added) continue;
+  const doc = JSON.stringify(body);
+  await db.tx(async (q) => {
+    await q('UPDATE {S}.content_version SET body = @b, source_hash = @h WHERE content_id = @id', { b: doc, h: hash(doc), id: en.content_id });
+    await q(`INSERT INTO {S}.audit_event (action, entity_type, entity_id, summary) VALUES ('content.visuals', 'content_version', @id, @s)`, { id: en.content_id, s: JSON.stringify({ lesson: code, animations: added }) });
+  });
+  summary.visuals += added;
 }
 
 // ---------------------------------------------------------------- quick checks (19 November 2026)

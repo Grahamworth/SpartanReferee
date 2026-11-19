@@ -1,6 +1,7 @@
 // Each obstacle's animation (obstacle-anim.js plays them): its structure, drawn from the side (or from behind, for the ones crossed
 // sideways), and its timelines: the good run, and fails. A mark's text is one of the obstacle's own Good or Bad lines (learn/obstacles.js),
 // so it's translated with them. Positions are in the 400 × 225 picture: the ground is at G, about 52 px to a metre.
+import { t } from './core.js';
 import { G, HIP, GRAV, timeline, stand, walk, fly, flightTime, solve, figure, ln, rc, ci, pl, pg, tx, ground, hl } from './obstacle-anim.js';
 
 const D = Math.PI / 180;
@@ -938,7 +939,39 @@ function memory() {
   };
 }
 
+// ================================================================================================ movements for the lessons
+/** the burpee standard (rule 3.17.4): chest to the ground, back up with hips and knees extended, then a jump with the hands above the ears */
+function burpee() {
+  const X = 196;
+  const plank = { x: X - 8, y: G - 20, a: 70, lh: [X + 18, G], rh: [X + 21, G], lf: [X - 44, G], rf: [X - 40, G], kp: [0, 1] };
+  const run = (fault) => {
+    const o = timeline({ ...stand(X - 6), cam: [X - 6, 150, 1.4] });
+    o.to(0.3, { x: X - 4, y: G - 25, a: 55, lh: [X + 18, G], rh: [X + 21, G], lf: [X - 10, G], rf: [X - 2, G] });
+    o.to(0.28, plank);
+    if (fault === 'chest') { o.to(0.32, { y: G - 15, a: 78, ep: [-0.4, -1] }); o.mark('Chest not touching the ground.', [X + 12, G - 4], { kind: 'bad', body: true }); }
+    else { o.to(0.32, { y: G - 8, a: 88, ep: [-0.4, -1] }); o.mark('Chest to the ground at the bottom.', [X + 12, G - 4]); }
+    o.to(0.3, { ...plank, ep: undefined });
+    o.to(0.28, { x: X + 2, y: G - 27, a: 52, lf: [X + 2, G], rf: [X + 9, G], kp: undefined });
+    if (fault === 'hips') { o.to(0.3, { x: X + 4, y: G - 36, a: 30, lh: [X + 14, G - 30], rh: [X + 18, G - 28], lf: [X - 2, G], rf: [X + 8, G] }); o.mark('Hips not extended at the top.', 'hip', { kind: 'bad', body: true }); }
+    else { o.to(0.3, { ...stand(X + 4), a: 0 }); o.mark('Hips and knees fully extended at the top.', 'hip'); }
+    const top = G - HIP - 18, sh = top - 29;
+    const hands = fault === 'hands' ? { lh: [X + 2, sh + 22], rh: [X + 9, sh + 20] } : { lh: [X + 1, sh - 31], rh: [X + 8, sh - 31] };
+    fly(o, { x: X + 4, y: top, a: 0, ...hands, lf: [X + 2, G - 18], rf: [X + 9, G - 16] }, 18);
+    if (fault === 'hands') o.mark('Hands not above the ears on the jump.', 'rh', { kind: 'bad', body: true });
+    else o.mark('A jump with the hands above the ears.', 'rh');
+    fly(o, { ...stand(X + 4), y: G - HIP + 2, lh: [X - 1, G - 70], rh: [X + 9, G - 72] });
+    return o.to(0.4, stand(X + 4));
+  };
+  return {
+    back: () => `${ground()}${rc(X - 70, G - 2, 130, 2, 'prF')}${tx(X - 66, G + 12, t('Burpee zone'))}`,
+    good: run(), fails: [run('chest'), run('hips'), run('hands')],
+  };
+}
+/** the scenes that aren't an obstacle (the obstacles page leaves them out) */
+export const MOVEMENTS = ['burpee'];
+
 export const SCENES = {
+  burpee,
   walls, inverted, slip, stairway, bender, rope, cargoplus, cargo, hurdles, out,
   monkey: rig('monkey'), ape, multirig: rig('rings'), twister: rig('twister'), hydra: rig('hydra'), helix: wallTraverse('helix'),
   olympus: wallTraverse('olympus'), zwall: wallTraverse('zwall'), hanging: wallTraverse('hanging'), tilting: rig('tilting'), tyrolean,
