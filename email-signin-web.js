@@ -17,12 +17,37 @@ async function goSignIn(cfg, provider, back, options, onError) {
 }
 
 const MS_LOGO = '<svg viewBox="0 0 21 21" width="20" height="20" aria-hidden="true"><path fill="#f25022" d="M1 1h9v9H1z"/><path fill="#7fba00" d="M11 1h9v9h-9z"/><path fill="#00a4ef" d="M1 11h9v9H1z"/><path fill="#ffb900" d="M11 11h9v9h-9z"/></svg>';
-/** Draws "Sign in with Microsoft" into el. Nothing shows if it isn't switched on. */
+/** Draws the sign-in buttons into el: "Sign in with Microsoft", and "Sign in with Google" (Spartan's own accounts are Google's,
+ *  from 19 November 2026) once the site has a Google client id (GOOGLE_CLIENT_ID). Each shows only if it's switched on. */
 export async function microsoftButton(el, back, onError) {
-  const { microsoftSignIn: cfg } = await call('config').catch(() => ({}));
-  if (!cfg || !cfg.webRedirectUri) return;
-  el.innerHTML = `<button class="msBtn" type="button">${MS_LOGO}<span>Sign in with Microsoft</span></button>`;
-  el.firstChild.onclick = () => goSignIn(cfg, 'microsoft', back, { prompt: 'select_account' }, onError);
+  const cfg = await call('config').catch(() => ({}));
+  const ms = cfg.microsoftSignIn && cfg.microsoftSignIn.webRedirectUri ? cfg.microsoftSignIn : null;
+  const google = cfg.signIn && cfg.googleClientId && cfg.googleClientId !== 'dev' ? cfg.googleClientId : '';
+  if (!ms && !google) return;
+  el.innerHTML = `<div class="signInBtns">${google ? '<div class="gBtn"></div>' : ''}${ms ? `<button class="msBtn" type="button">${MS_LOGO}<span>Sign in with Microsoft</span></button>` : ''}</div>`;
+  if (ms) el.querySelector('.msBtn').onclick = () => goSignIn(ms, 'microsoft', back, { prompt: 'select_account' }, onError);
+  if (google) googleButton(el.querySelector('.gBtn'), google, back, onError);
+}
+/** Google's own button (Google Identity Services): it gives an id token, which the API checks (POST /api/auth/google) and swaps for a
+ *  session; then on to the page to come back to, as after Microsoft's */
+async function googleButton(box, clientId, back, onError) {
+  const loaded = await new Promise((res) => {
+    if (window.google?.accounts?.id) { res(true); return; }
+    const s = document.createElement('script'); s.src = 'https://accounts.google.com/gsi/client'; s.async = true;
+    s.onload = () => res(true); s.onerror = () => res(false); document.head.appendChild(s);
+  });
+  if (!loaded || !window.google?.accounts?.id) { box.remove(); return; } // offline, or blocked: Microsoft's button still works
+  window.google.accounts.id.initialize({
+    client_id: clientId, ux_mode: 'popup',
+    callback: async (resp) => {
+      try {
+        const r = await call('auth/google', { method: 'POST', body: { idToken: resp.credential } });
+        localStorage.setItem(TOKEN, r.token);
+        location.assign(new URL(safeBack(back), `${location.origin}/`).href);
+      } catch (e) { onError(e); }
+    },
+  });
+  window.google.accounts.id.renderButton(box, { theme: 'outline', size: 'large', shape: 'pill', text: 'signin_with', width: Math.min(320, box.clientWidth || 320), locale: (window.SR_I18N && SR_I18N.lang) || 'en' });
 }
 
 /** On email-return.html: finish the sign-in. Says where to go next, and what went wrong if it did. */

@@ -68,7 +68,8 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
     const user = { id: uid, email: g.email || '', name: g.name || '', picture: g.picture || '', emailVerified: g.email_verified !== false };
     await store.put('user', uid, user);
     await touchProfile(uid, { email: user.email, google: true, ...(user.name && !(await store.get('profile', uid) || {}).name ? { name: user.name.slice(0, 30) } : {}) });
-    return reply(200, { token: sign({ uid, email: user.email, exp: now() + 30 * 24 * 3600 * 1000 }), user });
+    // the address counts (for the referee list and admins) only when Google has verified it, as with Microsoft's
+    return reply(200, { token: sign({ uid, ...(user.email && user.emailVerified ? { email: user.email } : {}), exp: now() + 30 * 24 * 3600 * 1000 }), user });
   }
   // The Broadcaster's email accounts (email-signin.js). The session deliberately has no email in it, so one of these
   // can never count as an admin through ADMIN_EMAILS: admins sign in with Google on the site.

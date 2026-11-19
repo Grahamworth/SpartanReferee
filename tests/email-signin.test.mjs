@@ -47,10 +47,15 @@ test('cancelling and Microsoft\'s errors say so, with its code to look up', () =
   assert.match(readReturn(`${RETURN}?error=access_denied&state=the-state`, pending).message, /cancelled/);
   assert.match(readReturn(`${RETURN}?error=access_denied&error_description=AADSTS53003%3A+blocked&state=the-state`, pending).message, /AADSTS53003/);
 });
-test('SpartanReferee is Microsoft sign-in only: no Google or email buttons on any page', () => {
+test('SpartanReferee signs in with Microsoft or Google (Spartan\'s own accounts are Google\'s); no email buttons on any page', () => {
   for (const f of ['console.html', 'console.js', 'results.html', 'results.js', 'customers.html', 'customers.js', 'email-signin-web.js', 'api-base.js']) {
-    assert.doesNotMatch(read(f), /emailBtns|emailButtons|googleBtn|googleButton|accounts\.google\.com/, f);
+    assert.doesNotMatch(read(f), /emailBtns|emailButtons/, f);
   }
+  // Google's button sits with Microsoft's, only once the site has a Google client id, and goes back to the same page
+  const web = read('email-signin-web.js');
+  assert.ok(web.includes("cfg.signIn && cfg.googleClientId && cfg.googleClientId !== 'dev'"));
+  assert.ok(web.includes("call('auth/google', { method: 'POST', body: { idToken: resp.credential } })"));
+  assert.ok(web.includes('location.assign(new URL(safeBack(back)'));
 });
 test('every sign-in page offers Sign in with Microsoft, which comes back to the same return page', () => {
   // everyone lands on Learning's overview, whichever of these two they signed in from
