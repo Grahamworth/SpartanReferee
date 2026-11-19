@@ -52,6 +52,7 @@ const crypto = require('node:crypto');
 const eventTimes = require('./events');
 const { recordingsPartition, KEEP_DAYS } = require('./recordings');
 const { createMembership, ourSettings } = require('./companies');
+const { canBookRow } = require('./assignments');
 const cameraSplit = require('./cameras');
 
 const { CAMERAS_PER_SERVER } = cameraSplit;
@@ -102,18 +103,19 @@ function createServers({ store, now, reply, session, isAdmin = () => false, memb
     return { serverHours: Math.round(out.serverHours * 10) / 10, cameraHours: Math.round(out.cameraHours * 10) / 10, charge: pounds(out.charge), azure: pounds(out.azure), profit: pounds(out.charge - out.azure) };
   }
   const { companyFor, provenEmail } = membership || createMembership(store); // owner, or one of its people
-  /** may this person book a practice server? Admins, and anyone who is head referee at an event */
+  /** may this person book a practice server? Admins, and anyone who may book an event's cameras */
   async function rehearses(me, h) {
     if (isAdmin(h)) return true;
     const email = me && provenEmail ? await provenEmail(me) : '';
-    return !!email && (await store.list('assignment')).some((a) => a.email === email && a.role === 'head');
+    return !!email && (await store.list('assignment')).some((a) => a.email === email && canBookRow(a));
   }
-  /** may this person book, extend and stop this unit? An event's: its head referee, or an admin. Your own training: you. Testing: admins */
+  /** may this person book, extend and stop this unit? An event's: whoever its organisers ticked for it (assignments.js), or an admin. Your own training: you. Testing: admins */
   async function manages(me, h, u) {
     if (isAdmin(h)) return true;
     if (u.kind !== 'event') return u.kind === 'training';
     const email = me && provenEmail ? await provenEmail(me) : '', eventId = u.event?.id || String(u.id).slice(1);
-    return !!email && (await store.get('assignment', `${eventId}|${email}`))?.role === 'head';
+    const a = email && await store.get('assignment', `${eventId}|${email}`);
+    return !!a && canBookRow(a);
   }
   async function companyOf(h) {
     const me = session(h); if (!me) return { error: reply(401, { error: 'Sign in first' }) };
@@ -320,7 +322,7 @@ function createServers({ store, now, reply, session, isAdmin = () => false, memb
     if (events) await events.fresh(); // synced from Spartan when the copy here is old
     const evs = events ? await events.upcoming() : [];
     const heads = new Set();
-    if (!isAdmin(h)) { const email = provenEmail ? await provenEmail(me) : ''; for (const a of await store.list('assignment')) if (a.email === email && a.role === 'head') heads.add(a.eventId); }
+    if (!isAdmin(h)) { const email = provenEmail ? await provenEmail(me) : ''; for (const a of await store.list('assignment')) if (a.email === email && canBookRow(a)) heads.add(a.eventId); }
     const units = evs.map((e) => ({ id: `e${e.id}`, kind: 'event', canManage: isAdmin(h) || heads.has(e.id), name: e.name, city: e.city, country: e.country, tz: e.tz, startDate: e.startDate, endDate: e.endDate, windows: e.windows, booking: booking(`e${e.id}`) }));
     if (booking(trainingId(me.uid))) units.push({ id: trainingId(me.uid), kind: 'training', name: 'Training', booking: booking(trainingId(me.uid)) });
     if (isAdmin(h)) units.push({ id: testingId(me.uid), kind: 'testing', name: 'Testing', booking: booking(testingId(me.uid)) });

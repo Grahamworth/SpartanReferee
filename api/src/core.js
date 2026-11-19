@@ -220,7 +220,9 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
   const { servers, adminPricing, adminCustomers, stopCompany, bookingStatus, trainingUnit, rehearses } = createServers({ store, now, reply, session, isAdmin, membership, payments, freeBooking: true, events: bookingUnits ? eventList : null, maxRunning: maxRunningServers, hourPrice: serverHourPrice });
   // which referees are assigned to which events, and each referee's home page
   const assignments = createAssignments({ store, now, reply, session, isAdmin, isAdminEmail, membership, events: eventList, bookingStatus, learnOn: !!learnDb,
-    onLanguage: learn ? async (email, language) => { await (learnReady || learnDb.migrate()); await learn.setLocale(email, language); } : null });
+    onLanguage: learn ? async (email, language) => { await (learnReady || learnDb.migrate()); await learn.setLocale(email, language); } : null,
+    // a regional coordinator manages the events in their regions' countries (their roles are in the learning database)
+    scopeOf: learn ? async (email) => { await learnUp(); return learn.scopeOf(email); } : async () => ({ countries: [] }) });
   const { companies, adminCompanies, referees } = createCompanies({ store, now, reply, session, isAdmin, putBrand, membership, onBlocked: stopCompany });
 
   async function handle({ method, path, headers = {}, body, query: extraQuery = {} }) {
@@ -254,7 +256,9 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
       if (parts[0] === 'invite' && parts[1] && parts.length <= 3) r = await invite(method, parts[1], parts[2], body, h);
       if (parts[0] === 'me' && method === 'GET') r = await me(h);
       if (parts[0] === 'home' && parts.length === 1) r = await assignments.home(method, h, body);
-      if (parts[0] === 'event' && parts.length === 2) r = await assignments.eventPage(method, parts[1], h);
+      if (parts[0] === 'event' && parts.length >= 2 && parts.length <= 3) r = await assignments.eventPage(method, parts[1], parts[2], h, body);
+      if (parts[0] === 'my' && parts[1] === 'events' && parts.length === 2 && method === 'GET') r = await assignments.myEvents(h);
+      if (parts[0] === 'manage' && parts[1] === 'events' && parts.length === 2 && method === 'GET') r = await assignments.manageList(h, query);
       // a 30-minute practice camera, booked only here, from Learning's camera guide (servers.js refuses it anywhere else)
       if (parts[0] === 'learn' && parts[1] === 'practice-camera' && parts.length === 2) {
         const me = session(h);

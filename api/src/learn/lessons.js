@@ -126,6 +126,12 @@ function createLessons(ctx, { speech, mediaSigner }) {
   }
   const lockOf = async (w, l, e) => (e && !ctx.editor(w, l.programme_id) ? (await locksFor(w.person.person_id, l.version_id)).get(l.lesson_id) || null : null);
   ctx.locksFor = locksFor;
+  /** the next lesson someone has to do in a programme version (in order, with published content): { id, title } or null */
+  ctx.nextLessonOf = async (personId, versionId) => {
+    const countable = new Set(await countableLessons(versionId)), done = new Set(await doneLessons(personId, versionId));
+    const x = (await lessonOrder(versionId)).find((l) => countable.has(l.lesson_id) && !done.has(l.lesson_id));
+    return x ? { id: x.lesson_id, title: x.title } : null;
+  };
 
   // ------------------------------------------------------------------ one lesson
   async function getLesson(w, id, query) {

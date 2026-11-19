@@ -57,12 +57,14 @@ test('a referee\'s home page: their name, their events (each with Book cameras),
   assert.ok(js.includes('href="event.html?id=${encodeURIComponent(e.id)}"'), 'each event opens its own page');
   assert.ok(js.includes('Head referee'));
   assert.ok(js.includes("show($('adminTile'), !!h.admin)"));
-  // the console takes the event it's given, and leads back home; the learning platform's logo goes to its overview (where everyone
-  // lands), and its Home link to the home page
+  // the console takes the event it's given, and leads back home (home.html now sends anyone to the app's Home tab); in the app the
+  // logo and the Home tab go to Home, and My profile is the icon at the top right
   assert.ok(read('console.js').includes("new URLSearchParams(location.search).get('unit')"));
   assert.match(read('console.html'), /<a href="home.html">Home<\/a>/);
-  assert.match(read('learn/index.html'), /<a class="mark" href="\.\/">/);
-  assert.match(read('learn/index.html'), /<a href="\.\.\/home\.html">Home<\/a>/);
+  assert.match(read('home.html'), /location\.replace\('learn\/' \+ location\.hash\)/);
+  assert.match(read('learn/index.html'), /<a class="mark" href="#\/">/);
+  assert.match(read('learn/index.html'), /<a href="#\/" data-view="home">Home<\/a>/);
+  assert.match(read('learn/index.html'), /class="profileBtn" id="profileBtn" href="#\/profile" aria-label="My profile"/);
 });
 test('on a phone, every page\'s header is the name and a Menu button, with big rows to tap (check: node scripts/mobile-check.mjs)', () => {
   const base = read('api-base.js'), css = read('headjudge.css');

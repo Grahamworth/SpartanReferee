@@ -62,3 +62,39 @@ html[dir="rtl"] .events svg { transform: scaleX(-1); }
 .installCard svg { flex: none; width: 34px; height: 34px; fill: none; stroke: var(--primary-text); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .installCard h2 { margin: 0 0 4px; }
 .installCard .btnRow { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+/* the "My profile" icon at the top right of the app (learn/index.html) */
+.profileBtn { order: 9; flex: none; display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; color: var(--text); border: 1px solid var(--line); background: var(--panel); }
+.profileBtn svg { width: 28px; height: 28px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; }
+.profileBtn.on, .profileBtn:hover { border-color: var(--primary); color: var(--primary-text); }
+/* Home (learn/home.js) and Events (learn/events.js) */
+.homeHello { margin: 4px 0 16px; }
+.homeHello h1 { margin: 0; overflow-wrap: anywhere; }
+.homeBadges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; text-decoration: none; }
+.homeProgs, .myProgs { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.homeProgs a, .myProgHead { display: grid; gap: 4px; color: var(--text); text-decoration: none; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; }
+.homeProgs a:hover, .myProgHead:hover { border-color: var(--primary); }
+.myProg { display: grid; gap: 8px; }
+.myProg .btnLink { justify-self: start; }
+.sharpNudge p { margin: 0 0 10px; }
+.otherProgs summary { cursor: pointer; } .otherProgs summary h2 { display: inline; }
+.refRow { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; align-items: center; }
+.refRow .rowBtns { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.tickLabel { display: inline-flex; gap: 6px; align-items: center; font-weight: 600; min-height: 40px; }
+.tickLabel input { width: 18px; height: 18px; accent-color: var(--primary); }
+.noteText { white-space: pre-wrap; margin: 0 0 8px; }
+.eventNotes { border-left: 4px solid var(--warn); }
+.pastEvents summary { cursor: pointer; font-weight: 600; margin-top: 12px; }
+/* on a phone the profile icon sits at the top right, beside Menu; the tabs take their own row below */
+@media (max-width: 640px) {
+  .top { column-gap: 8px; }
+  .top .mark { order: 0; }
+  .top .menuBtn { order: 1; }
+  .top .profileBtn { order: 2; }
+  .top .learnNav { order: 3; }
+  .top .topRight { order: 4; }
+}
+@media (max-width: 640px) {
+  .top:has(.profileBtn:not([hidden])) .menuBtn { padding: 0 10px; }
+  .top:has(.profileBtn:not([hidden])) .menuBtn span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+}
+@media (max-width: 380px) { .top .mark { font-size: 24px; } }

@@ -317,7 +317,8 @@ function createProgrammes(ctx) {
       const lessons = (await db.query('SELECT COUNT(*) AS n FROM {S}.lesson WHERE version_id = @v', { v: e.version_id }))[0].n;
       enrolments.push({ id: e.enrolment_id, programmeId: e.programme_id, title: e.title, category: e.category, demo: !!e.demo, versionId: e.version_id, edition: e.edition, versionState: e.version_state,
         qualification: e.qualification, completionRule: e.completion_rule, passMark: e.pass_mark, state: e.state, enrolledAt: e.enrolled_at, completedAt: e.completed_at,
-        role: e.prog_role || e.learner_role, grade: e.grade || '', roleStatus: e.role_status || 'active', lessons, ...(ctx.progressOf ? await ctx.progressOf(e) : { done: 0 }) });
+        role: e.prog_role || e.learner_role, grade: e.grade || '', roleStatus: e.role_status || 'active', lessons, due: e.due_date ? new Date(e.due_date).toISOString().slice(0, 10) : '',
+        ...(ctx.progressOf ? await ctx.progressOf(e) : { done: 0 }), next: e.state === 'active' && ctx.nextLessonOf ? await ctx.nextLessonOf(e.person_id, e.version_id) : null });
     }
     const extra = ctx.recordExtras ? await ctx.recordExtras(w, person) : {};
     return reply(200, { person: ctx.personView(person), enrolments, canEnrol: P.can(w.grants, 'enrol', { regionId: person.region_id || undefined, personId: person.person_id, selfId: w.person.person_id }), ...extra });

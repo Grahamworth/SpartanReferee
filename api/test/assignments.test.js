@@ -43,7 +43,7 @@ test('an admin assigns referees to an event; each sees their own upcoming events
   assert.deepStrictEqual((await call('GET', 'home', ben)).body.events.map((e) => e.name), ['Phuket Super']);
   const all = (await call('GET', 'admin/assignments', boss)).body.assignments;
   assert.strictEqual(all.length, 3);
-  assert.deepStrictEqual(Object.keys(all[0]).sort(), ['at', 'by', 'email', 'eventId', 'role']);
+  assert.deepStrictEqual(Object.keys(all[0]).sort(), ['at', 'by', 'canBook', 'email', 'eventId', 'role']);
   assert.strictEqual(all[0].by, 'boss@example.com');
 });
 
@@ -104,12 +104,12 @@ test('an event\'s page: its days and times, who\'s refereeing it (with the names
   assert.strictEqual(p.event.windows.length, 2, 'two days');
   assert.match(p.event.url, /spartan\.com/);
   assert.strictEqual(p.you, null, 'ben isn\'t assigned, but any referee can see it');
-  assert.deepStrictEqual(p.referees, [{ email: 'ana@example.com', name: 'Ana Popescu', role: 'head', you: false }]);
+  assert.deepStrictEqual(p.referees, [{ name: 'Ana Popescu', role: 'head', canBook: true, you: false }], 'names, not addresses, for a referee');
   assert.strictEqual(p.booking, null);
-  assert.strictEqual(p.canBook, false, 'only the head referee (or an admin) books its burpee cameras');
+  assert.strictEqual(p.canBook, false, 'only those ticked for it (a head referee made on the admin page is) and admins book its burpee cameras');
   assert.strictEqual((await call('GET', 'event/30002', ana)).body.canBook, true, 'Ana is its head referee');
   assert.strictEqual((await call('GET', 'event/30002', boss)).body.canBook, true, 'an admin');
-  assert.deepStrictEqual((await call('GET', 'event/e30002', ana)).body.you, { role: 'head' });
+  assert.deepStrictEqual((await call('GET', 'event/e30002', ana)).body.you, { role: 'head', canBook: true });
   // booked (by its head referee): the page says so
   await call('POST', 'admin/assignments', boss, { eventId: '30002', email: 'ben@example.com', role: 'head' });
   assert.strictEqual((await call('POST', 'servers/mine/start', ben, { unit: 'e30002', cameras: 2, from: Date.parse('2026-12-05T01:00:00Z'), until: Date.parse('2026-12-05T05:00:00Z') })).status, 200);

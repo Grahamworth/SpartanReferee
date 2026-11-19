@@ -55,6 +55,14 @@ function zoneOf(country, lon, lat) {
   return (bands.find(([west]) => lon >= west) || bands[bands.length - 1])[1];
 }
 let regionNames = null;
+/** a country's two-letter code from its English name (events synced before the code was kept): '' if unknown */
+let codes = null;
+function codeOf(name) {
+  if (!name) return '';
+  if (/^[A-Z]{2}$/.test(name)) return name;
+  if (!codes) { codes = new Map(); for (let a = 65; a < 91; a++) for (let b = 65; b < 91; b++) { const c = String.fromCharCode(a, b); const n = countryName(c); if (n && n !== c) codes.set(n.toLowerCase(), c); } }
+  return codes.get(String(name).toLowerCase()) || '';
+}
 const countryName = (code) => { try { regionNames = regionNames || new Intl.DisplayNames(['en'], { type: 'region' }); return regionNames.of(code) || code; } catch { return code; } };
 
 /** each day of the event, 07:00 to 18:00 local: [{ day, from, until }] */
@@ -84,12 +92,12 @@ function normalise(r, t, tz = '') {
   const id = String(r.id).replace(/\D/g, '').slice(0, 12);
   return {
     id, name: text(r.name || r.event_name, 120), brand: text(r.brand, 40),
-    city: text(venue.city, 60), country: text(code ? countryName(code) : venue.country, 60), tz: zone, offsetGuess: zone || !Number.isFinite(lon) ? 0 : Math.round(lon / 15),
+    city: text(venue.city, 60), country: text(code ? countryName(code) : venue.country, 60), countryCode: code || codeOf(venue.country), tz: zone, offsetGuess: zone || !Number.isFinite(lon) ? 0 : Math.round(lon / 15),
     startDate: r.start_date, endDate: end,
     url: `https://www.spartan.com/en/race/detail/${id}/overview`, syncedAt: t,
   };
 }
-const view = (ev) => ({ id: ev.id, name: ev.name, brand: ev.brand, city: ev.city, country: ev.country, tz: ev.tz, startDate: ev.startDate, endDate: ev.endDate, url: ev.url, windows: windows(ev) });
+const view = (ev) => ({ id: ev.id, name: ev.name, brand: ev.brand, city: ev.city, country: ev.country, countryCode: ev.countryCode || codeOf(ev.country), tz: ev.tz, startDate: ev.startDate, endDate: ev.endDate, url: ev.url, windows: windows(ev) });
 
 function createEvents({ store, now = Date.now, reply, fetcher = (u) => fetch(u, { headers: { accept: 'application/json' } }) }) {
   let syncing = null;

@@ -37,20 +37,33 @@ export function wireRecord() {
   for (const b of document.querySelectorAll('[data-withdraw]')) b.onclick = () => { if (confirm(t('Withdraw from this programme? Their record is kept.'))) act(async () => { await call(`enrolments/${b.dataset.withdraw}`, { method: 'DELETE' }); toast('Withdrawn'); redraw(); }, b); };
 }
 
-// ---------------------------------------------------------------- the overview
-async function overview() {
+// ---------------------------------------------------------------- My Learning (#/programmes): your programmes first, then keeping sharp,
+// then (a small part, as organisers mostly enrol people) the other programmes to enrol in
+const overdue = (due) => due && due < new Date().toISOString().slice(0, 10);
+function myProgramme(e) {
+  const total = e.lessons || 0, done = e.done || 0;
+  return `<li class="myProg">
+      <a class="myProgHead" href="#/programmes/${esc(e.programmeId)}"><span class="enrolTop"><b>${esc(e.title)}</b>${badge(e.state)}</span>
+        ${bar(done, total)}<small><span>${esc(t('{done} of {total} lessons done', { done, total }))}</span>${e.due && e.state !== 'completed' ? ` · <span class="${overdue(e.due) ? 'badText' : ''}">${esc(t(overdue(e.due) ? 'was due {date}' : 'complete by {date}', { date: day(e.due) }))}</span>` : ''}${e.credential ? ` · <span>${esc(e.credential.qualification)}</span>` : ''}</small></a>
+      ${e.next ? `<a class="btnLink primaryLink" href="#/lesson/${esc(e.next.id)}">${esc(t('Next: {title}', { title: t(e.next.title) }))}</a>` : e.state === 'completed' ? '' : `<a class="btnLink" href="#/programmes/${esc(e.programmeId)}">Open</a>`}
+    </li>`;
+}
+async function myLearning() {
   const p = S.me.person;
-  return `<section class="card hello"><h1>${esc(p.preferredName || p.legalName)}</h1>
-      <p class="muted">${esc(p.publicId)} · ${esc(regionName(p.regionId))}${p.country ? ` · ${esc(p.country)}` : ''}</p>
-      <ul class="chips">${S.me.grants.length ? S.me.grants.map((g) => `<li>${esc(roleText(g))}</li>`).join('') : '<li>Learner</li>'}</ul></section>
-    ${await runHooks(hooks.overview, S.me)}
-    ${await recordSection(p.id, true)}
-    <section class="card"><h2>Burpee camera station</h2><p>The course on setting up the phones at the penalty station, connecting them, judging with the AI judge and sorting out problems. It ends with the free camera, to try the judge on your own phone.</p><p><a class="btnLink" href="#/programmes/camera-station">Open the course</a></p></section>`;
+  let rec = { enrolments: [] }; try { rec = await call(`people/${encodeURIComponent(p.id)}/record`); } catch { /* shown empty */ }
+  const enrolled = rec.enrolments.filter((e) => e.state !== 'withdrawn');
+  const todo = enrolled.filter((e) => e.state !== 'completed'), done = enrolled.filter((e) => e.state === 'completed');
+  return `<section class="card"><h1>My Learning</h1>
+      <h2>To do</h2><ul class="myProgs">${todo.map(myProgramme).join('') || `<li class="muted">${esc(t('Nothing to do right now.'))}</li>`}</ul>
+      ${done.length ? `<h2>Completed</h2><ul class="myProgs">${done.map(myProgramme).join('')}</ul>` : ''}</section>
+    ${await runHooks(hooks.learning, S.me)}
+    ${await catalogue(new Set(enrolled.map((e) => e.programmeId)))}`;
 }
 
 // ---------------------------------------------------------------- the catalogue
-async function catalogue() {
-  const { programmes, canCreate } = await programmesList();
+async function catalogue(enrolled = new Set()) {
+  const { programmes: all, canCreate } = await programmesList();
+  const programmes = all.filter((p) => !enrolled.has(p.id));
   const card = (p) => `<li class="progCard">
       <a href="#/programmes/${esc(p.id)}"><span class="enrolTop"><b>${esc(p.title)}</b>${p.current ? badge('published', `${p.current.edition}`) : badge('draft', 'Not published')}</span>
       <small>${esc(CATEGORY[p.category] || p.category)} · ${p.modules} modules · ${esc(p.locales.map((l) => LANG[l] || l).join(', '))}${p.demo ? ' · demonstration content' : ''}${p.status === 'archived' ? ' · archived' : ''}</small>
@@ -58,8 +71,8 @@ async function catalogue() {
       ${p.drafts.length ? `<small>Being worked on: ${p.drafts.map((d) => `${esc(d.edition)} (${d.state === 'review' ? 'in review' : 'draft'})`).join(', ')}</small>` : ''}</a>
       ${p.enrolment ? `<span class="progFoot">${badge(p.enrolment.state, p.enrolment.state === 'active' ? 'Enrolled' : null)}</span>` : p.current && p.status === 'active' ? `<span class="progFoot"><button class="small" type="button" data-enrol="${esc(p.id)}">Enrol</button></span>` : ''}
     </li>`;
-  return `<section class="card"><h1>Programmes</h1><p class="note">Each programme has its own lessons, assessment, pass mark and qualification. One profile can be enrolled in any number of them.</p>
-      <ul class="progList">${programmes.map(card).join('') || '<li class="muted">No programmes yet.</li>'}</ul></section>
+  return `<section class="card"><details class="otherProgs"${enrolled.size ? '' : ' open'}><summary><h2>Other programmes</h2></summary><p class="note">Your organisers enrol you in what you need. You can also enrol yourself in another programme here.</p>
+      <ul class="progList">${programmes.map(card).join('') || '<li class="muted">No other programmes.</li>'}</ul></details></section>
     ${canCreate ? `<section class="card"><h2>New programme</h2><p class="note">Any number of programmes, set up here with no code change. It starts as a draft for you to fill in.</p>
       <form class="form2" id="newProgramme">
         <div><label for="np-title">Title</label><input id="np-title" name="title" required maxlength="120" placeholder="Spartan Kids Course Marshal"></div>
@@ -151,8 +164,7 @@ async function programmePage(id) {
 }
 
 export const views = {
-  home: overview,
-  async programmes(rest) { return rest ? programmePage(rest) : catalogue(); },
+  async programmes(rest) { return rest ? programmePage(rest) : myLearning(); },
 };
 
 export function wire() {

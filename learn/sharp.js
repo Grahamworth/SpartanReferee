@@ -134,7 +134,8 @@ export function streakStrip(s) {
 // ---------------------------------------------------------------- on the overview and each programme's page
 let progressCache = null;
 const progress = () => (progressCache = progressCache || call('progress').finally(() => setTimeout(() => { progressCache = null; }, 2000)));
-hooks.overview.push(async () => {
+// on My Learning (programmes.js)
+hooks.learning.push(async () => {
   let p; try { p = await progress(); } catch { return ''; }
   const due = p.refresher.reduce((n, r) => n + r.due, 0), practised = p.refresher.reduce((n, r) => n + r.practised, 0);
   const earned = p.badges.filter((b) => b.earned);

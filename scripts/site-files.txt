@@ -89,7 +89,8 @@ learn/saved.js
 learn/sharp.js
 study.css
 look.js
-learn/landing.js
+learn/home.js
+learn/events.js
 privacy.html
 learn/invites.js
 join.html

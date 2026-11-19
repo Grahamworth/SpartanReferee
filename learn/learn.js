@@ -16,11 +16,12 @@ import * as govern from './govern.js';
 import * as reports from './reports.js';
 import * as diagnostics from './diagnostics.js';
 import * as saved from './saved.js';
-import * as landing from './landing.js';
+import * as home from './home.js';
+import * as events from './events.js';
 import * as sharp from './sharp.js';
 import * as invites from './invites.js';
 
-const AREAS = [programmes, people, lesson, assess, govern, reports, diagnostics, saved, landing, sharp, invites];
+const AREAS = [programmes, people, lesson, assess, govern, reports, diagnostics, saved, home, events, sharp, invites];
 const views = Object.assign({}, ...AREAS.map((a) => a.views));
 
 async function draw() {
@@ -30,6 +31,7 @@ async function draw() {
   const [, view = '', rest = ''] = (location.hash.split('?')[0] || '#/').split('/');
   const name = views[view] ? view : 'home';
   for (const a of $('learnNav').querySelectorAll('a')) a.classList.toggle('on', a.dataset.view === name || (a.dataset.also || '').split(' ').includes(name));
+  $('profileBtn')?.classList.toggle('on', name === 'profile');
   // on a phone the tabs are a row to swipe along: bring the one you're on into view
   const on = $('learnNav').querySelector('a.on'), nav = $('learnNav');
   if (on && nav.scrollWidth > nav.clientWidth) nav.scrollLeft = Math.max(0, on.offsetLeft - (nav.clientWidth - on.offsetWidth) / 2);
@@ -45,7 +47,7 @@ const TYPES = [['', 'Learner / referee'], ['regional_coordinator', 'Regional coo
 function drawChrome() {
   const me = S.me;
   $('who').textContent = me.actingAs ? `${me.real.email} as ${me.person.legalName}` : me.person.email;
-  show($('learnNav'), true); show($('demoBar'), true);
+  show($('learnNav'), true); show($('demoBar'), true); show($('profileBtn'), true);
   const showNav = { people: isAdmin() || has('regional_coordinator'), duplicates: isAdmin(), audit: isAdmin() };
   for (const [v, on] of Object.entries(showNav)) show($('learnNav').querySelector(`[data-view="${v}"]`), on);
   for (const a of $('learnNav').querySelectorAll('[data-show]')) show(a, a.dataset.show.split(' ').some((r) => has(r)));

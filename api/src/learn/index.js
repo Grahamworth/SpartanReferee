@@ -294,7 +294,13 @@ function createLearn({ db, session, isAdminEmail = () => false, member = null, r
     if (!LOCALES.includes(locale)) return;
     await db.query("UPDATE {S}.person SET locale = @l, updated_at = SYSUTCDATETIME() WHERE email = @e AND synthetic = 0 AND status = 'active' AND locale <> @l", { l: locale, e: String(email).toLowerCase() });
   }
-  return { handle, who, setLocale, invites: ctx.invites, loginOf, noteError: (...a) => ctx.noteError?.(...a), noteWaking: () => ctx.noteWaking?.() };
+  /** what someone coordinates, for events management (assignments.js): the countries of the regions they're regional coordinator for */
+  async function scopeOf(email) {
+    const rows = await db.query(`SELECT r.countries FROM {S}.person p JOIN {S}.role_grant g ON g.person_id = p.person_id AND g.role = 'regional_coordinator'
+      JOIN {S}.region r ON r.region_id = g.region_id WHERE p.synthetic = 0 AND p.status = 'active' AND LOWER(p.email) = @e`, { e: String(email).toLowerCase() });
+    return { countries: [...new Set(rows.flatMap((r) => String(r.countries || '').split(',').filter(Boolean)))] };
+  }
+  return { handle, who, setLocale, scopeOf, invites: ctx.invites, loginOf, noteError: (...a) => ctx.noteError?.(...a), noteWaking: () => ctx.noteWaking?.() };
 }
 
 module.exports = { createLearn, LOCALES };
