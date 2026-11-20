@@ -17,7 +17,9 @@ const readBody = (req, max = 1e5) => new Promise((ok) => { let b = ''; req.on('d
 // marks only from this page's own scripts: a JSON request (another website can't send one without asking first)
 const isJson = (req) => /^application\/json\b/i.test(req.headers['content-type'] || '');
 
-function createReview({ DATA, S, REVIEW, SITE_DIR, extraState = () => ({}) }) {
+// segments (segments.js): how late each recording's own clock runs. Every time the page gives or gets is when it really happened
+// (the judge's clock); only what's asked of the streaming server is in the recording's.
+function createReview({ DATA, S, REVIEW, SITE_DIR, segments = null, extraState = () => ({}) }) {
   const clipCache = new Map();   // the last few clips, kept whole so an iPad can seek in them (Safari needs ranges)
   let serverOk = false;
   const MTX_API = () => `http://127.0.0.1:${S.apiPort}`;
@@ -72,11 +74,12 @@ const saveMarks = () => fs.writeFile(MARKS, JSON.stringify(marks), () => {});
 const clipLoading = new Map();
 const CLIP_CACHE_BYTES = 400e6;
 async function clip(cam, start, dur) {
-  const key = `${cam}|${start}|${dur}`;
+  const late = segments ? segments.latenessAt(cam, Date.parse(start)) : 0;
+  const key = `${cam}|${start}|${dur}|${Math.round(late / 20)}`;
   if (clipCache.has(key)) return clipCache.get(key);
   if (clipLoading.has(key)) return clipLoading.get(key);
   if (clipLoading.size >= 6) throw new Error('Busy cutting other clips: try again in a moment');
-  const p = loadClip(cam, start, dur, key).finally(() => clipLoading.delete(key));
+  const p = loadClip(cam, new Date(Date.parse(start) + late).toISOString(), dur, key).finally(() => clipLoading.delete(key));
   clipLoading.set(key, p);
   return p;
 }
@@ -295,7 +298,9 @@ function sendRange(req, res, buf, name) {
     if (p === '/api/recorded') {
       const cam = +u.searchParams.get('cam');
       const r = await fetch(`http://127.0.0.1:${S.playbackPort}/list?path=live/station${cam}`, { signal: AbortSignal.timeout(5000) }).catch(() => null);
-      return send(res, 200, r && r.ok ? (await r.json()).map((x) => ({ start: x.start, duration: x.duration })) : []);
+      // each stretch from when it really started
+      const real = (x) => { const t = Date.parse(x.start), late = segments ? segments.latenessFrom(cam, t) : 0; return late ? new Date(t - late).toISOString() : x.start; };
+      return send(res, 200, r && r.ok ? (await r.json()).map((x) => ({ start: real(x), duration: x.duration })) : []);
     }
     if (p === '/clip') {
       const cam = +u.searchParams.get('cam'), start = u.searchParams.get('start');

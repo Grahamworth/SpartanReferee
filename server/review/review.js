@@ -127,6 +127,9 @@ setInterval(poll, 1000);
 pullJudgeSettings().finally(poll);
 // a camera whose phone keeps dropping off and reconnecting: its video has gaps and its judge misses reps (usually mobile data that can't keep up)
 const DROPS_WARN = 3;
+// a judge looking at its camera too few times a second to be sure of a jump (a quarter of a second in the air)
+const JUDGE_SLOW = 6;
+const slowJudge = (c) => !!c.judging && c.fps > 0 && c.fps < JUDGE_SLOW;
 function showDrops() {
   const bad = st.cams.filter((c) => (c.drops || 0) >= DROPS_WARN);
   $('dropNote').hidden = !bad.length;
@@ -250,7 +253,7 @@ function renderJudges() {
     const held = !off && !j.frame && analysingNow();
     if ((off || held) && c.live) plainView(c.n, j); else if (j.view && !c.live) { j.view.pc?.close(); j.view.video.remove(); j.view = null; }
     drawWaiting(c, j);
-    const nm = camName(c.n); j.tile.querySelector('.label').innerHTML = `Camera ${camNo(c.n)}${nm ? `<small>${esc(nm)}</small>` : ''}${off ? '<small>AI judge off</small>' : held ? '<small>AI judge waiting</small>' : ''}${(c.drops || 0) >= DROPS_WARN ? '<small class="dropping">Connection dropping</small>' : ''}`;
+    const nm = camName(c.n); j.tile.querySelector('.label').innerHTML = `Camera ${camNo(c.n)}${nm ? `<small>${esc(nm)}</small>` : ''}${off ? '<small>AI judge off</small>' : held ? '<small>AI judge waiting</small>' : ''}${(c.drops || 0) >= DROPS_WARN ? '<small class="dropping">Connection dropping</small>' : ''}${slowJudge(c) ? `<small class="dropping" title="The AI judge is looking ${c.fps.toFixed(0)} times a second. Below ${JUDGE_SLOW} it can miss a jump: fewer people in view, or one camera on this server, speeds it up.">AI judge slow</small>` : ''}`;
   }
 }
 async function setAi(n, on) {
@@ -287,7 +290,9 @@ function plainView(n, j) {
     try {
       v.pc?.close();
       const pc = v.pc = new RTCPeerConnection();
-      pc.addTransceiver('video', { direction: 'recvonly' });
+      const tr = pc.addTransceiver('video', { direction: 'recvonly' });
+      // a fifth of a second in hand, so a picture that reaches the server in bunches (a phone on mobile data) still plays evenly
+      try { tr.receiver.jitterBufferTarget = 200; } catch { /* an older browser: as it comes */ }
       pc.ontrack = (e) => { v.video.srcObject = e.streams[0] || new MediaStream([e.track]); v.video.play().catch(() => {}); };
       await pc.setLocalDescription(await pc.createOffer());
       await new Promise((ok) => { if (pc.iceGatheringState === 'complete') ok(); pc.addEventListener('icegatheringstatechange', () => pc.iceGatheringState === 'complete' && ok()); setTimeout(ok, 1500); });
@@ -610,8 +615,18 @@ function hookMaster() {
   master.addEventListener('play', () => { $('play').textContent = 'Pause'; vids.forEach((v) => v !== master && v.play().catch(() => {})); });
   master.addEventListener('pause', () => { $('play').textContent = 'Play'; vids.forEach((v) => v !== master && v.pause()); sync(true); });
 }
+// The other cameras kept in step with the first. A little out: played a touch faster or slower until it's level, which doesn't
+// show; jumping to the right place does (the picture stops for a moment), so that's only for a big difference, or when paused.
+const STEP_OK = 0.03, STEP_JUMP = 0.5, STEP_RATE = 0.06;
 function sync(hard) {
-  for (const v of vids) if (v !== master && v.readyState > 0 && Math.abs(v.currentTime - master.currentTime) > (hard ? 0.02 : 0.15)) v.currentTime = master.currentTime;
+  if (!master) return;
+  const rate = master.playbackRate;
+  for (const v of vids) {
+    if (v === master || v.readyState < 1) continue;
+    const ahead = v.currentTime - master.currentTime;
+    if (hard || Math.abs(ahead) > STEP_JUMP) { if (Math.abs(ahead) > 0.02) v.currentTime = master.currentTime; v.playbackRate = rate; }
+    else v.playbackRate = Math.abs(ahead) < STEP_OK ? rate : rate * (ahead > 0 ? 1 - STEP_RATE : 1 + STEP_RATE);
+  }
 }
 function seek(t) { t = Math.max(0, Math.min(clipDur, t)); vids.forEach((v) => { if (v.readyState > 0) v.currentTime = t; }); updateAt(t); }
 function pauseAll() { vids.forEach((v) => v.pause()); }
@@ -855,7 +870,7 @@ const PROOF_BONES = [[11, 12], [11, 13], [13, 15], [12, 14], [14, 16], [11, 23],
 const PROOF_CLIP = 600;   // seconds of a live recording loaded at once
 let proof = null, proofLag = 0;
 const pv = $('proofVideo');
-try { proofLag = +localStorage.getItem('proofLag') || 0; } catch { /* not kept */ }
+try { proofLag = +localStorage.getItem('proofNudge') || 0; localStorage.removeItem('proofLag'); } catch { /* not kept */ } // (proofLag: the old nudge, which made up for skeletons saved 2 s early)
 function showProofLag() { $('proofShift').textContent = `${proofLag > 0 ? '+' : ''}${(proofLag / 1000).toFixed(1)} s`; }
 function watchInLive(a) {
   viewCam = a.cam;
@@ -942,7 +957,7 @@ $('proofClose').onclick = proofClose;
 addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('proof').hidden && !counting && $('quickStart').hidden) proofClose(); });
 $('proofLive').onclick = () => { const a = proof?.a; proofClose(); if (a) watchInLive(a); };
 $('proofSpeeds').onclick = (e) => { const b = e.target.closest('[data-prate]'); if (b) setProofRate(+b.dataset.prate); };
-$('proofSync').onclick = (e) => { const b = e.target.closest('[data-shift]'); if (!b) return; proofLag += +b.dataset.shift; showProofLag(); try { localStorage.setItem('proofLag', proofLag); } catch { /* not kept */ } };
+$('proofSync').onclick = (e) => { const b = e.target.closest('[data-shift]'); if (!b) return; proofLag += +b.dataset.shift; showProofLag(); try { localStorage.setItem('proofNudge', proofLag); } catch { /* not kept */ } };
 $('proofReps').onclick = (e) => {
   const b = e.target.closest('[data-ev]'); if (!b || !proof) return;
   const ev = proof.evs[+b.dataset.ev], from = ev.from ?? ev.t - 4000;

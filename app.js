@@ -1,7 +1,7 @@
 import { BurpeeJudge, GestureJudge, computeMetrics, DEFAULTS, LM } from './burpee.js';
 import { EXERCISES, exercise, applyStrictness, PushupJudge, STRICTNESS_DEFAULT, strictnessWord, strictnessValue } from './exercises.js';
 import { PoseFilter, TRACKING, JointHold } from './pose-filter.js';
-import { MultiTracker, MULTI_DEFAULTS, fromCrop, drawMasks, scanAreas, joinResults, unclaimedBoxes, boxArea } from './multi.js';
+import { MultiTracker, MULTI_DEFAULTS, fromCrop, drawMasks, scanAreas, joinResults, unclaimedBoxes, boxArea, peopleWanted, arrivalClock, blendSnaps } from './multi.js';
 import { loadFinder } from './finder.js';
 import { prepareDigits } from './ocr-prep.js';
 import { findCones, ConeTracker, coneReadBox } from './cones.js';
@@ -222,7 +222,9 @@ window.addEventListener('orientationchange', applyPageTurn);
 
 async function loadLandmarker() {
   const conf = tracking().mpConf;
-  const numPoses = multiMode() ? MULTI_DEFAULTS.maxPeople : 2;
+  // several athletes: five at a time, ten while more than five are in view (multi.js peopleWanted). A video being analysed isn't
+  // against the clock, so always ten.
+  const numPoses = multiMode() ? (S.upload ? MULTI_DEFAULTS.maxPeopleBusy : S.peopleCap || MULTI_DEFAULTS.maxPeople) : 2;
   const mdl = S.modelOverride || settings.model;
   const key = `${mdl}:${conf}:${numPoses}`;
   if (S.landmarker && S.landmarkerKey === key) return S.landmarker;
@@ -415,7 +417,10 @@ async function connectStream(url) {
   url = url.trim();
   if (!/\/whep\/?$/i.test(url)) url = url.replace(/\/+$/, '') + '/whep';
   const pc = new RTCPeerConnection();
-  pc.addTransceiver('video', { direction: 'recvonly' });
+  const tr = pc.addTransceiver('video', { direction: 'recvonly' });
+  // Someone watching: a fifth of a second in hand, so a picture that reaches the server in bunches (a phone on mobile data) still
+  // plays evenly. The outline waits for the picture whatever that takes (followHold). The judge itself takes frames as they come.
+  if (FOLLOW) try { tr.receiver.jitterBufferTarget = 200; } catch { /* an older browser: as it comes */ }
   const track = new Promise((res) => { pc.ontrack = (e) => res(e.streams[0] || new MediaStream([e.track])); });
   await pc.setLocalDescription(await pc.createOffer());
   // Send the offer once this computer's own addresses are in it (or after 2 s).
@@ -853,7 +858,7 @@ function followJudge(n) {
 // says how long after its frame arrived each outline went (lag), the viewer measures how long its own frames wait between
 // arriving and being shown, and each outline is held back by the difference. (Both travel the same way from the server, so the
 // trip itself cancels out.)
-const frameWait = { at: 0, ms: null, stats: null }; // the latest frame's arrival (performance.now), the smoothed wait from arrival to shown
+const frameWait = { at: 0, rtp: null, ms: null, stats: null }; // the latest frame's arrival (performance.now) and its own timestamp (90,000 a second), the smoothed wait from arrival to shown
 const FOLLOW_HOLD_MAX_MS = 2000;
 let framesWatched = false;
 function watchFrames() {
@@ -861,13 +866,23 @@ function watchFrames() {
   framesWatched = true;
   const cb = (now, m) => {
     if (m.receiveTime > 0) {
-      frameWait.at = m.receiveTime;
+      frameWait.at = m.receiveTime; frameWait.rtp = Number.isFinite(m.rtpTimestamp) ? m.rtpTimestamp : null;
       const wait = m.expectedDisplayTime - m.receiveTime;
       if (wait >= 0 && wait < 5000) frameWait.ms = frameWait.ms == null ? wait : frameWait.ms * 0.95 + wait * 0.05;
     }
     video.requestVideoFrameCallback(cb);
   };
   video.requestVideoFrameCallback(cb);
+}
+// When the frame being judged arrived, on this machine's clock: what the saved skeletons are timed by, so they can be drawn over the
+// recording, which the server times by arrival too (server/segments.js). Frames come over a phone's connection in bunches but
+// were filmed evenly, so the time is read off a steady line through the arrivals: a frame's own timestamp says how long after the
+// last it was filmed; a frame arriving sooner than the line says moves the line (it was running late), and it creeps later by
+// itself to follow a phone whose clock runs slow. A browser that doesn't say when frames arrived: now, as before.
+const arrivalTime = arrivalClock();
+function frameStamp(now = Date.now(), mono = performance.now()) {
+  const age = mono - frameWait.at;
+  return !frameWait.at || age < 0 || age > 1000 ? now : arrivalTime(now - age, frameWait.rtp, mono);
 }
 // A browser that doesn't say when its frames arrived: the stream's own figures (time in the jitter buffer, and decoding).
 async function followStats() {
@@ -883,14 +898,15 @@ const followHold = () => {
   const wait = frameWait.ms ?? frameWait.stats;
   return wait == null ? 0 : Math.max(0, Math.min(FOLLOW_HOLD_MAX_MS, wait - (S.followLag ?? 0)));
 };
-// the outline due now: the newest one that's waited long enough
+// The outline due now: the newest one that's waited long enough, moved part of the way to the one after it. The judge sends an
+// outline a few times a second and the picture moves 30 times, so drawn only as they come the outline went in steps; the next one
+// is already here (it's waiting for the picture), so everyone's drawn where they are between the two (multi.js blendSnaps).
 function followTick() {
-  const q = S.followQueue; if (!q?.length) return;
+  const q = S.followQueue; if (!q) return;
   const due = performance.now() - followHold();
   let i = -1; while (i + 1 < q.length && q[i + 1].at <= due) i++;
-  if (i < 0) return;
-  S.replay = [q[i].snap]; S.followAt = Date.now();
-  q.splice(0, i + 1);
+  if (i >= 0) { S.followFrom = q[i]; S.followAt = Date.now(); q.splice(0, i + 1); }
+  if (S.followFrom) S.replay = [blendSnaps(S.followFrom, q[0], due)];
 }
 
 // The judge's side: at most this many a second, skipping any while the last is still on its way. Only what's needed to draw.
@@ -1659,7 +1675,7 @@ function renderMulti(people = S.multi.athletes.map((k) => ({ label: k.label, bib
 // recorded while analysing a test video first.
 function multiView(tc) {
   return S.multi.tracks.filter((k) => k.pose && tc - k.seenAt <= 1500).map((k) => ({
-    lm: k.pose.lm, label: k.label, bib: k.bib, count: k.judge.count, noReps: k.judge.noReps, box: k.box,
+    id: k.id, lm: k.pose.lm, label: k.label, bib: k.bib, count: k.judge.count, noReps: k.judge.noReps, box: k.box,
     flash: tc < (k.flashUntil || 0) ? (k.flashGood ? 'good' : 'bad') : null,
   }));
 }
@@ -1886,9 +1902,18 @@ function frame() {
   if (!ENGINE) drawFrame(src, w, h, wantPose, practice);
 }
 
+// More people in view than the pose model is following (or no longer): it's loaded again asking for more (or fewer). The one
+// running carries on until the new one is ready.
+function peopleTick(boxes, t, aspect) {
+  const cap = peopleWanted(S.people ??= {}, boxes, t, aspect);
+  if (cap === (S.peopleCap || MULTI_DEFAULTS.maxPeople) || S.upload) return;
+  S.peopleCap = cap;
+  loadLandmarker().catch(() => {});
+}
+
 // Pose search and judging for one frame at judging-clock time t.
 function analyseFrame(src, w, h, t) {
-    S.frameAt = Date.now();
+    S.frameAt = frameStamp();
     const seen = performance.now();
     S.frameArrived = frameWait.at && seen - frameWait.at < 1000 ? frameWait.at : seen; // when this frame reached the page (or, not knowing, now)
     const wide = w > h;
@@ -1917,7 +1942,7 @@ function analyseFrame(src, w, h, t) {
           if (!S.findBusy && t - S.findAt >= MULTI_DEFAULTS.findEveryMs) {
             S.findAt = t;
             S.findBusy = true;
-            S.finder.find(src, w, h).then((b) => { S.findBoxes = b; }).catch(() => {}).finally(() => { S.findBusy = false; });
+            S.finder.find(src, w, h).then((b) => { S.findBoxes = b; peopleTick(b, t, w / h); }).catch(() => {}).finally(() => { S.findBusy = false; });
           }
           if (S.findBoxes) {
             const found = S.multiRes?.landmarks || [];

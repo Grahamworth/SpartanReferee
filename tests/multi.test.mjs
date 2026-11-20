@@ -1,7 +1,7 @@
 // Run with: node --test tests/*.test.mjs
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { MultiTracker, personBox, fromCrop, clothesColour, unclaimedBoxes } from '../multi.js';
+import { MultiTracker, MULTI_DEFAULTS, personBox, fromCrop, clothesColour, unclaimedBoxes, peopleWanted, arrivalClock, blendSnaps } from '../multi.js';
 import { TRACKING } from '../pose-filter.js';
 
 // A standing person with hips at (x, y) and the given height (fraction of the frame).
@@ -378,4 +378,124 @@ test('multi: an athlete\'s hips going back and forth through a burpee isn\'t tak
   }
   assert.equal(mt.athletes.length, 2);
   assert.deepEqual(mt.athletes.map((k) => Math.abs(k.home.cx - 0.35) < 0.05 || Math.abs(k.home.cx - 0.65) < 0.05), [true, true]);
+});
+
+// ---- who becomes an athlete: only by a first rep the judge can stand behind
+const rep = (downAt, endAt) => ({ type: 'rep', detail: { downAt, endAt } });
+
+test('multi: a first "rep" that took over 10 s (a bystander who bent down once, a camera being moved) doesn\'t make an athlete', () => {
+  const mt = tracker();
+  mt.update(frame(person(0.5, 0.6, 0.2)), 0);
+  mt.tracks[0].judge.next = { type: 'norep', reasons: ['x'] };
+  mt.update(frame(person(0.5, 0.6, 0.2)), 66);
+  mt.tracks[0].judge.next = rep(1000, 38000);
+  const none = mt.update(frame(person(0.5, 0.6, 0.2)), 132);
+  assert.deepEqual(none, []); assert.equal(mt.athletes.length, 0);
+  assert.equal(mt.tracks[0].judge.count, 0, 'they start again from nothing');
+  // their next one, done in one go, is rep 1: nothing is carried over
+  mt.tracks[0].judge.next = rep(40000, 42700);
+  const [e] = mt.update(frame(person(0.5, 0.6, 0.2)), 198);
+  assert.equal(mt.athletes.length, 1); assert.equal(e.ev.count, 1); assert.equal(mt.tracks[0].judge.noReps, 0);
+});
+
+test('multi: once someone is an athlete, a slow rep still counts', () => {
+  const mt = tracker();
+  mt.update(frame(person(0.5, 0.6, 0.2)), 0);
+  mt.tracks[0].judge.next = rep(0, 2500);
+  mt.update(frame(person(0.5, 0.6, 0.2)), 66);
+  mt.tracks[0].judge.next = rep(3000, 45000); // a long rest on the ground
+  const [e] = mt.update(frame(person(0.5, 0.6, 0.2)), 132);
+  assert.equal(e.ev.count, 2);
+});
+
+test('multi: someone at the very side of the picture (half out of it, or a reflection in a mirror there) doesn\'t become an athlete', () => {
+  for (const x of [0.03, 0.97]) {
+    const mt = tracker();
+    mt.update(frame(person(x, 0.6, 0.2)), 0);
+    mt.tracks[0].judge.next = rep(0, 2000);
+    assert.deepEqual(mt.update(frame(person(x, 0.6, 0.2)), 66), []);
+    assert.equal(mt.athletes.length, 0, `at ${x}`);
+  }
+  const mt = tracker();
+  mt.update(frame(person(0.1, 0.6, 0.2)), 0);
+  mt.tracks[0].judge.next = rep(0, 2000);
+  mt.update(frame(person(0.1, 0.6, 0.2)), 66);
+  assert.equal(mt.athletes.length, 1, 'a little way in is fine');
+});
+
+test('multi: an athlete lost for a while and found again is carried on even by a slow rep', () => {
+  const mt = tracker();
+  mt.update(frame(person(0.2, 0.6, 0.2)), 0);
+  mt.tracks[0].judge.next = rep(0, 2000);
+  mt.update(frame(person(0.2, 0.6, 0.2)), 66);
+  mt.update(frame(person(0.22, 0.6, 0.2)), 5000);
+  trackAt(mt, 0.22).judge.next = rep(5000, 17000);
+  const [e] = mt.update(frame(person(0.22, 0.6, 0.2)), 5066);
+  assert.equal(mt.athletes.length, 1); assert.equal(e.ev.count, 2);
+});
+
+// ---- how many people the pose model is asked for
+const boxOf = (h) => ({ x0: 0.1, x1: 0.15, y0: 0.2, y1: 0.2 + h });
+const crowd = (n, h = 0.3) => Array.from({ length: n }, () => boxOf(h));
+
+test('multi: five people are followed at once; ten while more than five keep being seen, then five again once they\'ve gone', () => {
+  const st = {};
+  assert.equal(peopleWanted(st, crowd(3), 0), 5);
+  assert.equal(peopleWanted(st, crowd(8), 500), 5, 'seen once: not yet');
+  assert.equal(peopleWanted(st, crowd(8), 1000), 5);
+  assert.equal(peopleWanted(st, crowd(8), 2000), 10, 'still there a second and a half later');
+  assert.equal(peopleWanted(st, crowd(4), 2500), 10);
+  assert.equal(peopleWanted(st, crowd(7), 12000), 10, 'they came back: the wait starts again');
+  assert.equal(peopleWanted(st, crowd(4), 13000), 10);
+  assert.equal(peopleWanted(st, crowd(4), 32000), 10);
+  assert.equal(peopleWanted(st, crowd(5), 33000), 5, 'five or fewer for 20 s');
+  assert.equal(MULTI_DEFAULTS.maxPeopleBusy, 10);
+});
+
+test('multi: people far in the background don\'t count towards asking for more, and one crowded look doesn\'t either', () => {
+  const st = {};
+  for (let t = 0; t <= 5000; t += 500) assert.equal(peopleWanted(st, [...crowd(4), ...crowd(6, 0.05)], t), 5);
+  const flicker = {};
+  for (let t = 0; t <= 6000; t += 500) assert.equal(peopleWanted(flicker, crowd(t % 1000 ? 4 : 7), t), 5);
+});
+
+// ---- saved skeletons are timed by when their frame arrived, on a steady line through the arrivals
+test('multi: frames arriving in bunches are timed evenly, as they were filmed', () => {
+  const stamp = arrivalClock(), t0 = 1_800_000_000_000;
+  let rtp = 4_000_000_000; // near the top of its range: it wraps round on the way
+  const out = [];
+  for (let i = 0; i < 60; i++) {
+    const filmed = i * 100 / 3, late = i % 6 === 5 ? 0 : (5 - (i % 6)) * 12; // every sixth frame arrives on time, the ones before it late
+    out.push(stamp(t0 + filmed + late, (rtp + i * 3000) >>> 0, filmed + late));
+  }
+  for (let i = 12; i < 60; i++) assert.ok(Math.abs(out[i] - (t0 + i * 100 / 3)) <= 2, `frame ${i}: ${out[i] - t0} against ${i * 100 / 3}`);
+});
+
+test('multi: the line follows a phone whose clock runs slow, and starts again on a new connection', () => {
+  const stamp = arrivalClock(), t0 = 1_800_000_000_000;
+  let last = 0;
+  // the phone's second is 1.0005 of ours: after 10 minutes its frames arrive 300 ms later than its timestamps say
+  for (let i = 0; i <= 18000; i++) { const got = t0 + i * (100 / 3) * 1.0005; last = stamp(got, i * 3000, got - t0) - got; }
+  assert.ok(Math.abs(last) <= 3, `off by ${last} ms after 10 minutes`);
+  // a new connection: its timestamps start somewhere else
+  const got = t0 + 700000;
+  assert.equal(stamp(got, 123456789, 700000), got);
+  assert.equal(stamp(got + 33, 123456789 + 3000, 700033), got + 33);
+  assert.equal(arrivalClock()(t0 + 5, null, 5), t0 + 5, 'a browser that gives no timestamp: when it arrived');
+});
+
+// ---- the live outline between two of the judge's snapshots
+test('multi: between two snapshots everyone is drawn part of the way from one to the next', () => {
+  const lm = (x) => [{ x, y: 0.5, visibility: 0.9 }, { x: x + 0.1, y: 0.6, visibility: 0.2 }];
+  const a = { at: 1000, snap: { t: 0, tracks: [{ id: 1, label: 1, count: 3, lm: lm(0.2), box: { x: 0.2, top: 0.4, tilt: null } }, { id: 2, label: null, lm: lm(0.7), box: { x: 0.7, top: 0.4 } }] } };
+  const b = { at: 1200, snap: { t: 0, tracks: [{ id: 1, label: 1, count: 4, lm: lm(0.3), box: { x: 0.3, top: 0.5, tilt: null } }, { id: 3, label: null, lm: lm(0.9), box: { x: 0.9, top: 0.4 } }] } };
+  const mid = blendSnaps(a, b, 1100);
+  assert.ok(Math.abs(mid.tracks[0].lm[0].x - 0.25) < 1e-9); assert.ok(Math.abs(mid.tracks[0].box.top - 0.45) < 1e-9);
+  assert.equal(mid.tracks[0].count, 3, 'the count is the shown snapshot\'s'); assert.equal(mid.tracks[0].lm[1].visibility, 0.2);
+  assert.equal(mid.tracks[1].lm[0].x, 0.7, 'someone not in the next one stays put'); assert.equal(mid.tracks.length, 2);
+  assert.equal(blendSnaps(a, b, 1000), a.snap); assert.equal(blendSnaps(a, undefined, 1100), a.snap);
+  assert.ok(Math.abs(blendSnaps(a, b, 5000).tracks[0].lm[0].x - 0.3) < 1e-9, 'never past the next one');
+  assert.equal(blendSnaps(a, { at: 1600, snap: b.snap }, 1300), a.snap, 'too far apart to be one movement');
+  const one = blendSnaps({ at: 0, snap: { t: 0, lm: lm(0.2), reps: 1 } }, { at: 100, snap: { t: 0, lm: lm(0.4), reps: 2 } }, 50);
+  assert.ok(Math.abs(one.lm[0].x - 0.3) < 1e-9); assert.equal(one.reps, 1);
 });

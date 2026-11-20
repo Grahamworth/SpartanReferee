@@ -10,6 +10,7 @@ const POINTS = [0, 7, 8, 11, 12, 13, 14, 15, 16, 23, 24, 25, 26, 27, 28, 29, 30,
 const BONES = [[11, 12], [11, 13], [13, 15], [12, 14], [14, 16], [11, 23], [12, 24], [23, 24], [23, 25], [25, 27], [24, 26], [26, 28], [27, 29], [29, 31], [27, 31], [28, 30], [30, 32], [28, 32], [7, 8]];
 const pointIndex = new Map(POINTS.map((p, i) => [p, i]));
 const SEEN_MS = 800; // tracking is only drawn near a saved frame, so it doesn't sit there once someone's gone
+const BLEND_MS = 500; // saved frames this close together are the same movement: the skeleton is drawn part-way between them
 const CLIP_MS = 12 * 60e3; // a recording is cut every 10 minutes, so anything starting within this could hold a moment
 
 let data = { athletes: [], numbers: [], recordings: [], sources: {}, merged: [] };
@@ -106,8 +107,14 @@ function drawTrack() {
   let lo = 0, hi = frames.length - 1;
   while (lo < hi) { const m = (lo + hi + 1) >> 1; if (frames[m][0] <= T) lo = m; else hi = m - 1; }
   const f = frames[lo]; if (Math.abs(f[0] - T) > SEEN_MS) return;
+  // between two saved frames (the judge saves a dozen a second at best): part of the way from one to the next, so it moves with the body
+  const g = frames[lo + 1], mix = g && f[0] <= T && g[0] - f[0] < BLEND_MS ? (T - f[0]) / (g[0] - f[0]) : 0;
   const k = Math.min(W / video.videoWidth, H / video.videoHeight), dw = video.videoWidth * k, dh = video.videoHeight * k, ox = (W - dw) / 2, oy = (H - dh) / 2;
-  const pt = (p) => { const i = pointIndex.get(p), x = f[2 + i * 2], y = f[3 + i * 2]; return x < 0 || y < 0 ? null : { x: ox + (x / 10000) * dw, y: oy + (y / 10000) * dh }; };
+  const pt = (p) => {
+    const i = pointIndex.get(p); let x = f[2 + i * 2], y = f[3 + i * 2]; if (x < 0 || y < 0) return null;
+    if (mix && g[2 + i * 2] >= 0 && g[3 + i * 2] >= 0) { x += (g[2 + i * 2] - x) * mix; y += (g[3 + i * 2] - y) * mix; } // (a point the next frame didn't see stays where it was)
+    return { x: ox + (x / 10000) * dw, y: oy + (y / 10000) * dh };
+  };
   const colour = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#3ddc97';
   ctx.strokeStyle = colour; ctx.lineWidth = Math.max(2, W / 320); ctx.lineCap = 'round';
   ctx.beginPath();

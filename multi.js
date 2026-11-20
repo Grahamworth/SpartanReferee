@@ -25,6 +25,11 @@
 // out of the side of the picture: then they've gone). Officials
 // and spectators walking or crouching never complete a rep, so they're never
 // labelled or counted. People far in the background are too small to track.
+// That first rep has to be one the judge can stand behind: done in one go (firstRepMs from going down to the jump: a bystander
+// who bent down once and stretched a minute later isn't doing burpees, nor is anyone while the camera's being moved), and not at
+// the very side of the picture (firstRepEdge: someone half out of it, or a reflection in a mirror there). Measured on a morning's
+// test: real first reps took 2.4 to 2.8 s; of the six false athletes, four took 17 s to over 3 minutes and one was a reflection
+// at the edge. Someone refused starts again from nothing, so a real athlete is picked up at their next rep.
 // The model sometimes finds one person twice: two poses with the shoulders
 // and hips in the same places. The smaller copy is dropped. (Outlines alone
 // won't do: an athlete lying at an official's feet overlaps him.)
@@ -94,7 +99,12 @@ import { computeMetrics } from './burpee.js';
 import { PoseFilter } from './pose-filter.js';
 
 export const MULTI_DEFAULTS = {
-  maxPeople: 5,       // poses asked of the model per frame
+  maxPeople: 5,       // poses asked of the model per frame...
+  maxPeopleBusy: 10,  // ...and while more than that are in view (peopleWanted)
+  busyAfterMs: 1500,  // more than maxPeople seen for this long: ask for maxPeopleBusy
+  quietAfterMs: 20000, // no more than maxPeople for this long: back to maxPeople
+  firstRepMs: 10000,  // someone new becomes an athlete by a rep done in this long, going down to the jump...
+  firstRepEdge: 0.05, // ...with their middle at least this far in from the side of the picture
   minSize: 0.1,       // smaller than this fraction of the frame height: background, not a new track
   keepSize: 0.04,     // an existing track still follows its person down to this size (crouched, far off)
   sameDist: 0.2,      // shoulders and hips this close (share of body size): one person found twice
@@ -145,6 +155,55 @@ export const MULTI_DEFAULTS = {
   heldMs: 10000,      // an athlete hidden up to this long gets their spot back when whoever was in front moves aside ...
   heldMinMs: 400,     // ... once hidden at least this long (missed for a frame or two is just the model)
 };
+
+// How many people to ask the pose model for. It follows that many at once; asking for more than are there costs nothing, but
+// every extra person followed takes time on every frame, shared by everyone, so it stays at maxPeople until the person finder
+// keeps seeing more than that (boxes: what it saw, shares of the frame; tiny ones in the background don't count), then goes to
+// maxPeopleBusy, and comes back once they've gone. state: {} at first, kept by the caller.
+export function peopleWanted(state, boxes, t, aspect = 1, o = MULTI_DEFAULTS) {
+  const seen = (boxes || []).filter((b) => Math.max(b.y1 - b.y0, (b.x1 - b.x0) * aspect) >= o.minSize).length;
+  state.cap ??= o.maxPeople;
+  const busy = state.cap > o.maxPeople, wantsChange = busy ? seen <= o.maxPeople : seen > o.maxPeople;
+  if (!wantsChange) { state.since = null; return state.cap; }
+  state.since ??= t;
+  if (t - state.since >= (busy ? o.quietAfterMs : o.busyAfterMs)) { state.cap = busy ? o.maxPeople : o.maxPeopleBusy; state.since = null; }
+  return state.cap;
+}
+
+// When a frame arrived, on a steady clock: what the saved skeletons are timed by. Frames come over a phone's connection in bunches
+// but were filmed evenly, so the time is read off a steady line through the arrivals. Returns a function of (got: when the frame
+// reached this machine, ms on its clock; rtp: the frame's own timestamp, 90,000 a second, or null if the browser doesn't say;
+// mono: a clock that never jumps, ms) giving the time to stamp it with. A frame's own timestamp says how long after the line's
+// start it was filmed. One arriving sooner than the line says moves the line (it was running late); the line creeps later by
+// itself (2 ms a second at most) to follow a phone whose clock runs slow; a timestamp that makes no sense (a new connection)
+// starts it again.
+export function arrivalClock() {
+  const line = { wall: 0, rtp: 0, at: 0 };
+  return (got, rtp, mono) => {
+    if (rtp == null) return Math.round(got);
+    const est = line.wall + ((rtp - line.rtp) | 0) / 90;
+    if (!line.wall || est > got || got - est > 2000) { line.wall = got; line.rtp = rtp; line.at = mono; return Math.round(got); }
+    line.wall += Math.min(got - est, (mono - line.at) * 0.002); line.at = mono;
+    return Math.round(line.wall + ((rtp - line.rtp) | 0) / 90);
+  };
+}
+
+// What to draw at time `due` between two of the judge's snapshots: a ({ at, snap }, the one showing) moved part of the way to b
+// (the next, or nothing yet). Each person (matched by their track's id) and a lone athlete's points are moved; counts, labels and
+// anyone not in both stay as in a. Snapshots more than maxGap ms apart aren't one movement: a as it is.
+export function blendSnaps(a, b, due, maxGap = 400) {
+  const gap = b ? b.at - a.at : 0;
+  if (!(gap > 0) || gap > maxGap) return a.snap;
+  const m = Math.max(0, Math.min(1, (due - a.at) / gap)), s = a.snap, n = b.snap;
+  if (!m) return s;
+  const points = (la, lb) => la.map((p, i) => (lb[i] ? { ...p, x: p.x + (lb[i].x - p.x) * m, y: p.y + (lb[i].y - p.y) * m } : p));
+  const box = (x, y) => (x && y ? Object.fromEntries(Object.entries(x).map(([k, v]) => [k, typeof v === 'number' && typeof y[k] === 'number' ? v + (y[k] - v) * m : v])) : x);
+  if (s.tracks && n.tracks) {
+    const next = new Map(n.tracks.filter((k) => k.id != null).map((k) => [k.id, k]));
+    return { ...s, tracks: s.tracks.map((k) => { const o = next.get(k.id); return o ? { ...k, lm: points(k.lm, o.lm), box: box(k.box, o.box) } : k; }) };
+  }
+  return s.lm && n.lm ? { ...s, lm: points(s.lm, n.lm) } : s;
+}
 
 // Where to take the look for new people: the area being watched (r, as
 // shares of the frame), and its left and right 60% (a person standing beside
@@ -589,6 +648,8 @@ export class MultiTracker {
         const lost = this._lostAthlete(k, t);
         if (lost) this._carryOn(k, lost);
         else {
+          // Someone new: only by a rep done in one go, in the picture. Anyone else starts again from nothing.
+          if (!this._firstRepOk(k, ev)) { k.early = []; k.judge = this.make(); continue; }
           // With cones out, only someone doing reps at a free cone is an athlete: anyone else starts again from nothing.
           if (this.cones?.length) {
             const c = this._coneFor(k);
@@ -604,6 +665,13 @@ export class MultiTracker {
     }
     this.tracks = this.tracks.filter((k) => !k.merged && (k.label != null || t - k.seenAt < o.forgetMs));
     return events;
+  }
+
+  // A first rep the judge can stand behind: quick enough from going down to the jump, and not at the very side of the picture.
+  _firstRepOk(k, ev) {
+    const o = this.o, d = ev.detail;
+    if (d && d.downAt != null && d.endAt != null && d.endAt - d.downAt > o.firstRepMs) return false;
+    return !(k.box.x < o.firstRepEdge || k.box.x > 1 - o.firstRepEdge);
   }
 
   // The unfinished athlete, out of sight for a while, that new track k most

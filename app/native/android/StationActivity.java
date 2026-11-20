@@ -46,6 +46,12 @@ import com.pedro.library.util.streamclient.StreamBaseClient;
  * Either can be left out. Each reconnects by itself if it drops, without affecting the other.
  * The judging computer may have several routes ("url1|url2": direct on the same Wi-Fi first, then Tailscale):
  * when one won't connect, the next is tried.
+ *
+ * The picture's quality follows the connection. A phone on weak mobile data that kept sending at full quality fell behind, was cut
+ * off and reconnected over and over (measured: half an hour of clips under a second long, and a judge that saw nothing). So once a
+ * second: if what's waiting to be sent is building up, the bitrate comes down by a third at once; while the connection keeps up, it
+ * creeps back to what was asked for. A connection that dropped comes back at half. The judging computer's connection decides (or
+ * YouTube's, when that's the only one), as there's one encoder for both.
  */
 public class StationActivity extends Activity implements SurfaceHolder.Callback {
     private static final int JUDGE = 0, YOUTUBE = 1;
@@ -63,6 +69,10 @@ public class StationActivity extends Activity implements SurfaceHolder.Callback 
     private String[] judgeRoutes = new String[0];
     private int judgeRoute = 0;
     private boolean wantLive = false;
+    private static final int MIN_BITRATE = 500_000;      // below this a 720p picture is no use to the judge
+    private int maxBitrate, bitrate;                     // bits a second: what was asked for, and what's being sent now
+    private int clearSeconds = 0;                        // seconds in a row with nothing building up
+    private final boolean[] live = new boolean[2];
     private long startedAt;
     private final Handler ui = new Handler(Looper.getMainLooper());
     private boolean checking = false, goAfterCheck = false, recheck = false, recheckThenGo = false;
@@ -106,6 +116,7 @@ public class StationActivity extends Activity implements SurfaceHolder.Callback 
         int width = height * 16 / 9;
         int kbps = getIntent().getIntExtra("bitrate", 3500);
         // keyframe every second: the judge picks the picture up quickly, and YouTube asks for 2 s or less
+        maxBitrate = bitrate = kbps * 1000;
         boolean ok = stream.prepareVideo(width, height, kbps * 1000, 30, 1) && stream.prepareAudio(44100, true, 128 * 1000);
         if (!ok) {
             setState(JUDGE, "This phone can't film at " + width + "×" + height + ": pick a lower quality", RED);
@@ -233,9 +244,13 @@ public class StationActivity extends Activity implements SurfaceHolder.Callback 
     private ConnectChecker checker(final int i) {
         return new ConnectChecker() {
             @Override public void onConnectionStarted(String u) { setState(i, "Connecting" + route(i) + "…", AMBER); }
-            @Override public void onConnectionSuccess() { setState(i, "LIVE" + route(i), GREEN); }
+            @Override public void onConnectionSuccess() { ui.post(() -> { live[i] = true; showLive(i); }); }
+            // once a second while it's sending
+            @Override public void onNewBitrate(long sent) { if (i == lead()) ui.post(() -> adapt()); }
             @Override public void onConnectionFailed(String reason) {
                 if (!wantLive || stream == null) return;
+                // it was live and dropped: back at half, so it isn't cut off again straight away
+                ui.post(() -> { if (live[i] && i == lead()) setBitrate(bitrate / 2); live[i] = false; });
                 StreamBaseClient c = stream.getStreamClient(MultiType.RTMP, i);
                 String why = i == YOUTUBE && reason != null && reason.toLowerCase().contains("configure stream")
                         ? "(YouTube refused: check the stream key, and that live streaming is on for the channel)" : plain(i, reason);
@@ -247,10 +262,32 @@ public class StationActivity extends Activity implements SurfaceHolder.Callback 
                 if (c.reTry(delay, reason, next)) setState(i, "Trying" + route(i) + "… " + why, AMBER);
                 else setState(i, "Can't connect: " + why, RED);
             }
-            @Override public void onDisconnect() { if (!wantLive) setState(i, url[i] == null ? "Not set" : "Stopped", GREY); }
+            @Override public void onDisconnect() { ui.post(() -> { live[i] = false; }); if (!wantLive) setState(i, url[i] == null ? "Not set" : "Stopped", GREY); }
             @Override public void onAuthError() { setState(i, "Wrong name or password", RED); }
             @Override public void onAuthSuccess() { }
         };
+    }
+
+    /** The connection whose keeping up decides the quality. */
+    private int lead() { return url[JUDGE] != null ? JUDGE : YOUTUBE; }
+
+    private void adapt() {
+        if (!wantLive || stream == null || !live[lead()]) return;
+        if (stream.getStreamClient(MultiType.RTMP, lead()).hasCongestion()) { clearSeconds = 0; setBitrate((int) (bitrate * 0.7)); }
+        else if (++clearSeconds >= 8 && bitrate < maxBitrate) { clearSeconds = 4; setBitrate((int) (bitrate * 1.15)); }
+    }
+
+    private void setBitrate(int wanted) {
+        int next = Math.max(Math.min(MIN_BITRATE, maxBitrate), Math.min(maxBitrate, wanted));
+        if (next == bitrate || stream == null) return;
+        bitrate = next;
+        try { stream.setVideoBitrateOnFly(bitrate); } catch (RuntimeException e) { /* an encoder that can't change as it goes: as it was */ }
+        for (int i = 0; i < 2; i++) if (live[i]) showLive(i);
+    }
+
+    private void showLive(int i) {
+        boolean lowered = bitrate < maxBitrate;
+        setState(i, "LIVE" + route(i) + (lowered ? " · weak connection: quality lowered (" + String.format("%.1f", bitrate / 1e6) + " Mbit/s)" : ""), lowered ? AMBER : GREEN);
     }
 
     private void toggle() {
@@ -266,6 +303,7 @@ public class StationActivity extends Activity implements SurfaceHolder.Callback 
     private void startLive() {
         if (stream == null || wantLive) return;
         wantLive = true;
+        clearSeconds = 0;
         startedAt = SystemClock.elapsedRealtime();
         judgeRoute = 0;
         if (judgeRoutes.length > 0) url[JUDGE] = judgeRoutes[0];

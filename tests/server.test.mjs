@@ -7,7 +7,7 @@ const require = createRequire(import.meta.url);
 const auth = require('../server/auth.js');
 const { createSleep } = require('../server/idle.js');
 const { mediamtxYaml } = require('../server/mediamtx.js');
-const { spartansLink } = require('../server/network.js');
+const { spartansLink, larixLink } = require('../server/network.js');
 
 const SECRET = 'a-long-test-secret-a-long-test-secret';
 const NOW = 1_800_000_000_000;
@@ -141,4 +141,20 @@ test('a server judges two cameras unless told otherwise (as measured: three fall
   assert.match(e.set(3, true), /up to 2 cameras/);
   assert.strictEqual(e.set(2, true), null, 'asking again for one already on is fine');
   assert.ok(e.wanted(1) && e.wanted(2) && !e.wanted(3));
+});
+
+test('the Larix link has the picture\'s quality follow the connection, starting from the bitrate asked for', () => {
+  const link = larixLink({ lan: ['203.0.113.7'], tailscale: null }, 1, { rtmpPort: 1935, password: 'pw', bitrate: 3500 });
+  assert.match(link, /enc\[vid\]\[bitrate\]=3500&enc\[vid\]\[adaptiveBitrate\]=1&enc\[vid\]\[keyframe\]=1/);
+});
+
+test('the review asks the streaming server for a clip by the recording\'s own clock, and lists recordings by when they really started', () => {
+  const api = fs.readFileSync(new URL('../server/review-api.js', import.meta.url), 'utf8');
+  assert.match(api, /segments\.latenessAt\(cam, Date\.parse\(start\)\)/);
+  assert.match(api, /loadClip\(cam, new Date\(Date\.parse\(start\) \+ late\)\.toISOString\(\)/);
+  assert.match(api, /segments\.latenessFrom\(cam, t\)/);
+  const index = fs.readFileSync(new URL('../server/index.js', import.meta.url), 'utf8');
+  assert.match(index, /createReview\(\{\s*DATA, S, REVIEW, SITE_DIR, segments,/);
+  assert.match(index, /lateness: \(rel\) => segments\.latenessOf\(rel\)/);
+  assert.match(index, /segments\.tick\(\)/);
 });

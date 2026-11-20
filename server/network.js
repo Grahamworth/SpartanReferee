@@ -44,7 +44,9 @@ function spartansLink(addr, n, cfg) {
 
 /** What Larix scans: the laptop (over Tailscale when this computer has it, otherwise the same Wi-Fi) and, when the
  *  camera has a YouTube key, YouTube too: both active, each on its own connection, so one failing doesn't stop the
- *  other. Also the video settings, 1 s keyframes (for precise replay), and a backup recording on the phone. */
+ *  other. Also the video settings, 1 s keyframes (for precise replay), and a backup recording on the phone.
+ *  The quality follows the connection (adaptiveBitrate 1: it starts at the bitrate asked for and comes down while the
+ *  connection can't keep up), so a phone on weak mobile data sends a softer picture instead of dropping off. */
 function larixLink(addr, n, cfg) {
   const r = routes(addr)[0];
   const conns = [];
@@ -57,7 +59,7 @@ function larixLink(addr, n, cfg) {
     'conn[][mode]=av', 'conn[][active]=on', 'conn[][overwrite]=on',
   ].join('&'));
   const enc = [
-    'enc[vid][res]=1280x720', 'enc[vid][fps]=30', `enc[vid][bitrate]=${cfg.bitrate || 3500}`, 'enc[vid][keyframe]=1',
+    'enc[vid][res]=1280x720', 'enc[vid][fps]=30', `enc[vid][bitrate]=${cfg.bitrate || 3500}`, 'enc[vid][adaptiveBitrate]=1', 'enc[vid][keyframe]=1',
     'enc[vid][format]=avc', 'enc[vid][orientation]=landscape', 'enc[adv][max_conn]=3', 'enc[record][enabled]=on',
   ];
   return `larix://set/v1?${[...q, ...enc].join('&')}`;

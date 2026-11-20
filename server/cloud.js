@@ -5,14 +5,20 @@
 const fs = require('fs');
 const path = require('path');
 const { Readable } = require('stream');
+const { faststart } = require('./faststart');
+const { fileStartMs } = require('./segments');
 
 const QUIET_MS = 90e3;        // a file unchanged this long is finished (the server closes one every 10 minutes)
 const RETRY_MS = 5 * 60e3;
 
 const uploadedName = (file) => file.replace(/^\d{4}-\d\d-\d\dT[\d-]+Z?_/, '');
 const RESULTS_EVERY_MS = 2 * 60e3;
-function createCloud({ dir, uploadsDir, stateFile, api, settings, results = null, camName = (n) => n, doFetch = fetch, now = Date.now }) {
+/** lateness(rel): how late that recording's own clock runs, ms (segments.js). log(line): the server's log. */
+function createCloud({ dir, uploadsDir, stateFile, api, settings, results = null, camName = (n) => n, lateness = () => 0, log = () => {}, doFetch = fetch, now = Date.now }) {
   let sent = {}; try { sent = JSON.parse(fs.readFileSync(stateFile, 'utf8')); } catch { /* none yet */ }
+  // a camera's recording goes up as an ordinary MP4 with its index at the front (faststart.js), written here first
+  const outbox = path.join(path.dirname(stateFile), 'outbox');
+  try { fs.rmSync(outbox, { recursive: true, force: true }); } catch { /* nothing left over */ }
   const status = { state: 'off', waiting: 0, sentCount: Object.keys(sent).length, current: '', lastAt: 0, error: '' };
   let busy = false, waitUntil = 0;
 
@@ -43,11 +49,11 @@ function createCloud({ dir, uploadsDir, stateFile, api, settings, results = null
     }
     return out.sort((a, b) => a.mtime - b.mtime);
   }
-  // recordPath: %Y-%m-%d_%H-%M-%S-%f%z: laptop time with its offset, or Z at UTC
-  function startedAt(file, fallback) {
-    const m = /^(\d{4}-\d\d-\d\d)_(\d\d)-(\d\d)-(\d\d)-\d+(Z|[+-]\d{2})(\d{2})?/.exec(file);
-    const t = m ? Date.parse(`${m[1]}T${m[2]}:${m[3]}:${m[4]}${m[5] === 'Z' ? 'Z' : `${m[5]}:${m[6] || '00'}`}`) : NaN;
-    return new Date(Number.isNaN(t) ? fallback : t).toISOString();
+  // When the recording's first moment really was: its name says (to the millisecond), less how late its own clock runs, so the
+  // skeletons the judge timed by its own clock line up with the picture. Not a recording's name (an uploaded video): when it was saved.
+  function startedAt(f) {
+    const t = fileStartMs(f.file);
+    return new Date(Number.isNaN(t) ? f.mtime : Math.round(t - (f.cam ? lateness(f.rel) || 0 : 0))).toISOString();
   }
   async function post(where, key, body) {
     const r = await doFetch(`${api()}/recordings/${where}`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Receiver-Key': key }, body: JSON.stringify(body), signal: AbortSignal.timeout(30e3) });
@@ -57,10 +63,18 @@ function createCloud({ dir, uploadsDir, stateFile, api, settings, results = null
   }
   async function send(f, key) {
     // a camera goes by its number in the whole booking, so another server's camera 1 isn't mixed up with this one's
-    const u = await post('upload', key, { cam: f.cam ? camName(f.cam) : 0, file: f.file, size: f.size });
-    const put = await doFetch(u.url, { method: 'PUT', duplex: 'half', body: Readable.toWeb(fs.createReadStream(f.p)), headers: { 'x-ms-blob-type': 'BlockBlob', 'x-ms-blob-content-type': 'video/mp4', 'Content-Length': String(f.size) } });
-    if (!put.ok) throw new Error(`Storage said ${put.status}`);
-    await post('done', key, { blob: u.blob, size: f.size, name: f.name, startedAt: startedAt(f.file, f.mtime) });
+    let from = f.p, size = f.size, ready = null;
+    if (f.cam) {
+      ready = path.join(outbox, `${f.cam}-${f.file}`);
+      try { fs.mkdirSync(outbox, { recursive: true }); size = await faststart(f.p, ready); from = ready; }
+      catch (e) { log(`${f.rel} goes up as it is (${e.message})`); ready = null; }
+    }
+    try {
+      const u = await post('upload', key, { cam: f.cam ? camName(f.cam) : 0, file: f.file, size });
+      const put = await doFetch(u.url, { method: 'PUT', duplex: 'half', body: Readable.toWeb(fs.createReadStream(from)), headers: { 'x-ms-blob-type': 'BlockBlob', 'x-ms-blob-content-type': 'video/mp4', 'Content-Length': String(size) } });
+      if (!put.ok) throw new Error(`Storage said ${put.status}`);
+      await post('done', key, { blob: u.blob, size, name: f.name, startedAt: startedAt(f) });
+    } finally { if (ready) await fs.promises.rm(ready, { force: true }).catch(() => {}); }
     sent[f.rel] = now();
     fs.writeFileSync(stateFile, JSON.stringify(sent));
   }

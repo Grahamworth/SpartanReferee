@@ -10,6 +10,7 @@ const QRCode = require('qrcode');
 const { createReview, send, readBody, isJson } = require('./review-api');
 const { createEngines } = require('./engines');
 const { createCloud, QUIET_MS } = require('./cloud');
+const { createSegments } = require('./segments');
 const { createSleep } = require('./idle');
 const { readGroups } = require('./merge');
 const { mediamtxYaml } = require('./mediamtx');
@@ -74,8 +75,10 @@ const uploadJobs = createUploadJobs({
 // each judge's latest picture of the scene, passed on to whoever's watching that camera
 const live = new Map();   // n → { last, at, viewers: Set<res>, frames: [timestamps] }
 const liveOf = (n) => { if (!live.has(n)) live.set(n, { last: '', at: 0, viewers: new Set(), fps: 0 }); return live.get(n); };
+// how late each recording's own clock runs, measured as it's written (segments.js)
+const segments = createSegments({ dir: RECORDINGS, stateFile: path.join(DATA, 'recording-timing.json'), log });
 const review = createReview({
-  DATA, S, REVIEW, SITE_DIR,
+  DATA, S, REVIEW, SITE_DIR, segments,
   extraState: (cams) => ({
     brand, maxJudges: engines.max, until: sleeper.until(), firstCamera: S.firstCamera || 1, site: C.site || '', // the console, for the Booking and History tabs
     cams: cams.map((c) => { const l = live.get(c.n); return { ...c, ai: engines.wanted(c.n), judging: engines.running(c.n) && !!l && Date.now() - l.at < 4000, fps: l && Date.now() - l.at < 4000 ? l.fps : 0 }; }),
@@ -93,7 +96,7 @@ refreshBrand(); setInterval(refreshBrand, 5 * 60e3);
 // ---------------------------------------------------------------- recordings to cloud storage
 // what goes up names cameras by their number in the booking, as the past results show every server's together
 const named = (x) => (x.src !== 'upload' && x.cam ? { ...x, cam: camName(x.cam) } : x);
-const cloud = createCloud({ dir: RECORDINGS, uploadsDir: path.join(DATA, 'training'), stateFile: path.join(DATA, 'cloud-sent.json'), camName, results: () => { const r = review.results(); return { json: { athletes: r.athletes.map(named), numbers: r.numbers.map(named), merged: r.merged.map((m) => ({ ...m, cams: m.cams.map(camName) })), sources: previousSources }, files: r.files }; }, api: () => C.api, settings: () => ({ cloudOn: !!(C.api && C.receiverKey), cloudKey: C.receiverKey, cloudSince: 0 }) });
+const cloud = createCloud({ dir: RECORDINGS, uploadsDir: path.join(DATA, 'training'), stateFile: path.join(DATA, 'cloud-sent.json'), camName, lateness: (rel) => segments.latenessOf(rel), log, results: () => { const r = review.results(); return { json: { athletes: r.athletes.map(named), numbers: r.numbers.map(named), merged: r.merged.map((m) => ({ ...m, cams: m.cams.map(camName) })), sources: previousSources }, files: r.files }; }, api: () => C.api, settings: () => ({ cloudOn: !!(C.api && C.receiverKey), cloudKey: C.receiverKey, cloudSince: 0 }) });
 
 // ---------------------------------------------------------------- the page's own requests beyond the review API
 const ADDRESSES = () => ({ lan: [C.host], lanNames: ['internet'], tailscale: null });
@@ -341,6 +344,7 @@ viewServer.listen(S.viewPort, C.bind || '127.0.0.1');
 engineServer.listen(S.enginePort, '127.0.0.1');
 setInterval(async () => { await review.watchCameras(); engines.tick(review.cams()); }, 1000);
 setInterval(() => { cloud.tick().catch(() => {}); }, 60000);
+setInterval(() => { try { segments.tick(); } catch (e) { log(`Recording timing: ${e.message}`); } }, 400);
 sleeper.start();
 const quit = async () => { if (stopping) return; stopping = true; await uploadJobs.stopAll().catch(() => {}); await engines.stopAll().catch(() => {}); await cloud.sendResults(true).catch(() => {}); try { mtx?.kill('SIGTERM'); } catch { /* gone */ } setTimeout(() => process.exit(0), 500); };
 process.on('SIGTERM', quit); process.on('SIGINT', quit);
