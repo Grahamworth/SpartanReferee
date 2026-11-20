@@ -1015,7 +1015,7 @@ function beginMulti() {
   S.multi = new MultiTracker({
     make: () => applyStrictness(exercise(a.mode).make(a.target, judgeOptions()), a.mode, settings.strictness),
     tracking: tracking(), metricOpts,
-    opts: { coneSide: settings.coneSide || 'left', holdWalkers: !!settings.holdWalkers, ...(detailed ? { lookAgainMax: DEEP_LOOKS } : { lookAgainMax: 1, lookEveryMs: 250 }) },
+    opts: { coneSide: settings.coneSide || 'left', holdWalkers: !!settings.holdWalkers, ...(detailed ? (DEEP ? { lookAgainMax: DEEP_LOOKS } : {}) : { lookAgainMax: 1, lookEveryMs: 250 }) },
   });
   S.cones = settings.cones ? new ConeTracker({ needNumber: settings.coneFind === 'number' }) : null; S.coneAt = -Infinity;
   beginCounting();
@@ -1907,15 +1907,34 @@ function frame() {
 // in full-detail parts as well as whole (finderTiles in multi.js: in a wide picture of ten people each is too small for it
 // otherwise), everyone it finds that the pose model hasn't gets a zoomed look of their own, and so does everyone being followed
 // who wasn't found in this frame. With ten athletes in view that's ten or more pose searches a frame: slow, and what makes it count them.
+// Only on a server, which has the graphics card for it: in someone's own browser or on a phone a video is analysed as it was before.
+const DEEP = BACKGROUND;
 const DEEP_LOOKS = 30;
-const FINE_EVERY_MS = 2000; // the smaller parts, which take eight times as many searches, this often; the larger ones every time
-async function findEveryone(src, w, h, fine) {
+// How often the finder searches the parts: with a crowd about (four or more people, as a live judge reckons it), the larger parts
+// every time it runs and the smaller ones (seven times as many searches) every 2 s; with fewer, every 2 s and every 10 s, which is
+// what finds a crowd arriving. One athlete filmed close to is found in the whole picture, and searching every part every time made
+// their video take two and a half times its length instead of one and a half.
+const PARTS_EVERY_MS = { busy: [0, 2000], quiet: [2000, 10000] };
+const BUSY_PEOPLE = MULTI_DEFAULTS.crowdPeople;
+function partsDue(t) {
+  const about = Math.max(S.multi.tracks.filter((k) => t - k.seenAt < 2000 && k.scale >= MULTI_DEFAULTS.minSize).length, t - (S.foundAt ?? -Infinity) < 5000 ? S.foundPeople || 0 : 0);
+  const [parts, fine] = PARTS_EVERY_MS[about >= BUSY_PEOPLE ? 'busy' : 'quiet'];
+  const due = { fine: t - (S.fineAt ?? -Infinity) >= fine, parts: t - (S.partsAt ?? -Infinity) >= parts };
+  if (due.fine) S.fineAt = t;
+  if (due.fine || due.parts) S.partsAt = t;
+  return due;
+}
+async function findEveryone(src, w, h, t, due) {
   const all = await S.finder.find(src, w, h);
-  for (const part of finderTiles(w / h, { fine })) for (const b of await S.finder.find(src, w, h, part)) all.push({ ...b, part });
-  return mergeBoxes(all);
+  if (!DEEP) return all;
+  if (due.parts || due.fine) for (const part of finderTiles(w / h, { fine: due.fine })) for (const b of await S.finder.find(src, w, h, part)) all.push({ ...b, part });
+  const found = mergeBoxes(all), people = found.filter((b) => Math.max(b.y1 - b.y0, (b.x1 - b.x0) * (w / h)) >= MULTI_DEFAULTS.minSize).length;
+  if (people >= BUSY_PEOPLE || t - (S.foundAt ?? -Infinity) >= 5000) { S.foundPeople = people; S.foundAt = t; }
+  return found;
 }
 // The frame being analysed, copied into memory once. Every look at part of it (the finder's two dozen, a zoomed pose search for each
-// person) then copies from there: taken from the video itself, each one fetched the frame back from the graphics card again.
+// person) then copies from there: taken from the video itself, each one fetched the frame back from the graphics card again. Only
+// when there are several looks to take: for one athlete found by the first search the copy costs more than it saves.
 const stillCanvas = document.createElement('canvas');
 const stillCtx = stillCanvas.getContext('2d', { willReadFrequently: true });
 function stillOf(src, w, h) {
@@ -1988,7 +2007,7 @@ function analyseFrame(src, w, h, t) {
           }
           if (S.findBoxes) {
             const found = S.multiRes?.landmarks || [];
-            const looks = unclaimedBoxes(S.findBoxes, found, w / h).slice(0, S.prepassing ? DEEP_LOOKS : 2).map((b) => secondLook(src, w, h, boxArea(b), found));
+            const looks = unclaimedBoxes(S.findBoxes, found, w / h).slice(0, DEEP && S.prepassing ? DEEP_LOOKS : 2).map((b) => secondLook(src, w, h, boxArea(b), found));
             S.findBoxes = null;
             S.multiExtra = joinResults(looks);
           }
@@ -2727,7 +2746,8 @@ async function prepass(range) {
   // spent: where the time has gone so far, in seconds (for the server's list of analyses, and for making it quicker)
   const run = window.__analysis = { paused: false, stop: false, done: false, pct: 0, spent: { step: 0, find: 0, pose: 0, looks: 0, frames: 0 } };
   const clock = (key, since) => { run.spent[key] = Math.round((run.spent[key] + (performance.now() - since) / 1000) * 100) / 100; };
-  S.lookCount = 0;
+  S.lookCount = 0; S.fineAt = S.partsAt = S.foundAt = -Infinity; S.foundPeople = 0;
+  let looksLast = 0;
   for (let i = i0; i < n && S.testMode; i++) {
     while (run.paused && !run.stop && S.testMode) { showLoader(`Paused at ${run.pct}%`); await new Promise((r) => setTimeout(r, 200)); }
     if (run.stop) break;
@@ -2737,22 +2757,23 @@ async function prepass(range) {
     clock('step', since);
     S.lastVideoTime = video.currentTime;
     S.frame = frameSource();
-    if (S.multi) S.frame = { src: stillOf(S.frame.src, S.frame.w, S.frame.h), w: S.frame.w, h: S.frame.h };
-    const { src, w, h } = S.frame;
     const t = clockNow();
+    const finding = !!S.multi && !!S.finder && t - S.findAt >= MULTI_DEFAULTS.findEveryMs, due = finding ? partsDue(t) : null;
+    if (DEEP && S.multi && (looksLast >= 3 || due?.parts || due?.fine)) S.frame = { src: stillOf(S.frame.src, S.frame.w, S.frame.h), w: S.frame.w, h: S.frame.h };
+    const { src, w, h } = S.frame;
     // The person finder is waited for here (no frame goes by meanwhile).
-    if (S.multi && S.finder && t - S.findAt >= MULTI_DEFAULTS.findEveryMs) {
+    if (finding) {
       S.findAt = t;
-      const fine = t - (S.fineAt ?? -Infinity) >= FINE_EVERY_MS;
-      if (fine) S.fineAt = t;
       const z = S.multi.zoom;
       const area = z ? { x: z.x0, y: z.y0, w: z.x1 - z.x0, h: z.y1 - z.y0 } : { x: 0, y: 0, w: 1, h: 1 };
       since = performance.now();
-      try { S.findBoxes = await findEveryone(src, w, h, fine); } catch { S.findBoxes = null; }
+      try { S.findBoxes = await findEveryone(src, w, h, t, due); } catch { S.findBoxes = null; }
       clock('find', since);
     }
     since = performance.now();
+    const looksBefore = S.lookCount;
     analyseFrame(src, w, h, t);
+    looksLast = S.lookCount - looksBefore;
     clock('pose', since); run.spent.frames++; run.spent.looks = S.lookCount;
     if (!BACKGROUND) S.replay.push(snapshot(t)); // for playing it back here, and a long video would fill the memory
     if (i % 5 === 0) {
