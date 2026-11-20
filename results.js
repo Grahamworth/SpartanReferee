@@ -60,7 +60,7 @@ function draw() {
         <small><b>${a.bib && a.bib !== 'No number' ? `Number ${esc(a.bib)}` : `Athlete ${esc(a.label ?? a.n)}`}</b> · ${a.other ? `Cameras ${esc(a.cam)} + ${esc(a.other.cam)}` : esc(sourceName(a))}</small>${a.other ? `
         <small>Camera ${esc(a.cam)}: ${esc(a.both.counts[0])} · Camera ${esc(a.other.cam)}: ${esc(a.both.counts[1])} · ${esc(a.both.both)} seen on both</small>` : ''}
         <small>${esc(dayLabel(athleteDay(a)))}, ${a.src === 'upload' && a.firstT != null ? `${esc(mmss(a.firstT))} in the video` : esc(when(a.firstAt))}</small></div>
-      <div class="pastActions"><button class="small" type="button" data-watch="${esc(a.server)}~${esc(a.n)}">${a.other ? `Watch camera ${esc(a.cam)}` : 'Watch'}</button>${a.other ? `<button class="small" type="button" data-watch="${esc(a.server)}~${esc(a.other.n)}">Watch camera ${esc(a.other.cam)}</button>` : ''}</div>
+      <div class="pastActions"><button class="small" type="button" data-watch="${esc(a.server)}~${esc(a.n)}">${a.other ? `Watch camera ${esc(a.cam)}` : 'Watch'}</button>${a.other ? `<button class="small" type="button" data-watch="${esc(a.server)}~${esc(a.other.n)}">Watch camera ${esc(a.other.cam)}</button>` : `<button class="small" type="button" data-save="${esc(a.server)}~${esc(a.n)}">Download with tracking</button>`}</div>
     </article>`).join('') || `<p class="muted">${data.athletes.length ? 'Nobody matches that.' : 'No athletes in the last 7 days.'}</p>`;
   const numbers = data.numbers.filter((x) => (!q || x.number.includes(q)) && (!day || dayKey(x.firstAt) === day) && (!source || sourceOf(x) === source));
   $('numbers').innerHTML = numbers.map((x) => `<div class="pastRow"><div><b>${esc(x.number)}</b><small>${esc(sourceName(x))} · ${esc(dayLabel(dayKey(x.firstAt)))}, ${x.src === 'upload' && x.firstT != null ? `${esc(mmss(x.firstT))} in the video` : esc(when(x.firstAt))}</small></div>
@@ -91,10 +91,16 @@ function play(rec, at, title) {
 }
 // a live camera's recording is cut every 10 minutes: carry on into the next piece
 video.addEventListener('ended', () => {
-  const rec = playing?.rec; if (!rec?.cam) return;
-  const after = data.recordings.filter((r) => r.cam === rec.cam && Date.parse(r.startedAt) > Date.parse(rec.startedAt)).sort((x, y) => Date.parse(x.startedAt) - Date.parse(y.startedAt))[0];
-  if (after && Date.parse(after.startedAt) - Date.parse(rec.startedAt) < CLIP_MS) play(after, Date.parse(after.startedAt), $('playerTitle').textContent);
+  const after = pieceAfter(playing?.rec);
+  if (after) play(after, Date.parse(after.startedAt), $('playerTitle').textContent);
 });
+function pieceAfter(rec) {
+  if (!rec?.cam) return null;
+  const after = data.recordings.filter((r) => r.cam === rec.cam && Date.parse(r.startedAt) > Date.parse(rec.startedAt)).sort((x, y) => Date.parse(x.startedAt) - Date.parse(y.startedAt))[0];
+  return after && Date.parse(after.startedAt) - Date.parse(rec.startedAt) < CLIP_MS ? after : null;
+}
+const accent = () => getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#3ddc97';
+const athleteName = (a) => (a.bib && a.bib !== 'No number' ? `Number ${a.bib}` : `Athlete ${a.label ?? a.n}`);
 function drawTrack() {
   requestAnimationFrame(drawTrack);
   const frames = playing?.frames, want = !!frames?.length && $('showTrack').checked && !video.hidden;
@@ -103,58 +109,183 @@ function drawTrack() {
   const box = video.getBoundingClientRect(), ratio = window.devicePixelRatio || 1, W = Math.round(box.width * ratio), H = Math.round(box.height * ratio);
   if (canvas.width !== W || canvas.height !== H) { canvas.width = W; canvas.height = H; }
   ctx.clearRect(0, 0, W, H);
-  const T = playing.startMs + video.currentTime * 1000;
+  const k = Math.min(W / video.videoWidth, H / video.videoHeight), dw = video.videoWidth * k, dh = video.videoHeight * k;
+  paintTrack(ctx, playing, playing.startMs + video.currentTime * 1000, { x: (W - dw) / 2, y: (H - dh) / 2, w: dw, h: dh }, accent());
+}
+// The judge's tracking and the athlete's count at time T, drawn on a canvas whose picture fills `area`: over the player on
+// screen, and into the video someone downloads (saveAthlete). P: { frames, events, athlete }.
+function paintTrack(c, P, T, area, colour) {
+  const frames = P.frames, W = c.canvas.width, H = c.canvas.height; if (!frames?.length) return;
   let lo = 0, hi = frames.length - 1;
   while (lo < hi) { const m = (lo + hi + 1) >> 1; if (frames[m][0] <= T) lo = m; else hi = m - 1; }
   const f = frames[lo]; if (Math.abs(f[0] - T) > SEEN_MS) return;
   // between two saved frames (the judge saves a dozen a second at best): part of the way from one to the next, so it moves with the body
   const g = frames[lo + 1], mix = g && f[0] <= T && g[0] - f[0] < BLEND_MS ? (T - f[0]) / (g[0] - f[0]) : 0;
-  const k = Math.min(W / video.videoWidth, H / video.videoHeight), dw = video.videoWidth * k, dh = video.videoHeight * k, ox = (W - dw) / 2, oy = (H - dh) / 2;
   const pt = (p) => {
     const i = pointIndex.get(p); let x = f[2 + i * 2], y = f[3 + i * 2]; if (x < 0 || y < 0) return null;
     if (mix && g[2 + i * 2] >= 0 && g[3 + i * 2] >= 0) { x += (g[2 + i * 2] - x) * mix; y += (g[3 + i * 2] - y) * mix; } // (a point the next frame didn't see stays where it was)
-    return { x: ox + (x / 10000) * dw, y: oy + (y / 10000) * dh };
+    return { x: area.x + (x / 10000) * area.w, y: area.y + (y / 10000) * area.h };
   };
-  const colour = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#3ddc97';
-  ctx.strokeStyle = colour; ctx.lineWidth = Math.max(2, W / 320); ctx.lineCap = 'round';
-  ctx.beginPath();
-  for (const [a, b] of BONES) { const m = pt(a), n = pt(b); if (m && n) { ctx.moveTo(m.x, m.y); ctx.lineTo(n.x, n.y); } }
-  ctx.stroke();
-  ctx.fillStyle = '#fff';
+  c.strokeStyle = colour; c.lineWidth = Math.max(2, W / 320); c.lineCap = 'round';
+  c.beginPath();
+  for (const [a, b] of BONES) { const m = pt(a), n = pt(b); if (m && n) { c.moveTo(m.x, m.y); c.lineTo(n.x, n.y); } }
+  c.stroke();
+  c.fillStyle = '#fff';
   const seen = [];
-  for (const p of POINTS) { const m = pt(p); if (m) { seen.push(m); ctx.beginPath(); ctx.arc(m.x, m.y, Math.max(2.5, W / 400), 0, 7); ctx.fill(); } }
-  if (seen.length) drawCount(T, seen, W, H, colour);
+  for (const p of POINTS) { const m = pt(p); if (m) { seen.push(m); c.beginPath(); c.arc(m.x, m.y, Math.max(2.5, W / 400), 0, 7); c.fill(); } }
+  if (seen.length) paintCount(c, P, T, seen, W, H, colour);
 }
 // The athlete's count at that moment, just above their head, as the judge showed it live: green for a moment after a rep, red after a no rep.
-function countAt(T) {
+function countAt(events, T) {
   let count = 0, noReps = 0, last = null;
-  for (const e of playing.events || []) { if (e.t > T) break; count = e.count ?? count; if (e.type !== 'rep') noReps++; last = e; }
+  for (const e of events || []) { if (e.t > T) break; count = e.count ?? count; if (e.type !== 'rep') noReps++; last = e; }
   return { count, noReps, flash: last && T - last.t < 700 ? (last.type === 'rep' ? 'good' : 'bad') : null };
 }
-function drawCount(T, seen, W, H, colour) {
-  const a = playing.athlete; if (!a) return;
-  const { count, noReps, flash } = countAt(T);
+function paintCount(c, P, T, seen, W, H, colour) {
+  const a = P.athlete; if (!a) return;
+  const { count, noReps, flash } = countAt(P.events, T);
   const fs = Math.max(14, Math.round(H / 24));
   const name = a.bib && a.bib !== 'No number' ? `#${a.bib}` : `Athlete ${a.label ?? a.n}`;
   const text = `${name}  ${count}${noReps ? `  · ${noReps} ✕` : ''}`;
-  ctx.font = `700 ${fs}px Barlow, Arial, sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
-  const tw = ctx.measureText(text).width + fs, x = Math.min(W - tw / 2, Math.max(tw / 2, seen.reduce((s, m) => s + m.x, 0) / seen.length));
+  c.font = `700 ${fs}px Barlow, Arial, sans-serif`; c.textAlign = 'center'; c.textBaseline = 'bottom';
+  const tw = c.measureText(text).width + fs, x = Math.min(W - tw / 2, Math.max(tw / 2, seen.reduce((s, m) => s + m.x, 0) / seen.length));
   const y = Math.max(fs * 1.4, Math.min(...seen.map((m) => m.y)) - fs * 0.5);
-  ctx.fillStyle = flash === 'good' ? '#22c55e' : flash === 'bad' ? '#e2231a' : colour;
-  ctx.fillRect(x - tw / 2, y - fs * 1.2, tw, fs * 1.25);
-  ctx.fillStyle = flash ? '#fff' : '#000';
-  ctx.fillText(text, x, y);
-  ctx.textAlign = 'start'; ctx.textBaseline = 'alphabetic';
+  c.fillStyle = flash === 'good' ? '#22c55e' : flash === 'bad' ? '#e2231a' : colour;
+  c.fillRect(x - tw / 2, y - fs * 1.2, tw, fs * 1.25);
+  c.fillStyle = flash ? '#fff' : '#000';
+  c.fillText(text, x, y);
+  c.textAlign = 'start'; c.textBaseline = 'alphabetic';
 }
+
+// ---------- an athlete's video to keep, with the tracking and the count drawn into the picture
+// The recording is played through once, off to the side, from just before the athlete appears to just after they're last
+// seen. Each frame is drawn on a canvas with the tracking on top, and the canvas is recorded as it goes, with the recording's
+// sound. So it takes as long as the athlete was in front of the camera, and it's made in this browser: nothing is sent anywhere.
+const SAVE_BEFORE_MS = 3000, SAVE_AFTER_MS = 2000, SAVE_MAX_MS = 20 * 60e3;
+let saving = null, savedUrl = '';
+function saveKind(sound) {
+  const R = window.MediaRecorder; if (!R || !HTMLCanvasElement.prototype.captureStream) return null;
+  const kinds = sound ? [['video/mp4;codecs=avc1.640028,mp4a.40.2', 'mp4'], ['video/mp4', 'mp4'], ['video/webm;codecs=vp9,opus', 'webm'], ['video/webm', 'webm']]
+    : [['video/mp4;codecs=avc1.640028', 'mp4'], ['video/mp4', 'mp4'], ['video/webm;codecs=vp9', 'webm'], ['video/webm', 'webm']];
+  const k = kinds.find(([type]) => R.isTypeSupported(type));
+  return k ? { type: k[0], ext: k[1] } : null;
+}
+const once = (el, ok) => new Promise((res, rej) => {
+  const done = (f, v) => { el.removeEventListener(ok, yes); el.removeEventListener('error', no); f(v); };
+  const yes = () => done(res), no = () => done(rej, new Error('the recording couldn\'t be read'));
+  el.addEventListener(ok, yes); el.addEventListener('error', no);
+});
+async function saveAthlete(server, n) {
+  if (saving) return;
+  const a = data.athletes.find((x) => x.server === server && String(x.n) === String(n)); if (!a) return;
+  const rec = recordingFor(a);
+  if (!rec) { fail('That video has gone, or is still on its way to storage. Try again in a few minutes.'); return; }
+  if (!saveKind(false)) { fail('This browser can\'t make that video. Use an up-to-date Chrome, Edge or Safari, or download the recording instead.'); return; }
+  fail('');
+  const S = saving = { a, rec, done: false, cancelled: false };
+  const view = $('saveView'), g = view.getContext('2d'), name = athleteName(a);
+  const say = (text, part) => { $('saveText').textContent = text; if (part != null) $('saveBar').value = part; };
+  if (savedUrl) { URL.revokeObjectURL(savedUrl); savedUrl = ''; }
+  show($('saveBox'), true); show($('saveBar'), true); show($('saveCancel'), true); show($('saveAgain'), false);
+  say(`Getting ${name}'s video ready…`, 0);
+  video.pause();
+  const v = S.v = document.createElement('video');
+  v.crossOrigin = 'anonymous'; v.playsInline = true; v.preload = 'auto';
+  view.before(v);
+  const tidy = () => {
+    try { v.pause(); v.removeAttribute('src'); v.load(); } catch { /* gone */ }
+    v.remove(); S.ac?.close?.().catch?.(() => {}); if (saving === S) saving = null;
+  };
+  try {
+    const t = await call(`recordings/track/${encodeURIComponent(`${server}~${n}`)}`).catch(() => ({ frames: [], events: [] }));
+    if (!t.frames.length) throw new Error('no tracking was saved for that athlete, so there\'s nothing to draw in. Download the recording instead');
+    const startOf = (r) => (r.cam ? Date.parse(r.startedAt) : 0);
+    S.startMs = startOf(rec);
+    const last = Math.max(t.frames.at(-1)[0], t.events.at(-1)?.t ?? 0);
+    const from = Math.max(S.startMs, t.frames[0][0] - SAVE_BEFORE_MS), to = Math.min(last + SAVE_AFTER_MS, from + SAVE_MAX_MS);
+    v.src = rec.url; await once(v, 'loadedmetadata');
+    v.currentTime = Math.max(0, (from - S.startMs) / 1000); await once(v, 'seeked');
+    if (S.cancelled) { tidy(); return; }
+    const k = Math.min(1, 1920 / v.videoWidth);
+    view.width = Math.round((v.videoWidth * k) / 2) * 2; view.height = Math.round((v.videoHeight * k) / 2) * 2;
+    const P = { frames: t.frames, events: t.events, athlete: a }, colour = accent(), area = { x: 0, y: 0, w: view.width, h: view.height };
+    const stream = view.captureStream(30);
+    // the recording's sound, through the browser's sound engine so it isn't heard while the video's made
+    let sound = false;
+    try {
+      const AC = window.AudioContext || window.webkitAudioContext; S.ac = new AC();
+      const out = S.ac.createMediaStreamDestination(); S.ac.createMediaElementSource(v).connect(out);
+      await Promise.race([S.ac.resume(), new Promise((r) => setTimeout(r, 800))]);
+      if (S.ac.state === 'running') for (const tr of out.stream.getAudioTracks()) { stream.addTrack(tr); sound = true; }
+    } catch { /* it's made without sound */ }
+    if (!sound) v.muted = true;
+    const kind = saveKind(sound) || saveKind(false);
+    const recorder = S.recorder = new MediaRecorder(stream, { mimeType: kind.type, videoBitsPerSecond: Math.round(Math.max(2e6, view.width * view.height * 6.5)), audioBitsPerSecond: 128000 });
+    const parts = []; recorder.ondataavailable = (e) => { if (e.data.size) parts.push(e.data); };
+    const finish = (why) => {
+      if (S.done) return; S.done = true;
+      recorder.onstop = () => {
+        tidy();
+        if (S.cancelled) { show($('saveBox'), false); return; }
+        if (why || !parts.length) { show($('saveBox'), false); fail(`The video couldn't be made: ${why || 'nothing was recorded'}.`); return; }
+        savedUrl = URL.createObjectURL(new Blob(parts, { type: kind.type.split(';')[0] }));
+        const d = new Date(a.firstAt), file = `${name.replace(/[^\w]+/g, '-')}-${dayKey(a.firstAt)}-${String(d.getHours()).padStart(2, '0')}${String(d.getMinutes()).padStart(2, '0')}.${kind.ext}`;
+        const link = $('saveAgain'); link.href = savedUrl; link.download = file;
+        show($('saveBar'), false); show($('saveCancel'), false); show(link, true);
+        say(`${name}'s video is in your downloads, with the tracking and the count drawn in.`);
+        link.click();
+      };
+      try { recorder.stop(); } catch { recorder.onstop(); }
+    };
+    S.finish = finish;
+    const paint = (sec) => {
+      const T = S.startMs + sec * 1000;
+      g.drawImage(v, 0, 0, view.width, view.height);
+      paintTrack(g, P, T, area, colour);
+      say(`Making ${name}'s video: ${mmss(Math.max(0, T - from) / 1000)} of ${mmss((to - from) / 1000)}. Keep this page open and in front until it's done.`, Math.min(1, Math.max(0, (T - from) / (to - from))));
+      if (T >= to) finish();
+    };
+    const step = (now, meta) => { if (S.done) return; paint(meta ? meta.mediaTime : v.currentTime); next(); };
+    const next = () => (v.requestVideoFrameCallback ? v.requestVideoFrameCallback(step) : requestAnimationFrame(() => step()));
+    v.addEventListener('error', () => finish('the recording couldn\'t be read'));
+    // a live camera's recording is cut every 10 minutes: carry on into the next piece
+    v.addEventListener('ended', async () => {
+      if (S.done) return;
+      const after = pieceAfter(S.rec); if (!after) { finish(); return; }
+      S.rec = after; S.startMs = Date.parse(after.startedAt);
+      try { v.src = after.url; await once(v, 'loadedmetadata'); await v.play(); } catch { finish(); }
+    });
+    paint(v.currentTime);
+    recorder.start(1000);
+    next();
+    try { await v.play(); } catch { v.muted = true; await v.play(); }
+  } catch (e) {
+    const why = e?.name === 'SecurityError' ? 'this browser wouldn\'t let the page read the recording' : e?.message || 'it didn\'t start';
+    if (S.recorder && S.recorder.state !== 'inactive') S.finish(why);
+    else { tidy(); show($('saveBox'), false); if (!S.cancelled) fail(`The video couldn't be made: ${why}.`); }
+  }
+}
+function cancelSave() {
+  const S = saving; if (!S) return;
+  S.cancelled = true;
+  if (S.finish) S.finish(); else show($('saveBox'), false);
+}
+// a page that isn't in front isn't drawn, so the video would freeze while the sound ran on: wait until it's back
+document.addEventListener('visibilitychange', () => {
+  const S = saving; if (!S?.recorder || S.done) return;
+  if (document.hidden) { S.v.pause(); if (S.recorder.state === 'recording') S.recorder.pause(); }
+  else { if (S.recorder.state === 'paused') S.recorder.resume(); S.v.play().catch(() => {}); }
+});
 async function watch(server, n) {
   const a = data.athletes.find((x) => x.server === server && String(x.n) === String(n)); if (!a) return;
   const rec = recordingFor(a);
-  const title = `${a.bib && a.bib !== 'No number' ? `Number ${a.bib}` : `Athlete ${a.label ?? a.n}`} · ${sourceName(a)}`;
+  const title = `${athleteName(a)} · ${sourceName(a)}`;
   if (!rec) { fail('That video has gone, or is still on its way to storage. Try again in a few minutes.'); return; }
   fail('');
   const t = await call(`recordings/track/${encodeURIComponent(`${server}~${n}`)}`).catch(() => ({ frames: [], events: [] }));
   playing = { rec, athlete: a, frames: t.frames, events: t.events, startMs: 0 };
   show($('trackRow'), t.frames.length > 0);
+  $('saveThis').dataset.save = `${server}~${n}`; show($('saveThis'), t.frames.length > 0);
   $('events').innerHTML = t.events.map((e, i) => `<button type="button" class="${e.type === 'rep' ? '' : 'bad'}" data-event="${i}" title="${esc((e.reasons || []).join(' · '))}">${e.type === 'rep' ? `✓ Rep ${esc(e.count)}` : '✗ No rep'}</button>`).join('');
   const start = t.frames[0]?.[0] ?? (a.src === 'upload' ? (a.firstT ?? 0) * 1000 : Date.parse(a.firstAt));
   play(rec, Math.max(0, start - 1000), title);
@@ -163,9 +294,11 @@ async function watch(server, n) {
 document.addEventListener('click', (e) => {
   const b = e.target.closest('button'); if (!b) return;
   if (b.dataset.watch) { const [server, n] = b.dataset.watch.split('~'); watch(server, n); }
+  if (b.dataset.save) { const [server, n] = b.dataset.save.split('~'); saveAthlete(server, n); scrollTo({ top: 0, behavior: 'smooth' }); }
+  if (b.id === 'saveCancel') cancelSave();
   if (b.dataset.play) {
     const r = data.recordings.find((x) => x.id === b.dataset.play); if (!r) return;
-    playing = { rec: r, frames: [], events: [], startMs: 0 }; $('events').innerHTML = ''; show($('trackRow'), false); fail('');
+    playing = { rec: r, frames: [], events: [], startMs: 0 }; $('events').innerHTML = ''; show($('trackRow'), false); show($('saveThis'), false); fail('');
     play(r, r.cam ? Date.parse(r.startedAt) : 0, `${recName(r)}, ${when(r.startedAt)}`);
     scrollTo({ top: 0, behavior: 'smooth' });
   }
@@ -179,7 +312,7 @@ document.addEventListener('click', (e) => {
     const at = x.src === 'upload' ? ((x.firstT ?? 0) * 1000) - 2000 : Date.parse(x.firstAt) - 2000;
     const rec = x.src === 'upload' ? data.recordings.find((r) => r.file === (data.sources[x.video] || x.video)) : recordingAt(x.cam, at);
     if (!rec) { fail('That video has gone, or is still on its way to storage. Try again in a few minutes.'); return; }
-    fail(''); playing = { rec, frames: [], events: [], startMs: 0 }; $('events').innerHTML = ''; show($('trackRow'), false);
+    fail(''); playing = { rec, frames: [], events: [], startMs: 0 }; $('events').innerHTML = ''; show($('trackRow'), false); show($('saveThis'), false);
     play(rec, Math.max(0, at), `Number ${x.number} · ${sourceName(x)}`);
     scrollTo({ top: 0, behavior: 'smooth' });
   }

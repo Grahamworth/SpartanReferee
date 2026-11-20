@@ -96,7 +96,15 @@ refreshBrand(); setInterval(refreshBrand, 5 * 60e3);
 // ---------------------------------------------------------------- recordings to cloud storage
 // what goes up names cameras by their number in the booking, as the past results show every server's together
 const named = (x) => (x.src !== 'upload' && x.cam ? { ...x, cam: camName(x.cam) } : x);
-const cloud = createCloud({ dir: RECORDINGS, uploadsDir: path.join(DATA, 'training'), stateFile: path.join(DATA, 'cloud-sent.json'), camName, lateness: (rel) => segments.latenessOf(rel), log, results: () => { const r = review.results(); return { json: { athletes: r.athletes.map(named), numbers: r.numbers.map(named), merged: r.merged.map((m) => ({ ...m, cams: m.cams.map(camName) })), sources: previousSources }, files: r.files }; }, api: () => C.api, settings: () => ({ cloudOn: !!(C.api && C.receiverKey), cloudKey: C.receiverKey, cloudSince: 0 }) });
+// This run's name, made the first time the server starts with nothing and kept with its athletes: what it saves to cloud
+// storage goes under it. Athletes are numbered from 1 on every new server, and without it a booking's results replaced the last.
+const RUN_FILE = path.join(DATA, 'results-run.txt');
+let resultsRun = ''; try { resultsRun = fs.readFileSync(RUN_FILE, 'utf8').trim(); } catch { /* not made yet */ }
+if (!/^[A-Za-z0-9]{1,24}$/.test(resultsRun)) {
+  resultsRun = `r${new Date().toISOString().replace(/[-:]/g, '').slice(0, 15)}`;
+  try { fs.writeFileSync(RUN_FILE, resultsRun); } catch (e) { log(`couldn't keep this run's name: ${e.message}`); }
+}
+const cloud = createCloud({ dir: RECORDINGS, run: resultsRun, uploadsDir: path.join(DATA, 'training'), stateFile: path.join(DATA, 'cloud-sent.json'), camName, lateness: (rel) => segments.latenessOf(rel), log, results: () => { const r = review.results(); return { json: { athletes: r.athletes.map(named), numbers: r.numbers.map(named), merged: r.merged.map((m) => ({ ...m, cams: m.cams.map(camName) })), sources: previousSources }, files: r.files }; }, api: () => C.api, settings: () => ({ cloudOn: !!(C.api && C.receiverKey), cloudKey: C.receiverKey, cloudSince: 0 }) });
 
 // ---------------------------------------------------------------- the page's own requests beyond the review API
 const ADDRESSES = () => ({ lan: [C.host], lanNames: ['internet'], tailscale: null });

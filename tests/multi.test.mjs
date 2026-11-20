@@ -499,3 +499,64 @@ test('multi: between two snapshots everyone is drawn part of the way from one to
   const one = blendSnaps({ at: 0, snap: { t: 0, lm: lm(0.2), reps: 1 } }, { at: 100, snap: { t: 0, lm: lm(0.4), reps: 2 } }, 50);
   assert.ok(Math.abs(one.lm[0].x - 0.3) < 1e-9); assert.equal(one.reps, 1);
 });
+
+// ---- the first rep's jump has to be read from a foot the pose model is sure of
+const jumped = (jumpSure, jumpBy = 'toes') => ({ type: 'rep', detail: { downAt: 0, endAt: 2500, jumpBy, jumpSure } });
+
+test('multi: a first "rep" whose jump was read from a hidden foot (someone bending over a chair) doesn\'t make an athlete', () => {
+  for (const sure of [0, 0.32, 0.6]) {
+    const mt = tracker();
+    mt.update(frame(person(0.5, 0.6, 0.2)), 0);
+    mt.tracks[0].judge.next = jumped(sure);
+    assert.deepEqual(mt.update(frame(person(0.5, 0.6, 0.2)), 66), [], `foot ${sure} sure`);
+    assert.equal(mt.athletes.length, 0);
+    assert.equal(mt.tracks[0].judge.count, 0, 'they start again from nothing');
+  }
+});
+
+test('multi: a first rep with the feet clearly seen, read from the whole body, or from a caller that doesn\'t say, makes an athlete', () => {
+  for (const ev of [jumped(0.8), jumped(0.99), jumped(null, 'body'), jumped(null), { type: 'rep' }]) {
+    const mt = tracker();
+    mt.update(frame(person(0.5, 0.6, 0.2)), 0);
+    mt.tracks[0].judge.next = ev;
+    mt.update(frame(person(0.5, 0.6, 0.2)), 66);
+    assert.equal(mt.athletes.length, 1, JSON.stringify(ev));
+  }
+  assert.equal(MULTI_DEFAULTS.firstRepFoot, 0.7);
+});
+
+test('multi: once someone is an athlete, a rep with a foot hidden for a moment still counts', () => {
+  const mt = tracker();
+  mt.update(frame(person(0.5, 0.6, 0.2)), 0);
+  mt.tracks[0].judge.next = jumped(0.95);
+  mt.update(frame(person(0.5, 0.6, 0.2)), 66);
+  mt.tracks[0].judge.next = jumped(0.3);
+  const [e] = mt.update(frame(person(0.5, 0.6, 0.2)), 132);
+  assert.equal(e.ev.count, 2);
+});
+
+// ---- a top that reads differently standing and bent over (a spotlight on the front, the back in shade)
+// blue from behind when the torso is tilted over, near grey from the front when upright; the picture's colour is given per call
+const leaning = (x, tiltDeg, h = 0.3) => { const lm = person(x, 0.6, h), a = (tiltDeg * Math.PI) / 180; for (const i of [11, 12]) lm[i] = { ...lm[i], x: x + Math.sin(a) * h * 0.3, y: 0.6 - Math.cos(a) * h * 0.3 }; return lm; };
+const GREY = () => [150, 130, 140], BLUE = () => [25, 60, 190];
+
+test('multi: an athlete whose top reads differently standing and bent over keeps one track through a burpee', () => {
+  const mt = tracker();
+  let t = 0;
+  const look = (tilt, colour) => mt.update(frame(leaning(0.5, tilt)), (t += 66), 1, colour);
+  for (let i = 0; i < 12; i++) look(5, GREY);          // standing: grey from the front
+  for (const tilt of [50, 60, 70, 80, 85, 85, 85, 85, 85, 85]) look(tilt, BLUE);   // going down and lying: blue
+  for (const tilt of [75, 65, 55, 50]) look(tilt, GREY);   // getting up: already grey, still counted as lying
+  for (let i = 0; i < 6; i++) look(5, GREY);
+  for (const tilt of [50, 60, 70, 80]) look(tilt, BLUE);   // and down again
+  assert.equal(mt.tracks.length, 1, 'never taken for someone else');
+});
+
+test('multi: someone unlike both of an athlete\'s looks still doesn\'t take their track', () => {
+  const mt = tracker();
+  let t = 0;
+  for (let i = 0; i < 8; i++) mt.update(frame(leaning(0.5, 5)), (t += 66), 1, GREY);
+  for (let i = 0; i < 8; i++) mt.update(frame(leaning(0.5, 85)), (t += 66), 1, BLUE);
+  mt.update(frame(leaning(0.51, 80)), (t += 66), 1, () => [220, 120, 150]); // on their spot, in pink
+  assert.equal(mt.tracks.length, 2);
+});

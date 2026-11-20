@@ -355,3 +355,63 @@ test('burpee: with the feet out of shot, tiptoe or just standing up is not a jum
   assert.equal(repsNoFeet(0.03), 0); // hips up by tiptoe height
   assert.equal(repsNoFeet(0), 0);    // stands up from the crouch, no jump
 });
+
+// ---- a judge that looks only a few times a second
+// One burpee as a judge looking 10 times a second sees it. The jump is over in a quarter of a second, so the frame that shows the
+// athlete is back upright (the second upright one) is already in the air.
+function slowBurpee({ lift = 0.05, handY = 0.1 } = {}) {
+  return [
+    ...Array(6).fill(stand),
+    { ...stand, tilt: 40, hipAngle: 120 },                                                              // going down
+    ...Array(2).fill({ ...stand, tilt: 85, wristsBelowHips: true, hipAngle: 172, chestRatio: 0.9, footY: null }),  // plank
+    ...Array(2).fill({ ...stand, tilt: 88, wristsBelowHips: true, hipAngle: 172, chestRatio: 0.15, footY: null }), // chest down
+    { ...stand, tilt: 85, wristsBelowHips: true, hipAngle: 172, chestRatio: 0.9, footY: null },        // push up
+    { ...stand, tilt: 45, hipAngle: 120 },                                                              // feet in, rising
+    { ...stand, tilt: 20, hipAngle: 150 },                                                              // upright, feet on the floor
+    { ...stand, footY: 0.9 - lift, handYL: handY, handYR: handY },                                      // upright again: in the air, hands up
+    { ...stand, hipAngle: 150, handYL: 0.4, handYR: 0.4 },                                              // landed
+    ...Array(4).fill(stand),
+  ];
+}
+const slowRun = (frames) => { const j = new BurpeeJudge(), ev = []; frames.forEach((f, i) => { const e = j.update(f, i * 100); if (e) ev.push(e); }); const last = j.finish(); if (last) ev.push(last); return { j, ev }; };
+
+test('a jump already under way when the athlete is seen to be back upright still counts (a judge looking 10 times a second)', () => {
+  const { j, ev } = slowRun(slowBurpee());
+  assert.equal(j.count, 1, JSON.stringify(ev.map((e) => [e.type, e.reasons])));
+  assert.equal(j.noReps, 0);
+  assert.ok(ev[0].detail.maxLift > 0.05, 'measured from where the feet were when they stood up');
+});
+
+test('standing up without jumping is still no rep at that speed, and hands that stay down still fail', () => {
+  const none = slowRun(slowBurpee({ lift: 0 }));
+  assert.equal(none.j.count, 0); assert.deepEqual(none.ev.map((e) => e.reasons), [[REASONS.jump]]);
+  const low = slowRun(slowBurpee({ handY: 0.5 }));
+  assert.equal(low.j.count, 0); assert.deepEqual(low.ev.map((e) => e.reasons), [[REASONS.hands]]);
+});
+
+test('at full speed nothing changes: one burpee is one rep, and a walk-through with no jump is one no rep', () => {
+  assert.equal(run(burpee()).j.count, 1);
+  const { j, events } = run(burpee({ lift: 0 }));
+  assert.equal(j.count, 0); assert.deepEqual(events.map((e) => e.reasons), [[REASONS.jump]]);
+});
+
+test('a rep says what the jump was read from, and how sure the pose model was of that foot', () => {
+  const feet = (toeSure) => burpee().map((f) => (f.footY == null ? { ...f, toeY: null, heelY: null } : { ...f, toeY: f.footY, heelY: f.footY - 0.02, toeSure, heelSure: 0.5 }));
+  const sure = repsOf(feet(0.93)).ev.at(-1).detail;
+  assert.equal(sure.jumpBy, 'toes'); assert.equal(sure.jumpSure, 0.93);
+  assert.equal(repsOf(feet(0)).ev.at(-1).detail.jumpSure, 0, 'a foot that was only guessed');
+  const plain = repsOf(burpee()).ev.at(-1).detail;
+  assert.equal(plain.jumpBy, 'toes'); assert.equal(plain.jumpSure, null, 'a caller that doesn\'t say');
+});
+
+test('computeMetrics says how sure the pose model is of the foot the jump is read from: 0 for a guessed one', () => {
+  const lm = Array.from({ length: 33 }, () => ({ x: 0.5, y: 0.5, z: 0, visibility: 0.9 }));
+  const wlm = lm.map((p) => ({ ...p }));
+  lm[LM.L_FOOT] = { ...lm[LM.L_FOOT], y: 0.92, visibility: 0.95 }; lm[LM.R_FOOT] = { ...lm[LM.R_FOOT], y: 0.9, visibility: 0.6 };
+  lm[LM.L_HEEL] = { ...lm[LM.L_HEEL], y: 0.91, visibility: 0.5, filled: 'held' };
+  const m = computeMetrics(lm, wlm, DEFAULTS);
+  assert.equal(m.toeY, 0.92); assert.equal(m.toeSure, 0.95, 'the lowest toe is the one the jump is read from');
+  assert.equal(m.heelY, 0.91); assert.equal(m.heelSure, 0, 'held where it was last seen: a guess');
+  for (const i of [LM.L_FOOT, LM.R_FOOT]) lm[i] = { ...lm[i], visibility: 0.1 };
+  assert.equal(computeMetrics(lm, wlm, DEFAULTS).toeSure, null, 'no toes seen');
+});

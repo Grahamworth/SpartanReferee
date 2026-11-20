@@ -161,3 +161,23 @@ test('a recording whose own clock ran late says when it really started', async (
   assert.deepEqual(asked, ['live/station2/2026-11-20_08-31-52-276975Z.mp4']);
   assert.equal(JSON.parse(t.calls.at(-1).body).startedAt, '2026-11-20T08:31:50.079Z');
 });
+
+// ---- what the server found goes up under its own run
+test('results go up under this server\'s run, so the next booking\'s athlete 1 doesn\'t replace this one\'s', async () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'cloud-')), dir = path.join(root, 'rec'); fs.mkdirSync(dir, { recursive: true });
+  const track = path.join(root, '1.jsonl'); fs.writeFileSync(track, '{"f":[1,[]]}\n');
+  const asked = [], put = [];
+  const doFetch = async (url, o) => {
+    if (url.startsWith('https://store')) { put.push(url); return { ok: true, status: 201 }; }
+    const body = JSON.parse(o.body); asked.push({ where: url.split('/').pop(), body });
+    return { ok: true, status: 200, json: async () => (url.endsWith('/results-urls') ? { urls: Object.fromEntries(body.names.map((n) => [n, `https://store/${body.run}/${n}`])) } : { ok: true }) };
+  };
+  const results = () => ({ json: { athletes: [{ n: 1, reps: 5 }] }, files: [{ name: 'tracks/1.jsonl', path: track }, { name: 'pics/1.jpg', path: path.join(root, 'none.jpg') }] });
+  const cloud = createCloud({ dir, stateFile: path.join(root, 'sent.json'), api: () => 'https://site/api', settings: () => ({ cloudOn: true, cloudKey: 'rk_x', cloudSince: 0 }), doFetch, results, run: 'r20261120T115759' });
+  await cloud.sendResults(true);
+  assert.deepEqual(asked.map((a) => [a.where, a.body.run]), [['results-urls', 'r20261120T115759'], ['results-done', 'r20261120T115759']]);
+  assert.deepEqual(put.sort(), ['https://store/r20261120T115759/results.json', 'https://store/r20261120T115759/tracks/1.jsonl']);
+  // nothing changed: nothing more is sent
+  await cloud.sendResults(true);
+  assert.equal(asked.length, 2);
+});

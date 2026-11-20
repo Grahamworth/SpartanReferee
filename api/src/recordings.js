@@ -45,7 +45,7 @@ const sha = (s) => crypto.createHash('sha256').update(String(s)).digest('hex');
 /** where an account's cloud recordings are listed */
 const recordingsPartition = (uid) => `rec:${sha(uid).slice(0, 32)}`;
 
-function createRecordings({ store, signer, now, reply, session, isAdmin, membership = null, fetchFn = fetch }) {
+function createRecordings({ store, signer, now, reply, session, isAdmin, membership = null, fetchFn = (...a) => fetch(...a) }) {
   const owned = recordingsPartition;
   // a company's recordings and results are listed under its owner, for everyone in the company to see
   const { companyFor } = membership || createMembership(store);
@@ -54,7 +54,13 @@ function createRecordings({ store, signer, now, reply, session, isAdmin, members
     const key = String(h['x-receiver-key'] || '');
     return key ? store.get('reckey', sha(key)) : null;
   }
-  const resultsBase = (link) => `${link.partition.slice(4)}/${link.id}/results`;
+  // Each run of a server keeps its results apart (run: a name the server makes when it starts with nothing, see
+  // server/index.js). A company's servers are made afresh for every booking and number their athletes from 1 each time, so with
+  // one folder for them all a new booking's athlete 1 replaced the last booking's: a morning's seven athletes were gone from
+  // Results by the afternoon (20 November 2026). A server that sends no run (older software) keeps the one folder.
+  const runOf = (body) => (/^[A-Za-z0-9]{1,24}$/.test(String(body?.run ?? '')) ? String(body.run) : '');
+  const resultsId = (link, run) => (run ? `${link.id}-${run}` : link.id);
+  const resultsBase = (link, run) => `${link.partition.slice(4)}/${link.id}/results${run ? `-${run}` : ''}`;
   async function entries(partition) {
     const list = await store.list(partition);
     const before = new Date(now() - KEEP_DAYS * 864e5).toISOString();
@@ -91,12 +97,15 @@ function createRecordings({ store, signer, now, reply, session, isAdmin, members
       const link = await byKey(h); if (!link) return reply(401, { error: 'That Receiver key isn\'t recognised' });
       const names = Array.isArray(body?.names) ? body.names.slice(0, 100) : [];
       if (!names.every((n) => /^(results\.json|tracks\/\d{1,9}\.jsonl|pics\/\d{1,9}\.jpg)$/.test(String(n)))) return reply(400, { error: 'That isn\'t a result' });
-      const base = resultsBase(link);
+      const base = resultsBase(link, runOf(body));
       return reply(200, { urls: Object.fromEntries(names.map((n) => [n, signer({ blob: `${base}/${n}`, perm: 'cw', minutes: WRITE_MINUTES })])) });
     }
     if (a === 'results-done' && method === 'POST') {
       const link = await byKey(h); if (!link) return reply(401, { error: 'That Receiver key isn\'t recognised' });
-      await store.put(`${link.partition}:results`, link.id, { id: link.id, base: resultsBase(link), at: now() });
+      const run = runOf(body), id = resultsId(link, run), part = `${link.partition}:results`;
+      await store.put(part, id, { id, base: resultsBase(link, run), at: now() });
+      // runs too old to show are forgotten (storage has deleted what they pointed at)
+      for (const r of await store.list(part)) if (r.at < now() - KEEP_DAYS * 864e5) await store.remove(part, r.id);
       return reply(200, { ok: true });
     }
     // a server choosing one of its company's recordings to analyse

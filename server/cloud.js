@@ -14,7 +14,7 @@ const RETRY_MS = 5 * 60e3;
 const uploadedName = (file) => file.replace(/^\d{4}-\d\d-\d\dT[\d-]+Z?_/, '');
 const RESULTS_EVERY_MS = 2 * 60e3;
 /** lateness(rel): how late that recording's own clock runs, ms (segments.js). log(line): the server's log. */
-function createCloud({ dir, uploadsDir, stateFile, api, settings, results = null, camName = (n) => n, lateness = () => 0, log = () => {}, doFetch = fetch, now = Date.now }) {
+function createCloud({ dir, uploadsDir, stateFile, api, settings, results = null, run = '', camName = (n) => n, lateness = () => 0, log = () => {}, doFetch = fetch, now = Date.now }) {
   let sent = {}; try { sent = JSON.parse(fs.readFileSync(stateFile, 'utf8')); } catch { /* none yet */ }
   // a camera's recording goes up as an ordinary MP4 with its index at the front (faststart.js), written here first
   const outbox = path.join(path.dirname(stateFile), 'outbox');
@@ -101,6 +101,7 @@ function createCloud({ dir, uploadsDir, stateFile, api, settings, results = null
     } finally { busy = false; status.current = ''; }
   }
   // Athletes, tracking and numbers go up too, so a company can still see them when this server is off. Only what's changed.
+  // They go under this server's run (index.js), so the next booking's athlete 1 doesn't replace this one's.
   const resultsSent = {}; let resultsAt = 0, resultsBusy = false;
   async function sendResults(force) {
     const { cloudOn, cloudKey } = settings();
@@ -116,14 +117,14 @@ function createCloud({ dir, uploadsDir, stateFile, api, settings, results = null
       }
       for (let i = 0; i < changed.length; i += 100) {
         const part = changed.slice(i, i + 100);
-        const { urls } = await post('results-urls', cloudKey, { names: part.map((c) => c.name) });
+        const { urls } = await post('results-urls', cloudKey, { names: part.map((c) => c.name), run });
         for (const c of part) {
           const put = await doFetch(urls[c.name], { method: 'PUT', body: await c.body(), headers: { 'x-ms-blob-type': 'BlockBlob', 'Content-Type': c.type } });
           if (!put.ok) throw new Error(`Storage said ${put.status}`);
           resultsSent[c.name] = c.mark;
         }
       }
-      if (changed.length) await post('results-done', cloudKey, {});
+      if (changed.length) await post('results-done', cloudKey, { run });
       status.resultsError = '';
     } catch (e) { status.resultsError = e.message; resultsAt = 0; } finally { resultsBusy = false; }
   }

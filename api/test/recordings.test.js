@@ -4,7 +4,7 @@ const assert = require('node:assert');
 const crypto = require('node:crypto');
 const { createApi } = require('../src/core');
 const { memoryStore } = require('../src/store');
-const { blobSigner, MAX_OWNER } = require('../src/recordings');
+const { blobSigner, MAX_OWNER, recordingsPartition } = require('../src/recordings');
 
 const SECRET = 'test-secret-test-secret-test-secret';
 function setup({ admins = ['owner@x.com', 'other@x.com'] } = {}) {
@@ -137,4 +137,73 @@ test('the links are signed the way storage checks them, for that one file', () =
   assert.strictEqual(u.searchParams.get('sig'), crypto.createHmac('sha256', Buffer.from(key, 'base64')).update(toSign).digest('base64'));
   assert.ok(new URL(sign({ blob: 'x.mp4', perm: 'r', minutes: 1, download: 'x.mp4' })).searchParams.get('rscd').includes('attachment'));
   assert.strictEqual(blobSigner('UseDevelopmentStorage=true'), null);
+});
+
+// ---- saved results: each run of a server keeps its own
+function withStorage() {
+  let t = Date.parse('2026-11-20T08:00:00Z');
+  const blobs = new Map(), signer = (o) => `https://store/${o.blob}?sp=${o.perm}`;
+  const fetchFn = async (url) => { const k = decodeURIComponent(String(url).slice('https://store/'.length).split('?')[0]); const v = blobs.get(k); return { ok: v != null, status: v != null ? 200 : 404, json: async () => JSON.parse(v), text: async () => String(v ?? '') }; };
+  const store = memoryStore();
+  const api = createApi({ store, now: () => t, secret: SECRET, adminEmails: ['owner@x.com'], googleClientId: 'dev', blobSigner: signer, fetchFn,
+    verifyGoogle: async (x) => ({ sub: x, email: x, name: x }) });
+  const signIn = async (email) => ({ Authorization: `Bearer ${(await api.handle({ method: 'POST', path: 'auth/google', body: { idToken: email } })).body.token}` });
+  // a server saving what it found: the files go where the site says, then it says it's done
+  const save = async (rk, run, files) => {
+    const u = await call(api, 'POST', 'recordings/results-urls', rk, { names: Object.keys(files), ...(run === undefined ? {} : { run }) });
+    assert.strictEqual(u.status, 200);
+    for (const [n, body] of Object.entries(files)) blobs.set(u.body.urls[n].slice('https://store/'.length).split('?')[0], typeof body === 'string' ? body : JSON.stringify(body));
+    assert.strictEqual((await call(api, 'POST', 'recordings/results-done', rk, run === undefined ? {} : { run })).status, 200);
+  };
+  return { api, signIn, save, blobs, store, tick: (ms) => { t += ms; }, now: () => t };
+}
+const athlete = (n, firstAt, reps) => ({ n, src: 'live', cam: 1, firstAt, lastAt: firstAt, reps, noReps: 0 });
+
+test('a new booking\'s athletes are added to the last booking\'s, not put in their place', async () => {
+  const s = withStorage(), { h, rk } = await linked(s);
+  await s.save(rk, 'r20261120T080000', { 'results.json': { athletes: [athlete(1, '2026-11-20T08:31:00Z', 7), athlete(2, '2026-11-20T08:40:00Z', 5)] }, 'tracks/1.jsonl': '{"f":[1000,[]]}\n{"e":{"t":1500,"type":"rep"}}\n' });
+  s.tick(4 * 3600e3);
+  // the afternoon's server is a new one: it starts again at athlete 1
+  await s.save(rk, 'r20261120T115759', { 'results.json': { athletes: [athlete(1, '2026-11-20T12:07:00Z', 4)] }, 'tracks/1.jsonl': '{"f":[9000,[]]}\n' });
+  const got = (await call(s.api, 'GET', 'recordings/results', h)).body;
+  assert.deepStrictEqual(got.athletes.map((a) => [a.firstAt, a.reps]), [['2026-11-20T12:07:00Z', 4], ['2026-11-20T08:40:00Z', 5], ['2026-11-20T08:31:00Z', 7]]);
+  const morning = got.athletes.find((a) => a.reps === 7), afternoon = got.athletes.find((a) => a.reps === 4);
+  assert.notStrictEqual(morning.server, afternoon.server, 'two athletes numbered 1 are told apart');
+  // and each one's tracking is its own
+  const track = async (a) => (await call(s.api, 'GET', `recordings/track/${encodeURIComponent(`${a.server}~${a.n}`)}`, h)).body;
+  assert.deepStrictEqual((await track(morning)).frames, [[1000, []]]); assert.strictEqual((await track(morning)).events.length, 1);
+  assert.deepStrictEqual((await track(afternoon)).frames, [[9000, []]]);
+});
+
+test('a server saving again in the same run replaces only its own', async () => {
+  const s = withStorage(), { h, rk } = await linked(s);
+  await s.save(rk, 'r1', { 'results.json': { athletes: [athlete(1, '2026-11-20T08:31:00Z', 3)] } });
+  await s.save(rk, 'r1', { 'results.json': { athletes: [athlete(1, '2026-11-20T08:31:00Z', 9)] } });
+  assert.deepStrictEqual((await call(s.api, 'GET', 'recordings/results', h)).body.athletes.map((a) => a.reps), [9]);
+});
+
+test('a server on older software, which names no run, still saves and shows its results', async () => {
+  const s = withStorage(), { h, rk, id } = await linked(s);
+  await s.save(rk, undefined, { 'results.json': { athletes: [athlete(1, '2026-11-20T08:31:00Z', 6)] } });
+  const got = (await call(s.api, 'GET', 'recordings/results', h)).body;
+  assert.deepStrictEqual(got.athletes.map((a) => [a.reps, a.server]), [[6, id]]);
+  assert.ok([...s.blobs.keys()].some((k) => k.endsWith(`/${id}/results/results.json`)));
+});
+
+test('a run\'s name can\'t reach outside its own folder', async () => {
+  const s = withStorage(), { rk, id } = await linked(s);
+  for (const run of ['../x', 'a/b', 'x'.repeat(25), { a: 1 }]) await s.save(rk, run, { 'results.json': { athletes: [] } });
+  assert.deepStrictEqual([...s.blobs.keys()].map((k) => k.slice(k.indexOf(`/${id}/`))), [`/${id}/results/results.json`]);
+});
+
+test('runs older than the week are forgotten', async () => {
+  const s = withStorage(), { h, rk } = await linked(s);
+  await s.save(rk, 'r1', { 'results.json': { athletes: [athlete(1, '2026-11-20T08:31:00Z', 3)] } });
+  s.tick(8 * 864e5);
+  const today = new Date(s.now()).toISOString();
+  await s.save(rk, 'r2', { 'results.json': { athletes: [athlete(1, today, 5)] } });
+  assert.deepStrictEqual((await call(s.api, 'GET', 'recordings/results', h)).body.athletes.map((a) => a.reps), [5]);
+  const uid = 'g_' + crypto.createHash('sha256').update('owner@x.com').digest('base64url').slice(0, 22);
+  const rows = (await s.store.list(`${recordingsPartition(uid)}:results`)).map((r) => r.id);
+  assert.strictEqual(rows.length, 1); assert.ok(rows[0].endsWith('-r2'));
 });

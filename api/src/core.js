@@ -27,7 +27,7 @@ const CORS = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers
  * verifyGoogle(idToken) -> {sub, email, name, picture} (throws when invalid); secret signs our own session tokens.
  * adminEmails: Google accounts that are admins. While neither adminEmails nor adminKey is set, everyone is (the prototype).
  */
-function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], verifyGoogle = null, emailSignIn = null, microsoftSignIn = null, payments = null, secret = '', googleClientId = '', blobSigner = null, putBrand = null, maxRunningServers = 1, serverHourPrice = 0.66, eventFetcher = null, bookingUnits = true, learnDb = null, learnSpeech = null, learnMedia = null, mailer = null, siteUrl = '' }) {
+function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], verifyGoogle = null, emailSignIn = null, microsoftSignIn = null, payments = null, secret = '', googleClientId = '', blobSigner = null, fetchFn = undefined, putBrand = null, maxRunningServers = 1, serverHourPrice = 0.66, eventFetcher = null, bookingUnits = true, learnDb = null, learnSpeech = null, learnMedia = null, mailer = null, siteUrl = '' }) {
   const reply = (status, body) => ({ status, body, headers: { 'Content-Type': 'application/json', ...CORS } });
   const admins = adminEmails.map((e) => String(e).trim().toLowerCase()).filter(Boolean);
   // session tokens: base64url(payload).HMAC
@@ -213,7 +213,7 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
     return reply(200, { ok: true });
   }
   let learnReady = null;
-  const recordings = createRecordings({ store, signer: blobSigner, now, reply, session, isAdmin, membership });
+  const recordings = createRecordings({ store, signer: blobSigner, now, reply, session, isAdmin, membership, fetchFn });
   // Spartan's events (events.js), synced from Spartan's race list; referees book cameras for one
   // bookingUnits false: one booking for the whole organisation, as before events (older tests)
   const eventList = createEvents({ store, now, reply, ...(eventFetcher ? { fetcher: eventFetcher } : {}) });

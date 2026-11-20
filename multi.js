@@ -30,6 +30,9 @@
 // the very side of the picture (firstRepEdge: someone half out of it, or a reflection in a mirror there). Measured on a morning's
 // test: real first reps took 2.4 to 2.8 s; of the six false athletes, four took 17 s to over 3 minutes and one was a reflection
 // at the edge. Someone refused starts again from nothing, so a real athlete is picked up at their next rep.
+// And the jump has to be read from a foot the pose model is sure of (firstRepFoot): feet hidden behind furniture are guessed, and
+// the guess moving was read as a jump for someone who bent over a chair. In 86 real first reps the foot was 0.80 sure or more
+// every time; in the false ones 0.32 and 0.60.
 // The model sometimes finds one person twice: two poses with the shoulders
 // and hips in the same places. The smaller copy is dropped. (Outlines alone
 // won't do: an athlete lying at an official's feet overlaps him.)
@@ -48,6 +51,14 @@
 // a clear mismatch in the same posture rules the match out. The colour is the
 // balance of red, green and blue, which shade and sun barely change;
 // brightness proved too unsteady on people this small.
+//
+// A top doesn't read the same standing and bent over. Under a ceiling spotlight one blue top read near grey from the front,
+// standing, and blue from behind, bent over: further apart than two different people's tops. Each posture's colour is kept
+// separately, but going down or getting up a body still looks like one posture while it counts as the other, so the rule
+// "clearly different in the same posture: someone else" took the athlete for someone else at every burpee. A new track followed
+// them through the jump, their own track's judge never saw the hands go up, and five good burpees were judged five no reps
+// with nobody counted (20 November 2026). So a body is compared with both of the track's remembered looks, and the nearer one
+// decides (clothesGap): someone else is unlike both.
 //
 // A person finder (finder.js), when the caller has one, looks for everyone
 // about twice a second; anyone it sees that hasn't been found
@@ -104,7 +115,8 @@ export const MULTI_DEFAULTS = {
   busyAfterMs: 1500,  // more than maxPeople seen for this long: ask for maxPeopleBusy
   quietAfterMs: 20000, // no more than maxPeople for this long: back to maxPeople
   firstRepMs: 10000,  // someone new becomes an athlete by a rep done in this long, going down to the jump...
-  firstRepEdge: 0.05, // ...with their middle at least this far in from the side of the picture
+  firstRepEdge: 0.05, // ...with their middle at least this far in from the side of the picture...
+  firstRepFoot: 0.7,  // ...and the jump read from a foot the pose model is at least this sure of (0 to 1)
   minSize: 0.1,       // smaller than this fraction of the frame height: background, not a new track
   keepSize: 0.04,     // an existing track still follows its person down to this size (crouched, far off)
   sameDist: 0.2,      // shoulders and hips this close (share of body size): one person found twice
@@ -321,10 +333,11 @@ function clothesGap(p, k, o) {
   if (!p.colour) return null;
   const pos = posture(p.box);
   const known = (c) => c && c.n >= o.colourFrames;
-  const same = pos ? k.colours[pos] : null;
-  if (known(same)) return { d: clothesDist(p.colour, same), same: true };
-  const other = [k.colours.up, k.colours.down].find(known);
-  return other ? { d: clothesDist(p.colour, other), same: false } : null;
+  const same = pos ? k.colours[pos] : null, others = [k.colours.up, k.colours.down].filter((c) => c !== same && known(c));
+  // The nearer of what they've looked like standing and lying decides. How a top reads depends on the light on it as much as on
+  // the posture (see the top of the file), and going down or getting up it still looks like one while counting as the other.
+  if (known(same)) return { d: Math.min(clothesDist(p.colour, same), ...others.map((c) => clothesDist(p.colour, c))), same: true };
+  return others.length ? { d: clothesDist(p.colour, others[0]), same: false } : null;
 }
 // Remember what track k's person wears in this posture (a running average).
 function learnClothes(k, p) {
@@ -671,6 +684,7 @@ export class MultiTracker {
   _firstRepOk(k, ev) {
     const o = this.o, d = ev.detail;
     if (d && d.downAt != null && d.endAt != null && d.endAt - d.downAt > o.firstRepMs) return false;
+    if (d && d.jumpSure != null && d.jumpSure < o.firstRepFoot) return false;
     return !(k.box.x < o.firstRepEdge || k.box.x > 1 - o.firstRepEdge);
   }
 

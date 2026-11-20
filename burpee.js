@@ -61,7 +61,7 @@ export function computeMetrics(lm, wlm, opts = DEFAULTS) {
   const vis = (...ids) => ids.every((i) => (lm[i].visibility ?? 1) >= minVis);
   const m = {
     tilt: null, chestRatio: null, hipAngle: null,
-    handYL: null, handYR: null, earY: null, footY: null, toeY: null, heelY: null, noseY: null,
+    handYL: null, handYR: null, earY: null, footY: null, toeY: null, heelY: null, toeSure: null, heelSure: null, noseY: null,
     wristsBelowHips: false, fullBody: false, hipY: null, torsoLen: null,
     kneeAngle: null, elbowAngle: null, elbowStraight: null, hipDrop: null, shY: null, headTopY: null, feetSpread: null,
     handsOff: false, feetOff: false, kneesOff: false, armsOff: false,
@@ -159,6 +159,15 @@ export function computeMetrics(lm, wlm, opts = DEFAULTS) {
   const lowest = (ids) => { const s = ids.filter((i) => vis(i) && !out(i)); return s.length ? Math.max(...s.map((i) => lm[i].y)) : null; };
   m.toeY = lowest([LM.L_FOOT, LM.R_FOOT]);
   m.heelY = lowest([LM.L_HEEL, LM.R_HEEL, LM.L_ANK, LM.R_ANK]);
+  // How sure the pose model is of the foot point each of those is read from, 0 to 1: 0 when it's only guessed (held or mirrored
+  // by the pose filter). Feet hidden behind something are guessed, and the guess moves when the feet don't.
+  const sureOf = (ids) => {
+    const s = ids.filter((i) => vis(i) && !out(i)); if (!s.length) return null;
+    const i = s.reduce((a, b) => (lm[b].y > lm[a].y ? b : a));
+    return lm[i].filled ? 0 : lm[i].visibility ?? 1;
+  };
+  m.toeSure = sureOf([LM.L_FOOT, LM.R_FOOT]);
+  m.heelSure = sureOf([LM.L_HEEL, LM.R_HEEL, LM.L_ANK, LM.R_ANK]);
   m.feetOff = m.toeY == null && m.heelY == null && [LM.L_FOOT, LM.R_FOOT, LM.L_HEEL, LM.R_HEEL, LM.L_ANK, LM.R_ANK].some(out);
 
   // Whole body in view: a shoulder, a hip and a foot. The head isn't needed.
@@ -232,6 +241,7 @@ export class BurpeeJudge {
     this.standHipY = null; // hip height when standing tall, for jumps with the feet out of shot
     this.plankRun = 0;
     this.uprightRun = 0;
+    this.upFeet = []; // where the feet were in the latest frames that show the athlete upright (the floor of the jump)
     this.done = false;
     this.live = {}; // latest per-frame values, for the debug overlay
   }
@@ -268,6 +278,10 @@ export class BurpeeJudge {
       this.uprightRun = upright ? this.uprightRun + 1 : 0;
     }
     this.live = { phase: this.phase, tilt: m.tilt, chest: m.chestRatio, hip: m.hipAngle };
+    if (m.tilt != null) {
+      if (m.tilt < o.upExitTilt) { this.upFeet.push({ t, toeY: m.toeY !== undefined ? m.toeY : m.footY ?? null, heelY: m.heelY ?? null }); if (this.upFeet.length > 3) this.upFeet.shift(); }
+      else this.upFeet = [];
+    }
 
     let event = null;
 
@@ -292,8 +306,15 @@ export class BurpeeJudge {
         if (!low && this.cycle.chestOff) this.cycle.chestAssumed = true;
         else if (!this.cycle.chestSeen) event = this._noRep([REASONS.unseen]);
         else if (!low) event = this._noRep([REASONS.chest]);
+        // The floor the jump is measured from starts with where the feet were in the frames that showed the athlete back
+        // upright, and the frame that settled it is judged as the first of the jump (below). Taking the floor only from the
+        // frames after this missed real jumps whenever the judge looked 10 times a second or fewer: by the second upright frame
+        // the feet had already left the ground, so the jump measured as nothing. Replayed on real footage (five stretches, 20
+        // November 2026): of the burpees done, 67% were counted at 10 looks a second and 25% at 6; with this, 94% and 81%,
+        // and the same as before at 30.
+        if (!event) for (const f of this.upFeet.slice(0, -1)) this.cycle.frames.push({ t: f.t, footY: null, toeY: f.toeY, heelY: f.heelY, air: false, airReal: false, hands: false, handsReal: false, hip: false, hipReal: false, by: null, lift: null, hipAngle: null, handMargin: null, footSure: null });
       }
-      return event;
+      if (event || this.phase !== 'up') return event;
     }
 
     if (this.phase === 'up') {
@@ -336,7 +357,8 @@ export class BurpeeJudge {
       if (lift != null && scale) air = lift > o.jumpMinLift * scale;
       const airOff = !air && lift == null && m.feetOff && m.tilt != null && m.tilt < o.upExitTilt; // stood up, feet out of shot
       c.frames.push({ t, footY: m.footY, toeY, heelY, air: air || airOff, airReal: air, hands: hands || handsOff, handsReal: hands, hip: hip || hipOff, hipReal: hip, by,
-        lift: scale && lift != null ? lift / scale : null, hipAngle: m.hipAngle ?? null, handMargin });
+        lift: scale && lift != null ? lift / scale : null, hipAngle: m.hipAngle ?? null, handMargin,
+        footSure: by === 'toes' ? m.toeSure ?? null : by === 'heels' ? m.heelSure ?? null : null });
       Object.assign(this.live, { lift: scale && lift != null ? lift / scale : null, liftBy: by, air, hands, hipOk: hip });
 
       if (!c.resolved) {
@@ -383,7 +405,11 @@ export class BurpeeJudge {
     if (near('hands', o.handsWindowMs) && !near('handsReal', o.handsWindowMs)) assumed.push('hands');
     if (near('hip', o.hipWindowMs) && !near('hipReal', o.hipWindowMs)) assumed.push('hips');
     if (this.cycle.chestAssumed) assumed.push('chest');
-    return { jump: airTimes.length > 0, hands: near('hands', o.handsWindowMs), hips: near('hip', o.hipWindowMs), assumed };
+    // what the jump was read from (toes, heels, or the whole body rising), and the surest the pose model was of that foot
+    // point in any frame in the air (null: not read from a foot, or the caller doesn't say)
+    const inAir = f.filter((fr) => fr.airReal && airTimes.includes(fr.t)), sure = inAir.map((fr) => fr.footSure).filter((v) => v != null);
+    return { jump: airTimes.length > 0, hands: near('hands', o.handsWindowMs), hips: near('hip', o.hipWindowMs), assumed,
+      jumpBy: inAir.map((fr) => fr.by).find(Boolean) ?? null, jumpSure: sure.length ? Math.max(...sure) : null };
   }
 
   _upReasons() {
@@ -425,6 +451,8 @@ export class BurpeeJudge {
       hands: r ? r.hands : null,
       hips: r ? r.hips : null,
       assumed: r ? r.assumed : [],
+      jumpBy: r ? r.jumpBy : null,          // toes, heels or body
+      jumpSure: r ? round(r.jumpSure, 2) : null, // how sure the pose model was of the foot the jump was read from (0 to 1)
     };
   }
 }

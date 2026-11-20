@@ -127,8 +127,9 @@ setInterval(poll, 1000);
 pullJudgeSettings().finally(poll);
 // a camera whose phone keeps dropping off and reconnecting: its video has gaps and its judge misses reps (usually mobile data that can't keep up)
 const DROPS_WARN = 3;
-// a judge looking at its camera too few times a second to be sure of a jump (a quarter of a second in the air)
-const JUDGE_SLOW = 6;
+// a judge looking at its camera too few times a second to be sure of a jump (a quarter of a second in the air). Replayed on
+// real footage it counts nearly every burpee down to about 10 looks a second, and fewer below.
+const JUDGE_SLOW = 12;
 const slowJudge = (c) => !!c.judging && c.fps > 0 && c.fps < JUDGE_SLOW;
 function showDrops() {
   const bad = st.cams.filter((c) => (c.drops || 0) >= DROPS_WARN);
