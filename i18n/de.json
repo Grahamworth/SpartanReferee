@@ -1994,6 +1994,7 @@
  "For now a flag can only be marked as not a duplicate; merging comes later": "Vorerst kann ein Hinweis nur als Nicht-Duplikat markiert werden; das Zusammenführen folgt später",
  "Only admins read the audit log": "Nur Admins lesen das Audit-Protokoll",
  "Only admins create programmes": "Nur Admins erstellen Programme",
+ "New programmes can't be created yet": "Neue Programme können noch nicht erstellt werden",
  "A programme id is 3 to 32 lowercase letters, numbers and dashes, like spartan-kids-marshal": "Eine Programm-ID besteht aus 3 bis 32 Kleinbuchstaben, Ziffern und Bindestrichen, zum Beispiel spartan-kids-marshal",
  "What is the programme called?": "Wie heißt das Programm?",
  "There is already a programme with that id": "Es gibt bereits ein Programm mit dieser ID",

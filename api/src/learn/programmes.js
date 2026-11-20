@@ -20,6 +20,9 @@ const PROGRAMME_ID = /^[a-z][a-z0-9-]{1,30}[a-z0-9]$/;
 
 function createProgrammes(ctx) {
   const { db, reply, P, audit, uuid, text, isUuid, personById } = ctx;
+  // new programmes aren't open on the live site yet (the user, 20 Nov 2026): the dev and test schemas keep them, and the site app
+  // setting LEARN_NEW_PROGRAMMES=on opens them on the live one
+  const newProgrammesOpen = () => db.schema !== 'learn' || process.env.LEARN_NEW_PROGRAMMES === 'on';
   const progById = async (id) => (PROGRAMME_ID.test(String(id || '')) ? (await db.query('SELECT * FROM {S}.programme WHERE programme_id = @id', { id }))[0] || null : null);
   const versionById = async (id) => (isUuid(id) ? (await db.query('SELECT * FROM {S}.programme_version WHERE version_id = @id', { id }))[0] || null : null);
   const editor = (w, programmeId) => P.can(w.grants, 'content.draft', { programmeId }) || P.can(w.grants, 'programme.edit', { programmeId });
@@ -50,12 +53,13 @@ function createProgrammes(ctx) {
       out.push({ ...progView(p), current: versionView(current), drafts: canEdit ? vs.filter((v) => v.state === 'draft' || v.state === 'review').map(versionView) : [],
         modules: counts.find((c) => c.programme_id === p.programme_id)?.n || 0, enrolment: e ? { id: e.enrolment_id, state: e.state, versionId: e.version_id } : null, canEdit });
     }
-    return reply(200, { programmes: out, canCreate: P.can(w.grants, 'programme.create') });
+    return reply(200, { programmes: out, canCreate: newProgrammesOpen() && P.can(w.grants, 'programme.create') });
   }
 
   // a programme made from the admin screens, with a first draft version (PRG-01, PRG-02, AT-03): no code change
   async function createProgramme(w, b) {
     if (!P.can(w.grants, 'programme.create')) return reply(403, { error: 'Only admins create programmes' });
+    if (!newProgrammesOpen()) return reply(403, { error: 'New programmes can\'t be created yet' });
     const id = String(b?.id || '').trim().toLowerCase(), title = text(b?.title, 120), category = text(b?.category, 40) || 'other';
     if (!PROGRAMME_ID.test(id)) return reply(400, { error: 'A programme id is 3 to 32 lowercase letters, numbers and dashes, like spartan-kids-marshal' });
     if (title.length < 3) return reply(400, { error: 'What is the programme called?' });

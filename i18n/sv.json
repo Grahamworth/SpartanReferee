@@ -2000,6 +2000,7 @@
  "For now a flag can only be marked as not a duplicate; merging comes later": "Tills vidare kan en flagga bara markeras som inte en dubblett; sammanslagning kommer senare",
  "Only admins read the audit log": "Bara admins läser granskningsloggen",
  "Only admins create programmes": "Bara admins skapar program",
+ "New programmes can't be created yet": "Nya program kan inte skapas än",
  "A programme id is 3 to 32 lowercase letters, numbers and dashes, like spartan-kids-marshal": "Ett program-id är 3 till 32 gemena bokstäver, siffror och bindestreck, som spartan-kids-marshal",
  "What is the programme called?": "Vad heter programmet?",
  "There is already a programme with that id": "Det finns redan ett program med det id:t",

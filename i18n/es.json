@@ -2003,6 +2003,7 @@
  "For now a flag can only be marked as not a duplicate; merging comes later": "Por ahora un aviso solo se puede marcar como no duplicado; la fusión llegará más adelante",
  "Only admins read the audit log": "Solo los admins leen el registro de auditoría",
  "Only admins create programmes": "Solo los admins crean programas",
+ "New programmes can't be created yet": "Todavía no se pueden crear programas nuevos",
  "A programme id is 3 to 32 lowercase letters, numbers and dashes, like spartan-kids-marshal": "Un identificador de programa tiene de 3 a 32 letras minúsculas, números y guiones, como spartan-kids-marshal",
  "What is the programme called?": "¿Cómo se llama el programa?",
  "There is already a programme with that id": "Ya existe un programa con ese identificador",

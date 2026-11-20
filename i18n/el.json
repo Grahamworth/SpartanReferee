@@ -2008,6 +2008,7 @@
  "For now a flag can only be marked as not a duplicate; merging comes later": "Προς το παρόν μια επισήμανση μπορεί μόνο να σημειωθεί ως μη διπλότυπο: η συγχώνευση έρχεται αργότερα",
  "Only admins read the audit log": "Μόνο οι διαχειριστές διαβάζουν το αρχείο καταγραφής ελέγχου",
  "Only admins create programmes": "Μόνο οι διαχειριστές δημιουργούν προγράμματα",
+ "New programmes can't be created yet": "Δεν είναι ακόμη δυνατή η δημιουργία νέων προγραμμάτων",
  "A programme id is 3 to 32 lowercase letters, numbers and dashes, like spartan-kids-marshal": "Το αναγνωριστικό ενός προγράμματος έχει 3 έως 32 πεζά γράμματα, αριθμούς και παύλες, όπως spartan-kids-marshal",
  "What is the programme called?": "Πώς λέγεται το πρόγραμμα;",
  "There is already a programme with that id": "Υπάρχει ήδη πρόγραμμα με αυτό το αναγνωριστικό",

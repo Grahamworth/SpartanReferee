@@ -3349,6 +3349,7 @@
  "For now a flag can only be marked as not a duplicate; merging comes later": "api/src/learn/index.js",
  "Only admins read the audit log": "api/src/learn/index.js",
  "Only admins create programmes": "api/src/learn/programmes.js",
+ "New programmes can't be created yet": "api/src/learn/programmes.js",
  "A programme id is 3 to 32 lowercase letters, numbers and dashes, like spartan-kids-marshal": "api/src/learn/programmes.js",
  "What is the programme called?": "api/src/learn/programmes.js",
  "There is already a programme with that id": "api/src/learn/programmes.js",

@@ -2051,6 +2051,7 @@
  "For now a flag can only be marked as not a duplicate; merging comes later": "Zatím lze příznak jen označit jako není duplicita; slučování přijde později",
  "Only admins read the audit log": "Auditní protokol čtou jen správci",
  "Only admins create programmes": "Programy vytvářejí jen správci",
+ "New programmes can't be created yet": "Nové programy zatím nelze vytvářet",
  "A programme id is 3 to 32 lowercase letters, numbers and dashes, like spartan-kids-marshal": "Id programu má 3 až 32 malých písmen, číslic a pomlček, například spartan-kids-marshal",
  "What is the programme called?": "Jak se program jmenuje?",
  "There is already a programme with that id": "Program s tímto id už existuje",

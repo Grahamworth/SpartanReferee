@@ -70,6 +70,8 @@ Tabs: **Home**, **My Learning**, **Events**, **Rules**, **Obstacles**, plus role
 
 **Signing in from an invite** says which address to use and fills it in: Google and Microsoft get it as `login_hint`, and the emailed code's box is fixed to it. Registering with another address is refused, naming the invited one.
 
+**New programmes are closed on the live site** (20 November 2026, the user: "We are not allowing the creation of new programmes just yet"): My Learning no longer shows the New programme form, and the server refuses one even from an admin. The dev and test schemas keep it (the tests and local work need it). To open it on the live site, set the site app setting `LEARN_NEW_PROGRAMMES=on`. Existing programmes are edited in Programs as before.
+
 **Programs** (`learn/authoring.js`, server `api/src/learn/authoring.js`, migration `008-authoring.sql`; admins, programme owners, content editors / translators). Reviews and Media are inside it now. A lesson is edited where it stands:
 - Type straight into its headings, bullet points (Enter adds one, Backspace on an empty one removes it), what the voice says and the note; tap the picture to choose another; move, add or remove slides.
 - Its quick-check questions: the question, the answers (tick the right one), and what shows after answering.

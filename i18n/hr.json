@@ -2035,6 +2035,7 @@
  "For now a flag can only be marked as not a duplicate; merging comes later": "Za sada se oznaka može samo označiti kao nije duplikat; spajanje dolazi kasnije",
  "Only admins read the audit log": "Samo administratori čitaju revizijski zapisnik",
  "Only admins create programmes": "Samo administratori stvaraju programe",
+ "New programmes can't be created yet": "Novi programi se još ne mogu stvarati",
  "A programme id is 3 to 32 lowercase letters, numbers and dashes, like spartan-kids-marshal": "Id programa ima od 3 do 32 mala slova, brojeva i crtica, kao spartan-kids-marshal",
  "What is the programme called?": "Kako se zove program?",
  "There is already a programme with that id": "Program s tim id-om već postoji",

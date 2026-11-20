@@ -1997,6 +1997,7 @@
  "For now a flag can only be marked as not a duplicate; merging comes later": "ตอนนี้ธงทำเครื่องหมายได้เพียงว่าไม่ซ้ำกัน การรวมจะมีในภายหลัง",
  "Only admins read the audit log": "เฉพาะผู้ดูแลระบบเท่านั้นที่อ่านบันทึกการตรวจสอบได้",
  "Only admins create programmes": "เฉพาะผู้ดูแลระบบเท่านั้นที่สร้างโปรแกรมได้",
+ "New programmes can't be created yet": "ยังสร้างหลักสูตรใหม่ไม่ได้",
  "A programme id is 3 to 32 lowercase letters, numbers and dashes, like spartan-kids-marshal": "id ของโปรแกรมมี 3 ถึง 32 ตัวอักษรพิมพ์เล็ก ตัวเลข และขีดกลาง เช่น spartan-kids-marshal",
  "What is the programme called?": "โปรแกรมชื่ออะไร",
  "There is already a programme with that id": "มีโปรแกรมที่ใช้ id นั้นอยู่แล้ว",

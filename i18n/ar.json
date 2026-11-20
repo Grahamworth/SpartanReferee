@@ -2077,6 +2077,7 @@
  "For now a flag can only be marked as not a duplicate; merging comes later": "في الوقت الحالي لا يمكن إلا وضع علامة «ليس تكرارًا» على التنبيه؛ الدمج سيأتي لاحقًا",
  "Only admins read the audit log": "يقرأ المسؤولون وحدهم سجل التدقيق",
  "Only admins create programmes": "ينشئ المسؤولون وحدهم البرامج",
+ "New programmes can't be created yet": "لا يمكن إنشاء برامج جديدة بعد",
  "A programme id is 3 to 32 lowercase letters, numbers and dashes, like spartan-kids-marshal": "معرّف البرنامج من 3 إلى 32 حرفًا صغيرًا أو رقمًا أو شرطة، مثل spartan-kids-marshal",
  "What is the programme called?": "ما اسم البرنامج؟",
  "There is already a programme with that id": "يوجد برنامج بهذا المعرّف بالفعل",

@@ -1994,6 +1994,7 @@
  "For now a flag can only be marked as not a duplicate; merging comes later": "Voorlopig kan een melding alleen als geen duplicaat worden gemarkeerd; samenvoegen komt later",
  "Only admins read the audit log": "Alleen beheerders lezen het auditlog",
  "Only admins create programmes": "Alleen beheerders maken programma's aan",
+ "New programmes can't be created yet": "Nieuwe programma's kunnen nog niet worden aangemaakt",
  "A programme id is 3 to 32 lowercase letters, numbers and dashes, like spartan-kids-marshal": "Een programma-id bestaat uit 3 tot 32 kleine letters, cijfers en streepjes, zoals spartan-kids-marshal",
  "What is the programme called?": "Hoe heet het programma?",
  "There is already a programme with that id": "Er is al een programma met die id",

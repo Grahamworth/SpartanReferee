@@ -1988,6 +1988,7 @@
  "For now a flag can only be marked as not a duplicate; merging comes later": "Pour l'instant, un signalement ne peut être marqué que comme non-doublon ; la fusion viendra plus tard",
  "Only admins read the audit log": "Seuls les admins consultent le journal d'audit",
  "Only admins create programmes": "Seuls les admins créent des programmes",
+ "New programmes can't be created yet": "Il n'est pas encore possible de créer de nouveaux programmes",
  "A programme id is 3 to 32 lowercase letters, numbers and dashes, like spartan-kids-marshal": "Un identifiant de programme compte de 3 à 32 lettres minuscules, chiffres et tirets, comme spartan-kids-marshal",
  "What is the programme called?": "Comment s'appelle le programme ?",
  "There is already a programme with that id": "Un programme avec cet identifiant existe déjà",

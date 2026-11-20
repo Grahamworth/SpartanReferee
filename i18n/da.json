@@ -2003,6 +2003,7 @@
  "For now a flag can only be marked as not a duplicate; merging comes later": "Indtil videre kan et flag kun markeres som ikke en dublet; sammenfletning kommer senere",
  "Only admins read the audit log": "Kun admins læser revisionsloggen",
  "Only admins create programmes": "Kun admins opretter programmer",
+ "New programmes can't be created yet": "Nye programmer kan ikke oprettes endnu",
  "A programme id is 3 to 32 lowercase letters, numbers and dashes, like spartan-kids-marshal": "Et program-id er 3 til 32 små bogstaver, tal og bindestreger, som spartan-kids-marshal",
  "What is the programme called?": "Hvad hedder programmet?",
  "There is already a programme with that id": "Der er allerede et program med det id",
