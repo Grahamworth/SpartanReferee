@@ -172,9 +172,11 @@ function saveKind(sound) {
 }
 const once = (el, ok) => new Promise((res, rej) => {
   const done = (f, v) => { el.removeEventListener(ok, yes); el.removeEventListener('error', no); f(v); };
-  const yes = () => done(res), no = () => done(rej, new Error('the recording couldn\'t be read'));
+  const yes = () => done(res), no = () => done(rej, new Error('unreadable'));
   el.addEventListener(ok, yes); el.addEventListener('error', no);
 });
+// (why it failed is for whoever looks into it: the person is told what to do next)
+const failed = (why) => { console.warn('download with tracking:', why); fail('The video couldn\'t be made. Try again, or download the recording instead.'); };
 async function saveAthlete(server, n) {
   if (saving) return;
   const a = data.athletes.find((x) => x.server === server && String(x.n) === String(n)); if (!a) return;
@@ -198,7 +200,7 @@ async function saveAthlete(server, n) {
   };
   try {
     const t = await call(`recordings/track/${encodeURIComponent(`${server}~${n}`)}`).catch(() => ({ frames: [], events: [] }));
-    if (!t.frames.length) throw new Error('no tracking was saved for that athlete, so there\'s nothing to draw in. Download the recording instead');
+    if (!t.frames.length) { tidy(); show($('saveBox'), false); fail('No tracking was saved for that athlete, so there\'s nothing to draw in. Download the recording instead.'); return; }
     const startOf = (r) => (r.cam ? Date.parse(r.startedAt) : 0);
     S.startMs = startOf(rec);
     const last = Math.max(t.frames.at(-1)[0], t.events.at(-1)?.t ?? 0);
@@ -227,7 +229,7 @@ async function saveAthlete(server, n) {
       recorder.onstop = () => {
         tidy();
         if (S.cancelled) { show($('saveBox'), false); return; }
-        if (why || !parts.length) { show($('saveBox'), false); fail(`The video couldn't be made: ${why || 'nothing was recorded'}.`); return; }
+        if (why || !parts.length) { show($('saveBox'), false); failed(why || 'nothing recorded'); return; }
         savedUrl = URL.createObjectURL(new Blob(parts, { type: kind.type.split(';')[0] }));
         const d = new Date(a.firstAt), file = `${name.replace(/[^\w]+/g, '-')}-${dayKey(a.firstAt)}-${String(d.getHours()).padStart(2, '0')}${String(d.getMinutes()).padStart(2, '0')}.${kind.ext}`;
         const link = $('saveAgain'); link.href = savedUrl; link.download = file;
@@ -247,7 +249,7 @@ async function saveAthlete(server, n) {
     };
     const step = (now, meta) => { if (S.done) return; paint(meta ? meta.mediaTime : v.currentTime); next(); };
     const next = () => (v.requestVideoFrameCallback ? v.requestVideoFrameCallback(step) : requestAnimationFrame(() => step()));
-    v.addEventListener('error', () => finish('the recording couldn\'t be read'));
+    v.addEventListener('error', () => finish('unreadable'));
     // a live camera's recording is cut every 10 minutes: carry on into the next piece
     v.addEventListener('ended', async () => {
       if (S.done) return;
@@ -260,9 +262,9 @@ async function saveAthlete(server, n) {
     next();
     try { await v.play(); } catch { v.muted = true; await v.play(); }
   } catch (e) {
-    const why = e?.name === 'SecurityError' ? 'this browser wouldn\'t let the page read the recording' : e?.message || 'it didn\'t start';
+    const why = e?.message || String(e);
     if (S.recorder && S.recorder.state !== 'inactive') S.finish(why);
-    else { tidy(); show($('saveBox'), false); if (!S.cancelled) fail(`The video couldn't be made: ${why}.`); }
+    else { tidy(); show($('saveBox'), false); if (!S.cancelled) failed(why); }
   }
 }
 function cancelSave() {
