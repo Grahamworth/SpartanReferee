@@ -166,6 +166,7 @@ async function programmePage(id) {
       <div><label for="ps-t">Title</label><input id="ps-t" name="title" value="${esc(p.title)}" maxlength="120"></div>
       <div><label for="ps-r">A learner in it is a…</label><input id="ps-r" name="learnerRole" value="${esc(p.learnerRole)}" maxlength="60"></div>
       <div><label for="ps-l">Languages (codes)</label><input id="ps-l" name="locales" value="${esc(p.locales.join(','))}" maxlength="80"></div>
+      <div class="wide"><label class="tickLabel"><input type="checkbox" id="ps-pass" name="lessonsNeedPass"${p.lessonsNeedPass ? ' checked' : ''}> <span>${esc(t('Lessons need a pass: a lesson counts as done only once its test has every answer right'))}</span></label></div>
       <div><label for="ps-s">Status</label><select id="ps-s" name="status">${['active', 'archived'].map((s) => `<option${s === p.status ? ' selected' : ''}>${s}</option>`).join('')}</select></div>
       <div class="wide"><label for="ps-d">Description</label><textarea id="ps-d" name="description" rows="2" maxlength="1000">${esc(p.description)}</textarea></div>
       <div class="wide"><button class="small" type="submit">Save</button></div></form></details></section>` : ''}`;
@@ -203,6 +204,6 @@ export function wire() {
     act(async () => { await call(`versions/${e.target.dataset.version}`, { method: 'PUT', body: b }); toast('Policy saved'); redraw(); }, e.submitter);
   });
   $('newVersion')?.addEventListener('submit', (e) => { e.preventDefault(); act(async () => { const r = await call(`programmes/${e.target.dataset.programme}/versions`, { method: 'POST', body: formBody(e.target) }); toast(`Draft ${r.version.edition} started`); location.hash = `#/programmes/${e.target.dataset.programme}?version=${r.version.id}`; }, e.submitter); });
-  $('progForm')?.addEventListener('submit', (e) => { e.preventDefault(); act(async () => { await call(`programmes/${e.target.dataset.programme}`, { method: 'PUT', body: Object.fromEntries([...new FormData(e.target)]) }); toast('Saved'); redraw(); }, e.submitter); });
+  $('progForm')?.addEventListener('submit', (e) => { e.preventDefault(); act(async () => { await call(`programmes/${e.target.dataset.programme}`, { method: 'PUT', body: { ...Object.fromEntries([...new FormData(e.target)]), lessonsNeedPass: e.target.lessonsNeedPass.checked } }); toast('Saved'); redraw(); }, e.submitter); });
   for (const f of hooks.wire) f();
 }

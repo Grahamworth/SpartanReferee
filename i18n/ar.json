@@ -2835,7 +2835,6 @@
  "Your answer: {answer}": "إجابتك: {answer}",
  "Right answer: {answer}": "الإجابة الصحيحة: {answer}",
  "Finish the lesson before this one first": "أنهِ الدرس السابق أولًا",
- "Answer the quick check first": "أجب عن الاختبار السريع أولًا",
  "Sources: {x9}. {locale} content version {versionNo}{x10}.": "المصادر: {x9}. نسخة محتوى {locale} {versionNo}{x10}.",
  "Privacy: SpartanReferee": "الخصوصية: SpartanReferee",
  "How SpartanReferee uses your information": "كيف يستخدم SpartanReferee معلوماتك",
@@ -3547,5 +3546,9 @@
  "Take the test again": "أعد الاختبار",
  "Go through the lesson again": "راجع الدرس مرة أخرى",
  "Only assessors see the lesson tests": "المقيِّمون فقط يرون اختبارات الدروس",
- "Every try at the test at the end of each lesson. A lesson is passed when every answer is right; \"right first time\" is how many were passed on the first try.": "كل محاولة في الاختبار في نهاية كل درس. يُعدّ الدرس ناجحًا عندما تكون كل الإجابات صحيحة؛ \"صحيح من أول مرة\" هو عدد ما نجح من المحاولة الأولى."
+ "Every try at the test at the end of each lesson. A lesson is passed when every answer is right; \"right first time\" is how many were passed on the first try.": "كل محاولة في الاختبار في نهاية كل درس. يُعدّ الدرس ناجحًا عندما تكون كل الإجابات صحيحة؛ \"صحيح من أول مرة\" هو عدد ما نجح من المحاولة الأولى.",
+ "Lessons need a pass: a lesson counts as done only once its test has every answer right": "يجب اجتياز الدروس: لا يُحتسب الدرس مكتملًا إلا عندما تكون كل إجابات اختباره صحيحة",
+ "Not every answer was right. The lesson counts as done once they all are: take the test again, or go through the lesson again first.": "لم تكن كل الإجابات صحيحة. يُحتسب الدرس مكتملًا عندما تصبح كلها صحيحة: أعد الاختبار، أو راجع الدرس أولًا.",
+ "Take the lesson's test first": "أجرِ اختبار الدرس أولًا",
+ "Get every answer in the lesson's test right first: take it again, or go through the lesson again": "أجب أولًا عن كل أسئلة اختبار الدرس إجابة صحيحة: أعده، أو راجع الدرس من جديد"
 }

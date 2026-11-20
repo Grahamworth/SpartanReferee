@@ -2758,7 +2758,6 @@
  "Your answer: {answer}": "Ditt svar: {answer}",
  "Right answer: {answer}": "Rätt svar: {answer}",
  "Finish the lesson before this one first": "Gör klart lektionen innan först",
- "Answer the quick check first": "Svara på snabbkollen först",
  "Sources: {x9}. {locale} content version {versionNo}{x10}.": "Källor: {x9}. {locale} innehållsversion {versionNo}{x10}.",
  "Privacy: SpartanReferee": "Integritet: SpartanReferee",
  "How SpartanReferee uses your information": "Hur SpartanReferee använder dina uppgifter",
@@ -3468,5 +3467,9 @@
  "Take the test again": "Gör testet igen",
  "Go through the lesson again": "Gå igenom lektionen igen",
  "Only assessors see the lesson tests": "Bara bedömare ser lektionstesterna",
- "Every try at the test at the end of each lesson. A lesson is passed when every answer is right; \"right first time\" is how many were passed on the first try.": "Varje försök på testet i slutet av varje lektion. En lektion är godkänd när alla svar är rätt; \"rätt första gången\" är hur många som blev godkända på första försöket."
+ "Every try at the test at the end of each lesson. A lesson is passed when every answer is right; \"right first time\" is how many were passed on the first try.": "Varje försök på testet i slutet av varje lektion. En lektion är godkänd när alla svar är rätt; \"rätt första gången\" är hur många som blev godkända på första försöket.",
+ "Lessons need a pass: a lesson counts as done only once its test has every answer right": "Lektioner måste klaras: en lektion räknas som klar först när alla svar på dess test är rätt",
+ "Not every answer was right. The lesson counts as done once they all are: take the test again, or go through the lesson again first.": "Alla svar var inte rätt. Lektionen räknas som klar när alla är rätt: gör testet igen, eller gå igenom lektionen igen först.",
+ "Take the lesson's test first": "Gör lektionens test först",
+ "Get every answer in the lesson's test right first: take it again, or go through the lesson again": "Svara först rätt på alla frågor i lektionens test: gör det igen, eller gå igenom lektionen igen"
 }

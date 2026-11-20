@@ -48,6 +48,19 @@ function createChecks(ctx) {
       LEFT JOIN {S}.check_state s ON s.check_key = c.check_key AND s.person_id = @p WHERE c.lesson_id = @l`, { p: personId, l: lessonId }))[0];
     return !r.n || r.done === r.n;
   };
+  /** does this lesson's programme want its tests passed (every answer right) before a lesson counts as done? On unless turned off */
+  const needsPass = async (lessonId) => {
+    const r = (await db.query('SELECT p.lessons_need_pass AS x FROM {S}.lesson l JOIN {S}.programme_version v ON v.version_id = l.version_id JOIN {S}.programme p ON p.programme_id = v.programme_id WHERE l.lesson_id = @l', { l: lessonId }))[0];
+    return !r || r.x !== false;
+  };
+  /** may this lesson be completed? Its test taken, and passed when the programme asks for that */
+  ctx.testDone = async (personId, lessonId) => {
+    if (!(await ctx.checksAnswered(personId, lessonId))) return { ok: false, why: 'Take the lesson\'s test first' };
+    const has = (await db.query('SELECT COUNT(*) AS n FROM {S}.lesson_check WHERE lesson_id = @l', { l: lessonId }))[0].n;
+    if (!has || !(await needsPass(lessonId))) return { ok: true };
+    const passed = (await db.query('SELECT COUNT(*) AS n FROM {S}.lesson_test WHERE person_id = @p AND lesson_id = @l AND passed = 1', { p: personId, l: lessonId }))[0].n;
+    return passed ? { ok: true } : { ok: false, why: 'Get every answer in the lesson\'s test right first: take it again, or go through the lesson again' };
+  };
   /** a day of learning, for the streak */
   ctx.markDay = async (personId, q = db.query) => {
     try { await q('INSERT INTO {S}.learning_day (person_id, day) SELECT @p, CAST(SYSUTCDATETIME() AS DATE) WHERE NOT EXISTS (SELECT 1 FROM {S}.learning_day WHERE person_id = @p AND day = CAST(SYSUTCDATETIME() AS DATE))', { p: personId }); }
@@ -63,7 +76,7 @@ function createChecks(ctx) {
     // this person's tries at the lesson's test: how many, and whether one had every answer right
     const tries = checks.length ? (await db.query('SELECT COUNT(*) AS n, MAX(CAST(passed AS INT)) AS passed FROM {S}.lesson_test WHERE person_id = @p AND lesson_id = @l', { p: w.person.person_id, l: l.lesson_id }))[0] : null;
     return { ...base, checks, checkState: Object.fromEntries(states.map((s) => [s.check_key, { right: !!s.last_right, answered: s.answered }])),
-      tests: tries ? { attempts: tries.n, passed: !!tries.passed } : null };
+      tests: tries ? { attempts: tries.n, passed: !!tries.passed } : null, passRequired: checks.length ? await needsPass(l.lesson_id) : false };
   };
 
   /** one answer into its box */

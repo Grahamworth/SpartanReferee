@@ -26,7 +26,7 @@ function createProgrammes(ctx) {
   const progById = async (id) => (PROGRAMME_ID.test(String(id || '')) ? (await db.query('SELECT * FROM {S}.programme WHERE programme_id = @id', { id }))[0] || null : null);
   const versionById = async (id) => (isUuid(id) ? (await db.query('SELECT * FROM {S}.programme_version WHERE version_id = @id', { id }))[0] || null : null);
   const editor = (w, programmeId) => P.can(w.grants, 'content.draft', { programmeId }) || P.can(w.grants, 'programme.edit', { programmeId });
-  const progView = (p) => ({ id: p.programme_id, title: p.title, category: p.category, description: p.description, ownerId: p.owner_id || '', status: p.status,
+  const progView = (p) => ({ id: p.programme_id, title: p.title, category: p.category, description: p.description, ownerId: p.owner_id || '', status: p.status, lessonsNeedPass: p.lessons_need_pass !== false && p.lessons_need_pass !== 0,
     locales: String(p.locales || 'en').split(',').filter(Boolean), learnerRole: p.learner_role, demo: !!p.demo, createdAt: p.created_at });
   const versionView = (v) => v && ({ id: v.version_id, programmeId: v.programme_id, edition: v.edition, state: v.state, effectiveDate: v.effective_date,
     completionRule: v.completion_rule, passMark: v.pass_mark, maxAttempts: v.max_attempts, retakeWaitHours: v.retake_wait_hours, validityMonths: v.validity_months,
@@ -87,6 +87,7 @@ function createProgrammes(ctx) {
     if (b?.description !== undefined) v.description = text(b.description, 1000);
     if (b?.category !== undefined) v.category = text(b.category, 40) || 'other';
     if (b?.learnerRole !== undefined) v.learner_role = text(b.learnerRole, 60) || 'Learner';
+    if (b?.lessonsNeedPass !== undefined) v.lessons_need_pass = b.lessonsNeedPass === true || b.lessonsNeedPass === 'on' || b.lessonsNeedPass === '1' ? 1 : 0;
     if (b?.status !== undefined) { if (!['active', 'archived'].includes(b.status)) return reply(400, { error: 'A programme is active or archived' }); v.status = b.status; }
     if (b?.locales !== undefined) { const l = [...new Set(String(b.locales).split(',').map((s) => s.trim()).filter((x) => ctx.LOCALES.includes(x)))]; if (!l.includes('en')) l.unshift('en'); v.locales = l.join(','); }
     const keys = Object.keys(v); if (!keys.length) return reply(200, { programme: progView(p) });

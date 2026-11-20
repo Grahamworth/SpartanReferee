@@ -2809,7 +2809,6 @@
  "Your answer: {answer}": "Vaše odpověď: {answer}",
  "Right answer: {answer}": "Správná odpověď: {answer}",
  "Finish the lesson before this one first": "Nejprve dokončete předchozí lekci",
- "Answer the quick check first": "Nejprve odpovězte na rychlou kontrolu",
  "Sources: {x9}. {locale} content version {versionNo}{x10}.": "Zdroje: {x9}. Obsah {locale} verze {versionNo}{x10}.",
  "Privacy: SpartanReferee": "Ochrana soukromí: SpartanReferee",
  "How SpartanReferee uses your information": "Jak SpartanReferee používá vaše údaje",
@@ -3518,5 +3517,9 @@
  "Take the test again": "Udělat test znovu",
  "Go through the lesson again": "Projít lekci znovu",
  "Only assessors see the lesson tests": "Testy lekcí vidí jen hodnotitelé",
- "Every try at the test at the end of each lesson. A lesson is passed when every answer is right; \"right first time\" is how many were passed on the first try.": "Každý pokus o test na konci každé lekce. Lekce je splněná, když jsou všechny odpovědi správně; \"správně napoprvé\" je počet lekcí splněných na první pokus."
+ "Every try at the test at the end of each lesson. A lesson is passed when every answer is right; \"right first time\" is how many were passed on the first try.": "Každý pokus o test na konci každé lekce. Lekce je splněná, když jsou všechny odpovědi správně; \"správně napoprvé\" je počet lekcí splněných na první pokus.",
+ "Lessons need a pass: a lesson counts as done only once its test has every answer right": "Lekce je nutné splnit: lekce se počítá jako hotová, až když jsou v testu všechny odpovědi správně",
+ "Not every answer was right. The lesson counts as done once they all are: take the test again, or go through the lesson again first.": "Ne všechny odpovědi byly správně. Lekce se počítá jako hotová, až budou správně všechny: zopakujte test, nebo si nejdřív znovu projděte lekci.",
+ "Take the lesson's test first": "Nejdřív udělejte test lekce",
+ "Get every answer in the lesson's test right first: take it again, or go through the lesson again": "Nejdřív odpovězte v testu lekce na vše správně: zopakujte ho, nebo si znovu projděte lekci"
 }

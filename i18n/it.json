@@ -2759,7 +2759,6 @@
  "Your answer: {answer}": "La tua risposta: {answer}",
  "Right answer: {answer}": "Risposta giusta: {answer}",
  "Finish the lesson before this one first": "Finisci prima la lezione precedente",
- "Answer the quick check first": "Rispondi prima alla verifica rapida",
  "Sources: {x9}. {locale} content version {versionNo}{x10}.": "Fonti: {x9}. {locale} versione del contenuto {versionNo}{x10}.",
  "Privacy: SpartanReferee": "Privacy: SpartanReferee",
  "How SpartanReferee uses your information": "Come SpartanReferee usa le tue informazioni",
@@ -3469,5 +3468,9 @@
  "Take the test again": "Rifai il test",
  "Go through the lesson again": "Ripassa la lezione",
  "Only assessors see the lesson tests": "Solo i valutatori vedono i test delle lezioni",
- "Every try at the test at the end of each lesson. A lesson is passed when every answer is right; \"right first time\" is how many were passed on the first try.": "Ogni tentativo al test alla fine di ogni lezione. Una lezione è superata quando tutte le risposte sono giuste; \"giuste al primo colpo\" indica quante sono state superate al primo tentativo."
+ "Every try at the test at the end of each lesson. A lesson is passed when every answer is right; \"right first time\" is how many were passed on the first try.": "Ogni tentativo al test alla fine di ogni lezione. Una lezione è superata quando tutte le risposte sono giuste; \"giuste al primo colpo\" indica quante sono state superate al primo tentativo.",
+ "Lessons need a pass: a lesson counts as done only once its test has every answer right": "Le lezioni vanno superate: una lezione conta come completata solo quando tutte le risposte del suo test sono giuste",
+ "Not every answer was right. The lesson counts as done once they all are: take the test again, or go through the lesson again first.": "Non tutte le risposte erano giuste. La lezione conta come completata quando lo saranno tutte: rifai il test o ripassa prima la lezione.",
+ "Take the lesson's test first": "Fai prima il test della lezione",
+ "Get every answer in the lesson's test right first: take it again, or go through the lesson again": "Prima rispondi bene a tutte le domande del test della lezione: rifallo o ripassa la lezione"
 }

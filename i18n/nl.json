@@ -2752,7 +2752,6 @@
  "Your answer: {answer}": "Jouw antwoord: {answer}",
  "Right answer: {answer}": "Juiste antwoord: {answer}",
  "Finish the lesson before this one first": "Rond eerst de les ervoor af",
- "Answer the quick check first": "Beantwoord eerst de snelle check",
  "Sources: {x9}. {locale} content version {versionNo}{x10}.": "Bronnen: {x9}. {locale} inhoudsversie {versionNo}{x10}.",
  "Privacy: SpartanReferee": "Privacy: SpartanReferee",
  "How SpartanReferee uses your information": "Hoe SpartanReferee je gegevens gebruikt",
@@ -3461,5 +3460,9 @@
  "Take the test again": "Test opnieuw doen",
  "Go through the lesson again": "De les opnieuw doornemen",
  "Only assessors see the lesson tests": "Alleen beoordelaars zien de lestests",
- "Every try at the test at the end of each lesson. A lesson is passed when every answer is right; \"right first time\" is how many were passed on the first try.": "Elke poging bij de test aan het eind van elke les. Een les is geslaagd als alle antwoorden goed zijn; \"meteen goed\" is hoeveel er bij de eerste poging zijn gehaald."
+ "Every try at the test at the end of each lesson. A lesson is passed when every answer is right; \"right first time\" is how many were passed on the first try.": "Elke poging bij de test aan het eind van elke les. Een les is geslaagd als alle antwoorden goed zijn; \"meteen goed\" is hoeveel er bij de eerste poging zijn gehaald.",
+ "Lessons need a pass: a lesson counts as done only once its test has every answer right": "Lessen moeten gehaald worden: een les telt pas als klaar als de test helemaal goed is",
+ "Not every answer was right. The lesson counts as done once they all are: take the test again, or go through the lesson again first.": "Niet alle antwoorden waren goed. De les telt als klaar zodra ze allemaal goed zijn: doe de test opnieuw, of loop eerst de les nog eens door.",
+ "Take the lesson's test first": "Doe eerst de test van de les",
+ "Get every answer in the lesson's test right first: take it again, or go through the lesson again": "Beantwoord eerst alle vragen van de test goed: doe hem opnieuw, of loop de les nog eens door"
 }

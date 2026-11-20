@@ -202,7 +202,7 @@ function createLessons(ctx, { speech, mediaSigner }) {
     if (await lockOf(w, l, e)) return reply(409, { error: 'Finish the lesson before this one first' });
     const had = (await db.query('SELECT * FROM {S}.completion WHERE person_id = @p AND lesson_id = @l AND locale = @loc', { p: w.person.person_id, l: l.lesson_id, loc: c.locale }))[0];
     // the lesson's quick check comes first (checks.js): answered, right or wrong
-    if (!had && ctx.checksAnswered && !(await ctx.checksAnswered(w.person.person_id, l.lesson_id))) return reply(409, { error: 'Answer the quick check first' });
+    if (!had && ctx.testDone) { const tst = await ctx.testDone(w.person.person_id, l.lesson_id); if (!tst.ok) return reply(409, { error: tst.why }); }
     let enrolment = e;
     await db.tx(async (q) => {
       if (had && had.preview && !isPreview(c)) {

@@ -2793,7 +2793,6 @@
  "Your answer: {answer}": "Vaš odgovor: {answer}",
  "Right answer: {answer}": "Točan odgovor: {answer}",
  "Finish the lesson before this one first": "Najprije završite prethodnu lekciju",
- "Answer the quick check first": "Najprije odgovorite na brzu provjeru",
  "Sources: {x9}. {locale} content version {versionNo}{x10}.": "Izvori: {x9}. {locale} verzija sadržaja {versionNo}{x10}.",
  "Privacy: SpartanReferee": "Privatnost: SpartanReferee",
  "How SpartanReferee uses your information": "Kako SpartanReferee upotrebljava vaše podatke",
@@ -3502,5 +3501,9 @@
  "Take the test again": "Riješite test ponovno",
  "Go through the lesson again": "Ponovno prođite lekciju",
  "Only assessors see the lesson tests": "Testove lekcija vide samo ocjenjivači",
- "Every try at the test at the end of each lesson. A lesson is passed when every answer is right; \"right first time\" is how many were passed on the first try.": "Svaki pokušaj testa na kraju svake lekcije. Lekcija je položena kad su svi odgovori točni; \"točno iz prvog puta\" je broj lekcija položenih iz prvog pokušaja."
+ "Every try at the test at the end of each lesson. A lesson is passed when every answer is right; \"right first time\" is how many were passed on the first try.": "Svaki pokušaj testa na kraju svake lekcije. Lekcija je položena kad su svi odgovori točni; \"točno iz prvog puta\" je broj lekcija položenih iz prvog pokušaja.",
+ "Lessons need a pass: a lesson counts as done only once its test has every answer right": "Lekcije se moraju položiti: lekcija se računa završenom tek kad su svi odgovori na testu točni",
+ "Not every answer was right. The lesson counts as done once they all are: take the test again, or go through the lesson again first.": "Nisu svi odgovori bili točni. Lekcija se računa završenom kad svi budu točni: ponovite test ili najprije ponovno prođite lekciju.",
+ "Take the lesson's test first": "Najprije riješite test lekcije",
+ "Get every answer in the lesson's test right first: take it again, or go through the lesson again": "Najprije točno odgovorite na sva pitanja testa: ponovite ga ili ponovno prođite lekciju"
 }

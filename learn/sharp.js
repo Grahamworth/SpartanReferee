@@ -118,9 +118,10 @@ export function wireCheck(L, { redo } = {}) {
         const r = await call(`lessons/${L.lesson.id}/checks`, { method: 'POST', body: { answers: answers.map(({ key, choice }) => ({ key, choice })) } });
         celebrate(r.badges);
         const tests = L.extra.tests = { attempts: r.attemptNo || (L.extra.tests?.attempts || 0) + 1, passed: (L.extra.tests?.passed) || all };
-        lines.push(all ? t('Every answer right: you\'ve passed this lesson\'s test.') : t('Not every answer was right. Take the test again, or go through the lesson again first.'));
+        const needPass = !!L.extra.passRequired;
+        lines.push(all ? t('Every answer right: you\'ve passed this lesson\'s test.') : needPass ? t('Not every answer was right. The lesson counts as done once they all are: take the test again, or go through the lesson again first.') : t('Not every answer was right. Take the test again, or go through the lesson again first.'));
         if (!r.queued) lines.push(t('Try {n} recorded.', { n: tests.attempts }));
-        if (L.enrolled && !completed) {
+        if (L.enrolled && !completed && (all || !needPass)) {
           const c = await call(`lessons/${L.lesson.id}/complete`, { method: 'POST', body: { contentId: L.content.id } });
           completed = true;
           lines.push(c.queued ? t('Saved on this phone: it goes to your record when there\'s signal') : c.preview ? t('Recorded: done in a preview translation') : c.enrolment?.state === 'completed' ? t('Lesson complete: programme complete!') : t('Lesson complete'));
@@ -135,8 +136,9 @@ export function wireCheck(L, { redo } = {}) {
         retry.querySelector('[data-retest]').onclick = start;
         retry.querySelector('[data-redo]')?.addEventListener('click', redo);
       }
+      // on to the next lesson once this one counts as done (or, not enrolled, once it would)
       const next = $('lpNextWrap');
-      if (ok && next) { next.hidden = false; if (all) next.querySelector('a')?.focus(); }
+      if (ok && next && (completed || (!L.enrolled && (all || !L.extra.passRequired)))) { next.hidden = false; if (all) next.querySelector('a')?.focus(); }
     });
     sec.scrollIntoView?.({ behavior: 'smooth', block: 'start' });
   };

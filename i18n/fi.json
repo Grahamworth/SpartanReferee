@@ -2773,7 +2773,6 @@
  "Your answer: {answer}": "Vastauksesi: {answer}",
  "Right answer: {answer}": "Oikea vastaus: {answer}",
  "Finish the lesson before this one first": "Suorita ensin edellinen oppitunti",
- "Answer the quick check first": "Vastaa ensin pikatestiin",
  "Sources: {x9}. {locale} content version {versionNo}{x10}.": "Lähteet: {x9}. {locale}-sisältöversio {versionNo}{x10}.",
  "Privacy: SpartanReferee": "Tietosuoja: SpartanReferee",
  "How SpartanReferee uses your information": "Miten SpartanReferee käyttää tietojasi",
@@ -3482,5 +3481,9 @@
  "Take the test again": "Tee testi uudelleen",
  "Go through the lesson again": "Käy oppitunti uudelleen läpi",
  "Only assessors see the lesson tests": "Vain arvioijat näkevät oppituntitestit",
- "Every try at the test at the end of each lesson. A lesson is passed when every answer is right; \"right first time\" is how many were passed on the first try.": "Jokainen yritys kunkin oppitunnin lopun testissä. Oppitunti on läpäisty, kun kaikki vastaukset ovat oikein; \"oikein ensimmäisellä\" kertoo, kuinka moni läpäistiin ensimmäisellä yrityksellä."
+ "Every try at the test at the end of each lesson. A lesson is passed when every answer is right; \"right first time\" is how many were passed on the first try.": "Jokainen yritys kunkin oppitunnin lopun testissä. Oppitunti on läpäisty, kun kaikki vastaukset ovat oikein; \"oikein ensimmäisellä\" kertoo, kuinka moni läpäistiin ensimmäisellä yrityksellä.",
+ "Lessons need a pass: a lesson counts as done only once its test has every answer right": "Oppitunnit on läpäistävä: oppitunti lasketaan tehdyksi vasta, kun sen testin kaikki vastaukset ovat oikein",
+ "Not every answer was right. The lesson counts as done once they all are: take the test again, or go through the lesson again first.": "Kaikki vastaukset eivät olleet oikein. Oppitunti lasketaan tehdyksi, kun kaikki ovat oikein: tee testi uudelleen tai käy oppitunti ensin uudelleen läpi.",
+ "Take the lesson's test first": "Tee ensin oppitunnin testi",
+ "Get every answer in the lesson's test right first: take it again, or go through the lesson again": "Vastaa ensin oppitunnin testin kaikkiin kysymyksiin oikein: tee se uudelleen tai käy oppitunti uudelleen läpi"
 }

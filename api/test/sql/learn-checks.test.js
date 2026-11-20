@@ -44,6 +44,8 @@ test.before(async () => {
   await ok('POST', `learn/versions/${made.versionId}/state`, boss, { to: 'review' });
   await ok('POST', `learn/versions/${made.versionId}/state`, boss, { to: 'published' });
   await ok('POST', 'learn/enrolments', as(learner), { programmeId: 'ocr-referee' });
+  // these tests take the lesson's test without passing it: the last test turns the pass back on
+  await ok('PUT', 'learn/programmes/ocr-referee', boss, { lessonsNeedPass: false });
 });
 test.after(async () => { if (!skip) { await db.dropSchema(); await db.close(); } });
 
@@ -52,7 +54,7 @@ test('a lesson brings its quick check, and is completed only once the check is a
   assert.deepStrictEqual(L.extra.checks.map((k) => [k.key, k.answer]), [['ocr-1-1.1', 0], ['ocr-1-1.2', 1]]);
   assert.deepStrictEqual(L.extra.checkState, {});
   const early = await call('POST', `learn/lessons/${lessonId}/complete`, as(learner), { contentId });
-  assert.strictEqual(early.status, 409); assert.match(early.body.error, /quick check/);
+  assert.strictEqual(early.status, 409); assert.match(early.body.error, /test first/);
   const r = await ok('POST', `learn/lessons/${lessonId}/checks`, as(learner), { answers: [{ key: 'ocr-1-1.1', choice: 0 }, { key: 'ocr-1-1.2', choice: 0 }] });
   assert.deepStrictEqual(r.results, [{ key: 'ocr-1-1.1', right: true }, { key: 'ocr-1-1.2', right: false }]);
   const done = await ok('POST', `learn/lessons/${lessonId}/complete`, as(learner), { contentId });
@@ -127,4 +129,15 @@ test('a lesson\'s test can be taken again until every answer is right; every try
   assert.deepStrictEqual({ lessons: s.lessons, passed: s.passed, firstTime: s.firstTime, tries: s.tries, answersRight: s.answersRight }, { lessons: 1, passed: 1, firstTime: 0, tries: 2, answersRight: 75 });
   // a learner can't see everyone's
   assert.strictEqual((await call('GET', 'learn/assessing/lesson-tests', as(learner))).status, 403);
+  // by default a lesson counts as done only once a try has every answer right
+  const p = (await ok('PUT', 'learn/programmes/ocr-referee', boss, { lessonsNeedPass: true })).programme;
+  assert.strictEqual(p.lessonsNeedPass, true);
+  const dana = (await ok('POST', 'learn/people', boss, { legalName: 'Dana Novak', email: 'dana@demo.test', regionId: 'europe' })).person;
+  await ok('POST', 'learn/enrolments', as(dana), { programmeId: 'ocr-referee' });
+  assert.strictEqual((await ok('GET', `learn/lessons/${lessonId}`, as(dana))).extra.passRequired, true);
+  await ok('POST', `learn/lessons/${lessonId}/checks`, as(dana), { answers: [{ key: 'ocr-1-1.1', choice: 0 }, { key: 'ocr-1-1.2', choice: 0 }] });
+  const notYet = await call('POST', `learn/lessons/${lessonId}/complete`, as(dana), { contentId });
+  assert.strictEqual(notYet.status, 409); assert.match(notYet.body.error, /every answer/);
+  await ok('POST', `learn/lessons/${lessonId}/checks`, as(dana), { answers: [{ key: 'ocr-1-1.1', choice: 0 }, { key: 'ocr-1-1.2', choice: 1 }] });
+  await ok('POST', `learn/lessons/${lessonId}/complete`, as(dana), { contentId });
 });

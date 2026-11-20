@@ -2755,7 +2755,6 @@
  "Your answer: {answer}": "คำตอบของคุณ: {answer}",
  "Right answer: {answer}": "คำตอบที่ถูกต้อง: {answer}",
  "Finish the lesson before this one first": "เรียนบทก่อนหน้าให้จบก่อน",
- "Answer the quick check first": "ตอบเช็กความเข้าใจก่อน",
  "Sources: {x9}. {locale} content version {versionNo}{x10}.": "แหล่งที่มา: {x9} {locale} เนื้อหาเวอร์ชัน {versionNo}{x10}",
  "Privacy: SpartanReferee": "ความเป็นส่วนตัว: SpartanReferee",
  "How SpartanReferee uses your information": "SpartanReferee ใช้ข้อมูลของคุณอย่างไร",
@@ -3467,5 +3466,9 @@
  "Take the test again": "ทำแบบทดสอบอีกครั้ง",
  "Go through the lesson again": "เรียนบทเรียนอีกรอบ",
  "Only assessors see the lesson tests": "ผู้ประเมินเท่านั้นที่เห็นแบบทดสอบบทเรียน",
- "Every try at the test at the end of each lesson. A lesson is passed when every answer is right; \"right first time\" is how many were passed on the first try.": "ทุกครั้งที่ทำแบบทดสอบท้ายแต่ละบทเรียน บทเรียนจะผ่านเมื่อตอบถูกทุกข้อ \"ถูกตั้งแต่ครั้งแรก\" คือจำนวนที่ผ่านในครั้งแรก"
+ "Every try at the test at the end of each lesson. A lesson is passed when every answer is right; \"right first time\" is how many were passed on the first try.": "ทุกครั้งที่ทำแบบทดสอบท้ายแต่ละบทเรียน บทเรียนจะผ่านเมื่อตอบถูกทุกข้อ \"ถูกตั้งแต่ครั้งแรก\" คือจำนวนที่ผ่านในครั้งแรก",
+ "Lessons need a pass: a lesson counts as done only once its test has every answer right": "ต้องผ่านบทเรียน: บทเรียนจะนับว่าเสร็จเมื่อตอบแบบทดสอบถูกทุกข้อเท่านั้น",
+ "Not every answer was right. The lesson counts as done once they all are: take the test again, or go through the lesson again first.": "ยังตอบไม่ถูกทุกข้อ บทเรียนจะนับว่าเสร็จเมื่อตอบถูกทั้งหมด: ทำแบบทดสอบอีกครั้ง หรือทบทวนบทเรียนก่อน",
+ "Take the lesson's test first": "ทำแบบทดสอบของบทเรียนก่อน",
+ "Get every answer in the lesson's test right first: take it again, or go through the lesson again": "ตอบแบบทดสอบของบทเรียนให้ถูกทุกข้อก่อน: ทำอีกครั้ง หรือทบทวนบทเรียนอีกรอบ"
 }

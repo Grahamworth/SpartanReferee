@@ -181,7 +181,7 @@ async function lessonView(rest) {
     </section>
     <section class="card" id="lpFinish" hidden><h2>${done ? 'You\'ve completed this lesson' : 'Finish the lesson'}</h2>
       ${checkSection(L)}
-      ${L.enrolled ? (done ? `<p>Completed ${esc(day(done.at))} (${esc(LANG[done.locale] || done.locale)}, content version ${done.versionNo}).</p>` : !checks.length || answered ? `<p>Mark it complete to record it against your programme: the record keeps this lesson, its content version (${esc(LANG[c.locale] || c.locale)} v${c.versionNo}) and the date.</p><button class="primary" type="button" id="lpComplete">Mark as complete</button>` : '')
+      ${L.enrolled ? (done ? `<p>Completed ${esc(day(done.at))} (${esc(LANG[done.locale] || done.locale)}, content version ${done.versionNo}).</p>` : !checks.length || (answered && (!L.extra.passRequired || L.extra.tests?.passed)) ? `<p>Mark it complete to record it against your programme: the record keeps this lesson, its content version (${esc(LANG[c.locale] || c.locale)} v${c.versionNo}) and the date.</p><button class="primary" type="button" id="lpComplete">Mark as complete</button>` : '')
         : `<p>Enrol in ${esc(L.programme.title)} to record your progress.</p><a class="btnLink" href="${back}">Go to the programme</a>`}
       ${await runHooks(hooks.lesson || [], L)}
       <p class="lpNextWrap" id="lpNextWrap"${moveOn ? '' : ' hidden'}>${L.nav.next ? `<a class="btnLink primaryLink" href="${lessonUrl(L.nav.next)}">Next: ${esc(L.nav.nextTitle)}</a>` : `<a class="btnLink primaryLink" href="${back}">Back to the programme</a>`}</p>

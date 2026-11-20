@@ -2752,7 +2752,6 @@
  "Your answer: {answer}": "Ihre Antwort: {answer}",
  "Right answer: {answer}": "Richtige Antwort: {answer}",
  "Finish the lesson before this one first": "Schließen Sie zuerst die Lektion davor ab",
- "Answer the quick check first": "Beantworten Sie zuerst den Kurzcheck",
  "Sources: {x9}. {locale} content version {versionNo}{x10}.": "Quellen: {x9}. {locale} Inhaltsversion {versionNo}{x10}.",
  "Privacy: SpartanReferee": "Datenschutz: SpartanReferee",
  "How SpartanReferee uses your information": "Wie SpartanReferee Ihre Daten verwendet",
@@ -3461,5 +3460,9 @@
  "Take the test again": "Test wiederholen",
  "Go through the lesson again": "Lektion noch einmal durchgehen",
  "Only assessors see the lesson tests": "Nur Prüfer sehen die Lektionstests",
- "Every try at the test at the end of each lesson. A lesson is passed when every answer is right; \"right first time\" is how many were passed on the first try.": "Jeder Versuch beim Test am Ende jeder Lektion. Eine Lektion gilt als bestanden, wenn alle Antworten richtig sind; \"beim ersten Mal richtig\" zeigt, wie viele im ersten Versuch bestanden wurden."
+ "Every try at the test at the end of each lesson. A lesson is passed when every answer is right; \"right first time\" is how many were passed on the first try.": "Jeder Versuch beim Test am Ende jeder Lektion. Eine Lektion gilt als bestanden, wenn alle Antworten richtig sind; \"beim ersten Mal richtig\" zeigt, wie viele im ersten Versuch bestanden wurden.",
+ "Lessons need a pass: a lesson counts as done only once its test has every answer right": "Lektionen müssen bestanden werden: Eine Lektion zählt erst als erledigt, wenn im Test alle Antworten richtig sind",
+ "Not every answer was right. The lesson counts as done once they all are: take the test again, or go through the lesson again first.": "Nicht alle Antworten waren richtig. Die Lektion zählt als erledigt, sobald alle richtig sind: Wiederholen Sie den Test oder gehen Sie die Lektion zuerst noch einmal durch.",
+ "Take the lesson's test first": "Machen Sie zuerst den Test der Lektion",
+ "Get every answer in the lesson's test right first: take it again, or go through the lesson again": "Beantworten Sie zuerst alle Fragen im Test der Lektion richtig: Wiederholen Sie ihn oder gehen Sie die Lektion noch einmal durch"
 }

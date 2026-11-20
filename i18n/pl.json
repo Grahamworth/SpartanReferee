@@ -2807,7 +2807,6 @@
  "Your answer: {answer}": "Twoja odpowiedź: {answer}",
  "Right answer: {answer}": "Poprawna odpowiedź: {answer}",
  "Finish the lesson before this one first": "Najpierw ukończ poprzednią lekcję",
- "Answer the quick check first": "Najpierw odpowiedz na szybki sprawdzian",
  "Sources: {x9}. {locale} content version {versionNo}{x10}.": "Źródła: {x9}. {locale}, wersja treści {versionNo}{x10}.",
  "Privacy: SpartanReferee": "Prywatność: SpartanReferee",
  "How SpartanReferee uses your information": "Jak SpartanReferee wykorzystuje twoje dane",
@@ -3516,5 +3515,9 @@
  "Take the test again": "Zrób test jeszcze raz",
  "Go through the lesson again": "Przejdź lekcję jeszcze raz",
  "Only assessors see the lesson tests": "Testy lekcji widzą tylko egzaminatorzy",
- "Every try at the test at the end of each lesson. A lesson is passed when every answer is right; \"right first time\" is how many were passed on the first try.": "Każda próba testu na końcu każdej lekcji. Lekcja jest zaliczona, gdy wszystkie odpowiedzi są dobre; \"dobrze za pierwszym razem\" to liczba lekcji zaliczonych w pierwszej próbie."
+ "Every try at the test at the end of each lesson. A lesson is passed when every answer is right; \"right first time\" is how many were passed on the first try.": "Każda próba testu na końcu każdej lekcji. Lekcja jest zaliczona, gdy wszystkie odpowiedzi są dobre; \"dobrze za pierwszym razem\" to liczba lekcji zaliczonych w pierwszej próbie.",
+ "Lessons need a pass: a lesson counts as done only once its test has every answer right": "Lekcje trzeba zaliczyć: lekcja liczy się jako ukończona dopiero, gdy wszystkie odpowiedzi w teście są poprawne",
+ "Not every answer was right. The lesson counts as done once they all are: take the test again, or go through the lesson again first.": "Nie wszystkie odpowiedzi były poprawne. Lekcja liczy się jako ukończona, gdy wszystkie będą poprawne: rozwiąż test ponownie albo najpierw przejdź lekcję jeszcze raz.",
+ "Take the lesson's test first": "Najpierw rozwiąż test lekcji",
+ "Get every answer in the lesson's test right first: take it again, or go through the lesson again": "Najpierw odpowiedz poprawnie na wszystkie pytania testu: rozwiąż go ponownie albo przejdź lekcję jeszcze raz"
 }

@@ -2766,7 +2766,6 @@
  "Your answer: {answer}": "Η απάντησή σας: {answer}",
  "Right answer: {answer}": "Σωστή απάντηση: {answer}",
  "Finish the lesson before this one first": "Ολοκληρώστε πρώτα το προηγούμενο μάθημα",
- "Answer the quick check first": "Απαντήστε πρώτα στον γρήγορο έλεγχο",
  "Sources: {x9}. {locale} content version {versionNo}{x10}.": "Πηγές: {x9}. Έκδοση περιεχομένου {locale} {versionNo}{x10}.",
  "Privacy: SpartanReferee": "Απόρρητο: SpartanReferee",
  "How SpartanReferee uses your information": "Πώς χρησιμοποιεί το SpartanReferee τα στοιχεία σας",
@@ -3475,5 +3474,9 @@
  "Take the test again": "Δώστε ξανά το τεστ",
  "Go through the lesson again": "Δείτε ξανά το μάθημα",
  "Only assessors see the lesson tests": "Μόνο οι αξιολογητές βλέπουν τα τεστ μαθημάτων",
- "Every try at the test at the end of each lesson. A lesson is passed when every answer is right; \"right first time\" is how many were passed on the first try.": "Κάθε προσπάθεια στο τεστ στο τέλος κάθε μαθήματος. Ένα μάθημα θεωρείται περασμένο όταν όλες οι απαντήσεις είναι σωστές· το \"σωστά με την πρώτη\" δείχνει πόσα πέρασαν με την πρώτη προσπάθεια."
+ "Every try at the test at the end of each lesson. A lesson is passed when every answer is right; \"right first time\" is how many were passed on the first try.": "Κάθε προσπάθεια στο τεστ στο τέλος κάθε μαθήματος. Ένα μάθημα θεωρείται περασμένο όταν όλες οι απαντήσεις είναι σωστές· το \"σωστά με την πρώτη\" δείχνει πόσα πέρασαν με την πρώτη προσπάθεια.",
+ "Lessons need a pass: a lesson counts as done only once its test has every answer right": "Τα μαθήματα πρέπει να περαστούν: ένα μάθημα μετράει ως ολοκληρωμένο μόνο όταν όλες οι απαντήσεις του τεστ είναι σωστές",
+ "Not every answer was right. The lesson counts as done once they all are: take the test again, or go through the lesson again first.": "Δεν ήταν σωστές όλες οι απαντήσεις. Το μάθημα μετράει ως ολοκληρωμένο όταν είναι όλες σωστές: κάντε ξανά το τεστ ή περάστε πρώτα ξανά από το μάθημα.",
+ "Take the lesson's test first": "Κάντε πρώτα το τεστ του μαθήματος",
+ "Get every answer in the lesson's test right first: take it again, or go through the lesson again": "Απαντήστε πρώτα σωστά σε όλες τις ερωτήσεις του τεστ: κάντε το ξανά ή περάστε ξανά από το μάθημα"
 }
