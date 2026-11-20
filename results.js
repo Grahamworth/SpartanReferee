@@ -23,9 +23,24 @@ const mmss = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart
 const size = (n) => (n >= 1e9 ? `${(n / 1e9).toFixed(1)} GB` : `${Math.max(1, Math.round(n / 1e6))} MB`);
 const plainName = (file) => String(file || '').replace(/^\d{4}-\d\d-\d\dT[\d-]+Z?_/, '');
 const recName = (r) => (r.cam ? `Camera ${r.cam}` : r.name || plainName(r.file) || 'Uploaded video');
-const sourceOf = (x) => (x.src === 'upload' ? `v:${x.video}` : `c:${x.cam}`);
-const sourceName = (x) => (x.src === 'upload' ? plainName(x.video) : `Camera ${x.cam}`);
-const athleteDay = (a) => dayKey(a.firstAt);
+// Someone found in a camera's recording that was analysed afterwards (a previous recording) was filmed by that camera when the
+// recording was made, not when it was analysed: they're listed under the camera, at the recording's start plus how far in they are.
+const sourceRec = (x) => (x.src === 'upload' ? data.recordings.find((r) => r.file === (data.sources[x.video] || x.video)) || null : null);
+const camOf = (x) => (x.src === 'upload' ? sourceRec(x)?.cam || 0 : x.cam);
+const sourceOf = (x) => (camOf(x) ? `c:${camOf(x)}` : `v:${x.video}`);
+const sourceName = (x) => (camOf(x) ? `Camera ${camOf(x)}` : plainName(x.video));
+const filmedAt = (x) => { const rec = sourceRec(x); return rec?.cam && x.firstT != null ? Date.parse(rec.startedAt) + x.firstT * 1000 : Date.parse(x.firstAt); };
+const filmedLine = (x) => (x.src === 'upload' && x.firstT != null ? (camOf(x) ? `${when(filmedAt(x))} · ${mmss(x.firstT)} in the video` : `${mmss(x.firstT)} in the video`) : when(x.firstAt));
+const athleteDay = (a) => dayKey(filmedAt(a));
+// The time of day something was filmed, against From and To (either can be left empty; a From later than To runs over midnight).
+// lengthMin: how long it runs for, for a recording.
+const clock = (v) => { const m = /^(\d\d):(\d\d)/.exec(v || ''); return m ? +m[1] * 60 + +m[2] : null; };
+function inTime(ms, lengthMin = 0) {
+  const from = clock($('from').value), to = clock($('to').value); if (from == null && to == null) return true;
+  const d = new Date(ms), start = d.getHours() * 60 + d.getMinutes() + d.getSeconds() / 60, end = start + lengthMin;
+  const lo = from ?? 0, hi = (to ?? 24 * 60 - 1) + 1; // (To takes in the whole of its minute)
+  return lo < hi ? end >= lo && start < hi : end >= lo || start < hi;
+}
 
 function fillFilters() {
   const days = [...new Set([...data.recordings.map((r) => dayKey(r.startedAt)), ...data.athletes.map(athleteDay)])].sort().reverse();
@@ -52,23 +67,25 @@ function combined(list) {
 }
 function draw() {
   const q = $('find').value.trim(), day = $('day').value, source = $('source').value;
-  const athletes = combined(data.athletes).filter((a) => (!q || String(a.bib || '').includes(q)) && (!day || athleteDay(a) === day) && (!source || sourceOf(a) === source || (a.other && sourceOf(a.other) === source)));
+  const athletes = combined(data.athletes).filter((a) => (!q || String(a.bib || '').includes(q)) && (!day || athleteDay(a) === day) && inTime(filmedAt(a)) && (!source || sourceOf(a) === source || (a.other && sourceOf(a.other) === source)))
+    .sort((x, y) => filmedAt(y) - filmedAt(x));
   $('athleteCount').textContent = athletes.length ? `(${athletes.length})` : '';
   $('athletes').innerHTML = athletes.map((a) => `<article class="pastCard">
       ${a.pic ? `<img src="${esc(a.pic)}" alt="">` : ''}
       <div><b class="reps">${esc(a.reps ?? 0)}</b> rep${a.reps === 1 ? '' : 's'}${a.noReps ? ` · ${esc(a.noReps)} no rep${a.noReps === 1 ? '' : 's'}` : ''}
         <small><b>${a.bib && a.bib !== 'No number' ? `Number ${esc(a.bib)}` : `Athlete ${esc(a.label ?? a.n)}`}</b> · ${a.other ? `Cameras ${esc(a.cam)} + ${esc(a.other.cam)}` : esc(sourceName(a))}</small>${a.other ? `
         <small>Camera ${esc(a.cam)}: ${esc(a.both.counts[0])} · Camera ${esc(a.other.cam)}: ${esc(a.both.counts[1])} · ${esc(a.both.both)} seen on both</small>` : ''}
-        <small>${esc(dayLabel(athleteDay(a)))}, ${a.src === 'upload' && a.firstT != null ? `${esc(mmss(a.firstT))} in the video` : esc(when(a.firstAt))}</small></div>
+        <small>${esc(dayLabel(athleteDay(a)))}, ${esc(filmedLine(a))}</small></div>
       <div class="pastActions"><button class="small" type="button" data-watch="${esc(a.server)}~${esc(a.n)}">${a.other ? `Watch camera ${esc(a.cam)}` : 'Watch'}</button>${a.other ? `<button class="small" type="button" data-watch="${esc(a.server)}~${esc(a.other.n)}">Watch camera ${esc(a.other.cam)}</button>` : `<button class="small" type="button" data-save="${esc(a.server)}~${esc(a.n)}">Download with tracking</button>`}</div>
     </article>`).join('') || `<p class="muted">${data.athletes.length ? 'Nobody matches that.' : 'No athletes in the last 7 days.'}</p>`;
-  const numbers = data.numbers.filter((x) => (!q || x.number.includes(q)) && (!day || dayKey(x.firstAt) === day) && (!source || sourceOf(x) === source));
-  $('numbers').innerHTML = numbers.map((x) => `<div class="pastRow"><div><b>${esc(x.number)}</b><small>${esc(sourceName(x))} · ${esc(dayLabel(dayKey(x.firstAt)))}, ${x.src === 'upload' && x.firstT != null ? `${esc(mmss(x.firstT))} in the video` : esc(when(x.firstAt))}</small></div>
+  const numbers = data.numbers.filter((x) => (!q || x.number.includes(q)) && (!day || dayKey(filmedAt(x)) === day) && inTime(filmedAt(x)) && (!source || sourceOf(x) === source))
+    .sort((x, y) => filmedAt(y) - filmedAt(x));
+  $('numbers').innerHTML = numbers.map((x) => `<div class="pastRow"><div><b>${esc(x.number)}</b><small>${esc(sourceName(x))} · ${esc(dayLabel(dayKey(filmedAt(x))))}, ${esc(filmedLine(x))}</small></div>
       <button class="small" type="button" data-number="${esc(x.id)}">Go to it</button></div>`).join('') || `<p class="muted">${data.numbers.length ? 'None match that.' : 'No numbers were shown.'}</p>`;
   // Only the recordings someone was counted in, unless the box is ticked: a day's cameras also leave long stretches with nobody
   // exercising, and a connection that keeps dropping leaves hundreds of clips under a second long.
   const counted = new Set(data.athletes.map((a) => recordingFor(a)?.id).filter(Boolean));
-  const inView = data.recordings.filter((r) => (!day || dayKey(r.startedAt) === day) && (!source || source === (r.cam ? `c:${r.cam}` : `f:${r.file}`) || source === `v:${r.file}`));
+  const inView = data.recordings.filter((r) => (!day || dayKey(r.startedAt) === day) && inTime(Date.parse(r.startedAt), r.cam ? 10 : 0) && (!source || source === (r.cam ? `c:${r.cam}` : `f:${r.file}`) || source === `v:${r.file}`));
   const recs = $('allRecs').checked ? inView : inView.filter((r) => counted.has(r.id));
   $('recCount').textContent = recs.length ? `(${recs.length})` : '';
   show($('allRecsRow'), inView.some((r) => !counted.has(r.id)));
@@ -86,8 +103,12 @@ function recordingAt(cam, at) {
   const list = data.recordings.filter((r) => r.cam === cam && Date.parse(r.startedAt) <= at && at - Date.parse(r.startedAt) < CLIP_MS);
   return list.sort((x, y) => Date.parse(y.startedAt) - Date.parse(x.startedAt))[0] || null;
 }
-function play(rec, at, title) {
-  playing = { ...playing, rec, startMs: rec.cam ? Date.parse(rec.startedAt) : 0 };
+// videoClock: `at`, and the tracking and reps that go with it, count from the start of this video, not the time of day. That's so
+// for anything found in a video analysed after it was made: an upload, and a camera's own recording analysed as a previous
+// recording. (Taking a camera's recording to run on the time of day whoever was found in it sent Watch to its first frame with no
+// tracking, and left the download waiting for ever: 20 November 2026.)
+function play(rec, at, title, videoClock = false) {
+  playing = { ...playing, rec, videoClock, startMs: videoClock || !rec.cam ? 0 : Date.parse(rec.startedAt) };
   show($('stageNote'), false); show(video, true); show($('playerHead'), true);
   $('playerTitle').textContent = title;
   $('playerDownload').href = rec.download;
@@ -97,7 +118,7 @@ function play(rec, at, title) {
 }
 // a live camera's recording is cut every 10 minutes: carry on into the next piece
 video.addEventListener('ended', () => {
-  const after = pieceAfter(playing?.rec);
+  const after = playing?.videoClock ? null : pieceAfter(playing?.rec);
   if (after) play(after, Date.parse(after.startedAt), $('playerTitle').textContent);
 });
 function pieceAfter(rec) {
@@ -213,7 +234,8 @@ async function saveAthlete(server, n) {
     const t = await call(`recordings/track/${encodeURIComponent(`${server}~${n}`)}`).catch(() => ({ frames: [], events: [] }));
     if (!t.frames.length) { tidy(); show($('saveBox'), false); fail('No tracking was saved for that athlete, so there\'s nothing to draw in. Download the recording instead.'); return; }
     const startOf = (r) => (r.cam ? Date.parse(r.startedAt) : 0);
-    S.startMs = startOf(rec);
+    const videoClock = a.src === 'upload'; // (see play)
+    S.startMs = videoClock ? 0 : startOf(rec);
     const last = Math.max(t.frames.at(-1)[0], t.events.at(-1)?.t ?? 0);
     const from = Math.max(S.startMs, t.frames[0][0] - SAVE_BEFORE_MS), to = Math.min(last + SAVE_AFTER_MS, from + SAVE_MAX_MS);
     v.src = rec.url; await within(once(v, 'loadedmetadata'));
@@ -242,7 +264,7 @@ async function saveAthlete(server, n) {
         if (S.cancelled) { show($('saveBox'), false); return; }
         if (why || !parts.length) { show($('saveBox'), false); failed(why || 'nothing recorded'); return; }
         savedUrl = URL.createObjectURL(new Blob(parts, { type: kind.type.split(';')[0] }));
-        const d = new Date(a.firstAt), file = `${name.replace(/[^\w]+/g, '-')}-${dayKey(a.firstAt)}-${String(d.getHours()).padStart(2, '0')}${String(d.getMinutes()).padStart(2, '0')}.${kind.ext}`;
+        const d = new Date(filmedAt(a)), file = `${name.replace(/[^\w]+/g, '-')}-${dayKey(filmedAt(a))}-${String(d.getHours()).padStart(2, '0')}${String(d.getMinutes()).padStart(2, '0')}.${kind.ext}`;
         const link = $('saveAgain'); link.href = savedUrl; link.download = file;
         show($('saveBar'), false); show($('saveCancel'), false); show(link, true);
         say(`${name}'s video is in your downloads, with the tracking and the count drawn in.`);
@@ -264,7 +286,7 @@ async function saveAthlete(server, n) {
     // a live camera's recording is cut every 10 minutes: carry on into the next piece
     v.addEventListener('ended', async () => {
       if (S.done) return;
-      const after = pieceAfter(S.rec); if (!after) { finish(); return; }
+      const after = videoClock ? null : pieceAfter(S.rec); if (!after) { finish(); return; }
       S.rec = after; S.startMs = Date.parse(after.startedAt);
       try { v.src = after.url; await once(v, 'loadedmetadata'); await v.play(); } catch { finish(); }
     });
@@ -301,7 +323,7 @@ async function watch(server, n) {
   $('saveThis').dataset.save = `${server}~${n}`; show($('saveThis'), t.frames.length > 0);
   $('events').innerHTML = t.events.map((e, i) => `<button type="button" class="${e.type === 'rep' ? '' : 'bad'}" data-event="${i}" title="${esc((e.reasons || []).join(' · '))}">${e.type === 'rep' ? `✓ Rep ${esc(e.count)}` : '✗ No rep'}</button>`).join('');
   const start = t.frames[0]?.[0] ?? (a.src === 'upload' ? (a.firstT ?? 0) * 1000 : Date.parse(a.firstAt));
-  play(rec, Math.max(0, start - 1000), title);
+  play(rec, Math.max(0, start - 1000), title, a.src === 'upload');
   scrollTo({ top: 0, behavior: 'smooth' });
 }
 document.addEventListener('click', (e) => {
@@ -318,7 +340,7 @@ document.addEventListener('click', (e) => {
   if (b.dataset.event != null && playing?.events) {
     const ev = playing.events[+b.dataset.event], cam = playing.athlete?.src !== 'upload' && playing.athlete?.cam;
     const at = (ev.from ?? ev.t) - 1500, rec = cam ? recordingAt(cam, at) || playing.rec : playing.rec;
-    play(rec, at, $('playerTitle').textContent);
+    play(rec, at, $('playerTitle').textContent, playing.athlete?.src === 'upload');
   }
   if (b.dataset.number) {
     const x = data.numbers.find((y) => y.id === b.dataset.number); if (!x) return;
@@ -326,12 +348,12 @@ document.addEventListener('click', (e) => {
     const rec = x.src === 'upload' ? data.recordings.find((r) => r.file === (data.sources[x.video] || x.video)) : recordingAt(x.cam, at);
     if (!rec) { fail('That video has gone, or is still on its way to storage. Try again in a few minutes.'); return; }
     fail(''); playing = { rec, frames: [], events: [], startMs: 0 }; $('events').innerHTML = ''; show($('trackRow'), false); show($('saveThis'), false);
-    play(rec, Math.max(0, at), `Number ${x.number} · ${sourceName(x)}`);
+    play(rec, Math.max(0, at), `Number ${x.number} · ${sourceName(x)}`, x.src === 'upload');
     scrollTo({ top: 0, behavior: 'smooth' });
   }
 });
 const fail = (msg) => { $('error').textContent = msg || ''; show($('error'), !!msg); };
-for (const id of ['find', 'day', 'source', 'allRecs']) $(id).addEventListener(id === 'find' ? 'input' : 'change', draw);
+for (const id of ['find', 'day', 'source', 'from', 'to', 'allRecs']) $(id).addEventListener(id === 'find' ? 'input' : 'change', draw);
 
 async function enter() {
   const me = await getMe(true);

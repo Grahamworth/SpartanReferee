@@ -18,6 +18,8 @@
 <style>
   .pastFilters { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 14px; }
   .pastFilters input, .pastFilters select { flex: 1 1 160px; min-width: 0; }
+  .pastTime { display: flex; align-items: center; gap: 8px; flex: 1 1 150px; min-width: 0; color: var(--muted); }
+  .pastTime input { flex: 1 1 auto; }
   .pastGrid { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 20px; align-items: start; }
   @media (max-width: 860px) { .pastGrid { grid-template-columns: minmax(0, 1fr); } }
   .pastStage { position: relative; background: #000; aspect-ratio: 16 / 9; }
@@ -74,6 +76,8 @@
       <input id="find" type="search" inputmode="numeric" placeholder="Find a number" aria-label="Find a number">
       <select id="day" aria-label="Day"></select>
       <select id="source" aria-label="Camera or video"></select>
+      <label class="pastTime">From <input id="from" type="time" aria-label="Filmed from this time of day"></label>
+      <label class="pastTime">To <input id="to" type="time" aria-label="Filmed up to this time of day"></label>
     </div>
     <div class="pastGrid">
       <div>
