@@ -8,10 +8,10 @@ import path from 'node:path';
 const CHROME = ['C:/Program Files/Google/Chrome/Application/chrome.exe', 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'].find((p) => fs.existsSync(p));
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-export async function launch({ port = 9333 } = {}) {
+export async function launch({ port = 9333, args = [] } = {}) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'promo-chrome-'));
   const proc = spawn(CHROME, ['--headless=new', `--remote-debugging-port=${port}`, `--user-data-dir=${dir}`, '--no-first-run', '--no-default-browser-check',
-    '--hide-scrollbars', '--mute-audio', '--disable-gpu-vsync', 'about:blank'], { stdio: 'ignore' });
+    '--hide-scrollbars', '--mute-audio', '--disable-gpu-vsync', ...args, 'about:blank'], { stdio: 'ignore' });
   let target;
   for (let i = 0; i < 60 && !target; i++) {
     await sleep(250);

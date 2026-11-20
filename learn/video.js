@@ -42,10 +42,16 @@ async function start(btn) {
       host: 'https://www.youtube-nocookie.com', videoId: id,
       playerVars: { autoplay: 1, playsinline: 1, rel: 0, cc_load_policy: 1, cc_lang_pref: l, hl: l },
       events: {
-        onReady: (e) => e.target.playVideo(),
+        // iPhones only start a video with sound straight from a tap, and the player arrives after it: if it hasn't started, it starts
+        // muted (allowed), with captions, so the tap never leaves YouTube's own play screen (whose title and logo open the YouTube app)
+        onReady: (e) => {
+          const p = e.target;
+          p.playVideo();
+          for (const ms of [1200, 3500]) setTimeout(() => { if (!box.started && p.getPlayerState() !== 3) { p.mute(); p.playVideo(); } }, ms);
+        },
         // the captions part of the player arrives once the video plays: set the language then, and again a few times as its tracks come in
         onApiChange: set,
-        onStateChange: (e) => { if (e.data === 1 && !done && tries++ < 1) for (const ms of [800, 2500, 5000]) setTimeout(set, ms); },
+        onStateChange: (e) => { if (e.data === 1) box.started = true; if (e.data === 1 && !done && tries++ < 1) for (const ms of [800, 2500, 5000]) setTimeout(set, ms); },
       },
     });
   } catch {
