@@ -132,7 +132,7 @@ const S = {
   finder: null, finderError: null, finderLoading: false, finderReady: null, paceAt: 0,
   pace: 'prepass', nextPace: null,
   testTurn: 0,
-  quiet: false, prepassing: false, replay: null, replayEvents: [], replayEvAt: 0, videoDur: 0, seekDrag: false, findBusy: false, findAt: -Infinity, findBoxes: null,
+  quiet: false, prepassing: false, replay: null, replayEvents: [], replayEvAt: 0, videoDur: 0, seekDrag: false, findBusy: false, findAt: -Infinity, findBoxes: null, lookMs: [0, 0],
   flashUntil: 0, flashGood: false,
   doneTimer: null,
   audio: null, wakeLock: null,
@@ -1330,13 +1330,16 @@ function secondLook(src, w, h, crop, poses) {
   const k = Math.min(1, 640 / Math.max(crop.w * w, crop.h * h));
   const W = Math.max(16, Math.round(crop.w * w * k)), H = Math.max(16, Math.round(crop.h * h * k));
   if (lookCanvas.width !== W || lookCanvas.height !== H) { lookCanvas.width = W; lookCanvas.height = H; }
+  const began = performance.now();
   lookCtx.drawImage(src, crop.x * w, crop.y * h, crop.w * w, crop.h * h, 0, 0, W, H);
   // Paint in the area's average colour, so the paint doesn't look like a person.
   const avg = (() => { const d = lookCtx.getImageData(0, 0, W, H).data; const c = [0, 0, 0]; let n = 0;
     for (let i = 0; i < d.length; i += 64) { c[0] += d[i]; c[1] += d[i + 1]; c[2] += d[i + 2]; n++; }
     return `rgb(${c.map((v) => Math.round(v / n)).join(',')})`; })();
   drawMasks(lookCtx, poses, crop, W, H, avg);
+  const drawn = performance.now();
   try { return fromCrop(S.scanner.detect(lookCanvas), crop); } catch { return null; }
+  finally { const now = performance.now(); S.lookMs[0] += drawn - began; S.lookMs[1] += now - drawn; } // (how long the picture took to get ready, and the pose search)
 }
 // Where to look again for a missing track: around where they were last seen.
 function lookAround(k, w, h) {
@@ -1910,12 +1913,12 @@ function frame() {
 // Only on a server, which has the graphics card for it: in someone's own browser or on a phone a video is analysed as it was before.
 const DEEP = BACKGROUND;
 const DEEP_LOOKS = 30;
-// How often the finder searches the parts: with a crowd about (four or more people, as a live judge reckons it), the larger parts
+// How often the finder searches the parts: with four or more people about, the larger parts
 // every time it runs and the smaller ones (seven times as many searches) every 2 s; with fewer, every 2 s and every 10 s, which is
 // what finds a crowd arriving. One athlete filmed close to is found in the whole picture, and searching every part every time made
 // their video take two and a half times its length instead of one and a half.
 const PARTS_EVERY_MS = { busy: [0, 2000], quiet: [2000, 10000] };
-const BUSY_PEOPLE = MULTI_DEFAULTS.crowdPeople;
+const BUSY_PEOPLE = 4;
 function partsDue(t) {
   const about = Math.max(S.multi.tracks.filter((k) => t - k.seenAt < 2000 && k.scale >= MULTI_DEFAULTS.minSize).length, t - (S.foundAt ?? -Infinity) < 5000 ? S.foundPeople || 0 : 0);
   const [parts, fine] = PARTS_EVERY_MS[about >= BUSY_PEOPLE ? 'busy' : 'quiet'];
@@ -2746,7 +2749,7 @@ async function prepass(range) {
   // spent: where the time has gone so far, in seconds (for the server's list of analyses, and for making it quicker)
   const run = window.__analysis = { paused: false, stop: false, done: false, pct: 0, spent: { step: 0, find: 0, pose: 0, looks: 0, frames: 0 } };
   const clock = (key, since) => { run.spent[key] = Math.round((run.spent[key] + (performance.now() - since) / 1000) * 100) / 100; };
-  S.lookCount = 0; S.fineAt = S.partsAt = S.foundAt = -Infinity; S.foundPeople = 0;
+  S.lookCount = 0; S.lookMs = [0, 0]; S.fineAt = S.partsAt = S.foundAt = -Infinity; S.foundPeople = 0;
   let looksLast = 0;
   for (let i = i0; i < n && S.testMode; i++) {
     while (run.paused && !run.stop && S.testMode) { showLoader(`Paused at ${run.pct}%`); await new Promise((r) => setTimeout(r, 200)); }
@@ -2774,7 +2777,7 @@ async function prepass(range) {
     const looksBefore = S.lookCount;
     analyseFrame(src, w, h, t);
     looksLast = S.lookCount - looksBefore;
-    clock('pose', since); run.spent.frames++; run.spent.looks = S.lookCount;
+    clock('pose', since); run.spent.frames++; run.spent.looks = S.lookCount; run.spent.lookDraw = Math.round(S.lookMs[0]) / 1000; run.spent.lookPose = Math.round(S.lookMs[1]) / 1000;
     if (!BACKGROUND) S.replay.push(snapshot(t)); // for playing it back here, and a long video would fill the memory
     if (i % 5 === 0) {
       showLoader(`${range ? 'Analysing the athlete' : 'Analysing the video'}… ${Math.round((100 * (i - i0)) / Math.max(1, n - i0))}%`);

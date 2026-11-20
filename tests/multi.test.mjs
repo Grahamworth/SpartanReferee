@@ -598,16 +598,16 @@ test('multi: someone the finder saw in two parts is one person, and a box cut of
   assert.equal(mergeBoxes([{ x0: 0, y0: 0.4, x1: 0.08, y1: 0.7, score: 0.5, part: left }, { x0: 0.0, y0: 0.38, x1: 0.2, y1: 0.72, score: 0.4 }]).length, 2);
 });
 
-test("multi: four or more people in view for three seconds is a crowd; people far in the background do not count", () => {
+test("multi: five or more people in view for three seconds is a crowd; people far in the background do not count", () => {
   const body = (x, h = 0.3) => ({ x0: x, x1: x + 0.05, y0: 0.5, y1: 0.5 + h, score: 0.9 });
-  const four = [body(0.1), body(0.3), body(0.5), body(0.7)], s = {};
-  assert.equal(crowdSeen(s, four, 0, 16 / 9), false, 'only just seen');
-  assert.equal(crowdSeen(s, four, 2900, 16 / 9), false);
-  assert.equal(crowdSeen(s, four, 3000, 16 / 9), true);
-  assert.equal(crowdSeen(s, four.slice(0, 3), 3500, 16 / 9), false, 'three is what a live judge follows');
-  assert.equal(crowdSeen(s, four, 4000, 16 / 9), false, 'it starts again');
-  assert.equal(crowdSeen(s, four, 7000, 16 / 9), true);
+  const five = [body(0.1), body(0.3), body(0.5), body(0.7), body(0.9)], s = {};
+  assert.equal(crowdSeen(s, five, 0, 16 / 9), false, 'only just seen');
+  assert.equal(crowdSeen(s, five, 2900, 16 / 9), false);
+  assert.equal(crowdSeen(s, five, 3000, 16 / 9), true);
+  assert.equal(crowdSeen(s, five.slice(0, 4), 3500, 16 / 9), false, 'an athlete and three officials are not a crowd');
+  assert.equal(crowdSeen(s, five, 4000, 16 / 9), false, 'it starts again');
+  assert.equal(crowdSeen(s, five, 7000, 16 / 9), true);
   const far = {};
-  for (const t of [0, 3000, 6000]) assert.equal(crowdSeen(far, [body(0.1), body(0.3), body(0.5, 0.05), body(0.7, 0.05), body(0.9, 0.05)], t, 16 / 9), false, 'two athletes and three spectators far off');
-  assert.equal(MULTI_DEFAULTS.crowdPeople, 4);
+  for (const t of [0, 3000, 6000]) assert.equal(crowdSeen(far, [body(0.1), body(0.3), body(0.4), body(0.5, 0.05), body(0.7, 0.05), body(0.9, 0.05)], t, 16 / 9), false, 'three athletes and three spectators far off');
+  assert.equal(MULTI_DEFAULTS.crowdPeople, 5);
 });
