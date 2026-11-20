@@ -24,6 +24,8 @@ function createReview({ DATA, S, REVIEW, SITE_DIR, extraState = () => ({}) }) {
 const EVENTS = path.join(DATA, 'events.json'), MARKS = path.join(DATA, 'marks.json'), ATHLETES = path.join(DATA, 'athletes.json'), PICS = path.join(DATA, 'athlete-pics'), TRACKS = path.join(DATA, 'athlete-tracks');
 const readJson = (f) => { try { return JSON.parse(fs.readFileSync(f, 'utf8')); } catch { return []; } };
 let events = readJson(EVENTS), marks = readJson(MARKS), cams = [], wasLive = {};
+// a camera whose phone keeps dropping off and reconnecting (a weak mobile connection): each reconnect starts a new stream, so its readyTime changes
+const DROP_WINDOW_MS = 3 * 60e3, lastReady = {}, drops = {}, ups = {};
 const COUNTS = path.join(DATA, 'rep-counts.json');
 let repCounts = readJson(COUNTS), countSaveT = null;
 const saveCounts = () => { clearTimeout(countSaveT); countSaveT = setTimeout(() => fs.writeFile(COUNTS, JSON.stringify(repCounts), () => {}), 300); };
@@ -113,7 +115,12 @@ function sendRange(req, res, buf, name) {
       const from = conn && conn.remoteAddr ? conn.remoteAddr.replace(/:\d+$/, '') : '';
       const video = p && (p.tracks2 || []).find((t) => t.codecProps && t.codecProps.width);
       const live = !!(p && p.ready);
-      now.push({ n, live, from, route: from ? 'internet' : '', video: video ? `${video.codecProps.width}×${video.codecProps.height}` : '', watchers: p ? (p.readers || []).length : 0 });
+      if (live && !wasLive[n]) ups[n] = (ups[n] || 0) + 1;
+      const at = Date.now(), ready = live ? p.readyTime ?? `up${ups[n]}` : null; // (each time it came back, if the streaming server doesn't say)
+      if (ok && ready && lastReady[n] && ready !== lastReady[n]) (drops[n] ||= []).push(at);
+      if (ready) lastReady[n] = ready;
+      drops[n] = (drops[n] || []).filter((t) => at - t < DROP_WINDOW_MS);
+      now.push({ n, live, from, route: from ? 'internet' : '', video: video ? `${video.codecProps.width}×${video.codecProps.height}` : '', watchers: p ? (p.readers || []).length : 0, drops: drops[n].length });
       if (ok && live !== !!wasLive[n]) { events.push({ t: new Date().toISOString(), cam: n, type: live ? 'connected' : 'lost', route: live ? 'internet' : '' }); saveEvents(); }
       if (ok) wasLive[n] = live;
     }

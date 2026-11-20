@@ -414,3 +414,6 @@ header .tabs svg, header .tabs .ts { display: none; }
 
 /* Arabic and Thai (i18n.js sets <html lang>): no slanted lettering or added letter spacing, which break Arabic's joined letters */
 html[lang="ar"] *, html[lang="th"] * { font-style: normal !important; letter-spacing: 0 !important; }
+
+/* a camera whose connection keeps dropping, or whose judge is running slow */
+.jtile .label small.dropping { color: #fff; background: #c62828; padding: 1px 6px; border-radius: 4px; }

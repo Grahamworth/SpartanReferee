@@ -451,6 +451,7 @@ async function startStream(url) {
   video.srcObject = media;
   video.muted = true;
   await video.play();
+  if (ENGINE || FOLLOW) watchFrames();
   S.mirror = false;
   S.ocrFlipKnown = false;
 }
@@ -834,9 +835,64 @@ function followJudge(n) {
   S.replayEvAt = 0;
   S.followAt = 0;
   const feed = new EventSource(`/api/engine/${n}/live`);
-  feed.onmessage = (m) => { try { const snap = JSON.parse(m.data); snap.t = 0; S.replay = [snap]; S.followAt = Date.now(); } catch { /* the next one */ } };
+  S.followQueue = [];
+  feed.onmessage = (m) => {
+    try {
+      const snap = JSON.parse(m.data); snap.t = 0;
+      if (Number.isFinite(snap.lag)) S.followLag = S.followLag == null ? snap.lag : S.followLag * 0.9 + snap.lag * 0.1;
+      S.followQueue.push({ at: performance.now(), snap });
+      if (S.followQueue.length > 200) S.followQueue.shift();
+    } catch { /* the next one */ }
+  };
+  setInterval(followStats, 2000);
   setInterval(() => { const last = S.replay?.[0]; if (last?.tracks?.length && Date.now() - S.followAt > 3000) S.replay = [{ t: 0, tracks: [], people: last.people }]; }, 1000);
 }
+// Keeping the outline in step with the picture. The server's judge sees each frame almost as it arrives: it's on the same machine
+// as the streaming server. A viewer's picture comes over the internet and waits in the browser's jitter buffer before it's shown,
+// while the outline, a few hundred bytes, comes straight through: drawn as it arrives, it runs ahead of the body. So the judge
+// says how long after its frame arrived each outline went (lag), the viewer measures how long its own frames wait between
+// arriving and being shown, and each outline is held back by the difference. (Both travel the same way from the server, so the
+// trip itself cancels out.)
+const frameWait = { at: 0, ms: null, stats: null }; // the latest frame's arrival (performance.now), the smoothed wait from arrival to shown
+const FOLLOW_HOLD_MAX_MS = 2000;
+let framesWatched = false;
+function watchFrames() {
+  if (framesWatched || !video.requestVideoFrameCallback) return;
+  framesWatched = true;
+  const cb = (now, m) => {
+    if (m.receiveTime > 0) {
+      frameWait.at = m.receiveTime;
+      const wait = m.expectedDisplayTime - m.receiveTime;
+      if (wait >= 0 && wait < 5000) frameWait.ms = frameWait.ms == null ? wait : frameWait.ms * 0.95 + wait * 0.05;
+    }
+    video.requestVideoFrameCallback(cb);
+  };
+  video.requestVideoFrameCallback(cb);
+}
+// A browser that doesn't say when its frames arrived: the stream's own figures (time in the jitter buffer, and decoding).
+async function followStats() {
+  if (frameWait.ms != null || !S.stream?.pc) return;
+  try {
+    for (const r of (await S.stream.pc.getStats()).values()) {
+      if (r.type !== 'inbound-rtp' || r.kind !== 'video' || !r.jitterBufferEmittedCount || !r.framesDecoded) continue;
+      frameWait.stats = (r.jitterBufferDelay / r.jitterBufferEmittedCount + (r.totalDecodeTime || 0) / r.framesDecoded) * 1000;
+    }
+  } catch { /* no figures: drawn as they come */ }
+}
+const followHold = () => {
+  const wait = frameWait.ms ?? frameWait.stats;
+  return wait == null ? 0 : Math.max(0, Math.min(FOLLOW_HOLD_MAX_MS, wait - (S.followLag ?? 0)));
+};
+// the outline due now: the newest one that's waited long enough
+function followTick() {
+  const q = S.followQueue; if (!q?.length) return;
+  const due = performance.now() - followHold();
+  let i = -1; while (i + 1 < q.length && q[i + 1].at <= due) i++;
+  if (i < 0) return;
+  S.replay = [q[i].snap]; S.followAt = Date.now();
+  q.splice(0, i + 1);
+}
+
 // The judge's side: at most this many a second, skipping any while the last is still on its way. Only what's needed to draw.
 const SNAP_EVERY_MS = 60;
 let snapBusy = false, snapAt = 0;
@@ -847,6 +903,7 @@ function sendSnap(t) {
   snapAt = at; snapBusy = true;
   const snap = snapshot(t);
   snap.fps = Math.round((procFps() ?? 0) * 10) / 10;
+  if (S.frameArrived) snap.lag = Math.round(performance.now() - S.frameArrived); // how long since its frame arrived
   const small3 = (p) => ({ x: small(p.x), y: small(p.y), visibility: Math.round((p.visibility ?? 1) * 100) / 100 });
   if (snap.lm) snap.lm = snap.lm.map(small3);
   if (snap.tracks) snap.tracks = snap.tracks.map((k) => ({ ...k, lm: k.lm.map((p) => ({ x: small(p.x), y: small(p.y), visibility: Math.round((p.visibility ?? 1) * 100) / 100 })) }));
@@ -1823,6 +1880,7 @@ function frame() {
     S.lastVideoTime = video.currentTime;
     analyseFrame(src, w, h, clockNow());
   }
+  if (FOLLOW) followTick();
   if (S.replay) replayTo(clockNow());
   // a judge on the server has nobody watching it, and the graphics card has better things to do than draw for them
   if (!ENGINE) drawFrame(src, w, h, wantPose, practice);
@@ -1831,6 +1889,8 @@ function frame() {
 // Pose search and judging for one frame at judging-clock time t.
 function analyseFrame(src, w, h, t) {
     S.frameAt = Date.now();
+    const seen = performance.now();
+    S.frameArrived = frameWait.at && seen - frameWait.at < 1000 ? frameWait.at : seen; // when this frame reached the page (or, not knowing, now)
     const wide = w > h;
     if (S.multi && S.frameWide != null && wide !== S.frameWide) { S.multi.reorient(t); S.findBoxes = null; }
     S.frameWide = wide;

@@ -111,7 +111,7 @@ async function poll() {
     const s = await r.json();
     skew = Date.parse(s.now) - (t0 + Date.now()) / 2;
     const first = !st;
-    st = s; $('offline').hidden = true; applyBrand(s.brand); showTimeLeft(s.until);
+    st = s; $('offline').hidden = true; applyBrand(s.brand); showTimeLeft(s.until); showDrops();
     if (first) {
       loadDays(); if (isToday()) goLive(); else openDay();
       // opened from the console on Results or Cameras: go there
@@ -125,6 +125,17 @@ async function poll() {
 }
 setInterval(poll, 1000);
 pullJudgeSettings().finally(poll);
+// a camera whose phone keeps dropping off and reconnecting: its video has gaps and its judge misses reps (usually mobile data that can't keep up)
+const DROPS_WARN = 3;
+function showDrops() {
+  const bad = st.cams.filter((c) => (c.drops || 0) >= DROPS_WARN);
+  $('dropNote').hidden = !bad.length;
+  if (!bad.length) return;
+  const one = bad.length === 1, nos = bad.map((c) => camNo(c.n)).join(' and '), most = Math.max(...bad.map((c) => c.drops));
+  $('dropNote').textContent = one
+    ? `Camera ${nos}'s connection keeps dropping (${most} times in the last 3 minutes), so its video has gaps and the AI judge misses reps. Put that phone on Wi-Fi, or lower the video quality in Larix.`
+    : `The connections of cameras ${nos} keep dropping (up to ${most} times in the last 3 minutes), so their videos have gaps and the AI judge misses reps. Put those phones on Wi-Fi, or lower the video quality in Larix.`;
+}
 // the booked time running out: anyone watching should know before the picture goes
 function showTimeLeft(until) {
   const left = until ? until - laptopNow().getTime() : Infinity, on = left < 20 * 60e3;
@@ -239,7 +250,7 @@ function renderJudges() {
     const held = !off && !j.frame && analysingNow();
     if ((off || held) && c.live) plainView(c.n, j); else if (j.view && !c.live) { j.view.pc?.close(); j.view.video.remove(); j.view = null; }
     drawWaiting(c, j);
-    const nm = camName(c.n); j.tile.querySelector('.label').innerHTML = `Camera ${camNo(c.n)}${nm ? `<small>${esc(nm)}</small>` : ''}${off ? '<small>AI judge off</small>' : held ? '<small>AI judge waiting</small>' : ''}`;
+    const nm = camName(c.n); j.tile.querySelector('.label').innerHTML = `Camera ${camNo(c.n)}${nm ? `<small>${esc(nm)}</small>` : ''}${off ? '<small>AI judge off</small>' : held ? '<small>AI judge waiting</small>' : ''}${(c.drops || 0) >= DROPS_WARN ? '<small class="dropping">Connection dropping</small>' : ''}`;
   }
 }
 async function setAi(n, on) {
