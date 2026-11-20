@@ -198,6 +198,10 @@
     <button class="btn" id="whatCounts">What counts?</button>
   </div>
   </details>
+  <!-- laid out as the website's Results page is: what's being watched on the left, the athletes beside it -->
+  <div class="resgrid">
+  <div class="rescol">
+  <div id="stageEmpty" class="stageempty">Choose an athlete to watch them with the AI judge's tracking.</div>
   <div id="proof" class="settingsbox" hidden>
     <div class="row"><b id="proofTitle">Watch</b><span class="muted small" id="proofNote"></span><span class="spacer"></span>
       <span class="speeds" id="proofSpeeds"><button class="btn" data-prate="0.25">¼×</button><button class="btn" data-prate="0.5">½×</button><button class="btn on" data-prate="1">1×</button></span>
@@ -226,9 +230,18 @@
     <div class="row"><b>What counts</b><span class="muted small">The standard each rep is judged against.</span><span class="spacer"></span><button class="btn" id="rulesClose">Close</button></div>
     <iframe id="rulesFrame" title="What counts"></iframe>
   </div>
-  <div id="athleteBox">
+  <div id="saveBox" class="savebox" hidden>
+    <div class="saveview"><canvas id="saveView" aria-hidden="true"></canvas></div>
+    <div><p id="saveText" role="status"></p><progress id="saveBar" max="1" value="0"></progress>
+      <div class="row"><button class="btn" type="button" id="saveCancel">Cancel</button><a class="btn" id="saveAgain" href="#" hidden>Save it again</a></div></div>
+  </div>
+  <div id="numBox" class="rescard" hidden><h2>Numbers shown to a camera</h2><div id="numList"></div></div>
+  </div>
+  <section id="athleteBox" class="rescard">
+    <h2>Athletes <small id="athleteCount"></small></h2>
     <p id="athleteSummary" class="muted"></p>
     <div id="athleteList" class="athletes"></div>
+  </section>
   </div>
 </section>
 

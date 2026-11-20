@@ -804,7 +804,7 @@ function filtered() {
 const shortName = (a) => (hasNum(a) ? `#${esc(a.bib)}` : `Athlete ${a.label}`);
 const athBody = (a, lines) => `<div class="pic">${a.pic ? `<img src="${picUrl(a)}" alt="" loading="lazy">` : '<span>no picture</span>'}</div>
     <div class="info"><span class="reps"><b>${Number(a.reps)}</b> rep${Number(a.reps) === 1 ? '' : 's'}${a.noReps ? `<small> · ${Number(a.noReps)} no rep${Number(a.noReps) === 1 ? '' : 's'}</small>` : ''}${a.questionable ? `<small class="tocheck" title="Counted with part of the body outside the picture"> · ⚠ ${Number(a.questionable)} to check</small>` : ''}</span><b class="num">${shortName(a)}</b>${lines}</div>
-    <div class="acts"><button class="btn watch" data-watch="${a.n}">▶ ${a.other ? `Camera ${camNo(a.cam)}` : 'Watch'}</button>${a.other ? `<button class="btn watch" data-watch="${a.other.n}">▶ Camera ${camNo(a.other.cam)}</button>` : ''}<button class="linkbtn" data-detail="${a.n}">Details</button>${a.src === 'upload' ? `<button class="linkbtn" data-count="${a.n}">Count reps</button>` : ''}<button class="btn del" data-del="${a.n}" title="Delete this entry" aria-label="Delete this entry">🗑</button></div>`;
+    <div class="acts"><button class="btn watch" data-watch="${a.n}">▶ ${a.other ? `Camera ${camNo(a.cam)}` : 'Watch'}</button>${a.other ? `<button class="btn watch" data-watch="${a.other.n}">▶ Camera ${camNo(a.other.cam)}</button>` : ''}<button class="btn save" data-save="${a.n}">Download with tracking</button><button class="linkbtn" data-detail="${a.n}">Details</button>${a.src === 'upload' ? `<button class="linkbtn" data-count="${a.n}">Count reps</button>` : ''}<button class="btn del" data-del="${a.n}" title="Delete this entry" aria-label="Delete this entry">🗑</button></div>`;
 let listSig = '';
 function renderAthletes(force) {
   if ($('judge').hidden && !force) return;
@@ -813,6 +813,8 @@ function renderAthletes(force) {
   if (sig === listSig && !force) return; listSig = sig;
   const numbered = list.filter((a) => a.bib && a.bib !== 'No number').length;
   const base = resultsBase();
+  $('athleteCount').textContent = list.length ? `(${list.length})` : '';
+  renderNumbers();
   $('athleteSummary').textContent = resMode === 'previous' && !recShown ? '' : base.length ? (list.length < base.length ? `Athletes: ${list.length} of ${base.length} · with a number read: ${numbered}` : `Athletes: ${list.length} · with a number read: ${numbered}`) : resMode === 'previous' ? (FREE ? 'Nobody from this recording has been judged yet.' : 'Nobody from this recording has been judged on this server.') : (FREE ? 'Nobody tracked yet. Start the AI judge on camera 1 (Live tab), analyse a minute of its recording, or upload a video of up to a minute.' :'Nobody tracked on this day yet. Turn the AI judge on for a camera (Live tab) or upload a video.');
   $('athleteList').innerHTML = list.map((a) => `<div class="ath${a.done ? '' : ' going'}" data-n="${a.n}">
     ${athBody(a, `<span>${whereText(a)}</span>${a.other ? `<span>${bothText(a)}</span>` : ''}<span>${whenText(a)}</span>${a.done ? '' : '<span class="going">Being judged</span>'}`)}
@@ -853,8 +855,9 @@ $('lsClear').onclick = () => { for (const id of ['lsNum', 'lsCam', 'lsRes']) $(i
 $('usClear').onclick = () => { for (const id of ['usNum', 'usRes']) $(id).value = ''; $('usSort').value = 'video'; renderSides(); };
 $('liveList').onclick = $('upResults').onclick = $('athleteList').onclick = (e) => {
   const b = e.target.closest('button'); if (!b) return;
-  const a = athByN(+(b.dataset.watch || b.dataset.detail || b.dataset.del || b.dataset.count)); if (!a) return;
+  const a = athByN(+(b.dataset.watch || b.dataset.save || b.dataset.detail || b.dataset.del || b.dataset.count)); if (!a) return;
   if (b.dataset.count) return startCount(a);
+  if (b.dataset.save) return saveAthlete(a);
   if (b.dataset.del) { if (confirm(`Delete ${a.bib && a.bib !== 'No number' ? '#' + a.bib : 'athlete ' + a.label} from the results?`)) fetch(`/api/athlete?n=${a.n}`, { method: 'DELETE' }).then(() => { athRev = -1; loadAthletes(); toast('Deleted'); }); return; }
   if (b.dataset.watch) watch(a); else detailed(a);
 };
@@ -862,6 +865,152 @@ for (const id of ['fNum', 'fCam', 'fSrc', 'fFrom', 'fTo']) $(id).addEventListene
 // on a phone the filters fold away until wanted; on a wider screen they're always there
 (() => { const narrow = matchMedia('(max-width: 760px)'), fit = () => { $('filterBox').open = !narrow.matches; }; fit(); narrow.addEventListener('change', fit); })();
 $('fClear').onclick = () => { for (const id of ['fNum', 'fCam', 'fSrc', 'fFrom', 'fTo']) $(id).value = ''; renderAthletes(true); };
+
+// The numbers shown to a camera, newest first, under what's being watched (as on the website's Results page): Go to it opens
+// that moment. They follow the Number, From and To filters.
+function renderNumbers() {
+  const num = $('fNum').value.trim().toLowerCase(), from = $('fFrom').value, to = $('fTo').value;
+  const tod = (iso) => { const d = new Date(iso); return pad(d.getHours()) + ':' + pad(d.getMinutes()); };
+  const list = numbersSeen.filter((x) => (!num || String(x.number).toLowerCase().includes(num)) && (x.src !== 'live' || ((!from || tod(x.lastAt || x.firstAt) >= from) && (!to || tod(x.firstAt) <= to))))
+    .sort((a, b) => String(b.firstAt).localeCompare(String(a.firstAt))).slice(0, 60);
+  $('numBox').hidden = !numbersSeen.length;
+  const html = list.map((x) => `<div class="numrow"><div><b>${esc(x.number)}</b><small>${x.src === 'live' ? `Camera ${camNo(x.cam)} · ${hms(new Date(x.firstAt))}` : `${esc(upName(x.video))} · ${mss(x.firstT ?? 0)} in the video`}</small></div><button class="btn" type="button" data-seen="${esc(x.id)}">Go to it</button></div>`).join('') || '<p class="muted">None match that.</p>';
+  if ($('numList').dataset.html !== html) { $('numList').innerHTML = html; $('numList').dataset.html = html; }
+}
+$('numList').onclick = (e) => { const b = e.target.closest('[data-seen]'); if (b) goToNumber(numbersSeen.find((x) => x.id === b.dataset.seen)); };
+
+// Download with tracking: an athlete's video with their skeleton and count drawn into the picture, as the website's Results page
+// makes it (results.js saveAthlete). The recording is played through once, small, beside the progress; each frame goes on a
+// canvas with the tracking on top, and the canvas is recorded with the recording's sound. It takes as long as the athlete was
+// on camera, and it's made in this browser. (Times as in a proof: ms into an uploaded video, or the server's clock.)
+const SAVE_BEFORE = 3000, SAVE_AFTER = 2000;
+let saving = null, savedUrl = '';
+function saveKind(sound) {
+  const R = window.MediaRecorder; if (!R || !HTMLCanvasElement.prototype.captureStream) return null;
+  const kinds = sound ? [['video/mp4;codecs=avc1.640028,mp4a.40.2', 'mp4'], ['video/mp4', 'mp4'], ['video/webm;codecs=vp9,opus', 'webm'], ['video/webm', 'webm']]
+    : [['video/mp4;codecs=avc1.640028', 'mp4'], ['video/mp4', 'mp4'], ['video/webm;codecs=vp9', 'webm'], ['video/webm', 'webm']];
+  const k = kinds.find(([type]) => R.isTypeSupported(type));
+  return k ? { type: k[0], ext: k[1] } : null;
+}
+// the skeleton and, above the head, who it is and their count so far: green for a moment after a rep, red after a no rep
+function paintSaved(c, P, T, W, H) {
+  const frames = P.frames; let lo = 0, hi = frames.length - 1;
+  while (lo < hi) { const m = (lo + hi + 1) >> 1; if (frames[m][0] <= T) lo = m; else hi = m - 1; }
+  const f = frames[lo]; if (Math.abs(f[0] - T) > 800) return;
+  const g = frames[lo + 1], mix = g && f[0] <= T && g[0] - f[0] < 500 ? (T - f[0]) / (g[0] - f[0]) : 0;
+  const pt = (i) => {
+    let x = f[2 + i * 2], y = f[3 + i * 2]; if (x < 0 || y < 0) return null;
+    if (mix && g[2 + i * 2] >= 0 && g[3 + i * 2] >= 0) { x += (g[2 + i * 2] - x) * mix; y += (g[3 + i * 2] - y) * mix; }
+    return { x: (x / 10000) * W, y: (y / 10000) * H };
+  };
+  const colour = '#3ddc97';
+  c.strokeStyle = colour; c.lineWidth = Math.max(2, W / 320); c.lineCap = 'round'; c.setLineDash([]);
+  c.beginPath();
+  for (const [a, b] of PROOF_BONES) { const m = pt(a), n = pt(b); if (m && n) { c.moveTo(m.x, m.y); c.lineTo(n.x, n.y); } }
+  c.stroke();
+  c.fillStyle = '#fff';
+  const seen = [];
+  PROOF_POINTS.forEach((_, i) => { const m = pt(i); if (m) { seen.push(m); c.beginPath(); c.arc(m.x, m.y, Math.max(2.5, W / 400), 0, 7); c.fill(); } });
+  if (!seen.length) return;
+  let count = 0, noReps = 0, last = null;
+  for (const e of P.evs) { if (e.t > T) break; count = e.count ?? count; if (e.type !== 'rep') noReps++; last = e; }
+  const flash = last && T - last.t < 700 ? (last.type === 'rep' ? 'good' : 'bad') : null;
+  const fs = Math.max(14, Math.round(H / 24)), text = `${P.name}  ${count}${noReps ? `  · ${noReps} ✕` : ''}`;
+  c.font = `700 ${fs}px Arial, sans-serif`; c.textAlign = 'center'; c.textBaseline = 'bottom';
+  const tw = c.measureText(text).width + fs, x = Math.min(W - tw / 2, Math.max(tw / 2, seen.reduce((s, m) => s + m.x, 0) / seen.length));
+  const y = Math.max(fs * 1.4, Math.min(...seen.map((m) => m.y)) - fs * 0.5);
+  c.fillStyle = flash === 'good' ? '#22c55e' : flash === 'bad' ? '#e2231a' : colour;
+  c.fillRect(x - tw / 2, y - fs * 1.2, tw, fs * 1.25);
+  c.fillStyle = flash ? '#fff' : '#000';
+  c.fillText(text, x, y);
+  c.textAlign = 'start'; c.textBaseline = 'alphabetic';
+}
+async function saveAthlete(a) {
+  if (saving) return;
+  if (!saveKind(false)) { toast('This browser can\'t make that video: use an up-to-date Chrome, Edge or Safari'); return; }
+  const S = saving = { a, done: false, cancelled: false };
+  const view = $('saveView'), g = view.getContext('2d'), up = a.src === 'upload', name = hasNum(a) ? `Number ${a.bib}` : `Athlete ${a.label}`;
+  const say = (text, part) => { $('saveText').textContent = text; if (part != null) $('saveBar').value = part; };
+  if (savedUrl) { URL.revokeObjectURL(savedUrl); savedUrl = ''; }
+  $('saveBox').hidden = false; $('saveBar').hidden = false; $('saveCancel').hidden = false; $('saveAgain').hidden = true;
+  say(`Getting ${name}'s video ready…`, 0);
+  showTab('judge'); scrollTo({ top: 0 });
+  const v = S.v = document.createElement('video'); v.playsInline = true; v.preload = 'auto';
+  view.before(v);
+  const tidy = S.tidy = () => { try { v.pause(); v.removeAttribute('src'); v.load(); } catch { /* gone */ } v.remove(); S.ac?.close?.().catch?.(() => {}); if (saving === S) saving = null; };
+  const failed = (why) => { console.warn('download with tracking:', why); $('saveBox').hidden = true; toast('The video couldn\'t be made: try again'); };
+  const once = (ok) => new Promise((res, rej) => { v.addEventListener(ok, res, { once: true }); v.addEventListener('error', () => rej(new Error('unreadable')), { once: true }); });
+  const within = (p) => Promise.race([p, new Promise((_, no) => { setTimeout(() => no(new Error('too slow')), 3 * 60e3); })]);
+  try {
+    const r = await fetch(`/api/athlete-track?n=${a.n}`).then((x) => x.json()).catch(() => null);
+    const frames = r?.frames || [], evs = r?.events || [];
+    if (!frames.length) { tidy(); $('saveBox').hidden = true; toast('No tracking was saved for that athlete, so there\'s nothing to draw in'); return; }
+    const last = Math.max(frames.at(-1)[0], evs.at(-1)?.t ?? 0);
+    const from = up ? Math.max(0, frames[0][0] - SAVE_BEFORE) : frames[0][0] - SAVE_BEFORE;
+    const to = up ? last + SAVE_AFTER : Math.min(last + SAVE_AFTER, from + PROOF_CLIP * 1000, laptopNow().getTime() - 3000);
+    const base = up ? 0 : from, lag = up ? 0 : proofLag; // (ms at the start of what's loaded; the Timing nudge, as Watch uses it)
+    v.src = up ? `/uploads/${encodeURIComponent(a.video)}` : `/clip?cam=${a.cam}&start=${encodeURIComponent(new Date(from).toISOString())}&duration=${Math.max(5, Math.ceil((to - from) / 1000))}`;
+    await within(once('loadedmetadata'));
+    if (up) { v.currentTime = from / 1000; await within(once('seeked')); }
+    if (S.cancelled) { tidy(); return; }
+    const k = Math.min(1, 1920 / v.videoWidth), W = view.width = Math.round((v.videoWidth * k) / 2) * 2, H = view.height = Math.round((v.videoHeight * k) / 2) * 2;
+    const P = { frames, evs, name: hasNum(a) ? `#${a.bib}` : `Athlete ${a.label}` };
+    const stream = view.captureStream(30);
+    let sound = false;
+    try {
+      const AC = window.AudioContext || window.webkitAudioContext; S.ac = new AC();
+      const out = S.ac.createMediaStreamDestination(); S.ac.createMediaElementSource(v).connect(out);
+      await Promise.race([S.ac.resume(), new Promise((res) => setTimeout(res, 800))]);
+      if (S.ac.state === 'running') for (const tr of out.stream.getAudioTracks()) { stream.addTrack(tr); sound = true; }
+    } catch { /* it's made without sound */ }
+    if (!sound) v.muted = true;
+    const kind = saveKind(sound) || saveKind(false);
+    const recorder = S.recorder = new MediaRecorder(stream, { mimeType: kind.type, videoBitsPerSecond: Math.round(Math.max(2e6, W * H * 6.5)), audioBitsPerSecond: 128000 });
+    const parts = []; recorder.ondataavailable = (e) => { if (e.data.size) parts.push(e.data); };
+    const finish = S.finish = (why) => {
+      if (S.done) return; S.done = true;
+      recorder.onstop = () => {
+        tidy();
+        if (S.cancelled) { $('saveBox').hidden = true; return; }
+        if (why || !parts.length) { failed(why || 'nothing recorded'); return; }
+        savedUrl = URL.createObjectURL(new Blob(parts, { type: kind.type.split(';')[0] }));
+        const d = up ? new Date(a.firstAt) : new Date(frames[0][0]);
+        const link = $('saveAgain'); link.href = savedUrl;
+        link.download = `${name.replace(/[^\w]+/g, '-')}-${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}-${pad(d.getHours())}${pad(d.getMinutes())}.${kind.ext}`;
+        $('saveBar').hidden = true; $('saveCancel').hidden = true; link.hidden = false;
+        say(`${name}'s video is in your downloads, with the tracking and the count drawn in.`);
+        link.click();
+      };
+      try { recorder.stop(); } catch { recorder.onstop(); }
+    };
+    const paint = (sec) => {
+      const at = base + sec * 1000;
+      g.drawImage(v, 0, 0, W, H);
+      paintSaved(g, P, at + lag, W, H);
+      say(`Making ${name}'s video: ${mss(Math.max(0, at - from) / 1000)} of ${mss((to - from) / 1000)}. Keep this page open and in front until it's done.`, Math.min(1, Math.max(0, (at - from) / (to - from))));
+      if (at >= to) finish();
+    };
+    const step = (now, meta) => { if (S.done) return; paint(meta ? meta.mediaTime : v.currentTime); next(); };
+    const next = () => (v.requestVideoFrameCallback ? v.requestVideoFrameCallback(step) : requestAnimationFrame(() => step()));
+    v.addEventListener('error', () => finish('unreadable'));
+    v.addEventListener('ended', () => finish());
+    paint(v.currentTime);
+    recorder.start(1000);
+    next();
+    try { await v.play(); } catch { v.muted = true; await v.play(); }
+  } catch (e) {
+    const why = e?.message || String(e);
+    if (S.recorder && S.recorder.state !== 'inactive') S.finish(why);
+    else { tidy(); if (!S.cancelled) failed(why); }
+  }
+}
+$('saveCancel').onclick = () => { const S = saving; if (!S) return; S.cancelled = true; if (S.finish) S.finish(); else { S.tidy?.(); $('saveBox').hidden = true; } };
+// a page that isn't in front isn't drawn, so the video would freeze while the sound ran on: wait until it's back
+document.addEventListener('visibilitychange', () => {
+  const S = saving; if (!S?.recorder || S.done) return;
+  if (document.hidden) { S.v.pause(); if (S.recorder.state === 'recording') S.recorder.pause(); }
+  else { if (S.recorder.state === 'paused') S.recorder.resume(); S.v.play().catch(() => {}); }
+});
 
 // Watch: the recording (or uploaded video) from just before they started, with what the AI judge saw drawn on it: their
 // skeleton, their count beside them, each rep and no rep as it was given. A rep in the list below plays just that rep.
@@ -899,7 +1048,7 @@ async function watch(a) {
   const nth = (e) => (e.type === 'rep' ? `${e.assumed?.length ? '⚠' : '✓'} Rep ${e.count}` : '✗ No rep');
   const stamp = (t) => (up ? mss(t / 1000) : hms(new Date(t)));
   $('proofReps').innerHTML = evs.map((e, i) => `<button class="btn ${e.type === 'rep' ? 'good' : 'bad'}" data-ev="${i}" title="${esc(e.reasons.join(' · '))}">${nth(e)} <small>${stamp(e.t)}${e.reasons.length ? ' · ' + esc(e.reasons[0]) : ''}${e.assumed?.length ? ' · not in picture: ' + esc(e.assumed.join(', ')) : ''}</small></button>`).join('') || '<span class="muted small">No reps or no reps saved for this athlete.</span>';
-  $('proof').hidden = false; $('athleteBox').hidden = true; $('analysis').hidden = true; $('rulesBox').hidden = true;
+  $('proof').hidden = false; $('athleteBox').hidden = false; $('analysis').hidden = true; $('rulesBox').hidden = true; // (the list stays beside it)
   setProofRate(1);
   proofGo(up ? Math.max(0, startAt) : startAt, true);
   proofDraw();

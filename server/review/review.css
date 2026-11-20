@@ -417,3 +417,36 @@ html[lang="ar"] *, html[lang="th"] * { font-style: normal !important; letter-spa
 
 /* a camera whose connection keeps dropping, or whose judge is running slow */
 .jtile .label small.dropping { color: #fff; background: #c62828; padding: 1px 6px; border-radius: 4px; }
+
+/* Results, laid out as the website's Results page is: what's being watched on the left (an empty stage until someone's chosen),
+   the athletes in a card beside it, one to a row with their buttons at the end. One column on a phone. */
+.resgrid { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 20px; align-items: start; }
+.resgrid:has(> #athleteBox[hidden]) { grid-template-columns: minmax(0, 1fr); }
+.rescol { display: grid; gap: 12px; min-width: 0; }
+.rescol > .settingsbox { margin-bottom: 0; }
+.stageempty { aspect-ratio: 16 / 9; background: #000; display: grid; place-items: center; padding: 20px; text-align: center; color: var(--muted); }
+.rescol:has(> .settingsbox:not([hidden])) > .stageempty { display: none; }
+.rescard { background: var(--ink); border: 1px solid var(--line); padding: 14px 16px; min-width: 0; }
+.rescard h2 { margin: 0 0 8px; font-size: 20px; text-transform: uppercase; letter-spacing: .02em; }
+.rescard h2 small { font-size: 15px; color: var(--muted); font-weight: 600; }
+.rescard #athleteSummary { margin: 0 0 8px; }
+#athleteBox .athletes { grid-template-columns: minmax(0, 1fr); gap: 0; }
+#athleteBox .ath { grid-template-columns: 58px minmax(0, 1fr) auto; align-items: center; background: none; border-left: 0; border-top: 1px solid var(--line); padding: 10px 0; }
+#athleteBox .ath.going { box-shadow: inset 3px 0 0 var(--amber); padding-left: 8px; }
+#athleteBox .ath .pic { width: 58px; height: 74px; grid-row: auto; }
+#athleteBox .ath .acts { grid-column: 3; grid-row: 1; display: grid; gap: 6px; justify-items: stretch; align-self: center; }
+#athleteBox .ath .acts .btn { text-align: center; }
+#athleteBox .ath .acts .linkbtn { justify-self: center; }
+#athleteBox .ath .acts .btn.del { margin-left: 0; justify-self: end; padding: 2px 6px; }
+.side .ath [data-save], .athletepop [data-save] { display: none; }
+.numrow { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 14px; padding: 9px 0; border-top: 1px solid var(--line); }
+.numrow b { font-size: 17px; }
+.numrow small { display: block; color: var(--muted); }
+@media (max-width: 860px) { .resgrid { grid-template-columns: minmax(0, 1fr); } }
+/* Download with tracking: the video being made, small, with how far it's got */
+.savebox { display: flex; gap: 12px; align-items: center; padding: 10px; background: var(--ink); border: 1px solid var(--line); }
+.savebox > div:last-child { flex: 1; min-width: 0; }
+.savebox p { margin: 0 0 6px; }
+.savebox progress { display: block; width: 100%; margin-bottom: 8px; }
+.saveview { position: relative; flex: none; width: 150px; aspect-ratio: 16 / 9; background: #000; overflow: hidden; }
+.saveview video, .saveview canvas { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
