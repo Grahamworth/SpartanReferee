@@ -4,7 +4,7 @@ const assert = require('node:assert');
 const crypto = require('node:crypto');
 const { createApi } = require('../src/core');
 const { memoryStore } = require('../src/store');
-const { blobSigner, MAX_OWNER, recordingsPartition } = require('../src/recordings');
+const { blobSigner, MAX_OWNER } = require('../src/recordings');
 
 const SECRET = 'test-secret-test-secret-test-secret';
 function setup({ admins = ['owner@x.com', 'other@x.com'] } = {}) {
@@ -144,7 +144,8 @@ function withStorage() {
   let t = Date.parse('2026-11-20T08:00:00Z');
   const blobs = new Map(), signer = (o) => `https://store/${o.blob}?sp=${o.perm}`;
   const fetchFn = async (url) => { const k = decodeURIComponent(String(url).slice('https://store/'.length).split('?')[0]); const v = blobs.get(k); return { ok: v != null, status: v != null ? 200 : 404, json: async () => JSON.parse(v), text: async () => String(v ?? '') }; };
-  const store = memoryStore();
+  // (what's taken out of the list is noted: forgetting an old run shows nowhere else)
+  const kept = memoryStore(), forgotten = [], store = { ...kept, remove: async (p, k) => { forgotten.push([p, k]); return kept.remove(p, k); } };
   const api = createApi({ store, now: () => t, secret: SECRET, adminEmails: ['owner@x.com'], googleClientId: 'dev', blobSigner: signer, fetchFn,
     verifyGoogle: async (x) => ({ sub: x, email: x, name: x }) });
   const signIn = async (email) => ({ Authorization: `Bearer ${(await api.handle({ method: 'POST', path: 'auth/google', body: { idToken: email } })).body.token}` });
@@ -155,7 +156,7 @@ function withStorage() {
     for (const [n, body] of Object.entries(files)) blobs.set(u.body.urls[n].slice('https://store/'.length).split('?')[0], typeof body === 'string' ? body : JSON.stringify(body));
     assert.strictEqual((await call(api, 'POST', 'recordings/results-done', rk, run === undefined ? {} : { run })).status, 200);
   };
-  return { api, signIn, save, blobs, store, tick: (ms) => { t += ms; }, now: () => t };
+  return { api, signIn, save, blobs, forgotten, tick: (ms) => { t += ms; }, now: () => t };
 }
 const athlete = (n, firstAt, reps) => ({ n, src: 'live', cam: 1, firstAt, lastAt: firstAt, reps, noReps: 0 });
 
@@ -203,7 +204,6 @@ test('runs older than the week are forgotten', async () => {
   const today = new Date(s.now()).toISOString();
   await s.save(rk, 'r2', { 'results.json': { athletes: [athlete(1, today, 5)] } });
   assert.deepStrictEqual((await call(s.api, 'GET', 'recordings/results', h)).body.athletes.map((a) => a.reps), [5]);
-  const uid = 'g_' + crypto.createHash('sha256').update('owner@x.com').digest('base64url').slice(0, 22);
-  const rows = (await s.store.list(`${recordingsPartition(uid)}:results`)).map((r) => r.id);
-  assert.strictEqual(rows.length, 1); assert.ok(rows[0].endsWith('-r2'));
+  const gone = s.forgotten.filter(([p]) => p.endsWith(':results')).map(([, k]) => k);
+  assert.strictEqual(gone.length, 1); assert.ok(gone[0].endsWith('-r1'));
 });
