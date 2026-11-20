@@ -32,9 +32,14 @@ async function load() {
   const live = data.customers.filter((b) => b.server.wanted === 'on' || b.server.state === 'stopping' || b.server.state === 'starting');
   $('bookingList').innerHTML = live.length ? live.map((b) => {
     const s = b.server, state = s.wanted === 'on' ? (s.scheduled ? 'booked' : s.state === 'on' ? 'on' : 'starting') : 'stopping';
-    return `<li><span><b>${esc(KIND[b.kind] ? `${KIND[b.kind]}: ` : '')}${esc(b.name)}</b><small><span class="light" data-state="${state}" aria-hidden="true"></span> ${esc(serverLine(s))}${b.bookedBy ? ` · ${esc(b.bookedBy)}` : ''}</small>${s.error ? `<small class="error">${esc(s.error)}</small>` : ''}</span>${s.wanted === 'on' ? `<button class="small" type="button" data-stop="${esc(b.id)}" data-name="${esc(b.name)}">${s.scheduled ? 'Cancel' : 'Stop'}</button>` : ''}</li>`;
+    return `<li><span><b>${esc(KIND[b.kind] ? `${KIND[b.kind]}: ` : '')}${esc(b.name)}</b><small><span class="light" data-state="${state}" aria-hidden="true"></span> ${esc(serverLine(s))}${b.bookedBy ? ` · ${esc(b.bookedBy)}` : ''}</small>${s.error ? `<small class="error">${esc(s.error)}</small>` : ''}</span>${s.wanted === 'on' ? `${state === 'on' ? `<button class="small" type="button" data-open="${esc(b.id)}">Open video review</button>` : ''}<button class="small" type="button" data-stop="${esc(b.id)}" data-name="${esc(b.name)}">${s.scheduled ? 'Cancel' : 'Stop'}</button>` : ''}</li>`;
   }).join('') : '<li class="muted">Nothing booked or running.</li>';
   for (const btn of $('bookingList').querySelectorAll('button[data-stop]')) btn.onclick = () => stopBooking(btn.dataset.stop, btn.dataset.name);
+  // any booking that's on: its video review, whoever's it is (an admin's way in to a referee's training or another admin's testing)
+  for (const btn of $('bookingList').querySelectorAll('button[data-open]')) btn.onclick = async () => {
+    try { location.assign((await call(`admin/customers/${encodeURIComponent(btn.dataset.open)}/open`, { method: 'POST', body: { tab: 'live' } })).url); }
+    catch (e) { toast(e.message); }
+  };
 }
 async function stopBooking(id, name) {
   if (!confirm(`Stop ${name}'s servers now? Their cameras stop being recorded.`)) return;

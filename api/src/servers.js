@@ -354,7 +354,18 @@ function createServers({ store, now, reply, session, isAdmin = () => false, memb
     } else if (method !== 'GET') return null;
     return reply(200, await pricing());
   }
-  async function adminCustomers(method, id, action, body) {
+  async function adminCustomers(method, id, action, body, h = {}) {
+    // An admin opening any booking's video review while it's on, from Config: an event's, a referee's training or another
+    // admin's testing. (Everyone opens an event's from their own console; someone's training and testing are otherwise theirs alone.)
+    if (id && action === 'open' && method === 'POST') {
+      if (!(await store.get('unit', id)) && !(await store.get('serverplan', id))) return reply(404, { error: 'No such booking' });
+      const n = Math.max(1, Math.floor(Number(body?.n) || 1)), slot = slotId(id, n);
+      const st = await store.get('serverstate', slot), s = await store.get('server', slot);
+      if (!s || st?.state !== 'on') return reply(409, { error: "That server isn't on yet" });
+      const me = session(h), t = signFor(s.secret, { kind: 'login', who: me?.email || me?.uid || 'an admin', exp: now() + LOGIN_MINUTES * 60e3 });
+      const tab = OPEN_TABS.includes(body?.tab) ? body.tab : 'live', of = (await store.get('serverplan', id))?.servers || 1;
+      return reply(200, { url: `https://${s.host}/login?t=${encodeURIComponent(t)}&tab=${tab}&n=${n}&of=${of}` });
+    }
     if (!id && method === 'GET') {
       const out = [], totals = { charge: 0, azure: 0, profit: 0, cameraHours: 0 };
       // SpartanReferee: each unit (event, training, testing) that's been booked, as the organisation

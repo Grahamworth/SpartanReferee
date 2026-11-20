@@ -131,7 +131,7 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
     if (a === 'admins') return adminList(method, b, body, h);
     if (a === 'companies') return adminCompanies(method, b, c, body);
     if (a === 'pricing' && !b) return adminPricing(method, body);
-    if (a === 'customers') return adminCustomers(method, b, c, body);
+    if (a === 'customers') return adminCustomers(method, b, c, body, h);
     if (a === 'referees' && !b) return referees(method, body, h);
     if (a === 'events' && b === 'sync') return eventList.adminSync(method);
     if (a === 'assignments' && !b) return assignments.admin(method, body, h);

@@ -187,3 +187,31 @@ test('admins: a testing booking at any time, and an event booked at any time whe
   assert.strictEqual(admin.running, 0, 'both booked ahead: nothing running yet');
   assert.strictEqual((await call('POST', 'admin/customers/e10664/stop', boss, {})).status, 200);
 });
+
+test('an admin opens any booking\'s video review while it\'s on, a referee\'s own training included; nobody else can', async () => {
+  const { call, referee, head, store, login } = setup();
+  const sam = await referee('sam'), pat = await referee('pat');
+  await call('GET', 'events', sam);
+  await head('sam', '10664');
+  const boss = await login('boss');
+  const started = await call('POST', 'learn/practice-camera', sam, { cameras: 1 });
+  assert.strictEqual(started.status, 200, JSON.stringify(started.body));
+  const unit = (await call('GET', 'admin/customers', boss)).body.customers.find((c) => c.kind === 'training');
+  assert.ok(unit, 'sam\'s training is among the bookings an admin sees');
+  // it's sam's alone otherwise: another referee can't name it
+  assert.strictEqual((await call('GET', `servers/mine?unit=${unit.id}`, pat)).status, 403);
+  assert.strictEqual((await call('POST', 'servers/mine/open', pat, { unit: unit.id, n: 1 })).status, 403);
+  // not on yet
+  assert.strictEqual((await call('POST', `admin/customers/${unit.id}/open`, boss, {})).status, 409);
+  await store.put('serverstate', unit.id, { id: unit.id, state: 'on' });
+  const r = await call('POST', `admin/customers/${unit.id}/open`, boss, { tab: 'results' });
+  assert.strictEqual(r.status, 200, JSON.stringify(r.body));
+  const url = new URL(r.body.url), server = await store.get('server', unit.id);
+  assert.strictEqual(url.host, server.host); assert.strictEqual(url.searchParams.get('tab'), 'results');
+  const token = JSON.parse(Buffer.from(url.searchParams.get('t').split('.')[0], 'base64url').toString());
+  assert.deepStrictEqual([token.kind, token.who], ['login', 'boss@example.com'], 'the review knows it\'s the admin');
+  // only admins, and only a booking there is
+  assert.strictEqual((await call('POST', `admin/customers/${unit.id}/open`, sam, {})).status, 403);
+  assert.strictEqual((await call('POST', `admin/customers/${unit.id}/open`, pat, {})).status, 403);
+  assert.strictEqual((await call('POST', 'admin/customers/tffffffffff/open', boss, {})).status, 404);
+});
