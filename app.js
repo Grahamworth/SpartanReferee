@@ -2637,18 +2637,30 @@ const SEEK_INSIDE_FRAME_S = 0.005;
 // are): waiting the full limit at every step made a minute of one take three times as long. Once it's happened a few steps running,
 // the wait is a moment, until a new frame is reported again.
 const UNREPORTED_WAIT_MS = 40;
+// A step that gives up waiting for its frame takes back its request for one. Left waiting, that request answered for the next
+// step's frame before the next step's own could, which then took the frame for one already seen, waited the full limit and left
+// its own request behind in turn: after one unreported frame (the first step's, often) every step of the video waited half a
+// second. A two-minute recording took 21 minutes to analyse on a server, at 1.6 steps a second with each seek done in 28 ms
+// (20 November 2026).
 let lastFrameTime = -1, unreported = 0;
 function seekTo(time) {
   return new Promise((r) => {
-    let seeked = false, framed = !video.requestVideoFrameCallback, settle = null;
-    const check = () => { if (seeked && framed) { clearTimeout(timer); clearTimeout(settle); r(); } };
-    const timer = setTimeout(() => { video.removeEventListener('seeked', onSeeked); r(); }, 3000);
+    const reports = !!video.requestVideoFrameCallback;
+    let seeked = false, framed = !reports, settle = null, asked = 0;
+    const finish = () => {
+      clearTimeout(timer); clearTimeout(settle); video.removeEventListener('seeked', onSeeked);
+      if (asked) { video.cancelVideoFrameCallback?.(asked); asked = 0; }
+      r();
+    };
+    const check = () => { if (seeked && framed) finish(); };
+    const timer = setTimeout(finish, 3000);
     const onSeeked = () => { seeked = true; if (!framed) settle = setTimeout(() => { unreported++; framed = true; check(); }, unreported >= 5 ? UNREPORTED_WAIT_MS : NEW_FRAME_WAIT_MS); check(); };
     const onFrame = (_, m) => {
-      if (m.mediaTime === lastFrameTime) { video.requestVideoFrameCallback(onFrame); return; }
+      asked = 0;
+      if (m.mediaTime === lastFrameTime) { asked = video.requestVideoFrameCallback(onFrame); return; }
       lastFrameTime = m.mediaTime; framed = true; unreported = 0; check();
     };
-    if (!framed) video.requestVideoFrameCallback(onFrame);
+    if (reports) asked = video.requestVideoFrameCallback(onFrame);
     video.addEventListener('seeked', onSeeked, { once: true });
     video.currentTime = time;
   });
