@@ -197,6 +197,9 @@ const { PROGRAMMES } = await import('./learn-content.mjs');
 const { ASSESSMENTS } = await import('./learn-questions.mjs');
 const { DISPUTES } = await import('./learn-rules.mjs');
 const CHECKS = JSON.parse(fs.readFileSync(new URL('./learn-checks.json', import.meta.url), 'utf8')); // the lessons' quick checks
+// the final assessments' question pools (scripts/learn-pools/<programme>.json) and the assessment that holds Referee Essentials' pool
+const POOLS = fs.readdirSync(new URL('./learn-pools/', import.meta.url)).filter((f) => f.endsWith('.json'))
+  .flatMap((f) => JSON.parse(fs.readFileSync(new URL(`./learn-pools/${f}`, import.meta.url), 'utf8')));
 export function contentTexts() {
   const out = [];
   const add = (s) => { const t = norm(s || ''); if (t && wordy(t)) out.push(t); };
@@ -206,6 +209,8 @@ export function contentTexts() {
     for (const m of p.modules) { [m.title, m.summary, m.source].forEach(add); for (const l of m.lessons) [l.title, l.summary].forEach(add); }
   }
   for (const d of DISPUTES) add(d.title); // the open review items' titles (their details quote the sources, in English)
+  for (const q of POOLS) [q.prompt, q.feedback, ...q.options].forEach(add);
+  ['Referee Essentials: final assessment', 'Questions from every part of the course, drawn at random each attempt.'].forEach(add);
   for (const a of Object.values(ASSESSMENTS)) {
     [a.title, a.description].forEach(add);
     for (const q of a.questions) { [q.prompt, q.feedback, q.review].forEach(add); q.options.forEach((o) => add(o.text)); }
