@@ -56,10 +56,10 @@ function createUploadJobs({ chrome, dataDir, pageUrl, settings, busy = () => fal
         await sleep(pollMs);
         if (gone) throw new Error('its browser stopped');
         const wait = !job.stopAsked && busy();
-        const r = await cdp.send('Runtime.evaluate', { returnByValue: true, expression: `(() => { const a = window.__analysis; if (!a) return null; a.paused = ${wait}; if (${!!job.stopAsked}) a.stop = true; return { pct: a.pct, done: a.done }; })()` });
+        const r = await cdp.send('Runtime.evaluate', { returnByValue: true, expression: `(() => { const a = window.__analysis; if (!a) return null; a.paused = ${wait}; if (${!!job.stopAsked}) a.stop = true; return { pct: a.pct, done: a.done, spent: a.spent }; })()` });
         const a = r?.result?.result?.value;
         job.state = wait ? 'waiting' : 'running';
-        if (a) { if (a.pct !== job.pct) { job.pct = a.pct; movedAt = now(); } if (a.done) break; }
+        if (a) { if (a.spent) job.spent = a.spent; if (a.pct !== job.pct) { job.pct = a.pct; movedAt = now(); } if (a.done) break; }
         if (wait) movedAt = now();
         if (job.stopAsked && !a) break; // stopped before it had begun
         if (now() - movedAt > stallMs) throw new Error('it stopped making progress');
@@ -102,7 +102,7 @@ function createUploadJobs({ chrome, dataDir, pageUrl, settings, busy = () => fal
       return true;
     },
     /** newest first; only what the page needs */
-    list: () => [...jobs].reverse().map(({ id, video, name, state, pct, at, startedAt, endedAt, why }) => ({ id, video, name, state, pct, at, startedAt, endedAt, why })),
+    list: () => [...jobs].reverse().map(({ id, video, name, state, pct, at, startedAt, endedAt, why, spent }) => ({ id, video, name, state, pct, at, startedAt, endedAt, why, spent })),
     active: () => jobs.some((j) => ACTIVE.has(j.state)),
     /** the server's stopping: everything's stopped, and what was found has gone up */
     async stopAll(why = 'The server stopped before it finished.') {

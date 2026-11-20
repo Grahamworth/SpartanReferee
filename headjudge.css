@@ -333,3 +333,8 @@ html[lang="ar"] *, html[lang="th"] * { font-style: normal !important; letter-spa
 .codeForm .note { margin: 0; }
 .mustUse { margin: 6px 0 8px; padding: 10px 12px; border-radius: 8px; border-inline-start: 4px solid var(--primary); background: var(--panel); overflow-wrap: anywhere; }
 .mustUse b { display: block; font-size: 1.1rem; }
+
+/* Results: a recording a crowd was in, counted again in full on the server (deep analysis), still going or never finished */
+.deepNote { display: grid; gap: 8px; margin: 0 40px 16px; } .deepNote p { margin: 0; padding: 10px 14px; border-left: 4px solid var(--good, #3ddc97); background: rgba(127, 127, 127, .12); line-height: 1.4; }
+.deepNote p.going { border-left-color: #ffc400; } .deepNote p.bad { border-left-color: var(--bad, #e2231a); }
+@media (max-width: 700px) { .deepNote { margin: 0 16px 16px; } }

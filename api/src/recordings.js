@@ -120,7 +120,7 @@ function createRecordings({ store, signer, now, reply, session, isAdmin, members
     const me = session(h); if (!me) return reply(401, { error: 'Sign in to see cloud recordings' });
     // what its servers found: the week's athletes and numbers, whether or not a server is on now
     if (a === 'results' && !b && method === 'GET') {
-      const from = now() - KEEP_DAYS * 864e5, out = { keepDays: KEEP_DAYS, athletes: [], numbers: [], merged: [], sources: {} };
+      const from = now() - KEEP_DAYS * 864e5, out = { keepDays: KEEP_DAYS, athletes: [], numbers: [], merged: [], sources: {}, deep: [] };
       const rows = (await store.list(`${owned(await ownerOf(me))}:results`)).filter((r) => r.at >= from);
       for (const r of rows) {
         let j; try { j = await (await fetchFn(signer({ blob: `${r.base}/results.json`, perm: 'r', minutes: READ_MINUTES }))).json(); } catch { continue; }
@@ -130,6 +130,8 @@ function createRecordings({ store, signer, now, reply, session, isAdmin, members
         // an athlete filmed by two cameras on the same athletes, their reps put together (n: the server's athletes)
         for (const x of Array.isArray(j.merged) ? j.merged : []) if (recent(x.firstAt) && Array.isArray(x.ns)) out.merged.push({ ...x, server: r.id });
         Object.assign(out.sources, j.sources || {});
+        // recordings a crowd was in, which the server analyses again in full: how far each has got
+        for (const x of Array.isArray(j.deep) ? j.deep : []) if (x && recent(x.startedAt)) out.deep.push({ cam: +x.cam || 0, file: String(x.file || ''), video: String(x.video || ''), startedAt: x.startedAt, state: String(x.state || ''), pct: +x.pct || 0, replaced: +x.replaced || 0, kept: String(x.kept || ''), server: r.id });
       }
       out.athletes.sort((x, y) => String(y.firstAt).localeCompare(String(x.firstAt)));
       out.numbers.sort((x, y) => String(y.firstAt).localeCompare(String(x.firstAt)));

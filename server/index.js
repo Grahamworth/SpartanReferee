@@ -16,6 +16,8 @@ const { readGroups } = require('./merge');
 const { mediamtxYaml } = require('./mediamtx');
 const { rtmp, spartansLink, larixLink } = require('./network');
 const { createUploadJobs } = require('./upload-jobs');
+const { createDeep } = require('./deep');
+const { faststart } = require('./faststart');
 const { pipeline } = require('stream/promises');
 const { Readable } = require('stream');
 const auth = require('./auth');
@@ -81,7 +83,8 @@ const review = createReview({
   DATA, S, REVIEW, SITE_DIR, segments,
   extraState: (cams) => ({
     brand, maxJudges: engines.max, until: sleeper.until(), firstCamera: S.firstCamera || 1, site: C.site || '', // the console, for the Booking and History tabs
-    cams: cams.map((c) => { const l = live.get(c.n); return { ...c, ai: engines.wanted(c.n), judging: engines.running(c.n) && !!l && Date.now() - l.at < 4000, fps: l && Date.now() - l.at < 4000 ? l.fps : 0 }; }),
+    cams: cams.map((c) => { const l = live.get(c.n); return { ...c, ai: engines.wanted(c.n), judging: engines.running(c.n) && !!l && Date.now() - l.at < 4000, fps: l && Date.now() - l.at < 4000 ? l.fps : 0, crowd: c.live && deep.crowdNow(c.n) }; }),
+    deep: deep.list(),
   }),
 });
 
@@ -104,7 +107,7 @@ if (!/^[A-Za-z0-9]{1,24}$/.test(resultsRun)) {
   resultsRun = `r${new Date().toISOString().replace(/[-:]/g, '').slice(0, 15)}`;
   try { fs.writeFileSync(RUN_FILE, resultsRun); } catch (e) { log(`couldn't keep this run's name: ${e.message}`); }
 }
-const cloud = createCloud({ dir: RECORDINGS, run: resultsRun, uploadsDir: path.join(DATA, 'training'), stateFile: path.join(DATA, 'cloud-sent.json'), camName, lateness: (rel) => segments.latenessOf(rel), log, results: () => { const r = review.results(); return { json: { athletes: r.athletes.map(named), numbers: r.numbers.map(named), merged: r.merged.map((m) => ({ ...m, cams: m.cams.map(camName) })), sources: previousSources }, files: r.files }; }, api: () => C.api, settings: () => ({ cloudOn: !!(C.api && C.receiverKey), cloudKey: C.receiverKey, cloudSince: 0 }) });
+const cloud = createCloud({ dir: RECORDINGS, run: resultsRun, uploadsDir: path.join(DATA, 'training'), stateFile: path.join(DATA, 'cloud-sent.json'), camName, lateness: (rel) => segments.latenessOf(rel), log, results: () => { const r = review.results(); return { json: { athletes: r.athletes.map(named), numbers: r.numbers.map(named), merged: r.merged.map((m) => ({ ...m, cams: m.cams.map(camName) })), sources: previousSources, deep: deep.list().map((d) => ({ ...d, cam: camName(d.cam) })) }, files: r.files }; }, api: () => C.api, settings: () => ({ cloudOn: !!(C.api && C.receiverKey), cloudKey: C.receiverKey, cloudSince: 0 }) });
 
 // ---------------------------------------------------------------- the page's own requests beyond the review API
 const ADDRESSES = () => ({ lan: [C.host], lanNames: ['internet'], tailscale: null });
@@ -156,9 +159,20 @@ async function fetchPrevious(id) {
   return { video, name: label.replace(/_/g, ' ') };
 }
 
+// ---------------------------------------------------------------- a crowd in view: its recording is analysed again in full (deep.js)
+const deep = createDeep({
+  dir: RECORDINGS, uploadsDir: path.join(DATA, 'training'), stateFile: path.join(DATA, 'deep.json'), jobs: uploadJobs, quietMs: QUIET_MS, camName, log,
+  lateness: (rel) => segments.latenessOf(rel),
+  // the copy to analyse: an ordinary MP4 with its index first, which is quick to step through frame by frame
+  prepare: async (src, dst) => { try { await faststart(src, dst); } catch { await fs.promises.copyFile(src, dst); } },
+  // the recording goes to cloud storage by itself, so the copy doesn't; what's found in the copy is the recording's
+  onQueued: (f) => { cloud.markSent(`uploads/${f.video}`); previousSources[f.video] = f.file; fs.writeFile(PREVIOUS, JSON.stringify(previousSources), () => {}); },
+  onDone: (f) => review.replaceLive(f.cam, f.start, f.end, f.video),
+});
+
 async function extra(req, res, u, { local }) {
   const p = u.pathname;
-  const eng = /^\/api\/engine\/(\d{1,2})(?:\/(snap|live|restart))?$/.exec(p);
+  const eng = /^\/api\/engine\/(\d{1,2})(?:\/(snap|live|restart|crowd))?$/.exec(p);
   if (eng) {
     const n = +eng[1];
     if (n < 1 || n > S.stations) return send(res, 404, { error: 'No such camera' }), true;
@@ -170,12 +184,16 @@ async function extra(req, res, u, { local }) {
       send(res, 200, { ok: true }); return true;
     }
     if (eng[2] === 'live' && req.method === 'GET') { followLive(req, res, n); return true; }
+    // the camera's judge sees a crowd: more than it can follow, so the recording gets a deep analysis afterwards
+    // (only while the camera is on: with its phone gone the judge is left looking at the last picture it got)
+    if (eng[2] === 'crowd' && req.method === 'POST') { if (!local) return send(res, 403, { error: 'Judges only' }), true; if (review.cams().some((c) => c.n === n && c.live)) deep.note(n); send(res, 200, { ok: true }); return true; }
     if (req.method !== 'POST' || !isJson(req)) return send(res, 415, { error: 'JSON only' }), true;
     const b = await readBody(req);
     if (eng[2] === 'restart') { await engines.restart(n); send(res, 200, { ok: true }); return true; }
     if (!eng[2]) { const why = engines.set(n, !!b?.on); if (why) return send(res, 409, { error: why }), true; save(); send(res, 200, { ok: true }); return true; }
   }
   if (p === '/api/upload-jobs' && req.method === 'GET') { send(res, 200, uploadJobs.list()); return true; }
+  if (p === '/api/deep' && req.method === 'GET') { send(res, 200, { list: deep.list() }); return true; }
   if (p === '/api/previous-recordings' && req.method === 'GET') {
     // with which local copy came from which recording, so a recording analysed here finds its athletes
     try { send(res, 200, { recordings: await cloud.previous(), sources: previousSources }); } catch (e) { send(res, 502, { error: e.message }); }
@@ -275,6 +293,7 @@ const sleeper = createSleep({
   // judges finish their rounds; the streaming server stops, which closes the recordings; they go up; only then may the site turn the server off
   flush: async () => {
     await uploadJobs.stopAll('The booking ended before it finished. What it found so far is on the right.');
+    await deep.tick().catch(() => {}); deep.close();
     await engines.stopAll();
     await cloud.sendResults(true).catch(() => {});
     stopping = true; try { mtx?.kill('SIGTERM'); } catch { /* gone */ }
@@ -352,8 +371,9 @@ viewServer.listen(S.viewPort, C.bind || '127.0.0.1');
 engineServer.listen(S.enginePort, '127.0.0.1');
 setInterval(async () => { await review.watchCameras(); engines.tick(review.cams()); }, 1000);
 setInterval(() => { cloud.tick().catch(() => {}); }, 60000);
+setInterval(() => { deep.tick().catch((e) => log(`Deep analysis: ${e.message}`)); }, 10000);
 setInterval(() => { try { segments.tick(); } catch (e) { log(`Recording timing: ${e.message}`); } }, 400);
 sleeper.start();
-const quit = async () => { if (stopping) return; stopping = true; await uploadJobs.stopAll().catch(() => {}); await engines.stopAll().catch(() => {}); await cloud.sendResults(true).catch(() => {}); try { mtx?.kill('SIGTERM'); } catch { /* gone */ } setTimeout(() => process.exit(0), 500); };
+const quit = async () => { if (stopping) return; stopping = true; await uploadJobs.stopAll().catch(() => {}); await deep.tick().catch(() => {}); try { deep.close('The server stopped before it could be analysed in full.'); } catch { /* the list is as it was */ } await engines.stopAll().catch(() => {}); await cloud.sendResults(true).catch(() => {}); try { mtx?.kill('SIGTERM'); } catch { /* gone */ } setTimeout(() => process.exit(0), 500); };
 process.on('SIGTERM', quit); process.on('SIGINT', quit);
 log('Server started');

@@ -1,7 +1,7 @@
 // Run with: node --test tests/*.test.mjs
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { MultiTracker, MULTI_DEFAULTS, personBox, fromCrop, clothesColour, unclaimedBoxes, peopleWanted, arrivalClock, blendSnaps } from '../multi.js';
+import { MultiTracker, MULTI_DEFAULTS, personBox, fromCrop, clothesColour, unclaimedBoxes, peopleWanted, arrivalClock, blendSnaps, finderTiles, mergeBoxes, crowdSeen } from '../multi.js';
 import { TRACKING } from '../pose-filter.js';
 
 // A standing person with hips at (x, y) and the given height (fraction of the frame).
@@ -559,4 +559,55 @@ test('multi: someone unlike both of an athlete\'s looks still doesn\'t take thei
   for (let i = 0; i < 8; i++) mt.update(frame(leaning(0.5, 85)), (t += 66), 1, BLUE);
   mt.update(frame(leaning(0.51, 80)), (t += 66), 1, () => [220, 120, 150]); // on their spot, in pink
   assert.equal(mt.tracks.length, 2);
+});
+
+// ---- a crowd: the person finder looks at the picture in parts, and says when there are more people than a live judge follows
+test("multi: the finder's parts of a wide picture are squares as tall as it, half over the next, covering it all", () => {
+  const parts = finderTiles(16 / 9);
+  assert.equal(parts.length, 3);
+  for (const p of parts) { assert.equal(p.y, 0); assert.equal(p.h, 1); assert.ok(Math.abs(p.w - 9 / 16) < 1e-9, 'square in pixels'); }
+  assert.equal(parts[0].x, 0); assert.ok(Math.abs(parts.at(-1).x + parts.at(-1).w - 1) < 1e-9, 'reaches the far side');
+  for (let i = 1; i < parts.length; i++) assert.ok(parts[i].x < parts[i - 1].x + parts[i - 1].w / 2 + 1e-9, 'at least half over the one before');
+  // a tall picture (a phone held upright): the same, down it
+  assert.deepEqual(finderTiles(9 / 16).map((p) => [p.x, p.w, +p.h.toFixed(4)]), [[0, 1, 0.5625], [0, 1, 0.5625], [0, 1, 0.5625]]);
+  // nearly square: the whole picture is already close to full detail
+  assert.deepEqual(finderTiles(1.1), []);
+});
+
+test('multi: the smaller parts, for a video analysed afterwards, are half that size and cover the picture too', () => {
+  const coarse = finderTiles(16 / 9), all = finderTiles(16 / 9, { fine: true }), fine = all.slice(coarse.length);
+  assert.deepEqual(all.slice(0, coarse.length), coarse);
+  assert.ok(fine.length >= 12 && fine.length <= 30, `${fine.length} smaller parts`);
+  for (const p of fine) { assert.ok(Math.abs(p.h - 0.5) < 1e-9); assert.ok(Math.abs(p.w - 9 / 32) < 1e-9); assert.ok(p.x >= 0 && p.x + p.w <= 1 + 1e-9 && p.y >= 0 && p.y + p.h <= 1 + 1e-9); }
+  // every point of the picture is inside one of them, well away from its edge sideways
+  for (let x = 0.02; x < 1; x += 0.02) for (let y = 0.02; y < 1; y += 0.04) assert.ok(fine.some((p) => x >= p.x && x <= p.x + p.w && y >= p.y && y <= p.y + p.h), `(${x.toFixed(2)}, ${y.toFixed(2)}) is covered`);
+  assert.equal(finderTiles(1, { fine: true }).length, 9, 'a square picture: three by three');
+});
+
+test('multi: someone the finder saw in two parts is one person, and a box cut off by the edge of its part gives way to the whole one', () => {
+  const left = { x: 0, y: 0, w: 0.5625, h: 1 }, mid = { x: 0.21875, y: 0, w: 0.5625, h: 1 };
+  const got = mergeBoxes([
+    { x0: 0.30, y0: 0.4, x1: 0.40, y1: 0.7, score: 0.8, part: left }, { x0: 0.31, y0: 0.41, x1: 0.40, y1: 0.7, score: 0.6, part: mid }, // the same person twice
+    { x0: 0.50, y0: 0.4, x1: 0.5625, y1: 0.7, score: 0.9, part: left },  // half of someone, at the left part's right-hand edge
+    { x0: 0.50, y0: 0.4, x1: 0.62, y1: 0.7, score: 0.5, part: mid },     // all of them, in the middle part
+    { x0: 0.02, y0: 0.5, x1: 0.10, y1: 0.8, score: 0.4 },                // seen in the whole picture only
+  ]);
+  assert.deepEqual(got.map((b) => [b.x0, b.x1, b.score]), [[0.30, 0.40, 0.8], [0.50, 0.62, 0.5], [0.02, 0.10, 0.4]]);
+  assert.ok(got.every((b) => !('part' in b) && !('cut' in b)), 'only the boxes come back');
+  // at the edge of the picture itself nobody is cut off by a part
+  assert.equal(mergeBoxes([{ x0: 0, y0: 0.4, x1: 0.08, y1: 0.7, score: 0.5, part: left }, { x0: 0.0, y0: 0.38, x1: 0.2, y1: 0.72, score: 0.4 }]).length, 2);
+});
+
+test("multi: four or more people in view for three seconds is a crowd; people far in the background do not count", () => {
+  const body = (x, h = 0.3) => ({ x0: x, x1: x + 0.05, y0: 0.5, y1: 0.5 + h, score: 0.9 });
+  const four = [body(0.1), body(0.3), body(0.5), body(0.7)], s = {};
+  assert.equal(crowdSeen(s, four, 0, 16 / 9), false, 'only just seen');
+  assert.equal(crowdSeen(s, four, 2900, 16 / 9), false);
+  assert.equal(crowdSeen(s, four, 3000, 16 / 9), true);
+  assert.equal(crowdSeen(s, four.slice(0, 3), 3500, 16 / 9), false, 'three is what a live judge follows');
+  assert.equal(crowdSeen(s, four, 4000, 16 / 9), false, 'it starts again');
+  assert.equal(crowdSeen(s, four, 7000, 16 / 9), true);
+  const far = {};
+  for (const t of [0, 3000, 6000]) assert.equal(crowdSeen(far, [body(0.1), body(0.3), body(0.5, 0.05), body(0.7, 0.05), body(0.9, 0.05)], t, 16 / 9), false, 'two athletes and three spectators far off');
+  assert.equal(MULTI_DEFAULTS.crowdPeople, 4);
 });

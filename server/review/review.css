@@ -450,3 +450,7 @@ html[lang="ar"] *, html[lang="th"] * { font-style: normal !important; letter-spa
 .savebox progress { display: block; width: 100%; margin-bottom: 8px; }
 .saveview { position: relative; flex: none; width: 150px; aspect-ratio: 16 / 9; background: #000; overflow: hidden; }
 .saveview video, .saveview canvas { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+
+/* a recording a crowd was in, counted again in full afterwards (deep analysis): how far it has got */
+.deepnote { margin: 0 0 10px; display: grid; gap: 6px; } .deepnote p { margin: 0; padding: 8px 10px; border: 1px solid var(--line); border-left: 4px solid var(--green); font-size: 14px; line-height: 1.35; }
+.deepnote p.going { border-left-color: var(--amber); } .deepnote p.bad { border-left-color: #e2231a; }

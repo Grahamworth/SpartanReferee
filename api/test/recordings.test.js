@@ -207,3 +207,18 @@ test('runs older than the week are forgotten', async () => {
   const gone = s.forgotten.filter(([p]) => p.endsWith(':results')).map(([, k]) => k);
   assert.strictEqual(gone.length, 1); assert.ok(gone[0].endsWith('-r1'));
 });
+
+test('the recordings a crowd was in come through with how far their deep analysis has got', async () => {
+  const s = withStorage(), { h, rk } = await linked(s);
+  const going = { cam: 2, file: '2026-11-20_08-30-00-000000Z.mp4', video: 'x_Camera_2_deep.mp4', name: 'Camera 2 08:30 deep analysis', startedAt: '2026-11-20T08:30:00.000Z', endedAt: '2026-11-20T08:40:00.000Z', state: 'running', pct: 40, why: '', replaced: 0, kept: '' };
+  await s.save(rk, 'r1', { 'results.json': { athletes: [athlete(1, '2026-11-20T08:31:00Z', 3)], deep: [going, 'junk', null, { cam: 1, state: 'done' }] } });
+  const got = (await call(s.api, 'GET', 'recordings/results', h)).body;
+  assert.strictEqual(got.deep.length, 1, 'only entries that say when their recording began');
+  const { server, ...d } = got.deep[0];
+  assert.deepStrictEqual(d, { cam: 2, file: going.file, video: going.video, startedAt: going.startedAt, state: 'running', pct: 40, replaced: 0, kept: '' });
+  assert.strictEqual(server, got.athletes[0].server, 'tied to the same server run as its athletes');
+  // a server on software from before deep analysis sends none
+  const old = withStorage(), o = await linked(old);
+  await old.save(o.rk, 'r1', { 'results.json': { athletes: [athlete(1, '2026-11-20T08:31:00Z', 3)] } });
+  assert.deepStrictEqual((await call(old.api, 'GET', 'recordings/results', o.h)).body.deep, []);
+});

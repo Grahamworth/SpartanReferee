@@ -120,11 +120,32 @@ async function poll() {
     }
   } catch { $('offline').hidden = false; return; }
   // (a mistake drawing the page isn't the server being out of reach)
-  for (const f of [renderJudges, renderViewPick, renderLog]) { try { f(); } catch (e) { console.error(e); } }
+  for (const f of [renderJudges, renderViewPick, renderLog, renderDeep]) { try { f(); } catch (e) { console.error(e); } }
   if (st.athletesRev !== athRev) loadAthletes();
 }
 setInterval(poll, 1000);
 pullJudgeSettings().finally(poll);
+// A crowd in front of a camera is more than its live judge can follow, so its recording is counted again in full afterwards
+// (the server's deep.js). What to say about each such recording: { text, live (still going), bad (didn't finish) }.
+function deepLines(list, camNo = (n) => n) {
+  return (list || []).map((d) => {
+    const cam = camNo(d.cam), at = new Date(d.startedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    if (d.state === 'running') return { live: true, text: `Deep analysis running: camera ${cam}, the recording made at ${at}, ${d.pct}%. A crowd was in view, more than a live judge can follow, so it is being counted again in full. Its counts replace the live ones when it's done.` };
+    if (d.state === 'waiting') return { live: true, text: `Deep analysis waiting for a free judge: camera ${cam}, the recording made at ${at}. A crowd was in view, so it will be counted again in full once a camera's live judge is off.` };
+    if (d.state === 'preparing' || d.state === 'queued') return { live: true, text: `Deep analysis waiting: camera ${cam}, the recording made at ${at}. A crowd was in view, so it will be counted again in full.` };
+    if (d.state === 'done' && d.kept === 'fewer') return { text: `Deep analysis done: camera ${cam}, the recording made at ${at}. It counted fewer reps than the live judge did, so both are listed.` };
+    if (d.state === 'done' && d.replaced) return { text: `Deep analysis done: camera ${cam}, the recording made at ${at}. Its counts have replaced what the live judge counted there.` };
+    if (d.state === 'done') return { text: `Deep analysis done: camera ${cam}, the recording made at ${at}.` };
+    return { bad: true, text: `Deep analysis not finished: camera ${cam}, the recording made at ${at}. Analyse it here, under A previous recording, while a server is on.` };
+  });
+}
+let deepShown = '';
+function renderDeep() {
+  const lines = deepLines(st?.deep, camNo).slice(0, 6), html = lines.map((l) => `<p class="${l.live ? 'going' : l.bad ? 'bad' : ''}">${esc(l.text)}</p>`).join('');
+  if (html === deepShown) return;
+  deepShown = html; $('deepNote').innerHTML = html; $('deepNote').hidden = !html;
+  if (!lines.some((l) => l.live)) loadAthletes(); // one has just finished: the list has changed
+}
 // a camera whose phone keeps dropping off and reconnecting: its video has gaps and its judge misses reps (usually mobile data that can't keep up)
 const DROPS_WARN = 3;
 // a judge looking at its camera too few times a second to be sure of a jump (a quarter of a second in the air). Replayed on
@@ -254,7 +275,7 @@ function renderJudges() {
     const held = !off && !j.frame && analysingNow();
     if ((off || held) && c.live) plainView(c.n, j); else if (j.view && !c.live) { j.view.pc?.close(); j.view.video.remove(); j.view = null; }
     drawWaiting(c, j);
-    const nm = camName(c.n); j.tile.querySelector('.label').innerHTML = `Camera ${camNo(c.n)}${nm ? `<small>${esc(nm)}</small>` : ''}${off ? '<small>AI judge off</small>' : held ? '<small>AI judge waiting</small>' : ''}${(c.drops || 0) >= DROPS_WARN ? '<small class="dropping">Connection dropping</small>' : ''}${slowJudge(c) ? `<small class="dropping" title="The AI judge is looking ${c.fps.toFixed(0)} times a second. Below ${JUDGE_SLOW} it can miss a jump: fewer people in view, or one camera on this server, speeds it up.">AI judge slow</small>` : ''}`;
+    const nm = camName(c.n); j.tile.querySelector('.label').innerHTML = `Camera ${camNo(c.n)}${nm ? `<small>${esc(nm)}</small>` : ''}${off ? '<small>AI judge off</small>' : held ? '<small>AI judge waiting</small>' : ''}${(c.drops || 0) >= DROPS_WARN ? '<small class="dropping">Connection dropping</small>' : ''}${c.crowd ? '<small class="dropping" title="More people are in view than a live judge can follow, so its counts will be low. This recording is counted again in full afterwards (a deep analysis), and Results is updated when that is done.">Crowd: deep analysis to follow</small>' : ''}${slowJudge(c) ? `<small class="dropping" title="The AI judge is looking ${c.fps.toFixed(0)} times a second. Below ${JUDGE_SLOW} it can miss a jump: fewer people in view, or one camera on this server, speeds it up.">AI judge slow</small>` : ''}`;
   }
 }
 async function setAi(n, on) {

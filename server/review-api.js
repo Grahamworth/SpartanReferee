@@ -5,6 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const { mergeAthletes } = require('./merge.js');
+const { givesWay } = require('./deep.js');
 
 const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.mjs': 'text/javascript', '.css': 'text/css', '.png': 'image/png', '.svg': 'image/svg+xml',
   '.json': 'application/json', '.wasm': 'application/wasm', '.webmanifest': 'application/manifest+json', '.onnx': 'application/octet-stream' };
@@ -252,7 +253,7 @@ function sendRange(req, res, buf, name) {
     }
     if (p === '/api/athletes') {
       const from = u.searchParams.get('from') || '', to = u.searchParams.get('to') || '9';
-      const list = athletes.filter((a) => a.lastAt >= from && a.firstAt <= to).slice(-2000).reverse();
+      const list = athletes.filter((a) => !a.replaced && a.lastAt >= from && a.firstAt <= to).slice(-2000).reverse();
       // athletes seen on two cameras that film the same athletes, put together (the review's "Same athletes" setting)
       return send(res, 200, { rev: athletesRev, list, numbers: numbersSeen.filter((x) => x.lastAt >= from && x.firstAt <= to), merged: mergeAthletes(list, S.sameAthletes || []), groups: S.sameAthletes || [] });
     }
@@ -327,14 +328,24 @@ function sendRange(req, res, buf, name) {
     send(res, 200, fs.readFileSync(file), TYPES[path.extname(file)] || 'application/octet-stream');
   } catch (e) { send(res, 500, { error: e.message }); }
   }
+  // A camera's recording has been analysed again in full (deep.js: a crowd was in view, more than its live judge could follow).
+  // What the live judge counted in that stretch gives way to it, unless the deep analysis counted fewer reps than the live judge
+  // did: then something went wrong with it and both stay listed. Returns { replaced } or { kept: why }.
+  function replaceLive(cam, from, to, video) {
+    const { live, kept } = givesWay(athletes, cam, from, to, String(video).replace(/[^\w.-]+/g, '_').slice(0, 140));
+    const at = new Date().toISOString();
+    for (const a of live) a.replaced = at;
+    if (live.length) saveAthletes();
+    return { replaced: live.length, kept };
+  }
   // what goes to cloud storage, to be seen when this server is off
-  const results = () => ({
-    athletes: athletes.map(({ n, src, video, cam, bib, label, firstT, lastT, firstAt, lastAt, reps, noReps, questionable, done, pic }) => ({ n, src, video, cam, bib, label, firstT, lastT, firstAt, lastAt, reps, noReps, questionable, done, pic })),
+  const results = () => { const shown = athletes.filter((a) => !a.replaced); return {
+    athletes: shown.map(({ n, src, video, cam, bib, label, firstT, lastT, firstAt, lastAt, reps, noReps, questionable, done, pic }) => ({ n, src, video, cam, bib, label, firstT, lastT, firstAt, lastAt, reps, noReps, questionable, done, pic })),
     numbers: numbersSeen,
-    merged: mergeAthletes(athletes, S.sameAthletes || []),
-    files: athletes.flatMap((a) => [{ name: `tracks/${a.n}.jsonl`, path: path.join(TRACKS, `${a.n}.jsonl`) }, { name: `pics/${a.n}.jpg`, path: path.join(PICS, `${a.n}.jpg`) }]),
-  });
-  return { handler, watchCameras, cams: () => cams, serverOk: () => serverOk, results };
+    merged: mergeAthletes(shown, S.sameAthletes || []),
+    files: shown.flatMap((a) => [{ name: `tracks/${a.n}.jsonl`, path: path.join(TRACKS, `${a.n}.jsonl`) }, { name: `pics/${a.n}.jpg`, path: path.join(PICS, `${a.n}.jpg`) }]),
+  }; };
+  return { handler, watchCameras, cams: () => cams, serverOk: () => serverOk, results, replaceLive };
 }
 
 module.exports = { createReview, send, readBody, isJson, TYPES };

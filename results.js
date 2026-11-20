@@ -13,7 +13,7 @@ const SEEN_MS = 800; // tracking is only drawn near a saved frame, so it doesn't
 const BLEND_MS = 500; // saved frames this close together are the same movement: the skeleton is drawn part-way between them
 const CLIP_MS = 12 * 60e3; // a recording is cut every 10 minutes, so anything starting within this could hold a moment
 
-let data = { athletes: [], numbers: [], recordings: [], sources: {}, merged: [] };
+let data = { athletes: [], numbers: [], recordings: [], sources: {}, merged: [], deep: [] };
 let playing = null; // { rec, athlete, frames, events, startMs }
 
 const dayKey = (iso) => { const d = new Date(iso); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
@@ -375,11 +375,28 @@ async function enter() {
   }).catch(() => { /* no company: no tabs */ });
   try {
     const [results, recs] = await Promise.all([call('recordings/results'), call('recordings')]);
-    data = { athletes: results.athletes, numbers: results.numbers, sources: results.sources, merged: results.merged || [], recordings: recs.recordings };
+    data = { athletes: results.athletes, numbers: results.numbers, sources: results.sources, merged: results.merged || [], deep: results.deep || [], recordings: recs.recordings };
     $('keepNote').textContent = `Your recordings, athletes and numbers for the last ${results.keepDays} days. Download anything you want to keep: after ${results.keepDays} days it's deleted.`;
-    fillFilters(); draw(); show($('content'), true);
+    fillFilters(); draw(); drawDeep(); show($('content'), true);
     requestAnimationFrame(drawTrack);
   } catch (e) { fail(e.message); }
+}
+// A crowd in front of a camera is more than its live judge can follow, so the server counts that recording again in full
+// afterwards (a deep analysis: server/deep.js). Said here while one is still going, or when one never finished: until it has,
+// that recording's counts are the live judge's, and low.
+export function deepLines(list) {
+  return (list || []).map((d) => {
+    const cam = d.cam, day = new Date(d.startedAt).toLocaleDateString([], { day: 'numeric', month: 'short' }), at = new Date(d.startedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    if (d.state === 'running') return { live: true, text: `Deep analysis running on the server: camera ${cam}, the recording made on ${day} at ${at}, ${d.pct}%. A crowd was in view, more than a live judge can follow, so it is being counted again in full. Its counts here will change when that's done.` };
+    if (['preparing', 'queued', 'waiting'].includes(d.state)) return { live: true, text: `Deep analysis waiting on the server: camera ${cam}, the recording made on ${day} at ${at}. A crowd was in view, so it will be counted again in full. Its counts here will change when that's done.` };
+    if (d.state === 'done') return d.kept === 'fewer' ? { text: `Deep analysis: camera ${cam}, the recording made on ${day} at ${at}, was counted again in full, but that found fewer reps than the live judge did, so both are listed.` } : null;
+    return { bad: true, text: `Deep analysis not finished: camera ${cam}, the recording made on ${day} at ${at}. A crowd was in view, more than a live judge can follow, and the server stopped before it could be counted again in full, so its counts are low. To count it, start a server and choose it under A previous recording in the video review's Results.` };
+  }).filter(Boolean);
+}
+function drawDeep() {
+  const lines = deepLines(data.deep).slice(0, 8);
+  $('deepNote').innerHTML = lines.map((l) => `<p class="${l.live ? 'going' : l.bad ? 'bad' : ''}">${esc(l.text)}</p>`).join('');
+  show($('deepNote'), lines.length > 0);
 }
 async function start() {
   if (signedIn()) return enter();

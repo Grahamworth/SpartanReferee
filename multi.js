@@ -113,6 +113,8 @@ export const MULTI_DEFAULTS = {
   maxPeople: 5,       // poses asked of the model per frame...
   maxPeopleBusy: 10,  // ...and while more than that are in view (peopleWanted)
   busyAfterMs: 1500,  // more than maxPeople seen for this long: ask for maxPeopleBusy
+  crowdPeople: 4,     // this many people in view...
+  crowdAfterMs: 3000, // ...for this long is a crowd: more than a live judge counts well (crowdSeen)
   quietAfterMs: 20000, // no more than maxPeople for this long: back to maxPeople
   firstRepMs: 10000,  // someone new becomes an athlete by a rep done in this long, going down to the jump...
   firstRepEdge: 0.05, // ...with their middle at least this far in from the side of the picture...
@@ -167,6 +169,16 @@ export const MULTI_DEFAULTS = {
   heldMs: 10000,      // an athlete hidden up to this long gets their spot back when whoever was in front moves aside ...
   heldMinMs: 400,     // ... once hidden at least this long (missed for a frame or two is just the model)
 };
+
+// A crowd: the person finder has kept seeing this many people or more (tiny ones in the background don't count) for this long. More
+// than a live judge can follow and still keep up, so the recording is analysed in full afterwards. state: {} at first, kept by the
+// caller; true while it lasts.
+export function crowdSeen(state, boxes, t, aspect = 1, o = MULTI_DEFAULTS) {
+  const seen = (boxes || []).filter((b) => Math.max(b.y1 - b.y0, (b.x1 - b.x0) * aspect) >= o.minSize).length;
+  if (seen < o.crowdPeople) { state.since = null; return false; }
+  state.since ??= t;
+  return t - state.since >= o.crowdAfterMs;
+}
 
 // How many people to ask the pose model for. It follows that many at once; asking for more than are there costs nothing, but
 // every extra person followed takes time on every frame, shared by everyone, so it stays at maxPeople until the person finder
@@ -246,6 +258,39 @@ export function unclaimedBoxes(boxes, found, aspect = 1, o = MULTI_DEFAULTS) {
   const outlines = found.map(outline).filter(Boolean);
   return boxes.filter((b) => size(b) >= o.minSize && !outlines.some((q) => claims(b, q)))
     .sort((a, b) => size(b) - size(a));
+}
+
+// The picture in parts for the person finder, as shares of the frame: squares as big as the picture's short side, each half over the
+// next, so everyone is whole in at least one and is seen at close to the picture's own detail. The finder shrinks whatever it's given
+// to 640 pixels: a wide picture of ten people leaves each about 50 pixels tall, too small for it to find. A picture that's nearly
+// square already has no parts. fine: squares half that size as well, which the finder sees at twice the picture's own size (on
+// a 720p picture of 8 to 12 athletes about 100 pixels tall it found 0.6 of them a frame in the whole picture, 4.7 in the parts
+// and 10.2 with the smaller ones too, 20 November 2026); many more searches, so only for a video analysed after the event.
+export function finderTiles(aspect = 1, { fine = false } = {}) {
+  const wide = aspect >= 1, side = wide ? 1 / aspect : aspect; // the square's size along the long side
+  const spread = (size) => { const n = Math.ceil((1 - size) / (size / 2) - 1e-9); return n < 1 ? [0] : Array.from({ length: n + 1 }, (_, i) => (i * (1 - size)) / n); };
+  const out = side > 0.8 ? [] : spread(side).map((at) => (wide ? { x: at, y: 0, w: side, h: 1 } : { x: 0, y: at, w: 1, h: side }));
+  if (fine) for (const across of spread(0.5)) for (const along of spread(side / 2)) out.push(wide ? { x: along, y: across, w: side / 2, h: 0.5 } : { x: across, y: along, w: 0.5, h: side / 2 });
+  return out;
+}
+
+// What the finder saw in several overlapping parts of the picture, as one list: a person seen in two parts is kept once (the surer
+// sighting), and a box cut off by the edge of its part (part: the { x, y, w, h } it was found in) goes when a whole one covers it.
+// Surest first.
+export function mergeBoxes(list, o = {}) {
+  const sameIou = o.sameIou ?? 0.5, cover = o.cover ?? 0.6, edge = o.edge ?? 0.012;
+  const area = (b) => Math.max(1e-9, (b.x1 - b.x0) * (b.y1 - b.y0));
+  const inter = (a, b) => Math.max(0, Math.min(a.x1, b.x1) - Math.max(a.x0, b.x0)) * Math.max(0, Math.min(a.y1, b.y1) - Math.max(a.y0, b.y0));
+  // cut off: touching an edge of its part that isn't the edge of the picture
+  const cut = (b) => { const p = b.part; if (!p) return false;
+    return (p.x > edge && b.x0 - p.x < edge) || (p.x + p.w < 1 - edge && p.x + p.w - b.x1 < edge) || (p.y > edge && b.y0 - p.y < edge) || (p.y + p.h < 1 - edge && p.y + p.h - b.y1 < edge); };
+  const all = list.map((b) => ({ ...b, cut: cut(b) })).sort((a, b) => a.cut - b.cut || b.score - a.score);
+  const kept = [];
+  for (const b of all) {
+    const dup = kept.some((k) => { const i = inter(b, k); return i / (area(b) + area(k) - i) > sameIou || (b.cut && i / area(b) > cover); });
+    if (!dup) kept.push(b);
+  }
+  return kept.map(({ part, cut: c, ...b }) => b).sort((a, b) => b.score - a.score);
 }
 
 // The part of the frame to zoom in on for a person the finder saw: their box

@@ -1,7 +1,7 @@
 import { BurpeeJudge, GestureJudge, computeMetrics, DEFAULTS, LM } from './burpee.js';
 import { EXERCISES, exercise, applyStrictness, PushupJudge, STRICTNESS_DEFAULT, strictnessWord, strictnessValue } from './exercises.js';
 import { PoseFilter, TRACKING, JointHold } from './pose-filter.js';
-import { MultiTracker, MULTI_DEFAULTS, fromCrop, drawMasks, scanAreas, joinResults, unclaimedBoxes, boxArea, peopleWanted, arrivalClock, blendSnaps } from './multi.js';
+import { MultiTracker, MULTI_DEFAULTS, fromCrop, drawMasks, scanAreas, joinResults, unclaimedBoxes, boxArea, finderTiles, mergeBoxes, crowdSeen, peopleWanted, arrivalClock, blendSnaps } from './multi.js';
 import { loadFinder } from './finder.js';
 import { prepareDigits } from './ocr-prep.js';
 import { findCones, ConeTracker, coneReadBox } from './cones.js';
@@ -1015,7 +1015,7 @@ function beginMulti() {
   S.multi = new MultiTracker({
     make: () => applyStrictness(exercise(a.mode).make(a.target, judgeOptions()), a.mode, settings.strictness),
     tracking: tracking(), metricOpts,
-    opts: { coneSide: settings.coneSide || 'left', holdWalkers: !!settings.holdWalkers, ...(detailed ? {} : { lookAgainMax: 1, lookEveryMs: 250 }) },
+    opts: { coneSide: settings.coneSide || 'left', holdWalkers: !!settings.holdWalkers, ...(detailed ? { lookAgainMax: DEEP_LOOKS } : { lookAgainMax: 1, lookEveryMs: 250 }) },
   });
   S.cones = settings.cones ? new ConeTracker({ needNumber: settings.coneFind === 'number' }) : null; S.coneAt = -Infinity;
   beginCounting();
@@ -1326,6 +1326,7 @@ const lookCanvas = document.createElement('canvas');
 const lookCtx = lookCanvas.getContext('2d', { willReadFrequently: true });
 function secondLook(src, w, h, crop, poses) {
   if (!S.scanner) return null;
+  S.lookCount = (S.lookCount || 0) + 1;
   const k = Math.min(1, 640 / Math.max(crop.w * w, crop.h * h));
   const W = Math.max(16, Math.round(crop.w * w * k)), H = Math.max(16, Math.round(crop.h * h * k));
   if (lookCanvas.width !== W || lookCanvas.height !== H) { lookCanvas.width = W; lookCanvas.height = H; }
@@ -1902,6 +1903,47 @@ function frame() {
   if (!ENGINE) drawFrame(src, w, h, wantPose, practice);
 }
 
+// A video being analysed isn't against the clock, so it's searched as deeply as it can be: the person finder looks at the picture
+// in full-detail parts as well as whole (finderTiles in multi.js: in a wide picture of ten people each is too small for it
+// otherwise), everyone it finds that the pose model hasn't gets a zoomed look of their own, and so does everyone being followed
+// who wasn't found in this frame. With ten athletes in view that's ten or more pose searches a frame: slow, and what makes it count them.
+const DEEP_LOOKS = 30;
+const FINE_EVERY_MS = 2000; // the smaller parts, which take eight times as many searches, this often; the larger ones every time
+async function findEveryone(src, w, h, fine) {
+  const all = await S.finder.find(src, w, h);
+  for (const part of finderTiles(w / h, { fine })) for (const b of await S.finder.find(src, w, h, part)) all.push({ ...b, part });
+  return mergeBoxes(all);
+}
+// The frame being analysed, copied into memory once. Every look at part of it (the finder's two dozen, a zoomed pose search for each
+// person) then copies from there: taken from the video itself, each one fetched the frame back from the graphics card again.
+const stillCanvas = document.createElement('canvas');
+const stillCtx = stillCanvas.getContext('2d', { willReadFrequently: true });
+function stillOf(src, w, h) {
+  if (stillCanvas.width !== w || stillCanvas.height !== h) { stillCanvas.width = w; stillCanvas.height = h; }
+  stillCtx.drawImage(src, 0, 0, w, h);
+  return stillCanvas;
+}
+// A live judge keeps up instead, so it follows only a few of a crowd. Its finder takes one part of the picture as well as the whole
+// each time, in turn; when what it has seen lately is a crowd (crowdSeen in multi.js), the judge tells its server, which has
+// the recording analysed in full afterwards (server/deep.js).
+const liveParts = { turn: 0, boxes: [] };
+async function findLive(src, w, h, t) {
+  const whole = await S.finder.find(src, w, h);
+  const parts = finderTiles(w / h);
+  if (!ENGINE || !parts.length) return { now: whole, lately: whole };
+  const i = liveParts.turn++ % parts.length, part = parts[i];
+  const seen = (await S.finder.find(src, w, h, part)).map((b) => ({ ...b, part }));
+  liveParts.boxes = [...liveParts.boxes.filter((x) => x.i !== i && t - x.t < 3000), { i, t, seen }];
+  return { now: mergeBoxes([...whole, ...seen]), lately: mergeBoxes([...whole, ...liveParts.boxes.flatMap((x) => x.seen)]) };
+}
+let crowdTold = 0;
+function crowdTick(boxes, t, aspect) {
+  if (!ENGINE || !crowdSeen(S.crowd ??= {}, boxes, t, aspect)) return;
+  const now = Date.now(); if (now - crowdTold < 10000) return;
+  crowdTold = now;
+  fetch(`/api/engine/${ENGINE}/crowd`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' }).catch(() => {});
+}
+
 // More people in view than the pose model is following (or no longer): it's loaded again asking for more (or fewer). The one
 // running carries on until the new one is ready.
 function peopleTick(boxes, t, aspect) {
@@ -1942,11 +1984,11 @@ function analyseFrame(src, w, h, t) {
           if (!S.findBusy && t - S.findAt >= MULTI_DEFAULTS.findEveryMs) {
             S.findAt = t;
             S.findBusy = true;
-            S.finder.find(src, w, h).then((b) => { S.findBoxes = b; peopleTick(b, t, w / h); }).catch(() => {}).finally(() => { S.findBusy = false; });
+            findLive(src, w, h, t).then((b) => { S.findBoxes = b.now; peopleTick(b.lately, t, w / h); crowdTick(b.lately, t, w / h); }).catch(() => {}).finally(() => { S.findBusy = false; });
           }
           if (S.findBoxes) {
             const found = S.multiRes?.landmarks || [];
-            const looks = unclaimedBoxes(S.findBoxes, found, w / h).slice(0, 2).map((b) => secondLook(src, w, h, boxArea(b), found));
+            const looks = unclaimedBoxes(S.findBoxes, found, w / h).slice(0, S.prepassing ? DEEP_LOOKS : 2).map((b) => secondLook(src, w, h, boxArea(b), found));
             S.findBoxes = null;
             S.multiExtra = joinResults(looks);
           }
@@ -2682,24 +2724,36 @@ async function prepass(range) {
   const i0 = range ? Math.max(0, Math.floor(range.from * PREPASS_FPS)) : 0;
   const n = Math.floor((range ? Math.min(range.to, S.videoDur) : S.videoDur) * PREPASS_FPS);
   // the Receiver's Pause and Stop (Stop keeps what's been found so far)
-  const run = window.__analysis = { paused: false, stop: false, done: false, pct: 0 };
+  // spent: where the time has gone so far, in seconds (for the server's list of analyses, and for making it quicker)
+  const run = window.__analysis = { paused: false, stop: false, done: false, pct: 0, spent: { step: 0, find: 0, pose: 0, looks: 0, frames: 0 } };
+  const clock = (key, since) => { run.spent[key] = Math.round((run.spent[key] + (performance.now() - since) / 1000) * 100) / 100; };
+  S.lookCount = 0;
   for (let i = i0; i < n && S.testMode; i++) {
     while (run.paused && !run.stop && S.testMode) { showLoader(`Paused at ${run.pct}%`); await new Promise((r) => setTimeout(r, 200)); }
     if (run.stop) break;
     run.pct = Math.round((100 * (i - i0)) / Math.max(1, n - i0)); run.unreported = unreported; // (for checking: frames stepped to without a report)
+    let since = performance.now();
     await seekTo(i / PREPASS_FPS + SEEK_INSIDE_FRAME_S);
+    clock('step', since);
     S.lastVideoTime = video.currentTime;
     S.frame = frameSource();
+    if (S.multi) S.frame = { src: stillOf(S.frame.src, S.frame.w, S.frame.h), w: S.frame.w, h: S.frame.h };
     const { src, w, h } = S.frame;
     const t = clockNow();
     // The person finder is waited for here (no frame goes by meanwhile).
     if (S.multi && S.finder && t - S.findAt >= MULTI_DEFAULTS.findEveryMs) {
       S.findAt = t;
+      const fine = t - (S.fineAt ?? -Infinity) >= FINE_EVERY_MS;
+      if (fine) S.fineAt = t;
       const z = S.multi.zoom;
       const area = z ? { x: z.x0, y: z.y0, w: z.x1 - z.x0, h: z.y1 - z.y0 } : { x: 0, y: 0, w: 1, h: 1 };
-      try { S.findBoxes = await S.finder.find(src, w, h); } catch { S.findBoxes = null; }
+      since = performance.now();
+      try { S.findBoxes = await findEveryone(src, w, h, fine); } catch { S.findBoxes = null; }
+      clock('find', since);
     }
+    since = performance.now();
     analyseFrame(src, w, h, t);
+    clock('pose', since); run.spent.frames++; run.spent.looks = S.lookCount;
     if (!BACKGROUND) S.replay.push(snapshot(t)); // for playing it back here, and a long video would fill the memory
     if (i % 5 === 0) {
       showLoader(`${range ? 'Analysing the athlete' : 'Analysing the video'}… ${Math.round((100 * (i - i0)) / Math.max(1, n - i0))}%`);
