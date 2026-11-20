@@ -79,55 +79,68 @@ export function quiz(box, questions, onDone, { showLesson = false } = {}) {
 }
 const score = (answers) => t('{right} of {total} right', { right: answers.filter((a) => a.right).length, total: answers.length });
 
-// ---------------------------------------------------------------- the quick check at the end of a lesson (lesson.js)
-/** the check's section for the lesson's finish card: before it's answered, "Mark as complete" (#lpComplete) waits */
+// ---------------------------------------------------------------- the test at the end of a lesson (lesson.js)
+// "Finish and test" (20 November 2026): the lesson's slides are put away and its questions asked. Every try is kept (the assessors see
+// them); with any answer wrong, the test can be taken again or the lesson redone. Taking it completes the lesson (enrolled), as before.
+/** the test's place in the lesson's finish card */
 export function checkSection(L) {
   const checks = L.extra?.checks || [];
   if (!checks.length) return '';
-  const st = L.extra.checkState || {}, answered = checks.every((k) => st[k.key]);
-  const right = checks.filter((k) => st[k.key]?.right).length;
-  return `<div class="quickCheck" id="lpCheck" data-answered="${answered ? 1 : 0}">
-      <h3>Quick check</h3>
-      ${answered ? `<p class="note">${esc(t('Last time: {right} of {total} right.', { right, total: checks.length }))} <button class="small" type="button" data-check-again>Try it again</button></p>`
-    : `<p class="note">${esc(t('{n} questions on what you just learned. They don\'t count towards anything: they help it stick, and they come back as refreshers.', { n: checks.length }))}</p><div id="lpQuiz"></div>`}
+  const tests = L.extra.tests || { attempts: 0, passed: false };
+  return `<div class="quickCheck" id="lpCheck">
+      <h3>${esc(t('Test'))}</h3>
+      <p class="note" id="lpTestNote">${esc(tests.attempts ? (tests.passed ? t('You\'ve had every answer right before. Tries so far: {n}.', { n: tests.attempts }) : t('Tries so far: {n}. Get every answer right to pass.', { n: tests.attempts }))
+    : t('{n} questions on what you just learned. Get every answer right to pass; you can try again, or go through the lesson again first.', { n: checks.length }))}</p>
+      <div id="lpQuiz"></div>
     </div>`;
 }
-/** the result after a lesson's quick check: the score, then each question with your answer and (if you missed it) the right one */
+/** the result after a test: the score, then each question with your answer and (if you missed it) the right one */
 function resultHtml(questions, answers) {
   return `<div class="quizResult"><p class="quizScore">${esc(score(answers))}</p>
     <ol class="quizReview">${answers.map((a) => {
       const k = localQ(questions.find((q) => q.key === a.key) || {}); if (!k.key) return '';
       return `<li class="${a.right ? 'isRight' : 'isWrong'}"><span class="qMark" aria-hidden="true">${a.right ? '✓' : '✗'}</span><span><span class="q">${esc(k.prompt)}</span>
         <small>${esc(t('Your answer: {answer}', { answer: t(k.options[a.choice]) }))}${a.right ? '' : ` · <b>${esc(t('Right answer: {answer}', { answer: t(k.options[k.answer]) }))}</b>`}</small></span></li>`;
-    }).join('')}</ol><p class="note" id="lpResultNote">${esc(t('Saving…'))}</p></div>`;
+    }).join('')}</ol><p class="note" id="lpResultNote">${esc(t('Saving…'))}</p><div class="btnRow" id="lpRetry" hidden></div></div>`;
 }
-/** the quick check at the end of a lesson: once it's answered (right or wrong) the lesson is completed (enrolled), the result shows,
- *  and only then does the way to the next lesson (#lpNextWrap) appear */
-export function wireCheck(L) {
-  const sec = $('lpCheck'); if (!sec) return;
-  const done = L.completions.some((x) => !x.preview);
-  const run = (box) => quiz(box, L.extra.checks, async (answers) => {
-    box.innerHTML = resultHtml(L.extra.checks, answers);
-    const note = $('lpResultNote'), lines = [];
-    let ok = true;
-    try {
-      const r = await call(`lessons/${L.lesson.id}/checks`, { method: 'POST', body: { answers: answers.map(({ key, choice }) => ({ key, choice })) } });
-      celebrate(r.badges);
-      if (L.enrolled && !done) {
-        const c = await call(`lessons/${L.lesson.id}/complete`, { method: 'POST', body: { contentId: L.content.id } });
-        lines.push(c.queued ? t('Saved on this phone: it goes to your record when there\'s signal') : c.preview ? t('Recorded: done in a preview translation') : c.enrolment?.state === 'completed' ? t('Lesson complete: programme complete!') : t('Lesson complete'));
-        celebrate(c.badges);
-        const h = $('lpFinish')?.querySelector('h2'); if (h) h.textContent = t('You\'ve completed this lesson');
-      } else if (r.queued) lines.push(t('Saved on this phone: it\'s sent when there\'s signal.'));
-      lines.push(t('These questions come back as refreshers when they\'re due.'));
-    } catch (e) { ok = false; lines.push(e.message); }
-    note.innerHTML = lines.map((x) => `<span>${esc(x)}</span>`).join('<br>');
-    const next = $('lpNextWrap');
-    if (ok && next) { next.hidden = false; next.querySelector('a')?.focus(); }
-  });
-  if (sec.dataset.answered === '1') {
-    sec.querySelector('[data-check-again]').onclick = () => { const box = document.createElement('div'); sec.querySelector('.note').replaceWith(box); run(box); };
-  } else run($('lpQuiz'));
+/** wires the test: returns start(), which asks the questions afresh; redo() is called for "Go through the lesson again" */
+export function wireCheck(L, { redo } = {}) {
+  const sec = $('lpCheck'); if (!sec) return null;
+  let completed = L.completions.some((x) => !x.preview);
+  const start = () => {
+    const box = $('lpQuiz'); if (!box) return;
+    quiz(box, L.extra.checks, async (answers) => {
+      box.innerHTML = resultHtml(L.extra.checks, answers);
+      const note = $('lpResultNote'), retry = $('lpRetry'), lines = [];
+      const all = answers.every((a) => a.right);
+      let ok = true;
+      try {
+        const r = await call(`lessons/${L.lesson.id}/checks`, { method: 'POST', body: { answers: answers.map(({ key, choice }) => ({ key, choice })) } });
+        celebrate(r.badges);
+        const tests = L.extra.tests = { attempts: r.attemptNo || (L.extra.tests?.attempts || 0) + 1, passed: (L.extra.tests?.passed) || all };
+        lines.push(all ? t('Every answer right: you\'ve passed this lesson\'s test.') : t('Not every answer was right. Take the test again, or go through the lesson again first.'));
+        if (!r.queued) lines.push(t('Try {n} recorded.', { n: tests.attempts }));
+        if (L.enrolled && !completed) {
+          const c = await call(`lessons/${L.lesson.id}/complete`, { method: 'POST', body: { contentId: L.content.id } });
+          completed = true;
+          lines.push(c.queued ? t('Saved on this phone: it goes to your record when there\'s signal') : c.preview ? t('Recorded: done in a preview translation') : c.enrolment?.state === 'completed' ? t('Lesson complete: programme complete!') : t('Lesson complete'));
+          celebrate(c.badges);
+          const h = $('lpFinish')?.querySelector('h2'); if (h) h.textContent = t('You\'ve completed this lesson');
+        } else if (r.queued) lines.push(t('Saved on this phone: it\'s sent when there\'s signal.'));
+      } catch (e) { ok = false; lines.push(e.message); }
+      note.innerHTML = lines.map((x) => `<span>${esc(x)}</span>`).join('<br>');
+      if (!all || !ok) {
+        retry.innerHTML = `<button class="primary" type="button" data-retest>${esc(t('Take the test again'))}</button>${redo ? `<button type="button" data-redo>${esc(t('Go through the lesson again'))}</button>` : ''}`;
+        retry.hidden = false;
+        retry.querySelector('[data-retest]').onclick = start;
+        retry.querySelector('[data-redo]')?.addEventListener('click', redo);
+      }
+      const next = $('lpNextWrap');
+      if (ok && next) { next.hidden = false; if (all) next.querySelector('a')?.focus(); }
+    });
+    sec.scrollIntoView?.({ behavior: 'smooth', block: 'start' });
+  };
+  return start;
 }
 
 // ---------------------------------------------------------------- the weekly streak

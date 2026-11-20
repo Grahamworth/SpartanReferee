@@ -66,11 +66,16 @@ function createLessons(ctx, { speech, mediaSigner }) {
     const base = prevExtras ? await prevExtras(w, p, v, e) : {};
     const countable = new Set(await countableLessons(v.version_id));
     const done = e && e.version_id === v.version_id ? await doneLessons(w.person.person_id, v.version_id) : [];
-    const lessons = await db.query('SELECT l.lesson_id FROM {S}.lesson l JOIN {S}.module m ON m.module_id = l.module_id WHERE l.version_id = @v ORDER BY m.seq, l.seq', { v: v.version_id });
+    const lessons = await db.query('SELECT l.lesson_id, l.title FROM {S}.lesson l JOIN {S}.module m ON m.module_id = l.module_id WHERE l.version_id = @v ORDER BY m.seq, l.seq', { v: v.version_id });
     const lessonNotes = Object.fromEntries(lessons.filter((l) => !countable.has(l.lesson_id)).map((l) => [l.lesson_id, 'being written']));
     const next = lessons.find((l) => countable.has(l.lesson_id) && !done.includes(l.lesson_id));
     const locked = e && e.version_id === v.version_id && !ctx.editor(w, p.programme_id) ? [...(await locksFor(w.person.person_id, v.version_id))].map(([id, x]) => ({ id, after: x.lessonId })) : [];
-    return { ...base, completed: done, lessonNotes, locked, progress: e ? { done: done.filter((id) => countable.has(id)).length, total: countable.size } : null, nextLesson: next?.lesson_id || null };
+    // has this person opened any lesson of it yet (a lesson finished, or one partway through)? The page then says Start or Continue
+    const opened = e && e.version_id === v.version_id ? await db.query(`SELECT p.lesson_id, p.slide FROM {S}.lesson_progress p JOIN {S}.lesson l ON l.lesson_id = p.lesson_id
+      WHERE p.person_id = @p AND l.version_id = @v`, { p: w.person.person_id, v: v.version_id }) : [];
+    const nextAt = next ? opened.find((x) => x.lesson_id === next.lesson_id) : null;
+    return { ...base, completed: done, lessonNotes, locked, progress: e ? { done: done.filter((id) => countable.has(id)).length, total: countable.size } : null, nextLesson: next?.lesson_id || null,
+      nextTitle: next?.title || '', started: done.length > 0 || opened.length > 0, nextSlide: nextAt ? nextAt.slide : null };
   };
   // a new programme version takes the content too: the same published content, carried over to the new lessons
   const prevCopy = ctx.copyVersionExtras;

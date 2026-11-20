@@ -101,6 +101,13 @@ function versionActions(d) {
   if (['draft', 'published', 'superseded'].includes(v.state) && d.can.programme) out.push(`<button class="small" type="button" data-state="archived">Archive</button>`);
   return out.join('');
 }
+// the way into the lessons, on a programme's page (20 November 2026): Start when nothing's been opened yet, otherwise Continue, each
+// naming the lesson it opens, as the page's main button
+function nextButton(d) {
+  if (!d.nextLesson) return '';
+  const label = d.started ? t('Continue') : t('Start');
+  return `<a class="btnLink primaryLink nextLessonBtn" href="#/lesson/${esc(d.nextLesson)}"><span class="nextLabel">${esc(label)}</span>${d.nextTitle ? `<span class="nextTitle">${esc(d.nextTitle)}</span>` : ''}<span class="nextArrow" aria-hidden="true">›</span></a>`;
+}
 async function programmePage(id) {
   const q = new URLSearchParams(location.hash.split('?')[1] || '');
   const d = await call(`programmes/${encodeURIComponent(id)}${q.get('version') ? `?version=${encodeURIComponent(q.get('version'))}` : ''}`);
@@ -120,8 +127,8 @@ async function programmePage(id) {
       ${d.versions.length > 1 ? `<label class="versionPick">Version <select id="versionPick">${d.versions.map((x) => `<option value="${esc(x.id)}"${x.id === v.id ? ' selected' : ''}>${esc(x.edition)} (${esc(x.state)})</option>`).join('')}</select></label>` : ''}
       ${v.state !== 'published' && !d.can.edit ? '' : v.state !== 'published' ? '<p class="note">Learners only ever see a published version.</p>' : ''}
     </section>
-    <section class="card"><h2>${e ? 'Your progress' : 'Take part'}</h2>
-      ${e ? `<p>${badge(e.state)} Enrolled ${esc(day(e.enrolledAt))}${e.versionId !== v.id ? ' on another version' : ''}.</p>${d.progress ? `${bar(d.progress.done, d.progress.total)}<p class="note">${d.progress.done} of ${d.progress.total} lessons done.${d.nextLesson ? ` <a href="#/lesson/${esc(d.nextLesson)}">Continue</a>` : ''}</p>` : ''}`
+    <section class="card"><div class="titleRow"><h2>${e ? 'Your progress' : 'Take part'}</h2>${await runHooks(hooks.programme, { ...d, slot: 'head' })}</div>
+      ${e ? `<p>${badge(e.state)} Enrolled ${esc(day(e.enrolledAt))}${e.versionId !== v.id ? ' on another version' : ''}.</p>${d.progress ? `${bar(d.progress.done, d.progress.total)}<p class="note">${d.progress.done} of ${d.progress.total} lessons done.</p>${nextButton(d)}` : ''}`
     : d.can.enrol && v.state === 'published' ? `<p>Enrol to start the lessons, take the assessment and earn ${esc(v.qualification)}.</p><button class="primary" type="button" data-enrol="${esc(p.id)}">Enrol</button>` : '<p class="muted">Not open for enrolment.</p>'}
       ${d.newer ? `<p class="reviewNote"><b>A newer edition</b> The ${esc(d.newer.edition)} edition is published. Your progress here stays on your record. <button class="small" type="button" data-enrol="${esc(p.id)}">Move to ${esc(d.newer.edition)}</button></p>` : ''}
       ${await runHooks(hooks.programme, { ...d, slot: 'progress' })}

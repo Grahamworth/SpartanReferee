@@ -99,9 +99,35 @@ async function assessingView(rest) {
       <form id="decideForm" data-id="${esc(t.id)}">${t.questions.map((q, i) => `${questionCard({ ...q, feedback: '' }, i, rules, true)}${q.answer && q.answer.correct === null ? `<div class="card decideBox"><p><b>Your decision on question ${i + 1}</b></p><label class="qOpt"><input type="radio" name="d-${esc(q.id)}" value="true" required><span>Right: the call and the reasons meet the standard</span></label><label class="qOpt"><input type="radio" name="d-${esc(q.id)}" value="false"><span>Not right</span></label></div>` : ''}`).join('')}
       ${waiting.length ? '<section class="card"><label class="qReason">A note for the learner (optional)<textarea name="note" rows="2" maxlength="1000"></textarea></label><button class="primary" type="submit">Record my decision</button></section>' : ''}</form>`;
   }
-  const { attempts } = await call('assessing');
-  return `<section class="card"><h1>Assessing</h1><p class="note">Answers waiting for an assessor's decision. Every decision is in the audit log.</p>
-    <ul class="rowList">${attempts.map((t) => `<li><a href="#/assessing/${esc(t.id)}"><b>${esc(t.person.name)} · ${esc(t.title)}</b><small>${esc(t.person.publicId)} · submitted ${esc(when(t.submittedAt))}</small></a></li>`).join('') || '<li class="muted">Nothing waiting.</li>'}</ul></section>`;
+  const pick = new URLSearchParams(location.hash.split('?')[1] || '').get('programme') || '';
+  const [{ attempts }, tests] = await Promise.all([call('assessing'), call(`assessing/lesson-tests${pick ? `?programme=${encodeURIComponent(pick)}` : ''}`).catch(() => null)]);
+  return `<section class="card"><h1>Assessing</h1><p class="note">Exam answers waiting for an assessor's decision (a video judgement, with the referee's reasons). Every decision is in the audit log.</p>
+    <ul class="rowList">${attempts.map((t) => `<li><a href="#/assessing/${esc(t.id)}"><b>${esc(t.person.name)} · ${esc(t.title)}</b><small>${esc(t.person.publicId)} · submitted ${esc(when(t.submittedAt))}</small></a></li>`).join('') || '<li class="muted">Nothing waiting.</li>'}</ul></section>
+    ${tests ? lessonTestsCard(tests) : ''}`;
+}
+
+// how everyone is doing with the tests at the end of lessons (20 November 2026): every try is kept, so an assessor sees who passes first
+// time and who needs several goes, person by person and lesson by lesson
+const share = (n, of) => (of ? Math.round((100 * n) / of) : 0);
+function lessonTestsCard(d) {
+  const person = (p) => {
+    const s = p.summary, first = share(s.firstTime, s.lessons);
+    return `<li class="ltPerson"><details><summary>
+        <span class="ltName"><b>${esc(p.name)}</b><small>${esc(p.publicId)}${s.lastAt ? ` · <span>${esc(t('last try {date}', { date: when(s.lastAt) }))}</span>` : ''}</small></span>
+        <span class="ltStats">
+          <span class="ltStat"><b>${first}%</b><small>${esc(t('right first time'))}</small></span>
+          <span class="ltStat"><b>${s.passed}/${s.lessons}</b><small>${esc(t('lessons passed'))}</small></span>
+          <span class="ltStat"><b>${s.tries}</b><small>${esc(t('tries'))}</small></span>
+          <span class="ltStat"><b>${s.answersRight}%</b><small>${esc(t('answers right'))}</small></span>
+        </span>
+        <span class="ltMeter" role="img" aria-label="${esc(t('{n}% right first time', { n: first }))}"><i class="${first >= 80 ? 'good' : first >= 50 ? 'mid' : 'low'}" style="width:${first}%"></i></span></summary>
+      <ul class="ltLessons">${p.lessons.map((l) => `<li><span><b>${esc(l.title)}</b><small>${esc(l.passed ? (l.firstTime ? t('Passed first time') : t('Passed on try {n}', { n: l.triesToPass })) : t('Not passed yet'))}</small></span>
+        <span class="ltTries">${l.tries.map((x) => `<span class="ltTry ${x.passed ? 'ok' : 'no'}" title="${esc(when(x.at))}">${x.no}: ${x.right}/${x.of}</span>`).join('')}</span></li>`).join('')}</ul></details></li>`;
+  };
+  return `<section class="card ltCard"><h2>${esc(t('Lesson tests'))}</h2>
+    <p class="note">${esc(t('Every try at the test at the end of each lesson. A lesson is passed when every answer is right; "right first time" is how many were passed on the first try.'))}</p>
+    ${d.programmes.length > 1 ? `<label class="ltPick">${esc(t('Programme'))} <select id="ltProgramme"><option value="">${esc(t('All programmes'))}</option>${d.programmes.map((p) => `<option value="${esc(p.id)}"${p.id === d.programme ? ' selected' : ''}>${esc(p.title)}</option>`).join('')}</select></label>` : ''}
+    <ul class="ltList">${d.people.map(person).join('') || `<li class="muted">${esc(t('Nobody has taken a lesson test yet.'))}</li>`}</ul></section>`;
 }
 
 // ---------------------------------------------------------------- a credential
@@ -137,6 +163,7 @@ export const views = { assessment: assessmentView, attempt: attemptView, assessi
 
 export function wire() {
   for (const h of document.querySelectorAll('.clipHolder')) clip(h, h.dataset.variant);
+  $('ltProgramme')?.addEventListener('change', (e) => { location.hash = `#/assessing${e.target.value ? `?programme=${encodeURIComponent(e.target.value)}` : ''}`; });
   $('startAttempt')?.addEventListener('click', (e) => act(async () => { const r = await call(`assessments/${e.currentTarget.dataset.id}/attempts`, { method: 'POST' }); location.hash = `#/attempt/${r.attempt.id}`; }, e.currentTarget));
   $('attemptForm')?.addEventListener('submit', (e) => {
     e.preventDefault();

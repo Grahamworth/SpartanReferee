@@ -10,7 +10,8 @@
    - Badges, once earned, are kept: per programme (first lesson, halfway, all lessons, every check right, qualified) and overall
      (a 4-week and a 12-week streak, 5 refreshers). There are no leaderboards: officiating isn't a contest.
 
-   POST /api/learn/lessons/<id>/checks {answers: [{key, choice}]}   -> { results: [{key, right}], right, of, badges }
+   POST /api/learn/lessons/<id>/checks {answers: [{key, choice}]}   -> { results: [{key, right}], right, of, passed, attemptNo, badges }
+        every try is kept (lesson_test, 009-lesson-tests.sql): the lesson's test can be taken again until every answer is right
    GET  /api/learn/refresher?programme=&more=1                      -> { questions, due, practised, nextDue }   more: fill up to 5
    POST /api/learn/refresher {answers: [{key, choice}], partial}    -> { results, right, of, nextDue, streak, badges }
         partial: one answer of a round answered a question at a time (Learning's Keep sharp bar); the round's last counts as a refresher
@@ -59,7 +60,10 @@ function createChecks(ctx) {
     const checks = await checksOf(l.lesson_id);
     const states = checks.length ? await db.query(`SELECT check_key, last_right, answered FROM {S}.check_state WHERE person_id = @p AND check_key IN (${checks.map((_, i) => `@k${i}`).join(', ')})`,
       { p: w.person.person_id, ...Object.fromEntries(checks.map((k, i) => [`k${i}`, k.key])) }) : [];
-    return { ...base, checks, checkState: Object.fromEntries(states.map((s) => [s.check_key, { right: !!s.last_right, answered: s.answered }])) };
+    // this person's tries at the lesson's test: how many, and whether one had every answer right
+    const tries = checks.length ? (await db.query('SELECT COUNT(*) AS n, MAX(CAST(passed AS INT)) AS passed FROM {S}.lesson_test WHERE person_id = @p AND lesson_id = @l', { p: w.person.person_id, l: l.lesson_id }))[0] : null;
+    return { ...base, checks, checkState: Object.fromEntries(states.map((s) => [s.check_key, { right: !!s.last_right, answered: s.answered }])),
+      tests: tries ? { attempts: tries.n, passed: !!tries.passed } : null };
   };
 
   /** one answer into its box */
@@ -85,13 +89,20 @@ function createChecks(ctx) {
     const answers = Array.isArray(b?.answers) ? b.answers : [];
     const results = checks.map((k) => { const a = answers.find((x) => x?.key === k.key); return a ? { key: k.key, right: choiceOf(a) === k.answer } : null; }).filter(Boolean);
     if (!results.length) return reply(400, { error: 'No answers' });
-    const right = results.filter((r) => r.right).length;
+    const right = results.filter((r) => r.right).length, passed = results.length === checks.length && right === checks.length;
+    let attemptNo = 1;
     await db.tx(async (q) => {
       for (const r of results) await record(q, w.person.person_id, l.programme_id, r.key, r.right);
       await ctx.markDay(w.person.person_id, q);
       await audit(q, w, 'lesson.check', 'lesson', l.lesson_id, { lesson: l.title, right, of: results.length }, { programmeId: l.programme_id });
+      // every try is kept, for the assessors' overview (Assessing)
+      attemptNo = (await q('SELECT COUNT(*) AS n FROM {S}.lesson_test WITH (UPDLOCK, HOLDLOCK) WHERE person_id = @p AND lesson_id = @l', { p: w.person.person_id, l: l.lesson_id }))[0].n + 1;
+      await q(`INSERT INTO {S}.lesson_test (test_id, person_id, lesson_id, programme_id, version_id, attempt_no, right_count, question_count, passed, answers)
+               VALUES (NEWID(), @p, @l, @prog, @v, @n, @r, @of, @ok, @ans)`,
+      { p: w.person.person_id, l: l.lesson_id, prog: l.programme_id, v: l.version_id, n: attemptNo, r: right, of: checks.length, ok: passed ? 1 : 0,
+        ans: JSON.stringify(results.map((x) => ({ key: x.key, choice: choiceOf(answers.find((a) => a?.key === x.key)), right: x.right }))) });
     });
-    return reply(200, { results, right, of: results.length, badges: await award(w.person) });
+    return reply(200, { results, right, of: results.length, passed, attemptNo, badges: await award(w.person) });
   }
 
   // ------------------------------------------------------------------ refreshers

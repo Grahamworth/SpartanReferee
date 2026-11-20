@@ -14,20 +14,25 @@ const record = (pid) => records()[keyOf(pid)] || null;
 function setRecord(pid, r) { const all = records(); if (r) all[keyOf(pid)] = r; else delete all[keyOf(pid)]; ls.set('sr_saved', JSON.stringify(all)); }
 const mb = (n) => (n / 1e6).toFixed(n < 1e7 ? 1 : 0);
 
+// a small download icon beside "Your progress" (20 November 2026): tapping it saves; once saved it shows a tick, and opens what was saved
+// with Update and Remove
+const ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11"/><path d="M7.5 10.5L12 15l4.5-4.5"/><path d="M5 19h14"/></svg>';
+const ICON_SAVED = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19h14"/><path d="M7 11l3.5 3.5L17 8"/></svg>';
 function box(pid) {
   if (!owner() || typeof caches === 'undefined') return '';
   const r = record(pid);
   const when = r ? new Date(r.at).toLocaleString(pageLang() || undefined, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '';
-  return `<div class="offlineSave" id="offlineSave" data-programme="${esc(pid)}">
-      <h3>Use offline</h3>
-      ${r ? `<p class="note"><b>${esc(t('Saved on this phone {when} ({size} MB).', { when, size: mb(r.bytes) }))}</b> ${esc(t('{lessons} lessons and {rules} rules, in {language}.', { lessons: r.lessons, rules: r.rules, language: LANG[r.lang] || r.lang }))}${r.noAudio ? ` ${esc(t('Some narration wasn\'t saved: the device reads those slides aloud instead.'))}` : ''}</p>`
-    : `<p class="note">${esc(t('Save the lessons, rules and handbook on this phone, with their narration, to use them with no signal at the venue.'))}</p>`}
-      <div class="btnRow"><button class="small primaryish" type="button" data-save-offline>${r ? 'Update the saved copy' : 'Save for offline'}</button>${r ? '<button class="small" type="button" data-forget-offline>Remove from this phone</button>' : ''}</div>
-      <p class="note" id="offlineProgress" aria-live="polite" hidden></p>
-    </div>`;
+  const progress = '<p class="note" id="offlineProgress" aria-live="polite" hidden></p>';
+  if (!r) return `<div class="offlineSave" id="offlineSave" data-programme="${esc(pid)}">
+      <button class="iconBtn offlineIcon" type="button" data-save-offline title="${esc(t('Save for offline'))}" aria-label="${esc(t('Save for offline'))}">${ICON}</button>${progress}</div>`;
+  return `<details class="offlineSave saved" id="offlineSave" data-programme="${esc(pid)}">
+      <summary class="iconBtn offlineIcon" title="${esc(t('Saved on this phone'))}" aria-label="${esc(t('Saved on this phone'))}">${ICON_SAVED}</summary>
+      <div class="offlinePanel"><p class="note"><b>${esc(t('Saved on this phone {when} ({size} MB).', { when, size: mb(r.bytes) }))}</b> ${esc(t('{lessons} lessons and {rules} rules, in {language}.', { lessons: r.lessons, rules: r.rules, language: LANG[r.lang] || r.lang }))}${r.noAudio ? ` ${esc(t('Some narration wasn\'t saved: the device reads those slides aloud instead.'))}` : ''}</p>
+      <div class="btnRow"><button class="small" type="button" data-save-offline>${esc(t('Update the saved copy'))}</button><button class="small" type="button" data-forget-offline>${esc(t('Remove from this phone'))}</button></div>${progress}</div>
+    </details>`;
 }
-// on a programme's page, in the "Your progress" card: published versions only, as learners see
-hooks.programme.push(async (d) => (d.slot === 'progress' && d.version.state === 'published' ? box(d.programme.id) : ''));
+// on a programme's page, beside "Your progress" (or "Take part"): published versions only, as learners see
+hooks.programme.push(async (d) => (d.slot === 'head' && d.version.state === 'published' ? box(d.programme.id) : ''));
 
 /** a few at a time, so it's quick without flooding the server */
 async function pool(jobs, n, each) {

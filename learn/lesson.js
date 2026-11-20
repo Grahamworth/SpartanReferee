@@ -172,7 +172,7 @@ async function lessonView(rest) {
       <div class="lpControls">
         <button type="button" id="lpPrev" class="lpBtn" aria-label="Previous slide">‹ Back</button>
         <button type="button" id="lpNext" class="lpBtn lpMain" aria-label="Next slide">Next ›</button>
-        <button type="button" id="lpEnd" class="lpBtn lpMain" hidden>${done ? 'Done' : 'Finish'}</button>
+        <button type="button" id="lpEnd" class="lpBtn lpMain" hidden>${checks.length ? esc(t('Finish and test')) : done ? 'Done' : 'Finish'}</button>
       </div>
       <div class="lpTools"><button type="button" class="link" id="lpCc" aria-pressed="true">Captions</button><button type="button" class="link" id="lpTx" aria-expanded="false">Transcript</button>
         <span class="muted lpMedia"><span>${esc(L.media.label)}</span>${L.media.kind !== 'text' ? ` · <span dir="ltr">${esc(L.media.voice)}</span>` : ''}${L.media.note ? ` · <span>${esc(L.media.note)}</span>` : ''}</span></div>
@@ -186,7 +186,7 @@ async function lessonView(rest) {
       ${await runHooks(hooks.lesson || [], L)}
       <p class="lpNextWrap" id="lpNextWrap"${moveOn ? '' : ' hidden'}>${L.nav.next ? `<a class="btnLink primaryLink" href="${lessonUrl(L.nav.next)}">Next: ${esc(L.nav.nextTitle)}</a>` : `<a class="btnLink primaryLink" href="${back}">Back to the programme</a>`}</p>
     </section>
-    <section class="card"><h2>About this lesson</h2><p>${esc(L.lesson.summary)}</p><p class="note">Sources: ${esc(String(c.sources || 'not given').replace(/\.$/, ''))}. ${esc(LANG[c.locale] || c.locale)} content version ${c.versionNo}${c.approvedAt ? `, approved ${esc(day(c.approvedAt))}` : ''}.</p></section>
+    <section class="card" id="lpAbout"><h2>About this lesson</h2><p>${esc(L.lesson.summary)}</p><p class="note">Sources: ${esc(String(c.sources || 'not given').replace(/\.$/, ''))}. ${esc(LANG[c.locale] || c.locale)} content version ${c.versionNo}${c.approvedAt ? `, approved ${esc(day(c.approvedAt))}` : ''}.</p></section>
     ${editorPanel()}`;
 }
 
@@ -220,12 +220,20 @@ export const views = { lesson: lessonView, media: mediaView };
 
 export function wire() {
   wireMedia();
+  $('view')?.classList.remove('lpTesting'); // a page drawn afresh starts with the lesson showing
   if (!$('lpStage') && !$('lpLang')) return;
   if ($('lpStage')) {
     drawSlide();
     $('lpPrev').onclick = () => go(slide - 1);
     $('lpNext').onclick = () => go(slide + 1);
-    $('lpEnd').onclick = () => { stopVoice(); drawControls(); $('lpFinish').hidden = false; $('lpFinish').scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+    // "Finish and test": the slides are put away while the questions are asked; going through the lesson again brings them back
+    const view = $('view');
+    const redo = () => { view.classList.remove('lpTesting'); $('lpFinish').hidden = true; go(0); $('lpStage').closest('.lpPlayer').scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+    const startTest = wireCheck(L, { redo });
+    $('lpEnd').onclick = () => {
+      stopVoice(); drawControls(); $('lpFinish').hidden = false;
+      if (startTest) { view.classList.add('lpTesting'); startTest(); } else $('lpFinish').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
     $('lpCc').onclick = () => { captions = !captions; drawSlide(); };
     $('lpTx').onclick = () => { const t = $('lpTranscript'); t.hidden = !t.hidden; $('lpTx').setAttribute('aria-expanded', String(!t.hidden)); };
     $('lpComplete')?.addEventListener('click', (e) => act(async () => {
@@ -234,7 +242,6 @@ export function wire() {
       celebrate(r.badges);
       redraw();
     }, e.currentTarget));
-    wireCheck(L);
   }
   $('lpLang')?.addEventListener('change', (e) => { stopVoice(); location.hash = lessonUrl(L.lesson.id, `locale=${e.target.value}`); });
 }

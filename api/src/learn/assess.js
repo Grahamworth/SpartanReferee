@@ -10,6 +10,8 @@
    GET  /api/learn/attempts/<id>                    -> { attempt }  yours (after submitting: feedback), or one you assess
    POST /api/learn/attempts/<id>/submit {answers}   -> { attempt, credential }  once only
    GET  /api/learn/assessing                        -> { attempts }  assessors: answers waiting for a decision
+   GET  /api/learn/assessing/lesson-tests?programme= -> { people, programmes }  assessors: every lesson test each person has taken, with
+        their success rate (how many lessons right first time, how many tries in all)
    POST /api/learn/attempts/<id>/decide {decisions: {questionId: true|false}, note}   assessors
    GET  /api/learn/credentials/<id>                 -> { credential }  POST /api/learn/credentials/<id>/status {status, reason}
    Scoring: a single-choice question is right when the right option is chosen; a multiple-choice one when exactly the right ones
@@ -264,6 +266,30 @@ function createAssess(ctx) {
       WHERE t.result = 'pending' AND t.programme_id IN (${mine.map((_, i) => `@p${i}`).join(', ')}) ORDER BY t.submitted_at`, Object.fromEntries(mine.map((id, i) => [`p${i}`, id])));
     return reply(200, { attempts: rows.map((t) => ({ id: t.attempt_id, title: t.title, programmeId: t.programme_id, person: { name: t.legal_name, publicId: t.public_id }, submittedAt: t.submitted_at })) });
   }
+  /** assessors: how each person is doing with the tests at the end of lessons, in the programmes they assess (20 November 2026) */
+  async function lessonTests(w, query) {
+    const progs = await db.query('SELECT programme_id, title FROM {S}.programme');
+    const mine = progs.filter((p) => P.can(w.grants, 'assess', { programmeId: p.programme_id }));
+    if (!mine.length) return reply(403, { error: 'Only assessors see the lesson tests' });
+    const pick = text(query?.programme, 32), ids = pick && mine.some((p) => p.programme_id === pick) ? [pick] : mine.map((p) => p.programme_id);
+    const rows = await db.query(`SELECT t.person_id, t.lesson_id, t.programme_id, t.attempt_no, t.right_count, t.question_count, t.passed, t.at, r.legal_name, r.preferred_name, r.public_id, l.title AS lesson
+      FROM {S}.lesson_test t JOIN {S}.person r ON r.person_id = t.person_id JOIN {S}.lesson l ON l.lesson_id = t.lesson_id
+      WHERE t.programme_id IN (${ids.map((_, i) => `@p${i}`).join(', ')}) ORDER BY t.at`, Object.fromEntries(ids.map((id, i) => [`p${i}`, id])));
+    const people = new Map();
+    for (const r of rows) {
+      if (!people.has(r.person_id)) people.set(r.person_id, { id: r.person_id, name: r.preferred_name || r.legal_name, publicId: r.public_id, lessons: new Map() });
+      const p = people.get(r.person_id), key = r.lesson_id;
+      if (!p.lessons.has(key)) p.lessons.set(key, { lessonId: key, title: r.lesson, programmeId: r.programme_id, tries: [] });
+      p.lessons.get(key).tries.push({ no: r.attempt_no, right: r.right_count, of: r.question_count, passed: !!r.passed, at: r.at });
+    }
+    const out = [...people.values()].map((p) => {
+      const lessons = [...p.lessons.values()].map((l) => ({ ...l, passed: l.tries.some((x) => x.passed), firstTime: !!l.tries[0]?.passed, triesToPass: (l.tries.findIndex((x) => x.passed) + 1) || null }));
+      const tries = lessons.flatMap((l) => l.tries), right = tries.reduce((n, x) => n + x.right, 0), asked = tries.reduce((n, x) => n + x.of, 0);
+      return { id: p.id, name: p.name, publicId: p.publicId, lessons, summary: { lessons: lessons.length, passed: lessons.filter((l) => l.passed).length, firstTime: lessons.filter((l) => l.firstTime).length,
+        tries: tries.length, answersRight: asked ? Math.round((100 * right) / asked) : 0, lastAt: tries.length ? tries[tries.length - 1].at : null } };
+    }).sort((a, b) => a.name.localeCompare(b.name));
+    return reply(200, { people: out, programmes: mine.map((p) => ({ id: p.programme_id, title: p.title })), programme: pick || '' });
+  }
   async function decide(w, id, b) {
     const t = await attemptById(id); if (!t) return reply(404, { error: 'No such attempt' });
     if (!P.can(w.grants, 'assess', { programmeId: t.programme_id })) return reply(403, { error: 'Only the programme\'s assessors decide its assessments' });
@@ -314,7 +340,7 @@ function createAssess(ctx) {
     return getCredential(w, c.credential_id);
   }
 
-  async function route(w, method, parts, body) {
+  async function route(w, method, parts, body, query) {
     const [, a, b, c] = parts;
     if (a === 'versions' && b && c === 'assessments' && method === 'POST') return addAssessment(w, b, body);
     if (a === 'assessments' && b && !c && method === 'GET') return getAssessment(w, b);
@@ -325,6 +351,7 @@ function createAssess(ctx) {
     if (a === 'attempts' && b && c === 'submit' && method === 'POST') return submit(w, b, body);
     if (a === 'attempts' && b && c === 'decide' && method === 'POST') return decide(w, b, body);
     if (a === 'assessing' && !b && method === 'GET') return assessing(w);
+    if (a === 'assessing' && b === 'lesson-tests' && method === 'GET') return lessonTests(w, query);
     if (a === 'credentials' && b && !c && method === 'GET') return getCredential(w, b);
     if (a === 'credentials' && b && c === 'status' && method === 'POST') return credentialStatus(w, b, body);
     return null;

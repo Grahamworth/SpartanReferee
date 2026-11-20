@@ -261,9 +261,23 @@ h3.sub { font-size: 1rem; text-transform: uppercase; letter-spacing: .04em; marg
   a { color: #000 !important; text-decoration: none !important; }
 }
 .reviewTitles { margin: 4px 0 6px; padding-inline-start: 1.2em; }
-.offlineSave { border-top: 1px solid var(--line); margin-top: 16px; padding-top: 12px; }
-.offlineSave h3 { margin: 0 0 4px; font-size: 1.15rem; }
+/* saving a programme for offline: a small download icon beside "Your progress" (saved.js); once saved, a tick that opens Update and Remove */
+.offlineSave { position: relative; flex: none; }
+.offlineSave > summary { list-style: none; cursor: pointer; } .offlineSave > summary::-webkit-details-marker { display: none; }
+.iconBtn.offlineIcon { width: 40px; height: 40px; background: transparent; color: var(--primary-text); border: 1.5px solid var(--line); }
+.iconBtn.offlineIcon svg { width: 22px; height: 22px; stroke-width: 2; }
+.iconBtn.offlineIcon:hover { border-color: var(--primary); filter: none; }
+.offlineSave.saved .offlineIcon { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 50%, var(--line)); }
+.offlineIcon:disabled { opacity: .6; }
+.offlinePanel, .offlineSave > #offlineProgress { position: absolute; right: 0; top: 48px; z-index: 5; width: min(320px, calc(100vw - 48px)); padding: 12px 14px; border: 1px solid var(--line); border-radius: 10px;
+  background: var(--panel); box-shadow: 0 8px 24px rgba(0,0,0,.18); }
+.offlinePanel #offlineProgress { position: static; width: auto; padding: 0; border: 0; box-shadow: none; margin: 8px 0 0; }
 .offlineSave .bar { display: block; margin: 6px 0; }
+/* the programme page's way into the lessons: Start or Continue, naming the lesson (programmes.js nextButton) */
+.btnLink.nextLessonBtn { display: flex; align-items: center; gap: 4px 12px; flex-wrap: wrap; width: 100%; max-width: 460px; margin: 6px 0 4px; padding: 14px 18px; border-radius: 12px; font-size: 1.05rem; text-decoration: none; }
+.nextLessonBtn .nextLabel { font-weight: 800; text-transform: uppercase; letter-spacing: .04em; }
+.nextLessonBtn .nextTitle { flex: 1; min-width: 0; font-weight: 500; opacity: .92; }
+.nextLessonBtn .nextArrow { font-size: 1.6rem; line-height: 1; margin-left: auto; }
 /* keeping sharp (sharp.js): the quick check, refreshers, the streak and badges */
 .quickCheck { border-top: 1px solid var(--line); margin: 6px 0 14px; padding-top: 12px; }
 .quickCheck h3, .progSharp h3 { margin: 0 0 4px; font-size: 1.15rem; }
@@ -603,3 +617,26 @@ h3.sub { font-size: 1rem; text-transform: uppercase; letter-spacing: .04em; marg
 .personMore[open] > summary b::after { content: " ▾"; }
 .personMore[open] > summary { margin-bottom: 6px; }
 .personOpen { margin: 8px 0 0; }
+
+/* "Finish and test" (lesson.js): while the questions are asked the lesson itself is put away */
+#view.lpTesting .lpPlayer, #view.lpTesting #lpAbout { display: none; }
+#lpRetry { margin-top: 10px; }
+
+/* Assessing: everyone's lesson tests (assess.js lessonTestsCard) */
+.ltPick { display: inline-flex; gap: 8px; align-items: center; margin: 4px 0 10px; }
+.ltList, .ltLessons { list-style: none; margin: 0; padding: 0; }
+.ltPerson { border-top: 1px solid var(--line); }
+.ltPerson > details > summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; padding: 12px 0; }
+.ltPerson > details > summary::-webkit-details-marker { display: none; }
+.ltName b::after { content: " ▸"; color: var(--muted); font-weight: 400; } .ltPerson details[open] .ltName b::after { content: " ▾"; }
+.ltName small { display: block; color: var(--muted); }
+.ltStats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.ltStat { display: grid; text-align: center; padding: 6px 4px; border: 1px solid var(--line); border-radius: 8px; font-variant-numeric: tabular-nums; }
+.ltStat b { font-size: 1.1rem; } .ltStat small { color: var(--muted); font-size: .75rem; line-height: 1.2; }
+.ltMeter { display: block; height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
+.ltMeter i { display: block; height: 100%; } .ltMeter i.good { background: var(--accent); } .ltMeter i.mid { background: var(--warn); } .ltMeter i.low { background: var(--bad); }
+.ltLessons li { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 6px 12px; padding: 8px 0 8px 12px; border-left: 3px solid var(--line); margin: 0 0 6px; }
+.ltLessons small { display: block; color: var(--muted); }
+.ltTries { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+.ltTry { font-size: .8rem; line-height: 1.4; white-space: nowrap; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+.ltTry.ok { border-color: var(--accent); color: var(--accent); } .ltTry.no { border-color: var(--bad); color: var(--bad); }

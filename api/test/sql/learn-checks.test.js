@@ -112,3 +112,19 @@ test('a lesson opens once the one before is completed, which needs its quick che
   await ok('POST', `learn/lessons/${two}/complete`, as(cara), { contentId: c2 });
   assert.deepStrictEqual((await ok('GET', 'learn/programmes/ocr-referee', as(cara))).locked, []);
 });
+
+test('a lesson\'s test can be taken again until every answer is right; every try is kept, and assessors see each person\'s record', { skip }, async () => {
+  // the first try (one wrong) was in the test before: this is the second, all right
+  const r = await ok('POST', `learn/lessons/${lessonId}/checks`, as(learner), { answers: [{ key: 'ocr-1-1.1', choice: 0 }, { key: 'ocr-1-1.2', choice: 1 }] });
+  assert.strictEqual(r.attemptNo, 2); assert.strictEqual(r.passed, true);
+  assert.deepStrictEqual((await ok('GET', `learn/lessons/${lessonId}`, as(learner))).extra.tests, { attempts: 2, passed: true });
+  const d = await ok('GET', 'learn/assessing/lesson-tests', boss);
+  const me = d.people.find((p) => p.id === learner.id);
+  assert.ok(me, 'the learner is in the assessors\' overview');
+  assert.deepStrictEqual(me.lessons[0].tries.map((x) => [x.no, x.right, x.of, x.passed]), [[1, 1, 2, false], [2, 2, 2, true]]);
+  assert.strictEqual(me.lessons[0].firstTime, false); assert.strictEqual(me.lessons[0].triesToPass, 2);
+  const s = me.summary;
+  assert.deepStrictEqual({ lessons: s.lessons, passed: s.passed, firstTime: s.firstTime, tries: s.tries, answersRight: s.answersRight }, { lessons: 1, passed: 1, firstTime: 0, tries: 2, answersRight: 75 });
+  // a learner can't see everyone's
+  assert.strictEqual((await call('GET', 'learn/assessing/lesson-tests', as(learner))).status, 403);
+});
