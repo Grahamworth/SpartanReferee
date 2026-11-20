@@ -65,9 +65,15 @@ function draw() {
   const numbers = data.numbers.filter((x) => (!q || x.number.includes(q)) && (!day || dayKey(x.firstAt) === day) && (!source || sourceOf(x) === source));
   $('numbers').innerHTML = numbers.map((x) => `<div class="pastRow"><div><b>${esc(x.number)}</b><small>${esc(sourceName(x))} · ${esc(dayLabel(dayKey(x.firstAt)))}, ${x.src === 'upload' && x.firstT != null ? `${esc(mmss(x.firstT))} in the video` : esc(when(x.firstAt))}</small></div>
       <button class="small" type="button" data-number="${esc(x.id)}">Go to it</button></div>`).join('') || `<p class="muted">${data.numbers.length ? 'None match that.' : 'No numbers were shown.'}</p>`;
-  const recs = data.recordings.filter((r) => (!day || dayKey(r.startedAt) === day) && (!source || source === (r.cam ? `c:${r.cam}` : `f:${r.file}`) || source === `v:${r.file}`));
+  // Only the recordings someone was counted in, unless the box is ticked: a day's cameras also leave long stretches with nobody
+  // exercising, and a connection that keeps dropping leaves hundreds of clips under a second long.
+  const counted = new Set(data.athletes.map((a) => recordingFor(a)?.id).filter(Boolean));
+  const inView = data.recordings.filter((r) => (!day || dayKey(r.startedAt) === day) && (!source || source === (r.cam ? `c:${r.cam}` : `f:${r.file}`) || source === `v:${r.file}`));
+  const recs = $('allRecs').checked ? inView : inView.filter((r) => counted.has(r.id));
+  $('recCount').textContent = recs.length ? `(${recs.length})` : '';
+  show($('allRecsRow'), inView.some((r) => !counted.has(r.id)));
   $('recordings').innerHTML = recs.map((r) => `<div class="pastRow"><div><b>${esc(recName(r))}</b><small>${esc(dayLabel(dayKey(r.startedAt)))}, ${esc(when(r.startedAt))} · ${esc(size(r.size))}</small></div>
-      <div class="pastActions"><button class="small" type="button" data-play="${esc(r.id)}">Play</button><a class="small" href="${esc(r.download)}" download>Download</a></div></div>`).join('') || '<p class="muted">No recordings in the last 7 days.</p>';
+      <div class="pastActions"><button class="small" type="button" data-play="${esc(r.id)}">Play</button><a class="small" href="${esc(r.download)}" download>Download</a></div></div>`).join('') || `<p class="muted">${inView.length ? 'Nobody was counted in these recordings. Tick the box above to show them.' : 'No recordings in the last 7 days.'}</p>`;
 }
 
 // ---------- playing, with the judge's tracking over the picture
@@ -190,11 +196,16 @@ async function saveAthlete(server, n) {
   if (savedUrl) { URL.revokeObjectURL(savedUrl); savedUrl = ''; }
   show($('saveBox'), true); show($('saveBar'), true); show($('saveCancel'), true); show($('saveAgain'), false);
   say(`Getting ${name}'s video ready…`, 0);
+  // A recording stored without its index (those made before 20 November 2026) has to be read through to find the place: over
+  // two minutes for one six minutes in, with nothing on the page changing. So it says what it's doing, and gives up in the end.
+  const slow = setTimeout(() => { if (saving === S && !S.recorder) say('Still finding the place in the recording. With an older recording this can take a few minutes: keep this page open.'); }, 8000);
+  const within = (p) => Promise.race([p, new Promise((_, no) => { setTimeout(() => no(new Error('too slow')), 10 * 60e3); })]);
   video.pause();
   const v = S.v = document.createElement('video');
   v.crossOrigin = 'anonymous'; v.playsInline = true; v.preload = 'auto';
   view.before(v);
-  const tidy = () => {
+  const tidy = S.tidy = () => {
+    clearTimeout(slow);
     try { v.pause(); v.removeAttribute('src'); v.load(); } catch { /* gone */ }
     v.remove(); S.ac?.close?.().catch?.(() => {}); if (saving === S) saving = null;
   };
@@ -205,8 +216,8 @@ async function saveAthlete(server, n) {
     S.startMs = startOf(rec);
     const last = Math.max(t.frames.at(-1)[0], t.events.at(-1)?.t ?? 0);
     const from = Math.max(S.startMs, t.frames[0][0] - SAVE_BEFORE_MS), to = Math.min(last + SAVE_AFTER_MS, from + SAVE_MAX_MS);
-    v.src = rec.url; await once(v, 'loadedmetadata');
-    v.currentTime = Math.max(0, (from - S.startMs) / 1000); await once(v, 'seeked');
+    v.src = rec.url; await within(once(v, 'loadedmetadata'));
+    v.currentTime = Math.max(0, (from - S.startMs) / 1000); await within(once(v, 'seeked'));
     if (S.cancelled) { tidy(); return; }
     const k = Math.min(1, 1920 / v.videoWidth);
     view.width = Math.round((v.videoWidth * k) / 2) * 2; view.height = Math.round((v.videoHeight * k) / 2) * 2;
@@ -270,7 +281,7 @@ async function saveAthlete(server, n) {
 function cancelSave() {
   const S = saving; if (!S) return;
   S.cancelled = true;
-  if (S.finish) S.finish(); else show($('saveBox'), false);
+  if (S.finish) S.finish(); else { S.tidy?.(); show($('saveBox'), false); } // (still getting ready: nothing's been recorded)
 }
 // a page that isn't in front isn't drawn, so the video would freeze while the sound ran on: wait until it's back
 document.addEventListener('visibilitychange', () => {
@@ -320,7 +331,7 @@ document.addEventListener('click', (e) => {
   }
 });
 const fail = (msg) => { $('error').textContent = msg || ''; show($('error'), !!msg); };
-for (const id of ['find', 'day', 'source']) $(id).addEventListener(id === 'find' ? 'input' : 'change', draw);
+for (const id of ['find', 'day', 'source', 'allRecs']) $(id).addEventListener(id === 'find' ? 'input' : 'change', draw);
 
 async function enter() {
   const me = await getMe(true);

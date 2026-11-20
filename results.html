@@ -39,6 +39,7 @@
   .pastRow > div { min-width: 0; overflow-wrap: anywhere; }
   .pastRow small { display: block; color: var(--muted); }
   .pastActions { display: flex; gap: 8px; flex-wrap: wrap; }
+  #allRecsRow { margin: 0 0 10px; color: var(--muted); }
   .pastSave { display: flex; gap: 12px; align-items: center; padding: 10px; margin: 10px 0; border: 1px solid var(--line); }
   .pastSave > div:last-child { flex: 1; min-width: 0; }
   .pastSave p { margin: 0 0 6px; }
@@ -96,7 +97,9 @@
         </div>
         <div class="pastEvents" id="events"></div>
         <section class="card" style="margin-top:18px"><h2>Numbers shown to a camera</h2><div id="numbers"></div></section>
-        <section class="card"><h2>Recordings</h2><div id="recordings"></div></section>
+        <section class="card"><h2>Recordings <small class="muted" id="recCount"></small></h2>
+          <label class="check" id="allRecsRow" hidden><input type="checkbox" id="allRecs"> Show recordings nobody was counted in</label>
+          <div id="recordings"></div></section>
       </div>
       <section class="card"><h2>Athletes <small class="muted" id="athleteCount"></small></h2><div id="athletes"></div></section>
     </div>
