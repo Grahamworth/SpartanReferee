@@ -28,7 +28,7 @@ const LANGUAGES = ['en', 'fr', 'de', 'nl', 'es', 'it', 'el', 'hr', 'cs', 'pl', '
 /** may this assignment book the event's cameras? The tick an organiser set; before ticks existed, the head referee */
 const canBookRow = (r) => (r.canBook === undefined ? r.role === 'head' : !!r.canBook);
 
-function createAssignments({ store, now, reply, session, isAdmin, isAdminEmail, membership, events, bookingStatus = async () => null, learnOn = false, onLanguage = null, scopeOf = async () => ({ countries: [] }) }) {
+function createAssignments({ store, now, reply, session, isAdmin, isAdminEmail, membership, events, bookingStatus = async () => null, bookedUnits = async () => new Set(), learnOn = false, onLanguage = null, scopeOf = async () => ({ countries: [] }) }) {
   const all = async () => store.list(T);
   const roleOf = (r) => (r.role === 'head' ? 'head' : 'referee');
   // head referees first, then by name or address
@@ -163,10 +163,10 @@ function createAssignments({ store, now, reply, session, isAdmin, isAdminEmail, 
     const rows = await all();
     const per = new Map();
     for (const r of rows) { const c = per.get(r.eventId) || { referees: 0, heads: 0, canBook: 0 }; c.referees++; if (roleOf(r) === 'head') c.heads++; if (canBookRow(r)) c.canBook++; per.set(r.eventId, c); }
-    const q = String(query.q || '').trim().toLowerCase();
+    const q = String(query.q || '').trim().toLowerCase(), booked = await bookedUnits();
     const list = (await events.upcoming()).map(eventView).filter((e) => manages(sc, e))
       .filter((e) => !q || `${e.name} ${e.city} ${e.country}`.toLowerCase().includes(q))
-      .map((e) => ({ ...e, ...(per.get(e.id) || { referees: 0, heads: 0, canBook: 0 }) }));
+      .map((e) => ({ ...e, ...(per.get(e.id) || { referees: 0, heads: 0, canBook: 0 }), camerasBooked: booked.has(`e${e.id}`) }));
     return reply(200, { events: list, admin: sc.admin, countries: sc.countries });
   }
 

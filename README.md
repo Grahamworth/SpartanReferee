@@ -70,6 +70,14 @@ Tabs: **Home**, **My Learning**, **Events**, **Rules**, **Obstacles**, plus role
 
 **Signing in from an invite** says which address to use and fills it in: Google and Microsoft get it as `login_hint`, and the emailed code's box is fixed to it. Registering with another address is refused, naming the invited one.
 
+**The tabs** (20 November 2026, the user's order and names): Home, Events, Learning, Obstacles, Rules, Assessing, Manage Events, Manage People, Manage Programs, Admin Reports, Admin Audit Log, Admin Diagnostics, Admin Config (`learn/index.html`; each tab's `data-show` says who sees it). Duplicates went (a possible duplicate is still flagged when someone is added). Alongside:
+- **Install the app** is a button in the header, only on an Android phone or tablet, an iPhone or an iPad, and not once installed (`installButton` in `offline.js`): Android installs from it, Apple devices get the two taps in Safari. The Home page's install card went.
+- **Events** is read only: an event's notes show, and managing it (referees, who books the cameras, notes) is only in **Manage Events**, whose list and event pages warn while an event's cameras aren't booked (`camerasBooked` from `bookedUnits()` in `servers.js`). Its notes are written, edited and removed in the one card where they show.
+- **Learning** opens with the **Keep sharp** bar once some lessons (and their quick checks) are done: a refresher question to answer there, a question at a time (`partial` answers; the round's last counts as a refresher), the streak, and how close the two nearest badges are (each badge now has `have` and `need`).
+- **Rules**: a rule's page says where it applies: the obstacles it's about (and "at every obstacle"), the lessons that teach it and the questions that test it, once each; every citation by language and version is folded away underneath. The list shows the obstacles each rule applies at.
+- **Manage People**: a person is one line (name, contact, how many programmes, completed and overdue) until clicked.
+- **Admin Config** has only the cameras (running, booked, camera hours), the AI judge's costs (this month, per server-hour and per camera-hour) and the admins. Who can sign in is in Manage People (invites).
+
 **New programmes are closed on the live site** (20 November 2026, the user: "We are not allowing the creation of new programmes just yet"): My Learning no longer shows the New programme form, and the server refuses one even from an admin. The dev and test schemas keep it (the tests and local work need it). To open it on the live site, set the site app setting `LEARN_NEW_PROGRAMMES=on`. Existing programmes are edited in Programs as before.
 
 **Programs** (`learn/authoring.js`, server `api/src/learn/authoring.js`, migration `008-authoring.sql`; admins, programme owners, content editors / translators). Reviews and Media are inside it now. A lesson is edited where it stands:

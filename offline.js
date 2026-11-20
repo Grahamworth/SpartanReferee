@@ -135,6 +135,25 @@ export const installed = () => matchMedia('(display-mode: standalone)').matches 
 const ios = () => /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 let prompt = null;
 if (typeof window !== 'undefined') addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); prompt = e; window.dispatchEvent(new Event('sr:installable')); });
+const android = () => /Android/i.test(navigator.userAgent);
+/** the app's header button (learn/index.html, 20 November 2026): only on an Android phone or tablet, an iPhone or an iPad, and not
+ *  once it's installed. Android installs it straight from the button (when the browser offers it); on Apple devices the button shows
+ *  the two taps in Safari (how, an element with a [data-close] button) */
+export function installButton(btn, how) {
+  if (!btn || installed() || !hosted() || !(android() || ios())) return;
+  const draw = () => { btn.hidden = !(ios() || prompt); };
+  btn.onclick = async () => {
+    if (prompt) {
+      prompt.prompt();
+      const { outcome } = await prompt.userChoice.catch(() => ({}));
+      prompt = null; if (outcome === 'accepted') btn.hidden = true; else draw();
+    } else if (ios() && how) how.hidden = !how.hidden;
+  };
+  how?.querySelector('[data-close]')?.addEventListener('click', () => { how.hidden = true; });
+  addEventListener('sr:installable', draw);
+  addEventListener('appinstalled', () => { btn.hidden = true; if (how) how.hidden = true; });
+  draw();
+}
 /** the home page's card offering to install the app: a button where the browser can do it, the steps on an iPhone */
 export function installCard(card) {
   if (!card || installed() || !hosted()) return;

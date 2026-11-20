@@ -12,8 +12,10 @@
 
    POST /api/learn/lessons/<id>/checks {answers: [{key, choice}]}   -> { results: [{key, right}], right, of, badges }
    GET  /api/learn/refresher?programme=&more=1                      -> { questions, due, practised, nextDue }   more: fill up to 5
-   POST /api/learn/refresher {answers: [{key, choice}]}             -> { results, right, of, nextDue, streak, badges }
+   POST /api/learn/refresher {answers: [{key, choice}], partial}    -> { results, right, of, nextDue, streak, badges }
+        partial: one answer of a round answered a question at a time (Learning's Keep sharp bar); the round's last counts as a refresher
    GET  /api/learn/progress                                         -> { streak, badges, refresher: [{programmeId, title, due, practised}] }
+        each badge has have and need (how close: "3 of 5 refreshers")
    badges in a reply are the ones just earned. */
 const DAYS = [1, 3, 7, 21, 60, 120];
 const SIZE = 5;
@@ -134,7 +136,7 @@ function createChecks(ctx) {
     await db.tx(async (q) => {
       for (const r of results) await record(q, w.person.person_id, r.programmeId, r.key, r.right);
       await ctx.markDay(w.person.person_id, q);
-      await audit(q, w, 'refresher.done', 'person', w.person.person_id, { right, of: results.length }, { programmeId: results[0].programmeId });
+      await audit(q, w, b?.partial ? 'refresher.answer' : 'refresher.done', 'person', w.person.person_id, { right, of: results.length }, { programmeId: results[0].programmeId });
     });
     const after = await practised(w.person.person_id, '');
     return reply(200, { results: results.map(({ key, right: r }) => ({ key, right: r })), right, of: results.length, nextDue: nextDue(after), due: after.filter((x) => x.why).length, streak: await streakOf(w.person.person_id), badges: await award(w.person) });
@@ -159,12 +161,16 @@ function createChecks(ctx) {
         LEFT JOIN {S}.check_state s ON s.check_key = c.check_key AND s.person_id = @p WHERE l.version_id = @v`, { p, v: e.version_id });
       const qualified = (await db.query("SELECT COUNT(*) AS n FROM {S}.credential WHERE person_id = @p AND programme_id = @g AND status IN ('active', 'due')", { p, g: e.programme_id }))[0].n > 0;
       const has = { started: n > 0, halfway: countable.length > 0 && n * 2 >= countable.length, lessons: countable.length > 0 && n === countable.length, sharp: checks.length > 0 && checks.every((c) => c.right_count > 0), qualified };
-      for (const kind of KINDS) out.push({ id: `${e.programme_id}:${kind}`, kind, programmeId: e.programme_id, programmeTitle: e.title, now: has[kind] });
+      // how close: so Learning's Keep sharp bar can say "3 of 5"
+      const rightChecks = checks.filter((c) => c.right_count > 0).length;
+      const count = { started: [Math.min(n, 1), 1], halfway: [n, Math.ceil(countable.length / 2)], lessons: [n, countable.length], sharp: [rightChecks, checks.length], qualified: [qualified ? 1 : 0, 1] };
+      for (const kind of KINDS) out.push({ id: `${e.programme_id}:${kind}`, kind, programmeId: e.programme_id, programmeTitle: e.title, now: has[kind], have: count[kind][0], need: count[kind][1] });
     }
     const streak = await streakOf(p);
     const refreshers = (await db.query("SELECT COUNT(*) AS n FROM {S}.audit_event WHERE action = 'refresher.done' AND entity_type = 'person' AND entity_id = CONVERT(NVARCHAR(64), @p)", { p }))[0].n;
     const overall = { 'streak-4': streak.best >= 4, 'streak-12': streak.best >= 12, 'refresher-5': refreshers >= 5 };
-    for (const kind of OVERALL) out.push({ id: kind, kind, programmeId: '', programmeTitle: '', now: overall[kind] });
+    const count = { 'streak-4': [streak.best, 4], 'streak-12': [streak.best, 12], 'refresher-5': [refreshers, 5] };
+    for (const kind of OVERALL) out.push({ id: kind, kind, programmeId: '', programmeTitle: '', now: overall[kind], have: Math.min(count[kind][0], count[kind][1]), need: count[kind][1] });
     return { list: out, streak };
   }
   /** keeps any badge just earned; returns those (and the full list, for the progress page) */

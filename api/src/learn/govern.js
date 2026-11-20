@@ -56,15 +56,21 @@ function createGovern(ctx) {
   const linksReady = () => (firstSync = firstSync || syncLinksSafe());
   /** everything that teaches or tests a rule, with where it sits */
   async function affectedBy(ruleId, q = db.query) {
-    const content = await q(`SELECT k.rule_version, c.content_id, c.locale, c.version_no, c.state, l.lesson_id, l.title, v.version_id, v.edition, v.state AS vstate, v.programme_id
-      FROM {S}.rule_link k JOIN {S}.content_version c ON c.content_id = k.target_id JOIN {S}.lesson l ON l.lesson_id = c.lesson_id JOIN {S}.programme_version v ON v.version_id = l.version_id
+    // with the lesson's module and programme, so a rule's page can say where it applies in words (20 November 2026)
+    const content = await q(`SELECT k.rule_version, c.content_id, c.locale, c.version_no, c.state, l.lesson_id, l.title, l.seq, m.title AS module, m.seq AS mseq, p.title AS programme,
+        v.version_id, v.edition, v.state AS vstate, v.programme_id
+      FROM {S}.rule_link k JOIN {S}.content_version c ON c.content_id = k.target_id JOIN {S}.lesson l ON l.lesson_id = c.lesson_id JOIN {S}.module m ON m.module_id = l.module_id
+        JOIN {S}.programme_version v ON v.version_id = l.version_id JOIN {S}.programme p ON p.programme_id = v.programme_id
       WHERE k.rule_id = @r AND k.target_type = 'content'`, { r: ruleId });
-    const questions = await q(`SELECT k.rule_version, qu.question_id, qu.prompt, a.title AS assessment, a.assessment_id, v.version_id, v.edition, v.state AS vstate, v.programme_id
+    const questions = await q(`SELECT k.rule_version, qu.question_id, qu.prompt, a.title AS assessment, a.assessment_id, p.title AS programme, v.version_id, v.edition, v.state AS vstate, v.programme_id
       FROM {S}.rule_link k JOIN {S}.question qu ON qu.question_id = k.target_id JOIN {S}.assessment a ON a.assessment_id = qu.assessment_id JOIN {S}.programme_version v ON v.version_id = a.version_id
+        JOIN {S}.programme p ON p.programme_id = v.programme_id
       WHERE k.rule_id = @r AND k.target_type = 'question'`, { r: ruleId });
     return [
-      ...content.map((c) => ({ type: 'lesson', id: c.lesson_id, contentId: c.content_id, title: `${c.title} (${c.locale} v${c.version_no}, ${c.state})`, edition: c.edition, programmeVersion: c.version_id, versionState: c.vstate, ruleVersion: c.rule_version })),
-      ...questions.map((x) => ({ type: 'question', id: x.question_id, assessmentId: x.assessment_id, title: `${x.assessment}: ${x.prompt.slice(0, 90)}`, edition: x.edition, programmeVersion: x.version_id, versionState: x.vstate, ruleVersion: x.rule_version })),
+      ...content.map((c) => ({ type: 'lesson', id: c.lesson_id, contentId: c.content_id, title: `${c.title} (${c.locale} v${c.version_no}, ${c.state})`, edition: c.edition, programmeVersion: c.version_id, versionState: c.vstate, ruleVersion: c.rule_version,
+        lessonTitle: c.title, lessonSeq: c.seq, module: c.module, moduleSeq: c.mseq, programme: c.programme, programmeId: c.programme_id, locale: c.locale, contentState: c.state })),
+      ...questions.map((x) => ({ type: 'question', id: x.question_id, assessmentId: x.assessment_id, title: `${x.assessment}: ${x.prompt.slice(0, 90)}`, edition: x.edition, programmeVersion: x.version_id, versionState: x.vstate, ruleVersion: x.rule_version,
+        prompt: x.prompt, assessment: x.assessment, programme: x.programme, programmeId: x.programme_id })),
     ];
   }
   const ruleView = (r, doc, open = 0) => r && ({ key: r.rule_key, id: r.rule_id, versionNo: r.version_no, programmeId: r.programme_id, docId: r.doc_id, section: r.section, title: r.title,

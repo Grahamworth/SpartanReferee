@@ -34,12 +34,18 @@ export async function peopleList({ title, tabs = '', addBtn = '' }) {
   const badge = (r) => (r.status === 'completed' ? '<span class="badge s-completed">Completed</span>' : r.status === 'overdue' ? '<span class="badge s-expired">Overdue</span>' : '');
   const programme = (r) => `<div class="personProg"><small><b>${esc(r.title)}</b> ${badge(r)}</small>${bar(r.done, r.total)}
       <small><span>${esc(t('{done} of {total} lessons', { done: r.done, total: r.total }))}</span>${r.due ? ` · <span>${esc(t('complete by {date}', { date: day(r.due) }))}</span>` : ''}${r.remindedAt ? ` · <span>${esc(t('reminded {date}', { date: when(r.remindedAt) }))}</span>` : ''}${r.lastLesson ? ` · <span>${esc(t('last lesson {date}', { date: day(r.lastLesson) }))}</span>` : ''}</small></div>`;
+  // one line per person; their programmes and lessons open when the person is clicked (20 November 2026)
+  const glance = (rows) => {
+    if (!rows.length) return `<small class="muted">${esc(t('No training assigned yet'))}</small>`;
+    const overdue = rows.filter((r) => r.status === 'overdue').length, done = rows.filter((r) => r.status === 'completed').length;
+    return `<small>${esc(rows.length === 1 ? t('1 programme') : t('{n} programmes', { n: rows.length }))}${done ? ` · <span>${esc(t('{n} completed', { n: done }))}</span>` : ''}${overdue ? ` · <span class="badText">${esc(t('{n} overdue', { n: overdue }))}</span>` : ''}</small>`;
+  };
   const person = (p, i) => {
     const open = p.rows.some((r) => r.status !== 'completed');
-    const name = canList ? `<a href="#/people/${esc(p.id)}"><b>${esc(p.name)}</b></a>` : `<b>${esc(p.name)}</b>`;
     return `<li class="personRow">${canProgress ? `<input type="checkbox" data-person="${i}" aria-label="${esc(p.name)}"${open ? '' : ' disabled'}>` : ''}
-      <div>${name}<small>${p.publicId ? `${esc(p.publicId)} · ` : ''}${esc(p.email)}${p.regionId ? ` · ${esc(regionName(p.regionId))}` : ''}</small>
-      ${p.rows.map(programme).join('') || `<small class="muted">${esc(t('No training assigned yet'))}</small>`}</div></li>`;
+      <details class="personMore"><summary><b>${esc(p.name)}</b><small>${p.publicId ? `${esc(p.publicId)} · ` : ''}${esc(p.email)}${p.regionId ? ` · ${esc(regionName(p.regionId))}` : ''}</small>${glance(p.rows)}</summary>
+      ${p.rows.map(programme).join('')}
+      ${canList ? `<p class="personOpen"><a class="btnLink" href="#/people/${esc(p.id)}">${esc(t('Open their profile'))}</a></p>` : ''}</details></li>`;
   };
   return `<section class="card"><div class="titleRow"><h1>${esc(t(title))}</h1>${addBtn}</div>${tabs}
       <p class="note">Everyone you look after, and how far they are with their training. Tick people, or everyone shown, to email them a reminder with a date to complete by.</p>

@@ -3,7 +3,7 @@
 // organiser's tools for those who have them, and the card to install the app.
 import { $, S, call, esc, t, bar, day, has, isAdmin } from './core.js';
 import { call as siteCall } from '../api-base.js';
-import { viaCache, installCard } from '../offline.js';
+import { viaCache } from '../offline.js';
 import { badgeIcon } from './sharp.js';
 
 const lang = () => (window.SR_I18N && SR_I18N.lang) || undefined;
@@ -48,19 +48,9 @@ async function homeView() {
     <section class="card"><h2>Your learning</h2>
       <ul class="homeProgs">${enrol.map((e) => `<li><a href="#/programmes/${esc(e.programmeId)}"><span class="enrolTop"><b>${esc(e.title)}</b>${e.state === 'completed' ? '<span class="badge s-completed">Completed</span>' : ''}</span>
         ${bar(e.done || 0, e.lessons || 0)}<small><span>${esc(t('{done} of {total} lessons', { done: e.done || 0, total: e.lessons || 0 }))}</span>${e.due && e.state !== 'completed' ? ` · <span class="${overdue(e.due) ? 'badText' : ''}">${esc(t(overdue(e.due) ? 'was due {date}' : 'complete by {date}', { date: day(e.due) }))}</span>` : ''}</small></a></li>`).join('')
-      || `<li class="muted">${esc(t('No programmes yet: your organisers assign them, or see My Learning.'))}</li>`}</ul>
-      <p><a class="btnLink" href="#/programmes">My Learning</a></p></section>
-    ${tools.length ? `<section class="card"><h2>Organiser tools</h2><div class="btnRow">${tools.map(([href, text]) => `<a class="btnLink" href="${href}">${esc(text)}</a>`).join('')}</div></section>` : ''}
-    <section class="card installCard" id="installCard" hidden>
-      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M12 7v7M9 11l3 3 3-3M10 18h4"/></svg>
-      <div>
-        <h2>Install the app</h2>
-        <p class="note">SpartanReferee on your home screen, full screen. Lessons, the rules and the handbook you save keep working with no signal at the venue.</p>
-        <p class="note" data-how hidden>On an iPhone or iPad: tap Share in Safari, then Add to Home Screen.</p>
-        <div class="btnRow"><button class="small primaryish" type="button" data-install hidden>Install</button><button class="small" type="button" data-later>Not now</button></div>
-      </div>
-    </section>`;
+      || `<li class="muted">${esc(t('No programmes yet: your organisers assign them, or see Learning.'))}</li>`}</ul>
+      <p><a class="btnLink" href="#/programmes">Learning</a></p></section>
+    ${tools.length ? `<section class="card"><h2>Organiser tools</h2><div class="btnRow">${tools.map(([href, text]) => `<a class="btnLink" href="${href}">${esc(text)}</a>`).join('')}</div></section>` : ''}`;
 }
 
 export const views = { home: homeView };
-export function wire() { const c = $('installCard'); if (c && !c.dataset.wired) { c.dataset.wired = '1'; installCard(c); } }

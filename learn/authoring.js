@@ -22,7 +22,7 @@ const pending = (p) => [p.lessonsChanged ? t(p.lessonsChanged === 1 ? '1 lesson 
 // ---------------------------------------------------------------- the list
 async function listView() {
   const { programmes } = await call('authoring');
-  return `<section class="card"><h1>Programs</h1>${programsTabs('programs')}
+  return `<section class="card"><h1>Manage Programs</h1>${programsTabs('programs')}
     <p class="note">Change a programme's lessons where they stand: text, pictures, bullet points, quick-check questions, translations and the order. Changes are drafts until a programme owner publishes them.</p>
     <ul class="rowList progEdList">${programmes.map((p) => `<li><a href="#/programs/${esc(p.id)}"><b>${esc(p.title)}</b>
       <small>${esc([p.edition, p.locales.map(langName).join(', ')].filter(Boolean).join(' · '))}</small>
@@ -49,7 +49,7 @@ async function programmeView(pid) {
       <span class="moveBtns"><button class="iconSmall" type="button" data-move="-1" aria-label="${esc(t('Move up'))}"${i === 0 ? ' disabled' : ''}>▲</button><button class="iconSmall" type="button" data-move="1" aria-label="${esc(t('Move down'))}"${i === m.lessons.length - 1 ? ' disabled' : ''}>▼</button></span>
       <a href="#/programs/${esc(pid)}/${esc(l.id)}"><b>${esc(l.title)}</b>
       <small>${l.draftLocales.length ? `<span class="draftTag">${esc(t('Draft'))}</span> ${esc(l.draftLocales.map(langName).join(', '))}` : esc(!l.publishedLocales.length ? t('Being written') : l.publishedLocales.length > 3 ? t('Published in {n} languages', { n: l.publishedLocales.length }) : l.publishedLocales.map(langName).join(', '))}</small></a></li>`;
-  return `<section class="card"><p class="crumbs"><a href="#/programs">Programs</a></p><h1>${esc(d.programme.title)}</h1>
+  return `<section class="card"><p class="crumbs"><a href="#/programs">Manage Programs</a></p><h1>${esc(d.programme.title)}</h1>
       <p class="muted">${esc(d.version.edition)}</p>${publishBar(d)}</section>
     ${ordered.map((m) => `<section class="card"><h2>${esc(m.title)}</h2>
       <ol class="rowList edLessons" data-module="${esc(m.id)}">${m.lessons.map((l, i) => lessonRow(m, l, i)).join('')}</ol></section>`).join('')}`;
@@ -113,7 +113,7 @@ async function lessonEditView(pid, lessonId) {
   ED = { pid, lessonId, locale: d.locale, data: d, english: d.english, timer: null, dirty: false };
   const en = d.locale === 'en' ? null : d.english;
   const state = d.draft ? `<span class="draftTag">${esc(t('Draft'))}</span> ${esc(t('Not published yet'))}` : d.published ? esc(t('Published: your changes make a draft')) : esc(t('New: nothing published yet'));
-  return `<section class="card edHead"><p class="crumbs"><a href="#/programs">Programs</a> › <a href="#/programs/${esc(pid)}">${esc(d.lesson.programme)}</a></p>
+  return `<section class="card edHead"><p class="crumbs"><a href="#/programs">Manage Programs</a> › <a href="#/programs/${esc(pid)}">${esc(d.lesson.programme)}</a></p>
       <h1>${esc(d.lesson.title)}</h1><p class="muted">${esc(d.lesson.module)}</p>
       <p class="chips edLangs" data-i18n-skip>${d.locales.map((c) => `<a class="chipLink${c === d.locale ? ' on' : ''}" href="#/programs/${esc(pid)}/${esc(lessonId)}?lang=${esc(c)}">${esc(langName(c))}</a>`).join('')}</p>
       <p class="edState"><span id="edState">${state}</span> <span class="muted" id="edSaved" aria-live="polite"></span></p>

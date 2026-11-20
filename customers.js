@@ -1,4 +1,5 @@
-// Config (customers.html, admins): the servers and this month's use, who can sign in (the referees) and who the admins are. Spartan's
+// Config (customers.html, admins): the cameras (what's running and booked), the AI judge's costs and who the admins are. Who can sign
+// in moved to Manage People (invites) and the events to Manage Events; on 20 November 2026 Config was cut to these three. Spartan's
 // events (the sync) and who referees each one moved to the app's Manage Events tab (learn/events.js) on 19 November 2026.
 import { call, devSignInButton, signedIn, getMe, signOut, esc } from './api-base.js';
 import { microsoftButton } from './email-signin-web.js';
@@ -8,7 +9,6 @@ const $ = (id) => document.getElementById(id);
 const show = (el, on) => { el.hidden = !on; };
 const toast = (s) => { const t = $('toast'); t.textContent = s; t.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 2400); };
 const onDay = (t) => new Date(t).toLocaleDateString();
-let referees = [];
 
 // ---------------------------------------------------------------- servers and this month
 function serverLine(s) {
@@ -26,6 +26,9 @@ async function load() {
   $('tAzure').textContent = money(t.azure);
   $('tHours').textContent = String(t.cameraHours);
   $('tRunning').textContent = data.running; $('tRunningOf').textContent = `of ${plural(data.maxRunning, 'server')} allowed at once`;
+  const pr = data.pricing || {};
+  if (Number.isFinite(pr.azureServerHour)) { $('tServerHour').textContent = money(pr.azureServerHour); $('tPerServer').textContent = `${plural(pr.camerasPerServer, 'camera')} per server`; }
+  if (Number.isFinite(pr.azureCameraHour)) $('tCameraHour').textContent = money(pr.azureCameraHour);
   const live = data.customers.filter((b) => b.server.wanted === 'on' || b.server.state === 'stopping' || b.server.state === 'starting');
   $('bookingList').innerHTML = live.length ? live.map((b) => {
     const s = b.server, state = s.wanted === 'on' ? (s.scheduled ? 'booked' : s.state === 'on' ? 'on' : 'starting') : 'stopping';
@@ -38,32 +41,6 @@ async function stopBooking(id, name) {
   try { await call(`admin/customers/${encodeURIComponent(id)}/stop`, { method: 'POST', body: {} }); toast(`Stopping ${name}`); await load(); }
   catch (e) { toast(e.message); }
 }
-
-// ---------------------------------------------------------------- referees: who can sign in
-const refereeFail = (msg) => { $('refereeError').textContent = msg || ''; show($('refereeError'), !!msg); };
-function drawReferees() {
-  const q = $('findReferee').value.trim().toLowerCase();
-  show($('findReferee'), referees.length > 8);
-  const list = referees.filter((p) => !q || p.email.includes(q));
-  $('refereeList').innerHTML = list.length ? list.map((p) => `<li><span><b>${esc(p.email)}</b><small>${p.seen ? `Signed in ${esc(onDay(p.seen))}` : 'Not signed in yet'}${p.addedBy ? ` · added by ${esc(p.addedBy)}` : ''}</small></span><button class="small" type="button" data-remove="${esc(p.email)}">Remove</button></li>`).join('')
-    : `<li class="muted">${referees.length ? 'Nobody matches that.' : 'No referees yet. Add the address each one signs in with.'}</li>`;
-  for (const b of $('refereeList').querySelectorAll('button[data-remove]')) b.onclick = () => removeReferee(b.dataset.remove);
-}
-async function loadReferees() { referees = (await call('admin/referees')).people; drawReferees(); }
-async function removeReferee(email) {
-  if (!confirm(`Remove ${email}? They can't sign in any more.`)) return;
-  refereeFail('');
-  try { referees = (await call('admin/referees', { method: 'POST', body: { email, remove: true } })).people; drawReferees(); toast(`${email} can't sign in any more`); }
-  catch (e) { refereeFail(e.message); }
-}
-// referees join by invite now (learn/#/invites): the form is gone, so this only runs if it's ever brought back
-$('addReferee')?.addEventListener('submit', async (e) => {
-  e.preventDefault(); refereeFail('');
-  const email = $('refereeEmail').value.trim();
-  try { referees = (await call('admin/referees', { method: 'POST', body: { email } })).people; drawReferees(); $('refereeEmail').value = ''; toast(`${email} can now sign in`); }
-  catch (err) { refereeFail(err.message); }
-});
-$('findReferee').addEventListener('input', drawReferees);
 
 // ---------------------------------------------------------------- admins
 function drawAdmins(a) {
@@ -95,7 +72,6 @@ async function enter() {
   show($('signIn'), false);
   if (!me.admin) { show($('refused'), true); return; }
   await load();
-  await loadReferees();
   drawAdmins(await call('admin/admins'));
   show($('content'), true);
   setInterval(() => load().catch(() => {}), 15000);

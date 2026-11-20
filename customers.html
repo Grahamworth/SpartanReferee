@@ -21,7 +21,7 @@
 <body>
 <header class="top" data-tab="config">
   <a class="mark" href="learn/">Spartan<span>Referee</span></a>
-  <span class="topRight"><select class="langPick" data-lang-picker aria-label="Language"></select><a href="review-test/">Test review</a><span id="who" class="muted"></span></span>
+  <span class="topRight"><select class="langPick" data-lang-picker aria-label="Language"></select><span id="who" class="muted"></span></span>
 </header>
 <main class="page admin">
   <section id="signIn" class="card narrow" hidden>
@@ -36,31 +36,26 @@
   </section>
 
   <div id="content" hidden>
-    <section class="adminTop">
-      <dl class="totals" aria-label="This month">
-        <div><dt id="monthName">This month</dt><dd id="tAzure">£0.00</dd><small>Azure's cost</small></div>
-        <div><dt>Camera hours</dt><dd id="tHours">0</dd><small>this month</small></div>
+    <section class="card">
+      <h2>Cameras</h2>
+      <dl class="totals" aria-label="Cameras now">
         <div><dt>Running now</dt><dd id="tRunning">0</dd><small id="tRunningOf"></small></div>
+        <div><dt>Camera hours</dt><dd id="tHours">0</dd><small id="tHoursMonth">this month</small></div>
       </dl>
-      <div class="card">
-        <h2>Bookings</h2>
-        <ul id="bookingList" class="adminList"></ul>
-        <p class="note">Each event's head referee books and starts them from their console (admins can too). Azure's cost is running time and storing the recordings; servers are deleted once they're shut down and everything is saved, so they cost nothing between bookings.</p>
-      </div>
+      <h3 class="sub">Bookings</h3>
+      <ul id="bookingList" class="adminList"></ul>
+      <p class="note">Each event's head referee books and starts them from their console (admins can too). Servers are deleted once they're shut down and everything is saved, so they cost nothing between bookings. <a href="review-test/">Test the review page</a></p>
     </section>
 
-    <section class="card adminsBox">
-      <h2>Events</h2>
-      <p class="note">Syncing Spartan's events and choosing who referees each one are in <a href="learn/#/manage">Manage Events</a>.</p>
-    </section>
-
-    <section class="card adminsBox">
-      <h2>Referees</h2>
-      <p class="note">Who can sign in: everyone who registered from an invite, by the address they sign in with (Google, Microsoft or email). Admins don't need to be on this list.</p>
-      <p><a class="btn btn-ghost" href="learn/#/invites">Invite people</a></p>
-      <input id="findReferee" type="search" placeholder="Find a referee" aria-label="Find a referee" hidden>
-      <ul id="refereeList" class="adminList"></ul>
-      <p class="error" id="refereeError" role="alert" hidden></p>
+    <section class="card">
+      <h2>AI costs</h2>
+      <p class="note">The cameras' AI judge runs on graphics-card servers in Azure; this is what they cost, from Azure's own prices.</p>
+      <dl class="totals" aria-label="AI costs">
+        <div><dt id="monthName">This month</dt><dd id="tAzure">£0.00</dd><small>Azure's cost for the AI judge servers</small></div>
+        <div><dt>Per server-hour</dt><dd id="tServerHour">–</dd><small id="tPerServer"></small></div>
+        <div><dt>Per camera-hour</dt><dd id="tCameraHour">–</dd><small>the server shared, plus keeping the recording</small></div>
+      </dl>
+      <p class="note">Lesson narration uses Azure AI Speech on its free tier (half a million characters a month), so it costs nothing at today's use.</p>
     </section>
 
     <section class="card adminsBox">

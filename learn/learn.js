@@ -6,7 +6,7 @@
 import { devSignInButton, signedIn, signOut, call as siteCall } from '../api-base.js';
 import { language } from '../language.js';
 import { microsoftButton } from '../email-signin-web.js';
-import { setOwner, keep, viaCache, registerApp } from '../offline.js';
+import { setOwner, keep, viaCache, registerApp, installButton } from '../offline.js';
 import { $, S, show, call, esc, fail, store, AS_KEY, PREVIEW_KEY, has, isAdmin, t } from './core.js';
 import * as programmes from './programmes.js';
 import * as people from './people.js';
@@ -105,3 +105,4 @@ async function start() {
 }
 start();
 registerApp();
+installButton($('installBtn'), $('installHow'));

@@ -217,9 +217,9 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
   // Spartan's events (events.js), synced from Spartan's race list; referees book cameras for one
   // bookingUnits false: one booking for the whole organisation, as before events (older tests)
   const eventList = createEvents({ store, now, reply, ...(eventFetcher ? { fetcher: eventFetcher } : {}) });
-  const { servers, adminPricing, adminCustomers, stopCompany, bookingStatus, trainingUnit, rehearses } = createServers({ store, now, reply, session, isAdmin, membership, payments, freeBooking: true, events: bookingUnits ? eventList : null, maxRunning: maxRunningServers, hourPrice: serverHourPrice });
+  const { servers, adminPricing, adminCustomers, stopCompany, bookingStatus, bookedUnits, trainingUnit, rehearses } = createServers({ store, now, reply, session, isAdmin, membership, payments, freeBooking: true, events: bookingUnits ? eventList : null, maxRunning: maxRunningServers, hourPrice: serverHourPrice });
   // which referees are assigned to which events, and each referee's home page
-  const assignments = createAssignments({ store, now, reply, session, isAdmin, isAdminEmail, membership, events: eventList, bookingStatus, learnOn: !!learnDb,
+  const assignments = createAssignments({ store, now, reply, session, isAdmin, isAdminEmail, membership, events: eventList, bookingStatus, bookedUnits, learnOn: !!learnDb,
     onLanguage: learn ? async (email, language) => { await (learnReady || learnDb.migrate()); await learn.setLocale(email, language); } : null,
     // a regional coordinator manages the events in their regions' countries (their roles are in the learning database)
     scopeOf: learn ? async (email, preview) => { await learnUp(); return learn.scopeOf(email, preview); } : async () => ({ countries: [] }) });

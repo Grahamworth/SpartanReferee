@@ -28,23 +28,27 @@
   <a class="mark" href="#/">Spartan<span>Referee</span></a>
   <nav class="learnNav" id="learnNav" aria-label="SpartanReferee" hidden>
     <a href="#/" data-view="home">Home</a>
-    <a href="#/programmes" data-view="programmes" data-also="lesson assessment attempt credential badges refresh">My Learning</a>
-    <a href="#/events" data-view="events">My Events</a>
-    <a href="#/manage" data-view="manage" data-show="global_admin regional_coordinator" hidden>Manage Events</a>
-    <a href="#/rules" data-view="rules" data-also="handbook">Rules</a>
+    <a href="#/events" data-view="events">Events</a>
+    <a href="#/programmes" data-view="programmes" data-also="lesson assessment attempt credential badges refresh">Learning</a>
     <a href="#/obstacles" data-view="obstacles">Obstacles</a>
-    <a href="#/people" data-view="people" data-also="invites progress" data-show="global_admin regional_coordinator assessor programme_owner" hidden>People</a>
-    <a href="#/programs" data-view="programs" data-also="reviews media" data-show="global_admin programme_owner content_editor" hidden>Programs</a>
+    <a href="#/rules" data-view="rules" data-also="handbook">Rules</a>
     <a href="#/assessing" data-view="assessing" data-show="assessor global_admin programme_owner" hidden>Assessing</a>
-    <a href="#/reports" data-view="reports" data-show="global_admin programme_owner regional_coordinator" hidden>Reports</a>
-    <a href="#/duplicates" data-view="duplicates" data-show="global_admin" hidden>Duplicates</a>
-    <a href="#/audit" data-view="audit" data-show="global_admin" hidden>Audit log</a>
-    <a href="#/diagnostics" data-view="diagnostics" data-show="technical_admin global_admin" hidden>Diagnostics</a>
-    <a href="../customers.html" data-view="config" data-show="global_admin" hidden>Config</a>
+    <a href="#/manage" data-view="manage" data-show="global_admin regional_coordinator" hidden>Manage Events</a>
+    <a href="#/people" data-view="people" data-also="invites progress" data-show="global_admin regional_coordinator assessor programme_owner" hidden>Manage People</a>
+    <a href="#/programs" data-view="programs" data-also="reviews media" data-show="global_admin programme_owner content_editor" hidden>Manage Programs</a>
+    <a href="#/reports" data-view="reports" data-show="global_admin programme_owner regional_coordinator" hidden>Admin Reports</a>
+    <a href="#/audit" data-view="audit" data-show="global_admin" hidden>Admin Audit Log</a>
+    <a href="#/diagnostics" data-view="diagnostics" data-show="technical_admin global_admin" hidden>Admin Diagnostics</a>
+    <a href="../customers.html" data-view="config" data-show="global_admin" hidden>Admin Config</a>
   </nav>
-  <span class="topRight"><select class="langPick" data-lang-picker aria-label="Language"></select><span id="who" class="muted"></span></span>
+  <span class="topRight"><button class="small installBtn" type="button" id="installBtn" hidden>Install the app</button><select class="langPick" data-lang-picker aria-label="Language"></select><span id="who" class="muted"></span></span>
   <a class="profileBtn" id="profileBtn" href="#/profile" aria-label="My profile" title="My profile" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.5"/><circle cx="12" cy="9.5" r="3.6"/><path d="M5.6 19.2c1.4-2.6 3.8-4 6.4-4s5 1.4 6.4 4"/></svg></a>
 </header>
+<div class="installHow" id="installHow" role="dialog" aria-label="Install the app" hidden>
+  <p><b>Install the app</b></p>
+  <p>In Safari, tap Share, then Add to Home Screen. SpartanReferee then opens full screen from your home screen, and the lessons, the rules and the handbook you save keep working with no signal.</p>
+  <button class="small" type="button" data-close>Close</button>
+</div>
 <div class="demoBar" id="demoBar" hidden>
   <span class="demoTag">Prototype</span>
   <span>Nothing here is an official Spartan qualification yet.</span>

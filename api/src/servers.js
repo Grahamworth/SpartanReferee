@@ -336,6 +336,8 @@ function createServers({ store, now, reply, session, isAdmin = () => false, memb
     const state = want?.desired !== 'on' ? 'stopping' : (p.from || 0) - START_LEAD_MS > now() ? 'booked' : st?.state === 'on' ? 'on' : 'starting';
     return { state, from: p.from || 0, until: p.until, cameras: p.cameras, by: p.by || p.requestedBy || '' };
   }
+  /** the units (events, practice) with a booking that hasn't ended: for Manage Events' "cameras not booked yet" */
+  async function bookedUnits() { return new Set((await store.list('serverplan')).filter(active).map((p) => p.id)); }
   async function stopCompany(id) {
     // the organisation blocked: every one of its units stops
     if (events && !/^[etx][\w]+$/.test(id) && !id.includes('~')) { for (const u of await store.list('unit')) await stopCompany(u.id); }
@@ -521,7 +523,7 @@ function createServers({ store, now, reply, session, isAdmin = () => false, memb
     }
     return null;
   }
-  return { servers, adminPricing, adminCustomers, stopCompany, bookingStatus, trainingUnit: trainingId, rehearses };
+  return { servers, adminPricing, adminCustomers, stopCompany, bookingStatus, bookedUnits, trainingUnit: trainingId, rehearses };
 }
 
 module.exports = { createServers, signFor, serversFor };

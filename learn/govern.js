@@ -1,7 +1,8 @@
 // Governance (step 5): rule references and their versions, what each affects, review items, and the handbook with its PDF
 // (RUL-01..04, LRN-06, AT-06, AT-07). Rule chips on lessons and questions lead here.
-import { $, call, esc, toast, badge, day, when, redraw, act, hooks, loadPdf, LANG } from './core.js';
+import { $, call, esc, toast, badge, day, when, redraw, act, hooks, loadPdf, LANG, t } from './core.js';
 import { programsTabs } from './authoring.js';
+import { OBSTACLES, GENERAL } from './obstacles.js';
 
 const KIND = { rule_change: 'Rule change', dispute: 'The sources disagree' };
 const stateBadge = (r) => badge(r.state === 'baseline' ? 'preview' : r.state === 'under_review' ? 'under_review' : r.state === 'draft' ? 'draft' : 'approved', r.stateText);
@@ -40,8 +41,29 @@ async function rulesView(rest) {
   return `<section class="card"><h1>Rule references</h1><p class="note">The sections of the source documents that lessons and questions teach. Each change is a new version, approved before it's current, and flags everything that cites it for review.</p>
       <details class="docsBox"><summary>The source documents (${d.documents.length})</summary><ul class="plain docList">${d.documents.map((x) => `<li><b>${esc(x.title)} ${esc(x.edition)}</b> ${badge(x.approval === 'baseline' ? 'preview' : x.approval, x.approvalText)}<br><small class="muted">${esc(x.note)}</small></li>`).join('')}</ul></details>
       <div class="ruleSearch"><input type="search" id="ruleQ" value="${esc(q.get('q') || '')}" placeholder="Search: a number, a name or any words" aria-label="Search the rules" aria-controls="ruleList" autocomplete="off" enterkeyhint="search"><span class="muted" id="ruleCount" aria-live="polite"></span></div>
-      <ul class="rowList ruleList" id="ruleList">${d.rules.map((r) => `<li data-q="${esc(fold([r.section, r.id, r.title, r.excerpt, r.docTitle, r.stateText].join(' ')))}"><a href="#/rules/${encodeURIComponent(r.id)}"><b>${esc(r.section)} ${esc(r.title)}</b><small>${esc(r.id)} · v${r.versionNo} · cited by ${r.links} ${r.links === 1 ? 'item' : 'items'}${r.draftChange ? ' · a change is drafted' : ''}</small><small class="ruleExcerpt">${esc(r.excerpt)}</small></a>${stateBadge(r)}</li>`).join('') || '<li class="muted">None yet.</li>'}</ul>
+      <ul class="rowList ruleList" id="ruleList">${d.rules.map((r) => `<li data-q="${esc(fold([r.section, r.id, r.title, r.excerpt, r.docTitle, r.stateText].join(' ')))}"><a href="#/rules/${encodeURIComponent(r.id)}"><b>${esc(r.section)} ${esc(r.title)}</b><small>${esc(r.id)} · v${r.versionNo} · ${r.draftChange ? ' · a change is drafted' : ''}</small>${atObstacles(r.id).length ? `<small>${esc(t('Applies at: {list}', { list: atObstacles(r.id).map((o) => t(o.title)).join(', ') }))}</small>` : ''}<small class="ruleExcerpt">${esc(r.excerpt)}</small></a>${stateBadge(r)}</li>`).join('') || '<li class="muted">None yet.</li>'}</ul>
       <p class="muted" id="ruleNone" hidden>No rule matches that. Try fewer words, or a section number such as 3.17.</p></section>`;
+}
+// where a rule applies, in words (20 November 2026): the obstacles it's about, then the lessons that teach it and the questions that test
+// it, once each (not once per translation and edition). Every citation, by language and version, is still there, folded away for editors.
+const sectionOf = (id) => String(id || '').replace(/^OCR-\d{4}-/, '');
+const atObstacles = (id) => OBSTACLES.filter((o) => o.section === sectionOf(id));
+function whereItApplies(r, links) {
+  const obstacles = atObstacles(r.id), everywhere = GENERAL.filter(([, id]) => sectionOf(id) === sectionOf(r.id));
+  const current = (l) => l.versionState === 'published';
+  const once = (list, key) => { const m = new Map(); for (const l of list) { const k = key(l); const was = m.get(k); if (!was) m.set(k, { ...l, locales: new Set([l.locale].filter(Boolean)) }); else if (l.locale) was.locales.add(l.locale); } return [...m.values()]; };
+  const lessons = once(links.filter((l) => l.type === 'lesson' && current(l)), (l) => l.id).sort((a, b) => String(a.programme).localeCompare(String(b.programme)) || a.moduleSeq - b.moduleSeq || a.lessonSeq - b.lessonSeq);
+  const questions = once(links.filter((l) => l.type === 'question' && current(l)), (l) => l.id);
+  const others = links.filter((l) => !current(l));
+  const crumb = (...parts) => parts.filter(Boolean).map((x) => esc(x)).join(' <span aria-hidden="true">›</span> ');
+  return `<section class="card ruleWhere"><h2>${esc(t('Where this rule applies'))}</h2>
+      ${obstacles.length || everywhere.length ? `<h3 class="sub">${esc(t('On the course'))}</h3><ul class="rowList">
+        ${everywhere.length ? `<li><span><b>${esc(t('At every obstacle'))}</b>${everywhere.map(([s]) => `<small>${esc(t(s))}</small>`).join('')}</span></li>` : ''}
+        ${obstacles.map((o) => `<li><a href="#/obstacles/${esc(o.id)}"><b>${esc(t(o.title))}</b><small>${esc(t(o.how[0]))}</small></a></li>`).join('')}</ul>` : ''}
+      <h3 class="sub">${esc(t('Taught in'))}</h3><ul class="rowList">${lessons.map((l) => `<li><a href="#/lesson/${esc(l.id)}"><b>${esc(l.lessonTitle || l.title)}</b><small>${crumb(l.programme, l.module)}${l.locales.size > 1 ? ` · ${esc(t('in {n} languages', { n: l.locales.size }))}` : ''}</small></a></li>`).join('') || `<li class="muted">${esc(t('No published lesson teaches it yet.'))}</li>`}</ul>
+      ${questions.length ? `<h3 class="sub">${esc(t('Tested by'))}</h3><ul class="rowList">${questions.map((q) => `<li><a href="#/assessment/${esc(q.assessmentId)}"><b>${esc(q.prompt || q.title)}</b><small>${crumb(q.programme, q.assessment)}</small></a></li>`).join('')}</ul>` : ''}
+      ${links.length ? `<details class="edit"><summary>${esc(t('Every citation, by language and version ({n})', { n: links.length }))}</summary><ul class="rowList">${links.map((l) => `<li><a href="${l.type === 'lesson' ? `#/lesson/${esc(l.id)}` : `#/assessment/${esc(l.assessmentId)}`}"><b>${esc(l.title)}</b><small>${l.type === 'lesson' ? 'Lesson' : 'Question'} · ${esc(l.edition)} (${esc(l.versionState)}) · written against v${l.ruleVersion}</small></a></li>`).join('')}</ul>
+        ${others.length ? `<p class="note">${esc(t('{n} of these are in drafts or older editions.', { n: others.length }))}</p>` : ''}</details>` : ''}</section>`;
 }
 async function ruleView(id) {
   const d = await call(`rules/${encodeURIComponent(id)}`), r = d.rule;
@@ -50,7 +72,7 @@ async function ruleView(id) {
       <h1>${esc(r.section)} ${esc(r.title)}</h1><p class="badges">${stateBadge(r)}${badge('draft', `v${r.versionNo}`)}</p>
       <blockquote class="excerpt">${esc(r.excerpt)}</blockquote><p class="note">${esc(r.citation)}${r.effectiveDate ? ` · effective ${esc(day(r.effectiveDate))}` : ''}</p></section>
     ${d.reviews.length ? `<section class="card"><h2>Review items</h2><ul class="rowList">${d.reviews.map((i) => `<li><span><b>${esc(i.title)}</b><small>${esc(KIND[i.kind])} · ${esc(day(i.createdAt))}${i.resolution ? ` · ${esc(i.resolution)}` : ''}</small></span>${badge(i.state)}</li>`).join('')}</ul><p class="note"><a href="#/reviews?programme=${esc(r.programmeId)}">All review items</a></p></section>` : ''}
-    <section class="card"><h2>Cited by</h2><ul class="rowList">${d.links.map((l) => `<li><a href="${l.type === 'lesson' ? `#/lesson/${esc(l.id)}` : `#/assessment/${esc(l.assessmentId)}`}"><b>${esc(l.title)}</b><small>${l.type === 'lesson' ? 'Lesson' : 'Question'} · ${esc(l.edition)} (${esc(l.versionState)}) · written against v${l.ruleVersion}</small></a></li>`).join('') || '<li class="muted">Nothing cites it yet.</li>'}</ul></section>
+    ${whereItApplies(r, d.links)}
     <section class="card"><h2>Versions</h2><ul class="rowList">${d.versions.map((v) => `<li><span><b>v${v.versionNo}: ${esc(v.title)}</b><small>${esc(v.ruleState)} · ${esc(day(v.createdAt))}${v.changeNote ? ` · ${esc(v.changeNote)}` : ''}</small></span>
       ${v.ruleState === 'draft' && d.can.approve ? `<span class="rowBtns"><button class="primary small" type="button" data-rule-state="approved" data-key="${esc(v.key)}">Approve</button><button class="small" type="button" data-rule-state="withdrawn" data-key="${esc(v.key)}">Withdraw</button></span>` : ''}</li>`).join('')}</ul>
       ${d.can.draft && !draft ? `<details class="edit"><summary>Draft a change</summary><p class="note">Published lessons and questions stay exactly as they are: everything that cites this rule gets a review item, for someone to update or confirm.</p>

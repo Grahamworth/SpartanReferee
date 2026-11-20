@@ -1,4 +1,5 @@
-// People: your profile, and for admins and coordinators everyone they look after, possible duplicates and the audit log (step 1).
+// People: your profile, and for admins and coordinators everyone they look after (Manage People) and the audit log (step 1). The
+// Duplicates tab went on 20 November 2026: a possible duplicate is still flagged when someone is added.
 // Each profile ends with the person's learning record (programmes.js).
 import { $, S, call, esc, toast, has, isAdmin, regionName, roleText, when, formBody, ROLE, LANG, redraw, act, t } from './core.js';
 import { recordSection, wireRecord } from './programmes.js';
@@ -38,13 +39,8 @@ export const views = {
   async people(rest) {
     if (rest) return personView(rest, false);
     // one list: everyone you look after and how far they are with their training (tracking.js)
-    const html = await peopleList({ title: 'People', tabs: isAdmin() ? peopleTabs('people') : '', addBtn: isAdmin() ? addPersonBtn : '' });
+    const html = await peopleList({ title: 'Manage People', tabs: isAdmin() ? peopleTabs('people') : '', addBtn: isAdmin() ? addPersonBtn : '' });
     return `${html}${has('regional_coordinator') && !isAdmin() ? '<section class="card"><p class="note">Everyone joins by invite: they register from the emailed link with their name, region and language.</p><p class="note">Ask an admin to invite them.</p></section>' : ''}`;
-  },
-  async duplicates() {
-    const { flags } = await call('duplicates');
-    return `<section class="card"><h1>Possible duplicates</h1><p class="note">Flagged when a new person has the same email, or the same name in the same region. Nobody is merged automatically.</p>
-      <ul class="rowList">${flags.map((f) => `<li><span><b>${esc(f.a.legalName)} (${esc(f.a.publicId)}) and ${esc(f.b.legalName)} (${esc(f.b.publicId)})</b><small>${esc(f.reason)} · ${esc(f.a.email)} · ${esc(f.b.email)}</small></span><button class="small" type="button" data-not-dup="${esc(f.id)}">Not the same person</button></li>`).join('') || '<li class="muted">Nothing flagged.</li>'}</ul></section>`;
   },
   async audit() {
     const q = new URLSearchParams(location.hash.split('?')[1] || '');
@@ -89,5 +85,4 @@ export function wire({ reloadMe }) {
     act(async () => { await call('roles', { method: 'POST', body: { personId: e.target.dataset.id, ...formBody(e.target) } }); toast('Role given'); redraw(); }, e.submitter);
   });
   for (const b of document.querySelectorAll('[data-remove-role]')) b.onclick = () => act(async () => { await call(`roles/${b.dataset.removeRole}`, { method: 'DELETE' }); toast('Role removed'); redraw(); }, b);
-  for (const b of document.querySelectorAll('[data-not-dup]')) b.onclick = () => act(async () => { await call(`duplicates/${b.dataset.notDup}`, { method: 'POST', body: { decision: 'not_duplicate' } }); toast('Marked as different people'); redraw(); }, b);
 }

@@ -71,7 +71,7 @@ test('a referee\'s home page: their name, their events (each with Book cameras),
     assert.match(read(`${f}.html`), /<header class="top" data-tab="\w+">/, f);
     assert.ok(read(`${f}.html`).includes('<script type="module" src="appnav.js"></script>'), f);
   }
-  assert.match(read('learn/index.html'), /<a href="\.\.\/customers.html" data-view="config" data-show="global_admin" hidden>Config<\/a>/);
+  assert.match(read('learn/index.html'), /<a href="\.\.\/customers.html" data-view="config" data-show="global_admin" hidden>Admin Config<\/a>/);
   assert.ok(read('appnav.js').includes("new URL('learn/index.html', root)"), 'the tabs come from the app: one list');
   assert.match(read('home.html'), /location\.replace\('learn\/' \+ location\.hash\)/);
   assert.match(read('learn/index.html'), /<a class="mark" href="#\/">/);

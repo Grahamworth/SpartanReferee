@@ -183,6 +183,9 @@ h3.sub { font-size: 1rem; text-transform: uppercase; letter-spacing: .04em; marg
 .qReason textarea { width: 100%; font: inherit; }
 .qResult { margin: 12px 0 4px; }
 .okText { color: var(--accent); } .badText { color: var(--bad); } .waitText { color: var(--warn); }
+.warnText { color: var(--warn); font-weight: 600; }
+.warnCard { border-left: 4px solid var(--warn); }
+.warnCard p { margin: 0 0 .4rem; }
 .bigResult { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; font-size: 1.4rem; margin: 6px 0; }
 .credIssued { border: 1px solid var(--accent); padding: 10px 12px; }
 .clip { display: grid; justify-items: center; gap: 8px; background: var(--bg); border: 1px solid var(--line); padding: 10px; margin: 0 0 10px; clear: both; }
@@ -562,3 +565,41 @@ h3.sub { font-size: 1rem; text-transform: uppercase; letter-spacing: .04em; marg
 .figPick { display: block; }
 .figPick[hidden], .figPane[hidden] { display: none; }
 .figGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; }
+
+/* the header's Install the app (phones and tablets only, offline.js installButton) and, on Apple devices, the two taps in Safari */
+.installBtn { white-space: nowrap; }
+.installHow { position: fixed; z-index: 30; top: calc(env(safe-area-inset-top, 0px) + 64px); right: max(12px, env(safe-area-inset-right, 0px)); left: max(12px, env(safe-area-inset-left, 0px));
+  max-width: 360px; margin-left: auto; background: var(--panel); color: var(--text); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; box-shadow: 0 8px 24px rgba(0,0,0,.18); }
+.installHow p { margin: 0 0 .5rem; }
+
+/* Learning's Keep sharp bar (sharp.js): a question to answer at the top, and how close the nearest badges are */
+.sharpBar { display: grid; gap: 10px; margin: 0 0 14px; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--line);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 12%, var(--panel)), var(--panel)); }
+.sharpHead { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: 0; }
+.sharpHead b { font-family: var(--display); font-size: 1.15rem; letter-spacing: .02em; text-transform: uppercase; }
+.sharpCount { margin-left: auto; color: var(--muted); font-size: .85rem; }
+.sharpQ { margin: 0; font-weight: 600; font-size: 1.05rem; }
+.sharpOpts { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; }
+.sharpOpt { text-align: left; padding: 10px 12px; min-height: 44px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--panel); color: var(--text); font: inherit; cursor: pointer; }
+.sharpOpt:hover:not(:disabled) { border-color: var(--primary); }
+.sharpOpt:disabled { cursor: default; }
+.sharpOpt.right { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, var(--panel)); }
+.sharpOpt.wrong { border-color: var(--bad); background: color-mix(in srgb, var(--bad) 12%, var(--panel)); }
+.sharpOpt.right::after { content: " ✓"; color: var(--accent); font-weight: 700; } .sharpOpt.wrong::after { content: " ✗"; color: var(--bad); font-weight: 700; }
+.sharpFb p { margin: 0 0 6px; } .sharpFb.isRight b { color: var(--accent); } .sharpFb.isWrong b { color: var(--bad); }
+.sharpFoot { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; padding-top: 8px; border-top: 1px solid var(--line); font-size: .9rem; }
+.sharpNear { display: inline-flex; align-items: center; gap: 8px; min-width: 0; }
+.sharpNear > span { display: grid; gap: 2px; min-width: 120px; }
+.sharpNear small { color: var(--muted); }
+.sharpMeter { display: block; height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
+.sharpMeter i { display: block; height: 100%; background: var(--primary); }
+.sharpAll { margin-left: auto; font-weight: 600; }
+
+/* Manage People (tracking.js): a person is one line until clicked */
+.personMore { flex: 1; min-width: 0; display: grid; gap: 4px; }
+.personMore > summary { cursor: pointer; list-style: none; display: grid; gap: 2px; }
+.personMore > summary::-webkit-details-marker { display: none; }
+.personMore > summary b::after { content: " ▸"; color: var(--muted); font-weight: 400; }
+.personMore[open] > summary b::after { content: " ▾"; }
+.personMore[open] > summary { margin-bottom: 6px; }
+.personOpen { margin: 8px 0 0; }

@@ -18,7 +18,7 @@ async function invitesView() {
   const c = data.counts || {};
   const tab = (s) => `<a href="#/invites?state=${s}" class="chipLink${s === state ? ' on' : ''}">${esc(t(STATE[s]))} (${c[s] || 0})</a>`;
   const typeName = (g) => (TYPE.find(([k]) => k === g.role) || [0, g.role])[1];
-  return `<section class="card"><p class="crumbs"><a href="#/people">People</a></p><h1>Invite people</h1>${peopleTabs('invites')}
+  return `<section class="card"><p class="crumbs"><a href="#/people">Manage People</a></p><h1>Invite people</h1>${peopleTabs('invites')}
       <p class="note">Everyone joins by invite. Each address gets an email with a link to register: they give their full name, region and language, and sign in with Google, Microsoft or a code emailed to them.</p>
       <form class="form2 inviteForm" id="inviteForm">
         <div class="wide"><label for="iv-emails">Email addresses</label>

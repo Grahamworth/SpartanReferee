@@ -219,7 +219,7 @@ export const OBSTACLES = [
 ];
 
 // what holds at every obstacle, with the rule each comes from
-const GENERAL = [
+export const GENERAL = [
   ['Bells are struck with the arms and hands, or any part of the body above the chest. Kicking a bell (feet, legs or knees) is a fail: no retry, the penalty.', 'OCR-2026-3.17.7'],
   ['An athlete who fails because another competitor got in their way may start the obstacle again, with no penalty, once an official allows it.', 'OCR-2026-3.17.8'],
   ['Where there are separate men’s and women’s options, athletes do the one for their registered category. A woman may choose not to use a step or kicker meant for women.', 'OCR-2026-3.17.9'],

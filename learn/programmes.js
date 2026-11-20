@@ -53,10 +53,11 @@ async function myLearning() {
   let rec = { enrolments: [] }; try { rec = await call(`people/${encodeURIComponent(p.id)}/record`); } catch { /* shown empty */ }
   const enrolled = rec.enrolments.filter((e) => e.state !== 'withdrawn');
   const todo = enrolled.filter((e) => e.state !== 'completed'), done = enrolled.filter((e) => e.state === 'completed');
-  return `<section class="card"><h1>My Learning</h1>
+  // Keep sharp first (sharp.js): a question to answer, at the top, once some lessons are done
+  return `${await runHooks(hooks.learning, S.me)}
+    <section class="card"><h1>Learning</h1>
       <h2>To do</h2><ul class="myProgs">${todo.map(myProgramme).join('') || `<li class="muted">${esc(t('Nothing to do right now.'))}</li>`}</ul>
       ${done.length ? `<h2>Completed</h2><ul class="myProgs">${done.map(myProgramme).join('')}</ul>` : ''}</section>
-    ${await runHooks(hooks.learning, S.me)}
     ${await catalogue(new Set(enrolled.map((e) => e.programmeId)))}`;
 }
 

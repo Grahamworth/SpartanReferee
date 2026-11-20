@@ -1,7 +1,7 @@
-// Keeping sharp: the quick check at the end of a lesson, refreshers (#/refresh), the weekly streak and badges (#/badges), on the
-// overview and each programme's page. The server side is api/src/learn/checks.js. It's practice: the answers come with the questions,
+// Keeping sharp: the quick check at the end of a lesson, refreshers (#/refresh), the weekly streak and badges (#/badges), the Keep
+// sharp bar at the top of Learning and each programme's page. The server side is api/src/learn/checks.js. It's practice: the answers come with the questions,
 // so the page marks them itself, and with no signal the answers wait in the outbox (core.js) like lesson progress.
-import { $, call, esc, t, toast, hooks, day } from './core.js';
+import { $, call, esc, t, toast, hooks, day, redraw } from './core.js';
 
 // ---------------------------------------------------------------- badges
 const BADGE = {
@@ -140,18 +140,52 @@ export function streakStrip(s) {
 // ---------------------------------------------------------------- on the overview and each programme's page
 let progressCache = null;
 const progress = () => (progressCache = progressCache || call('progress').finally(() => setTimeout(() => { progressCache = null; }, 2000)));
-// on My Learning (programmes.js)
+// at the top of Learning (programmes.js, 20 November 2026): a small bar with a refresher question to answer there and then, and how close
+// the nearest badges are. It shows once some lessons (and their quick checks) are done; before that there's nothing to practise.
+let BAR = null;
 hooks.learning.push(async () => {
-  let p; try { p = await progress(); } catch { return ''; }
-  const due = p.refresher.reduce((n, r) => n + r.due, 0), practised = p.refresher.reduce((n, r) => n + r.practised, 0);
-  const earned = p.badges.filter((b) => b.earned);
-  return `<section class="card keepSharp"><h2>Keep sharp</h2>
-      <div class="sharpGrid">${streakStrip(p.streak)}
-      <div class="refresherBox"><p>${practised ? esc(due ? t('{n} refresher questions are due.', { n: due }) : t('No refresher questions are due right now.')) : esc(t('Finish a lesson and its quick check: its questions come back here as refreshers.'))}</p>
-        ${practised ? `<a class="btnLink${due ? ' primaryLink' : ''}" href="#/refresh${due ? '' : '?more=1'}">${due ? 'Start a refresher' : 'Practise anyway'}</a>` : ''}</div></div>
-      <div class="badgeRow">${earned.length ? earned.slice(-8).map((b) => badgeIcon(b, 'sm')).join('') : `<span class="note">${esc(t('No badges yet: your first comes with your first lesson.'))}</span>`}
-        <a href="#/badges" class="badgeAll">${esc(t('All badges ({n} of {total})', { n: earned.length, total: p.badges.length }))}</a></div></section>`;
+  let p, r; try { [p, r] = await Promise.all([progress(), call('refresher?more=1')]); } catch { return ''; }
+  if (!r.practised || !r.questions.length) return '';
+  BAR = { questions: r.questions.map(localQ), at: 0, right: 0, badges: p.badges, streak: p.streak };
+  return `<section class="sharpBar" id="sharpBar" aria-labelledby="sharpTitle"><div id="sharpBody"></div>${barFoot(BAR)}</section>`;
 });
+const near = (badges) => badges.filter((b) => !b.earned && b.need > 0 && b.kind !== 'qualified').sort((a, b) => b.have / b.need - a.have / a.need).slice(0, 2);
+function barFoot(s) {
+  return `<div class="sharpFoot"><span class="sharpStreak"><b>${s.streak.weeks}</b> ${esc(s.streak.weeks === 1 ? t('week in a row') : t('weeks in a row'))}</span>
+    ${near(s.badges).map((b) => `<span class="sharpNear">${badgeIcon(b, 'sm')}<span><small>${esc(badgeName(b))}${b.programmeTitle ? ` · ${esc(b.programmeTitle)}` : ''}</small>
+      <span class="sharpMeter" role="img" aria-label="${esc(t('{have} of {need}', { have: b.have, need: b.need }))}"><i style="width:${Math.round((100 * b.have) / b.need)}%"></i></span><small>${esc(t('{have} of {need}', { have: b.have, need: b.need }))}</small></span></span>`).join('')}
+    <a class="sharpAll" href="#/badges">${esc(t('All badges'))}</a></div>`;
+}
+function drawBar() {
+  const box = $('sharpBody'), s = BAR; if (!box || !s) return;
+  if (s.at >= s.questions.length) {
+    box.innerHTML = `<p class="sharpHead"><b id="sharpTitle">${esc(t('Keep sharp'))}</b> <span>${esc(t('{right} of {total} right', { right: s.right, total: s.questions.length }))}</span></p>
+      <div class="btnRow"><button class="small" type="button" id="sharpMore">${esc(t('More questions'))}</button></div>`;
+    $('sharpMore').onclick = () => redraw();
+    return;
+  }
+  const k = s.questions[s.at];
+  box.innerHTML = `<p class="sharpHead"><b id="sharpTitle">${esc(t('Keep sharp'))}</b>${k.why ? ` <span class="quizWhy w-${esc(k.why)}">${esc(t(WHY[k.why]))}</span>` : ''} <span class="sharpCount">${esc(t('Question {n} of {total}', { n: s.at + 1, total: s.questions.length }))}</span></p>
+    <p class="sharpQ">${esc(k.prompt)}</p>
+    <div class="sharpOpts">${k.options.map((o, j) => `<button type="button" class="sharpOpt" data-opt="${j}">${esc(o)}</button>`).join('')}</div>
+    <div class="sharpFb" role="status" aria-live="polite" hidden></div>`;
+  for (const b of box.querySelectorAll('[data-opt]')) b.onclick = async () => {
+    const choice = Number(b.dataset.opt), right = choice === k.answer, last = s.at === s.questions.length - 1;
+    if (right) s.right++;
+    box.querySelectorAll('.sharpOpt').forEach((x, j) => { x.disabled = true; x.classList.toggle('right', j === k.answer); x.classList.toggle('wrong', j === choice && !right); });
+    const fb = box.querySelector('.sharpFb');
+    fb.className = `sharpFb ${right ? 'isRight' : 'isWrong'}`;
+    fb.innerHTML = `<p><b>${right ? `✓ ${esc(t('Right'))}` : `✗ ${esc(t('Not quite'))}`}</b>${right ? '' : ` <span>${esc(t('The answer is: {answer}', { answer: k.options[k.answer] }))}</span>`}${k.feedback ? ` <span>${esc(k.feedback)}</span>` : ''}</p>
+      <div class="btnRow"><button class="small primaryish" type="button" id="sharpNext">${esc(last ? t('Finish') : t('Next question'))}</button>${k.lessonTitle ? `<a class="small" href="#/lesson/${esc(k.lessonId)}">${esc(t('From {lesson}', { lesson: k.lessonTitle }))}</a>` : ''}</div>`;
+    fb.hidden = false;
+    $('sharpNext').onclick = () => { s.at++; drawBar(); };
+    try {
+      const r = await call('refresher', { method: 'POST', body: { answers: [{ key: k.key, choice }], partial: !last } });
+      celebrate(r.badges);
+      if (last && !r.queued) { progressCache = null; const p = await progress(); s.badges = p.badges; s.streak = p.streak; $('sharpBar')?.querySelector('.sharpFoot')?.replaceWith(Object.assign(document.createElement('div'), { innerHTML: barFoot(s) }).firstElementChild); }
+    } catch (e) { toast(e.message); }
+  };
+}
 hooks.programme.push(async (d) => {
   if (d.slot !== 'progress' || !d.enrolment) return '';
   let p; try { p = await progress(); } catch { return ''; }
@@ -183,6 +217,8 @@ async function badgesView() {
 }
 export const views = { refresh: refreshView, badges: badgesView };
 export function wire() {
+  const bar = $('sharpBar');
+  if (bar && BAR && !bar.dataset.wired) { bar.dataset.wired = '1'; drawBar(); }
   const box = $('refreshBox');
   if (box && REFRESH) {
     const questions = REFRESH; REFRESH = null;
