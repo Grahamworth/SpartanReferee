@@ -1,0 +1,522 @@
+[
+ {
+  "topic": "Welcome",
+  "prompt": "What is your main job as a referee?",
+  "options": [
+   "Protect the fairness of the challenge for every athlete",
+   "Help athletes finish as quickly as possible",
+   "Make sure the strongest athletes win",
+   "Keep spectators entertained"
+  ],
+  "answer": 0,
+  "feedback": "Spartan challenges every athlete. You protect the integrity of the race, treat everyone equally and keep it fair.",
+  "rules": []
+ },
+ {
+  "topic": "Welcome",
+  "prompt": "A team-mate of yours is clearly exhausted at your obstacle. Which part of the referee code applies?",
+  "options": [
+   "Safety first: let them skip it",
+   "Be impartial: judge the action, never the athlete",
+   "Escalate doubt: let them pass and tell the Head Referee later",
+   "Follow the rules only for athletes you do not know"
+  ],
+  "answer": 1,
+  "feedback": "You judge the action against the rule, whoever the athlete is.",
+  "rules": []
+ },
+ {
+  "topic": "Welcome",
+  "prompt": "You spot a loose fixing on your obstacle just before the first athlete arrives. What does the code say?",
+  "options": [
+   "Wait and see if it holds",
+   "Tell the athletes to take care",
+   "Spot the danger and report it at once",
+   "Note it for your end-of-day report"
+  ],
+  "answer": 2,
+  "feedback": "Safety first means spotting danger and reporting it at once.",
+  "rules": []
+ },
+ {
+  "topic": "Welcome",
+  "prompt": "Two athletes make the same mistake at your obstacle, an hour apart. How should you treat them?",
+  "options": [
+   "Be easier on the second, as you are tired",
+   "Be stricter on the second, as the first was a warning",
+   "Decide by how hard each one tried",
+   "Apply the same standard to both"
+  ],
+  "answer": 3,
+  "feedback": "The code says to follow the rules with the same standard every time.",
+  "rules": []
+ },
+ {
+  "topic": "Welcome",
+  "prompt": "You are not sure how a rule applies to what you have just seen. What does the code tell you to do?",
+  "options": [
+   "Take it to the Head Referee",
+   "Give the athlete the benefit of the doubt",
+   "Choose the stricter option to be safe",
+   "Ask the other athletes nearby"
+  ],
+  "answer": 0,
+  "feedback": "Doubt is escalated to the Head Referee, not settled by guesswork.",
+  "rules": []
+ },
+ {
+  "topic": "Welcome",
+  "prompt": "Which athletes make up the Competitive category?",
+  "options": [
+   "Age Group and Open",
+   "Elite and Age Group",
+   "Elite and Open",
+   "Open only"
+  ],
+  "answer": 1,
+  "feedback": "Competitive is the Elite and Age Group racers. Open is the other category.",
+  "rules": []
+ },
+ {
+  "topic": "Welcome",
+  "prompt": "The event runs Open athletes differently from Competitive athletes at your obstacle. What do you do?",
+  "options": [
+   "Use the Competitive way for everyone",
+   "Use whichever you think is fairer",
+   "Follow the event's instructions for the category in front of you",
+   "Ask the athlete which way they prefer"
+  ],
+  "answer": 2,
+  "feedback": "The two categories can be run differently, so always follow the event's instructions for each.",
+  "rules": []
+ },
+ {
+  "topic": "Welcome",
+  "prompt": "Which of these is one of the four parts of the referee code?",
+  "options": [
+   "Be quick",
+   "Be friendly",
+   "Be lenient",
+   "Be impartial"
+  ],
+  "answer": 3,
+  "feedback": "The code is: be impartial, safety first, follow the rules, and escalate doubt.",
+  "rules": []
+ },
+ {
+  "topic": "Race day",
+  "prompt": "Which race-day step comes straight after check-in?",
+  "options": [
+   "Inspection",
+   "Briefing",
+   "Officiating",
+   "Handover"
+  ],
+  "answer": 0,
+  "feedback": "The order is briefing, check-in, inspection, officiating, handover and report.",
+  "rules": []
+ },
+ {
+  "topic": "Race day",
+  "prompt": "What do you collect when you check in and confirm your assignment?",
+  "options": [
+   "Your athlete list",
+   "Your kit and the rules",
+   "A penalty tally sheet",
+   "Your obstacle's finish times"
+  ],
+  "answer": 1,
+  "feedback": "After checking in you collect your kit and the rules.",
+  "rules": []
+ },
+ {
+  "topic": "Race day",
+  "prompt": "The event has a radio or chat group for referees. What should you do?",
+  "options": [
+   "Ignore it unless you need help",
+   "Leave it to the Head Referee",
+   "Join it, and report to the Head Referee",
+   "Join it only after the first athlete passes"
+  ],
+  "answer": 2,
+  "feedback": "Being race-ready includes joining the event's radio or chat if there is one, and reporting to the Head Referee.",
+  "rules": []
+ },
+ {
+  "topic": "Race day",
+  "prompt": "What do you check when you inspect your obstacle before the race?",
+  "options": [
+   "The athletes' headband numbers",
+   "The finish line timing",
+   "The spectators' viewing area",
+   "The setup and any hazards"
+  ],
+  "answer": 3,
+  "feedback": "You inspect for safety: the setup and any hazards.",
+  "rules": []
+ },
+ {
+  "topic": "Race day",
+  "prompt": "You walk your obstacle's route before the race. What should the walk include?",
+  "options": [
+   "How athletes will flow, and the penalty loop",
+   "Only the obstacle itself",
+   "Only the start of the course",
+   "The route to the finish area"
+  ],
+  "answer": 0,
+  "feedback": "Walk the route: how athletes flow, and the penalty loop.",
+  "rules": []
+ },
+ {
+  "topic": "Race day",
+  "prompt": "You have checked your obstacle's rule and walked the route. What is the last part of getting ready?",
+  "options": [
+   "Practise the obstacle yourself",
+   "Choose where you will stand, and brief any marshals",
+   "Take the athletes' headband numbers early",
+   "Ask the Head Referee to stand with you"
+  ],
+  "answer": 1,
+  "feedback": "You choose your view, and brief any marshals, before the first athlete arrives.",
+  "rules": []
+ },
+ {
+  "topic": "Race day",
+  "prompt": "In the escalation chain, what is the referee's part?",
+  "options": [
+   "Review, direct and interpret",
+   "Take further action on timing",
+   "Observe, apply the rule and record",
+   "Decide the overall results"
+  ],
+  "answer": 2,
+  "feedback": "The referee observes, applies the rule and records. Reviewing and interpreting is the Head Referee's part.",
+  "rules": []
+ },
+ {
+  "topic": "Race day",
+  "prompt": "Who takes further action where it is needed, after the Head Referee has reviewed a case?",
+  "options": [
+   "The nearest marshal",
+   "The other referees on the course",
+   "The athlete's team captain",
+   "The Race Director or the timing team"
+  ],
+  "answer": 3,
+  "feedback": "The Race Director or the timing team take further action where needed.",
+  "rules": []
+ },
+ {
+  "topic": "Obstacle logic",
+  "prompt": "Before you make a call, what should you recognise first about the obstacle?",
+  "options": [
+   "Which of the three types it is",
+   "How many athletes are waiting",
+   "How tired the athlete looks",
+   "How long it takes to complete"
+  ],
+  "answer": 0,
+  "feedback": "Mandatory, multiple attempt and single attempt each follow a different rule path.",
+  "rules": []
+ },
+ {
+  "topic": "Obstacle logic",
+  "prompt": "An athlete fails the Hercules Hoist, then gives up. What applies at a multiple attempt obstacle?",
+  "options": [
+   "They are disqualified",
+   "They take the penalty",
+   "They must keep trying",
+   "They finish the race without a penalty"
+  ],
+  "answer": 1,
+  "feedback": "At a multiple attempt obstacle the athlete may keep trying, or give up and take the penalty.",
+  "rules": []
+ },
+ {
+  "topic": "Obstacle logic",
+  "prompt": "At a single attempt obstacle, an athlete has not yet reached the point where the attempt starts. May they reset?",
+  "options": [
+   "No, they are already committed",
+   "Only if the Head Referee agrees",
+   "Yes, before that point they may still reset",
+   "Yes, but they must take the penalty"
+  ],
+  "answer": 2,
+  "feedback": "Each obstacle's rule says when the attempt starts. Before that point the athlete may still reset.",
+  "rules": []
+ },
+ {
+  "topic": "Obstacle logic",
+  "prompt": "Which of these is a single attempt obstacle?",
+  "options": [
+   "The Rope Climb",
+   "The Hercules Hoist",
+   "The barbed wire crawl",
+   "The Z Wall"
+  ],
+  "answer": 3,
+  "feedback": "The Monkey Bars, the Multi-Rig and the Z Wall are single attempt. The Rope Climb and Hercules Hoist are multiple attempt, and the barbed wire crawl is mandatory.",
+  "rules": []
+ },
+ {
+  "topic": "Obstacle logic",
+  "prompt": "An athlete runs round the fire jump instead of jumping it. What normally follows?",
+  "options": [
+   "Disqualification, unless the Race Director gives a time penalty",
+   "A penalty loop",
+   "30 burpees",
+   "Nothing, if they rejoin the course"
+  ],
+  "answer": 0,
+  "feedback": "The fire jump is mandatory. Failing it normally means disqualification, though the Race Director may give a time penalty instead.",
+  "rules": []
+ },
+ {
+  "topic": "Obstacle logic",
+  "prompt": "At the Spear Throw, how far must the athlete move away before the throw counts?",
+  "options": [
+   "1 metre",
+   "2 metres",
+   "5 metres",
+   "Out of the lane"
+  ],
+  "answer": 1,
+  "feedback": "One of the four things to watch is that the athlete moves 2 metres away before it counts.",
+  "rules": []
+ },
+ {
+  "topic": "Obstacle logic",
+  "prompt": "An athlete at the Spear Throw hits the target in the next lane. What is wrong?",
+  "options": [
+   "Both feet must be behind the barrier",
+   "The spear must stay in the target",
+   "The throw must be at the target in their own lane",
+   "The athlete must move 2 metres away"
+  ],
+  "answer": 2,
+  "feedback": "The throw must be at the target in the same lane.",
+  "rules": []
+ },
+ {
+  "topic": "Obstacle logic",
+  "prompt": "A spear sticks in the target, then slides out and its tail touches the ground. Does it count?",
+  "options": [
+   "Yes, it stuck first",
+   "Yes, if the athlete moved 2 metres away",
+   "Only if it was a close throw",
+   "No: it must stay in the target without touching the ground"
+  ],
+  "answer": 3,
+  "feedback": "The spear must stick and stay there. Once it has stopped, no part of it may touch the ground.",
+  "rules": []
+ },
+ {
+  "topic": "Penalty logic",
+  "prompt": "An athlete does half of the designated penalty loop and carries on. Is that enough?",
+  "options": [
+   "No: the penalty is the whole of the loop",
+   "Yes, if the loop was busy",
+   "Yes, if they were close to passing",
+   "Only for Open athletes"
+  ],
+  "answer": 0,
+  "feedback": "The penalty has to be the one the event sets: the whole of the designated loop, or the burpees where the event says so.",
+  "rules": []
+ },
+ {
+  "topic": "Penalty logic",
+  "prompt": "An athlete argues with you, so you want to add burpees. What does the penalty rule say?",
+  "options": [
+   "Add 10 burpees for rudeness",
+   "Never give a penalty of your own",
+   "Add the burpees but tell the Head Referee",
+   "Add a lap of the penalty loop"
+  ],
+  "answer": 1,
+  "feedback": "You give the event's penalty and never one of your own.",
+  "rules": []
+ },
+ {
+  "topic": "Penalty logic",
+  "prompt": "Where the event says burpees are the penalty, how many do athletes do at a Stadion event?",
+  "options": [
+   "10",
+   "20",
+   "15",
+   "30"
+  ],
+  "answer": 2,
+  "feedback": "The penalty is 30 burpees, or 15 at Stadion events.",
+  "rules": []
+ },
+ {
+  "topic": "Penalty logic",
+  "prompt": "Where might an athlete's skipped penalty loop be found?",
+  "options": [
+   "Only at the finish line",
+   "Only if the athlete admits it",
+   "Only by the timing team",
+   "On course, or in the review before the awards"
+  ],
+  "answer": 3,
+  "feedback": "It can be found on course or in the review before the awards, and 10 minutes are added.",
+  "rules": []
+ },
+ {
+  "topic": "Penalty logic",
+  "prompt": "An athlete jumps at the top of a burpee but keeps their hands down by their hips. What is missing?",
+  "options": [
+   "Hands above the ears",
+   "Chest to the ground",
+   "Hips and knees fully extended",
+   "A clap at the bottom"
+  ],
+  "answer": 0,
+  "feedback": "A burpee needs chest down, hips and knees fully extended, and a jump with the hands above the ears.",
+  "rules": []
+ },
+ {
+  "topic": "Penalty logic",
+  "prompt": "An athlete is unsure whether a burpee was good and asks you for a count. What is right?",
+  "options": [
+   "You call the count for them",
+   "They count their own, and may repeat one they are unsure of",
+   "You tell them to carry on",
+   "You coach them on the standard as they go"
+  ],
+  "answer": 1,
+  "feedback": "The athlete counts their own burpees. You watch the standard and help video review, and don't coach.",
+  "rules": []
+ },
+ {
+  "topic": "Penalty logic",
+  "prompt": "After review, an athlete at a standard OCR race missed 4 burpees. What is added?",
+  "options": [
+   "4 minutes",
+   "10 minutes",
+   "2 minutes",
+   "30 seconds"
+  ],
+  "answer": 2,
+  "feedback": "Each of the first 10 missed burpees adds 30 seconds, so 4 missed adds 2 minutes.",
+  "rules": []
+ },
+ {
+  "topic": "Penalty logic",
+  "prompt": "After review, an athlete at a Stadion event missed 7 burpees. What is added?",
+  "options": [
+   "3 minutes 30 seconds",
+   "10 minutes",
+   "2 minutes 30 seconds",
+   "5 minutes in total"
+  ],
+  "answer": 3,
+  "feedback": "At Stadion events, missing more than 5 adds 5 minutes in total.",
+  "rules": []
+ },
+ {
+  "topic": "Conduct",
+  "prompt": "An athlete challenges your call and starts to argue. What should you do?",
+  "options": [
+   "Stay calm and refer the challenge to the Head Referee",
+   "Argue your case until they accept it",
+   "Change the call to end the dispute",
+   "Ignore them and move on"
+  ],
+  "answer": 0,
+  "feedback": "Explain the rule briefly and respectfully, don't argue, and refer a challenge to the Head Referee.",
+  "rules": []
+ },
+ {
+  "topic": "Conduct",
+  "prompt": "An athlete asks why you made a call. How should you explain it?",
+  "options": [
+   "In as much detail as possible",
+   "Briefly, respectfully and accurately",
+   "By telling them to ask someone else",
+   "By comparing them with other athletes"
+  ],
+  "answer": 1,
+  "feedback": "Professional conversations stop disputes growing.",
+  "rules": []
+ },
+ {
+  "topic": "Conduct",
+  "prompt": "Which detail belongs in your report to the Head Referee?",
+  "options": [
+   "Your opinion of the athlete's attitude",
+   "How the athlete compares with others",
+   "The headband number",
+   "Your guess at why it happened"
+  ],
+  "answer": 2,
+  "feedback": "Report the headband number, the obstacle and where it is, what you saw, when it happened, and who you told.",
+  "rules": []
+ },
+ {
+  "topic": "Conduct",
+  "prompt": "An athlete is struggling on the Monkey Bars. You know a tip that would help. What do you do?",
+  "options": [
+   "Call the tip out quietly",
+   "Give the tip, then log it",
+   "Give the tip only if they ask",
+   "Say nothing, as you must never coach during an attempt"
+  ],
+  "answer": 3,
+  "feedback": "Never coach an athlete during an attempt. Watch the action and protect safety.",
+  "rules": []
+ },
+ {
+  "topic": "Conduct",
+  "prompt": "An athlete at your obstacle is from your own club. What does your position of trust ask of you?",
+  "options": [
+   "Avoid any bias and watch the action",
+   "Give them a little extra help",
+   "Check them more strictly to look fair",
+   "Pass every call on them to the Head Referee"
+  ],
+  "answer": 0,
+  "feedback": "Your position is one of trust: watch the action, avoid any bias, and protect safety.",
+  "rules": []
+ },
+ {
+  "topic": "Conduct",
+  "prompt": "When you choose your view of an obstacle, what should you know about the approach?",
+  "options": [
+   "How quickly athletes will finish",
+   "Where athletes enter, and where the lane boundaries are",
+   "Who is likely to fail",
+   "Which athletes are Elite"
+  ],
+  "answer": 1,
+  "feedback": "A good call starts with a clear view: know the entry and the lane boundaries.",
+  "rules": []
+ },
+ {
+  "topic": "Conduct",
+  "prompt": "At an obstacle with a bell, what must your view let you see at the finish?",
+  "options": [
+   "The athlete's face",
+   "The next athlete in the queue",
+   "The success condition, such as the bell",
+   "The penalty loop"
+  ],
+  "answer": 2,
+  "feedback": "At the finish you must see the success condition, such as the bell.",
+  "rules": []
+ },
+ {
+  "topic": "Conduct",
+  "prompt": "Which of these is one of the five rules for race day?",
+  "options": [
+   "Speed first",
+   "Athletes decide close calls",
+   "Keep your view loose",
+   "Consistency always"
+  ],
+  "answer": 3,
+  "feedback": "The five rules are: safety first, consistency always, know the obstacle, give the correct penalty, and escalate uncertainty.",
+  "rules": []
+ }
+]

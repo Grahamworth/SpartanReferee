@@ -58,7 +58,7 @@ test('a lesson brings its quick check, and is completed only once the check is a
   const r = await ok('POST', `learn/lessons/${lessonId}/checks`, as(learner), { answers: [{ key: 'ocr-1-1.1', choice: 0 }, { key: 'ocr-1-1.2', choice: 0 }] });
   assert.deepStrictEqual(r.results, [{ key: 'ocr-1-1.1', right: true }, { key: 'ocr-1-1.2', right: false }]);
   const done = await ok('POST', `learn/lessons/${lessonId}/complete`, as(learner), { contentId });
-  assert.deepStrictEqual(done.badges.map((b) => b.kind).sort(), ['halfway', 'lessons', 'started'], 'its first lesson, halfway and all of them at once (it has one)');
+  assert.deepStrictEqual(done.badges.map((b) => b.kind).sort(), ['halfway', 'lessons', 'qualified', 'started'], 'its first lesson, halfway and all of them at once (it has one); with no assessment, finishing it qualifies');
   const again = await ok('GET', `learn/lessons/${lessonId}`, as(learner));
   assert.deepStrictEqual(again.extra.checkState, { 'ocr-1-1.1': { right: true, answered: 1 }, 'ocr-1-1.2': { right: false, answered: 1 } });
 });
@@ -86,12 +86,12 @@ test('progress: the streak, every badge earned or not, and what each programme h
   const p = await ok('GET', 'learn/progress', as(learner));
   assert.strictEqual(p.streak.weeks, 1); assert.strictEqual(p.streak.recent.length, 8); assert.strictEqual(p.streak.recent[7], true);
   const earned = p.badges.filter((b) => b.earned).map((b) => b.id).sort();
-  assert.deepStrictEqual(earned, ['ocr-referee:halfway', 'ocr-referee:lessons', 'ocr-referee:sharp', 'ocr-referee:started']);
-  assert.ok(p.badges.some((b) => b.id === 'ocr-referee:qualified' && !b.earned) && p.badges.some((b) => b.id === 'streak-4' && !b.earned));
+  assert.deepStrictEqual(earned, ['ocr-referee:halfway', 'ocr-referee:lessons', 'ocr-referee:qualified', 'ocr-referee:sharp', 'ocr-referee:started']);
+  assert.ok(p.badges.some((b) => b.id === 'streak-4' && !b.earned));
   assert.deepStrictEqual(p.refresher.map((x) => [x.programmeId, x.due, x.practised]), [['ocr-referee', 0, 2]]);
   // their practice is in their data export, and goes when they're erased
   const out = await ok('GET', `learn/people/${learner.id}/export`, boss);
-  assert.strictEqual(out.practice.length, 2); assert.strictEqual(out.badges.length, 4); assert.strictEqual(out.learningDays.length, 1);
+  assert.strictEqual(out.practice.length, 2); assert.strictEqual(out.badges.length, 5); assert.strictEqual(out.learningDays.length, 1);
 });
 
 test('a lesson opens once the one before is completed, which needs its quick check answered; editors open any', { skip }, async () => {

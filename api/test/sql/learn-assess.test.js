@@ -21,6 +21,7 @@ async function programme(id, policy, questions) {
   const made = await ok('POST', 'learn/programmes', boss, { id, title: id, category: 'referee', edition: '2027' });
   const v = made.versionId;
   await ok('PUT', `learn/versions/${v}`, boss, policy);
+  await ok('PUT', `learn/programmes/${id}`, boss, { assessmentPassMark: policy.passMark || 80, assessmentAttempts: policy.maxAttempts || 10 });
   const m = (await ok('POST', `learn/versions/${v}/modules`, boss, { title: 'Basics' })).modules[0];
   const lessonId = (await ok('POST', `learn/modules/${m.id}/lessons`, boss, { title: 'The lesson' })).lessonId;
   const a = (await ok('POST', `learn/versions/${v}/assessments`, boss, { title: `${id} check` })).assessment;
@@ -113,11 +114,59 @@ test('passing issues a demonstration credential per programme, each expiring by 
   assert.deepStrictEqual(now, { 'ocr-referee': 'due', 'deka-judge': 'expired' });
 });
 
-test('failing uses up attempts, then a wait; the policy is the programme\'s own (ASM-03)', { skip }, async () => {
+test('the final assessment: its attempts are the programme\'s setting, and when none passes the programme starts again', { skip }, async () => {
+  await ok('PUT', 'learn/programmes/ocr-referee', boss, { assessmentAttempts: 3, assessmentPassMark: 80 });
   await ok('POST', `learn/lessons/${P['ocr-referee'].lessonId}/complete`, as(ben), { contentId: P['ocr-referee'].contentId });
   for (let i = 0; i < 2; i++) assert.strictEqual((await attempt(ben, 'ocr-referee', wrong('ocr-referee'))).attempt.result, 'fail');
+  assert.strictEqual((await ok('GET', `learn/assessments/${P['ocr-referee'].assessmentId}`, as(ben))).may.left, 1);
+  const last = await attempt(ben, 'ocr-referee', wrong('ocr-referee'));
+  assert.strictEqual(last.attempt.result, 'fail'); assert.strictEqual(last.restarted, true);
+  assert.deepStrictEqual(last.attempt.after, { restarted: true, left: 0 });
+  // the lessons are done again before the assessment opens; what was done before is kept, not counted
   const blocked = await call('POST', `learn/assessments/${P['ocr-referee'].assessmentId}/attempts`, as(ben));
-  assert.strictEqual(blocked.status, 409); assert.match(blocked.body.error, /2 attempts used/);
+  assert.strictEqual(blocked.status, 409); assert.match(blocked.body.error, /lesson/);
+  const page = await ok('GET', 'learn/programmes/ocr-referee', as(ben));
+  assert.strictEqual(page.progress.done, 0); assert.strictEqual(page.finalAssessment.restarts, 1);
+  assert.strictEqual((await db.query('SELECT COUNT(*) AS n FROM {S}.completion_archive WHERE person_id = @p', { p: ben.id }))[0].n, 1);
+  await ok('POST', `learn/lessons/${P['ocr-referee'].lessonId}/complete`, as(ben), { contentId: P['ocr-referee'].contentId });
+  const again = await ok('GET', `learn/assessments/${P['ocr-referee'].assessmentId}`, as(ben));
+  assert.strictEqual(again.may.ok, true); assert.strictEqual(again.may.left, 3); assert.strictEqual(again.policy.restarts, 1);
+});
+
+test('each attempt draws its questions from the pool, none repeated while unseen ones are left, across the programme\'s topics', { skip }, async () => {
+  const qs = Array.from({ length: 25 }, (_, i) => ({ type: 'single', prompt: `Pool question ${i + 1}?`, options: [{ text: 'Right', correct: true }, { text: 'Wrong' }] }));
+  await programme('pool-test', { passMark: 80 }, qs);
+  await ok('PUT', 'learn/programmes/pool-test', boss, { assessmentQuestions: 10, assessmentAttempts: 3 });
+  const cara = (await ok('POST', 'learn/people', boss, { legalName: 'Cara Pool', email: 'cara.pool@demo.test', regionId: 'europe' })).person;
+  await ok('POST', 'learn/enrolments', as(cara), { programmeId: 'pool-test' });
+  await ok('POST', `learn/lessons/${P['pool-test'].lessonId}/complete`, as(cara), { contentId: P['pool-test'].contentId });
+  const a = await ok('GET', `learn/assessments/${P['pool-test'].assessmentId}`, as(cara));
+  assert.deepStrictEqual({ per: a.policy.perAttempt, pool: a.policy.pool, pass: a.policy.passMark, tries: a.policy.maxAttempts }, { per: 10, pool: 25, pass: 80, tries: 3 });
+  const seen = [];
+  for (let i = 0; i < 2; i++) {
+    const t = (await ok('POST', `learn/assessments/${P['pool-test'].assessmentId}/attempts`, as(cara))).attempt;
+    assert.strictEqual(t.questions.length, 10);
+    const ids = t.questions.map((q) => q.id);
+    assert.strictEqual(ids.filter((id) => seen.includes(id)).length, 0, `attempt ${i + 1} repeats no question`);
+    seen.push(...ids);
+    await ok('POST', `learn/attempts/${t.id}/submit`, as(cara), { answers: Object.fromEntries(t.questions.map((q) => [q.id, { chosen: [q.options[1].id] }])) });
+  }
+  const third = (await ok('POST', `learn/assessments/${P['pool-test'].assessmentId}/attempts`, as(cara))).attempt;
+  assert.strictEqual(third.questions.filter((q) => !seen.includes(q.id)).length, 5, 'the 5 never seen, then the least seen');
+  // all right: 100%, a pass
+  const r = await ok('POST', `learn/attempts/${third.id}/submit`, as(cara), { answers: Object.fromEntries(third.questions.map((q) => [q.id, { chosen: [q.options[0].id] }])) });
+  assert.strictEqual(r.attempt.result, 'pass'); assert.strictEqual(r.enrolment.state, 'completed');
+});
+
+test('with the final assessment turned off, the lessons alone complete a programme', { skip }, async () => {
+  await ok('PUT', 'learn/programmes/pool-test', boss, { assessmentOn: false });
+  const dan = (await ok('POST', 'learn/people', boss, { legalName: 'Dan Off', email: 'dan.off@demo.test', regionId: 'europe' })).person;
+  await ok('POST', 'learn/enrolments', as(dan), { programmeId: 'pool-test' });
+  const done = await ok('POST', `learn/lessons/${P['pool-test'].lessonId}/complete`, as(dan), { contentId: P['pool-test'].contentId });
+  assert.strictEqual(done.enrolment.state, 'completed');
+  const no = await call('POST', `learn/assessments/${P['pool-test'].assessmentId}/attempts`, as(dan));
+  assert.strictEqual(no.status, 409); assert.match(no.body.error, /no final assessment/);
+  assert.deepStrictEqual((await ok('GET', 'learn/programmes/pool-test', as(dan))).assessments, []);
 });
 
 test('only the owner or an admin changes a credential, with a reason, and the audit says who (AT-09, AT-10, ADM-03)', { skip }, async () => {

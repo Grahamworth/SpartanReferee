@@ -12,8 +12,9 @@ hooks.programme.push(async (d) => {
   if (d.slot === 'progress') {
     const c = d.credential;
     const creds = c ? `<div class="credLine">${badge(c.status)} <a href="#/credential/${esc(c.id)}"><b>${esc(c.qualification)}</b></a> <small class="muted">${esc(c.publicId)}${c.expiresAt ? ` · until ${esc(day(c.expiresAt))}` : ''}</small></div>` : '';
-    const list = (d.assessments || []).map((a) => `<li class="assessRow"><a href="#/assessment/${esc(a.id)}"><b>${esc(a.title)}</b><small>${a.questions} questions · pass mark ${d.version.passMark}%${a.attempts.length ? ` · ${a.attempts.map((t) => (t.result === 'open' ? 'in progress' : t.result === 'pending' ? 'with an assessor' : `${t.result === 'pass' ? 'passed' : 'not passed'} ${pct(t.percent)}`)).join(', ')}` : ''}</small></a></li>`).join('');
-    return `${creds}${list ? `<h3 class="sub">Assessment</h3><ul class="plain">${list}</ul>` : ''}`;
+    const f = d.finalAssessment || {};
+    const list = (d.assessments || []).map((a) => `<li class="assessRow"><a href="#/assessment/${esc(a.id)}"><b>${esc(a.title)}</b><small>${esc(t('{n} questions from a pool of {pool}', { n: a.perAttempt ?? a.questions, pool: a.pool ?? a.questions }))} · ${esc(t('pass mark {n}%', { n: f.passMark ?? d.version.passMark }))} · ${esc(t('{n} attempts', { n: f.attempts ?? '' }))}${a.attempts.length ? ` · ${a.attempts.map((t) => (t.result === 'open' ? 'in progress' : t.result === 'pending' ? 'with an assessor' : `${t.result === 'pass' ? 'passed' : 'not passed'} ${pct(t.percent)}`)).join(', ')}` : ''}</small></a></li>`).join('');
+    return `${creds}${list ? `<h3 class="sub">${esc(t('Final assessment'))}</h3><ul class="plain">${list}</ul>` : ''}`;
   }
   if (d.slot === 'sections' && d.can.edit && d.version.state === 'draft') {
     return `<section class="card"><h2>Assessments</h2><ul class="rowList">${(d.assessments || []).map((a) => `<li><a href="#/assessment/${esc(a.id)}"><b>${esc(a.title)}</b><small>${a.questions} questions: edit them</small></a></li>`).join('') || '<li class="muted">None yet.</li>'}</ul>
@@ -42,7 +43,12 @@ async function assessmentView(id) {
   const a = d.assessment, may = d.may, p = d.policy;
   const head = `<section class="card"><p class="crumbs"><a href="#/programmes/${esc(a.programmeId)}">Back to the programme</a></p><h1>${esc(a.title)}</h1>
     ${a.description ? `<p>${esc(a.description)}</p>` : ''}
-    <ul class="plain"><li>${a.questions} questions</li><li>Pass mark ${p.passMark}%</li><li>${p.maxAttempts ? `${p.maxAttempts} attempts${p.retakeWaitHours ? `, then a ${p.retakeWaitHours}-hour wait` : ''}` : 'Unlimited attempts'}</li><li>Edition ${esc(a.edition)}${a.versionState !== 'published' ? ` (${esc(a.versionState)})` : ''}</li></ul>
+    <ul class="plain"><li>${esc(t('{n} questions each attempt, drawn from a pool of {pool}: an attempt doesn\'t repeat a question you\'ve had before', { n: p.perAttempt ?? a.questions, pool: p.pool ?? a.questions }))}</li>
+      <li>${esc(t('Pass mark {n}%', { n: p.passMark }))}</li>
+      <li>${esc(p.maxAttempts ? t('{n} attempts; if none passes, the programme starts again: its lessons, then the assessment', { n: p.maxAttempts }) : t('Unlimited attempts'))}</li>
+      ${may.left !== undefined && may.left !== null && !may.resume ? `<li><b>${esc(t('Attempts left: {n}', { n: may.left }))}</b></li>` : ''}
+      ${p.restarts ? `<li>${esc(t('You\'ve started this programme again {n} times.', { n: p.restarts }))}</li>` : ''}
+      <li>Edition ${esc(a.edition)}${a.versionState !== 'published' ? ` (${esc(a.versionState)})` : ''}</li></ul>
     ${d.attempts.length ? `<h3 class="sub">Your attempts</h3><ul class="plain">${d.attempts.map((t) => `<li><a href="#/attempt/${esc(t.id)}">${esc(day(t.startedAt))}</a> ${badge(t.result === 'open' ? 'draft' : t.result, t.result === 'open' ? 'In progress' : null)} ${esc(pct(t.percent))}</li>`).join('')}</ul>` : ''}
     ${may.ok ? `<button class="primary" type="button" id="startAttempt" data-id="${esc(a.id)}">${may.resume ? 'Carry on with your attempt' : 'Start the assessment'}</button>` : `<p class="note">${esc(may.why)}</p>`}</section>`;
   if (!d.can.edit && !d.questions.length) return head;
@@ -77,13 +83,24 @@ function questionCard(q, i, rules, done) {
     ${q.reviewNote ? `<p class="reviewNote"><b>Under review</b> ${esc(q.reviewNote)}</p>` : ''}
   </fieldset>`;
 }
+/** under a failed attempt's result: how many attempts are left, or that the programme starts again (outside attemptView, whose t is
+ *  the attempt) */
+function afterFail(at) {
+  if (at.result !== 'fail' || !at.after) return '';
+  const again = at.after.restarted;
+  const line = again ? t('All attempts used: the programme starts again. Go through its lessons again; the assessment opens once they\'re done.')
+    : at.after.left ? t('Attempts left: {n}. Each one asks questions you haven\'t had before.', { n: at.after.left }) : '';
+  return `${line ? `<p class="${again ? 'badText' : ''}"><b>${esc(line)}</b></p>` : ''}
+    <div class="btnRow"><a class="btnLink primaryLink" href="${again ? `#/programmes/${esc(at.programmeId)}` : `#/assessment/${esc(at.assessmentId)}`}">${esc(again ? t('Back to the programme') : t('Try again'))}</a></div>`;
+}
 async function attemptView(id) {
   const { attempt: t, rules, credential: c } = await call(`attempts/${encodeURIComponent(id)}`);
   const done = t.result !== 'open';
   const head = `<section class="card"><p class="crumbs"><a href="#/assessment/${esc(t.assessmentId)}">${esc(t.title)}</a> · ${esc(t.programmeTitle)}</p>
     <h1>${done ? 'Your result' : esc(t.title)}</h1>${t.person ? `<p class="muted">${esc(t.person.name)} · ${esc(t.person.publicId)}</p>` : ''}
     ${done ? `<p class="bigResult">${badge(t.result)} <b>${esc(pct(t.percent))}</b> <span class="muted">(${t.score} of ${t.maxScore}; pass mark ${t.passMark}%)</span></p>${bar(t.score || 0, t.maxScore || 1)}
-      ${t.result === 'pending' ? '<p>An assessor checks your video judgement; your result follows.</p>' : ''}${t.assessorNote ? `<p class="note">Assessor: ${esc(t.assessorNote)}</p>` : ''}
+      ${t.result === 'pending' ? '<p>An assessor checks your video judgement; your result follows.</p>' : ''}
+      ${afterFail(t)}${t.assessorNote ? `<p class="note">Assessor: ${esc(t.assessorNote)}</p>` : ''}
       ${c ? `<p class="credIssued">${badge(c.status)} <b>${esc(c.qualification)}</b> issued: <a href="#/credential/${esc(c.id)}">see the credential</a></p>` : ''}`
     : `<p class="note">Answer every question, then submit. You can't change your answers once submitted.</p>`}</section>`;
   return `${head}<form id="attemptForm" data-id="${esc(t.id)}">${t.questions.map((q, i) => questionCard(q, i, rules, done)).join('')}
@@ -176,7 +193,7 @@ export function wire() {
     if (blank && !confirm(blank === 1 ? t('One question has no answer. Submit anyway?') : t('{n} questions have no answer. Submit anyway?', { n: blank }))) return;
     act(async () => {
       const r = await call(`attempts/${form.dataset.id}/submit`, { method: 'POST', body: { answers } });
-      toast(r.attempt.result === 'pass' ? (r.credential ? 'Passed: credential issued' : 'Passed') : r.attempt.result === 'pending' ? 'Submitted: an assessor checks it next' : 'Submitted');
+      toast(r.attempt.result === 'pass' ? (r.credential ? 'Passed: credential issued' : 'Passed') : r.attempt.result === 'pending' ? 'Submitted: an assessor checks it next' : r.restarted ? t('All attempts used: the programme starts again') : 'Submitted');
       redraw(); window.scrollTo({ top: 0, behavior: 'smooth' });
     }, e.submitter);
   });

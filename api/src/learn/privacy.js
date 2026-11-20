@@ -27,6 +27,8 @@ function createPrivacy(ctx) {
       enrolments: await q('SELECT * FROM {S}.enrolment WHERE person_id = @p'),
       lessonProgress: await q('SELECT * FROM {S}.lesson_progress WHERE person_id = @p'),
       completions: await q('SELECT * FROM {S}.completion WHERE person_id = @p'),
+      completionsBeforeRestarts: await q('SELECT * FROM {S}.completion_archive WHERE person_id = @p'),
+      lessonTests: await q('SELECT * FROM {S}.lesson_test WHERE person_id = @p'),
       attempts: parse(await q('SELECT * FROM {S}.attempt WHERE person_id = @p'), ['answers']),
       credentials: await q('SELECT * FROM {S}.credential WHERE person_id = @p'),
       practice: await q('SELECT check_key, programme_id, box, answered, right_count, last_right, last_at, due_at FROM {S}.check_state WHERE person_id = @p'),

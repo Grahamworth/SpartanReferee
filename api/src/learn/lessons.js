@@ -52,8 +52,8 @@ function createLessons(ctx, { speech, mediaSigner }) {
     return (await db.query("SELECT DISTINCT l.lesson_id FROM {S}.lesson l JOIN {S}.content_version c ON c.lesson_id = l.lesson_id AND c.state = 'published' WHERE l.version_id = @v", { v: versionId })).map((r) => r.lesson_id);
   }
   ctx.countableLessons = countableLessons;
-  async function doneLessons(personId, versionId, { counting = false } = {}) {
-    return (await db.query(`SELECT DISTINCT c.lesson_id FROM {S}.completion c WHERE c.person_id = @p AND c.version_id = @v${counting ? ' AND c.preview = 0' : ''}`, { p: personId, v: versionId })).map((r) => r.lesson_id);
+  async function doneLessons(personId, versionId, { counting = false, q = db.query } = {}) {
+    return (await q(`SELECT DISTINCT c.lesson_id FROM {S}.completion c WHERE c.person_id = @p AND c.version_id = @v${counting ? ' AND c.preview = 0' : ''}`, { p: personId, v: versionId })).map((r) => r.lesson_id);
   }
 
   // progress on a programme's page, the record and the overview (programmes.js asks through these hooks)
@@ -110,10 +110,13 @@ function createLessons(ctx, { speech, mediaSigner }) {
 
   /** has this enrolment met its programme's completion rule? If so it's marked completed, and onComplete (credentials) runs */
   ctx.checkCompletion = async (q, enrolmentId, w) => {
-    const e = (await q('SELECT e.*, v.completion_rule FROM {S}.enrolment e JOIN {S}.programme_version v ON v.version_id = e.version_id WHERE e.enrolment_id = @id', { id: enrolmentId }))[0];
+    const e = (await q(`SELECT e.*, v.completion_rule, p.assessment_on, (SELECT COUNT(*) FROM {S}.question qu JOIN {S}.assessment a ON a.assessment_id = qu.assessment_id WHERE a.version_id = e.version_id) AS exam_questions
+      FROM {S}.enrolment e JOIN {S}.programme_version v ON v.version_id = e.version_id JOIN {S}.programme p ON p.programme_id = e.programme_id WHERE e.enrolment_id = @id`, { id: enrolmentId }))[0];
     if (!e || e.state !== 'active') return e;
-    const rule = e.completion_rule;
-    const countable = await countableLessons(e.version_id), done = new Set(await doneLessons(e.person_id, e.version_id, { counting: true }));
+    // the programme's setting decides (20 November 2026): its lessons, then its final assessment when that's on and has questions
+    // (a version made to complete on its assessment alone keeps that)
+    const rule = e.assessment_on !== false && e.exam_questions > 0 ? (e.completion_rule === 'assessment' ? 'assessment' : 'lessons+assessment') : 'lessons';
+    const countable = await countableLessons(e.version_id), done = new Set(await doneLessons(e.person_id, e.version_id, { counting: true, q })); // in this transaction: it sees the lesson just finished
     const lessonsOk = countable.length > 0 && countable.every((id) => done.has(id));
     const assessOk = ctx.assessmentPassed ? await ctx.assessmentPassed(q, e) : false;
     const complete = rule === 'lessons' ? lessonsOk : rule === 'assessment' ? assessOk : lessonsOk && assessOk;

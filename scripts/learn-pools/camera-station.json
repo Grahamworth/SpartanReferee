@@ -1,0 +1,522 @@
+[
+ {
+  "topic": "Before the event",
+  "prompt": "You plan to film with 8 cameras. How many servers do you need?",
+  "options": [
+   "2",
+   "8",
+   "4",
+   "16"
+  ],
+  "answer": 2,
+  "feedback": "Each server takes 2 cameras, so 8 cameras need 4 servers.",
+  "rules": []
+ },
+ {
+  "topic": "Before the event",
+  "prompt": "You book the cameras ahead of the event. When do the servers start?",
+  "options": [
+   "10 minutes early, so the cameras are ready on time",
+   "On the stroke of 07:00",
+   "30 minutes early",
+   "The evening before"
+  ],
+  "answer": 0,
+  "feedback": "A booking made ahead starts its servers 10 minutes early.",
+  "rules": []
+ },
+ {
+  "topic": "Before the event",
+  "prompt": "The head referee starts the cameras straight away. About how long until they are ready?",
+  "options": [
+   "Under a minute",
+   "About 30 minutes",
+   "About an hour",
+   "About 5 minutes"
+  ],
+  "answer": 3,
+  "feedback": "Starting a booking straight away takes about 5 minutes.",
+  "rules": []
+ },
+ {
+  "topic": "Before the event",
+  "prompt": "The event runs over two days. What camera hours apply?",
+  "options": [
+   "07:00 to 18:00 on the first day only",
+   "07:00 to 18:00 local time on each day",
+   "08:00 to 20:00 on each day",
+   "Midnight to midnight on both days"
+  ],
+  "answer": 1,
+  "feedback": "The cameras run from 07:00 to 18:00, local time, on each day of the event.",
+  "rules": []
+ },
+ {
+  "topic": "Before the event",
+  "prompt": "Before the day, you check the venue's connection. What must it be able to do?",
+  "options": [
+   "Carry the video from the busiest camera only",
+   "Run the AI judge on site",
+   "Carry the video from every camera at once, about 3.5 Mbit/s each",
+   "Give every phone its own separate network"
+  ],
+  "answer": 2,
+  "feedback": "Each camera sends about 3.5 Mbit/s, and the venue's connection has to carry all of them.",
+  "rules": []
+ },
+ {
+  "topic": "Before the event",
+  "prompt": "The head referee can't be reached and the cameras need stopping. Who else can stop any event's cameras?",
+  "options": [
+   "An admin",
+   "Any referee assigned to the event",
+   "Any referee at the race",
+   "The owner of each camera phone"
+  ],
+  "answer": 0,
+  "feedback": "Admins can book, extend or stop any event's cameras.",
+  "rules": []
+ },
+ {
+  "topic": "Before the event",
+  "prompt": "A volunteer brings an Android phone to use as a camera. Which app does it need?",
+  "options": [
+   "Larix Broadcaster",
+   "The phone's own camera app",
+   "A web browser",
+   "SpartanReferee Broadcaster"
+  ],
+  "answer": 3,
+  "feedback": "Android phones use the SpartanReferee Broadcaster app. Larix is for iPhones.",
+  "rules": []
+ },
+ {
+  "topic": "Before the event",
+  "prompt": "Why does each camera phone need a power bank?",
+  "options": [
+   "To boost its signal to the server",
+   "To keep it going all day",
+   "To run the AI judge on the phone",
+   "To let it film without any connection"
+  ],
+  "answer": 1,
+  "feedback": "Each camera needs a power bank to keep the phone going all day.",
+  "rules": []
+ },
+ {
+  "topic": "Before the event",
+  "prompt": "Where does a referee find an event's camera hours and who is refereeing it?",
+  "options": [
+   "By opening the event from their home page",
+   "On the Live tab of a camera",
+   "In the Larix app",
+   "On a camera's QR code"
+  ],
+  "answer": 0,
+  "feedback": "Your events are on your home page. Open one to see its camera hours and who is refereeing it.",
+  "rules": []
+ },
+ {
+  "topic": "Before the event",
+  "prompt": "A referee on the event wants to watch the cameras on their own laptop. What should they do?",
+  "options": [
+   "Install Larix Broadcaster",
+   "Install SpartanReferee Broadcaster",
+   "Open it in a browser: there is nothing to install",
+   "Ask for a second server for the laptop"
+  ],
+  "answer": 2,
+  "feedback": "Any phone, tablet or computer with a browser will do, with nothing to install.",
+  "rules": []
+ },
+ {
+  "topic": "Setting up",
+  "prompt": "A phone on its stand 1 metre from the lane cuts off the athletes' legs. What is the fix?",
+  "options": [
+   "Move it even closer",
+   "Pick a lower quality",
+   "Switch the picture to portrait",
+   "Move it back to about 3 to 4 metres"
+  ],
+  "answer": 3,
+  "feedback": "Place the phone 3 to 4 metres from the athletes, with each athlete's whole body in the picture.",
+  "rules": []
+ },
+ {
+  "topic": "Setting up",
+  "prompt": "How should a camera phone sit on its stand?",
+  "options": [
+   "In landscape",
+   "In portrait",
+   "Either way: the server rotates it",
+   "Tilted at 45 degrees"
+  ],
+  "answer": 0,
+  "feedback": "Put the phone in landscape on its stand.",
+  "rules": []
+ },
+ {
+  "topic": "Setting up",
+  "prompt": "You are framing the shot. What must stay in the picture?",
+  "options": [
+   "Just the athlete's chest and hands",
+   "Each athlete's whole body, including when they lie flat",
+   "Only the athlete's legs and feet",
+   "Only the athlete while standing"
+  ],
+  "answer": 1,
+  "feedback": "Keep each athlete's whole body in the picture, including when they lie flat on the ground.",
+  "rules": []
+ },
+ {
+  "topic": "Setting up",
+  "prompt": "The judge struggles to see chest to the ground from a camera straight on. What helps?",
+  "options": [
+   "Moving the phone back to 10 metres",
+   "Picking a lower quality",
+   "A slightly angled or side-on view",
+   "Putting an official in front of the phone"
+  ],
+  "answer": 2,
+  "feedback": "A slightly angled or side-on view judges chest to the ground better than straight on.",
+  "rules": []
+ },
+ {
+  "topic": "Setting up",
+  "prompt": "How does the judge treat an official in a hi-vis yellow top?",
+  "options": [
+   "It counts them if they stand in front of the camera",
+   "It never counts them as an athlete",
+   "It counts them only if they do a burpee",
+   "It counts them but marks them separately"
+  ],
+  "answer": 1,
+  "feedback": "Officials in hi-vis yellow tops are never counted as athletes.",
+  "rules": []
+ },
+ {
+  "topic": "Setting up",
+  "prompt": "Where does a camera that is waiting for its phone show its QR codes?",
+  "options": [
+   "On the Results tab",
+   "On the Watch page only",
+   "In the Larix app",
+   "On the Live and Cameras tabs"
+  ],
+  "answer": 3,
+  "feedback": "Each waiting camera shows QR codes on the Live and Cameras tabs of the console.",
+  "rules": []
+ },
+ {
+  "topic": "Setting up",
+  "prompt": "Why must you scan a camera's QR code again for each new booking?",
+  "options": [
+   "The codes change with every booking",
+   "The phone forgets its apps after a day",
+   "The server keeps one code per phone for ever",
+   "Larix deletes imported cameras after use"
+  ],
+  "answer": 0,
+  "feedback": "The codes change with every booking, so scan them again each time.",
+  "rules": []
+ },
+ {
+  "topic": "Setting up",
+  "prompt": "An Android phone is ready to connect. What quality do you leave it on?",
+  "options": [
+   "The lowest setting, to save power",
+   "The highest setting, for the best picture",
+   "720p, unless the signal is weak",
+   "480p, unless the signal is strong"
+  ],
+  "answer": 2,
+  "feedback": "Leave the quality on 720p unless the signal is weak.",
+  "rules": []
+ },
+ {
+  "topic": "Setting up",
+  "prompt": "You have just installed Larix Broadcaster on an iPhone. What do you do before scanning the code?",
+  "options": [
+   "Open it once, allowing the camera and microphone",
+   "Restart the phone",
+   "Press the red button",
+   "Switch on aeroplane mode"
+  ],
+  "answer": 0,
+  "feedback": "Install Larix and open it once, allowing the camera and microphone.",
+  "rules": []
+ },
+ {
+  "topic": "Setting up",
+  "prompt": "On an iPhone, how do you get the camera into Larix?",
+  "options": [
+   "Scan the code from inside Larix's camera view",
+   "Scan the Android code with Larix",
+   "Type the camera's name into Larix",
+   "Scan the iPhone (Larix) code with the phone's own camera, open the link in Larix and tap Import"
+  ],
+  "answer": 3,
+  "feedback": "Scan the iPhone code with the phone's own camera, open the link in Larix and tap Import.",
+  "rules": []
+ },
+ {
+  "topic": "Judging with the cameras",
+  "prompt": "You have pressed Start AI judge, named the camera and chosen the exercise. What is the last step?",
+  "options": [
+   "Scan the QR code again",
+   "Press Start judging",
+   "Open the Results tab",
+   "Wait for the head referee to approve it"
+  ],
+  "answer": 1,
+  "feedback": "After naming the camera and choosing what it judges, press Start judging.",
+  "rules": []
+ },
+ {
+  "topic": "Judging with the cameras",
+  "prompt": "A burpee has full hip extension and hands over the ears, but both feet stay on the ground. What is it?",
+  "options": [
+   "A good rep, as most checks passed",
+   "A good rep if the athlete lands cleanly",
+   "A half rep that counts for half",
+   "A no rep, because it missed the jump"
+  ],
+  "answer": 3,
+  "feedback": "A burpee needs a jump with both feet off the ground. A rep that misses one check is a no rep.",
+  "rules": []
+ },
+ {
+  "topic": "Judging with the cameras",
+  "prompt": "What does the judge look for in the jump on a burpee?",
+  "options": [
+   "Both feet off the ground",
+   "One foot off the ground",
+   "Hands clapping overhead",
+   "A jump forward past the starting line"
+  ],
+  "answer": 0,
+  "feedback": "The judge checks for a jump with both feet off the ground.",
+  "rules": []
+ },
+ {
+  "topic": "Judging with the cameras",
+  "prompt": "When should you do test reps in front of a camera?",
+  "options": [
+   "After the first wave has finished",
+   "At the first camera only",
+   "Before athletes arrive, at every camera",
+   "Only if a camera drops"
+  ],
+  "answer": 2,
+  "feedback": "Do a few test reps in front of each camera before athletes arrive.",
+  "rules": []
+ },
+ {
+  "topic": "Judging with the cameras",
+  "prompt": "During a test rep the athlete steps out of the picture. What do you do?",
+  "options": [
+   "Restart the AI judge",
+   "Move the phone",
+   "Switch the phone to mobile data",
+   "Pick a lower quality"
+  ],
+  "answer": 1,
+  "feedback": "If an athlete leaves the picture, move the phone.",
+  "rules": []
+ },
+ {
+  "topic": "Judging with the cameras",
+  "prompt": "An athlete says the judge got a rep wrong. How do you see exactly what happened?",
+  "options": [
+   "Scroll back on the Live tab",
+   "Start the AI judge again on that camera",
+   "Use Watch to play them back with every rep and no rep marked",
+   "Ask the head referee to book the cameras again"
+  ],
+  "answer": 2,
+  "feedback": "Watch plays the athlete back with every rep and every no rep marked.",
+  "rules": []
+ },
+ {
+  "topic": "Judging with the cameras",
+  "prompt": "It is two days after the event. Can referees still review the results?",
+  "options": [
+   "No: they are deleted when the booking ends",
+   "Yes: recordings and results are kept for 7 days",
+   "Only the head referee can, for 24 hours",
+   "Only admins can"
+  ],
+  "answer": 1,
+  "feedback": "Recordings and results are kept for 7 days, and every referee on the event can review them.",
+  "rules": []
+ },
+ {
+  "topic": "Judging with the cameras",
+  "prompt": "A phone will not connect to its camera. What do you try?",
+  "options": [
+   "Book another server",
+   "Pick a lower quality",
+   "Restart the AI judge",
+   "Check its signal and scan its code again from this booking"
+  ],
+  "answer": 3,
+  "feedback": "If a phone won't connect, check its signal and scan its code again from this booking.",
+  "rules": []
+ },
+ {
+  "topic": "Judging with the cameras",
+  "prompt": "A camera's picture keeps stuttering and dropping. What does that point to?",
+  "options": [
+   "The signal is too weak for 720p, so pick a lower quality",
+   "The venue is blocking video, so use mobile data",
+   "No server is free, so try again later",
+   "The phone is in the wrong orientation"
+  ],
+  "answer": 0,
+  "feedback": "A stuttering or dropping picture means the signal is too weak for 720p. Pick a lower quality.",
+  "rules": []
+ },
+ {
+  "topic": "Judging with the cameras",
+  "prompt": "You booked the cameras but a server did not start. What do you do?",
+  "options": [
+   "Scan every QR code again",
+   "Switch every phone to Larix",
+   "Read what the console says; if no server is free, try again in a few minutes",
+   "Pick a lower quality on each phone"
+  ],
+  "answer": 2,
+  "feedback": "The console says why. Sometimes there is no server free for a few minutes, so try again.",
+  "rules": []
+ },
+ {
+  "topic": "Practise",
+  "prompt": "Where does the AI judge run when you use the free camera?",
+  "options": [
+   "On a SpartanReferee server",
+   "On a practice server",
+   "In the Larix app",
+   "In your own browser"
+  ],
+  "answer": 3,
+  "feedback": "The free camera runs the AI judge in your own browser.",
+  "rules": []
+ },
+ {
+  "topic": "Practise",
+  "prompt": "What does using the free camera cost?",
+  "options": [
+   "A 30-minute booking each time",
+   "Nothing: there is no server and no cost",
+   "The cost of one server",
+   "A booking by a head referee"
+  ],
+  "answer": 1,
+  "feedback": "The free camera needs no server and has no cost.",
+  "rules": []
+ },
+ {
+  "topic": "Practise",
+  "prompt": "When can you use the free camera?",
+  "options": [
+   "At any time",
+   "Only during an event's camera hours",
+   "Only after a head referee books it",
+   "Only in a 30-minute slot"
+  ],
+  "answer": 0,
+  "feedback": "You can use the free camera at any time.",
+  "rules": []
+ },
+ {
+  "topic": "Practise",
+  "prompt": "Who can book a 30-minute practice server?",
+  "options": [
+   "Any referee",
+   "Anyone with a browser",
+   "Head referees and admins",
+   "Only the race director"
+  ],
+  "answer": 2,
+  "feedback": "A practice server is for head referees and admins.",
+  "rules": []
+ },
+ {
+  "topic": "Practise",
+  "prompt": "How long is a practice server booking?",
+  "options": [
+   "10 minutes",
+   "30 minutes",
+   "1 hour",
+   "A full event day"
+  ],
+  "answer": 1,
+  "feedback": "A practice server is booked for 30 minutes.",
+  "rules": []
+ },
+ {
+  "topic": "Practise",
+  "prompt": "Why are practice servers limited to head referees and admins?",
+  "options": [
+   "They cost referees money",
+   "They need an app only head referees can install",
+   "Only head referees have a review page",
+   "A practice server uses one of the servers events need"
+  ],
+  "answer": 3,
+  "feedback": "It uses one of the servers events need, so it is for head referees and admins.",
+  "rules": []
+ },
+ {
+  "topic": "Practise",
+  "prompt": "You have a laptop and a minute of video of someone doing burpees. How can you see them judged?",
+  "options": [
+   "With a practice server only",
+   "By booking an event's cameras",
+   "With the free camera, which can judge a minute of video",
+   "With Larix Broadcaster on its own"
+  ],
+  "answer": 2,
+  "feedback": "The free camera judges your own device's camera, live or on a minute of video.",
+  "rules": []
+ },
+ {
+  "topic": "Practise",
+  "prompt": "A head referee wants to rehearse the phones, the console, the judge and the review before an event. What should they book?",
+  "options": [
+   "A 30-minute practice server",
+   "Another event booking",
+   "Nothing: the free camera does all of it",
+   "An extra server on the event day"
+  ],
+  "answer": 0,
+  "feedback": "A practice server rehearses the whole station, just as at an event.",
+  "rules": []
+ },
+ {
+  "topic": "Practise",
+  "prompt": "Which of these can only be rehearsed on a practice server, not the free camera?",
+  "options": [
+   "Watching a burpee being judged",
+   "Phones scanning their codes to connect",
+   "Using your own device's camera",
+   "Using it at any time"
+  ],
+  "answer": 1,
+  "feedback": "The practice server rehearses the phones scanning their codes, as at an event. The free camera uses your own device.",
+  "rules": []
+ },
+ {
+  "topic": "Practise",
+  "prompt": "How do you try the free camera with your own phone?",
+  "options": [
+   "Book a server first",
+   "Scan a QR code with Larix",
+   "Ask the head referee for a booking",
+   "Prop the phone up, do a few burpees and watch each one judged"
+  ],
+  "answer": 3,
+  "feedback": "Prop the phone up, do a few burpees and see each one judged.",
+  "rules": []
+ }
+]

@@ -640,3 +640,9 @@ h3.sub { font-size: 1rem; text-transform: uppercase; letter-spacing: .04em; marg
 .ltTries { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
 .ltTry { font-size: .8rem; line-height: 1.4; white-space: nowrap; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); font-variant-numeric: tabular-nums; }
 .ltTry.ok { border-color: var(--accent); color: var(--accent); } .ltTry.no { border-color: var(--bad); color: var(--bad); }
+
+/* Programme settings: the final assessment (programmes.js) */
+.finalSet { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px 12px; margin: 4px 0; display: grid; gap: 10px; }
+.finalSet legend { font-weight: 700; padding: 0 6px; }
+.finalNums { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.finalNums label { display: block; font-size: .9rem; margin-bottom: 4px; }

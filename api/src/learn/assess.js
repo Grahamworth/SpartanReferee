@@ -20,8 +20,41 @@ const TYPES = ['single', 'multiple', 'video'];
 
 function createAssess(ctx) {
   const { db, reply, P, audit, uuid, text, isUuid } = ctx;
-  const assessmentById = async (id) => (isUuid(id) ? (await db.query('SELECT a.*, v.programme_id, v.state AS version_state, v.edition, v.pass_mark, v.max_attempts, v.retake_wait_hours, v.completion_rule FROM {S}.assessment a JOIN {S}.programme_version v ON v.version_id = a.version_id WHERE a.assessment_id = @id', { id }))[0] || null : null);
+  // the final assessment's settings are the programme's own (20 November 2026): on or off, its pass mark, how many questions each
+  // attempt draws from the pool, and how many attempts before the programme is done again
+  const withSettings = (r) => r && ({ ...r, version_pass_mark: r.pass_mark, pass_mark: r.assessment_pass_mark, max_attempts: r.assessment_attempts, draw: r.assessment_questions, on: r.assessment_on !== false });
+  const assessmentById = async (id) => (isUuid(id) ? withSettings((await db.query(`SELECT a.*, v.programme_id, v.state AS version_state, v.edition, v.pass_mark, v.max_attempts, v.retake_wait_hours, v.completion_rule,
+      p.assessment_on, p.assessment_pass_mark, p.assessment_questions, p.assessment_attempts
+    FROM {S}.assessment a JOIN {S}.programme_version v ON v.version_id = a.version_id JOIN {S}.programme p ON p.programme_id = v.programme_id WHERE a.assessment_id = @id`, { id }))[0] || null) : null);
   const questionsOf = async (aid) => db.query('SELECT * FROM {S}.question WHERE assessment_id = @a ORDER BY seq', { a: aid });
+  /** the pool an attempt draws from: every question of the assessment (a video judgement too, which an assessor may confirm) */
+  const poolOf = async (aid) => questionsOf(aid);
+  /** an attempt's questions: those it drew, in that order (every question, for attempts from before the pool) */
+  const attemptQuestions = async (t) => {
+    const all = await questionsOf(t.assessment_id);
+    if (!t.question_ids) return all;
+    const byId = new Map(all.map((q) => [String(q.question_id).toLowerCase(), q]));
+    return JSON.parse(t.question_ids).map((id) => byId.get(String(id).toLowerCase())).filter(Boolean);
+  };
+  /** this round's attempts: those since the programme was last started again */
+  const thisRound = (tries, e) => tries.filter((t) => !e?.restarted_at || new Date(t.started_at) > new Date(e.restarted_at));
+  const shuffle = (list) => { const a = [...list]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  /** n questions for a new attempt: those this person has seen least (never, first), spread across the programme's topics, at random */
+  function draw(pool, tries, n) {
+    const seen = new Map();
+    for (const t of tries) for (const id of JSON.parse(t.question_ids || '[]')) seen.set(String(id).toLowerCase(), (seen.get(String(id).toLowerCase()) || 0) + 1);
+    const tiers = new Map();
+    for (const q of pool) { const c = seen.get(String(q.question_id).toLowerCase()) || 0; if (!tiers.has(c)) tiers.set(c, []); tiers.get(c).push(q); }
+    const picked = [];
+    for (const c of [...tiers.keys()].sort((x, y) => x - y)) {
+      const byTopic = new Map();
+      for (const q of shuffle(tiers.get(c))) { const k = q.topic || ''; if (!byTopic.has(k)) byTopic.set(k, []); byTopic.get(k).push(q); }
+      const queues = shuffle([...byTopic.values()]);
+      while (picked.length < n && queues.some((x) => x.length)) for (const x of queues) if (x.length && picked.length < n) picked.push(x.shift());
+      if (picked.length >= n) break;
+    }
+    return picked.sort((x, y) => x.seq - y.seq); // in the programme's order
+  }
   const qView = (q, withAnswers) => ({ id: q.question_id, lineageId: q.lineage_id, versionNo: q.version_no, seq: q.seq, type: q.type, prompt: q.prompt,
     options: JSON.parse(q.options).map((o) => ({ id: o.id, text: o.text, ...(withAnswers ? { correct: !!o.correct } : {}) })),
     clip: q.clip ? JSON.parse(q.clip) : null, rules: q.rules ? q.rules.split(',').filter(Boolean) : [], reviewNote: q.review_note || '', needsAssessor: !!q.needs_assessor,
@@ -75,7 +108,11 @@ function createAssess(ctx) {
     const list = await db.query('SELECT a.*, (SELECT COUNT(*) FROM {S}.question q WHERE q.assessment_id = a.assessment_id) AS questions FROM {S}.assessment a WHERE a.version_id = @v ORDER BY a.created_at', { v: v.version_id });
     const mine = e ? await db.query('SELECT * FROM {S}.attempt WHERE enrolment_id = @e ORDER BY started_at', { e: e.enrolment_id }) : [];
     const cred = e ? (await db.query(`${credQuery} WHERE c.person_id = @p AND c.programme_id = @prog ORDER BY c.issued_at DESC`, { p: w.person.person_id, prog: p.programme_id }))[0] : null;
-    return { ...base, assessments: list.map((a) => ({ id: a.assessment_id, title: a.title, description: a.description, questions: a.questions,
+    const st = (await db.query('SELECT assessment_on, assessment_pass_mark, assessment_questions, assessment_attempts FROM {S}.programme WHERE programme_id = @p', { p: p.programme_id }))[0] || {};
+    const pool = async (aid) => (await poolOf(aid)).length;
+    const pools = Object.fromEntries(await Promise.all(list.map(async (a) => [a.assessment_id, await pool(a.assessment_id)])));
+    return { ...base, finalAssessment: { on: st.assessment_on !== false, passMark: st.assessment_pass_mark, perAttempt: st.assessment_questions, attempts: st.assessment_attempts, restarts: e?.restarts || 0 },
+      assessments: (st.assessment_on === false ? [] : list).map((a) => ({ id: a.assessment_id, title: a.title, description: a.description, questions: a.questions, pool: pools[a.assessment_id], perAttempt: Math.min(st.assessment_questions || 10, pools[a.assessment_id]),
       attempts: mine.filter((t) => t.assessment_id === a.assessment_id).map((t) => ({ id: t.attempt_id, result: t.result, percent: t.max_score ? Math.round((100 * t.score) / t.max_score) : null, submittedAt: t.submitted_at })) })),
     credential: credView(cred) };
   };
@@ -148,26 +185,23 @@ function createAssess(ctx) {
   // ------------------------------------------------------------------ taking an assessment
   /** can this person start an attempt now? { ok, why, waitUntil } by the version's policy (ASM-03) */
   async function mayAttempt(a, e) {
+    if (!a.on) return { ok: false, why: 'This programme has no final assessment' };
     if (!e || e.state === 'withdrawn') return { ok: false, why: 'Enrol in the programme to take its assessment' };
     if (!['published', 'superseded'].includes(a.version_state)) return { ok: false, why: 'The assessment opens once the programme is published' };
-    const tries = await db.query("SELECT * FROM {S}.attempt WHERE enrolment_id = @e AND assessment_id = @a ORDER BY started_at", { e: e.enrolment_id, a: a.assessment_id });
+    const tries = thisRound(await db.query("SELECT * FROM {S}.attempt WHERE enrolment_id = @e AND assessment_id = @a ORDER BY started_at", { e: e.enrolment_id, a: a.assessment_id }), e);
     if (tries.some((t) => t.result === 'pass')) return { ok: false, why: 'You\'ve passed it already', passed: true };
     if (tries.some((t) => t.result === 'pending')) return { ok: false, why: 'An assessor is checking your last attempt' };
     const open = tries.find((t) => t.result === 'open'); if (open) return { ok: true, resume: open.attempt_id };
-    // lessons first, where the programme needs both
-    if (a.completion_rule === 'lessons+assessment') {
+    // the lessons first: it's the programme's final assessment (unless the version completes on its assessment alone)
+    if (a.completion_rule !== 'assessment') {
       const countable = await ctx.countableLessons(a.version_id);
       const done = new Set((await db.query('SELECT DISTINCT lesson_id FROM {S}.completion WHERE enrolment_id = @e AND preview = 0', { e: e.enrolment_id })).map((r) => r.lesson_id));
       const left = countable.filter((id) => !done.has(id)).length;
       if (left) return { ok: false, why: `Complete the ${left === 1 ? 'lesson' : `${left} lessons`} first (in an approved language)` };
     }
     const failed = tries.filter((t) => t.result === 'fail');
-    if (a.max_attempts && !a.retake_wait_hours && failed.length >= a.max_attempts) return { ok: false, why: `All ${a.max_attempts} attempts used: ask the programme's owner` };
-    if (a.max_attempts && failed.length && failed.length % a.max_attempts === 0) {
-      const last = new Date(failed[failed.length - 1].submitted_at).getTime(), until = last + a.retake_wait_hours * 3600e3;
-      if (until > Date.now()) return { ok: false, why: `${a.max_attempts} attempts used: you can try again after ${new Date(until).toISOString().slice(0, 16).replace('T', ' ')} UTC`, waitUntil: until };
-    }
-    return { ok: true };
+    if (a.max_attempts && failed.length >= a.max_attempts) return { ok: false, why: `All ${a.max_attempts} attempts used: the programme starts again` };
+    return { ok: true, used: failed.length, left: a.max_attempts ? a.max_attempts - failed.length : null };
   }
   async function getAssessment(w, id) {
     const a = await assessmentById(id); if (!a) return reply(404, { error: 'No such assessment' });
@@ -175,11 +209,11 @@ function createAssess(ctx) {
     if (!canEdit && !['published', 'superseded'].includes(a.version_state)) return reply(404, { error: 'No such assessment' });
     const e = (await db.query("SELECT TOP 1 * FROM {S}.enrolment WHERE person_id = @p AND version_id = @v AND state <> 'withdrawn'", { p: w.person.person_id, v: a.version_id }))[0];
     const tries = e ? await db.query('SELECT * FROM {S}.attempt WHERE enrolment_id = @e AND assessment_id = @a ORDER BY started_at', { e: e.enrolment_id, a: a.assessment_id }) : [];
-    const qs = await questionsOf(a.assessment_id);
+    const qs = await questionsOf(a.assessment_id), pool = qs;
     const rules = ctx.rulesFor ? await ctx.rulesFor(qs.map((q) => ({ rules: q.rules.split(',') })), a.programme_id) : [];
     return reply(200, {
       assessment: { id: a.assessment_id, title: a.title, description: a.description, versionId: a.version_id, programmeId: a.programme_id, edition: a.edition, versionState: a.version_state, questions: qs.length },
-      policy: { passMark: a.pass_mark, maxAttempts: a.max_attempts, retakeWaitHours: a.retake_wait_hours, completionRule: a.completion_rule },
+      policy: { passMark: a.pass_mark, maxAttempts: a.max_attempts, perAttempt: Math.min(a.draw, pool.length), pool: pool.length, on: a.on, restarts: e?.restarts || 0, completionRule: a.completion_rule },
       questions: canEdit ? qs.map((q) => qView(q, true)) : [], rules,
       attempts: tries.map((t) => ({ id: t.attempt_id, result: t.result, percent: t.max_score ? Math.round((100 * t.score) / t.max_score) : null, startedAt: t.started_at, submittedAt: t.submitted_at })),
       may: await mayAttempt(a, e), can: { edit: canEdit && a.version_state === 'draft' },
@@ -190,14 +224,24 @@ function createAssess(ctx) {
     const e = (await db.query("SELECT TOP 1 * FROM {S}.enrolment WHERE person_id = @p AND version_id = @v AND state <> 'withdrawn'", { p: w.person.person_id, v: a.version_id }))[0];
     const may = await mayAttempt(a, e); if (!may.ok) return reply(409, { error: may.why });
     if (may.resume) return getAttempt(w, may.resume);
-    const qs = await questionsOf(a.assessment_id); if (!qs.length) return reply(409, { error: 'This assessment has no questions yet' });
+    const pool = await poolOf(a.assessment_id); if (!pool.length) return reply(409, { error: 'This assessment has no questions yet' });
+    // the questions this person has seen least, every round counted, so an attempt repeats none while the pool lasts
+    const before = await db.query('SELECT question_ids FROM {S}.attempt WHERE person_id = @p AND assessment_id = @a', { p: w.person.person_id, a: a.assessment_id });
+    const chosen = draw(pool, before, Math.min(a.draw || 10, pool.length));
     const tid = uuid();
     await db.tx(async (q) => {
-      await q('INSERT INTO {S}.attempt (attempt_id, person_id, enrolment_id, assessment_id, version_id, programme_id, pass_mark) VALUES (@id, @p, @e, @a, @v, @prog, @pass)',
-        { id: tid, p: w.person.person_id, e: e.enrolment_id, a: a.assessment_id, v: a.version_id, prog: a.programme_id, pass: a.pass_mark });
-      await audit(q, w, 'attempt.start', 'attempt', tid, { assessment: a.title }, { programmeId: a.programme_id });
+      await q('INSERT INTO {S}.attempt (attempt_id, person_id, enrolment_id, assessment_id, version_id, programme_id, pass_mark, question_ids) VALUES (@id, @p, @e, @a, @v, @prog, @pass, @qs)',
+        { id: tid, p: w.person.person_id, e: e.enrolment_id, a: a.assessment_id, v: a.version_id, prog: a.programme_id, pass: a.pass_mark, qs: JSON.stringify(chosen.map((x) => x.question_id)) });
+      await audit(q, w, 'attempt.start', 'attempt', tid, { assessment: a.title, questions: chosen.length, pool: pool.length }, { programmeId: a.programme_id });
     });
     return getAttempt(w, tid);
+  }
+  /** after a failed attempt: how many are left this round, or whether the programme started again because of it */
+  async function afterFail(t) {
+    const e = (await db.query('SELECT * FROM {S}.enrolment WHERE enrolment_id = @e', { e: t.enrolment_id }))[0];
+    if (e?.restarted_at && t.submitted_at && new Date(e.restarted_at) >= new Date(t.submitted_at)) return { restarted: true, left: 0 };
+    const a = await assessmentById(t.assessment_id), may = a && e ? await mayAttempt(a, e) : {};
+    return { restarted: false, left: may.left ?? null };
   }
   /** an attempt, as its owner (or an assessor, an admin, their coordinator) may see it: answers and feedback once submitted */
   async function getAttempt(w, id) {
@@ -205,12 +249,13 @@ function createAssess(ctx) {
     const own = t.person_id === w.person.person_id;
     const may = own || P.can(w.grants, 'assess', { programmeId: t.programme_id }) || P.can(w.grants, 'report.read', { programmeId: t.programme_id, regionId: t.region_id || undefined });
     if (!may) return reply(404, { error: 'No such attempt' });
-    const qs = await questionsOf(t.assessment_id), answers = JSON.parse(t.answers || '[]'), done = t.result !== 'open';
+    const qs = await attemptQuestions(t), answers = JSON.parse(t.answers || '[]'), done = t.result !== 'open';
     const rules = ctx.rulesFor ? await ctx.rulesFor(qs.map((q) => ({ rules: q.rules.split(',') })), t.programme_id) : [];
     return reply(200, { attempt: {
       id: t.attempt_id, assessmentId: t.assessment_id, title: t.assessment_title, programmeId: t.programme_id, programmeTitle: t.programme_title, versionId: t.version_id,
       person: own ? null : { name: t.legal_name, publicId: t.public_id }, result: t.result, score: t.score, maxScore: t.max_score, passMark: t.pass_mark,
       percent: t.max_score ? Math.round((100 * t.score) / t.max_score) : null, startedAt: t.started_at, submittedAt: t.submitted_at, assessorNote: t.assessor_note || '', decidedAt: t.decided_at,
+      after: own && t.result === 'fail' ? await afterFail(t) : null,
       questions: qs.map((q) => { const v = qView(q, done); const a = answers.find((x) => x.questionId.toLowerCase() === q.question_id.toLowerCase()); return { ...v, answer: a ? { chosen: a.chosen, reason: a.reason || '', correct: a.correct, decided: !!a.decided } : null }; }),
     }, rules, credential: done ? await credentialFor(t) : null });
   }
@@ -233,17 +278,33 @@ function createAssess(ctx) {
     await q('UPDATE {S}.attempt SET answers = @ans, score = @s, max_score = @m, result = @r WHERE attempt_id = @id', { ans: JSON.stringify(answers), s: right, m: max, r: result, id: t.attempt_id });
     return { result, percent };
   }
+  /** after a failed attempt: with every attempt of this round used, the programme is done again. Its finished lessons move to
+   *  completion_archive (kept, not counted), where each lesson was is forgotten, and the attempts start counting afresh */
+  async function maybeRestart(q, t, w) {
+    const e = (await q('SELECT e.*, p.assessment_attempts FROM {S}.enrolment e JOIN {S}.programme p ON p.programme_id = e.programme_id WHERE e.enrolment_id = @e', { e: t.enrolment_id }))[0];
+    if (!e || !e.assessment_attempts) return false;
+    const fails = thisRound(await q("SELECT started_at, result FROM {S}.attempt WHERE enrolment_id = @e AND assessment_id = @a", { e: e.enrolment_id, a: t.assessment_id }), e).filter((x) => x.result === 'fail').length;
+    if (fails < e.assessment_attempts) return false;
+    const n = (e.restarts || 0) + 1;
+    await q(`INSERT INTO {S}.completion_archive (completion_id, person_id, enrolment_id, programme_id, version_id, lesson_id, content_id, content_version, locale, preview, completed_at, restart_no)
+             SELECT completion_id, person_id, enrolment_id, programme_id, version_id, lesson_id, content_id, content_version, locale, preview, completed_at, @n FROM {S}.completion WHERE enrolment_id = @e`, { e: e.enrolment_id, n });
+    const moved = await q('DELETE FROM {S}.completion OUTPUT deleted.completion_id WHERE enrolment_id = @e', { e: e.enrolment_id });
+    await q('DELETE FROM {S}.lesson_progress WHERE person_id = @p AND lesson_id IN (SELECT lesson_id FROM {S}.lesson WHERE version_id = @v)', { p: e.person_id, v: e.version_id });
+    await q("UPDATE {S}.enrolment SET restarted_at = SYSUTCDATETIME(), restarts = @n, state = 'active', completed_at = NULL WHERE enrolment_id = @e", { e: e.enrolment_id, n });
+    await audit(q, w, 'enrolment.restart', 'enrolment', e.enrolment_id, { reason: `${fails} attempts at the final assessment not passed`, lessonsArchived: moved.length, restart: n }, { programmeId: e.programme_id });
+    return true;
+  }
   async function submit(w, id, b) {
     const t = await attemptById(id); if (!t || t.person_id !== w.person.person_id) return reply(404, { error: 'No such attempt' });
     if (t.result !== 'open') return reply(409, { error: 'That attempt has been submitted: its answers can\'t change' });
-    const qs = await questionsOf(t.assessment_id), given = b?.answers && typeof b.answers === 'object' ? b.answers : {};
+    const qs = await attemptQuestions(t), given = b?.answers && typeof b.answers === 'object' ? b.answers : {};
     const answers = qs.map((q) => {
       const raw = given[q.question_id] ?? given[q.question_id.toLowerCase()] ?? {};
       const options = JSON.parse(q.options).map((o) => o.id);
       const chosen = (Array.isArray(raw.chosen) ? raw.chosen : []).map(String).filter((x) => options.includes(x)).slice(0, q.type === 'multiple' ? 8 : 1);
       return { questionId: q.question_id, lineageId: q.lineage_id, versionNo: q.version_no, rules: q.rules.split(',').filter(Boolean), type: q.type, chosen, reason: text(raw.reason, 1000), correct: mark(q, chosen), provisional: mark({ ...q, needs_assessor: 0 }, chosen) };
     });
-    let out, enrolment, late = false;
+    let out, enrolment, late = false, restarted = false;
     await db.tx(async (q) => {
       // submitted once: a second submit (a double tap) finds it no longer open and changes nothing
       const took = await q("UPDATE {S}.attempt SET submitted_at = SYSUTCDATETIME() OUTPUT inserted.attempt_id WHERE attempt_id = @id AND result = 'open' AND submitted_at IS NULL", { id: t.attempt_id });
@@ -251,10 +312,11 @@ function createAssess(ctx) {
       out = await score(q, t, answers);
       await audit(q, w, 'attempt.submit', 'attempt', t.attempt_id, { assessment: t.assessment_title, result: out.result, percent: out.percent, passMark: t.pass_mark }, { programmeId: t.programme_id });
       if (out.result === 'pass') enrolment = await ctx.checkCompletion(q, t.enrolment_id, w);
+      if (out.result === 'fail') restarted = await maybeRestart(q, t, w);
     });
     if (late) return reply(409, { error: 'That attempt has been submitted: its answers can\'t change' });
     const r = await getAttempt(w, t.attempt_id);
-    return reply(200, { ...r.body, enrolment: enrolment ? { state: enrolment.state } : null });
+    return reply(200, { ...r.body, enrolment: enrolment ? { state: enrolment.state } : null, restarted });
   }
 
   // ------------------------------------------------------------------ assessors

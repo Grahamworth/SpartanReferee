@@ -19,6 +19,7 @@ const as = (p) => ({ ...boss, 'x-learn-as': p.id });
 async function programme(id, months) {
   const v = (await ok('POST', 'learn/programmes', boss, { id, title: id, category: 'referee', edition: '2027' })).versionId;
   await ok('PUT', `learn/versions/${v}`, boss, { completionRule: 'assessment', passMark: 50, validityMonths: months });
+  await ok('PUT', `learn/programmes/${id}`, boss, { assessmentPassMark: 50, assessmentAttempts: 10 });
   await ok('POST', `learn/versions/${v}/modules`, boss, { title: 'Basics' });
   const a = (await ok('POST', `learn/versions/${v}/assessments`, boss, { title: 'Check' })).assessment;
   await ok('POST', `learn/assessments/${a.id}/questions`, boss, { type: 'single', prompt: 'One plus one?', options: [{ text: 'Two', correct: true }, { text: 'Three' }] });

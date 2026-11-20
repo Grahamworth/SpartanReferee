@@ -54,12 +54,16 @@ function createChecks(ctx) {
     return !r || r.x !== false;
   };
   /** may this lesson be completed? Its test taken, and passed when the programme asks for that */
+  // tries since the programme was last started again (after the final assessment's attempts ran out), so a redone programme is redone
+  const SINCE = "ISNULL((SELECT MAX(e.restarted_at) FROM {S}.enrolment e JOIN {S}.lesson x ON x.version_id = e.version_id WHERE e.person_id = @p AND x.lesson_id = @l), '19000101')";
+  const triesOf = async (personId, lessonId) => (await db.query(`SELECT COUNT(*) AS n, ISNULL(MAX(CAST(passed AS INT)), 0) AS passed FROM {S}.lesson_test WHERE person_id = @p AND lesson_id = @l AND at > ${SINCE}`, { p: personId, l: lessonId }))[0];
   ctx.testDone = async (personId, lessonId) => {
-    if (!(await ctx.checksAnswered(personId, lessonId))) return { ok: false, why: 'Take the lesson\'s test first' };
     const has = (await db.query('SELECT COUNT(*) AS n FROM {S}.lesson_check WHERE lesson_id = @l', { l: lessonId }))[0].n;
-    if (!has || !(await needsPass(lessonId))) return { ok: true };
-    const passed = (await db.query('SELECT COUNT(*) AS n FROM {S}.lesson_test WHERE person_id = @p AND lesson_id = @l AND passed = 1', { p: personId, l: lessonId }))[0].n;
-    return passed ? { ok: true } : { ok: false, why: 'Get every answer in the lesson\'s test right first: take it again, or go through the lesson again' };
+    if (!has) return { ok: true };
+    const tries = await triesOf(personId, lessonId);
+    if (!tries.n) return { ok: false, why: 'Take the lesson\'s test first' };
+    if (!tries.passed && (await needsPass(lessonId))) return { ok: false, why: 'Get every answer in the lesson\'s test right first: take it again, or go through the lesson again' };
+    return { ok: true };
   };
   /** a day of learning, for the streak */
   ctx.markDay = async (personId, q = db.query) => {
@@ -74,7 +78,7 @@ function createChecks(ctx) {
     const states = checks.length ? await db.query(`SELECT check_key, last_right, answered FROM {S}.check_state WHERE person_id = @p AND check_key IN (${checks.map((_, i) => `@k${i}`).join(', ')})`,
       { p: w.person.person_id, ...Object.fromEntries(checks.map((k, i) => [`k${i}`, k.key])) }) : [];
     // this person's tries at the lesson's test: how many, and whether one had every answer right
-    const tries = checks.length ? (await db.query('SELECT COUNT(*) AS n, MAX(CAST(passed AS INT)) AS passed FROM {S}.lesson_test WHERE person_id = @p AND lesson_id = @l', { p: w.person.person_id, l: l.lesson_id }))[0] : null;
+    const tries = checks.length ? await triesOf(w.person.person_id, l.lesson_id) : null;
     return { ...base, checks, checkState: Object.fromEntries(states.map((s) => [s.check_key, { right: !!s.last_right, answered: s.answered }])),
       tests: tries ? { attempts: tries.n, passed: !!tries.passed } : null, passRequired: checks.length ? await needsPass(l.lesson_id) : false };
   };

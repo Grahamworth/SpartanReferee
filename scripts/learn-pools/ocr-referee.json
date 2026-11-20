@@ -1,0 +1,885 @@
+[
+  {
+    "topic": "Spartan Racing",
+    "prompt": "You usually referee an obstacle with a penalty loop. Today you're at a Stadion event and an athlete fails your obstacle. What is the penalty?",
+    "options": [
+      "The obstacle's usual penalty loop",
+      "15 burpees",
+      "30 burpees",
+      "The penalty loop, then 15 burpees"
+    ],
+    "answer": 1,
+    "feedback": "At Stadion events the penalty for failing any obstacle is always 15 burpees, for every obstacle and every heat (rule 3.17.3).",
+    "rules": [
+      "OCR-2026-3.17.3"
+    ]
+  },
+  {
+    "topic": "Spartan Racing",
+    "prompt": "An athlete says the rules must be different here because the race is in another country. What is right?",
+    "options": [
+      "Each country publishes its own version of the rules",
+      "The Race Director decides which rules apply locally",
+      "One rulebook applies to every Spartan event worldwide",
+      "Only Elite and championship races follow the global rulebook"
+    ],
+    "answer": 2,
+    "feedback": "The Rules of Competition apply to all Spartan events and competitions globally and bind every competitor (rule 1.1.1). One aim is globally standardised competition (rule 1.2.1).",
+    "rules": [
+      "OCR-2026-1.1.1",
+      "OCR-2026-1.2.1"
+    ]
+  },
+  {
+    "topic": "Spartan Racing",
+    "prompt": "The programme groups Spartan's obstacles into five kinds of challenge. Which list is correct?",
+    "options": [
+      "Climbing, carrying, crawling, jumping, and pulling and lifting",
+      "Climbing, carrying, swimming, throwing, and pushing and pulling",
+      "Running, climbing, crawling, throwing, and hanging and swinging",
+      "Carrying, crawling, swimming, jumping, and balancing"
+    ],
+    "answer": 0,
+    "feedback": "The five kinds are climbing, carrying, crawling, jumping, and pulling and lifting: for example the walls, the Bucket Carry, the Barbed Wire Crawl, the Fire Jump and the Hercules Hoist.",
+    "rules": []
+  },
+  {
+    "topic": "Spartan Racing",
+    "prompt": "You're refereeing at a Beast. What minimum number of referees does Spartan's officiating procedure set for this format?",
+    "options": [
+      "10",
+      "15",
+      "20",
+      "25"
+    ],
+    "answer": 2,
+    "feedback": "The minimum is 10 referees at a Sprint or Stadion, 15 at a Super, and 20 at a Beast or Ultra.",
+    "rules": []
+  },
+  {
+    "topic": "Spartan Racing",
+    "prompt": "What is Spartan's stated mission?",
+    "options": [
+      "To find the fastest obstacle racers in the world",
+      "To make every race harder than the last",
+      "To give elite athletes a professional circuit",
+      "To help people live without limits"
+    ],
+    "answer": 3,
+    "feedback": "Spartan's mission is to help people live without limits, by building strength, discipline and resilience. Its events are for every level, from first-timers to elite competitors.",
+    "rules": []
+  },
+  {
+    "topic": "Role of Referees",
+    "prompt": "You and the Race Director disagree on how a rule applies at your obstacle. Whose interpretation is final?",
+    "options": [
+      "The Head Referee (the rulebook's Head Official)",
+      "The Race Director, who runs the overall event",
+      "Yours, as the referee posted at that obstacle",
+      "The timing team, who apply the penalties to results"
+    ],
+    "answer": 0,
+    "feedback": "The Head Official is the chief decision maker on all rules matters and the ultimate authority for interpreting them (rule 2.1.2). The Race Director runs the event's overall operations (rule 2.1.9).",
+    "rules": [
+      "OCR-2026-2.1.2",
+      "OCR-2026-2.1.9"
+    ]
+  },
+  {
+    "topic": "Role of Referees",
+    "prompt": "In the rulebook, who counts as an 'official'?",
+    "options": [
+      "Only referees and the Head Official, never volunteers or staff",
+      "Staff, referees and volunteers given authority by Spartan",
+      "Only paid Spartan staff, including the Race Director",
+      "Referees and the timing team, but not volunteers"
+    ],
+    "answer": 1,
+    "feedback": "Rule 2.1.3 defines an official as any Spartan representative designated to carry out event duties in a position of authority, including staff, referees and volunteers.",
+    "rules": [
+      "OCR-2026-2.1.3"
+    ]
+  },
+  {
+    "topic": "Role of Referees",
+    "prompt": "In an Elite heat at a Beast, Athlete A crosses the finish line first. Athlete B started later and had a faster start-to-finish time. Neither has a penalty. Who wins?",
+    "options": [
+      "Athlete B: Elite heats are decided on chip time",
+      "Athlete B: the fastest course time always wins",
+      "Athlete A: Elite heats are decided on gun time",
+      "Neither, until the Head Referee decides"
+    ],
+    "answer": 2,
+    "feedback": "Outside Stadion, an Elite heat is won by whoever crosses the finish line first, regardless of when they crossed the start line, plus any time penalties (rule 3.22.1).",
+    "rules": [
+      "OCR-2026-3.22.1"
+    ]
+  },
+  {
+    "topic": "Role of Referees",
+    "prompt": "Which heats are decided on chip time?",
+    "options": [
+      "Elite heats at every event, including Stadion",
+      "Open heats only; Age Group and Elite use gun time",
+      "Every Elite and Age Group heat at a Sprint, Super or Beast",
+      "Age Group and Open heats, and Elite heats at Stadion"
+    ],
+    "answer": 3,
+    "feedback": "Chip time, from crossing the start line to crossing the finish, decides Age Group and Open heats and Elite Stadion heats, with any time penalties added (rule 3.22.2).",
+    "rules": [
+      "OCR-2026-3.22.2"
+    ]
+  },
+  {
+    "topic": "Role of Referees",
+    "prompt": "An Age Group racer starts in the wrong heat. What is the consequence under the rulebook?",
+    "options": [
+      "They are moved to the Open category",
+      "They are disqualified from the race",
+      "They get a time penalty added to their finish",
+      "They become ineligible for awards"
+    ],
+    "answer": 3,
+    "feedback": "Any racer who starts in an incorrect heat is ineligible for awards, including championship qualification (rule 3.9.1). Being moved to Open applies to Elite racers (rule 3.9.2).",
+    "rules": [
+      "OCR-2026-3.9.1",
+      "OCR-2026-3.9.2"
+    ]
+  },
+  {
+    "topic": "Role of Referees",
+    "prompt": "How are Open category racers expected to complete burpee penalties?",
+    "options": [
+      "On camera, for video review",
+      "With a referee counting each rep",
+      "As 15 burpees instead of 30",
+      "On Spartan honour"
+    ],
+    "answer": 3,
+    "feedback": "All Open category competitors are expected to use Spartan honour when completing burpee penalties (rule 3.23.1). Referees focus primarily on the Competitive categories (rule 3.2).",
+    "rules": [
+      "OCR-2026-3.23.1",
+      "OCR-2026-3.2"
+    ]
+  },
+  {
+    "topic": "Role of Referees",
+    "prompt": "You've finished officiating the Elite and competitive waves at your obstacle. What happens next, depending on the event?",
+    "options": [
+      "Clear down, or hand over to volunteers for Open waves",
+      "Stay and officiate every Open wave in full, as before",
+      "Go to the finish line to hear athletes' protests",
+      "Join the timing team to enter the penalties you saw"
+    ],
+    "answer": 0,
+    "feedback": "The referee's day ends with clearing down the course or handing over to volunteers for the Open waves. The Head Referee's briefing tells you which applies.",
+    "rules": []
+  },
+  {
+    "topic": "Role of Referees",
+    "prompt": "Pre-event training puts special emphasis on which obstacles?",
+    "options": [
+      "Mandatory obstacles only",
+      "High-failure obstacles",
+      "Obstacles that are new this season",
+      "Obstacles with a water crossing"
+    ],
+    "answer": 1,
+    "feedback": "Pre-event training covers the rulebook with emphasis on high-failure obstacles, the ones athletes fail most often, plus the referee workflow, burpee standards and video at the Spear Throw.",
+    "rules": []
+  },
+  {
+    "topic": "Race Day Workflow",
+    "prompt": "What minimum battery life does the officiating procedure set for referee video cameras?",
+    "options": [
+      "At least 1 hour",
+      "At least 2.5 hours",
+      "At least 1.5 hours",
+      "At least 4 hours"
+    ],
+    "answer": 1,
+    "feedback": "Cameras need at least 2.5 hours of battery, with backup batteries, plus adjustable 7 foot tripods and SD cards of at least 32 GB.",
+    "rules": []
+  },
+  {
+    "topic": "Race Day Workflow",
+    "prompt": "When does the Head Referee prepare and test the officiating equipment?",
+    "options": [
+      "At check-in on race morning",
+      "Straight after the onsite briefing",
+      "On the Friday before the event",
+      "The evening after the race"
+    ],
+    "answer": 2,
+    "feedback": "The Head Referee prepares and tests the equipment on the Friday before the event, then hands it out on race day with final instructions.",
+    "rules": []
+  },
+  {
+    "topic": "Race Day Workflow",
+    "prompt": "You're assigned to the Rope Climb. Do you need a video camera and tripod?",
+    "options": [
+      "Yes: every multiple-attempt obstacle is filmed",
+      "No: video is for the Spear Throw only",
+      "Yes, if the Rope Climb has a burpee zone",
+      "Only if it is a high-failure obstacle"
+    ],
+    "answer": 1,
+    "feedback": "Video recording at obstacles is for the Spear Throw only, so you carry a camera and tripod only if you're assigned to film it.",
+    "rules": []
+  },
+  {
+    "topic": "Race Day Workflow",
+    "prompt": "Which is true of the Head Referee's onsite briefing?",
+    "options": [
+      "It's optional if you did the online training",
+      "It takes place after the first Elite wave",
+      "Only referees at the Spear Throw attend",
+      "It's mandatory, before you deploy"
+    ],
+    "answer": 3,
+    "feedback": "The onsite briefing is mandatory. It covers assignments, obstacle classifications, penalty loops, the burpee standard and how penalties are reported.",
+    "rules": []
+  },
+  {
+    "topic": "Race Day Workflow",
+    "prompt": "At the 7 foot wall, a female athlete chooses not to use the red step. What is the call?",
+    "options": [
+      "A failure: she must use the female option",
+      "She must climb again using the step",
+      "A failure, but only in an Elite heat",
+      "No issue: she may choose not to use it"
+    ],
+    "answer": 3,
+    "feedback": "Female competitors may choose to forgo a female-specific step (rule 3.17.9). The failure is a male athlete using the red step (rule 4.1.1).",
+    "rules": [
+      "OCR-2026-3.17.9",
+      "OCR-2026-4.1.1"
+    ]
+  },
+  {
+    "topic": "Race Day Workflow",
+    "prompt": "You see an athlete cut short your obstacle's penalty loop. Who do you report it to?",
+    "options": [
+      "The timing team, directly",
+      "The Race Director, directly",
+      "The Head Referee",
+      "The Volunteer Coordinator"
+    ],
+    "answer": 2,
+    "feedback": "Referees report to the Head Referee, the rulebook's Head Official (rule 2.1.8). The Head Referee tells Timing about competitor incidents such as shortcuts.",
+    "rules": [
+      "OCR-2026-2.1.8"
+    ]
+  },
+  {
+    "topic": "Race Day Workflow",
+    "prompt": "At check-in on race morning, who can sign you in?",
+    "options": [
+      "Only the Race Director, at the referee tent",
+      "Any member of the timing team at the start",
+      "The Volunteer Coordinator or the Head Referee",
+      "Another referee who is posted at your obstacle"
+    ],
+    "answer": 2,
+    "feedback": "You sign in with the Volunteer Coordinator or the Head Referee, at the Volunteer Tent or the referee tent. Make sure the Head Referee knows you're there.",
+    "rules": []
+  },
+  {
+    "topic": "Race Day Workflow",
+    "prompt": "What must the Head Referee confirm before the first Elite start?",
+    "options": [
+      "That every penalty loop has been timed",
+      "That the Results Tent is open",
+      "That every referee is in position",
+      "That the Race Director has approved each referee's calls"
+    ],
+    "answer": 2,
+    "feedback": "Before the first Elite start, the Head Referee has to confirm that every referee is in position. That's why you make sure they know you've arrived.",
+    "rules": []
+  },
+  {
+    "topic": "Obstacle Types",
+    "prompt": "At the Ape Hanger, an athlete climbs the ladder, touches an overhead bar, then steps back down to rest and start again. What is the call?",
+    "options": [
+      "Fine: the attempt only starts at the second bar",
+      "They're committed: complete it or take the penalty",
+      "Fine: they may reset at any point until they ring the bell",
+      "A failure, followed by disqualification"
+    ],
+    "answer": 1,
+    "feedback": "At the Ape Hanger an athlete is committed once they touch any overhead bar, and must then complete the obstacle or the penalty (rule 4.2.2).",
+    "rules": [
+      "OCR-2026-4.2.2",
+      "OCR-2026-2.1.7"
+    ]
+  },
+  {
+    "topic": "Obstacle Types",
+    "prompt": "At the Rope Climb, an athlete climbs halfway, returns to the ground, then tries again on a different rope. What is the call?",
+    "options": [
+      "Allowed: ropes may be changed back on the ground",
+      "A failure: they must stay on the rope they started on",
+      "A failure: only one attempt is allowed",
+      "Allowed only if the first rope was damaged"
+    ],
+    "answer": 0,
+    "feedback": "Rule 4.1.8 lets a competitor change ropes after returning to the ground and try again. Using more than one rope during a single attempt is the failure.",
+    "rules": [
+      "OCR-2026-4.1.8",
+      "OCR-2026-2.1.6"
+    ]
+  },
+  {
+    "topic": "Obstacle Types",
+    "prompt": "At a Super, an athlete's spear misses. They ask to move to a free lane and throw again. What do you do?",
+    "options": [
+      "Allow it: athletes may change lanes at the Spear Throw",
+      "Refuse: it's a fail, so 30 burpees in the zone",
+      "Refuse, and send them on the penalty loop",
+      "Allow it if their tether tangled"
+    ],
+    "answer": 1,
+    "feedback": "The attempt starts once the spear is released forward, and lanes can only be changed before that. A miss is a fail: 30 burpees in the zone (rules 4.2.13 and 3.17.5).",
+    "rules": [
+      "OCR-2026-4.2.13",
+      "OCR-2026-3.17.5"
+    ]
+  },
+  {
+    "topic": "Obstacle Types",
+    "prompt": "A spear embeds cleanly. The athlete walks 3 metres from the lane, then the spear falls out. What is the call?",
+    "options": [
+      "Pass: it was complete at 2 metres",
+      "Fail: the spear didn't stay in the target",
+      "An incomplete attempt: 30 burpees",
+      "A rethrow, as the spear stuck at first"
+    ],
+    "answer": 0,
+    "feedback": "The Spear Throw is complete once the athlete is at least 2 metres from the lane (rule 4.2.13). It's an incomplete attempt only if the spear falls before then.",
+    "rules": [
+      "OCR-2026-4.2.13"
+    ]
+  },
+  {
+    "topic": "Obstacle Types",
+    "prompt": "At the Bucket Carry, an athlete asks if they can do burpees instead of carrying the bucket. What do you tell them?",
+    "options": [
+      "Yes: they may do 30 burpees instead of the carry",
+      "Yes: they may do the penalty loop instead",
+      "Yes, if they're racing in an Open wave",
+      "No: there's no burpee option at the Bucket Carry"
+    ],
+    "answer": 3,
+    "feedback": "Rule 4.3.3 says there is no burpee option for the Bucket Carry: it must be completed. Failing a mandatory obstacle means disqualification unless the Race Director substitutes a time penalty (rule 3.17.2).",
+    "rules": [
+      "OCR-2026-4.3.3",
+      "OCR-2026-3.17.2"
+    ]
+  },
+  {
+    "topic": "Obstacle Types",
+    "prompt": "Your obstacle sits beyond a stretch of water. An athlete wants to skip the water and go straight to the penalty. Nobody has said that's acceptable. What is the call?",
+    "options": [
+      "Allowed: taking the penalty replaces the attempt",
+      "Not allowed: reaching it is part of the attempt",
+      "Allowed, if they complete the penalty in full",
+      "Allowed at single-attempt obstacles only"
+    ],
+    "answer": 1,
+    "feedback": "An attempt can include entering water or difficult terrain to reach the obstacle. That can't be bypassed with a penalty unless the briefing or race staff allow it (rule 3.17.6).",
+    "rules": [
+      "OCR-2026-3.17.6"
+    ]
+  },
+  {
+    "topic": "Penalty Rules",
+    "prompt": "An athlete fails a mandatory obstacle. Who can substitute a time penalty for disqualification?",
+    "options": [
+      "You, the referee at the obstacle",
+      "The timing team",
+      "The Race Director",
+      "The Volunteer Coordinator"
+    ],
+    "answer": 2,
+    "feedback": "Failing a mandatory obstacle means disqualification, but the Race Director may substitute a time penalty depending on how serious it was (rule 3.17.2).",
+    "rules": [
+      "OCR-2026-3.17.2"
+    ]
+  },
+  {
+    "topic": "Penalty Rules",
+    "prompt": "Two Age Group athletes in the same heat fail your obstacle. The second is struggling, so you think about a shorter loop. What is right?",
+    "options": [
+      "Shorten it: loop distance can vary",
+      "Let the second athlete do burpees instead",
+      "Shorten it, then tell the Head Referee",
+      "Both do the same loop"
+    ],
+    "answer": 3,
+    "feedback": "A loop's distance can vary with terrain, but each penalty is applied consistently to everyone in the same category or heat (rule 3.17.3).",
+    "rules": [
+      "OCR-2026-3.17.3"
+    ]
+  },
+  {
+    "topic": "Penalty Rules",
+    "prompt": "Outside Stadion, which penalty does the officiating procedure say most obstacles use?",
+    "options": [
+      "A penalty loop; the Spear Throw uses burpees",
+      "Burpees; only the Spear Throw uses a penalty loop",
+      "30 burpees at every obstacle",
+      "Whatever the referee chooses on the day"
+    ],
+    "answer": 0,
+    "feedback": "The officiating procedure says most obstacles use a penalty loop and the Spear Throw uses burpees. Rule 3.17.3 lets Spartan set a loop or 30 burpees per obstacle, event, category or heat.",
+    "rules": [
+      "OCR-2026-3.17.3"
+    ]
+  },
+  {
+    "topic": "Penalty Rules",
+    "prompt": "Who confirms each obstacle's penalty format before the event?",
+    "options": [
+      "You, when you inspect the obstacle",
+      "The timing team, together with the Head Referee",
+      "The Volunteer Coordinator",
+      "The Head Referee, with the Race Director"
+    ],
+    "answer": 3,
+    "feedback": "Before the event, the Head Referee confirms each obstacle's penalty format with the Race Director, and the onsite briefing covers what applies to yours.",
+    "rules": [
+      "OCR-2026-3.17.3"
+    ]
+  },
+  {
+    "topic": "Penalty Rules",
+    "prompt": "Between obstacles, a friend runs alongside an Elite athlete, coaching them and setting the pace. What is this?",
+    "options": [
+      "Fine, as long as there's no physical contact at all",
+      "Fine between obstacles, just not at them",
+      "Pacing: not allowed. Record the number, report it",
+      "Fine: it's only information about the race"
+    ],
+    "answer": 2,
+    "feedback": "Pacing by any person is strictly prohibited (rule 3.16.1), and athletes may not accept pacing from anyone but a Spartan official (rule 3.6.1). Only being told about other athletes' progress or times isn't assistance.",
+    "rules": [
+      "OCR-2026-3.16.1",
+      "OCR-2026-3.6.1"
+    ]
+  },
+  {
+    "topic": "Penalty Rules",
+    "prompt": "Under the general rule on striking bells, may an athlete ring the bell with their head?",
+    "options": [
+      "No: only the arms and hands may strike a bell",
+      "No: it counts the same as kicking the bell",
+      "Yes: any part above the chest may strike it",
+      "Only if both hands are still on the obstacle"
+    ],
+    "answer": 2,
+    "feedback": "Rule 3.17.7 allows bells to be struck with the arms, the hands or any other part of the body above the chest. Using the feet, legs or knees is the failure.",
+    "rules": [
+      "OCR-2026-3.17.7"
+    ]
+  },
+  {
+    "topic": "Penalty Rules",
+    "prompt": "At the Spear Throw burpee zone, an athlete has lost their headband. What do you do?",
+    "options": [
+      "Note their name, or say it on camera, and tell the Head Referee",
+      "Send them back to find it before they start",
+      "Let them do their burpees out of camera view",
+      "Turn their face towards the camera lens so the review can identify them"
+    ],
+    "answer": 0,
+    "feedback": "If an athlete has lost their headband, record their name or say who they are on the camera's audio, and tell the Head Referee. Never move an athlete's body or face for the camera.",
+    "rules": []
+  },
+  {
+    "topic": "Penalty Rules",
+    "prompt": "Who keeps the official video footage, and for how long?",
+    "options": [
+      "The referee who filmed it, until the award ceremony",
+      "The timing team, until results are final",
+      "The Race Director, for a week after the race",
+      "The Head Referee, until the end of the event day"
+    ],
+    "answer": 3,
+    "feedback": "The Head Referee manages the video review, keeps the footage until the end of the event day, and never gives it to athletes.",
+    "rules": []
+  },
+  {
+    "topic": "Burpee Standard",
+    "prompt": "Under rule 3.17.4, what is the top position of a burpee?",
+    "options": [
+      "Balanced and upright, with hips and knees extended",
+      "A squat with the knees bent, ready to jump",
+      "Kneeling upright with a straight back and arms up",
+      "Standing bent forward at the hips, hands on the knees"
+    ],
+    "answer": 0,
+    "feedback": "Rule 3.17.4 defines the top position as balanced and upright, with the hips and knees extended. The jump comes after it.",
+    "rules": [
+      "OCR-2026-3.17.4"
+    ]
+  },
+  {
+    "topic": "Burpee Standard",
+    "prompt": "Mid-penalty, an athlete loses count and asks how many burpees they've done. What do you say?",
+    "options": [
+      "Athletes count their own: you watch the standard",
+      "Give them your count, so they can finish correctly",
+      "Tell them to start again from zero",
+      "Tell them to stop: the video will count them"
+    ],
+    "answer": 0,
+    "feedback": "Athletes are responsible for counting their own burpees, and referees don't count for them. Your job is to watch that every rep meets the standard.",
+    "rules": []
+  },
+  {
+    "topic": "Burpee Standard",
+    "prompt": "An athlete does 30 burpees to the standard, but the last 4 are outside the burpee zone. How many count towards the penalty?",
+    "options": [
+      "30",
+      "4",
+      "None: they must start again",
+      "26"
+    ],
+    "answer": 3,
+    "feedback": "Burpees completed outside the designated zone don't count towards the penalty (rule 3.17.5), so 4 are still owed.",
+    "rules": [
+      "OCR-2026-3.17.5"
+    ]
+  },
+  {
+    "topic": "Burpee Standard",
+    "prompt": "In the video review, what is checked about an athlete's burpees?",
+    "options": [
+      "Only how many were done; quality is your job",
+      "Only whether they were in the zone",
+      "Only the last few reps",
+      "Both how many were done and how well"
+    ],
+    "answer": 3,
+    "feedback": "Under the officiating procedure, the review decides on both the number and the quality of the burpees. That's why missed and incorrect burpees are treated alike.",
+    "rules": [
+      "OCR-2026-3.18.1"
+    ]
+  },
+  {
+    "topic": "Burpee Standard",
+    "prompt": "An athlete does very fast burpees. Every rep has the chest on the ground, full extension at the top and a jump with hands above the ears. What is your call?",
+    "options": [
+      "Require extra reps: fast burpees aren't one continuous movement",
+      "They count: speed isn't a fault if the standard is met",
+      "Require extra reps: each rep must be slow",
+      "Refer it to the Head Referee before they go on"
+    ],
+    "answer": 1,
+    "feedback": "What matters is whether each rep meets rule 3.17.4 as one continuous movement. Fast reps that meet every part of the standard are complete burpees.",
+    "rules": [
+      "OCR-2026-3.17.4"
+    ]
+  },
+  {
+    "topic": "Burpee Standard",
+    "prompt": "At the top of each rep, an athlete jumps straight from a half-squat, hips still bent. What do you do?",
+    "options": [
+      "Accept them: there's a jump with hands above the ears",
+      "Accept them, as the chest touched the ground",
+      "Stop them and send them to the Head Referee",
+      "Require extra burpees: hips must be extended first"
+    ],
+    "answer": 3,
+    "feedback": "The top position needs the hips and knees extended before the jump (rule 3.17.4). A rep without it isn't complete, so require extra burpees and explain calmly why.",
+    "rules": [
+      "OCR-2026-3.17.4"
+    ]
+  },
+  {
+    "topic": "Burpee Standard",
+    "prompt": "An athlete stands fully upright and raises their hands above their ears, but doesn't jump. Does the rep count?",
+    "options": [
+      "No: a complete burpee ends with a jump",
+      "Yes: hands above the ears is what matters",
+      "Yes, as long as the chest touched the ground",
+      "Only if it's the last rep of the penalty"
+    ],
+    "answer": 0,
+    "feedback": "Rule 3.17.4 requires a jump with the hands extended above the ears after the top position. A rep with no jump isn't complete.",
+    "rules": [
+      "OCR-2026-3.17.4"
+    ]
+  },
+  {
+    "topic": "Burpee Standard",
+    "prompt": "Where are penalties given in the official video review made available?",
+    "options": [
+      "At each obstacle's burpee zone, as they are given",
+      "Only online, after the awards",
+      "At the start line, before the next wave",
+      "Inside the Results Tent, during the review"
+    ],
+    "answer": 3,
+    "feedback": "Penalties given during the official video review are made available inside the Results Tent throughout the review (rule 3.18.3).",
+    "rules": [
+      "OCR-2026-3.18.3"
+    ]
+  },
+  {
+    "topic": "Disputes and Conduct",
+    "prompt": "When does the competitor protest period normally end?",
+    "options": [
+      "As soon as the provisional results are posted on site",
+      "One hour after the athlete finishes",
+      "15 minutes before their category's award ceremony",
+      "When the award ceremony starts"
+    ],
+    "answer": 2,
+    "feedback": "The protest period starts as soon as the athlete crosses the finish line and ends 15 minutes before the official award ceremony for their category (rule 3.19.1).",
+    "rules": [
+      "OCR-2026-3.19.1"
+    ]
+  },
+  {
+    "topic": "Disputes and Conduct",
+    "prompt": "During a dispute, an athlete pushes you. What does the rulebook say about this?",
+    "options": [
+      "You may disqualify them on the spot",
+      "It can be grounds for suspension",
+      "It only counts if another official saw it",
+      "It's settled by a time penalty you set"
+    ],
+    "answer": 1,
+    "feedback": "Physical violence towards a race official is grounds for suspension (rule 3.11.1). Your part is to record the number and what happened, and report it to the Head Referee.",
+    "rules": [
+      "OCR-2026-3.11.1",
+      "OCR-2026-3.5.1"
+    ]
+  },
+  {
+    "topic": "Disputes and Conduct",
+    "prompt": "In the official video review, an athlete submits a spectator's photo of their attempt. Must officials consider it?",
+    "options": [
+      "No: they aren't obliged to consider it",
+      "Yes: all evidence must be reviewed",
+      "Yes, if the photo is time-stamped",
+      "Only if the athlete raced in an Elite heat"
+    ],
+    "answer": 0,
+    "feedback": "Race officials aren't obliged to review or consider any video or photo taken by competitors or spectators (rule 3.18.4).",
+    "rules": [
+      "OCR-2026-3.18.4"
+    ]
+  },
+  {
+    "topic": "Disputes and Conduct",
+    "prompt": "Can a protest still be heard after the award ceremony?",
+    "options": [
+      "No, never",
+      "Yes: protests stay open for 24 hours",
+      "Only if the Head Official extends the period",
+      "Only if the Race Director agrees to hear it late"
+    ],
+    "answer": 2,
+    "feedback": "Protests go to the Head Official, who may extend a protest period beyond the award ceremony at their sole discretion (rule 3.19.3).",
+    "rules": [
+      "OCR-2026-3.19.3"
+    ]
+  },
+  {
+    "topic": "Professional Conduct",
+    "prompt": "How must athletes come down from the Rope Climb?",
+    "options": [
+      "Any way they like, once the bell has been rung",
+      "By dropping from the top, if the ground below is soft",
+      "Under control, with at least one hand on the rope",
+      "Down a different rope from the one they climbed up"
+    ],
+    "answer": 2,
+    "feedback": "At the Rope Climb, athletes must return to the ground in a safe and controlled manner, with at least one hand touching the rope at all times.",
+    "rules": [
+      "OCR-2026-4.1.8"
+    ]
+  },
+  {
+    "topic": "Professional Conduct",
+    "prompt": "At a water crossing, an athlete dives in from the bank. What is the call?",
+    "options": [
+      "Fine, if they stay inside the marked course",
+      "A failure: diving isn't allowed",
+      "A warning, as it's a safety matter",
+      "Fine, unless it gains them an advantage"
+    ],
+    "answer": 1,
+    "feedback": "Rule 4.3.9 says no diving at a swim or water crossing, and lists diving as a failure.",
+    "rules": [
+      "OCR-2026-4.3.9"
+    ]
+  },
+  {
+    "topic": "Professional Conduct",
+    "prompt": "You think one of your obstacle's failure modes is too harsh for tired athletes. What do you do?",
+    "options": [
+      "Apply it as written; escalate if unsure",
+      "Soften it as the day goes on",
+      "Use your own sense of what is fair",
+      "Apply it to Elite racers only"
+    ],
+    "answer": 0,
+    "feedback": "Judge against the obstacle's written failure modes, avoid judgement beyond the rule, and use the same interpretation from the first wave to the last. Escalate to the Head Referee when unsure.",
+    "rules": []
+  },
+  {
+    "topic": "Professional Conduct",
+    "prompt": "An athlete asks to cut across a bend to avoid a slope you think is unsafe. What do you do?",
+    "options": [
+      "Allow it: athlete safety always comes before the route",
+      "Allow it, if they take the penalty",
+      "Allow it, but record their headband number",
+      "Refuse, and report the hazard straight away"
+    ],
+    "answer": 3,
+    "feedback": "Athletes must cover the official course in its entirety (rule 3.6.1), so a shortcut is never yours to allow. Report the hazard straight away to the Head Referee, Race Director or Spartan staff.",
+    "rules": [
+      "OCR-2026-3.6.1",
+      "OCR-2026-1.2.1"
+    ]
+  },
+  {
+    "topic": "Professional Conduct",
+    "prompt": "Where there's no video, which decision does the officiating procedure make yours, on site?",
+    "options": [
+      "Burpee number and quality, in writing",
+      "Whether a mandatory failure becomes a time penalty",
+      "The outcome of an athlete's protest",
+      "Which penalty format your obstacle uses"
+    ],
+    "answer": 0,
+    "feedback": "Without video, the referee decides burpee quantity and quality on site, writes it down and hands it to the Head Referee. The other decisions belong to the Race Director or the Head Referee.",
+    "rules": []
+  },
+  {
+    "topic": "Referee Scenarios",
+    "prompt": "At Olympus, an athlete rests a foot on one of the holds to get their breath. What is the call?",
+    "options": [
+      "No failure: feet may rest on the wall",
+      "A failure: no feet on holds or holes",
+      "No failure, unless it gives an advantage",
+      "A failure only if they also touch the ground"
+    ],
+    "answer": 1,
+    "feedback": "Feet and knees may rest against the wall at Olympus, but touching any hold or hole with the feet is a failure (rule 4.2.10).",
+    "rules": [
+      "OCR-2026-4.2.10"
+    ]
+  },
+  {
+    "topic": "Referee Scenarios",
+    "prompt": "At the Monkey Bars, an athlete climbs the vertical truss like a ladder to reach the first bar. What is the call?",
+    "options": [
+      "No failure: truss may be used to start the traverse",
+      "No failure, as the traverse hasn't begun",
+      "A failure: no vertical truss as a ladder",
+      "A failure only if they use it to finish"
+    ],
+    "answer": 2,
+    "feedback": "Rule 4.2.7 lists using vertical truss as a ladder as a failure, whether to start, traverse or finish. Only horizontal truss may be used to start or transfer.",
+    "rules": [
+      "OCR-2026-4.2.7",
+      "OCR-2026-2.1.10"
+    ]
+  },
+  {
+    "topic": "Referee Scenarios",
+    "prompt": "Mid-traverse on the Monkey Bars, an athlete uses the horizontal truss to transfer. What is the call?",
+    "options": [
+      "No failure: horizontal truss is allowed",
+      "A failure: any truss contact is banned on rigs",
+      "A failure: only the bars may be touched",
+      "No failure, but they restart that section"
+    ],
+    "answer": 0,
+    "feedback": "Rule 4.2.7 says horizontal truss may be used to start or transfer on the Monkey Bars. Vertical truss used as a ladder is the failure.",
+    "rules": [
+      "OCR-2026-4.2.7",
+      "OCR-2026-2.1.10"
+    ]
+  },
+  {
+    "topic": "Referee Scenarios",
+    "prompt": "At the Helix, an athlete reaches across and uses a bar in the next lane. What is the call?",
+    "options": [
+      "No failure, if the next lane is empty",
+      "A failure: only their own lane's bars",
+      "No failure, if it gives no advantage",
+      "A warning, then a failure next time"
+    ],
+    "answer": 1,
+    "feedback": "Rule 4.2.6 requires the Helix to be done using only the bars in a single lane. Using bars from another lane is a listed failure.",
+    "rules": [
+      "OCR-2026-4.2.6"
+    ]
+  },
+  {
+    "topic": "Referee Scenarios",
+    "prompt": "At the Multi-Rig, an athlete moves across into a second lane to reach a better attachment. What is the call?",
+    "options": [
+      "A failure: it must stay in one lane",
+      "No failure, as they're using attachments only",
+      "No failure, if the other lane is free",
+      "A failure only if they also grab a chain"
+    ],
+    "answer": 0,
+    "feedback": "Rule 4.2.8 says the Multi-Rig is traversed using only the attachments, within one lane. Using more than one lane is a failure.",
+    "rules": [
+      "OCR-2026-4.2.8"
+    ]
+  },
+  {
+    "topic": "Referee Scenarios",
+    "prompt": "At which obstacles does the attempt start once four points of contact are made?",
+    "options": [
+      "The Monkey Bars and the Multi-Rig",
+      "The Helix and the Z Wall",
+      "Olympus and the Monkey Bars",
+      "The Spear Throw and the Ape Hanger"
+    ],
+    "answer": 1,
+    "feedback": "The Helix and Z Wall attempts start at four points of contact (rules 4.2.6 and 4.2.17). At the Monkey Bars, Multi-Rig and Olympus it's once both feet leave the starting step.",
+    "rules": [
+      "OCR-2026-4.2.6",
+      "OCR-2026-4.2.17"
+    ]
+  },
+  {
+    "topic": "Referee Scenarios",
+    "prompt": "On the 8 foot wall, an athlete pushes off the side of the wall to get over. What is the call?",
+    "options": [
+      "No failure: only the straps are banned",
+      "A failure: no using the sides",
+      "No failure, as long as they get over",
+      "A failure only for male athletes"
+    ],
+    "answer": 1,
+    "feedback": "Rule 4.1.1 lists using the support structure, the sides of the wall or the straps as a failure on the 6 to 9 foot walls.",
+    "rules": [
+      "OCR-2026-4.1.1"
+    ]
+  },
+  {
+    "topic": "Referee Scenarios",
+    "prompt": "At the Z Wall, an athlete grips the top edge of a cutout for balance. What is the call?",
+    "options": [
+      "No failure: cutouts are part of the wall to use",
+      "No failure, unless it gives an advantage",
+      "A failure: no touching a cutout's top or bottom",
+      "A failure only if a foot touches the ground"
+    ],
+    "answer": 2,
+    "feedback": "Rule 4.2.17 lists touching the top or bottom of any cutout as a Z Wall failure, alongside the ground, the top of the wall and the brace structures.",
+    "rules": [
+      "OCR-2026-4.2.17"
+    ]
+  }
+]

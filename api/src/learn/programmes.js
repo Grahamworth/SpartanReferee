@@ -26,7 +26,7 @@ function createProgrammes(ctx) {
   const progById = async (id) => (PROGRAMME_ID.test(String(id || '')) ? (await db.query('SELECT * FROM {S}.programme WHERE programme_id = @id', { id }))[0] || null : null);
   const versionById = async (id) => (isUuid(id) ? (await db.query('SELECT * FROM {S}.programme_version WHERE version_id = @id', { id }))[0] || null : null);
   const editor = (w, programmeId) => P.can(w.grants, 'content.draft', { programmeId }) || P.can(w.grants, 'programme.edit', { programmeId });
-  const progView = (p) => ({ id: p.programme_id, title: p.title, category: p.category, description: p.description, ownerId: p.owner_id || '', status: p.status, lessonsNeedPass: p.lessons_need_pass !== false && p.lessons_need_pass !== 0,
+  const progView = (p) => ({ id: p.programme_id, title: p.title, category: p.category, description: p.description, ownerId: p.owner_id || '', status: p.status, lessonsNeedPass: p.lessons_need_pass !== false && p.lessons_need_pass !== 0, assessmentOn: p.assessment_on !== false && p.assessment_on !== 0, assessmentPassMark: p.assessment_pass_mark ?? 80, assessmentQuestions: p.assessment_questions ?? 10, assessmentAttempts: p.assessment_attempts ?? 3,
     locales: String(p.locales || 'en').split(',').filter(Boolean), learnerRole: p.learner_role, demo: !!p.demo, createdAt: p.created_at });
   const versionView = (v) => v && ({ id: v.version_id, programmeId: v.programme_id, edition: v.edition, state: v.state, effectiveDate: v.effective_date,
     completionRule: v.completion_rule, passMark: v.pass_mark, maxAttempts: v.max_attempts, retakeWaitHours: v.retake_wait_hours, validityMonths: v.validity_months,
@@ -87,6 +87,13 @@ function createProgrammes(ctx) {
     if (b?.description !== undefined) v.description = text(b.description, 1000);
     if (b?.category !== undefined) v.category = text(b.category, 40) || 'other';
     if (b?.learnerRole !== undefined) v.learner_role = text(b.learnerRole, 60) || 'Learner';
+    if (b?.assessmentOn !== undefined) v.assessment_on = b.assessmentOn === true || b.assessmentOn === 'on' ? 1 : 0;
+    const whole = (x, lo, hi, what) => { const n = Number(x); if (!Number.isInteger(n) || n < lo || n > hi) throw Object.assign(new Error(`${what} is a whole number from ${lo} to ${hi}`), { status: 400 }); return n; };
+    try {
+      if (b?.assessmentPassMark !== undefined) v.assessment_pass_mark = whole(b.assessmentPassMark, 1, 100, 'The pass mark');
+      if (b?.assessmentQuestions !== undefined) v.assessment_questions = whole(b.assessmentQuestions, 1, 50, 'The number of questions');
+      if (b?.assessmentAttempts !== undefined) v.assessment_attempts = whole(b.assessmentAttempts, 1, 10, 'The number of attempts');
+    } catch (err) { return reply(400, { error: err.message }); }
     if (b?.lessonsNeedPass !== undefined) v.lessons_need_pass = b.lessonsNeedPass === true || b.lessonsNeedPass === 'on' || b.lessonsNeedPass === '1' ? 1 : 0;
     if (b?.status !== undefined) { if (!['active', 'archived'].includes(b.status)) return reply(400, { error: 'A programme is active or archived' }); v.status = b.status; }
     if (b?.locales !== undefined) { const l = [...new Set(String(b.locales).split(',').map((s) => s.trim()).filter((x) => ctx.LOCALES.includes(x)))]; if (!l.includes('en')) l.unshift('en'); v.locales = l.join(','); }
