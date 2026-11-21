@@ -32,7 +32,9 @@ const v = (x, y) => { const a = new Float32Array(1536); a[0] = x; a[1] = y; retu
 const b64 = (a) => Buffer.from(a.buffer).toString('base64');
 const INDEX = { builtAt: 'now', chunks: [
   { id: 'r', kind: 'rule', ref: 'OCR-2026-3.17.7', title: 'Rules 3.17.7: bells', link: '#/rules/OCR-2026-3.17.7', text: 'Kicking a bell is a fail.', v: b64(v(1, 0)) },
-  { id: 'o', kind: 'obstacle', ref: 'spear', title: 'Obstacle: Spear Throw', link: '#/obstacles/spear', text: 'Spear in the target.', v: b64(v(0, 1)) },
+  { id: 'o', kind: 'obstacle', ref: 'spear', title: 'Obstacle: Spear Throw', link: '#/obstacles/spear', text: 'Spear in the target.', v: b64(v(0, 1)),
+    media: [{ id: 'anim:spear', type: 'anim', src: 'spear', title: 'Spear Throw, animated' }, { id: 'youtube:LvV76-1eYIc', type: 'youtube', src: 'LvV76-1eYIc', title: 'Spear Throw video' },
+      { id: 'image:../../secret', type: 'image', src: '../../secret', title: 'not a file name' }] },
 ] };
 function make(dbOpts, answer = 'No: kicking is a fail. [Rules of Competition 3.17.7](#/rules/OCR-2026-3.17.7) [elsewhere](https://evil.example)') {
   const db = fakeDb(dbOpts), asked = [];
@@ -77,6 +79,14 @@ test('the model\'s site pages written as app pages are put right', async () => {
   const { a } = make({ mode: 'all' }, 'The next one: [London](#/event.html?id=10454)');
   const r = await ask(a, 'ref@x.com', 'What\'s next?');
   assert.match(r.body.answer, /\[London\]\(\/event\.html\?id=10454\)/);
+});
+test('an answer shows the pictures, videos and animations it picks, only ones the knowledge has, and the tags leave the words', async () => {
+  const { a, asked } = make({ mode: 'all' }, 'Into the target.\n\n[[show:anim:spear]]\n[[show:youtube:LvV76-1eYIc]]\n[[show:image:../../secret]]\n[[show:anim:made-up]]');
+  const r = await ask(a, 'ref@x.com', 'Show me the spear throw');
+  assert.match(JSON.stringify(asked[0].input), /Media you can show: \[\[show:anim:spear\]\] \(Spear Throw, animated\); \[\[show:youtube:LvV76-1eYIc\]\]/);
+  assert.doesNotMatch(JSON.stringify(asked[0].input), /secret/, 'a bad file name isn\'t offered');
+  assert.strictEqual(r.body.answer, 'Into the target.');
+  assert.deepStrictEqual(r.body.media, [{ type: 'anim', src: 'spear', title: 'Spear Throw, animated' }, { type: 'youtube', src: 'LvV76-1eYIc', title: 'Spear Throw video' }]);
 });
 test('settings are admins\' only', async () => {
   const { a } = make({ mode: 'all' });

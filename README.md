@@ -172,7 +172,10 @@ answers, risks at review and known gaps.
 The big **Referee Assistant** button on Home opens it as a chat, like a messaging app: a glowing header with the helper's face and
 "Online" ("Typing…" while it looks things up), its greeting as the first message, your messages on the right and its on the left with
 the time, a speaker in the header to have every answer read aloud, and one round button that's the microphone until you type, then
-Send. On a phone it fills the screen above the keyboard, and a long answer opens at its start. It (`#/assistant`, `learn/assistant.js`) answers a referee's questions, typed or spoken, in their language:
+Send. On a phone it fills the screen above the keyboard, and a long answer opens at its start. An answer can show pictures, videos and
+animations in the chat: an obstacle's animation (the good run and the fails) and its demonstration video, the burpee animation, and a
+lesson slide's own picture, video or drawing. The index lists each passage's media; the model picks one or two by tag, and the API
+only passes on tags the index has (`MEDIA_OK` in `api/src/assistant.js`). It (`#/assistant`, `learn/assistant.js`) answers a referee's questions, typed or spoken, in their language:
 - an obstacle: what to do, what passes and what fails, with a link to it in Obstacles;
 - a rule: the answer with the rule cited and linked in Rules;
 - a lesson: the answer with the lesson quoted word for word and linked;

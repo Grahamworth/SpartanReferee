@@ -26,6 +26,10 @@ const MAX_TURNS = 12, MAX_CHARS = 2000, TOOL_ROUNDS = 4, TOP = 10, INDEX_MINUTES
 const EMAIL = /^[^\s@/#?\\]+@[^\s@/#?\\]+\.[^\s@/#?\\]+$/;
 const clip = (s, n) => String(s ?? '').slice(0, n);
 const dayOf = (iso) => String(iso || '').slice(0, 10);
+// a picture, video or animation the chat can show: an animation or a lesson drawing by its name, a YouTube video by its id, a lesson's
+// own uploaded picture or video by its file name
+const MEDIA_SRC = { anim: /^[a-z]{2,20}$/, figure: /^[a-z]{2,20}$/, youtube: /^[\w-]{11}$/, image: /^[\w-]{8,64}\.\w{2,5}$/, video: /^[\w-]{8,64}\.\w{2,5}$/ };
+const MEDIA_OK = (m) => !!(m && MEDIA_SRC[m.type] && typeof m.src === 'string' && MEDIA_SRC[m.type].test(m.src));
 
 const SYSTEM = `You are the SpartanReferee Assistant, for referees at Spartan obstacle course races. You answer questions about Spartan's
 2026 Rules of Competition, the Officiating SOP, the obstacles, the referee lessons, Spartan's events, and athletes the cameras filmed.
@@ -44,6 +48,10 @@ How to answer:
 - Events: use find_events. Give the name, dates and place, and the link to the event's page.
 - Athletes the cameras filmed: use camera_results with the bib number (and the day or event if given). Give the link to each result
   so the referee can review the video. Results are kept for 7 days.
+- Pictures, videos and animations: some passages list media you can show, each with a tag like [[show:anim:spear]]. When seeing it
+  helps (how an obstacle is done, what passes or fails, a movement such as the burpee), or the referee asks to see something, show the
+  most useful one or two by writing their tags exactly as listed, each on its own line at the end of the answer. They appear in the chat
+  under your answer, so don't describe them at length. Only tags listed in the passages; never make one up.
 - Links: only the ones in the passages and tool results, written as Markdown links. Never write a web address of your own.
 - Be brief and practical: a referee may be standing at an obstacle. Short paragraphs or a few bullet points; no headings.
 - Reply in the referee's language (given below), whatever language the passages are in; keep rule numbers and obstacle names as they are.
@@ -75,7 +83,9 @@ function createAssistant({ db, ai, indexSigner, member, session, reply, events, 
           let n = 0; for (const x of v) n += x * x; n = Math.sqrt(n) || 1;
           return { ...c, v: Float32Array.from(v, (x) => x / n) };
         });
-        index = { chunks, builtAt: j.builtAt }; loadedAt = now();
+        // every picture, video and animation the passages offer, by tag: what an answer may show
+        const media = new Map(chunks.flatMap((c) => c.media || []).filter(MEDIA_OK).map((m) => [m.id, { type: m.type, src: m.src, title: m.title }]));
+        index = { chunks, media, builtAt: j.builtAt }; loadedAt = now();
       } catch (e) { if (!index) throw Object.assign(new Error('The Assistant\'s knowledge isn\'t ready yet'), { status: 503, cause: e }); } finally { loading = null; }
       return index;
     })();
@@ -95,7 +105,8 @@ function createAssistant({ db, ai, indexSigner, member, session, reply, events, 
     }).sort((a, b) => b.s - a.s);
     return { hits: scored.slice(0, k).map((x) => x.c), tokens };
   }
-  const passage = (c) => `[${c.title}] (link: ${c.link})\n${clip(c.text, 2400)}`;
+  const showable = (c) => (c.media || []).filter(MEDIA_OK).map((m) => `[[show:${m.id}]] (${m.title})`);
+  const passage = (c) => `[${c.title}] (link: ${c.link})\n${clip(c.text, 2400)}${showable(c).length ? `\nMedia you can show: ${showable(c).join('; ')}` : ''}`;
 
   // ---------------------------------------------------------------- who may use it, and what's been spent
   async function setting() { return (await db.query('SELECT * FROM {S}.assistant_setting WHERE id = 1'))[0] || { mode: 'chosen', monthly_cap_gbp: 50 }; }
@@ -130,7 +141,7 @@ function createAssistant({ db, ai, indexSigner, member, session, reply, events, 
   // ---------------------------------------------------------------- the tools the model can use
   const eventLine = (e, extra = {}) => ({ name: e.name, dates: e.startDate === e.endDate ? e.startDate : `${e.startDate} to ${e.endDate}`, place: [e.city, e.country].filter(Boolean).join(', '), link: `/event.html?id=${e.id}`, ...extra });
   async function tool(name, args, h, m) {
-    if (name === 'search_knowledge') { const { hits } = await find(String(args.query || '')); return { passages: hits.slice(0, 8).map((c) => ({ title: c.title, link: c.link, text: clip(c.text, 1800) })) }; }
+    if (name === 'search_knowledge') { const { hits } = await find(String(args.query || '')); return { passages: hits.slice(0, 8).map((c) => ({ title: c.title, link: c.link, text: clip(c.text, 1800), ...(showable(c).length ? { media: showable(c) } : {}) })) }; }
     if (name === 'find_events') {
       // a place as people say it: "UK" is GB in Spartan's list, "Britain" and "England" too
       const ALIAS = { uk: 'gb', 'united kingdom': 'gb', britain: 'gb', 'great britain': 'gb', england: 'gb', scotland: 'gb', wales: 'gb', usa: 'us', america: 'us', uae: 'ae', emirates: 'ae', holland: 'nl' };
@@ -208,8 +219,12 @@ function createAssistant({ db, ai, indexSigner, member, session, reply, events, 
     if (!answer) answer = 'Sorry, I couldn\'t put an answer together. Try asking another way.';
     // the model sometimes writes a site page as if it were in the app ("#/event.html?id=1"): put it right
     answer = answer.replace(/\]\(#\/((?:event|results)\.html[^)]*)\)/g, '](/$1)');
+    // the pictures, videos and animations it chose to show (at most three, only ones the knowledge has), taken out of the words
+    const kn = await knowledge(), media = [];
+    answer = answer.replace(/\[\[show:([^\]\s]{1,200})\]\]/g, (x, id) => { const m = kn.media?.get(id); if (m && media.length < 3 && !media.includes(m)) media.push(m); return ''; })
+      .replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim();
     // the passages it drew on, as the answer links them
-    return reply(200, { answer, sources: [...sources].filter(([link]) => answer.includes(`](${link})`)).slice(0, 6).map(([link, title]) => ({ link, title })) });
+    return reply(200, { answer, media, sources: [...sources].filter(([link]) => answer.includes(`](${link})`)).slice(0, 6).map(([link, title]) => ({ link, title })) });
   }
 
   // ---------------------------------------------------------------- talking and listening (Azure AI Speech, LEARN_SPEECH_*)

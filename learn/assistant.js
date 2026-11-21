@@ -7,6 +7,8 @@ import { call as siteCall } from '../api-base.js';
 import { $, S, esc, t, store } from './core.js';
 import { startRecording, play, stopPlaying } from './voice.js';
 import { markdown } from './assistant-md.js';
+import { visualHtml, wireVisual } from './slide-visual.js';
+import { FIGURES } from './lesson.js';
 
 const KEPT = 'sr_assistant', SPEAK = 'sr_assistant_speak';
 const lang = () => (window.SR_I18N && window.SR_I18N.lang) || document.documentElement.lang || 'en';
@@ -29,9 +31,16 @@ const TICKS = '<svg class="asTicks" viewBox="0 0 18 12" aria-hidden="true"><path
 
 // the time as the phone shows it (24-hour in the UK), in the site's language
 const clock = (at) => (at ? new Date(at).toLocaleTimeString(navigator.language?.startsWith(lang()) ? navigator.language : lang(), { hour: '2-digit', minute: '2-digit' }) : '');
+// the pictures, videos and animations an answer shows (api/src/assistant.js picks them from the knowledge), drawn as lesson slides
+// draw theirs (slide-visual.js): an animation with its player, a YouTube video waiting for a tap, a lesson's picture, video or drawing
+const MEDIA_SRC = { anim: /^[a-z]{2,20}$/, figure: /^[a-z]{2,20}$/, youtube: /^[\w-]{11}$/, image: /^[\w-]{8,64}\.\w{2,5}$/, video: /^[\w-]{8,64}\.\w{2,5}$/ };
+const mediaHtml = (list) => {
+  const ok = (Array.isArray(list) ? list : []).filter((x) => x && MEDIA_SRC[x.type]?.test(String(x.src)) && (x.type !== 'figure' || FIGURES[x.src]));
+  return ok.length ? `<div class="asMedia">${ok.map((x) => `<div class="asShow lpFig lpFigMedia" data-media="${esc(x.type)}">${visualHtml(x.type === 'figure' ? { figure: x.src } : { media: { type: x.type, src: x.src }, heading: x.title }, FIGURES)}</div>`).join('')}</div>` : '';
+};
 const bubble = (m, i) => m.role === 'user'
   ? `<li class="asMsg asYou"><p>${esc(m.content)}</p><span class="asTime">${esc(clock(m.at))}${TICKS}</span></li>`
-  : `<li class="asMsg asIt">${markdown(m.content)}<span class="asTime">${esc(clock(m.at))}</span>${m.voice !== false ? `<button class="asReplay" type="button" data-say="${i}" aria-label="${esc(t('Read it aloud'))}" title="${esc(t('Read it aloud'))}">${SPEAKER}</button>` : ''}</li>`;
+  : `<li class="asMsg asIt${m.media?.length ? ' asHasMedia' : ''}">${markdown(m.content)}${mediaHtml(m.media)}<span class="asTime">${esc(clock(m.at))}</span>${m.voice !== false ? `<button class="asReplay" type="button" data-say="${i}" aria-label="${esc(t('Read it aloud'))}" title="${esc(t('Read it aloud'))}">${SPEAKER}</button>` : ''}</li>`;
 const hello = () => {
   const p = S.me?.person || {}, name = String(p.preferredName || p.legalName || '').split(' ')[0];
   return `<li class="asMsg asIt asHello"><p>${esc(name ? t('Hi {name}! You can ask me anything about Spartan\'s rules, obstacles and refereeing.', { name }) : t('Hi! You can ask me anything about Spartan\'s rules, obstacles and refereeing.'))}</p></li>`;
@@ -68,6 +77,7 @@ const toBottom = (smooth) => { const log = $('asLog'); if (log) log.scrollTo({ t
 function draw(list) {
   const log = $('asLog'); if (!log) return;
   log.innerHTML = logHtml(list);
+  wireVisual(log);
   toBottom(true);
 }
 async function say(text) {
@@ -93,7 +103,7 @@ async function ask(question, byVoice = false) {
   $('asSend').disabled = true;
   try {
     const r = await siteCall('assistant/ask', { method: 'POST', body: { lang: lang(), messages: list.map(({ role, content }) => ({ role, content })) } });
-    const done = [...list, { role: 'assistant', content: r.answer, at: Date.now() }];
+    const done = [...list, { role: 'assistant', content: r.answer, at: Date.now(), ...(r.media?.length ? { media: r.media } : {}) }];
     keep(done); draw(done);
     // a long answer opens at its start, under the question, rather than at its end
     const log = $('asLog'), mine = log?.querySelectorAll('.asYou'), q = mine?.[mine.length - 1];
@@ -155,6 +165,7 @@ export function wire() {
   });
   $('asNew').addEventListener('click', () => { keep([]); stopPlaying(); failAs(''); draw([]); });
   $('asLog').addEventListener('click', (e) => { const b = e.target.closest('[data-say]'); if (b) { const m = kept()[Number(b.dataset.say)]; if (m) say(m.content); } });
+  wireVisual($('asLog'));
   fit(); toBottom();
   const refit = () => { if ($('asChat')) fit(); };
   window.visualViewport?.addEventListener('resize', refit); window.addEventListener('resize', refit);
