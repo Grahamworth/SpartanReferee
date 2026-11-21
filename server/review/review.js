@@ -129,9 +129,9 @@ pullJudgeSettings().finally(poll);
 // (the server's deep.js). What to say about each such recording: { text, live (still going), bad (didn't finish) }.
 function deepLines(list, camNo = (n) => n) {
   return (list || []).map((d) => {
-    const cam = camNo(d.cam), at = new Date(d.startedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const cam = d.earlier ? d.cam : camNo(d.cam), at = new Date(d.startedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // (an earlier server's recording says its camera's number in the booking already)
     if (d.state === 'running') return { live: true, text: `Deep analysis running: camera ${cam}, the recording made at ${at}, ${d.pct}%. A crowd was in view, more than a live judge can follow, so it is being counted again in full. Its counts replace the live ones when it's done.` };
-    if (d.state === 'waiting') return { live: true, text: `Deep analysis waiting for a free judge: camera ${cam}, the recording made at ${at}. A crowd was in view, so it will be counted again in full once a camera's live judge is off.` };
+    if (d.state === 'waiting') return { live: true, text: `Deep analysis waiting for the cameras to be quiet: camera ${cam}, the recording made at ${at}. A crowd was in view, so it will be counted again in full. Live judging comes first: it carries on when nobody is in view of a camera being judged.` };
     if (d.state === 'preparing' || d.state === 'queued') return { live: true, text: `Deep analysis waiting: camera ${cam}, the recording made at ${at}. A crowd was in view, so it will be counted again in full.` };
     if (d.state === 'done' && d.kept === 'fewer') return { text: `Deep analysis done: camera ${cam}, the recording made at ${at}. It counted fewer reps than the live judge did, so both are listed.` };
     if (d.state === 'done' && d.replaced) return { text: `Deep analysis done: camera ${cam}, the recording made at ${at}. Its counts have replaced what the live judge counted there.` };

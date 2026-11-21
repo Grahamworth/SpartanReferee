@@ -122,3 +122,22 @@ test('the review page has no judge of its own for uploads: nothing is analysed i
   assert.doesNotMatch(js, /judge\.html\?video=/);
   assert.match(js, /'\/api\/upload-jobs'/);
 });
+
+test("a deep analysis is told apart, so the server can make it give way more readily than someone's uploaded video", async () => {
+  // this server holds deep analyses back while somebody is in view, and nothing else
+  const { jobs, s } = make((dir, st) => ({ busy: (job) => !!job.deep && st.inView }));
+  s.inView = true;
+  s.analysis.now = { pct: 5, done: false };
+  jobs.add('upload.mp4', 'upload');
+  assert.ok(await until(() => state(jobs, 'upload.mp4') === 'running'), 'an uploaded video carries on');
+  s.analysis.now = { pct: 100, done: true };
+  assert.ok(await until(() => state(jobs, 'upload.mp4') === 'done'));
+  s.analysis.now = { pct: 5, done: false };
+  jobs.add('crowd_deep.mp4', 'Camera 1 22:00 deep analysis', { deep: true });
+  assert.ok(await until(() => state(jobs, 'crowd_deep.mp4') === 'waiting'), 'the deep analysis waits');
+  assert.deepEqual(jobs.list().map((j) => [j.video, j.deep]), [['crowd_deep.mp4', true], ['upload.mp4', false]]);
+  s.inView = false;
+  assert.ok(await until(() => state(jobs, 'crowd_deep.mp4') === 'running'), 'and carries on when the cameras are quiet');
+  s.analysis.now = { pct: 100, done: true };
+  assert.ok(await until(() => state(jobs, 'crowd_deep.mp4') === 'done'));
+});

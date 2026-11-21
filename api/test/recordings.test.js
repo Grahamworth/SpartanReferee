@@ -251,3 +251,65 @@ test('a later analysis that counted fewer reps than the live judge did leaves th
   assert.deepStrictEqual(got.athletes.map((a) => a.reps).sort(), [3, 8]);
   assert.deepStrictEqual([got.deep[0].state, got.deep[0].replaced, got.deep[0].kept], ['done', 0, 'fewer']);
 });
+
+// ---- a deep analysis that didn't finish is carried on by the company's next server
+const REC_A = '2026-11-20_08-30-00-000000+0000.mp4', REC_B = '2026-11-20_08-40-00-000000+0000.mp4';
+const crowdIn = (file, state, more = {}) => ({ cam: 1, file, video: '', startedAt: file === REC_A ? '2026-11-20T08:30:00.000Z' : '2026-11-20T08:40:00.000Z', endedAt: file === REC_A ? '2026-11-20T08:40:00.000Z' : '2026-11-20T08:50:00.000Z', state, pct: 0, ...more });
+async function twoRecordings() {
+  const s = withStorage(), { h, rk } = await linked(s);
+  for (const [file, startedAt] of [[REC_A, '2026-11-20T08:30:00Z'], [REC_B, '2026-11-20T08:40:00Z']]) {
+    const u = await call(s.api, 'POST', 'recordings/upload', rk, { cam: 1, file, size: 1000 });
+    assert.strictEqual(u.status, 200, JSON.stringify(u.body));
+    assert.strictEqual((await call(s.api, 'POST', 'recordings/done', rk, { blob: u.body.blob, size: 1000, startedAt })).status, 200);
+  }
+  const wanted = async () => (await call(s.api, 'GET', 'recordings/by-key', rk)).body.recordings.filter((r) => r.deepWanted).map((r) => r.file).sort();
+  return { s, h, rk, wanted };
+}
+
+test('a server is told which of its company’s recordings still want their deep analysis, until a server has finished it', async () => {
+  const { s, h, rk, wanted } = await twoRecordings();
+  assert.deepStrictEqual(await wanted(), [], 'no crowd was in either');
+  // the booking ended with neither counted again in full (its server said so as it stopped)
+  await s.save(rk, 'r1', { 'results.json': { athletes: [athlete(1, '2026-11-20T08:31:00Z', 2), athlete(2, '2026-11-20T08:41:00Z', 3)], deep: [crowdIn(REC_A, 'stopped'), crowdIn(REC_B, 'stopped')] } });
+  assert.deepStrictEqual(await wanted(), [REC_A, REC_B]);
+  // the next server carries the first on: while it is going, no other server is asked to
+  s.tick(3600e3);
+  await s.save(rk, 'r2', { 'results.json': { athletes: [], deep: [crowdIn(REC_A, 'running', { earlier: true, video: 'fetched.mp4', pct: 40 })] } });
+  assert.deepStrictEqual(await wanted(), [REC_B]);
+  let got = (await call(s.api, 'GET', 'recordings/results', h)).body;
+  assert.deepStrictEqual(got.deep.map((d) => [d.file, d.state, d.pct]).sort(), [[REC_A, 'running', 40], [REC_B, 'stopped', 0]], 'one line a recording, with how it stands now');
+  assert.strictEqual(got.athletes.length, 2, 'nothing has given way yet');
+  // it finishes: its athletes stand in place of what the first server's live judge counted in that recording
+  const found = (n, reps) => ({ n, src: 'upload', cam: 0, video: 'fetched.mp4', firstAt: '2026-11-20T09:35:00Z', lastAt: '2026-11-20T09:35:00Z', reps, noReps: 0 });
+  await s.save(rk, 'r2', { 'results.json': { athletes: [found(1, 4), found(2, 5)], sources: { 'fetched.mp4': REC_A }, deep: [crowdIn(REC_A, 'done', { earlier: true, video: 'fetched.mp4', pct: 100 })] } });
+  assert.deepStrictEqual(await wanted(), [REC_B]);
+  got = (await call(s.api, 'GET', 'recordings/results', h)).body;
+  assert.deepStrictEqual(got.athletes.map((a) => a.reps).sort(), [3, 4, 5], 'the live entry of 08:31 has given way; 08:41 is the other recording');
+  const a = got.deep.find((d) => d.file === REC_A);
+  assert.deepStrictEqual([a.state, a.replaced, a.kept, a.cam, a.startedAt], ['done', 1, '', 1, '2026-11-20T08:30:00.000Z']);
+  assert.ok(!('later' in a) && !('wanted' in a) && !('earlier' in a), 'only what the page needs');
+});
+
+test('a recording is carried on three times at most, and a server that went quiet half a day ago has stopped', async () => {
+  const { s, rk, wanted } = await twoRecordings();
+  await s.save(rk, 'r1', { 'results.json': { athletes: [], deep: [crowdIn(REC_A, 'failed'), crowdIn(REC_B, 'stopped')] } });
+  s.tick(3600e3);
+  // a second server tries the first and stops too; it is still going on the other when it is last heard from
+  await s.save(rk, 'r2', { 'results.json': { athletes: [], deep: [crowdIn(REC_A, 'stopped', { earlier: true }), crowdIn(REC_B, 'running', { earlier: true })] } });
+  assert.deepStrictEqual(await wanted(), [REC_A], 'twice tried, so once more; the other is being done');
+  s.tick(13 * 3600e3);
+  assert.deepStrictEqual(await wanted(), [REC_A, REC_B], 'thirteen hours on, that server has plainly stopped');
+  await s.save(rk, 'r3', { 'results.json': { athletes: [], deep: [crowdIn(REC_A, 'failed', { earlier: true }), crowdIn(REC_B, 'stopped', { earlier: true })] } });
+  assert.deepStrictEqual(await wanted(), [], 'three servers have tried each: left for someone to start by hand');
+});
+
+test('a later server that stopped part of the way through a carried-on recording replaces nothing', async () => {
+  const { s, h, rk } = await twoRecordings();
+  await s.save(rk, 'r1', { 'results.json': { athletes: [athlete(1, '2026-11-20T08:31:00Z', 2)], deep: [crowdIn(REC_A, 'stopped')] } });
+  s.tick(3600e3);
+  // (a server hides what a stopped analysis had found, but an older one might not have)
+  await s.save(rk, 'r2', { 'results.json': { athletes: [{ n: 1, src: 'upload', cam: 0, video: 'part.mp4', firstAt: '2026-11-20T09:35:00Z', lastAt: '2026-11-20T09:35:00Z', reps: 9, noReps: 0 }], sources: { 'part.mp4': REC_A }, deep: [crowdIn(REC_A, 'stopped', { earlier: true, video: 'part.mp4', pct: 30 })] } });
+  const got = (await call(s.api, 'GET', 'recordings/results', h)).body;
+  assert.deepStrictEqual([got.deep[0].state, got.deep[0].replaced], ['stopped', 0]);
+  assert.ok(got.athletes.some((a) => a.src === 'live' && a.reps === 2), 'the live count stands');
+});

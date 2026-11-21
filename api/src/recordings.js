@@ -61,6 +61,43 @@ function createRecordings({ store, signer, now, reply, session, isAdmin, members
   const runOf = (body) => (/^[A-Za-z0-9]{1,24}$/.test(String(body?.run ?? '')) ? String(body.run) : '');
   const resultsId = (link, run) => (run ? `${link.id}-${run}` : link.id);
   const resultsBase = (link, run) => `${link.partition.slice(4)}/${link.id}/results${run ? `-${run}` : ''}`;
+  // Every run's saved results for a company's servers (the last KEEP_DAYS), oldest first: [{ r: the run's row, j: its results.json }]
+  async function savedRuns(partition, from) {
+    const rows = (await store.list(`${partition}:results`)).filter((r) => r.at >= from).sort((x, y) => x.at - y.at), out = [];
+    for (const r of rows) {
+      try { out.push({ r, j: await (await fetchFn(signer({ blob: `${r.base}/results.json`, perm: 'r', minutes: READ_MINUTES }))).json() }); } catch { /* gone, or not written yet */ }
+    }
+    return out;
+  }
+  // The recordings a crowd was in (the servers' deep.js), one entry each however many servers have had a go at it: where and when
+  // it was filmed (server: the run that filmed it), how its deep analysis stands now, later: what a later, complete analysis of it
+  // found (null if the first server finished it, or nobody has), and wanted: it still wants doing, so the next server carries it on.
+  // A recording is tried three times at most, and a run that says it's going but hasn't saved anything for half a day has stopped.
+  const DEEP_GOING = new Set(['preparing', 'queued', 'waiting', 'running']), DEEP_TRIES = 3, DEEP_STALE_MS = 12 * 3600e3;
+  function deepStates(runs, from) {
+    const files = new Map();
+    for (const { r, j } of runs) for (const x of Array.isArray(j.deep) ? j.deep : []) {
+      if (!x || !x.file || !(Date.parse(x.startedAt) >= from)) continue;
+      const state = DEEP_GOING.has(String(x.state)) && now() - r.at > DEEP_STALE_MS ? 'stopped' : String(x.state || '');
+      const e = { cam: +x.cam || 0, file: String(x.file), video: String(x.video || ''), startedAt: x.startedAt, endedAt: Date.parse(x.endedAt) >= from ? x.endedAt : x.startedAt, state, pct: +x.pct || 0, replaced: +x.replaced || 0, kept: String(x.kept || ''), earlier: !!x.earlier, server: r.id };
+      if (!files.has(e.file)) files.set(e.file, []);
+      files.get(e.file).push(e);
+    }
+    const out = [];
+    for (const [file, tries] of files) {
+      const first = tries.find((e) => !e.earlier) || tries[0], last = tries.at(-1), uploads = [];
+      // analysed in full since: by a server that carried it on (its entry for it says done), or by hand as a previous recording (a run with no entry for it)
+      for (const { r, j } of runs) {
+        const mine = tries.find((e) => e.server === r.id);
+        if (r.id === first.server || (mine && mine.state !== 'done')) continue;
+        for (const a of j.athletes || []) if (a.src === 'upload' && (j.sources || {})[a.video] === file) uploads.push(a);
+      }
+      const since = uploads.length > 0, done = first.state === 'done' || since;
+      out.push({ ...first, state: done ? 'done' : last.state, pct: done ? 100 : last.pct, later: first.state !== 'done' && since ? uploads : null,
+        wanted: !done && !DEEP_GOING.has(last.state) && tries.length < DEEP_TRIES });
+    }
+    return out;
+  }
   async function entries(partition) {
     const list = await store.list(partition);
     const before = new Date(now() - KEEP_DAYS * 864e5).toISOString();
@@ -112,7 +149,11 @@ function createRecordings({ store, signer, now, reply, session, isAdmin, members
     if (a === 'by-key' && method === 'GET') {
       const link = await byKey(h); if (!link) return reply(401, { error: 'That Receiver key isn\'t recognised' });
       const list = await entries(link.partition);
-      if (!b) return reply(200, { recordings: list.sort((x, y) => y.startedAt.localeCompare(x.startedAt)).slice(0, 500).map((r) => ({ id: r.id, cam: r.cam, size: r.size, startedAt: r.startedAt, file: r.file, name: r.name || '' })) });
+      if (!b) {
+        // (deepWanted: a crowd was in it and no server has finished counting it again in full: the server that asks carries it on)
+        const from = now() - KEEP_DAYS * 864e5, wanted = new Set(deepStates(await savedRuns(link.partition, from), from).filter((d) => d.wanted).map((d) => d.file));
+        return reply(200, { recordings: list.sort((x, y) => y.startedAt.localeCompare(x.startedAt)).slice(0, 500).map((r) => ({ id: r.id, cam: r.cam, size: r.size, startedAt: r.startedAt, file: r.file, name: r.name || '', ...(wanted.has(r.file) ? { deepWanted: true } : {}) })) });
+      }
       const r = list.find((x) => x.id === b); if (!r) return reply(404, { error: 'That recording has gone' });
       return reply(200, { id: r.id, cam: r.cam, file: r.file, name: r.name || '', startedAt: r.startedAt, url: signer({ blob: r.blob, perm: 'r', minutes: READ_MINUTES }) });
     }
@@ -121,32 +162,29 @@ function createRecordings({ store, signer, now, reply, session, isAdmin, members
     // what its servers found: the week's athletes and numbers, whether or not a server is on now
     if (a === 'results' && !b && method === 'GET') {
       const from = now() - KEEP_DAYS * 864e5, out = { keepDays: KEEP_DAYS, athletes: [], numbers: [], merged: [], sources: {}, deep: [] };
-      const rows = (await store.list(`${owned(await ownerOf(me))}:results`)).filter((r) => r.at >= from);
-      for (const r of rows) {
-        let j; try { j = await (await fetchFn(signer({ blob: `${r.base}/results.json`, perm: 'r', minutes: READ_MINUTES }))).json(); } catch { continue; }
+      const runs = await savedRuns(owned(await ownerOf(me)), from);
+      for (const { r, j } of runs) {
         const recent = (iso) => Date.parse(iso) >= from;
         for (const x of j.athletes || []) if (recent(x.firstAt)) out.athletes.push({ ...x, server: r.id, pic: x.pic ? signer({ blob: `${r.base}/pics/${x.n}.jpg`, perm: 'r', minutes: READ_MINUTES }) : '' });
         for (const x of j.numbers || []) if (recent(x.firstAt)) out.numbers.push({ ...x, server: r.id });
         // an athlete filmed by two cameras on the same athletes, their reps put together (n: the server's athletes)
         for (const x of Array.isArray(j.merged) ? j.merged : []) if (recent(x.firstAt) && Array.isArray(x.ns)) out.merged.push({ ...x, server: r.id });
         Object.assign(out.sources, j.sources || {});
-        // recordings a crowd was in, which the server analyses again in full: how far each has got
-        for (const x of Array.isArray(j.deep) ? j.deep : []) if (x && recent(x.startedAt)) out.deep.push({ cam: +x.cam || 0, file: String(x.file || ''), video: String(x.video || ''), startedAt: x.startedAt, endedAt: recent(x.endedAt) ? x.endedAt : x.startedAt, state: String(x.state || ''), pct: +x.pct || 0, replaced: +x.replaced || 0, kept: String(x.kept || ''), server: r.id });
       }
-      // A recording whose deep analysis never finished on its own server (it stopped first) and has since been analysed on another,
-      // as a previous recording: that analysis stands in its place, as it would have on the first server. What the live judge
-      // counted in that stretch gives way to it, unless it counted fewer reps than the live judge did (then both stay listed).
+      // The recordings a crowd was in, and how the deep analysis of each stands. One that never finished on the server that filmed
+      // it (it stopped first) and has since been analysed in full on another (carried on there by itself, or chosen as a previous
+      // recording): that analysis stands in its place, as it would have on the first server. What the live judge counted in that
+      // stretch gives way to it, unless it counted fewer reps than the live judge did (then both stay listed).
       const reps = (list) => list.reduce((n, a) => n + (+a.reps || 0), 0);
-      for (const d of out.deep) {
-        if (['done', 'preparing', 'queued', 'waiting', 'running'].includes(d.state) || !d.file) continue;
-        const later = out.athletes.filter((a) => a.src === 'upload' && out.sources[a.video] === d.file);
-        if (!later.length) continue;
-        const from = Date.parse(d.startedAt) - 2000, to = Date.parse(d.endedAt);
-        const live = out.athletes.filter((a) => a.src !== 'upload' && a.server === d.server && a.cam === d.cam && Date.parse(a.firstAt) >= from && Date.parse(a.firstAt) <= to);
-        d.state = 'done';
-        if (reps(later) < reps(live)) { d.kept = 'fewer'; continue; }
-        d.replaced = live.length;
-        out.athletes = out.athletes.filter((a) => !live.includes(a));
+      for (const d of deepStates(runs, from)) {
+        const { later, wanted, earlier, ...entry } = d;
+        if (later) {
+          const a0 = Date.parse(d.startedAt) - 2000, a1 = Date.parse(d.endedAt);
+          const live = out.athletes.filter((a) => a.src !== 'upload' && a.server === d.server && a.cam === d.cam && Date.parse(a.firstAt) >= a0 && Date.parse(a.firstAt) <= a1);
+          if (reps(later) < reps(live)) entry.kept = 'fewer';
+          else { entry.replaced = live.length; out.athletes = out.athletes.filter((a) => !live.includes(a)); }
+        }
+        out.deep.push(entry);
       }
       out.athletes.sort((x, y) => String(y.firstAt).localeCompare(String(x.firstAt)));
       out.numbers.sort((x, y) => String(y.firstAt).localeCompare(String(x.firstAt)));

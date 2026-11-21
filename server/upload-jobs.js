@@ -25,7 +25,7 @@ async function firstPage(port, alive) {
   throw new Error('its browser didn\'t start');
 }
 
-/** pageUrl(video, name): the judge's address for that video; settings(): every saved judge setting; busy(): live judges need the card */
+/** pageUrl(video, name): the judge's address for that video; settings(): every saved judge setting; busy(job): live judges need the card (job.deep: a deep analysis, which gives way more readily) */
 function createUploadJobs({ chrome, dataDir, pageUrl, settings, busy = () => false, extraFlags = [], env = {}, log = () => {}, now = Date.now, pollMs = 2000, settleMs = SETTLE_MS, stallMs = STALL_MS, spawnFn = spawn, connectFn = connect, pageFn = firstPage }) {
   const file = path.join(dataDir, 'upload-jobs.json');
   let jobs = [];
@@ -55,7 +55,7 @@ function createUploadJobs({ chrome, dataDir, pageUrl, settings, busy = () => fal
       for (;;) {
         await sleep(pollMs);
         if (gone) throw new Error('its browser stopped');
-        const wait = !job.stopAsked && busy();
+        const wait = !job.stopAsked && busy(job);
         const r = await cdp.send('Runtime.evaluate', { returnByValue: true, expression: `(() => { const a = window.__analysis; if (!a) return null; a.paused = ${wait}; if (${!!job.stopAsked}) a.stop = true; return { pct: a.pct, done: a.done, spent: a.spent }; })()` });
         const a = r?.result?.result?.value;
         job.state = wait ? 'waiting' : 'running';
@@ -83,11 +83,11 @@ function createUploadJobs({ chrome, dataDir, pageUrl, settings, busy = () => fal
     try { await run(job); } finally { current = null; pump(); }
   }
   return {
-    /** Adds a video to the queue. Already queued or running: that job. */
-    add(video, name) {
+    /** Adds a video to the queue. Already queued or running: that job. deep: a crowd's recording being counted again (deep.js). */
+    add(video, name, { deep = false } = {}) {
       const had = jobs.find((j) => j.video === video && ACTIVE.has(j.state));
       if (had) return had;
-      const job = { id: nextId++, video, name, state: 'queued', pct: 0, at: now() };
+      const job = { id: nextId++, video, name, state: 'queued', pct: 0, at: now(), ...(deep ? { deep: true } : {}) };
       jobs.push(job);
       const done = jobs.filter((j) => !ACTIVE.has(j.state));
       if (done.length > KEEP) { const old = new Set(done.slice(0, done.length - KEEP)); jobs = jobs.filter((j) => !old.has(j)); }
@@ -102,7 +102,7 @@ function createUploadJobs({ chrome, dataDir, pageUrl, settings, busy = () => fal
       return true;
     },
     /** newest first; only what the page needs */
-    list: () => [...jobs].reverse().map(({ id, video, name, state, pct, at, startedAt, endedAt, why, spent }) => ({ id, video, name, state, pct, at, startedAt, endedAt, why, spent })),
+    list: () => [...jobs].reverse().map(({ id, video, name, state, pct, at, startedAt, endedAt, why, spent, deep }) => ({ id, video, name, state, pct, at, startedAt, endedAt, why, spent, deep: !!deep })),
     active: () => jobs.some((j) => ACTIVE.has(j.state)),
     /** the server's stopping: everything's stopped, and what was found has gone up */
     async stopAll(why = 'The server stopped before it finished.') {

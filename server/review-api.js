@@ -338,6 +338,15 @@ function sendRange(req, res, buf, name) {
     if (live.length) saveAthletes();
     return { replaced: live.length, kept };
   }
+  // A deep analysis that stopped part of the way through: what it had found is only part of the recording, so it isn't listed
+  // (beside the live counts it would count some athletes twice). The live counts stand until the recording is analysed in full.
+  function hideVideo(video) {
+    const name = String(video).replace(/[^\w.-]+/g, '_').slice(0, 140), at = new Date().toISOString();
+    const part = athletes.filter((a) => a.src === 'upload' && a.video === name && !a.replaced);
+    for (const a of part) a.replaced = at;
+    if (part.length) saveAthletes();
+    return part.length;
+  }
   // what goes to cloud storage, to be seen when this server is off
   const results = () => { const shown = athletes.filter((a) => !a.replaced); return {
     athletes: shown.map(({ n, src, video, cam, bib, label, firstT, lastT, firstAt, lastAt, reps, noReps, questionable, done, pic }) => ({ n, src, video, cam, bib, label, firstT, lastT, firstAt, lastAt, reps, noReps, questionable, done, pic })),
@@ -345,7 +354,7 @@ function sendRange(req, res, buf, name) {
     merged: mergeAthletes(shown, S.sameAthletes || []),
     files: shown.flatMap((a) => [{ name: `tracks/${a.n}.jsonl`, path: path.join(TRACKS, `${a.n}.jsonl`) }, { name: `pics/${a.n}.jpg`, path: path.join(PICS, `${a.n}.jpg`) }]),
   }; };
-  return { handler, watchCameras, cams: () => cams, serverOk: () => serverOk, results, replaceLive };
+  return { handler, watchCameras, cams: () => cams, serverOk: () => serverOk, results, replaceLive, hideVideo };
 }
 
 module.exports = { createReview, send, readBody, isJson, TYPES };

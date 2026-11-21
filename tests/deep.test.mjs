@@ -13,7 +13,7 @@ const QUIET = 90e3, T0 = Date.parse('2026-11-20T22:10:00Z');
 function setup() {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'hj-deep-')), dir = path.join(root, 'recordings'), uploadsDir = path.join(root, 'training');
   const s = { now: T0, jobs: [], prepared: [], queued: [], done: [], answer: () => ({ replaced: 2 }) };
-  const jobs = { add: (video, name) => { const j = { video, name, state: 'queued', pct: 0 }; s.jobs.push(j); return j; }, list: () => s.jobs };
+  const jobs = { add: (video, name, extra) => { const j = { video, name, state: 'queued', pct: 0, ...extra }; s.jobs.push(j); return j; }, list: () => s.jobs };
   // a camera's recording, named as the streaming server names them, last written to at `end`
   const record = (cam, startIso, minutes) => {
     const d = path.join(dir, 'live', `station${cam}`); fs.mkdirSync(d, { recursive: true });
@@ -38,6 +38,7 @@ test('a finished recording a crowd was in is queued for analysis; one with no cr
   assert.deepEqual(s.prepared, [crowded]);
   assert.equal(s.jobs.length, 1);
   assert.match(s.jobs[0].name, /^Camera 1 22:00 deep analysis$/);
+  assert.equal(s.jobs[0].deep, true, 'queued as a deep analysis, which gives way to live judging');
   assert.ok(fs.existsSync(path.join(uploadsDir, s.jobs[0].video)), 'the copy to analyse is in the uploads folder');
   assert.deepEqual(s.queued, [s.jobs[0].video], 'the copy is tied to its recording before it is analysed');
   const [e] = deep.list();
@@ -156,4 +157,41 @@ test('a deep analysis that counted fewer reps than the live judge did there repl
   list.push(deepA(8, 'cam1_deep.mp4', 1));
   assert.equal(givesWay(list, 1, FROM, TO, 'cam1_deep.mp4').live.length, 2);
   assert.deepEqual(givesWay([deepA(7, 'cam1_deep.mp4', 0)], 1, FROM, TO, 'cam1_deep.mp4'), { live: [], kept: '' });
+});
+
+// ---- a recording an earlier server never finished, carried on here
+test("an earlier server's unfinished recording is queued as a deep analysis, followed like the rest, and replaces nothing here", async () => {
+  const { s, deep } = setup();
+  assert.equal(deep.has('2026-11-19_10-00-00-000000Z.mp4'), false);
+  assert.equal(deep.adopt({ file: '2026-11-19_10-00-00-000000Z.mp4', cam: 3, startedAt: '2026-11-19T10:00:00.000Z', video: 'fetched_Camera_3.mp4' }), true);
+  assert.equal(deep.adopt({ file: '2026-11-19_10-00-00-000000Z.mp4', cam: 3, startedAt: '2026-11-19T10:00:00.000Z', video: 'again.mp4' }), false, 'only once');
+  assert.equal(deep.has('2026-11-19_10-00-00-000000Z.mp4'), true);
+  assert.deepEqual(s.jobs.map((j) => [j.video, j.deep]), [['fetched_Camera_3.mp4', true]]);
+  let [e] = deep.list();
+  assert.deepEqual([e.cam, e.file, e.video, e.state, e.earlier, e.startedAt], [3, '2026-11-19_10-00-00-000000Z.mp4', 'fetched_Camera_3.mp4', 'queued', true, '2026-11-19T10:00:00.000Z']);
+  assert.match(e.name, /^Camera 3 2026-11-19 10:00 deep analysis$/);
+  Object.assign(s.jobs[0], { state: 'running', pct: 60 }); await deep.tick();
+  assert.deepEqual([deep.list()[0].state, deep.list()[0].pct], ['running', 60]);
+  Object.assign(s.jobs[0], { state: 'done', pct: 100 }); await deep.tick();
+  [e] = deep.list();
+  assert.deepEqual([e.state, e.replaced], ['done', 0]);
+  assert.deepEqual(s.done, [], 'the live counts it stands in for are another server\'s: the website does that');
+  // nothing is adopted without what it needs
+  assert.equal(deep.adopt({ file: '', cam: 1, startedAt: '2026-11-19T10:00:00.000Z', video: 'x.mp4' }), false);
+  assert.equal(deep.adopt({ file: 'a.mp4', cam: 1, startedAt: 'when', video: 'x.mp4' }), false);
+});
+
+test('an analysis that stops part of the way through says so, so what it had found is not listed beside the live counts', async () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'hj-deep-')), jobsList = [], stopped = [];
+  const jobs = { add: (video, name, extra) => { jobsList.push({ video, name, state: 'queued', pct: 0, ...extra }); }, list: () => jobsList };
+  let now = T0;
+  const deep = createDeep({ dir: path.join(root, 'recordings'), uploadsDir: path.join(root, 'training'), stateFile: path.join(root, 'deep.json'), jobs, quietMs: QUIET, now: () => now,
+    prepare: async () => {}, onStopped: (f) => stopped.push(f.video) });
+  deep.adopt({ file: 'r.mp4', cam: 1, startedAt: '2026-11-19T10:00:00.000Z', video: 'part.mp4' });
+  Object.assign(jobsList[0], { state: 'running', pct: 30 }); await deep.tick();
+  Object.assign(jobsList[0], { state: 'stopped', why: 'The booking ended before it finished.' }); await deep.tick();
+  assert.deepEqual(stopped, ['part.mp4']);
+  assert.equal(deep.list()[0].state, 'stopped');
+  await deep.tick();
+  assert.equal(stopped.length, 1, 'only once');
 });

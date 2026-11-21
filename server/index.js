@@ -72,11 +72,14 @@ const uploadJobs = createUploadJobs({
   chrome: C.chrome || 'google-chrome', dataDir: DATA, extraFlags: C.chromeFlags || [], env: C.display ? { DISPLAY: C.display } : {}, log,
   pageUrl: (video, name) => `http://127.0.0.1:${S.enginePort}/judge/judge.html?video=${encodeURIComponent('/uploads/' + encodeURIComponent(video))}&name=${encodeURIComponent(name)}&go=1&cfg=upload&bg=1`,
   settings: () => judgeSettings,
-  busy: () => engines.list().filter((n) => engines.running(n)).length >= engines.max,
+  // (a deep analysis also waits while anyone is in view of a camera being judged: see deep.js)
+  busy: (job) => engines.list().filter((n) => engines.running(n)).length >= engines.max || (!!job?.deep && someoneInView()),
 });
 // each judge's latest picture of the scene, passed on to whoever's watching that camera
 const live = new Map();   // n → { last, at, viewers: Set<res>, frames: [timestamps] }
 const liveOf = (n) => { if (!live.has(n)) live.set(n, { last: '', at: 0, viewers: new Set(), fps: 0 }); return live.get(n); };
+// a camera that's on, with its judge following somebody right now
+const someoneInView = () => review.cams().some((c) => { const l = live.get(c.n); return c.live && engines.running(c.n) && !!l && Date.now() - l.at < 4000 && l.inView; });
 // how late each recording's own clock runs, measured as it's written (segments.js)
 const segments = createSegments({ dir: RECORDINGS, stateFile: path.join(DATA, 'recording-timing.json'), log });
 const review = createReview({
@@ -107,7 +110,7 @@ if (!/^[A-Za-z0-9]{1,24}$/.test(resultsRun)) {
   resultsRun = `r${new Date().toISOString().replace(/[-:]/g, '').slice(0, 15)}`;
   try { fs.writeFileSync(RUN_FILE, resultsRun); } catch (e) { log(`couldn't keep this run's name: ${e.message}`); }
 }
-const cloud = createCloud({ dir: RECORDINGS, run: resultsRun, uploadsDir: path.join(DATA, 'training'), stateFile: path.join(DATA, 'cloud-sent.json'), camName, lateness: (rel) => segments.latenessOf(rel), log, results: () => { const r = review.results(); return { json: { athletes: r.athletes.map(named), numbers: r.numbers.map(named), merged: r.merged.map((m) => ({ ...m, cams: m.cams.map(camName) })), sources: previousSources, deep: deep.list().map((d) => ({ ...d, cam: camName(d.cam) })) }, files: r.files }; }, api: () => C.api, settings: () => ({ cloudOn: !!(C.api && C.receiverKey), cloudKey: C.receiverKey, cloudSince: 0 }) });
+const cloud = createCloud({ dir: RECORDINGS, run: resultsRun, uploadsDir: path.join(DATA, 'training'), stateFile: path.join(DATA, 'cloud-sent.json'), camName, lateness: (rel) => segments.latenessOf(rel), log, results: () => { const r = review.results(); return { json: { athletes: r.athletes.map(named), numbers: r.numbers.map(named), merged: r.merged.map((m) => ({ ...m, cams: m.cams.map(camName) })), sources: previousSources, deep: deep.list().map((d) => ({ ...d, cam: d.earlier ? d.cam : camName(d.cam) })) }, files: r.files }; }, api: () => C.api, settings: () => ({ cloudOn: !!(C.api && C.receiverKey), cloudKey: C.receiverKey, cloudSince: 0 }) });
 
 // ---------------------------------------------------------------- the page's own requests beyond the review API
 const ADDRESSES = () => ({ lan: [C.host], lanNames: ['internet'], tailscale: null });
@@ -168,7 +171,22 @@ const deep = createDeep({
   // the recording goes to cloud storage by itself, so the copy doesn't; what's found in the copy is the recording's
   onQueued: (f) => { cloud.markSent(`uploads/${f.video}`); previousSources[f.video] = f.file; fs.writeFile(PREVIOUS, JSON.stringify(previousSources), () => {}); },
   onDone: (f) => review.replaceLive(f.cam, f.start, f.end, f.video),
+  onStopped: (f) => { if (f.video) review.hideVideo(f.video); },
 });
+// A recording an earlier server of this company filmed with a crowd in view, whose deep analysis never finished there (the booking
+// ended first): the site says which (recordings/by-key, deepWanted), and it's carried on here, a few at a time, oldest first. Like
+// every deep analysis it waits while anyone is in view of a camera being judged.
+const RESUME_AFTER_MS = 2 * 60e3, RESUME_MOST = 3;
+async function resumeDeep() {
+  let list = [];
+  try { list = await cloud.previous(); } catch { return; }
+  const todo = list.filter((r) => r.deepWanted && r.cam && !deep.has(r.file)).sort((x, y) => String(x.startedAt).localeCompare(String(y.startedAt))).slice(0, RESUME_MOST);
+  for (const r of todo) {
+    try { const got = await fetchPrevious(r.id); deep.adopt({ file: r.file, cam: r.cam, startedAt: r.startedAt, video: got.video }); }
+    catch (e) { log(`An earlier recording's deep analysis couldn't be carried on: ${e.message}`); }
+  }
+}
+setTimeout(() => { resumeDeep().catch(() => {}); }, RESUME_AFTER_MS);
 
 async function extra(req, res, u, { local }) {
   const p = u.pathname;
@@ -180,7 +198,7 @@ async function extra(req, res, u, { local }) {
       if (!local) return send(res, 403, { error: 'Judges only' }), true;
       const raw = await new Promise((ok) => { let b = ''; req.on('data', (c) => { b += c; if (b.length > 5e5) { req.destroy(); ok(''); } }); req.on('end', () => ok(b)); req.on('error', () => ok('')); });
       const l = liveOf(n), now = Date.now();
-      if (raw) { l.fps = +(/"fps":([\d.]+)/.exec(raw) || [])[1] || 0; l.last = raw; l.at = now; for (const r of l.viewers) r.write(`data: ${raw}\n\n`); }
+      if (raw) { l.fps = +(/"fps":([\d.]+)/.exec(raw) || [])[1] || 0; l.inView = /"tracks":\[\{/.test(raw) || /"lm":\[/.test(raw); l.last = raw; l.at = now; for (const r of l.viewers) r.write(`data: ${raw}\n\n`); }
       send(res, 200, { ok: true }); return true;
     }
     if (eng[2] === 'live' && req.method === 'GET') { followLive(req, res, n); return true; }
