@@ -24,7 +24,7 @@ test('an answer\'s text can\'t carry HTML, and its lists and bold come out as su
   assert.strictEqual(markdown('**Pass:** in the target\n\n- one\n- two\n1. first'), '<p><b>Pass:</b> in the target</p><ul><li>one</li><li>two</li></ul><ol><li>first</li></ol>');
 });
 test('Home has the Assistant\'s button for whoever it\'s on for, and the app has its page', () => {
-  assert.match(read('learn/home.js'), /helper\?\.allowed \? `<a class="btnLink primaryLink homeAssistant" href="#\/assistant">/);
+  assert.match(read('learn/home.js'), /helper\?\.allowed \? `<a class="homeAssistant" href="#\/assistant">.*t\('Referee Assistant'\)/);
   assert.match(read('learn/learn.js'), /import \* as assistant from '\.\/assistant\.js';/);
   assert.match(read('learn/assistant.js'), /export const views = \{ assistant: assistantView \};/);
 });

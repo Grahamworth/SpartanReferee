@@ -167,9 +167,12 @@ store update. The site's service worker keeps saved lessons, rules and the handb
 `docs/apps/stores.md` is the checklist for publishing: accounts and their costs, store forms, the reviewer's sign-in, privacy
 answers, risks at review and known gaps.
 
-### The Assistant (21 November 2026)
+### The Referee Assistant (21 November 2026)
 
-**Assistant** on Home (`#/assistant`, `learn/assistant.js`) answers a referee's questions, typed or spoken, in their language:
+The big **Referee Assistant** button on Home opens it as a chat, like a messaging app: a glowing header with the helper's face and
+"Online" ("Typing…" while it looks things up), its greeting as the first message, your messages on the right and its on the left with
+the time, a speaker in the header to have every answer read aloud, and one round button that's the microphone until you type, then
+Send. On a phone it fills the screen above the keyboard, and a long answer opens at its start. It (`#/assistant`, `learn/assistant.js`) answers a referee's questions, typed or spoken, in their language:
 - an obstacle: what to do, what passes and what fails, with a link to it in Obstacles;
 - a rule: the answer with the rule cited and linked in Rules;
 - a lesson: the answer with the lesson quoted word for word and linked;

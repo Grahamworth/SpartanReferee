@@ -97,7 +97,8 @@ html[dir="rtl"] .events svg { transform: scaleX(-1); }
   .top:has(.profileBtn:not([hidden])) .menuBtn { padding: 0 10px; }
   .top:has(.profileBtn:not([hidden])) .menuBtn span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 }
-@media (max-width: 380px) { .top .mark { font-size: 24px; } }
+/* the logo scales with the phone so it, Menu and the profile icon share one row (21 November 2026) */
+@media (max-width: 640px) { .top .mark { font-size: clamp(18px, 5.6vw, 23px); } }
 /* a heading with an icon button beside it (People's "add person") */
 .titleRow { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .titleRow h1 { margin: 0; }

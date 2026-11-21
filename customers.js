@@ -92,7 +92,7 @@ async function loadAssistant() {
   catch { show(document.querySelector('.assistantBox'), false); } // not set up here
 }
 for (const r of document.querySelectorAll('input[name=asMode]')) r.addEventListener('change', async () => {
-  asFail(''); try { drawAssistant(await call('assistant/settings', { method: 'PUT', body: { mode: r.value } })); toast(r.value === 'all' ? 'The Assistant is on for every referee' : r.value === 'chosen' ? 'The Assistant is on for the chosen people' : 'The Assistant is off (admins only)'); } catch (e) { asFail(e.message); }
+  asFail(''); try { drawAssistant(await call('assistant/settings', { method: 'PUT', body: { mode: r.value } })); toast(r.value === 'all' ? 'The Referee Assistant is on for every referee' : r.value === 'chosen' ? 'The Referee Assistant is on for the chosen people' : 'The Referee Assistant is off (admins only)'); } catch (e) { asFail(e.message); }
 });
 $('asCapForm').addEventListener('submit', async (e) => {
   e.preventDefault(); asFail('');
