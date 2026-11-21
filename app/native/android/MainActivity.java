@@ -27,10 +27,13 @@ public class MainActivity extends BridgeActivity {
         });
     }
 
+    // the Broadcaster's only page, or the SpartanReferee app's start: Learning's overview (/learn/ with no #/page after it)
     private static boolean isHomepage(WebView web) {
         String url = web.getUrl();
         if (url == null) return true;
-        String path = Uri.parse(url).getPath();
+        Uri uri = Uri.parse(url);
+        String path = uri.getPath(), page = uri.getFragment();
+        if (path != null && (path.equals("/learn/") || path.equals("/learn/index.html"))) return page == null || page.isEmpty() || page.equals("/");
         return path == null || path.isEmpty() || path.equals("/") || path.equals("/index.html") || path.equals("/app.html");
     }
 }

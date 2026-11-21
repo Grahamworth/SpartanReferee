@@ -1,13 +1,12 @@
 {
-  "name": "spartans-app",
-  "version": "0.1.0",
+  "name": "spartanreferee-app",
+  "version": "1.0.0",
   "private": true,
-  "description": "The Spartans site packaged as Android and iPhone apps (Capacitor). Built by scripts/build-app.sh.",
+  "description": "SpartanReferee's phone apps (Capacitor): the referee app for Google Play and the App Store (scripts/build-app.sh) and the Broadcaster camera app (scripts/build-broadcaster.sh).",
   "dependencies": {
     "@capacitor/android": "^8.5.3",
     "@capacitor/core": "^8.5.3",
-    "@capacitor/ios": "^8.5.3",
-    "@capgo/capacitor-social-login": "^8.7.5"
+    "@capacitor/ios": "^8.5.3"
   },
   "devDependencies": {
     "@capacitor/cli": "^8.5.3"

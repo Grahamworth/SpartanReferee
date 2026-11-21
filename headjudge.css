@@ -10,7 +10,8 @@ a { color: var(--primary-text); }
 h1, h2, legend { font-family: var(--display); font-weight: 800; text-transform: uppercase; letter-spacing: .01em; margin: 0; }
 .muted { color: var(--muted); }
 
-.top { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 14px clamp(16px, 4vw, 40px); border-bottom: 3px solid var(--primary); }
+.top { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 14px clamp(16px, 4vw, 40px); border-bottom: 3px solid var(--primary);
+  padding-top: calc(14px + env(safe-area-inset-top, 0px)); /* below the status bar and notch in the phone apps (viewport-fit=cover) */ }
 .mark { font: italic 800 28px var(--display); text-transform: uppercase; color: var(--text); text-decoration: none; }
 .mark span { color: var(--primary); }
 /* the Spartans helmet before the SpartanReferee name (not before a company's own name, which takes its place once signed in) */
@@ -289,7 +290,7 @@ html[lang="ar"] *, html[lang="th"] * { font-style: normal !important; letter-spa
    Everything people tap is at least 44px tall. */
 .menuBtn { display: none; }
 @media (max-width: 640px) {
-  .top { padding: 10px 16px; gap: 10px; flex-wrap: wrap; }
+  .top { padding: 10px 16px; padding-top: calc(10px + env(safe-area-inset-top, 0px)); gap: 10px; flex-wrap: wrap; }
   .mark { font-size: 23px; display: inline-flex; align-items: center; min-height: 44px; }
   .menuBtn { display: inline-flex; align-items: center; gap: 6px; margin-left: auto; min-height: 44px; padding: 0 12px; background: none; color: var(--text); border: 1px solid var(--line); font: 700 15px Barlow, -apple-system, "Segoe UI", system-ui, sans-serif; cursor: pointer; }
   .menuBtn svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; }

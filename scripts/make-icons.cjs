@@ -4,18 +4,24 @@ const fs = require('fs'), path = require('path'), zlib = require('zlib');
 
 function crc32(buf) { let c, crc = 0xffffffff; for (let n = 0; n < buf.length; n++) { c = (crc ^ buf[n]) & 0xff; for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1; crc = (crc >>> 8) ^ c; } return (crc ^ 0xffffffff) >>> 0; }
 function chunk(type, data) { const len = Buffer.alloc(4); len.writeUInt32BE(data.length); const td = Buffer.concat([Buffer.from(type), data]); const crc = Buffer.alloc(4); crc.writeUInt32BE(crc32(td)); return Buffer.concat([len, td, crc]); }
-function png(size, pixel) {
-  const raw = Buffer.alloc(size * (size * 4 + 1));
-  for (let y = 0; y < size; y++) {
-    raw[y * (size * 4 + 1)] = 0;
-    for (let x = 0; x < size; x++) {
-      // 4x4 supersampling for smooth edges
+const png = (size, pixel) => pngWH(size, size, pixel);
+// any width and height; pixel(u, v) gets 0..1 across the shorter side, centred. opts.alpha false: no alpha channel at all (the App
+// Store refuses an app icon that has one, even fully opaque); opts.ss: supersampling per side (big splash screens use fewer)
+function pngWH(w, h, pixel, { alpha = true, ss = 4 } = {}) {
+  const ch = alpha ? 4 : 3, side = Math.min(w, h), row = w * ch + 1;
+  const raw = Buffer.alloc(h * row);
+  for (let y = 0; y < h; y++) {
+    raw[y * row] = 0;
+    for (let x = 0; x < w; x++) {
       let r = 0, g = 0, b = 0;
-      for (let sy = 0; sy < 4; sy++) for (let sx = 0; sx < 4; sx++) { const c = pixel((x + (sx + 0.5) / 4) / size, (y + (sy + 0.5) / 4) / size); r += c[0]; g += c[1]; b += c[2]; }
-      const o = y * (size * 4 + 1) + 1 + x * 4; raw[o] = r / 16; raw[o + 1] = g / 16; raw[o + 2] = b / 16; raw[o + 3] = 255;
+      for (let sy = 0; sy < ss; sy++) for (let sx = 0; sx < ss; sx++) {
+        const c = pixel((x + (sx + 0.5) / ss - (w - side) / 2) / side, (y + (sy + 0.5) / ss - (h - side) / 2) / side);
+        r += c[0]; g += c[1]; b += c[2];
+      }
+      const n = ss * ss, o = y * row + 1 + x * ch; raw[o] = r / n; raw[o + 1] = g / n; raw[o + 2] = b / n; if (alpha) raw[o + 3] = 255;
     }
   }
-  const ihdr = Buffer.alloc(13); ihdr.writeUInt32BE(size, 0); ihdr.writeUInt32BE(size, 4); ihdr[8] = 8; ihdr[9] = 6;
+  const ihdr = Buffer.alloc(13); ihdr.writeUInt32BE(w, 0); ihdr.writeUInt32BE(h, 4); ihdr[8] = 8; ihdr[9] = alpha ? 6 : 2;
   return Buffer.concat([Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]), chunk('IHDR', ihdr), chunk('IDAT', zlib.deflateSync(raw)), chunk('IEND', Buffer.alloc(0))]);
 }
 const BLACK = [11, 11, 11], RED = [226, 35, 26], WHITE = [255, 255, 255];
@@ -33,7 +39,7 @@ const icon = (pad) => (u, v) => {
   if ((dome || guards) && !slot) return WHITE;
   return RED;
 };
-module.exports = { png, icon };
+module.exports = { png, pngWH, icon, BLACK };
 if (require.main === module) {
   const out = process.argv[2] || 'icons';
   fs.mkdirSync(out, { recursive: true });

@@ -4406,5 +4406,7 @@
  "Keep your view loose": "Pidä näkymäsi väljänä",
  "Consistency always": "Johdonmukaisuus aina",
  "Referee Essentials: final assessment": "Referee Essentials: loppuarviointi",
- "Questions from every part of the course, drawn at random each attempt.": "Kurssin jokaisesta osasta kysytään kysymyksiä, jotka arvotaan satunnaisesti jokaisella yrityksellä."
+ "Questions from every part of the course, drawn at random each attempt.": "Kurssin jokaisesta osasta kysytään kysymyksiä, jotka arvotaan satunnaisesti jokaisella yrityksellä.",
+ "SpartanReferee needs a connection the first time it opens.": "SpartanReferee tarvitsee yhteyden, kun se avataan ensimmäisen kerran.",
+ "After that, what you've saved on this phone opens with no signal.": "Sen jälkeen tähän puhelimeen tallentamasi aukeaa ilman kenttää."
 }

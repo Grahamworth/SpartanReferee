@@ -29,7 +29,10 @@ test('every page the front and info pages link to exists', () => {
 });
 test('Spartans has left: its pages are gone, and their old addresses go to the Spartans site', () => {
   for (const f of ['app', 'chat', 'course', 'profile', 'news', 'past', 'scoreboard', 'admin', 'judging', 'camera']) assert.ok(!fs.existsSync(new URL(`../${f}.html`, import.meta.url)), f);
-  for (const f of ['hub.js', 'scripts/build-app.sh', 'courses']) assert.ok(!fs.existsSync(new URL(`../${f}`, import.meta.url)), f);
+  for (const f of ['hub.js', 'courses']) assert.ok(!fs.existsSync(new URL(`../${f}`, import.meta.url)), f);
+  // scripts/build-app.sh is back since 21 November 2026, building SpartanReferee's own apps, not the Spartans one
+  assert.match(read('scripts/build-app.sh'), /APP_ID="\$\{SPARTANREFEREE_APP_ID:-com\.vdaso\.spartanreferee\}"/);
+  assert.doesNotMatch(read('scripts/build-app.sh'), /com\.vdaso\.spartans\b(?!\\)|app\.html/);
   const routes = JSON.parse(read('staticwebapp.config.json')).routes;
   assert.deepStrictEqual(routes.find((r) => r.route === '/app'), { route: '/app', redirect: `${SPARTANS}/`, statusCode: 301 });
   assert.strictEqual(routes.find((r) => r.route === '/downloads/spartans.apk').redirect, `${SPARTANS}/downloads/spartans.apk`);

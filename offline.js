@@ -130,8 +130,9 @@ export function registerApp() {
   if (!hosted() || !('serviceWorker' in navigator)) return;
   navigator.serviceWorker.register('/sw.js').catch(() => { /* the page still works, online */ });
 }
-/** true when it's running as the installed app */
-export const installed = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+/** true when it's running as the installed app: added to the home screen, or the Android or iPhone app (scripts/build-app.sh) */
+export const installed = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true
+  || !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
 const ios = () => /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 let prompt = null;
 if (typeof window !== 'undefined') addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); prompt = e; window.dispatchEvent(new Event('sr:installable')); });

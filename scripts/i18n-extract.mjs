@@ -13,7 +13,7 @@ export const FILES = [
   // event day: the server's video review, the judge, the Broadcaster and the camera phone guide
   'server/review/index.html', 'server/review/review.js', 'server/review/counts.js',
   'judge.html', 'app.js', 'burpee.js', 'exercises.js', 'multi.js', 'cones.js', 'judge-gate.js', 'readers.js',
-  'broadcaster.html', 'camera.js', 'phone.html', 'apptabs.js', 'apptabs-core.js',
+  'broadcaster.html', 'app/referee/no-connection.html', 'camera.js', 'phone.html', 'apptabs.js', 'apptabs-core.js',
   // the website
   'index.html', 'info.html', 'home.html', 'home.js', 'language.js', 'event.html', 'event.js', 'console.html', 'console.js', 'booking.js', 'results.html', 'results.js',
   'streaming.html', 'email-return.html', 'offline.html', 'offline.js', 'privacy.html', 'email-signin-web.js', 'email-signin-core.js', 'api-base.js', 'recordings.html', 'recordings.js',
