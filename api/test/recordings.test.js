@@ -215,10 +215,39 @@ test('the recordings a crowd was in come through with how far their deep analysi
   const got = (await call(s.api, 'GET', 'recordings/results', h)).body;
   assert.strictEqual(got.deep.length, 1, 'only entries that say when their recording began');
   const { server, ...d } = got.deep[0];
-  assert.deepStrictEqual(d, { cam: 2, file: going.file, video: going.video, startedAt: going.startedAt, state: 'running', pct: 40, replaced: 0, kept: '' });
+  assert.deepStrictEqual(d, { cam: 2, file: going.file, video: going.video, startedAt: going.startedAt, endedAt: going.endedAt, state: 'running', pct: 40, replaced: 0, kept: '' });
   assert.strictEqual(server, got.athletes[0].server, 'tied to the same server run as its athletes');
   // a server on software from before deep analysis sends none
   const old = withStorage(), o = await linked(old);
   await old.save(o.rk, 'r1', { 'results.json': { athletes: [athlete(1, '2026-11-20T08:31:00Z', 3)] } });
   assert.deepStrictEqual((await call(old.api, 'GET', 'recordings/results', o.h)).body.deep, []);
+});
+
+test('a recording whose deep analysis never finished, analysed on a later server, takes the place of what the live judge counted there', async () => {
+  const s = withStorage(), { h, rk } = await linked(s);
+  const file = '2026-11-20_08-30-00-000000Z.mp4';
+  const unfinished = { cam: 1, file, video: '', startedAt: '2026-11-20T08:30:00.000Z', endedAt: '2026-11-20T08:40:00.000Z', state: 'stopped', pct: 0, why: 'The booking ended before it could be analysed in full.' };
+  // the first booking: a crowd on camera 1 from 08:30, which its live judge counted 3 reps of; and an athlete at 08:20, before it
+  await s.save(rk, 'r1', { 'results.json': { athletes: [athlete(1, '2026-11-20T08:20:00Z', 9), athlete(2, '2026-11-20T08:31:00Z', 2), athlete(3, '2026-11-20T08:35:00Z', 1), { ...athlete(4, '2026-11-20T08:36:00Z', 5), cam: 2 }], deep: [unfinished] } });
+  let got = (await call(s.api, 'GET', 'recordings/results', h)).body;
+  assert.deepStrictEqual(got.athletes.map((a) => a.reps).sort(), [1, 2, 5, 9]);
+  assert.strictEqual(got.deep[0].state, 'stopped', 'said on the Results page until it is analysed');
+  // a later booking: that recording chosen under A previous recording, and counted in full
+  s.tick(3 * 3600e3);
+  const found = (n, reps) => ({ n, src: 'upload', cam: 0, video: 'later_Camera_1.mp4', firstAt: '2026-11-20T11:05:00Z', lastAt: '2026-11-20T11:05:00Z', firstT: 60, lastT: 90, reps, noReps: 0 });
+  await s.save(rk, 'r2', { 'results.json': { athletes: [found(1, 6), found(2, 5), found(3, 4)], sources: { 'later_Camera_1.mp4': file } } });
+  got = (await call(s.api, 'GET', 'recordings/results', h)).body;
+  assert.deepStrictEqual(got.athletes.map((a) => a.reps).sort(), [4, 5, 5, 6, 9], 'the two live entries of that stretch on camera 1 have given way; camera 2 and the earlier athlete stay');
+  assert.deepStrictEqual([got.deep[0].state, got.deep[0].replaced, got.deep[0].kept], ['done', 2, '']);
+});
+
+test('a later analysis that counted fewer reps than the live judge did leaves the live counts, and both are listed', async () => {
+  const s = withStorage(), { h, rk } = await linked(s);
+  const file = '2026-11-20_08-30-00-000000Z.mp4';
+  await s.save(rk, 'r1', { 'results.json': { athletes: [athlete(1, '2026-11-20T08:31:00Z', 8)], deep: [{ cam: 1, file, startedAt: '2026-11-20T08:30:00.000Z', endedAt: '2026-11-20T08:40:00.000Z', state: 'failed' }] } });
+  s.tick(3600e3);
+  await s.save(rk, 'r2', { 'results.json': { athletes: [{ n: 1, src: 'upload', cam: 0, video: 'v.mp4', firstAt: '2026-11-20T09:05:00Z', lastAt: '2026-11-20T09:05:00Z', reps: 3, noReps: 0 }], sources: { 'v.mp4': file } } });
+  const got = (await call(s.api, 'GET', 'recordings/results', h)).body;
+  assert.deepStrictEqual(got.athletes.map((a) => a.reps).sort(), [3, 8]);
+  assert.deepStrictEqual([got.deep[0].state, got.deep[0].replaced, got.deep[0].kept], ['done', 0, 'fewer']);
 });

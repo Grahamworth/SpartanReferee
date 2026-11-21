@@ -131,7 +131,22 @@ function createRecordings({ store, signer, now, reply, session, isAdmin, members
         for (const x of Array.isArray(j.merged) ? j.merged : []) if (recent(x.firstAt) && Array.isArray(x.ns)) out.merged.push({ ...x, server: r.id });
         Object.assign(out.sources, j.sources || {});
         // recordings a crowd was in, which the server analyses again in full: how far each has got
-        for (const x of Array.isArray(j.deep) ? j.deep : []) if (x && recent(x.startedAt)) out.deep.push({ cam: +x.cam || 0, file: String(x.file || ''), video: String(x.video || ''), startedAt: x.startedAt, state: String(x.state || ''), pct: +x.pct || 0, replaced: +x.replaced || 0, kept: String(x.kept || ''), server: r.id });
+        for (const x of Array.isArray(j.deep) ? j.deep : []) if (x && recent(x.startedAt)) out.deep.push({ cam: +x.cam || 0, file: String(x.file || ''), video: String(x.video || ''), startedAt: x.startedAt, endedAt: recent(x.endedAt) ? x.endedAt : x.startedAt, state: String(x.state || ''), pct: +x.pct || 0, replaced: +x.replaced || 0, kept: String(x.kept || ''), server: r.id });
+      }
+      // A recording whose deep analysis never finished on its own server (it stopped first) and has since been analysed on another,
+      // as a previous recording: that analysis stands in its place, as it would have on the first server. What the live judge
+      // counted in that stretch gives way to it, unless it counted fewer reps than the live judge did (then both stay listed).
+      const reps = (list) => list.reduce((n, a) => n + (+a.reps || 0), 0);
+      for (const d of out.deep) {
+        if (['done', 'preparing', 'queued', 'waiting', 'running'].includes(d.state) || !d.file) continue;
+        const later = out.athletes.filter((a) => a.src === 'upload' && out.sources[a.video] === d.file);
+        if (!later.length) continue;
+        const from = Date.parse(d.startedAt) - 2000, to = Date.parse(d.endedAt);
+        const live = out.athletes.filter((a) => a.src !== 'upload' && a.server === d.server && a.cam === d.cam && Date.parse(a.firstAt) >= from && Date.parse(a.firstAt) <= to);
+        d.state = 'done';
+        if (reps(later) < reps(live)) { d.kept = 'fewer'; continue; }
+        d.replaced = live.length;
+        out.athletes = out.athletes.filter((a) => !live.includes(a));
       }
       out.athletes.sort((x, y) => String(y.firstAt).localeCompare(String(x.firstAt)));
       out.numbers.sort((x, y) => String(y.firstAt).localeCompare(String(x.firstAt)));
