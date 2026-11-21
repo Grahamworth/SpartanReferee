@@ -23,7 +23,10 @@ const MS_LOGO = '<svg viewBox="0 0 21 21" width="20" height="20" aria-hidden="tr
 export async function microsoftButton(el, back, onError, opts = {}) {
   const cfg = await call('config').catch(() => ({}));
   const ms = cfg.microsoftSignIn && cfg.microsoftSignIn.webRedirectUri ? cfg.microsoftSignIn : null;
-  const google = cfg.signIn && cfg.googleClientId && cfg.googleClientId !== 'dev' ? cfg.googleClientId : '';
+  // not in the Android and iPhone apps (scripts/build-app.sh): Google refuses its sign-in inside an app's web view, so people there
+  // use Microsoft or an emailed code
+  const native = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
+  const google = !native && cfg.signIn && cfg.googleClientId && cfg.googleClientId !== 'dev' ? cfg.googleClientId : '';
   const code = !!cfg.codeSignIn;
   if (!ms && !google && !code) return;
   el.innerHTML = `<div class="signInBtns">${google ? '<div class="gBtn"></div>' : ''}${ms ? `<button class="msBtn" type="button">${MS_LOGO}<span>Sign in with Microsoft</span></button>` : ''}${code ? '<div class="codeBox"></div>' : ''}</div>`;

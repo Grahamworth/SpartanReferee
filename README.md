@@ -134,6 +134,39 @@ What the server says is kept by the pages, in `offline.js` (Cache Storage `sr-da
 - Lesson progress and completion made offline wait in an outbox and are sent when there's signal again. Anything else that changes data says it needs a connection.
 - Assessments stay online only.
 
+### The phone apps (Google Play and the App Store)
+
+Added 21 November 2026. `scripts/build-app.sh` packages the site as SpartanReferee's own Android and iPhone apps (Capacitor 8).
+The app is a frame around the live site, opening on Learning's overview. Every site deploy reaches the apps straight away with no
+store update. The site's service worker keeps saved lessons, rules and the handbook for when there's no signal, as above. Only
+`app/referee/no-connection.html` is carried inside the app: it shows if the very first opening has no signal.
+
+- **Android:** `bash scripts/build-app.sh android` builds on this PC (Node, JDK 21, Android SDK). It writes
+  `downloads/spartanreferee.aab` for Google Play and `downloads/spartanreferee.apk` to install directly. Both are signed with the
+  **upload key** in `C:\Users\graha\.spartanreferee\` (`upload.jks`, with its password in `upload.properties`). The key is never
+  in git, so back that folder up. The Android app also has the native camera screen from `app/native/android`, as the
+  Broadcaster has, and the back button goes back a page until Learning's overview.
+- **iPhone:** there's no Mac here, so `.github/workflows/iphone-app.yml` runs `bash scripts/build-app.sh ios` on GitHub's Macs
+  (Xcode 26). It runs on every push that changes the app, or from Actions → iPhone app → Run workflow. It opens the build in the
+  iPhone Simulator and keeps a screenshot in the run's artifacts. Once the App Store Connect secrets are in the repo, the build
+  is signed, and "upload" sends it to App Store Connect (`docs/apps/stores.md`). The iPhone app lists its sites as app-bound
+  domains (the site, Microsoft's sign-in, YouTube) because WebKit only runs a service worker in an app that does.
+- **Sign-in** inside the apps is Microsoft (its pages stay inside the app) or an emailed code. Google refuses its sign-in inside an
+  app, so the apps leave that button out (`email-signin-web.js`). Links to other sites, such as a server's video review, open in
+  the phone's browser.
+- **Tested on GitHub:** each change to the app also runs `.github/workflows/android-app.yml`. It builds the Android app (signed
+  with a throwaway key; the Play file is built on the PC) and `scripts/test-app-android.sh` tries it in an emulator, keeping a
+  screenshot of each step. This PC's emulator froze for want of memory on 21 November 2026.
+- **Versions:** the store version is `VERSION` in `build-app.sh` (1.0.0). The build number is the number of commits, so it
+  always rises.
+- **The app's id** is `com.vdaso.spartanreferee`. `SPARTANREFEREE_APP_ID` changes it, and it's fixed for good after the first
+  upload: who publishes (VDASO or Spartan) isn't decided yet.
+- **Rebuild only** when `app/` or the build script changes, or when a store wants a newer Android or iOS SDK (about yearly).
+  Site changes don't need a rebuild.
+
+`docs/apps/stores.md` is the checklist for publishing: accounts and their costs, store forms, the reviewer's sign-in, privacy
+answers, risks at review and known gaps.
+
 ### Keeping sharp: quick checks, refreshers, streak and badges
 
 Added 19 November 2026. The server side is `api/src/learn/checks.js` (migration `006-checks.sql`) and the pages are in `learn/sharp.js`. All of it is practice: none of it counts towards a credential, which only the assessment gives.

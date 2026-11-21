@@ -1,0 +1,55 @@
+# Builds SpartanReferee's Android app (scripts/build-app.sh android, as on the PC but signed with a throwaway key, since the real
+# upload key never leaves the PC) and tries it in an emulator: scripts/test-app-android.sh keeps a screenshot of each step.
+# The Play Store's file is still built on the PC with the upload key. README "The phone apps".
+name: Android app
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - app/**
+      - scripts/build-app.sh
+      - scripts/app-images.cjs
+      - scripts/make-icons.cjs
+      - scripts/test-app-android.sh
+      - .github/workflows/android-app.yml
+concurrency: { group: android-app, cancel-in-progress: true }
+jobs:
+  build-and-try:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 } # the build number is the number of commits
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: 21 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: Build
+        run: bash scripts/build-app.sh android
+      - name: Sign it with a throwaway key, for the emulator
+        run: |
+          BT=$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)
+          keytool -genkeypair -keystore "$RUNNER_TEMP/try.jks" -storepass trythis -keypass trythis -alias try -keyalg RSA -dname CN=try -validity 2 > /dev/null
+          "$BT/apksigner" sign --ks "$RUNNER_TEMP/try.jks" --ks-pass pass:trythis --out "$RUNNER_TEMP/try.apk" downloads/spartanreferee.apk
+      - name: Let the emulator use the processor's virtualisation
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Try it in the emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          target: google_apis
+          arch: x86_64
+          profile: pixel_6
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
+          script: bash scripts/test-app-android.sh "$RUNNER_TEMP/try.apk" android-shots
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: android-app
+          path: android-shots
+          retention-days: 14
