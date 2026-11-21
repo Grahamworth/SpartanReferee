@@ -120,7 +120,8 @@ function createDeep({ dir, uploadsDir, stateFile, jobs, quietMs, prepare, latene
   /** The server's stopping: a recording a crowd was in that never got its turn is listed as not done, so the page can say so. */
   function close(why = 'The booking ended before it could be analysed in full.') {
     for (const r of recordings()) {
-      if (state.files[r.rel] || !r.size || !crowded(r.cam, r.start, Math.max(r.end, now()))) continue;
+      // (one still being written runs up to now; a finished one that never had a crowd in it isn't listed)
+      if (state.files[r.rel] || !r.size || !crowded(r.cam, r.start, now() - r.end < quietMs ? now() : r.end)) continue;
       state.files[r.rel] = { ...entry(r), video: '', state: 'stopped', why };
     }
     for (const f of Object.values(state.files)) if (ACTIVE.has(f.state)) { f.state = 'stopped'; f.why = f.why || why; }

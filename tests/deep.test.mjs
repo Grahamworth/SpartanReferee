@@ -195,3 +195,13 @@ test('an analysis that stops part of the way through says so, so what it had fou
   await deep.tick();
   assert.equal(stopped.length, 1, 'only once');
 });
+
+test('the server stopping does not list a finished recording that never had a crowd in it, even if a crowd came later', async () => {
+  const { s, record, deep } = setup();
+  const early = record(1, '2026-11-20T21:30:00Z', 10), late = record(1, '2026-11-20T22:00:00Z', 9);
+  deep.note(1, Date.parse('2026-11-20T22:08:30Z'));           // a crowd, 38 minutes after the first recording began
+  s.now = Date.parse('2026-11-20T22:09:20Z');                 // the second is still being written (changed 20 s ago)
+  deep.close();
+  assert.deepEqual(deep.list().map((e) => [e.file, e.state]), [[late, 'stopped']]);
+  assert.ok(!deep.list().some((e) => e.file === early));
+});
