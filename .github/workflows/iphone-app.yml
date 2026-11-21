@@ -1,0 +1,74 @@
+# Builds SpartanReferee's iPhone app on GitHub's Macs (there's no Mac here): scripts/build-app.sh ios, then opens it in the
+# iPhone Simulator and keeps a picture of it. With the App Store Connect key in the repo's secrets it's also signed, and with
+# "upload" ticked (Run workflow) it goes to App Store Connect for TestFlight and review. README "The phone apps".
+name: iPhone app
+on:
+  workflow_dispatch:
+    inputs:
+      upload:
+        description: Send the signed build to App Store Connect (needs the App Store Connect secrets)
+        type: boolean
+        default: false
+  push:
+    branches: [main]
+    paths:
+      - app/**
+      - scripts/build-app.sh
+      - scripts/app-images.cjs
+      - scripts/make-icons.cjs
+      - .github/workflows/iphone-app.yml
+concurrency: { group: iphone-app, cancel-in-progress: true }
+jobs:
+  build:
+    runs-on: macos-15
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 } # the build number is the number of commits
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: Newest Xcode 26 (the App Store takes only apps built with the iOS 26 SDK)
+        run: |
+          X=$(ls -d /Applications/Xcode_26*.app 2>/dev/null | sort -V | tail -1)
+          [ -n "$X" ] || { echo "No Xcode 26 on this runner"; ls -d /Applications/Xcode*.app; exit 1; }
+          sudo xcode-select -s "$X"
+          xcodebuild -version
+      - name: App Store Connect key (when the secrets are set)
+        env: { KEY: '${{ secrets.APP_STORE_CONNECT_KEY }}' }
+        run: |
+          if [ -n "$KEY" ]; then
+            printf '%s' "$KEY" > "$RUNNER_TEMP/asc.p8"
+            echo "APP_STORE_CONNECT_KEY_PATH=$RUNNER_TEMP/asc.p8" >> "$GITHUB_ENV"
+          else
+            echo "No App Store Connect key: building unsigned"
+          fi
+      - name: Build
+        env:
+          SPARTANREFEREE_APP_BUILD: ${{ runner.temp }}/spartanreferee-app
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APP_STORE_UPLOAD: ${{ inputs.upload && 'upload' || 'export' }}
+        run: bash scripts/build-app.sh ios
+      - name: Open it in the Simulator and take a picture
+        run: |
+          DEV=$(xcrun simctl list devices available -j | node -e '
+            const d = JSON.parse(require("fs").readFileSync(0, "utf8")).devices;
+            const all = Object.entries(d).filter(([r]) => /iOS/.test(r)).flatMap(([, l]) => l).filter((x) => /^iPhone \d+( Pro)?$/.test(x.name));
+            all.sort((a, b) => parseInt(b.name.slice(7)) - parseInt(a.name.slice(7)));
+            console.log(all[0].udid)')
+          xcrun simctl boot "$DEV"
+          xcrun simctl bootstatus "$DEV" -b
+          xcrun simctl install "$DEV" build/ios/SpartanReferee-simulator.app
+          xcrun simctl launch "$DEV" com.vdaso.spartanreferee
+          sleep 25
+          xcrun simctl io "$DEV" screenshot build/ios/simulator.png
+      - uses: actions/upload-artifact@v4
+        with:
+          name: iphone-app
+          path: |
+            build/ios/simulator.png
+            build/ios/SpartanReferee.xcarchive
+            build/ios/export
+          if-no-files-found: warn
+          retention-days: 14

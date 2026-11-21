@@ -17,6 +17,7 @@ downloads/
 # Installed packages and build output
 node_modules/
 dist/
+build/
 
 # Secrets and local settings
 .env
