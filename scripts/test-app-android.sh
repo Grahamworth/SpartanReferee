@@ -5,7 +5,7 @@
 set -uo pipefail
 APK="$1"; OUT="$2"; ID="${SPARTANREFEREE_APP_ID:-com.vdaso.spartanreferee}"
 mkdir -p "$OUT"
-shot() { adb exec-out screencap -p > "$OUT/$1.png"; echo "picture: $1"; }
+shot() { tap_text "Wait" anr > /dev/null 2>&1 && sleep 2; adb exec-out screencap -p > "$OUT/$1.png"; echo "picture: $1"; }
 open_app() { adb shell monkey -p "$ID" -c android.intent.category.LAUNCHER 1 > /dev/null; }
 signal() { adb shell svc wifi "$1"; adb shell svc data "$1"; }
 top() { adb shell dumpsys activity activities | grep -m1 -E "topResumedActivity|mResumedActivity" | sed 's/^ *//'; }
@@ -17,6 +17,9 @@ tap_text() { # taps the middle of the first thing on screen showing this text (w
 }
 adb install -r "$APK" || exit 1
 adb shell settings put global window_animation_scale 0
+# the emulator's own "isn't responding" boxes (its launcher is slow on a fresh boot) would cover the app: none, and a minute to settle
+adb shell settings put global hide_error_dialogs 1
+sleep 60
 
 echo "1. The very first opening, with no signal: the app's own no-connection page"
 signal disable; sleep 3; open_app; sleep 15; shot 1-first-opening-no-signal

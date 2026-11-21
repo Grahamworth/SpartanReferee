@@ -51,6 +51,9 @@ jobs:
           APP_STORE_UPLOAD: ${{ inputs.upload && 'upload' || 'export' }}
         run: bash scripts/build-app.sh ios
       - name: Open it in the Simulator and take a picture
+        # the Simulator sometimes hangs while booting on GitHub's Macs: the build above still counts, and its files are kept
+        timeout-minutes: 12
+        continue-on-error: true
         run: |
           DEV=$(xcrun simctl list devices available -j | node -e '
             const d = JSON.parse(require("fs").readFileSync(0, "utf8")).devices;
@@ -64,6 +67,7 @@ jobs:
           sleep 25
           xcrun simctl io "$DEV" screenshot build/ios/simulator.png
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: iphone-app
           path: |

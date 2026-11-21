@@ -55,11 +55,12 @@ node -e '
     for (const k of keys) if (typeof d[k] === "string") t[k] = d[k];
     strings[f.slice(0, 2)] = t;
   }
-  html = html.replace("/*STRINGS*/{}", JSON.stringify(strings)).replace("__SITE__", site);
+  html = html.replace("/*STRINGS*/{}", JSON.stringify(strings)).replace("__SITE__", site)
+    // the icon inside the page: the app serves only this one file of its own while the site is out of reach
+    .replace("src=\"icon.png\"", `src="data:image/png;base64,${fs.readFileSync(`${src}/icons/spartanreferee/icon-192.png`).toString("base64")}"`);
   fs.writeFileSync(`${out}/no-connection.html`, html);
   fs.writeFileSync(`${out}/index.html`, `<!doctype html><meta charset="utf-8"><script>location.replace(${JSON.stringify(site + "/learn/")})</script>`);
 ' "$SRC" "$BUILD/www" "$SITE"
-cp "$SRC/icons/spartanreferee/icon-192.png" "$BUILD/www/icon.png"
 
 cd "$BUILD"
 [ -d node_modules/@capacitor/cli ] || npm install --no-audit --no-fund
