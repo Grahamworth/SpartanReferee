@@ -12,6 +12,13 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;1,800&family=Barlow:wght@400;600;700&display=swap">
 <link rel="stylesheet" href="headjudge.css">
 <link rel="stylesheet" href="study.css">
+<style>
+  /* the Assistant's settings */
+  .asMode { border: 0; padding: 0; margin: 8px 0 12px; display: flex; flex-direction: column; gap: 2px; }
+  .asMode legend { font-weight: 700; margin-bottom: 6px; }
+  .asMode label { display: flex; align-items: center; gap: 10px; min-height: 44px; margin: 0; font-weight: 600; }
+  .asMode input { flex: none; width: 20px; height: 20px; margin: 0; accent-color: var(--primary); }
+</style>
 <script src="look.js"></script>
 <script src="brand.js"></script>
 <script src="booking.js"></script>
@@ -56,6 +63,29 @@
         <div><dt>Per camera-hour</dt><dd id="tCameraHour">–</dd><small>the server shared, plus keeping the recording</small></div>
       </dl>
       <p class="note">Lesson narration uses Azure AI Speech on its free tier (half a million characters a month), so it costs nothing at today's use.</p>
+    </section>
+
+    <section class="card assistantBox">
+      <h2>Assistant</h2>
+      <p class="note">The Assistant answers referees' questions about the rules, obstacles, lessons, events and camera results, by text or voice. It runs on Luna (gpt-6-luna) in Azure AI Foundry; nothing anyone asks is kept, only what each question cost. Admins can always use it.</p>
+      <fieldset class="asMode"><legend>On for</legend>
+        <label><input type="radio" name="asMode" value="off"> Nobody (admins only)</label>
+        <label><input type="radio" name="asMode" value="chosen"> Chosen people</label>
+        <label><input type="radio" name="asMode" value="all"> Every referee</label>
+      </fieldset>
+      <dl class="totals" aria-label="The Assistant this month">
+        <div><dt>Spent this month</dt><dd id="asSpent">£0.00</dd><small id="asCount"></small></div>
+        <div><dt>Monthly limit</dt><dd><span id="asCapShow">£50</span></dd><small>it stops for everyone at this, until the 1st</small></div>
+      </dl>
+      <form id="asCapForm" class="addAdmin"><label for="asCap">Change the monthly limit (£)</label>
+        <div><input id="asCap" type="number" min="0" max="1000" step="1" inputmode="decimal" required><button class="small" type="submit">Save</button></div></form>
+      <div id="asPeopleBox">
+        <h3 class="sub">Chosen people</h3>
+        <ul id="asPeople" class="adminList"></ul>
+        <form id="asAdd" class="addAdmin"><label for="asEmail">Add someone (they need to have signed in once)</label>
+          <div><input id="asEmail" type="email" autocomplete="off" maxlength="200" placeholder="name@example.com" required><button class="small" type="submit">Add</button></div></form>
+      </div>
+      <p class="error" id="asError" role="alert" hidden></p>
     </section>
 
     <section class="card adminsBox">

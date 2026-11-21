@@ -1,4 +1,4 @@
-// Config (customers.html, admins): the cameras (what's running and booked), the AI judge's costs and who the admins are. Who can sign
+// Config (customers.html, admins): the cameras (what's running and booked), the AI judge's costs, the Assistant and who the admins are. Who can sign
 // in moved to Manage People (invites) and the events to Manage Events; on 20 November 2026 Config was cut to these three. Spartan's
 // events (the sync) and who referees each one moved to the app's Manage Events tab (learn/events.js) on 19 November 2026.
 import { call, devSignInButton, signedIn, getMe, signOut, esc } from './api-base.js';
@@ -70,6 +70,39 @@ $('addAdmin').addEventListener('submit', async (e) => {
   catch (err) { adminFail(err.message); }
 });
 
+// ---------------------------------------------------------------- the Assistant (21 November 2026): on for whom, and its monthly limit
+// under a pound in pence (a question costs a fraction of a penny)
+const pounds = (n) => { n = Number(n || 0); return n > 0 && n < 1 ? `${(n * 100).toFixed(n < 0.1 ? 2 : 1)}p` : `£${n.toFixed(2)}`; };
+const asFail = (msg) => { $('asError').textContent = msg || ''; show($('asError'), !!msg); };
+function drawAssistant(a) {
+  for (const r of document.querySelectorAll('input[name=asMode]')) r.checked = r.value === a.mode;
+  $('asSpent').textContent = pounds(a.spentGbp);
+  const asks = (a.month || []).find((k) => k.kind === 'ask');
+  $('asCount').textContent = `${asks ? asks.count : 0} question${asks && asks.count === 1 ? '' : 's'}${a.capGbp ? ` · ${Math.min(100, Math.round((a.spentGbp / a.capGbp) * 100))}% of the limit` : ''}`;
+  $('asCapShow').textContent = `£${Number(a.capGbp).toFixed(2).replace(/\.00$/, '')}`;
+  if (document.activeElement !== $('asCap')) $('asCap').value = a.capGbp;
+  show($('asPeopleBox'), a.mode === 'chosen');
+  $('asPeople').innerHTML = a.people.map((p) => `<li><span><b>${esc(p.name || p.email)}</b><small>${esc(p.email)} · added ${esc(onDay(p.addedAt))}</small></span><button class="small" type="button" data-as-remove="${esc(p.email)}">Remove</button></li>`).join('')
+    || '<li class="muted">Nobody yet: add the people who should have it.</li>';
+  $('asPeople').querySelectorAll('button[data-as-remove]').forEach((btn) => { btn.onclick = async () => {
+    asFail(''); try { drawAssistant(await call(`assistant/access/${encodeURIComponent(btn.dataset.asRemove)}`, { method: 'DELETE' })); toast('Removed'); } catch (e) { asFail(e.message); } }; });
+}
+async function loadAssistant() {
+  try { drawAssistant(await call('assistant/settings')); show(document.querySelector('.assistantBox'), true); }
+  catch { show(document.querySelector('.assistantBox'), false); } // not set up here
+}
+for (const r of document.querySelectorAll('input[name=asMode]')) r.addEventListener('change', async () => {
+  asFail(''); try { drawAssistant(await call('assistant/settings', { method: 'PUT', body: { mode: r.value } })); toast(r.value === 'all' ? 'The Assistant is on for every referee' : r.value === 'chosen' ? 'The Assistant is on for the chosen people' : 'The Assistant is off (admins only)'); } catch (e) { asFail(e.message); }
+});
+$('asCapForm').addEventListener('submit', async (e) => {
+  e.preventDefault(); asFail('');
+  try { drawAssistant(await call('assistant/settings', { method: 'PUT', body: { capGbp: Number($('asCap').value) } })); toast('Monthly limit saved'); } catch (err) { asFail(err.message); }
+});
+$('asAdd').addEventListener('submit', async (e) => {
+  e.preventDefault(); asFail('');
+  try { drawAssistant(await call('assistant/access', { method: 'POST', body: { email: $('asEmail').value.trim() } })); $('asEmail').value = ''; toast('Added'); } catch (err) { asFail(err.message); }
+});
+
 async function enter() {
   const me = await getMe(true);
   if (!me.user && !me.admin) { signOut(); return start(); }
@@ -78,6 +111,7 @@ async function enter() {
   if (!me.admin) { show($('refused'), true); return; }
   await load();
   drawAdmins(await call('admin/admins'));
+  await loadAssistant();
   show($('content'), true);
   setInterval(() => load().catch(() => {}), 15000);
 }

@@ -127,7 +127,7 @@ pb() { /usr/libexec/PlistBuddy -c "$1" "$PL" >/dev/null 2>&1 || true; }
 put() { pb "Delete :$1"; /usr/libexec/PlistBuddy -c "Add :$1 $2 $3" "$PL"; }
 put CFBundleDisplayName string "$APP_NAME"
 put NSCameraUsageDescription string "SpartanReferee uses the camera to judge reps and to film an event's obstacles."
-put NSMicrophoneUsageDescription string "Videos filmed for judging can include sound."
+put NSMicrophoneUsageDescription string "SpartanReferee listens when you ask the Assistant a question out loud, and videos filmed for judging can include sound."
 put ITSAppUsesNonExemptEncryption bool false
 # the service worker (offline lessons) only runs in an app that lists its sites (10 at most): the referee site, Microsoft's sign-in
 # and YouTube (a slide's video plays in a YouTube frame, learn/video.js)

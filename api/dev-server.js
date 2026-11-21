@@ -36,6 +36,9 @@ const api = createApi({
   // narration (Azure AI Speech) and where it's kept, when the site's settings were read with az
   learnSpeech: learnSettings.LEARN_SPEECH_KEY ? { key: learnSettings.LEARN_SPEECH_KEY, region: learnSettings.LEARN_SPEECH_REGION || 'uksouth' } : null,
   learnMedia: learnSettings.LEARN_STORAGE ? blobSigner(learnSettings.LEARN_STORAGE, 'learn-media') : null,
+  // the Assistant, on the same models as the live site (its knowledge: assistant/learn_dev/index.json, from scripts/assistant-index.mjs)
+  assistantAi: require('./src/assistant-ai').createAi({ endpoint: learnSettings.ASSISTANT_ENDPOINT, key: learnSettings.ASSISTANT_KEY, model: learnSettings.ASSISTANT_MODEL || 'luna', embedModel: learnSettings.ASSISTANT_EMBED || 'embed' }),
+  assistantIndex: learnSettings.LEARN_STORAGE ? blobSigner(learnSettings.LEARN_STORAGE, 'assistant') : null,
   blobSigner: process.env.STORAGE_CONNECTION ? blobSigner(process.env.STORAGE_CONNECTION) : null,
   // logos stay in the page's own data link here: nothing is saved
   putBrand: async (_name, buf, type) => `data:${type};base64,${buf.toString('base64')}`,

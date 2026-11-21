@@ -79,6 +79,9 @@ learn/assess.js
 learn/judgement.js
 learn/govern.js
 learn/obstacles.js
+learn/assistant.js
+learn/assistant-md.js
+learn/voice.js
 learn/obstacle-anim.js
 learn/obstacle-scenes.js
 learn/video.js

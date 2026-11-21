@@ -74,7 +74,7 @@ function createGovern(ctx) {
     ];
   }
   const ruleView = (r, doc, open = 0) => r && ({ key: r.rule_key, id: r.rule_id, versionNo: r.version_no, programmeId: r.programme_id, docId: r.doc_id, section: r.section, title: r.title,
-    excerpt: r.excerpt, citation: r.citation, effectiveDate: r.effective_date, ruleState: r.state, changeNote: r.change_note, createdAt: r.created_at, approvedAt: r.approved_at,
+    excerpt: r.excerpt, body: r.body || '', chapter: r.chapter || '', citation: r.citation, effectiveDate: r.effective_date, ruleState: r.state, changeNote: r.change_note, createdAt: r.created_at, approvedAt: r.approved_at,
     docTitle: doc?.title || '', docApproval: doc?.approval || '', openReviews: open,
     state: open ? 'under_review' : doc?.approval === 'baseline' ? 'baseline' : r.state, stateText: open ? 'Under review' : doc?.approval === 'baseline' ? DOC_STATE.baseline : r.state });
   /** the rules a lesson's slides or a question cite, with their state, for the rule chips */
@@ -103,10 +103,11 @@ function createGovern(ctx) {
     const byId = new Map();
     for (const r of rows) { const had = byId.get(r.rule_id); if (!had || r.state === 'approved' || (had.state !== 'approved' && r.version_no > had.version_no)) byId.set(r.rule_id, r); }
     const drafts = new Set(rows.filter((r) => r.state === 'draft' && byId.get(r.rule_id) !== r).map((r) => r.rule_id));
-    const sortKey = (s) => s.split('.').map((n) => String(n).padStart(4, '0')).join('.');
+    // by document (the rulebook, then the SOP, then the slides), then section
+    const sortKey = (r) => `${r.doc_id}|${r.section.split(/[.-]/).map((n) => String(n).padStart(4, '0')).join('.')}`;
     return reply(200, {
       documents: docs.map((d) => ({ id: d.doc_id, title: d.title, edition: d.edition, approval: d.approval, approvalText: DOC_STATE[d.approval] || d.approval, note: d.note })),
-      rules: [...byId.values()].sort((a, b) => sortKey(a.section).localeCompare(sortKey(b.section))).map((r) => ({ ...ruleView(r, docs.find((d) => d.doc_id === r.doc_id), r.open_reviews), links: r.links, draftChange: drafts.has(r.rule_id) })),
+      rules: [...byId.values()].sort((a, b) => sortKey(a).localeCompare(sortKey(b))).map((r) => ({ ...ruleView(r, docs.find((d) => d.doc_id === r.doc_id), r.open_reviews), links: r.links, draftChange: drafts.has(r.rule_id) })),
       can: { draft: P.can(w.grants, 'content.draft', { programmeId: pid }), approve: P.can(w.grants, 'content.approve', { programmeId: pid }) },
     });
   }

@@ -34,14 +34,33 @@ function filterRules() {
   history.replaceState(null, '', `${path}${p.toString() ? `?${p}` : ''}`);
 }
 
+// the list, under each document's chapter headings (21 November 2026: the full rulebook and SOP are in it); the search looks through
+// every rule's full text, and hides the headings while it does
+function ruleRows(d) {
+  let doc = '', chapter = '';
+  const rows = d.rules.map((r) => {
+    let head = '';
+    if (r.docId !== doc) { doc = r.docId; chapter = ''; head += `<li class="ruleGroup ruleDoc" aria-hidden="true">${esc(r.docTitle)}</li>`; }
+    if (r.chapter && r.chapter !== chapter) { chapter = r.chapter; head += `<li class="ruleGroup" aria-hidden="true">${esc(r.chapter)}</li>`; }
+    return `${head}<li data-q="${esc(fold([r.section, r.id, r.title, r.excerpt, r.body, r.chapter, r.docTitle, r.stateText].join(' ')))}"><a href="#/rules/${encodeURIComponent(r.id)}"><b>${esc(r.section)} ${esc(r.title)}</b><small>${esc(r.id)} · v${r.versionNo}${r.draftChange ? ' · a change is drafted' : ''}</small>${atObstacles(r.id).length ? `<small>${esc(t('Applies at: {list}', { list: atObstacles(r.id).map((o) => t(o.title)).join(', ') }))}</small>` : ''}<small class="ruleExcerpt">${esc(r.excerpt)}</small></a>${stateBadge(r)}</li>`;
+  });
+  return rows.join('') || '<li class="muted">None yet.</li>';
+}
+// a section's full text as paragraphs, each lettered or numbered point on a line of its own ("a) Competitor Instructions 1. Stand …")
+export function ruleText(body) {
+  const lines = String(body || '').replace(/\s+(?=(?:[a-h]|i{1,3}|iv|vi{0,3}|ix|x)\)\s)/g, '\n').replace(/\s+(?=\d{1,2}\.\s+[A-Z“"])/g, '\n')
+    .split(/\n+/).map((x) => x.trim()).filter(Boolean);
+  return lines.map((l) => `<p${/^(?:[a-h]|i{1,3}|iv|vi{0,3}|ix|x)\)\s/.test(l) ? ' class="pt"' : /^\d{1,2}\.\s/.test(l) ? ' class="pt2"' : ''}>${esc(l)}</p>`).join('');
+}
+
 async function rulesView(rest) {
   if (rest) return ruleView(rest);
   const q = new URLSearchParams(location.hash.split('?')[1] || ''), pid = q.get('programme') || 'ocr-referee';
   const d = await call(`rules?programme=${encodeURIComponent(pid)}`);
-  return `<section class="card"><h1>Rule references</h1><p class="note">The sections of the source documents that lessons and questions teach. Each change is a new version, approved before it's current, and flags everything that cites it for review.</p>
+  return `<section class="card"><h1>Rule references</h1><p class="note">Spartan's 2026 Rules of Competition and Officiating SOP in full, section by section, with what lessons and questions teach from them. Each change is a new version, approved before it's current, and flags everything that cites it for review.</p>
       <details class="docsBox"><summary>The source documents (${d.documents.length})</summary><ul class="plain docList">${d.documents.map((x) => `<li><b>${esc(x.title)} ${esc(x.edition)}</b> ${badge(x.approval === 'baseline' ? 'preview' : x.approval, x.approvalText)}<br><small class="muted">${esc(x.note)}</small></li>`).join('')}</ul></details>
       <div class="ruleSearch"><input type="search" id="ruleQ" value="${esc(q.get('q') || '')}" placeholder="Search: a number, a name or any words" aria-label="Search the rules" aria-controls="ruleList" autocomplete="off" enterkeyhint="search"><span class="muted" id="ruleCount" aria-live="polite"></span></div>
-      <ul class="rowList ruleList" id="ruleList">${d.rules.map((r) => `<li data-q="${esc(fold([r.section, r.id, r.title, r.excerpt, r.docTitle, r.stateText].join(' ')))}"><a href="#/rules/${encodeURIComponent(r.id)}"><b>${esc(r.section)} ${esc(r.title)}</b><small>${esc(r.id)} · v${r.versionNo} · ${r.draftChange ? ' · a change is drafted' : ''}</small>${atObstacles(r.id).length ? `<small>${esc(t('Applies at: {list}', { list: atObstacles(r.id).map((o) => t(o.title)).join(', ') }))}</small>` : ''}<small class="ruleExcerpt">${esc(r.excerpt)}</small></a>${stateBadge(r)}</li>`).join('') || '<li class="muted">None yet.</li>'}</ul>
+      <ul class="rowList ruleList" id="ruleList">${ruleRows(d)}</ul>
       <p class="muted" id="ruleNone" hidden>No rule matches that. Try fewer words, or a section number such as 3.17.</p></section>`;
 }
 // where a rule applies, in words (20 November 2026): the obstacles it's about, then the lessons that teach it and the questions that test
@@ -70,7 +89,8 @@ async function ruleView(id) {
   const draft = d.versions.find((v) => v.ruleState === 'draft');
   return `<section class="card"><p class="crumbs"><a href="#/rules?programme=${esc(r.programmeId)}">Rule references</a></p>
       <h1>${esc(r.section)} ${esc(r.title)}</h1><p class="badges">${stateBadge(r)}${badge('draft', `v${r.versionNo}`)}</p>
-      <blockquote class="excerpt">${esc(r.excerpt)}</blockquote><p class="note">${esc(r.citation)}${r.effectiveDate ? ` · effective ${esc(day(r.effectiveDate))}` : ''}</p></section>
+      ${r.chapter ? `<p class="muted">${esc(r.docTitle)} › ${esc(r.chapter)}</p>` : ''}
+      ${r.body ? `<div class="ruleBody">${ruleText(r.body)}</div>` : `<blockquote class="excerpt">${esc(r.excerpt)}</blockquote>`}<p class="note">${esc(r.citation)}${r.effectiveDate ? ` · effective ${esc(day(r.effectiveDate))}` : ''}</p></section>
     ${d.reviews.length ? `<section class="card"><h2>Review items</h2><ul class="rowList">${d.reviews.map((i) => `<li><span><b>${esc(i.title)}</b><small>${esc(KIND[i.kind])} · ${esc(day(i.createdAt))}${i.resolution ? ` · ${esc(i.resolution)}` : ''}</small></span>${badge(i.state)}</li>`).join('')}</ul><p class="note"><a href="#/reviews?programme=${esc(r.programmeId)}">All review items</a></p></section>` : ''}
     ${whereItApplies(r, d.links)}
     <section class="card"><h2>Versions</h2><ul class="rowList">${d.versions.map((v) => `<li><span><b>v${v.versionNo}: ${esc(v.title)}</b><small>${esc(v.ruleState)} · ${esc(day(v.createdAt))}${v.changeNote ? ` · ${esc(v.changeNote)}` : ''}</small></span>

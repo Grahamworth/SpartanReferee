@@ -10,6 +10,7 @@ const { createMicrosoftSignIn } = require('./microsoft-signin');
 const { createPayments } = require('./payments');
 const { dbFromEnv } = require('./learn/db');
 const { createMailer } = require('./mailer');
+const { createAi } = require('./assistant-ai');
 
 // Settings: GOOGLE_CLIENT_ID (the web client for Google sign-in), SESSION_SECRET (signs session tokens), ADMIN_EMAILS (comma separated),
 // CIAM_SUBDOMAIN, CIAM_TENANT_ID, CIAM_CLIENT_ID (email sign-in; none is a secret), MICROSOFT_CLIENT_ID (Sign in with Microsoft; not a secret),
@@ -34,6 +35,10 @@ const getApi = () => (api = api || createApi({
   // email: invites, sign-in codes and reminders (Azure Communication Services: EMAIL_CONNECTION, a secret; EMAIL_FROM)
   mailer: createMailer({ connection: process.env.EMAIL_CONNECTION, from: process.env.EMAIL_FROM }),
   siteUrl: 'https://brave-forest-022879f03.3.azurestaticapps.net',
+  // the Assistant: its models on Azure AI Foundry (ASSISTANT_ENDPOINT, ASSISTANT_KEY a secret, ASSISTANT_MODEL, ASSISTANT_EMBED) and its
+  // knowledge in the storage account's private "assistant" container (scripts/assistant-index.mjs)
+  assistantAi: createAi({ endpoint: process.env.ASSISTANT_ENDPOINT, key: process.env.ASSISTANT_KEY, model: process.env.ASSISTANT_MODEL || 'luna', embedModel: process.env.ASSISTANT_EMBED || 'embed' }),
+  assistantIndex: blobSigner(process.env.STORAGE_CONNECTION, 'assistant'),
 }));
 
 app.http('api', {

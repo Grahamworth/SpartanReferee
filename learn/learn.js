@@ -23,8 +23,9 @@ import * as invites from './invites.js';
 import * as tracking from './tracking.js';
 import * as authoring from './authoring.js';
 import * as obstacles from './obstacles.js';
+import * as assistant from './assistant.js';
 
-const AREAS = [programmes, people, lesson, assess, govern, reports, diagnostics, saved, home, events, sharp, invites, tracking, authoring, obstacles];
+const AREAS = [programmes, people, lesson, assess, govern, reports, diagnostics, saved, home, events, sharp, invites, tracking, authoring, obstacles, assistant];
 const views = Object.assign({}, ...AREAS.map((a) => a.views));
 
 async function draw() {

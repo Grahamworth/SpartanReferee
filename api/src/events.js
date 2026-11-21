@@ -160,6 +160,8 @@ function createEvents({ store, now = Date.now, reply, fetcher = (u) => fetch(u, 
   const get = async (id) => { const ev = await store.get('event', String(id || '')); return ev || null; };
   return {
     sync, fresh, upcoming, get,
+    /** every event kept: upcoming ones and those that ended in the last week (the Assistant's past events) */
+    async all() { return (await store.list('event')).map(view); },
     async events(method) { if (method !== 'GET') return reply(405, { error: 'Not allowed' }); await fresh(); return listReply(); },
     async adminSync(method) { if (method !== 'POST') return reply(405, { error: 'Not allowed' }); await sync(); return listReply(); },
   };

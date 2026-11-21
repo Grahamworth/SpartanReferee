@@ -167,6 +167,42 @@ store update. The site's service worker keeps saved lessons, rules and the handb
 `docs/apps/stores.md` is the checklist for publishing: accounts and their costs, store forms, the reviewer's sign-in, privacy
 answers, risks at review and known gaps.
 
+### The Assistant (21 November 2026)
+
+**Assistant** on Home (`#/assistant`, `learn/assistant.js`) answers a referee's questions, typed or spoken, in their language:
+- an obstacle: what to do, what passes and what fails, with a link to it in Obstacles;
+- a rule: the answer with the rule cited and linked in Rules;
+- a lesson: the answer with the lesson quoted word for word and linked;
+- events: upcoming, recent (kept a week after they end) and the referee's own, with links to their pages;
+- an athlete the cameras filmed: by bib number, a link to Results (`results.html?bib=&day=&athlete=`) that plays their video.
+Where the 2026 sources disagree (an open review item) it gives each one and says the Head Referee decides. Asked by voice, it answers
+by voice too; "Read answers aloud" makes that the rule.
+
+How it works (`api/src/assistant.js`, `api/src/assistant-ai.js`):
+- **Models:** Azure AI Foundry resource `spartanreferee-ai` (rg-spartanreferee-uksouth, UK South) with two deployments: `luna`
+  (OpenAI's gpt-6-luna, Global Standard, pay as you go: about £0.075 per million input tokens, a tenth of that cached, £0.38 output)
+  and `embed` (text-embedding-3-small). Site settings: `ASSISTANT_ENDPOINT`, `ASSISTANT_KEY` (a secret), `ASSISTANT_MODEL`,
+  `ASSISTANT_EMBED`. Luna answers through the Responses API with `store: false` (nothing kept at Azure) and low reasoning effort.
+  Global Standard means Azure may process a question in any of its regions.
+- **Knowledge, embedded ahead of time:** `source scripts/learn-env.sh && node scripts/assistant-index.mjs learn` turns every rule and
+  SOP section, every obstacle (`learn/obstacles.js`), every published English lesson slide and the open review items into vectors,
+  into the storage account's private `assistant` container (`<schema>/index.json`). Run it again after rules or lessons change (the
+  API rereads it every 10 minutes). Assessment questions are left out on purpose. A question is embedded, its closest passages go
+  to Luna, and Luna can search for more, list events (`find_events`) and find camera results (`camera_results`) with the asker's
+  own rights.
+- **Voice:** Azure AI Speech (`LEARN_SPEECH_*`, the free tier the narration uses): the page records a 16 kHz WAV
+  (`learn/voice.js`), `POST /api/assistant/listen` makes it text, `POST /api/assistant/speak` reads an answer aloud.
+- **Who and how much:** Config (`customers.html`) has the Assistant's card: on for nobody (admins only), chosen people (who have
+  signed in once) or every referee; the monthly limit (£50 to start) and this month's spend. Admins can always use it. At the limit it
+  stops for everyone until the 1st. Only each question's cost is kept (`assistant_usage`): never the question or the answer.
+  Migration 012 has the tables; a person's export lists their use, erasing them removes their access.
+
+**The full rulebook in Rules.** `scripts/learn-rulebook-parse.mjs` splits Spartan's 2026 Rules of Competition (PDF) and Officiating
+SOP (Word) from `material/` into numbered sections; `node scripts/learn-rulebook.mjs learn` puts them into Rules (`rule_ref.body`,
+with the chapter), approved as the 2026 baseline. The references lessons already cite keep their excerpt and version and gain the
+full text. The text lives in the database and the private index only, never in git. Rules lists them under chapter headings, and
+search looks through the full text. The rule text is English in every language for now.
+
 ### Keeping sharp: quick checks, refreshers, streak and badges
 
 Added 19 November 2026. The server side is `api/src/learn/checks.js` (migration `006-checks.sql`) and the pages are in `learn/sharp.js`. All of it is practice: none of it counts towards a credential, which only the assessment gives.

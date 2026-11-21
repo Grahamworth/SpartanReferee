@@ -19,6 +19,7 @@ const { createServers } = require('./servers');
 const { createEvents } = require('./events');
 const { createLearn } = require('./learn');
 const { createAssignments } = require('./assignments');
+const { createAssistant } = require('./assistant');
 const { layout } = require('./mailer');
 
 const CORS = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Authorization, Content-Type, X-Session, X-Device, X-Admin-Key, X-Server-Key', 'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS' };
@@ -27,7 +28,7 @@ const CORS = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers
  * verifyGoogle(idToken) -> {sub, email, name, picture} (throws when invalid); secret signs our own session tokens.
  * adminEmails: Google accounts that are admins. While neither adminEmails nor adminKey is set, everyone is (the prototype).
  */
-function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], verifyGoogle = null, emailSignIn = null, microsoftSignIn = null, payments = null, secret = '', googleClientId = '', blobSigner = null, fetchFn = undefined, putBrand = null, maxRunningServers = 1, serverHourPrice = 0.66, eventFetcher = null, bookingUnits = true, learnDb = null, learnSpeech = null, learnMedia = null, mailer = null, siteUrl = '' }) {
+function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], verifyGoogle = null, emailSignIn = null, microsoftSignIn = null, payments = null, secret = '', googleClientId = '', blobSigner = null, fetchFn = undefined, putBrand = null, maxRunningServers = 1, serverHourPrice = 0.66, eventFetcher = null, bookingUnits = true, learnDb = null, learnSpeech = null, learnMedia = null, mailer = null, siteUrl = '', assistantAi = null, assistantIndex = null }) {
   const reply = (status, body) => ({ status, body, headers: { 'Content-Type': 'application/json', ...CORS } });
   const admins = adminEmails.map((e) => String(e).trim().toLowerCase()).filter(Boolean);
   // session tokens: base64url(payload).HMAC
@@ -223,6 +224,9 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
     onLanguage: learn ? async (email, language) => { await (learnReady || learnDb.migrate()); await learn.setLocale(email, language); } : null,
     // a regional coordinator manages the events in their regions' countries (their roles are in the learning database)
     scopeOf: learn ? async (email, preview) => { await learnUp(); return learn.scopeOf(email, preview); } : async () => ({ countries: [] }) });
+  // the Assistant (/api/assistant, 21 November 2026): its settings and costs in the learning database, its knowledge in storage
+  const assistant = learnDb && assistantAi && assistantIndex ? createAssistant({ db: learnDb, ai: assistantAi, indexSigner: assistantIndex, member: learnMember, session, reply,
+    events: eventList, myEvents: (h) => assignments.myEvents(h), manageEvents: (h, q) => assignments.manageList(h, q), recordings, speech: learnSpeech, now }) : null;
   const { companies, adminCompanies, referees } = createCompanies({ store, now, reply, session, isAdmin, putBrand, membership, onBlocked: stopCompany });
 
   async function handle({ method, path, headers = {}, body, query: extraQuery = {} }) {
@@ -280,6 +284,10 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
           try { learnReady = learnReady || learnDb.migrate().catch((e) => { learnReady = null; throw e; }); await learnReady; r = await learn.handle(method, parts, body, h, query); }
           catch (e) { if (!e.waking) { learn.noteError(e, method, pathOnly); throw e; } learn.noteWaking(); r = reply(503, { error: 'The learning platform is waking up after a quiet spell: try again in a minute' }); }
         }
+      }
+      if (parts[0] === 'assistant' && parts.length <= 3) {
+        if (!assistant) r = reply(503, { error: 'The Assistant isn’t set up yet' });
+        else { try { await learnUp(); r = await assistant.handle(method, parts, body, h); } catch (e) { if (!e.waking) throw e; r = reply(503, { error: 'The Assistant is waking up after a quiet spell: try again in a minute' }); } }
       }
       if (parts[0] === 'companies' && parts.length <= 3) r = await companies(method, parts[1], parts[2], body, h);
       return r || reply(404, { error: 'not found' });

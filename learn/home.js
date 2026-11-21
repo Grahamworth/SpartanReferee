@@ -5,6 +5,7 @@ import { $, S, call, esc, t, bar, day, has, isAdmin } from './core.js';
 import { call as siteCall } from '../api-base.js';
 import { viaCache } from '../offline.js';
 import { badgeIcon } from './sharp.js';
+import { assistantStatus } from './assistant.js';
 
 const lang = () => (window.SR_I18N && SR_I18N.lang) || undefined;
 const dayOf = (d) => new Date(`${d}T12:00:00Z`);
@@ -18,6 +19,9 @@ export const eventRow = (e, now = Date.now()) => `<li><a href="#/events/${encode
   <span class="chips">${e.role === 'head' ? '<span class="chip head">Head referee</span>' : '<span class="chip">Referee</span>'}${e.from && e.from <= now && now < e.until ? '<span class="chip now">On now</span>' : ''}${e.canBook ? '<span class="chip">Books the cameras</span>' : ''}</span></span>${ARROW}</a></li>`;
 const overdue = (due) => due && due < new Date().toISOString().slice(0, 10);
 
+// the Assistant's button (21 November 2026): for whoever it's switched on for (learn/assistant.js)
+const ASK_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4V5z"/><path d="M9 9.5h6M9 12.5h4"/></svg>';
+
 async function homeView() {
   const p = S.me.person;
   const [home, prog, rec] = await Promise.all([
@@ -25,6 +29,7 @@ async function homeView() {
     call('progress').catch(() => null),
     call(`people/${encodeURIComponent(p.id)}/record`).catch(() => null),
   ]);
+  const helper = S.me.actingAs ? null : await assistantStatus().catch(() => null);
   const earned = (prog?.badges || []).filter((b) => b.earned);
   const events = S.me.actingAs ? [] : home?.events || [];
   const next = events[0];
@@ -38,6 +43,7 @@ async function homeView() {
     isAdmin() ? ['#/config', 'Config'] : null,
   ].filter(Boolean);
   return `<section class="homeHello"><h1>${esc(p.preferredName || p.legalName)}</h1>
+      ${helper?.allowed ? `<a class="btnLink primaryLink homeAssistant" href="#/assistant">${ASK_ICON}<span>${esc(t('Assistant'))}</span></a>` : ''}
       ${earned.length ? `<a class="homeBadges" href="#/badges" aria-label="${esc(t('Your badges'))}">${earned.slice(-10).map((b) => badgeIcon(b, 'sm')).join('')}</a>` : ''}</section>
     <section class="card"><h2>Your next event</h2>
       ${next ? `<ul class="events">${eventRow(next)}</ul>${events.length > 1 ? `<p class="note"><a href="#/events">${esc(t(events.length === 2 ? 'And 1 more event' : 'And {n} more events', { n: events.length - 1 }))}</a></p>` : ''}`

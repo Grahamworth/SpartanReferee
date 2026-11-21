@@ -377,7 +377,15 @@ async function enter() {
     const [results, recs] = await Promise.all([call('recordings/results'), call('recordings')]);
     data = { athletes: results.athletes, numbers: results.numbers, sources: results.sources, merged: results.merged || [], deep: results.deep || [], recordings: recs.recordings };
     $('keepNote').textContent = `Your recordings, athletes and numbers for the last ${results.keepDays} days. Download anything you want to keep: after ${results.keepDays} days it's deleted.`;
-    fillFilters(); draw(); drawDeep(); show($('content'), true);
+    fillFilters();
+    // a link from the Assistant (21 November 2026): results.html?bib=123&day=2026-11-20&athlete=<server>~<n> opens on that athlete's
+    // number and day, and plays their video
+    const p = new URLSearchParams(location.search), wantDay = p.get('day') || '';
+    if (p.get('bib')) $('find').value = p.get('bib').replace(/\D/g, '').slice(0, 8);
+    if (wantDay && [...$('day').options].some((o) => o.value === wantDay)) $('day').value = wantDay;
+    draw(); drawDeep(); show($('content'), true);
+    const watch = p.get('athlete') && [...document.querySelectorAll('[data-watch]')].find((b) => b.dataset.watch === p.get('athlete'));
+    if (watch) { watch.scrollIntoView({ block: 'center' }); watch.click(); }
     requestAnimationFrame(drawTrack);
   } catch (e) { fail(e.message); }
 }

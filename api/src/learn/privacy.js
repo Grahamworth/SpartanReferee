@@ -34,6 +34,9 @@ function createPrivacy(ctx) {
       practice: await q('SELECT check_key, programme_id, box, answered, right_count, last_right, last_at, due_at FROM {S}.check_state WHERE person_id = @p'),
       learningDays: (await q('SELECT day FROM {S}.learning_day WHERE person_id = @p ORDER BY day')).map((r) => r.day),
       badges: await q('SELECT badge_id, programme_id, earned_at FROM {S}.badge WHERE person_id = @p'),
+      // the Assistant: whether it's on for them, and when they used it (what they asked is never kept)
+      assistantAccess: await q('SELECT added_at FROM {S}.assistant_access WHERE person_id = @p'),
+      assistantUse: await q('SELECT at, kind, cost_gbp FROM {S}.assistant_usage WHERE person_id = @p ORDER BY at'),
       audit: parse(await q("SELECT at, action, entity_type, entity_id, summary FROM {S}.audit_event WHERE actor_id = @p OR acting_as = @p OR (entity_type = 'person' AND entity_id = CONVERT(NVARCHAR(64), @p)) ORDER BY audit_id"), ['summary']),
     };
     await audit(db.query, w, 'person.export', 'person', p.person_id, { by: self ? 'themselves' : 'an admin' }, { regionId: p.region_id });
@@ -54,6 +57,9 @@ function createPrivacy(ctx) {
       await q('DELETE FROM {S}.lesson_progress WHERE person_id = @p', { p: p.person_id });
       // practice, the streak and badges: not part of the learning record
       for (const t of ['check_state', 'learning_day', 'badge']) await q(`DELETE FROM {S}.${t} WHERE person_id = @p`, { p: p.person_id });
+      // the Assistant: no longer on for them; what they used it for stays in the month's spending, with no one named
+      await q('DELETE FROM {S}.assistant_access WHERE person_id = @p', { p: p.person_id });
+      await q('UPDATE {S}.assistant_usage SET person_id = NULL WHERE person_id = @p', { p: p.person_id });
       await q("UPDATE {S}.duplicate_flag SET state = 'not_duplicate' WHERE (person_a = @p OR person_b = @p) AND state = 'open'", { p: p.person_id });
       await audit(q, w, 'person.erase', 'person', p.person_id, { publicId: p.public_id }, { regionId: p.region_id });
     });
