@@ -234,17 +234,3 @@ if (photosEl) photosEl.innerHTML = PHOTOS.map((ph) => {
   return `<figure class="photo"><div class="obWorld photoPic"><svg viewBox="${f1(x)} ${f1(y)} ${w} ${h}" role="img" aria-label="Action photo: ${ph.name}">${sc.back(s, new Set(), P, 0)}${figure(P)}${sc.front ? sc.front(s, new Set(), P, 0) : ''}</svg></div>
     <img class="photoLogo" src="../icons/spartanreferee/logo-red.png" alt=""><figcaption><b>${ph.bib} · ${ph.name}</b><span>${ph.line}</span></figcaption></figure>`;
 }).join('');
-
-// ------------------------------------------------------------------------------------------------ the tabs: Refereeing and Marketing
-const TABS = [['tabMktBtn', 'tabMkt'], ['tabRefBtn', 'tabRef']];
-const showTab = (panel, scroll) => {
-  for (const [b, p] of TABS) { const on = p === panel; document.getElementById(b).classList.toggle('on', on); document.getElementById(b).setAttribute('aria-selected', String(on)); document.getElementById(p).hidden = !on; }
-  if (scroll) document.querySelector('.demoTabs').scrollIntoView({ block: 'start' });
-  light();
-};
-const panelOf = (hash) => { try { return document.querySelector(`#tabRef ${hash}`) ? 'tabRef' : 'tabMkt'; } catch { return 'tabMkt'; } };
-for (const [b, p] of TABS) document.getElementById(b)?.addEventListener('click', () => { history.replaceState(null, '', p === 'tabMkt' ? '#marketing' : '#burpee'); showTab(p, true); });
-// Live photo shots first; a link straight to a refereeing section opens that tab
-if (location.hash && location.hash !== '#marketing' && location.hash !== '#summary') showTab(panelOf(location.hash), false);
-for (const a of document.querySelectorAll('.demoNav a')) a.addEventListener('click', () => { const want = panelOf(a.getAttribute('href')); if (document.getElementById(want).hidden) showTab(want, false); });
-addEventListener('hashchange', () => { const want = panelOf(location.hash); if (location.hash && document.getElementById(want).hidden) { showTab(want, false); document.querySelector(location.hash)?.scrollIntoView(); } });
