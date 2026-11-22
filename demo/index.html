@@ -27,7 +27,11 @@
     <p>Cameras watch the obstacle. An AI judge counts, checks and flags. Referees stay in charge, and everyone sees the result live.</p>
   </section>
 
-  <nav class="demoTabs" aria-label="Demo areas"><a class="on" href="#burpee" aria-current="page">Refereeing</a><span class="soon">More areas soon</span></nav>
+  <div class="demoTabs" role="tablist" aria-label="Demo areas">
+    <button type="button" role="tab" id="tabRefBtn" aria-controls="tabRef" aria-selected="true" class="on">Refereeing</button>
+    <button type="button" role="tab" id="tabMktBtn" aria-controls="tabMkt" aria-selected="false">Marketing</button>
+  </div>
+  <div class="tabPanel" id="tabRef" role="tabpanel" aria-labelledby="tabRefBtn">
 
   <!-- ====================================================================== the burpee zone: the flagship -->
   <section class="card demoSec" id="burpee">
@@ -49,12 +53,12 @@
 
   <!-- ====================================================================== the Atlas Carry -->
   <section class="card demoSec" id="atlas">
-    <p class="kicker">Obstacle</p>
+    <p class="kicker">Obstacle · Rule 4.1.3</p>
     <h2>Atlas Carry</h2>
     <ul class="ticks">
-      <li>Confirms the stone is <b>lifted clear</b> of the ground.</li>
-      <li>Confirms it is <b>carried, not rolled</b>.</li>
-      <li>Counts the <b>halfway burpees</b> to the same standard as the Burpee Zone.</li>
+      <li>Confirms the stone is <b>lifted clear</b> of the ground and <b>carried, never rolled</b>.</li>
+      <li>Confirms it went <b>past the far flags</b> and was <b>placed back at the start</b>.</li>
+      <li>If it's put down, <b>pins the exact spot</b> and checks it's picked up from there.</li>
     </ul>
     <div id="atlasAnim"></div>
   </section>
@@ -115,7 +119,29 @@
       <li><b>Go live</b><p>The AI's counts become the result, with the referee able to overrule. The leaderboard and YouTube stream go public, and more kits follow for more events.</p></li>
     </ol>
   </section>
-  <p class="demoFoot muted">A prototype by SpartanReferee. The animations show what the AI checks; the athletes and bib numbers are invented.</p>
+  </div>
+
+  <!-- ====================================================================== marketing: action photos, taken by the same cameras -->
+  <div class="tabPanel" id="tabMkt" role="tabpanel" aria-labelledby="tabMktBtn" hidden>
+  <section class="card demoSec" id="marketing">
+    <p class="kicker">Marketing</p>
+    <h2>Action photos, automatically</h2>
+    <p class="lead">The cameras that referee also take the photos. The AI picks every athlete's best moment on each obstacle and sends it to them, with their name on it.</p>
+    <div class="notif" aria-hidden="true"><img src="../icons/spartanreferee/logo-red.png" alt=""><div><b>Spartan Race</b><span>Your 3 action photos are ready. Tap to see and share them.</span></div><small>now</small></div>
+    <div class="photos" id="photos"></div>
+    <h3>How it works</h3>
+    <ul class="ticks">
+      <li><b>The best moment, picked by the AI.</b> The bell strike, the stone held high, the top of a burpee jump: sharp, face visible, from the 4K video.</li>
+      <li><b>Matched by the timing chip.</b> Each photo goes to the right athlete, with no photographer at every obstacle.</li>
+      <li><b>Straight to their phone</b> with their result, framed in Spartan branding (and a sponsor's, if wanted), ready to share.</li>
+      <li><b>A library for Spartan.</b> Action shots from every event and every obstacle, for social media, sponsors and the stream's highlights.</li>
+      <li><b>Could earn its keep.</b> Free with the result, or a photo pack to buy.</li>
+      <li><b>Privacy first.</b> Only for athletes who agree when they register; nobody else's photo is sent or shared.</li>
+    </ul>
+    <p class="note">No extra hardware: the same cameras and AI judge as the refereeing.</p>
+  </section>
+  </div>
+  <p class="demoFoot muted">A prototype by SpartanReferee. The animations and photos are drawn to show what the AI does; the athletes and bib numbers are invented.</p>
 </main>
 
 <nav class="demoNav" aria-label="Jump to">

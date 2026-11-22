@@ -1,69 +1,17 @@
 // The AI demo for Spartan's leadership (22 November 2026): what cameras and an AI judge can referee, and how it works. The obstacle
 // animations are the learning platform's (learn/obstacle-anim.js and obstacle-scenes.js); over them goes what the AI sees: the pose it
 // tracks, boxes on the stone or chain, the checks it ticks off, and what it would flag to a referee.
-import { G, HIP, timeline, stand, walk, fly, sample, solve, figure, ln, rc, ci, pg, tx, ground, hl } from '../learn/obstacle-anim.js';
+import { G, sample, solve, figure } from '../learn/obstacle-anim.js';
 import { SCENES } from '../learn/obstacle-scenes.js';
 
-const D = Math.PI / 180;
 const f1 = (v) => (+v).toFixed(1);
-const shoulder = (s) => [s.x + Math.sin(s.a * D) * Math.max(-1, Math.min(1, s.f * 1.5)) * 29, s.y - Math.cos(s.a * D) * 29];
 const CM = (px) => Math.round((px / 52) * 100); // 52 px to a metre
 
-// ------------------------------------------------------------------------------------------------ the Atlas Carry, with the halfway burpees
-// out to the halfway marker carrying the stone, put it down, 5 burpees, back with it; the fail rolls it instead
-const R = 11;
-function atlasScene() {
-  const START = 60, MID = 300;
-  const on = (s) => { const sh = shoulder(s); return { lh: [sh[0] + s.f * 19, sh[1] + 22], rh: [sh[0] + s.f * 11, sh[1] + 33], hold: 1 }; };
-  const squat = (x, f, objX) => ({ x, y: G - 26, a: 38, f, lf: [x - 6 * f, G], rf: [x + 7 * f, G], lh: [objX - 4, G - R * 2 + 2], rh: [objX + 4, G - R * 2] });
-  const pick = (o, x, f, objX) => o.to(0.45, squat(x, f, objX)).to(0.5, (s) => ({ ...stand(x, f), ...on({ ...s, ...stand(x, f) }) }));
-  const put = (o, x, f, objX) => o.to(0.05, { obj: [objX, G - R] }).to(0.45, squat(x, f, objX)).to(0.01, { hold: 0 }).to(0.4, stand(x, f));
-  const burpee = (o, X) => {
-    const plank = { x: X - 8, y: G - 20, a: 70, lh: [X + 18, G], rh: [X + 21, G], lf: [X - 44, G], rf: [X - 40, G], kp: [0, 1] };
-    o.to(0.25, { x: X - 4, y: G - 25, a: 55, lh: [X + 18, G], rh: [X + 21, G], lf: [X - 10, G], rf: [X - 2, G] });
-    o.to(0.22, plank).to(0.25, { y: G - 8, a: 88, ep: [-0.4, -1] }).to(0.25, { ...plank, ep: undefined });
-    o.to(0.14, { x: X - 6, y: G - 36, a: 122 });
-    o.to(0.22, { x: X - 2, y: G - 34, a: 45, lf: [X + 2, G], rf: [X + 9, G], lh: [X + 14, G - 40], rh: [X + 16, G - 38], kp: undefined });
-    o.to(0.22, { ...stand(X + 4), a: 0 });
-    const top = G - HIP - 18, sh = top - 29;
-    fly(o, { x: X + 4, y: top, a: 0, lh: [X + 1, sh - 31], rh: [X + 8, sh - 31], lf: [X + 2, G - 18], rf: [X + 9, G - 16] }, 18);
-    fly(o, { ...stand(X + 4), y: G - HIP + 2, lh: [X - 1, G - 70], rh: [X + 9, G - 72] });
-    return o.to(0.25, { ...stand(X - 4), f: 1 });
-  };
-  const good = () => {
-    const o = timeline({ ...stand(START - 30), obj: [START, G - R], hold: 0, spin: 0 }); o.ev = [];
-    pick(o, START - 13, 1, START); o.ev.push({ t: o.end, k: 'lift' });
-    walk(o, MID - 13, { hands: on });
-    put(o, MID - 13, 1, MID); o.ev.push({ t: o.end, k: 'down' });
-    walk(o, MID - 46, {}); o.to(0.25, { ...stand(MID - 46), f: 1 });
-    for (let i = 1; i <= 5; i++) { burpee(o, MID - 42); o.ev.push({ t: o.end - 0.5, k: 'burpee', n: i }); }
-    walk(o, MID - 13, {}); o.to(0.2, { f: 1 });
-    pick(o, MID - 13, 1, MID); o.ev.push({ t: o.end, k: 'lift' });
-    o.to(0.6, (s) => ({ f: -1, ...on({ ...s, f: -1 }) }));
-    walk(o, START + 13, { hands: on });
-    put(o, START + 13, -1, START); o.ev.push({ t: o.end, k: 'done' });
-    return o.hold(0.6);
-  };
-  const rolled = () => {
-    const o = timeline({ ...stand(START - 30), obj: [START, G - R], hold: 0, spin: 0 }); o.ev = [];
-    const h = (s) => ({ lh: [s.x + 16, G - 12], rh: [s.x + 18, G - 10], hold: 0, obj: [s.x + 28, G - R], spin: s.x * 4 });
-    o.to(0.5, (s) => ({ a: 32, y: G - 36, ...h(s) }));
-    walk(o, 150, { hands: h, lean: 32, v: 55 }); o.ev.push({ t: o.end, k: 'roll' });
-    walk(o, 240, { hands: h, lean: 32, v: 55 });
-    return o.to(0.4, (s) => ({ ...stand(s.x, 1) })).hold(0.8);
-  };
-  const stone = (s, P, bad) => {
-    const sh = P.sh, carried = [sh[0] + s.f * 13, sh[1] + 24];
-    const p = [s.obj[0] + (carried[0] - s.obj[0]) * s.hold, s.obj[1] + (carried[1] - s.obj[1]) * s.hold];
-    return { p, svg: `<circle class="${bad ? 'prMetal hlBad' : 'prMetal'}" cx="${f1(p[0])}" cy="${f1(p[1])}" r="${R}"/>${ln(p[0] - 6, p[1] - 3 + ((s.spin || 0) % 6), p[0] + 2, p[1] + 4, 'pr prThin')}` };
-  };
-  return {
-    stone,
-    back: () => `${ground()}${rc(START - 22, G - 3, 44, 3, 'prF')}${ln(MID + 22, G, MID + 22, G - 56, 'pr')}${pg([[MID + 22, G - 56], [MID + 40, G - 50], [MID + 22, G - 44]], 'prFlag')}${tx(MID - 6, G + 14, 'Halfway: 5 burpees')}`,
-    front: (s, H, P) => stone(s, P, H.has('item')).svg,
-    good: good(), fails: [rolled()],
-  };
-}
+// ------------------------------------------------------------------------------------------------ the Atlas Carry (rule 4.1.3)
+// the learning platform's own: from the start out past the far flags, turn, back; put down once on the way back and picked up from the
+// same spot; placed at the start. The fail rolls it. No burpees: that requirement was removed from the 2026 rules.
+const R = 11, START = 66, FLAG = 300;
+const stoneAt = (s, P) => { const c = [P.sh[0] + s.f * 13, P.sh[1] + 24]; return [s.obj[0] + (c[0] - s.obj[0]) * s.hold, s.obj[1] + (c[1] - s.obj[1]) * s.hold]; };
 
 // ------------------------------------------------------------------------------------------------ what the AI draws: the pose it tracks
 const BONES = (P) => [[P.head, P.sh], [P.sh, P.hip], [P.sh, P.la[1]], [P.la[1], P.la[2]], [P.sh, P.ra[1]], [P.ra[1], P.ra[2]], [P.hip, P.ll[1]], [P.ll[1], P.ll[2]], [P.hip, P.rl[1]], [P.rl[1], P.rl[2]]];
@@ -83,32 +31,37 @@ const bubble = (x, y, text, cls = '') => `<g class="aiBubble ${cls}"><rect x="${
 
 // ------------------------------------------------------------------------------------------------ the three demos: what the AI checks
 const ATLAS = {
-  scene: atlasScene,
+  scene: () => SCENES.atlas(),
   phases: ['Clean run', 'Fail: stone rolled'],
-  checks: [['lift', 'Stone lifted clear of the ground'], ['carry', 'Carried, not rolled'], ['burpees', 'Halfway burpees counted'], ['back', 'Carried back to the start']],
-  look({ s, P, time, tl, phase, memo, sc }) {
-    const bad = phase === 1, st = sc.stone(s, P, false), p = st.p, gap = G - (p[1] + R);
+  checks: [['lift', 'Stone lifted clear of the ground'], ['far', 'Carried past the far flags'], ['carry', 'Carried, never rolled'], ['spot', 'Put down, picked up from the same spot'], ['back', 'Placed back at the start']],
+  look({ s, P, phase, memo }) {
+    const p = stoneAt(s, P), gap = G - (p[1] + R), held = s.hold > 0.5;
     memo.lifted ||= gap > 3;
-    const moved = memo.lastX === undefined ? 0 : Math.abs(p[0] - memo.lastX); memo.lastX = p[0];
-    if (s.hold > 0.5 && gap > 3) memo.carried = (memo.carried || 0) + moved;
-    const rolling = bad && s.hold < 0.5 && moved > 0.2; memo.rolled ||= rolling && time > 1.2;
-    const ev = (k) => tl.ev.filter((e) => e.k === k && e.t <= time);
-    const n = ev('burpee').length, done = ev('done').length > 0, inBurpees = time >= (tl.ev.find((e) => e.k === 'down')?.t ?? 1e9) && time <= (tl.ev.find((e) => e.k === 'burpee' && e.n === 5)?.t ?? -1) + 0.6;
+    const moved = memo.lastX === undefined ? 0 : Math.abs(s.obj[0] - memo.lastX); memo.lastX = s.obj[0];
+    memo.rolled ||= phase === 1 && !held && moved > 0.2 && memo.lifted;
+    memo.far ||= memo.lifted && s.f < -0.2;
+    // put down on the way back: the AI pins the spot, and checks the pick-up is from it
+    if (memo.far && !held && !memo.rolled && s.obj[0] > START + 40 && memo.down === undefined) memo.down = s.obj[0];
+    if (memo.down !== undefined && held && memo.again === undefined) memo.again = Math.abs(s.obj[0] - memo.down) < 4;
+    const done = memo.far && !held && Math.abs(s.obj[0] - START) < 4 && memo.again !== undefined;
     const states = {
       lift: memo.lifted ? 'ok' : 'wait',
-      carry: memo.rolled ? 'bad' : (memo.carried || 0) > 60 ? 'ok' : s.hold > 0.5 ? 'live' : 'wait',
-      burpees: n >= 5 ? 'ok' : n > 0 || inBurpees ? 'live' : 'wait',
-      back: done ? 'ok' : 'wait',
+      far: memo.far ? 'ok' : held ? 'live' : 'wait',
+      carry: memo.rolled ? 'bad' : done ? 'ok' : held ? 'live' : 'wait',
+      spot: memo.again === true ? 'ok' : memo.again === false ? 'bad' : memo.down !== undefined ? 'live' : 'wait',
+      back: done ? 'ok' : memo.rolled ? 'bad' : 'wait',
     };
-    const vals = { lift: gap > 3 ? `+${CM(gap)} cm` : memo.lifted ? '' : 'on ground', burpees: bad ? '' : `${n} / 5`, carry: memo.rolled ? 'rolled' : '' };
+    const vals = { lift: gap > 3 ? `+${CM(gap)} cm` : '', carry: memo.rolled ? 'rolled' : '', spot: memo.down !== undefined && memo.again === undefined ? 'pinned' : '' };
     const say = memo.rolled ? 'The stone is turning on the ground and never leaves it: rolled, not carried. Flagged to the referee with the clip.'
-      : done ? 'Atlas Carry complete: lifted, carried both ways, 5 good burpees. Logged against the athlete\'s chip.'
-        : inBurpees ? `Burpee ${Math.max(n, 1)} of 5: chest to the ground, hips and knees extended, jump with hands above the ears.`
-          : gap > 3 ? `Stone held ${CM(gap)} cm off the ground and moving with the athlete: carried.`
-            : 'Watching the athlete and the stone.';
+      : done ? 'Atlas Carry complete: carried past the far flags and back, picked up from where it was put down, placed at the start.'
+        : memo.down !== undefined && memo.again === undefined ? 'The stone is down. The AI has pinned the spot: it must be picked up from exactly there.'
+          : memo.again ? 'Picked up from exactly where it was put down: carry on.'
+            : memo.far ? 'Past the far flags and turned: now back to the start.'
+              : gap > 3 ? `Stone held ${CM(gap)} cm off the ground and moving with the athlete: carried.` : 'Watching the athlete and the stone.';
+    const pin = memo.down !== undefined && (memo.again === undefined || held) ? `<g class="aiObj"><line class="aiGap" x1="${f1(memo.down)}" y1="${G + 2}" x2="${f1(memo.down)}" y2="${G - 34}"/>${bubble(memo.down, G - 36, 'SPOT PINNED')}</g>` : '';
     const overlay = `${pose(P, 'ATHLETE #1842', false)}${objBox(p, R, gap > 3 ? `STONE +${CM(gap)}cm` : memo.rolled ? 'STONE ROLLING' : 'STONE', memo.rolled)}
-      ${gap > 3 ? `<line class="aiGap" x1="${f1(p[0])}" y1="${f1(p[1] + R + 1)}" x2="${f1(p[0])}" y2="${G}"/>` : ''}
-      ${inBurpees ? bubble(P.head[0], P.head[1] - 22, `BURPEE ${Math.max(n, 1)}/5`) : ''}`;
+      ${gap > 3 ? `<line class="aiGap" x1="${f1(p[0])}" y1="${f1(p[1] + R + 1)}" x2="${f1(p[0])}" y2="${G}"/>` : ''}${pin}
+      ${memo.far ? '' : `<line class="aiFinish" x1="${FLAG + 6}" y1="${G + 4}" x2="${FLAG + 6}" y2="${G - 70}"/>`}`;
     return { states, vals, say, overlay, bad: memo.rolled, hl: memo.rolled ? ['item'] : [] };
   },
 };
@@ -264,3 +217,31 @@ addEventListener('scroll', light, { passive: true }); addEventListener('resize',
 // the zone picture opens full size
 document.querySelector('.zonePic')?.addEventListener('click', (e) => { e.preventDefault(); document.getElementById('zoneBig').showModal(); });
 document.getElementById('zoneBig')?.addEventListener('click', (e) => e.currentTarget.close());
+
+// ------------------------------------------------------------------------------------------------ marketing: the action photos
+// stills from the same animations at each obstacle's best moment, framed as the athlete would get them
+const firstAt = (tl, ok) => { for (let t = 0; t < tl.end; t += 0.04) { const s = sample(tl, t); if (ok(s, solve(s))) return t; } return tl.end / 2; };
+const markAt = (tl, re) => tl.marks.find((m) => !m.kind && re.test(m.text))?.t ?? tl.end / 2;
+const PHOTOS = [
+  { scene: () => SCENES.rope(), at: (tl) => markAt(tl, /bell/i) - 0.35, crop: (P) => [P.head[0] - 52, P.head[1] - 48, 120, 150], bib: '#3164', name: 'Rope Climb', line: 'Bell in 3.8 s' },
+  { scene: () => SCENES.atlas(), at: (tl) => firstAt(tl, (s) => s.hold > 0.99 && s.f > 0 && s.x > 170), crop: (P) => [P.hip[0] - 50, P.head[1] - 28, 120, 150], bib: '#1842', name: 'Atlas Carry', line: 'Stone lifted 75 cm' },
+  { scene: () => SCENES.burpee(), at: (tl) => markAt(tl, /jump/i), crop: (P) => [P.hip[0] - 60, P.head[1] - 52, 120, 150], bib: '#2076', name: 'Burpee Zone', line: '30 burpees, 0 no-reps' },
+];
+const photosEl = document.getElementById('photos');
+if (photosEl) photosEl.innerHTML = PHOTOS.map((ph) => {
+  const sc = ph.scene(), tl = sc.good, s = sample(tl, ph.at(tl)), P = solve(s), [x, y, w, h] = ph.crop(P, s);
+  return `<figure class="photo"><div class="obWorld photoPic"><svg viewBox="${f1(x)} ${f1(y)} ${w} ${h}" role="img" aria-label="Action photo: ${ph.name}">${sc.back(s, new Set(), P, 0)}${figure(P)}${sc.front ? sc.front(s, new Set(), P, 0) : ''}</svg></div>
+    <img class="photoLogo" src="../icons/spartanreferee/logo-red.png" alt=""><figcaption><b>${ph.bib} · ${ph.name}</b><span>${ph.line}</span></figcaption></figure>`;
+}).join('');
+
+// ------------------------------------------------------------------------------------------------ the tabs: Refereeing and Marketing
+const TABS = [['tabRefBtn', 'tabRef'], ['tabMktBtn', 'tabMkt']];
+const showTab = (panel, scroll) => {
+  for (const [b, p] of TABS) { const on = p === panel; document.getElementById(b).classList.toggle('on', on); document.getElementById(b).setAttribute('aria-selected', String(on)); document.getElementById(p).hidden = !on; }
+  document.body.classList.toggle('mktOn', panel === 'tabMkt');
+  if (scroll) document.querySelector('.demoTabs').scrollIntoView({ block: 'start' });
+  light();
+};
+for (const [b, p] of TABS) document.getElementById(b)?.addEventListener('click', () => { history.replaceState(null, '', p === 'tabMkt' ? '#marketing' : '#burpee'); showTab(p, true); });
+if (location.hash === '#marketing') showTab('tabMkt', false);
+for (const a of document.querySelectorAll('.demoNav a')) a.addEventListener('click', () => { if (document.getElementById('tabRef').hidden) showTab('tabRef', false); });

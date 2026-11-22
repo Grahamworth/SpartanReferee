@@ -112,3 +112,22 @@ body { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
 .steps li:first-child::before { content: "✓"; background: var(--accent); color: #062a1a; }
 .steps b { display: block; }
 .steps p { margin: 2px 0 0; color: var(--muted); line-height: 1.45; }
+.aiFinish { stroke: #3ddc97; stroke-width: 1.2; stroke-dasharray: 3 2; }
+/* the tabs */
+.demoTabs button { padding: 8px 18px; border-radius: 999px; border: 1px solid var(--line); background: var(--soft); color: var(--text); font: 700 1rem Barlow, sans-serif; cursor: pointer; min-height: 42px; }
+.demoTabs button.on { background: var(--tint); color: var(--primary-text); border-color: var(--primary); }
+body.mktOn .demoNav { display: none; }
+body.mktOn { padding-bottom: 24px; }
+/* marketing: the phone notification and the action photos */
+.notif { display: flex; align-items: center; gap: 10px; max-width: 420px; margin: 4px 0 14px; padding: 10px 12px; border-radius: 16px; background: color-mix(in srgb, var(--panel) 70%, var(--soft)); border: 1px solid var(--line); box-shadow: var(--shadow); }
+.notif img { width: 36px; height: 36px; border-radius: 9px; }
+.notif div { flex: 1; min-width: 0; display: grid; line-height: 1.3; }
+.notif span { color: var(--muted); font-size: .92rem; }
+.notif small { align-self: flex-start; color: var(--muted); }
+.photos { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(200px, 1fr); gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; }
+.photo { position: relative; margin: 0; border-radius: 14px; overflow: hidden; scroll-snap-align: start; box-shadow: var(--shadow); background: linear-gradient(180deg, #2a4f7a 0%, #6d8fb3 62%, #8fa66b 62.1%, #5b7340 100%); }
+.photoPic svg { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; }
+.photoLogo { position: absolute; left: 8px; top: 8px; width: 30px; height: 30px; }
+.photo figcaption { position: absolute; left: 0; right: 0; bottom: 0; display: grid; padding: 18px 10px 8px; color: #fff; background: linear-gradient(transparent, rgba(0, 0, 0, .78)); line-height: 1.25; }
+.photo figcaption b { font: 800 1rem var(--display); }
+.photo figcaption span { font-size: .85rem; opacity: .9; }
