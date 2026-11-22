@@ -5,6 +5,7 @@
 // says so (X-Learn-As).
 import { devSignInButton, signedIn, signOut, call as siteCall } from '../api-base.js';
 import { language } from '../language.js';
+import { refreshMore, wireMore } from '../navmore.js';
 import { microsoftButton } from '../email-signin-web.js';
 import { setOwner, keep, viaCache, registerApp, installButton } from '../offline.js';
 import { $, S, show, call, esc, fail, store, AS_KEY, PREVIEW_KEY, has, isAdmin, t } from './core.js';
@@ -36,9 +37,7 @@ async function draw() {
   const name = views[view] ? view : 'home';
   for (const a of $('learnNav').querySelectorAll('a')) a.classList.toggle('on', a.dataset.view === name || (a.dataset.also || '').split(' ').includes(name));
   $('profileBtn')?.classList.toggle('on', name === 'profile');
-  // on a phone the tabs are a row to swipe along: bring the one you're on into view
-  const on = $('learnNav').querySelector('a.on'), nav = $('learnNav');
-  if (on && nav.scrollWidth > nav.clientWidth) nav.scrollLeft = Math.max(0, on.offsetLeft - (nav.clientWidth - on.offsetWidth) / 2);
+  refreshMore($('learnNav')); // on a phone the tabs are a bar along the bottom: More lights up for its pages
   // a page that takes more than a moment shows it's loading (the database can be slow to wake)
   const slow = setTimeout(() => { $('view').innerHTML = LOADER; }, 150);
   try {
@@ -60,6 +59,8 @@ function drawChrome() {
   $('who').textContent = me.person.email;
   show($('learnNav'), true); show($('demoBar'), true); show($('profileBtn'), true);
   for (const a of $('learnNav').querySelectorAll('[data-show]')) show(a, a.dataset.show.split(' ').some((r) => has(r)));
+  wireMore($('learnNav'));
+  refreshMore($('learnNav'));
   show($('viewAsBox'), !!me.canPreview);
   show($('previewBack'), !!me.previewRole);
   $('previewLine').textContent = me.previewRole ? t('Previewing as: {type}', { type: t(typeName(me.previewRole)) }) : '';

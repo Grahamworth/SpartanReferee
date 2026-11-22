@@ -143,7 +143,8 @@ async function toggleMic() {
 function fit() {
   const chat = $('asChat'); if (!chat) return;
   const vv = window.visualViewport, h = vv ? vv.height : innerHeight;
-  const tabs = document.querySelector('.appTabs:not([hidden])'), below = tabs && getComputedStyle(tabs).position === 'fixed' && !(vv && vv.height < innerHeight - 120) ? tabs.offsetHeight : 0;
+  const keyboard = vv && vv.height < innerHeight - 120; // the bars along the bottom (the app's tabs on a phone, the cameras' tabs) are under the keyboard then
+  const below = keyboard ? 0 : [document.querySelector('.appTabs'), document.querySelector('.learnNav')].filter((b) => b && !b.hidden && getComputedStyle(b).position === 'fixed').reduce((n, b) => n + b.offsetHeight, 0);
   const top = chat.getBoundingClientRect().top + scrollY; // where it starts on the page, under the header
   chat.style.height = `${Math.max(320, Math.round(h - top - below - 10))}px`;
 }

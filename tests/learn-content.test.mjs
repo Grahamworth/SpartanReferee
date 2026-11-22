@@ -70,7 +70,7 @@ test('every obstacle has how, good and bad; ids are unique; its rule references 
   for (const s of LINKED) assert.ok(ids.includes(`OCR-2026-${s}`), `rule ${s} is a rule reference`);
   for (const [, r] of src.matchAll(/'(OCR-2026-[\d.]+)'/g)) assert.ok(ids.includes(r), r);
   // the tab is for everyone, just before Rules (the order the user set on 20 November 2026)
-  assert.match(fs.readFileSync(new URL('../learn/index.html', import.meta.url), 'utf8'), /<a href="#\/obstacles" data-view="obstacles">Obstacles<\/a>\n\s*<a href="#\/rules" data-view="rules"/);
+  assert.match(fs.readFileSync(new URL('../learn/index.html', import.meta.url), 'utf8'), /<a href="#\/obstacles" data-view="obstacles">[^\n]*<span>Obstacles<\/span><\/a>\n\s*<a href="#\/rules" data-view="rules"/);
 });
 
 // the obstacle animations (learn/obstacle-scenes.js): every obstacle but the event's own has one, with a good run and at least one fail,

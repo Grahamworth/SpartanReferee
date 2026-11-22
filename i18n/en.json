@@ -1669,7 +1669,7 @@
  "● Live": "server/review/index.html",
  "LIVE": "server/review/index.html server/review/review.js",
  "Pick athlete": "server/review/index.html",
- "More": "server/review/index.html index.html info.html",
+ "More": "server/review/index.html index.html info.html learn/index.html",
  "Restart judges": "server/review/index.html",
  "Same athletes, two angles": "server/review/index.html",
  "Ticked: each athlete's reps on both cameras are put together. A rep seen by both counts once, and one camera fills in when the other's view is blocked. They're matched by the number read, or by their reps happening at the same moments.": "server/review/index.html",

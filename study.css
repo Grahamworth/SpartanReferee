@@ -123,13 +123,47 @@ html[dir="rtl"] .events svg { transform: scaleX(-1); }
 .learnNav { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-right: auto; margin-left: 18px; }
 .learnNav a { color: var(--muted); text-decoration: none; font-weight: 600; padding: 4px 0; border-bottom: 2px solid transparent; }
 .learnNav a.on, .learnNav a:hover { color: var(--text); border-bottom-color: var(--primary); }
+/* the tabs' icons and More are for the phone's bar (below); on wider screens the tabs are words along the top, More's ones among them */
+.navIcon, .navMoreBtn { display: none; }
+.navMore { display: contents; }
+/* phones (22 November 2026): a bar along the bottom, an icon over each name, the one you're on lit; More (for people with managing or
+   admin pages, navmore.js) opens their list just above the bar */
 @media (max-width: 640px) {
-  .learnNav { order: 3; flex-wrap: nowrap; overflow-x: auto; gap: 0; margin: 0 -16px; padding: 0 8px; width: calc(100% + 32px); scrollbar-width: none; }
-  .learnNav::-webkit-scrollbar { display: none; }
-  .learnNav a { flex: none; display: flex; align-items: center; min-height: 46px; padding: 0 10px; border-bottom-width: 3px; }
-  .learnNav { -webkit-mask-image: linear-gradient(to right, #000 82%, transparent); mask-image: linear-gradient(to right, #000 82%, transparent); padding-inline-end: 40px; }
-  html[dir="rtl"] .learnNav { -webkit-mask-image: linear-gradient(to left, #000 82%, transparent); mask-image: linear-gradient(to left, #000 82%, transparent); }
+  .learnNav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; margin: 0; width: auto; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr);
+    padding: 0 4px env(safe-area-inset-bottom); gap: 0; background: color-mix(in srgb, var(--panel) 92%, transparent); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+    border-top: 1px solid var(--line); box-shadow: 0 -6px 24px rgba(0, 0, 0, .22); }
+  .learnNav[hidden] { display: none; }
+  .learnNav > a, .navMoreBtn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-width: 0; min-height: 62px; padding: 7px 2px 6px;
+    margin: 0; border: 0; border-image: none; background: none; color: var(--muted); font: 600 11.5px/1.2 Barlow, -apple-system, "Segoe UI", system-ui, sans-serif; text-decoration: none; cursor: pointer; }
+  .learnNav > a > span:last-child, .navMoreBtn > span:last-child { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .navIcon { display: grid; place-items: center; width: 52px; height: 30px; border-radius: 999px; transition: background .15s, color .15s; }
+  .navIcon svg { width: 23px; height: 23px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+  .navMoreBtn .navIcon svg { fill: currentColor; stroke: none; }
+  .learnNav > a.on, .navMoreBtn.on, .learnNav.moreOpen .navMoreBtn { color: var(--text); }
+  .learnNav > a.on .navIcon, .navMoreBtn.on .navIcon, .learnNav.moreOpen .navMoreBtn .navIcon { background: var(--tint); color: var(--primary-text); }
+  .learnNav > a:hover, .navMoreBtn:hover { color: var(--text); }
+  .navMoreBtn[hidden] { display: none; }
+  .navMore { display: none; }
+  .learnNav.moreOpen .navMore { position: absolute; left: 8px; right: 8px; bottom: calc(100% + 8px); display: grid; gap: 2px; padding: 6px; max-height: min(70vh, 520px); overflow-y: auto;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 12px 40px rgba(0, 0, 0, .35); animation: navUp .16s ease-out; }
+  @keyframes navUp { from { opacity: 0; transform: translateY(8px); } }
+  .learnNav .navMore a { display: flex; align-items: center; min-height: 50px; padding: 0 14px; border: 0; border-image: none; border-radius: 12px; color: var(--text); font-size: 1.02rem; font-weight: 600; }
+  .learnNav .navMore a:hover { background: var(--soft); }
+  .learnNav .navMore a.on { background: var(--tint); color: var(--primary-text); }
+  /* room for the bar under the page; the header loses its blur, which would hold the bar inside it */
+  body:has(.learnNav:not([hidden])) { padding-bottom: calc(64px + env(safe-area-inset-bottom)); }
+  html .top { -webkit-backdrop-filter: none; backdrop-filter: none; background: var(--panel); }
+  body:has(.learnNav:not([hidden])) .toast { bottom: calc(76px + env(safe-area-inset-bottom)); }
+  body:has(.learnNav:not([hidden])) .lpControls { bottom: calc(63px + env(safe-area-inset-bottom)); padding-bottom: 8px; }
+  body:has(.learnNav:not([hidden])) .asAsk { padding-bottom: 8px; }
+  /* the cameras' own tabs (Booking, Live, Results…) step up under the header, as a row of pills, leaving the bottom to the app's bar */
+  body:has(.learnNav:not([hidden])) .appTabs { position: static; order: 5; flex: 1 1 100%; display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding: 2px 0 0; background: none; border: 0; }
+  body:has(.learnNav:not([hidden])) .appTabs[hidden] { display: none; }
+  body:has(.learnNav:not([hidden])) .appTabs button { display: inline-flex; flex: none; align-items: center; gap: 6px; padding: 7px 13px; border: 1px solid var(--line); border-radius: 999px; background: var(--soft); font-size: 14px; }
+  body:has(.learnNav:not([hidden])) .appTabs button.on { background: var(--tint); color: var(--primary-text); border-color: var(--primary); }
+  body:has(.learnNav:not([hidden])) .appTabs svg { width: 18px; height: 18px; }
 }
+@media (max-width: 640px) and (prefers-reduced-motion: reduce) { .learnNav.moreOpen .navMore { animation: none; } .navIcon { transition: none; } }
 /* tablets and laptops: the tabs get their own row under the logo, one line, swiping if an admin's many tabs don't fit */
 @media (min-width: 641px) and (max-width: 1599px) {
   .learnNav { order: 3; width: 100%; margin: 10px 0 0; flex-wrap: nowrap; overflow-x: auto; gap: 0 18px; scrollbar-width: none; }

@@ -2,6 +2,7 @@ api-base.js
 app.js
 apptabs-core.js
 appnav.js
+navmore.js
 apptabs.js
 booking.js
 brand.js

@@ -9,7 +9,7 @@
 const VERSION = '__VERSION__';
 const SHELL = `sr-shell-${VERSION}`, EXTRA = 'sr-extra', DATA = 'sr-data'; // DATA belongs to offline.js: never cleared here
 const FILES = ['/home.html', '/home.js', '/learn/', '/offline.html', '/offline.js', '/api-base.js', '/email-signin-web.js', '/email-signin-core.js',
-  '/language.js', '/i18n.js', '/headjudge.css', '/study.css', '/look.js', '/tracked-demos.js', '/exercises.js', '/burpee.js', '/pose-filter.js', '/manifest.webmanifest',
+  '/language.js', '/navmore.js', '/i18n.js', '/headjudge.css', '/study.css', '/look.js', '/tracked-demos.js', '/exercises.js', '/burpee.js', '/pose-filter.js', '/manifest.webmanifest',
   '/learn/learn.css', '/learn/learn.js', '/learn/core.js', '/learn/programmes.js', '/learn/people.js', '/learn/lesson.js', '/learn/practice.js',
   '/learn/assess.js', '/learn/judgement.js', '/learn/govern.js', '/learn/reports.js', '/learn/diagnostics.js', '/learn/saved.js', '/learn/sharp.js', '/learn/home.js', '/learn/events.js', '/learn/invites.js', '/learn/tracking.js', '/learn/authoring.js', '/learn/obstacles.js', '/learn/obstacle-anim.js', '/learn/obstacle-scenes.js', '/learn/video.js', '/learn/slide-visual.js', '/learn/assistant.js', '/learn/assistant-md.js', '/learn/voice.js',
   '/icons/spartanreferee/icon-192.png', '/icons/spartanreferee/icon-512.png'];

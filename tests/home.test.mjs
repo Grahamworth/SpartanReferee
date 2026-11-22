@@ -78,7 +78,7 @@ test('a referee\'s home page: their name, their events (each with Book cameras),
   assert.ok(read('appnav.js').includes("new URL('learn/index.html', root)"), 'the tabs come from the app: one list');
   assert.match(read('home.html'), /location\.replace\('learn\/' \+ location\.hash\)/);
   assert.match(read('learn/index.html'), /<a class="mark" href="#\/">/);
-  assert.match(read('learn/index.html'), /<a href="#\/" data-view="home">Home<\/a>/);
+  assert.match(read('learn/index.html'), /<a href="#\/" data-view="home"><span class="navIcon" aria-hidden="true"><svg [^\n]*<\/svg><\/span><span>Home<\/span><\/a>/);
   assert.match(read('learn/index.html'), /class="profileBtn" id="profileBtn" href="#\/profile" aria-label="My profile"/);
 });
 test('on a phone, every page\'s header is the name and a Menu button, with big rows to tap (check: node scripts/mobile-check.mjs)', () => {
@@ -148,4 +148,17 @@ test('every script and stylesheet a published page loads, and every module the a
     }
   }
   assert.deepStrictEqual(missing, []);
+});
+test('on a phone the tabs are a bar along the bottom, with More for whoever has the managing and admin pages (22 November 2026)', () => {
+  const html = read('learn/index.html'), nav = html.slice(html.indexOf('<nav class="learnNav"'), html.indexOf('</nav>'));
+  for (const name of ['Home', 'Events', 'Learning', 'Obstacles', 'Rules']) assert.match(nav, new RegExp(`<span class="navIcon" aria-hidden="true"><svg [^\n]*</svg></span><span>${name}</span></a>`), name);
+  assert.match(nav, /<button class="navMoreBtn" type="button" aria-expanded="false" hidden>/);
+  const more = nav.slice(nav.indexOf('<div class="navMore">'));
+  assert.strictEqual((more.match(/<a /g) || []).length, (more.match(/data-show="/g) || []).length, 'only the tabs some people have are under More');
+  assert.ok(!nav.slice(0, nav.indexOf('<div class="navMore">')).includes('data-show'), 'the five everyone has are on the bar');
+  const css = read('study.css');
+  assert.match(css, /@media \(max-width: 640px\) \{\n  \.learnNav \{ position: fixed; left: 0; right: 0; bottom: 0;/);
+  assert.match(css, /\.navIcon, \.navMoreBtn \{ display: none; \}\n\.navMore \{ display: contents; \}/, 'wider screens: words along the top');
+  for (const f of ['learn/learn.js', 'appnav.js']) assert.match(read(f), /wireMore\(/, f);
+  assert.match(read('scripts/site-files.txt'), /^navmore\.js$/m);
 });
