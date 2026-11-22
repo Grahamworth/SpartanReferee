@@ -1,0 +1,114 @@
+/* The AI demo (demo/index.html): phone first, the site's modern look (study.css), a jump menu along the bottom. */
+html { scroll-behavior: smooth; scroll-padding-top: 12px; }
+body { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
+.demoBadge { margin-inline-start: auto; padding: 4px 12px; border-radius: 999px; background: var(--grad); color: #fff; font-weight: 700; font-size: .85rem; letter-spacing: .02em; }
+.demo { max-width: 860px; }
+.demoHero { margin: 4px 0 18px; }
+.demoHero h1 { margin: 0 0 8px; font-size: clamp(1.9rem, 7vw, 2.8rem); line-height: 1.1; }
+.demoHero h1 span { background: linear-gradient(90deg, var(--brand), #ff7a3d); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.demoHero p { margin: 0; color: var(--muted); font-size: 1.1rem; max-width: 40em; }
+.demoTabs { display: flex; align-items: center; gap: 10px; margin: 0 0 16px; }
+.demoTabs a { padding: 8px 16px; border-radius: 999px; background: var(--tint); color: var(--primary-text); border: 1px solid var(--primary); font-weight: 700; text-decoration: none; }
+.demoTabs .soon { color: var(--muted); font-size: .9rem; }
+.demoSec { scroll-margin-top: 12px; }
+.demoSec h2 { font-size: clamp(1.5rem, 5.5vw, 1.9rem); margin: 0 0 8px; }
+.demoSec h3 { margin: 18px 0 8px; font-size: 1.15rem; }
+.kicker { margin: 0 0 4px; font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--primary-text); }
+#burpee .kicker { color: #ff7a3d; }
+.lead { margin: 0 0 14px; font-size: 1.05rem; }
+.ticks { list-style: none; margin: 0 0 14px; padding: 0; display: grid; gap: 10px; }
+.ticks li { position: relative; padding-inline-start: 30px; line-height: 1.5; }
+.ticks li::before { content: ""; position: absolute; inset-inline-start: 0; top: .15em; width: 20px; height: 20px; border-radius: 50%; background: var(--tint) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2319b8ff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12.5l4 4 8-9'/%3E%3C/svg%3E") center / 13px no-repeat; }
+.zonePic { position: relative; display: block; margin: 0 -4px 6px; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); }
+.zonePic img { display: block; width: 100%; height: auto; }
+.zonePic span { position: absolute; right: 8px; bottom: 8px; padding: 3px 10px; border-radius: 999px; background: rgba(0, 0, 0, .65); color: #fff; font-size: .8rem; font-weight: 600; }
+.zoneBig { padding: 0; border: 0; max-width: 100vw; max-height: 100vh; width: 100vw; height: 100vh; background: rgba(0, 0, 0, .92); }
+.zoneBig::backdrop { background: rgba(0, 0, 0, .8); }
+.zoneBig img { display: block; width: 100%; height: calc(100% - 40px); object-fit: contain; }
+.zoneBig p { margin: 0; text-align: center; color: #ccc; }
+.demoSoon { padding: 10px 12px; border: 1px dashed var(--line); border-radius: 12px; }
+
+/* the AI player: the animation with what the AI sees drawn over it, its checklist, and what it says */
+.aiPlayer { display: grid; gap: 10px; margin-top: 6px; }
+.aiStage { background: radial-gradient(circle at 20% 10%, rgba(47, 107, 255, .14), transparent 55%), var(--bg); }
+.aiPhase { position: absolute; left: 8px; top: 8px; padding: 3px 10px; border-radius: 999px; background: rgba(10, 20, 40, .78); color: #9fe9ff; font-size: .78rem; font-weight: 700; border: 1px solid rgba(25, 184, 255, .5); }
+.aiPhase.bad { color: #ffb3ad; border-color: rgba(255, 90, 80, .6); }
+.aiPose .aiBone { stroke: #19d3ff; stroke-width: 1.1; opacity: .9; }
+.aiPose .aiDot { fill: #0b1018; stroke: #19d3ff; stroke-width: 1.2; }
+.aiBox { fill: none; stroke: #19d3ff; stroke-width: 1; stroke-dasharray: 3 2; }
+.aiTagBg { fill: #19b8ff; }
+.aiTag { fill: #04121f; font: 700 7px Barlow, sans-serif; letter-spacing: .03em; }
+.aiBad .aiBox, .aiPose.aiBad .aiBox { stroke: #ff5a50; }
+.aiBad .aiTagBg { fill: #ff5a50; }
+.aiBad .aiTag { fill: #fff; }
+.aiGap { stroke: #3ddc97; stroke-width: 1.2; stroke-dasharray: 2 1.5; }
+.aiBubble rect { fill: #19b8ff; }
+.aiBubble text { fill: #04121f; font: 800 8px Barlow, sans-serif; text-anchor: middle; }
+.aiBubble.bad rect { fill: #ff5a50; } .aiBubble.bad text { fill: #fff; }
+.aiMapBg { fill: rgba(8, 14, 24, .86); stroke: rgba(25, 184, 255, .45); stroke-width: .8; }
+.aiMapT { fill: #9fe9ff; font: 700 5.6px Barlow, sans-serif; letter-spacing: .06em; }
+.aiLoop { fill: none; stroke: rgba(255, 255, 255, .28); stroke-width: 5; }
+.aiTrail { fill: none; stroke: #19d3ff; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.aiCut { stroke: #ff5a50; stroke-width: 1.6; stroke-dasharray: 2.5 2; }
+.aiGate { fill: #1a2230; stroke: rgba(255, 255, 255, .5); stroke-width: .8; }
+.aiGate.on { fill: #3ddc97; stroke: #3ddc97; }
+.aiGateN { fill: #fff; font: 700 4.2px Barlow, sans-serif; text-anchor: middle; }
+.aiMe { fill: #fff; stroke: #19d3ff; stroke-width: 1.4; }
+.aiMe.bad { stroke: #ff5a50; fill: #ff5a50; }
+.aiWave { fill: rgba(159, 233, 255, .55); }
+.aiWave.hot { fill: #3ddc97; }
+.aiClockT { fill: #fff; font: 800 10px Barlow, sans-serif; text-anchor: middle; }
+.aiChecks { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.aiChecks li { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 12px; background: var(--soft); border: 1px solid var(--line); transition: border-color .2s, background .2s; }
+.aiChecks i { flex: none; width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--line); display: grid; place-items: center; font-style: normal; font-weight: 800; font-size: 13px; }
+.aiChecks span { flex: 1; min-width: 0; }
+.aiChecks b { flex: none; font-variant-numeric: tabular-nums; color: var(--primary-text); }
+.aiChecks li[data-state="live"] { border-color: rgba(25, 184, 255, .6); }
+.aiChecks li[data-state="live"] i { border-color: #19b8ff; border-top-color: transparent; animation: srSpin 1s linear infinite; }
+.aiChecks li[data-state="ok"] { border-color: rgba(61, 220, 151, .55); background: color-mix(in srgb, var(--accent) 10%, var(--soft)); }
+.aiChecks li[data-state="ok"] i { border-color: var(--accent); background: var(--accent); color: #062a1a; }
+.aiChecks li[data-state="ok"] i::before { content: "✓"; }
+.aiChecks li[data-state="bad"] { border-color: rgba(255, 90, 80, .6); background: color-mix(in srgb, var(--bad) 12%, var(--soft)); }
+.aiChecks li[data-state="bad"] i { border-color: #ff5a50; background: #ff5a50; color: #fff; }
+.aiChecks li[data-state="bad"] i::before { content: "✗"; }
+.aiChecks li[data-state="bad"] b { color: var(--bad); }
+.aiSay { margin: 0; padding: 10px 12px; min-height: 3.4em; border-radius: 12px; border-inline-start: 4px solid #19b8ff; background: var(--tint); line-height: 1.45; }
+.aiSay::before { content: "AI judge: "; font-weight: 800; color: var(--primary-text); }
+.aiSay.bad { border-inline-start-color: #ff5a50; background: color-mix(in srgb, var(--bad) 12%, transparent); }
+.aiSay.bad::before { content: "Flagged: "; color: var(--bad); }
+.aiControls { display: flex; flex-wrap: wrap; gap: 6px; }
+.aiControls .small { min-height: 40px; }
+.aiControls .small.on { background: var(--tint); border-color: var(--primary); color: var(--primary-text); }
+
+/* how it flows: four steps down the page, joined by a moving line */
+.flow { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 0; }
+.flow li { position: relative; display: flex; gap: 14px; padding: 0 0 18px; }
+.flow li:not(:last-child)::after { content: ""; position: absolute; inset-inline-start: 23px; top: 50px; bottom: 2px; width: 2px; background: repeating-linear-gradient(to bottom, #19b8ff 0 6px, transparent 6px 12px); background-size: 2px 12px; animation: flowDown 1s linear infinite; }
+@keyframes flowDown { to { background-position: 0 12px; } }
+.flowIcon { flex: none; width: 48px; height: 48px; border-radius: 14px; display: grid; place-items: center; background: var(--grad); color: #fff; box-shadow: var(--glow); }
+.flowIcon svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+.flow b { display: block; font-size: 1.05rem; }
+.flow p { margin: 4px 0 0; color: var(--muted); line-height: 1.5; }
+.flow p b { display: inline; font-size: inherit; color: var(--text); }
+.kit { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; }
+.kit li { display: grid; gap: 2px; padding: 10px 12px; border-radius: 12px; background: var(--soft); border: 1px solid var(--line); }
+.kit b { font: 800 1.8rem/1 var(--display); background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.kit span { color: var(--muted); font-size: .92rem; }
+.demoFoot { font-size: .85rem; text-align: center; margin: 4px 0 0; }
+
+/* the jump menu along the bottom */
+.demoNav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); padding: 0 4px env(safe-area-inset-bottom);
+  background: color-mix(in srgb, var(--panel) 92%, transparent); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border-top: 1px solid var(--line); box-shadow: 0 -6px 24px rgba(0, 0, 0, .22); }
+.demoNav a { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 62px; color: var(--muted); text-decoration: none; font: 600 11.5px/1.2 Barlow, sans-serif; }
+.demoNav svg { width: 52px; height: 30px; padding: 4px 14px; border-radius: 999px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; transition: background .15s; }
+.demoNav a.on { color: var(--text); }
+.demoNav a.on svg { background: var(--tint); color: var(--primary-text); }
+@media (min-width: 900px) { .demoNav { left: 50%; right: auto; transform: translateX(-50%); width: 560px; bottom: 14px; border: 1px solid var(--line); border-radius: 22px; padding: 0 6px; } }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .flow li::after { animation: none; } .aiChecks li[data-state="live"] i { animation: none; } }
+/* how we roll it out: numbered steps */
+.steps { list-style: none; counter-reset: st; margin: 0; padding: 0; display: grid; gap: 8px; }
+.steps li { counter-increment: st; position: relative; padding: 10px 12px 10px 52px; border-radius: 12px; background: var(--soft); border: 1px solid var(--line); }
+.steps li::before { content: counter(st); position: absolute; inset-inline-start: 12px; top: 10px; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--grad); color: #fff; font-weight: 800; }
+.steps li:first-child::before { content: "✓"; background: var(--accent); color: #062a1a; }
+.steps b { display: block; }
+.steps p { margin: 2px 0 0; color: var(--muted); line-height: 1.45; }

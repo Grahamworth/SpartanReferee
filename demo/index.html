@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI at Spartan Race · SpartanReferee</title>
+<meta name="description" content="What cameras and an AI judge can referee at Spartan Race, and how it works.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0b1018">
+<link rel="icon" href="../icons/spartanreferee/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;1,800&family=Barlow:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="../headjudge.css">
+<link rel="stylesheet" href="../learn/learn.css">
+<link rel="stylesheet" href="../study.css">
+<link rel="stylesheet" href="demo.css">
+<script src="../look.js"></script>
+<script type="module" src="demo.js"></script>
+</head>
+<body>
+<!-- The AI demo for Spartan's leadership (22 November 2026): demo.js plays the animations; the zone picture is in site-extras/demo. -->
+<header class="top"><a class="mark" href="../learn/">Spartan<span>Referee</span></a><span class="demoBadge">AI demo</span></header>
+
+<main class="page demo">
+  <section class="demoHero">
+    <h1>AI referees at <span>Spartan Race</span></h1>
+    <p>Cameras watch the obstacle. An AI judge counts, checks and flags. Referees stay in charge, and everyone sees the result live.</p>
+  </section>
+
+  <nav class="demoTabs" aria-label="Demo areas"><a class="on" href="#burpee" aria-current="page">Refereeing</a><span class="soon">More areas soon</span></nav>
+
+  <!-- ====================================================================== the burpee zone: the flagship -->
+  <section class="card demoSec" id="burpee">
+    <p class="kicker">Flagship</p>
+    <h2>The Burpee Zone</h2>
+    <p class="lead">12 burpee stations under one rig, 4 cameras in the corners. Every burpee counted and checked, for every athlete, at the same time.</p>
+    <a class="zonePic" href="burpee-zone.jpg"><img src="burpee-zone.jpg" alt="The 12-station Spartan Burpee Zone: a truss rig with a camera in each top corner, 12 marked stations in 4 by 3, entry and exit gates with timing-chip readers, and a live leaderboard screen" width="1204" height="673" loading="lazy"><span>Tap to enlarge</span></a>
+    <h3>What it does</h3>
+    <ul class="ticks">
+      <li><b>Knows who's there.</b> The athlete's timing chip is scanned every time they enter the zone, so the AI knows exactly who is on which station.</li>
+      <li><b>Sees every station.</b> 4 cameras high on the rig corners see all 12 stations from different sides, so one athlete standing in front of another doesn't break the count.</li>
+      <li><b>Counts to the standard.</b> Chest to the ground, hips and knees extended, a jump with the hands above the ears. A burpee that misses any of these is a no-rep, with the reason.</li>
+      <li><b>Live everywhere.</b> The count shows on the big screen, on referees' phones and on the YouTube stream as it happens.</li>
+      <li><b>Referees decide the close ones.</b> A doubtful rep goes to the referee's phone with its clip: one tap to accept or reject.</li>
+      <li><b>Checked out and saved.</b> The chip is scanned again at the exit; the athlete's count and clip are saved to their result.</li>
+    </ul>
+    <p class="note demoSoon">Coming next: a clip from the World Championship recordings in Abu Dhabi with the AI's count on it.</p>
+  </section>
+
+  <!-- ====================================================================== the Atlas Carry -->
+  <section class="card demoSec" id="atlas">
+    <p class="kicker">Obstacle</p>
+    <h2>Atlas Carry</h2>
+    <ul class="ticks">
+      <li>Confirms the stone is <b>lifted clear</b> of the ground.</li>
+      <li>Confirms it is <b>carried, not rolled</b>.</li>
+      <li>Counts the <b>halfway burpees</b> to the same standard as the Burpee Zone.</li>
+    </ul>
+    <div id="atlasAnim"></div>
+  </section>
+
+  <!-- ====================================================================== the Chain Carry -->
+  <section class="card demoSec" id="chain">
+    <p class="kicker">Obstacle</p>
+    <h2>Chain Carry</h2>
+    <ul class="ticks">
+      <li>Tracks the athlete round the <b>full loop</b>, checkpoint by checkpoint.</li>
+      <li>Flags a chain that is <b>dropped or dragged</b>.</li>
+      <li>Flags <b>course cutting</b>.</li>
+    </ul>
+    <div id="chainAnim"></div>
+  </section>
+
+  <!-- ====================================================================== the Rope Climb -->
+  <section class="card demoSec" id="rope">
+    <p class="kicker">Obstacle</p>
+    <h2>Rope Climb</h2>
+    <ul class="ticks">
+      <li>Confirms the <b>bell strike</b> two ways: seen by the camera and heard by the microphone.</li>
+      <li><b>Times</b> the climb, from feet leaving the ground to the bell.</li>
+      <li><b>Classifies the technique</b> (foot lock, S-wrap, arms only).</li>
+    </ul>
+    <div id="ropeAnim"></div>
+  </section>
+
+  <!-- ====================================================================== the hardware, and how it flows -->
+  <section class="card demoSec" id="hardware">
+    <p class="kicker">How it works</p>
+    <h2>The hardware, and where the pictures go</h2>
+    <ol class="flow">
+      <li><span class="flowIcon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="7" width="13" height="10" rx="2"/><path d="M16 11l5-3v8l-5-3"/></svg></span>
+        <div><b>1 · At the obstacle</b><p>4 outdoor 4K cameras on the rig corners, with microphones. The timing-chip readers at the entry and exit. For a single obstacle, one phone on a tripod running our Broadcaster app is enough.</p></div></li>
+      <li><span class="flowIcon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 16.5h.01M11 16.5h.01M8 9a6 6 0 0 1 8 0M5.5 6.5a10 10 0 0 1 13 0"/></svg></span>
+        <div><b>2 · On site</b><p>One small box on the rig: a network switch that also powers the cameras, and a 5G router (Starlink as a backup). It sends the video up. Nothing else to install.</p></div></li>
+      <li><span class="flowIcon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 18a4.5 4.5 0 0 1-.5-9 6 6 0 0 1 11.5 1.5A3.75 3.75 0 0 1 17.5 18z"/><path d="M10 13.5l1.5 1.5 3-3"/></svg></span>
+        <div><b>3 · The AI judge, in the cloud</b><p>A graphics-card server in Microsoft Azure, booked for the event. It tracks every body, counts the reps, spots the fails and matches each athlete to their chip.</p></div></li>
+      <li><span class="flowIcon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="18" rx="2"/><path d="M11 18h2"/></svg></span>
+        <div><b>4 · Out to people, live</b><p><b>Referees' phones:</b> live counts, one tap on a flagged rep. <b>The big screen:</b> the leaderboard. <b>YouTube Live:</b> the stream with the counts on it. <b>Athletes' phones:</b> their result and clip.</p></div></li>
+    </ol>
+    <h3>For one Burpee Zone</h3>
+    <ul class="kit">
+      <li><b>4</b><span>outdoor 4K cameras</span></li>
+      <li><b>1</b><span>switch that powers them</span></li>
+      <li><b>1</b><span>5G router (+ Starlink)</span></li>
+      <li><b>2</b><span>chip readers, in and out</span></li>
+      <li><b>1</b><span>screen for the leaderboard</span></li>
+      <li><b>0</b><span>servers on site</span></li>
+    </ul>
+    <h3 id="rollout">How we roll it out</h3>
+    <ol class="steps">
+      <li><b>Today: the AI judge works</b><p>It already counts burpees from our cameras. The World Championship recordings from Abu Dhabi were judged by it.</p></li>
+      <li><b>Buy one kit, build one zone</b><p>The cameras, switch, router and chip readers above, fixed to one Burpee Zone rig. Set it up and test it at our own site first.</p></li>
+      <li><b>Pilot at a few events</b><p>Run it at 2 or 3 events alongside our referees, who still make every call. We compare its counts with theirs and fix what it gets wrong.</p></li>
+      <li><b>Add the obstacles</b><p>Atlas Carry, Chain Carry and Rope Climb, each with its own camera or phone, at the same pilot events.</p></li>
+      <li><b>Go live</b><p>The AI's counts become the result, with the referee able to overrule. The leaderboard and YouTube stream go public, and more kits follow for more events.</p></li>
+    </ol>
+  </section>
+  <p class="demoFoot muted">A prototype by SpartanReferee. The animations show what the AI checks; the athletes and bib numbers are invented.</p>
+</main>
+
+<nav class="demoNav" aria-label="Jump to">
+  <a href="#burpee"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="2"/><path d="M5 20h4l2-5 3 2v3M7 11l4-2 4 1 3 3"/></svg><span>Burpees</span></a>
+  <a href="#atlas"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="7"/><path d="M8.5 11.5l3 2"/></svg><span>Atlas</span></a>
+  <a href="#chain"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="9" width="8" height="6" rx="3"/><rect x="13.5" y="9" width="8" height="6" rx="3"/><path d="M9 12h6"/></svg><span>Chain</span></a>
+  <a href="#rope"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v13"/><path d="M8 18a4 4 0 0 0 8 0z"/><path d="M12 22v-1"/></svg><span>Rope</span></a>
+  <a href="#hardware"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="13" height="10" rx="2"/><path d="M16 11l5-3v8l-5-3"/></svg><span>Hardware</span></a>
+</nav>
+
+<dialog id="zoneBig" class="zoneBig" aria-label="The Burpee Zone, full size"><img src="burpee-zone.jpg" alt=""><p>Tap anywhere to close</p></dialog>
+</body>
+</html>

@@ -107,3 +107,6 @@ join.js
 learn/tracking.js
 learn/authoring.js
 info.html
+demo/index.html
+demo/demo.js
+demo/demo.css
