@@ -143,3 +143,20 @@ body { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
 .execStar dt { color: #ff9a5c; }
 .execStar dt::before { content: "★ "; }
 #marketing .kicker { color: #ff7a3d; }
+/* the proposed setups (Atlas, Chain, Rope): plans in the style of the Burpee Zone's */
+.setup { margin: 0 0 12px; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); background: #f3f5f8; }
+.setup svg { display: block; width: 100%; height: auto; }
+.setup figcaption { padding: 8px 12px; background: var(--soft); font-size: .92rem; }
+.suSky { fill: #e9eef5; } .suGround { fill: #dfe6d6; } .suLane { fill: #eceee8; stroke: #b9c0b0; stroke-dasharray: 4 3; }
+.suCone { fill: rgba(25, 150, 255, .16); stroke: rgba(25, 150, 255, .35); stroke-width: .8; }
+.suTruss { fill: #c9ced6; stroke: #7d8693; } .suTrussZ { fill: none; stroke: #7d8693; stroke-width: 1; } .suPost { fill: #aab1bb; }
+.suRope { stroke: #b2884f; stroke-width: 3; stroke-linecap: round; } .suBell { fill: #d4a017; } .suThin { stroke: #59626e; stroke-width: 1.2; }
+.suCam circle { fill: #e2231a; stroke: #fff; stroke-width: 1.5; } .suCam rect, .suCam path { fill: #fff; }
+.suMic rect { fill: #3a3f47; } .suMic path { fill: none; stroke: #3a3f47; stroke-width: 1.6; }
+.suChip { fill: #22a35a; } .suStart { stroke: #22a35a; stroke-width: 2.5; stroke-dasharray: 5 3; }
+.suFlag line { stroke: #59626e; stroke-width: 1.5; } .suFlag path { fill: #e2231a; }
+.suStone { fill: #8a8f96; stroke: #5d6168; } .suPin { fill: #19b8ff; stroke: #fff; stroke-width: 1.2; }
+.suPath { fill: none; stroke: #2457e6; stroke-width: 2; marker-end: none; stroke-dasharray: 6 4; } .suPathBack { fill: none; stroke: #2457e6; stroke-width: 2; stroke-dasharray: 2 4; }
+.suLoop { fill: none; stroke: #f1c232; stroke-width: 9; } .suCp circle { fill: #22a35a; stroke: #fff; stroke-width: 1.5; } .suCp text { fill: #fff; font: 700 10px Barlow, sans-serif; }
+.suChain circle { fill: #8a8f96; } .suDim { stroke: #59626e; stroke-width: 1; stroke-dasharray: 3 2; }
+.suLab { fill: #1b1f24; font: 600 10px Barlow, sans-serif; }
