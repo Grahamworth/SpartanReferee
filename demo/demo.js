@@ -208,8 +208,9 @@ const nav = [...document.querySelectorAll('.demoNav a')];
 const sections = nav.map((a) => document.querySelector(a.getAttribute('href')));
 const light = () => {
   const y = window.scrollY + window.innerHeight * 0.35;
-  let on = 0; sections.forEach((s, i) => { if (s && s.offsetTop <= y) on = i; });
-  if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 4) on = sections.length - 1;
+  let on = -1; sections.forEach((s, i) => { if (s && s.offsetParent && s.offsetTop <= y) on = i; });
+  if (on < 0) on = sections.findIndex((s) => s && s.offsetParent);
+  if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 4) { const vis = sections.map((s, i) => (s && s.offsetParent ? i : -1)).filter((i) => i >= 0); on = vis[vis.length - 1] ?? on; }
   nav.forEach((a, i) => { a.classList.toggle('on', i === on); if (i === on) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current'); });
 };
 addEventListener('scroll', light, { passive: true }); addEventListener('resize', light); light();
@@ -235,13 +236,15 @@ if (photosEl) photosEl.innerHTML = PHOTOS.map((ph) => {
 }).join('');
 
 // ------------------------------------------------------------------------------------------------ the tabs: Refereeing and Marketing
-const TABS = [['tabRefBtn', 'tabRef'], ['tabMktBtn', 'tabMkt']];
+const TABS = [['tabMktBtn', 'tabMkt'], ['tabRefBtn', 'tabRef']];
 const showTab = (panel, scroll) => {
   for (const [b, p] of TABS) { const on = p === panel; document.getElementById(b).classList.toggle('on', on); document.getElementById(b).setAttribute('aria-selected', String(on)); document.getElementById(p).hidden = !on; }
-  document.body.classList.toggle('mktOn', panel === 'tabMkt');
   if (scroll) document.querySelector('.demoTabs').scrollIntoView({ block: 'start' });
   light();
 };
+const panelOf = (hash) => { try { return document.querySelector(`#tabRef ${hash}`) ? 'tabRef' : 'tabMkt'; } catch { return 'tabMkt'; } };
 for (const [b, p] of TABS) document.getElementById(b)?.addEventListener('click', () => { history.replaceState(null, '', p === 'tabMkt' ? '#marketing' : '#burpee'); showTab(p, true); });
-if (location.hash === '#marketing') showTab('tabMkt', false);
-for (const a of document.querySelectorAll('.demoNav a')) a.addEventListener('click', () => { if (document.getElementById('tabRef').hidden) showTab('tabRef', false); });
+// Live photo shots first; a link straight to a refereeing section opens that tab
+if (location.hash && location.hash !== '#marketing' && location.hash !== '#summary') showTab(panelOf(location.hash), false);
+for (const a of document.querySelectorAll('.demoNav a')) a.addEventListener('click', () => { const want = panelOf(a.getAttribute('href')); if (document.getElementById(want).hidden) showTab(want, false); });
+addEventListener('hashchange', () => { const want = panelOf(location.hash); if (location.hash && document.getElementById(want).hidden) { showTab(want, false); document.querySelector(location.hash)?.scrollIntoView(); } });

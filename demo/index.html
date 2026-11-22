@@ -23,16 +23,17 @@
 
 <main class="page demo">
   <section class="demoHero">
-    <h1>AI referees at <span>Spartan Race</span></h1>
-    <p>Cameras watch the obstacle. An AI judge counts, checks and flags. Referees stay in charge, and everyone sees the result live.</p>
+    <h1>AI at <span>Spartan Race</span></h1>
+    <p>Live photo shots of every athlete, and an AI judge that counts, checks and flags. All from the same cameras, with our referees in charge.</p>
   </section>
 
   <section class="card exec" id="summary" aria-labelledby="execH">
     <p class="kicker">Executive summary · for Joe</p>
-    <h2 id="execH">AI referees, in one page</h2>
+    <h2 id="execH">AI at Spartan Race, in one page</h2>
     <dl class="execList">
-      <div><dt>What</dt><dd>Cameras and an AI judge referee the Burpee Zone, Atlas Carry, Chain Carry and Rope Climb to the 2026 rules: every rep counted, every fail flagged, for every athlete at once. Referees stay in charge and make the close calls.</dd></div>
-      <div><dt>Why</dt><dd>The same standard for every athlete at every event, fewer disputes, a live leaderboard and stream that fans can follow, and referees freed for the decisions that need a person. The same cameras give every athlete their own action photos.</dd></div>
+      <div class="execStar"><dt>Live photo shots</dt><dd>Every athlete gets action photos of themselves on their phone, live, moments after each obstacle: picked by the AI, matched by their timing chip, framed in Spartan branding and ready to share. Every share is Spartan marketing.</dd></div>
+      <div><dt>What</dt><dd>The same cameras and an AI judge referee the Burpee Zone, Atlas Carry, Chain Carry and Rope Climb to the 2026 rules: every rep counted, every fail flagged, for every athlete at once. Referees stay in charge and make the close calls.</dd></div>
+      <div><dt>Why</dt><dd>The same standard for every athlete at every event, fewer disputes, a live leaderboard and stream that fans can follow, and referees freed for the decisions that need a person.</dd></div>
       <div><dt>How</dt><dd>Cameras on the rig, one small box on site, the AI judge in the cloud, results live on referees' phones, the big screen, YouTube and athletes' phones. Nothing complicated at the venue.</dd></div>
       <div><dt>Where we are</dt><dd>The AI judge already works: it judged the burpees in our World Championship recordings from Abu Dhabi.</dd></div>
       <div><dt>The ask</dt><dd>A pilot: one Burpee Zone kit at 2 or 3 events, alongside our referees, to prove the counts before it goes live.</dd></div>
@@ -40,10 +41,33 @@
   </section>
 
   <div class="demoTabs" role="tablist" aria-label="Demo areas">
-    <button type="button" role="tab" id="tabRefBtn" aria-controls="tabRef" aria-selected="true" class="on">Refereeing</button>
-    <button type="button" role="tab" id="tabMktBtn" aria-controls="tabMkt" aria-selected="false">Marketing</button>
+    <button type="button" role="tab" id="tabMktBtn" aria-controls="tabMkt" aria-selected="true" class="on">Live photo shots</button>
+    <button type="button" role="tab" id="tabRefBtn" aria-controls="tabRef" aria-selected="false">Refereeing</button>
   </div>
-  <div class="tabPanel" id="tabRef" role="tabpanel" aria-labelledby="tabRefBtn">
+  <!-- ====================================================================== marketing: action photos, taken by the same cameras -->
+  <div class="tabPanel" id="tabMkt" role="tabpanel" aria-labelledby="tabMktBtn">
+  <section class="card demoSec" id="marketing">
+    <p class="kicker">Marketing</p>
+    <h2>Live photo shots</h2>
+    <p class="lead">Every athlete gets action photos of themselves on their phone, live, moments after each obstacle. The cameras that referee take them; the AI picks the best moment and sends it, with their name on it.</p>
+    <div class="notif" aria-hidden="true"><img src="../icons/spartanreferee/logo-red.png" alt=""><div><b>Spartan Race</b><span>📸 Your Rope Climb photo is in, taken 30 seconds ago. Tap to share it.</span></div><small>now</small></div>
+    <div class="photos" id="photos"></div>
+    <h3>How it works</h3>
+    <ul class="ticks">
+      <li><b>Live.</b> The photo reaches the athlete's phone moments after the obstacle, while they're still on the course, and the best shots of the day go up on the big screen and the stream as they happen.</li>
+      <li><b>The best moment, picked by the AI.</b> The bell strike, the stone held high, the top of a burpee jump: sharp, face visible, from the 4K video.</li>
+      <li><b>Matched by the timing chip.</b> Each photo goes to the right athlete, with no photographer at every obstacle.</li>
+      <li><b>Branded and ready to share.</b> Framed in Spartan branding (and a sponsor's, if wanted): every share is Spartan marketing.</li>
+      <li><b>A library for Spartan.</b> Action shots from every event and every obstacle, for social media, sponsors and the stream's highlights.</li>
+      <li><b>Could earn its keep.</b> Free with the result, or a photo pack to buy.</li>
+      <li><b>Privacy first.</b> Only for athletes who agree when they register; nobody else's photo is sent or shared.</li>
+    </ul>
+    <p class="note">No extra hardware: the same cameras and AI judge as the refereeing.</p>
+  </section>
+  </div>
+
+  <!-- ====================================================================== refereeing -->
+  <div class="tabPanel" id="tabRef" role="tabpanel" aria-labelledby="tabRefBtn" hidden>
 
   <!-- ====================================================================== the burpee zone: the flagship -->
   <section class="card demoSec" id="burpee">
@@ -60,7 +84,6 @@
       <li><b>Referees decide the close ones.</b> A doubtful rep goes to the referee's phone with its clip: one tap to accept or reject.</li>
       <li><b>Checked out and saved.</b> The chip is scanned again at the exit; the athlete's count and clip are saved to their result.</li>
     </ul>
-    <p class="note demoSoon">Coming next: a clip from the World Championship recordings in Abu Dhabi with the AI's count on it.</p>
   </section>
 
   <!-- ====================================================================== the Atlas Carry -->
@@ -133,35 +156,16 @@
   </section>
   </div>
 
-  <!-- ====================================================================== marketing: action photos, taken by the same cameras -->
-  <div class="tabPanel" id="tabMkt" role="tabpanel" aria-labelledby="tabMktBtn" hidden>
-  <section class="card demoSec" id="marketing">
-    <p class="kicker">Marketing</p>
-    <h2>Action photos, automatically</h2>
-    <p class="lead">The cameras that referee also take the photos. The AI picks every athlete's best moment on each obstacle and sends it to them, with their name on it.</p>
-    <div class="notif" aria-hidden="true"><img src="../icons/spartanreferee/logo-red.png" alt=""><div><b>Spartan Race</b><span>Your 3 action photos are ready. Tap to see and share them.</span></div><small>now</small></div>
-    <div class="photos" id="photos"></div>
-    <h3>How it works</h3>
-    <ul class="ticks">
-      <li><b>The best moment, picked by the AI.</b> The bell strike, the stone held high, the top of a burpee jump: sharp, face visible, from the 4K video.</li>
-      <li><b>Matched by the timing chip.</b> Each photo goes to the right athlete, with no photographer at every obstacle.</li>
-      <li><b>Straight to their phone</b> with their result, framed in Spartan branding (and a sponsor's, if wanted), ready to share.</li>
-      <li><b>A library for Spartan.</b> Action shots from every event and every obstacle, for social media, sponsors and the stream's highlights.</li>
-      <li><b>Could earn its keep.</b> Free with the result, or a photo pack to buy.</li>
-      <li><b>Privacy first.</b> Only for athletes who agree when they register; nobody else's photo is sent or shared.</li>
-    </ul>
-    <p class="note">No extra hardware: the same cameras and AI judge as the refereeing.</p>
-  </section>
-  </div>
   <p class="demoFoot muted">A prototype by SpartanReferee. The animations and photos are drawn to show what the AI does; the athletes and bib numbers are invented.</p>
 </main>
 
 <nav class="demoNav" aria-label="Jump to">
+  <a href="#marketing"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M8.5 7l1.5-2.5h4L15.5 7"/><circle cx="12" cy="13.5" r="3.5"/></svg><span>Photos</span></a>
   <a href="#burpee"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="2"/><path d="M5 20h4l2-5 3 2v3M7 11l4-2 4 1 3 3"/></svg><span>Burpees</span></a>
   <a href="#atlas"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="7"/><path d="M8.5 11.5l3 2"/></svg><span>Atlas</span></a>
   <a href="#chain"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="9" width="8" height="6" rx="3"/><rect x="13.5" y="9" width="8" height="6" rx="3"/><path d="M9 12h6"/></svg><span>Chain</span></a>
   <a href="#rope"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v13"/><path d="M8 18a4 4 0 0 0 8 0z"/><path d="M12 22v-1"/></svg><span>Rope</span></a>
-  <a href="#hardware"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="13" height="10" rx="2"/><path d="M16 11l5-3v8l-5-3"/></svg><span>Hardware</span></a>
+  <a href="#hardware"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 16.5h.01M11 16.5h.01M8 9a6 6 0 0 1 8 0M5.5 6.5a10 10 0 0 1 13 0"/></svg><span>Hardware</span></a>
 </nav>
 
 <dialog id="zoneBig" class="zoneBig" aria-label="The Burpee Zone, full size"><img src="burpee-zone.jpg" alt=""><p>Tap anywhere to close</p></dialog>
