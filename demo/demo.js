@@ -4,7 +4,7 @@
 import { G, sample, solve, figure } from '../learn/obstacle-anim.js';
 import { SCENES } from '../learn/obstacle-scenes.js';
 
-const f1 = (v) => (+v).toFixed(1);
+export const f1 = (v) => (+v).toFixed(1);
 const CM = (px) => Math.round((px / 52) * 100); // 52 px to a metre
 
 // ------------------------------------------------------------------------------------------------ the Atlas Carry (rule 4.1.3)
@@ -15,7 +15,7 @@ const stoneAt = (s, P) => { const c = [P.sh[0] + s.f * 13, P.sh[1] + 24]; return
 
 // ------------------------------------------------------------------------------------------------ what the AI draws: the pose it tracks
 const BONES = (P) => [[P.head, P.sh], [P.sh, P.hip], [P.sh, P.la[1]], [P.la[1], P.la[2]], [P.sh, P.ra[1]], [P.ra[1], P.ra[2]], [P.hip, P.ll[1]], [P.ll[1], P.ll[2]], [P.hip, P.rl[1]], [P.rl[1], P.rl[2]]];
-function pose(P, tag, bad) {
+export function pose(P, tag, bad) {
   const pts = [P.head, P.sh, P.hip, P.la[1], P.la[2], P.ra[1], P.ra[2], P.ll[1], P.ll[2], P.rl[1], P.rl[2]];
   const xs = pts.map((p) => p[0]), ys = pts.map((p) => p[1]);
   const x0 = Math.min(...xs) - 8, y0 = Math.min(...ys) - 12, x1 = Math.max(...xs) + 8, y1 = Math.max(...ys) + 4;
@@ -25,9 +25,9 @@ function pose(P, tag, bad) {
     <rect class="aiBox" x="${f1(x0)}" y="${f1(y0)}" width="${f1(x1 - x0)}" height="${f1(y1 - y0)}" rx="3"/>
     <rect class="aiTagBg" x="${f1(x0)}" y="${f1(y0 - 11)}" width="${tag.length * 4.5 + 8}" height="10" rx="2"/><text class="aiTag" x="${f1(x0 + 4)}" y="${f1(y0 - 3.2)}">${tag}</text></g>`;
 }
-const objBox = (p, r, label, bad) => `<g class="aiObj${bad ? ' aiBad' : ''}"><rect class="aiBox" x="${f1(p[0] - r - 4)}" y="${f1(p[1] - r - 4)}" width="${f1(2 * r + 8)}" height="${f1(2 * r + 8)}" rx="3"/>
+export const objBox = (p, r, label, bad) => `<g class="aiObj${bad ? ' aiBad' : ''}"><rect class="aiBox" x="${f1(p[0] - r - 4)}" y="${f1(p[1] - r - 4)}" width="${f1(2 * r + 8)}" height="${f1(2 * r + 8)}" rx="3"/>
   <rect class="aiTagBg" x="${f1(p[0] - r - 4)}" y="${f1(p[1] - r - 14)}" width="${label.length * 4.5 + 8}" height="10" rx="2"/><text class="aiTag" x="${f1(p[0] - r)}" y="${f1(p[1] - r - 7.2)}">${label}</text></g>`;
-const bubble = (x, y, text, cls = '') => `<g class="aiBubble ${cls}"><rect x="${f1(x - text.length * 3.4 - 6)}" y="${f1(y - 11)}" width="${f1(text.length * 6.8 + 12)}" height="15" rx="7.5"/><text x="${f1(x)}" y="${f1(y)}">${text}</text></g>`;
+export const bubble = (x, y, text, cls = '') => `<g class="aiBubble ${cls}"><rect x="${f1(x - text.length * 3.4 - 6)}" y="${f1(y - 11)}" width="${f1(text.length * 6.8 + 12)}" height="15" rx="7.5"/><text x="${f1(x)}" y="${f1(y)}">${text}</text></g>`;
 
 // ------------------------------------------------------------------------------------------------ the three demos: what the AI checks
 const ATLAS = {
@@ -234,3 +234,22 @@ if (photosEl) photosEl.innerHTML = PHOTOS.map((ph) => {
   return `<figure class="photo"><div class="obWorld photoPic"><svg viewBox="${f1(x)} ${f1(y)} ${w} ${h}" role="img" aria-label="Action photo: ${ph.name}">${sc.back(s, new Set(), P, 0)}${figure(P)}${sc.front ? sc.front(s, new Set(), P, 0) : ''}</svg></div>
     <img class="photoLogo" src="../icons/spartanreferee/logo-red.png" alt=""><figcaption><b>${ph.bib} · ${ph.name}</b><span>${ph.line}</span></figcaption></figure>`;
 }).join('');
+
+// ------------------------------------------------------------------------------------------------ AI Possibilities
+// the subtle button at the bottom opens the area; its animations (possibilities.js) load the first time it opens. #possibilities opens it.
+const possBtn = document.getElementById('possBtn'), poss = document.getElementById('possibilities');
+let possLoaded = false;
+const openPoss = (jump) => {
+  poss.hidden = false; possBtn.setAttribute('aria-expanded', 'true');
+  if (!possLoaded) { possLoaded = true; import('./possibilities.js').then((m) => m.start(poss)); }
+  const target = jump === 'hash' ? document.getElementById(location.hash.slice(1)) : null;
+  const to = () => (target && poss.contains(target) ? target : poss).scrollIntoView({ block: 'start' });
+  // opened by a link: jump again once the page has finished loading, as the browser's own jump (to a hidden spot) goes nowhere
+  if (jump === 'hash' && document.readyState !== 'complete') addEventListener('load', () => setTimeout(to, 50), { once: true });
+  to();
+};
+possBtn?.addEventListener('click', () => {
+  if (!poss.hidden) { poss.hidden = true; possBtn.setAttribute('aria-expanded', 'false'); return; }
+  openPoss('click');
+});
+if (poss && /^#(possibilities|p-)/.test(location.hash)) openPoss('hash');

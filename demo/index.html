@@ -189,6 +189,89 @@
   </section>
 
   <p class="demoFoot muted">A prototype by SpartanReferee. The animations and photos are drawn to show what the AI does; the athletes and bib numbers are invented.</p>
+
+  <!-- ====================================================================== AI Possibilities: a subtle button opens the area; possibilities.js draws its animations -->
+  <div class="possOpen"><button type="button" class="possBtn" id="possBtn" aria-expanded="false" aria-controls="possibilities">AI Possibilities <span aria-hidden="true">›</span></button></div>
+
+  <section class="poss" id="possibilities" hidden aria-labelledby="possH">
+    <div class="possHead">
+      <p class="kicker">Beyond refereeing</p>
+      <h2 id="possH">AI Possibilities</h2>
+      <p class="lead">The cameras, the AI judge and the referee platform are the start. The same technology can do far more, for referees, athletes, fans and the teams who run the course.</p>
+    </div>
+
+    <article class="card possCard" id="p-assistant">
+      <div class="possTop"><span class="possNo">01</span><span class="possState built">Built</span></div>
+      <p class="kicker">AI Assistant Referee and learning platform</p>
+      <h3 class="possWow">An expert referee in every referee's pocket</h3>
+      <p>An app for every Spartan referee, to help them do the job better. Ask any rules question at the obstacle and get the answer in seconds, with the rule it comes from. Lessons, quick checks and refreshers keep every referee to the same standard, and they work with no signal.</p>
+      <div class="possStage" data-p="assist"></div>
+      <p class="shot"><b>Shot</b>A referee at the Atlas Carry asks whether the athlete can put the stone down. The answer comes back with rule 4.1.3, and their Atlas Carry lesson ticks over underneath.</p>
+    </article>
+
+    <article class="card possCard" id="p-var">
+      <div class="possTop"><span class="possNo">02</span><span class="possState part">Part built</span></div>
+      <p class="kicker">VAR for obstacle racing</p>
+      <h3 class="possWow">Every obstacle judged. Every call on video.</h3>
+      <p>Every obstacle auto-judged: pass or fail, and any penalty, written straight to the athlete's timing record with the video clip attached for appeals. The referee platform becomes the human in the loop: referees review what the AI flags and always have the final say. The burpee judge is built; the Atlas Carry, Chain Carry and Rope Climb above are the next three examples.</p>
+      <div class="possStage" data-p="var"></div>
+      <p class="shot"><b>Shot</b>One athlete's timing record fills in obstacle by obstacle. The Chain Carry is flagged: the referee watches the clip on their phone, taps Confirm, and the penalty and the clip are saved to the record.</p>
+    </article>
+
+    <article class="card possCard" id="p-reels">
+      <div class="possTop"><span class="possNo">03</span><span class="possState idea">Possible</span></div>
+      <p class="kicker">Personal highlight reels</p>
+      <h3 class="possWow">Their race, their film, before they've caught their breath</h3>
+      <p>The AI finds each athlete by their bib on every camera and edits a film of their race within minutes of the finish. A memento every athlete will want to keep, and to share.</p>
+      <div class="possStage" data-p="film"></div>
+      <p class="shot"><b>Shot</b>Bib 2076 is found at four obstacles, the clips are cut together, and the finished film plays in Spartan branding, on the athlete's phone 4 minutes after the finish.</p>
+    </article>
+
+    <article class="card possCard" id="p-broadcast">
+      <div class="possTop"><span class="possNo">04</span><span class="possState idea">Possible</span></div>
+      <p class="kicker">AI-driven live video and audio commentary</p>
+      <h3 class="possWow">Every elite heat, covered like a Grand Prix</h3>
+      <p>A live broadcast of the elite heats with obstacle split times, live leaderboards, win predictions and skeleton overlays, and commentary written and voiced by the AI as it happens.</p>
+      <div class="possStage" data-p="cast"></div>
+      <p class="shot"><b>Shot</b>Elite heat 2 at the Rope Climb: the climber's skeleton is tracked, the bell brings up the split time, the leaderboard reshuffles, the win chances swing, and the AI commentator calls it.</p>
+    </article>
+
+    <article class="card possCard" id="p-score">
+      <div class="possTop"><span class="possNo">05</span><span class="possState idea">Possible</span></div>
+      <p class="kicker">Spartan Score</p>
+      <h3 class="possWow">A score for every athlete, and a reason to come back</h3>
+      <p>Speed and technique at every obstacle, benchmarked against the elites, feeding a personal training plan after the race. It keeps athletes training, and engaged with Spartan, between races.</p>
+      <div class="possStage" data-p="score"></div>
+      <p class="shot"><b>Shot</b>After the race, the athlete's Spartan Score counts up, each obstacle is set against the elite benchmark, and a 4-week plan builds itself around the weakest.</p>
+    </article>
+
+    <article class="card possCard" id="p-home">
+      <div class="possTop"><span class="possNo">06</span><span class="possState mostly">Mostly built</span></div>
+      <p class="kicker">At-home burpee judge</p>
+      <h3 class="possWow">Qualify for Spartan from your living room</h3>
+      <p>The burpee judge we already have, on a phone camera: virtual qualifiers and global challenges, judged to the same standard as the Burpee Zone, for anyone, anywhere. It already runs in a phone's browser.</p>
+      <div class="possStage" data-p="home"></div>
+      <p class="shot"><b>Shot</b>A phone on the floor counts the burpees, rejects one with the chest off the ground, and the count climbs the global leaderboard live.</p>
+    </article>
+
+    <article class="card possCard" id="p-safety">
+      <div class="possTop"><span class="possNo">07</span><span class="possState idea">Possible</span></div>
+      <p class="kicker">Safety and course ops</p>
+      <h3 class="possWow">An athlete down is seen in seconds, not minutes</h3>
+      <p>The cameras watch for falls and athletes who don't get up, and alert the medics with the exact spot. They predict queues at obstacles too, so the course team can act before one builds.</p>
+      <div class="possStage" data-p="safety"></div>
+      <p class="shot"><b>Shot</b>The course from above: the AI predicts a queue at obstacle 7 ten minutes ahead; an athlete falls at obstacle 9 and stays down, and the nearest medic is sent straight there.</p>
+    </article>
+
+    <article class="card possCard" id="p-course">
+      <div class="possTop"><span class="possNo">08</span><span class="possState idea">Possible</span></div>
+      <p class="kicker">3D course view</p>
+      <h3 class="possWow">Walk the course before race day</h3>
+      <p>Anyone can explore the racecourse in 3D before the event, with accurate gradients and landmarks. On race day, athletes' live positions move on the same 3D course for friends, family and fans.</p>
+      <div class="possStage" data-p="course"></div>
+      <p class="shot"><b>Shot</b>The course turns in 3D over its hills: the obstacles are pinned, the steepest climb shows in red, and athletes' live positions move along the route.</p>
+    </article>
+  </section>
 </main>
 
 <nav class="demoNav" aria-label="Jump to">

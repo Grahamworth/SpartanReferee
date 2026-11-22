@@ -160,3 +160,196 @@ body { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
 .suLoop { fill: none; stroke: #f1c232; stroke-width: 9; } .suCp circle { fill: #22a35a; stroke: #fff; stroke-width: 1.5; } .suCp text { fill: #fff; font: 700 10px Barlow, sans-serif; }
 .suChain circle { fill: #8a8f96; } .suDim { stroke: #59626e; stroke-width: 1; stroke-dasharray: 3 2; }
 .suLab { fill: #1b1f24; font: 600 10px Barlow, sans-serif; }
+
+/* AI Possibilities: the subtle text button at the bottom, and the area it opens (possibilities.js draws the animations) */
+.possOpen { display: flex; justify-content: center; margin: 10px 0 4px; }
+.possBtn { min-height: 44px; padding: 8px 14px; border: 0; background: none; color: var(--muted); font: 600 .95rem Barlow, sans-serif; letter-spacing: .05em; cursor: pointer;
+  text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 5px; transition: color .15s, text-decoration-color .15s; }
+.possBtn:hover, .possBtn:focus-visible { color: var(--text); text-decoration-color: currentColor; }
+.possBtn span { display: inline-block; margin-inline-start: 2px; transition: transform .2s; }
+.possBtn[aria-expanded="true"] { color: var(--text); }
+.possBtn[aria-expanded="true"] span { transform: rotate(90deg); }
+.poss, .possCard { scroll-margin-top: 12px; }
+.possHead { margin: 8px 0 14px; }
+.possHead h2 { display: inline-block; margin: 0 0 6px; font-size: clamp(1.8rem, 7vw, 2.5rem); line-height: 1.1; background: linear-gradient(90deg, var(--brand), #ff7a3d 45%, #19b8ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.possHead .lead { color: var(--muted); }
+.possTop { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+.possNo { font: 800 1.5rem/1 var(--display); background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.possState { padding: 2px 10px; border-radius: 999px; font-size: .78rem; font-weight: 700; letter-spacing: .02em; border: 1px solid currentColor; }
+.possState.built { color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); }
+.possState.mostly { color: var(--accent); }
+.possState.part { color: var(--primary-text); background: var(--tint); }
+.possState.idea { color: #ff8a4d; }
+.possWow { margin: 0 0 8px; font: 800 clamp(1.45rem, 5.6vw, 1.95rem)/1.12 var(--display); }
+.possCard > p:not(.kicker):not(.shot) { margin: 0; line-height: 1.5; }
+.possStage { margin: 14px 0 10px; }
+.shot { margin: 0; padding: 8px 12px; border-radius: 10px; border: 1px dashed var(--line); color: var(--muted); font-size: .92rem; line-height: 1.45; }
+.shot b { margin-inline-end: 8px; color: var(--text); font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; }
+.pMini { margin: 0 0 6px; font-size: .76rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.pNote { margin: 8px 0 0; color: var(--muted); font-size: .9rem; line-height: 1.4; }
+.possStage [data-at] { opacity: 0; transform: translateY(6px); transition: opacity .35s, transform .35s; }
+.possStage [data-at].in { opacity: 1; transform: none; }
+
+/* 1 · the assistant's chat */
+.pChat { max-width: 480px; margin: 0 auto; padding: 12px; border-radius: 18px; background: var(--soft); border: 1px solid var(--line); display: grid; gap: 8px; }
+.pChatTop { display: flex; gap: 10px; align-items: center; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+.pChatTop img { width: 34px; height: 34px; border-radius: 9px; }
+.pChatTop div { display: grid; line-height: 1.25; }
+.pChatTop span { color: var(--muted); font-size: .85rem; }
+.pMsg { margin: 0; max-width: 88%; padding: 8px 12px; border-radius: 16px; line-height: 1.42; }
+.pMsg.me { justify-self: end; background: var(--grad); color: #fff; border-end-end-radius: 4px; }
+.pMsg.ai { justify-self: start; position: relative; background: var(--panel); border: 1px solid var(--line); border-end-start-radius: 4px; }
+.pMsg.ai.typing .txt { visibility: hidden; }
+.pDots { display: none; position: absolute; left: 14px; top: 14px; gap: 5px; }
+.pMsg.ai.typing .pDots { display: flex; }
+.pDots i { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); animation: pDot 1s infinite ease-in-out; }
+.pDots i:nth-child(2) { animation-delay: .15s; } .pDots i:nth-child(3) { animation-delay: .3s; }
+@keyframes pDot { 0%, 80%, 100% { opacity: .3; transform: none; } 40% { opacity: 1; transform: translateY(-3px); } }
+.pRule { display: inline-block; margin-inline-start: 2px; padding: 0 8px; border-radius: 999px; background: var(--tint); color: var(--primary-text); font-weight: 700; font-size: .82rem; white-space: nowrap; }
+.pLearn { display: grid; gap: 6px; padding: 10px 12px; border-radius: 12px; background: var(--panel); border: 1px solid var(--line); }
+.pLearn > div:first-child { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px 8px; }
+.pLearn span { color: var(--accent); font-weight: 700; font-size: .9rem; }
+.pLearn small { color: var(--muted); }
+.pBar { height: 8px; border-radius: 99px; background: var(--line); overflow: hidden; }
+.pBar i { display: block; height: 100%; width: 62%; background: var(--grad); transition: width 1.2s .3s ease-out; }
+.pLearn.in .pBar i { width: 80%; }
+
+/* 2 · VAR: the timing record and the referee's review */
+.pVar { display: grid; gap: 10px; }
+@media (min-width: 680px) { .pVar { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; } }
+.pRec { display: grid; gap: 6px; padding: 10px; border-radius: 14px; background: var(--soft); border: 1px solid var(--line); }
+.pRecHead { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px 8px; padding: 0 2px 6px; border-bottom: 1px solid var(--line); }
+.pRecHead span { color: var(--muted); font-size: .88rem; }
+.pRow { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0 8px; padding: 7px 10px; border-radius: 10px; background: var(--panel); border: 1px solid var(--line); }
+.pRow span { font-weight: 700; }
+.pRow em { font-style: normal; font-weight: 800; }
+.pRow em.ok { color: var(--accent); } .pRow em.bad { color: var(--bad); }
+.pRow small { grid-column: 1 / -1; color: var(--muted); font-size: .84rem; }
+.pRow.pPen { border-color: color-mix(in srgb, var(--bad) 55%, var(--line)); background: color-mix(in srgb, var(--bad) 10%, var(--panel)); }
+.pRef { display: grid; gap: 8px; }
+.pRefBar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding: 8px 10px; border-radius: 12px; background: var(--soft); border: 1px solid var(--line); }
+.pRefBar > div:first-child { display: grid; min-width: 0; }
+.pRefState { color: var(--muted); font-size: .88rem; min-height: 1.3em; }
+.pRefState.done { color: var(--accent); font-weight: 700; }
+.pRefBtns { display: flex; gap: 6px; }
+.pRefBtns span { padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); font-weight: 700; font-size: .88rem; transition: background .2s, color .2s, transform .15s; }
+.pRefBtns .yes { border-color: var(--accent); color: var(--accent); }
+.pRefBtns .yes.on { background: var(--accent); color: #062a1a; transform: scale(.95); }
+
+/* 3 · the highlight film */
+.pFilm .pTileBg { fill: var(--bg); }
+.pDim { fill: rgba(5, 10, 18, .45); }
+.pScan { stroke: #19d3ff; stroke-width: 3; opacity: .8; }
+.pTileEdge { fill: none; stroke: rgba(255, 255, 255, .18); stroke-width: 3; }
+.pTileEdge.on { stroke: #3ddc97; stroke-width: 5; }
+.pTileT { fill: #fff; font: 700 22px Barlow, sans-serif; paint-order: stroke; stroke: rgba(0, 0, 0, .6); stroke-width: 4px; }
+.pFound { fill: none; stroke: #3ddc97; stroke-width: 4; }
+.pFoundTagBg { fill: #3ddc97; }
+.pFoundTag { fill: #062a1a; font: 800 20px Barlow, sans-serif; }
+.pFilmT { fill: var(--text); font: 800 11px Barlow, sans-serif; letter-spacing: .08em; text-anchor: middle; }
+.pFilmS { fill: var(--muted); font: 600 10px Barlow, sans-serif; text-anchor: middle; }
+.pProg { fill: var(--line); } .pProgOn { fill: #3ddc97; }
+.pBars { fill: #000; }
+.pFilmBrand { fill: #fff; font: italic 800 11px "Barlow Condensed", Barlow, sans-serif; letter-spacing: .06em; paint-order: stroke; stroke: rgba(0, 0, 0, .5); stroke-width: 3px; }
+.pLower { fill: rgba(8, 12, 20, .86); } .pLowerEdge { fill: #e2231a; }
+.pLowerT { fill: #fff; font: 800 12px Barlow, sans-serif; letter-spacing: .03em; }
+.pLowerS { fill: #ffb08a; font: 600 9.5px Barlow, sans-serif; }
+.pFlash { fill: #fff; pointer-events: none; }
+.pEnd { fill: #0b1018; }
+.pEnd ~ .pFilmS { fill: #aab4c3; }
+.pEndT { fill: #fff; font: italic 800 24px "Barlow Condensed", Barlow, sans-serif; letter-spacing: .04em; text-anchor: middle; }
+.pPlayC { fill: #e2231a; } .pPlayT { fill: #fff; }
+.pBib rect { fill: #fff; stroke: #333; stroke-width: .4; }
+.pBib text { fill: #111; font: 800 4.6px Barlow, sans-serif; text-anchor: middle; }
+.pCap { margin: 8px 0 0; min-height: 1.4em; color: var(--muted); font-size: .92rem; }
+
+/* 4 · the broadcast */
+.pLive { fill: #e2231a; }
+.pLiveT { fill: #fff; font: 800 7.5px Barlow, sans-serif; text-anchor: middle; letter-spacing: .06em; }
+.pSplitT { fill: #fff; font: 800 15px Barlow, sans-serif; text-anchor: middle; }
+.pFast { fill: #3ddc97; font: 800 7px Barlow, sans-serif; text-anchor: middle; letter-spacing: .08em; }
+.pCast { display: grid; gap: 8px; margin-top: 8px; }
+.pSaid { margin: 0; display: flex; gap: 10px; align-items: flex-start; padding: 8px 12px; min-height: 3.9em; border-radius: 12px; background: var(--tint); line-height: 1.42; }
+.pSaid svg { flex: none; width: 22px; height: 22px; margin-top: 1px; fill: none; stroke: var(--primary-text); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.pSaid b { color: var(--primary-text); }
+.pBoard { position: relative; }
+.pLb { position: absolute; left: 0; right: 0; top: 0; height: 36px; display: flex; align-items: center; gap: 8px; padding: 0 10px; border-radius: 10px; background: var(--soft); border: 1px solid var(--line); transition: top .6s cubic-bezier(.2, .8, .2, 1); }
+.pLb.me { border-color: var(--primary); background: var(--tint); }
+.pLb .pos { width: 1.2em; font: 800 1.05rem var(--display); }
+.pLb .cc { flex: none; padding: 1px 6px; border-radius: 5px; background: var(--line); font-size: .72rem; font-weight: 800; letter-spacing: .04em; }
+.pLb .who { flex: 1; min-width: 0; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pWin { flex: 1; max-width: 140px; height: 8px; border-radius: 99px; background: var(--line); overflow: hidden; }
+.pWin i { display: block; height: 100%; width: 0; background: var(--grad); transition: width .5s; }
+.pLb .n { min-width: 2.6em; text-align: end; font-variant-numeric: tabular-nums; }
+
+/* 5 · the Spartan Score */
+.pScore { display: grid; gap: 14px; }
+@media (min-width: 640px) { .pScore { grid-template-columns: 170px minmax(0, 1fr); align-items: center; } .pPlan { grid-column: 1 / -1; } }
+.pRing { position: relative; width: 160px; height: 160px; margin: 0 auto; }
+.pRing svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.pRingBg { fill: none; stroke: var(--line); stroke-width: 10; }
+.pRingFg { fill: none; stroke: #ff7a3d; stroke-width: 10; stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: 100; }
+.pRing > div { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; }
+.pRing b { font: 800 2.7rem/1 var(--display); font-variant-numeric: tabular-nums; }
+.pRing span { color: var(--muted); font-size: .85rem; line-height: 1.25; }
+.pBench { display: grid; gap: 8px; }
+.pBRow { display: grid; grid-template-columns: 6.6em minmax(0, 1fr); gap: 2px 10px; align-items: center; }
+.pBRow > span { font-weight: 700; }
+.pBRow small { grid-column: 2; color: var(--muted); font-size: .85rem; }
+.pBRow small b { color: #ff8a4d; }
+.pBBar { position: relative; height: 10px; border-radius: 99px; background: var(--line); }
+.pBBar i { position: absolute; left: 0; top: 0; bottom: 0; width: 0; border-radius: 99px; background: var(--grad); transition: width 1s ease-out; }
+.pBRow.in .pBBar i { width: var(--w); }
+.pBRow.weak .pBBar i { background: linear-gradient(90deg, #ff7a3d, var(--brand)); }
+.pTech { margin: 4px 0 0; padding: 8px 10px; border-radius: 10px; background: var(--soft); border: 1px solid var(--line); font-size: .92rem; line-height: 1.4; }
+.pPlan ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.pPlan li { padding: 8px 12px; border-radius: 12px; background: var(--soft); border: 1px solid var(--line); line-height: 1.4; }
+.pPlan li b { color: var(--primary-text); }
+.pPlan li.pNext { background: none; border-style: dashed; color: var(--muted); }
+
+/* 6 · the at-home judge: a phone on its side, and the challenge's leaderboard */
+.pHome { display: grid; gap: 14px; }
+@media (min-width: 680px) { .pHome { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); align-items: center; } }
+.pPhone { padding: 7px 16px; border-radius: 24px; background: #0d0f13; box-shadow: var(--shadow), inset 0 0 0 2px #2c313a; }
+.pPhone .obStage { border-radius: 12px; }
+.pPhone .prT { display: none; } /* the scene's "Burpee zone" floor label: this one is at home */
+.pCount { fill: #fff; font: 800 26px Barlow, sans-serif; text-anchor: middle; font-variant-numeric: tabular-nums; }
+
+/* 7 · safety and course ops: the course from above, and the ops feed */
+.pMap { position: relative; aspect-ratio: 16 / 9; border-radius: 12px; overflow: hidden; background: #1b3122; }
+.pMap svg, .p3d svg { display: block; width: 100%; height: 100%; }
+.pTerrain { fill: #1f3727; } .pWood { fill: #183020; }
+.pTrack { fill: none; stroke: #c9b78a; stroke-width: 7; stroke-linejoin: round; opacity: .55; }
+.pTrackC { fill: none; stroke: #f2e6c4; stroke-width: .8; stroke-dasharray: 3 3; opacity: .6; }
+.pQueue { fill: rgba(255, 176, 32, .28); stroke: rgba(255, 176, 32, .7); stroke-width: 1; }
+.pObs { fill: #0b1018; stroke: #fff; stroke-width: 1; } .pObs.warn { stroke: #ffb020; stroke-width: 2; } .pObs.bad { stroke: #ff5a50; stroke-width: 2; }
+.pObsN { fill: #fff; font: 700 6.5px Barlow, sans-serif; text-anchor: middle; }
+.pDot { fill: #19d3ff; stroke: #0b1018; stroke-width: .6; } .pDot.down { fill: #ff5a50; stroke: #fff; stroke-width: 1; }
+.pPulse { fill: none; stroke: #ff5a50; stroke-width: 1.4; }
+.pTent rect { fill: #f4f6f8; } .pTent path { stroke: #e2231a; stroke-width: 3; }
+.pMapL { fill: #dfe7da; font: 700 6.5px Barlow, sans-serif; text-anchor: middle; letter-spacing: .08em; }
+.pMedic circle { fill: #fff; stroke: #e2231a; stroke-width: 1; } .pMedic path { stroke: #e2231a; stroke-width: 1.8; }
+.aiBubble.warn rect { fill: #ffb020; } .aiBubble.warn text { fill: #1b1200; }
+.pFeed { display: grid; gap: 6px; margin-top: 8px; }
+.pAlert { margin: 0; padding: 8px 12px; border-radius: 12px; border: 1px solid var(--line); border-inline-start: 4px solid var(--line); background: var(--soft); line-height: 1.4; font-size: .94rem; }
+.pAlert b { display: block; }
+.pAlert.warn { border-inline-start-color: var(--warn); } .pAlert.warn b { color: var(--warn); }
+.pAlert.bad { border-inline-start-color: var(--bad); } .pAlert.bad b { color: var(--bad); }
+.pAlert.ok { border-inline-start-color: var(--accent); } .pAlert.ok b { color: var(--accent); }
+
+/* 8 · the 3D course */
+.p3d { aspect-ratio: 16 / 9; border-radius: 12px; overflow: hidden; background: radial-gradient(ellipse at 50% 20%, #24405a, #0b1018 75%); }
+.p3d polygon { stroke-width: .5; }
+.p3RouteB { fill: none; stroke: rgba(0, 0, 0, .55); stroke-width: 4.5; stroke-linejoin: round; }
+.p3Route { fill: none; stroke: #ffb020; stroke-width: 2.2; stroke-linejoin: round; }
+.p3Steep { stroke: #ff3b30; stroke-width: 3; stroke-linecap: round; }
+.p3Pin line { stroke: #fff; stroke-width: 1; } .p3Pin circle { fill: #e2231a; stroke: #fff; stroke-width: 1; }
+.p3Pin text { fill: #fff; font: 800 6.5px Barlow, sans-serif; text-anchor: middle; }
+.p3Pin.sf circle { fill: #0b1018; } .p3Pin.sf text { font-size: 5.5px; }
+.p3Top { fill: #fff; font: 700 8px Barlow, sans-serif; text-anchor: middle; paint-order: stroke; stroke: rgba(0, 0, 0, .65); stroke-width: 2.5px; }
+.p3Ath { fill: #19d3ff; stroke: #fff; stroke-width: .9; } .p3Ath.me { fill: #fff; stroke: #19b8ff; stroke-width: 1.6; }
+.pHud { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.pHud span { padding: 4px 10px; border-radius: 999px; background: var(--soft); border: 1px solid var(--line); font-size: .88rem; }
+.pHud span.steep b { color: var(--bad); }
+.pHud .pHudLive { flex-basis: 100%; border-color: var(--primary); background: var(--tint); font-variant-numeric: tabular-nums; }
+@media (prefers-reduced-motion: reduce) { .possStage [data-at] { transition: none; } .pDots i { animation: none; } .pLb, .pWin i, .pBBar i, .pBar i { transition: none; } }

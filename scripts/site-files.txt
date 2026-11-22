@@ -110,3 +110,4 @@ info.html
 demo/index.html
 demo/demo.js
 demo/demo.css
+demo/possibilities.js
