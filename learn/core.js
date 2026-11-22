@@ -36,7 +36,14 @@ export async function call(path, { method = 'GET', body } = {}) {
 const QUEUED = /^(lessons\/[^/]+\/(progress|complete|checks)|refresher)$/;
 export const sendWaiting = () => flush((item) => send(item.path, item.method, item.body));
 if (typeof window !== 'undefined') addEventListener('online', sendWaiting);
+// a GET that finds the database still waking (the server has already waited about 40 seconds) asks once more: it's up by then
 async function send(path, method = 'GET', body) {
+  try { return await sendOnce(path, method, body); } catch (e) {
+    if (method !== 'GET' || e.status !== 503 || !/waking/i.test(e.message)) throw e;
+    return sendOnce(path, method, body);
+  }
+}
+async function sendOnce(path, method = 'GET', body) {
   const headers = { 'X-Session': store.get('sp_token') };
   if (store.get(AS_KEY)) headers['X-Learn-As'] = store.get(AS_KEY);
   if (store.get(PREVIEW_KEY)) headers['X-Learn-As-Role'] = store.get(PREVIEW_KEY);

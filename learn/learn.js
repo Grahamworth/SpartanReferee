@@ -40,14 +40,16 @@ async function draw() {
   refreshMore($('learnNav')); // on a phone the tabs are a bar along the bottom: More lights up for its pages
   // a page that takes more than a moment shows it's loading (the database can be slow to wake)
   const slow = setTimeout(() => { $('view').innerHTML = LOADER; }, 150);
+  // still waiting after a few seconds: almost always the database waking after a quiet spell, so say so
+  const waking = setTimeout(() => { const l = $('loaderText'); if (l) l.textContent = t('Waking up the server after a quiet spell: this can take up to a minute…'); }, 6000);
   try {
     const html = await views[name](decodeURIComponent(rest));
-    clearTimeout(slow);
+    clearTimeout(slow); clearTimeout(waking);
     $('view').innerHTML = html;
     for (const a of AREAS) a.wire?.({ reloadMe: loadMe });
-  } catch (e) { clearTimeout(slow); $('view').innerHTML = ''; fail(e.message); }
+  } catch (e) { clearTimeout(slow); clearTimeout(waking); $('view').innerHTML = ''; fail(e.message); }
 }
-const LOADER = '<div class="loader" role="status"><span class="spin" aria-hidden="true"></span><span>Loading…</span></div>';
+const LOADER = '<div class="loader" role="status"><span class="spin" aria-hidden="true"></span><span id="loaderText">Loading…</span></div>';
 window.addEventListener('learn:redraw', () => draw());
 
 // the brief's user types (section 4), in the order the Preview as list shows them

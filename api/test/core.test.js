@@ -32,3 +32,19 @@ test('Spartans\' parts are gone from here', async () => {
   }
   assert.strictEqual((await call('PUT', 'profile', boss, { name: 'x' })).status, 404);
 });
+
+test('opening any page wakes the sleeping learning database, at most once every 5 minutes, and says when it is still waking (22 November 2026)', async () => {
+  let t = 1e12, ups = 0, asleep = false;
+  const learnDb = { schema: 'learn_test', migrate: async () => {}, tx: async () => {},
+    query: async (sql) => { if (/SELECT 1 AS up/.test(sql)) { if (asleep) throw Object.assign(new Error('The learning platform is waking up'), { waking: true }); ups++; } return []; } };
+  const api = createApi({ store: memoryStore(), secret: 'test-secret-test-secret-test-secret', learnDb, now: () => t });
+  const wake = () => api.handle({ method: 'GET', path: 'wake', headers: {} });
+  assert.deepStrictEqual([(await wake()).status, ups], [200, 1], 'no sign-in needed: it touches the database');
+  t += 60 * 1000;
+  assert.deepStrictEqual([(await wake()).status, ups], [200, 1], 'a minute later: not again');
+  t += 5 * 60 * 1000; asleep = true;
+  const r = await wake();
+  assert.deepStrictEqual([r.status, r.body.waking], [503, true], 'still waking: says so');
+  asleep = false;
+  assert.deepStrictEqual([(await wake()).status, ups], [200, 2], 'after a waking answer it may try again at once');
+});

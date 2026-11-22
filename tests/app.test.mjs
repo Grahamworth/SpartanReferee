@@ -137,3 +137,17 @@ test('lesson progress made offline waits, the latest per lesson, and goes when t
 test('every picture the shared stylesheets use is deployed (the red helmet at the top, 22 November 2026)', () => {
   for (const f of ['headjudge.css', 'study.css']) for (const [, u] of read(f).matchAll(/url\(([^)'"]+)\)/g)) assert.ok(siteFiles.includes(u), `${f}: ${u}`);
 });
+test('a sleeping database: every page wakes it as it opens, the app asks again while it wakes, and the messages say so (22 November 2026)', async () => {
+  assert.match(read('api-base.js'), /if \(due\) call\('wake'\)\.catch\(\(\) => \{\}\);/);
+  assert.match(read('api-base.js'), /Date\.now\(\) - \(Number\(localStorage\.getItem\('sr_woke'\)\) \|\| 0\) > 5 \* 60 \* 1000/, 'at most once every 5 minutes');
+  assert.match(read('learn/core.js'), /if \(method !== 'GET' \|\| e\.status !== 503 \|\| !\/waking\/i\.test\(e\.message\)\) throw e;\n    return sendOnce\(/);
+  assert.match(read('learn/learn.js'), /t\('Waking up the server after a quiet spell: this can take up to a minute…'\)/);
+  const off = read('offline.js');
+  assert.match(off, /why === 'waking' \? tr\('The server is waking up after a quiet spell/);
+  assert.doesNotMatch(off, /The connection is slow/, 'not blamed on the phone\'s connection');
+  assert.match(off, /if \(shown\) freshBar\(\); else offlineBar\(null\);/, 'the answer arriving late offers the latest');
+  browser(); const o = await O();
+  localStorage.setItem('sp_token', 't'); o.setOwner('ann@example.com');
+  await o.viaCache('me', async () => ({ v: 1 }));
+  assert.deepStrictEqual(await o.viaCache('me', () => Promise.reject(Object.assign(new Error('The learning platform is waking up after a quiet spell: try again in a minute'), { status: 503 }))), { v: 1 }, 'waking: the kept copy');
+});

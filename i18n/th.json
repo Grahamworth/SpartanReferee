@@ -2186,7 +2186,6 @@
  "What works with no signal: your home page, and in Learning the lessons, rules and handbook saved on this phone.": "สิ่งที่ใช้ได้เมื่อไม่มีสัญญาณ: หน้าแรกของคุณ และในส่วนการเรียนรู้ ได้แก่ บทเรียน กฎ และคู่มือที่บันทึกไว้ในโทรศัพท์เครื่องนี้",
  "You're offline, and this page isn't saved on this phone. It opens when there's signal again.": "คุณออฟไลน์อยู่ และหน้านี้ไม่ได้บันทึกไว้ในโทรศัพท์เครื่องนี้ จะเปิดได้เมื่อมีสัญญาณอีกครั้ง",
  "You're offline. Pages saved on this phone still open.": "คุณออฟไลน์อยู่ หน้าที่บันทึกไว้ในโทรศัพท์เครื่องนี้ยังเปิดได้",
- "The connection is slow: showing the copy saved on this phone ({when}).": "การเชื่อมต่อช้า: กำลังแสดงสำเนาที่บันทึกไว้ในโทรศัพท์เครื่องนี้ ({when})",
  "The server isn't answering: showing the copy saved on this phone ({when}).": "เซิร์ฟเวอร์ไม่ตอบสนอง: กำลังแสดงสำเนาที่บันทึกไว้ในโทรศัพท์เครื่องนี้ ({when})",
  "You're offline: showing the copy saved on this phone ({when}).": "คุณออฟไลน์อยู่: กำลังแสดงสำเนาที่บันทึกไว้ในโทรศัพท์เครื่องนี้ ({when})",
  "Saved on this phone {when} ({size} MB).": "บันทึกไว้ในโทรศัพท์เครื่องนี้ {when} ({size} MB)",
@@ -4414,5 +4413,9 @@
  "The Assistant isn’t set up yet": "ผู้ช่วยยังไม่ได้ตั้งค่า",
  "The Assistant is waking up after a quiet spell: try again in a minute": "ผู้ช่วยกำลังตื่นหลังจากไม่ได้ใช้งานสักพัก: ลองอีกครั้งในอีกหนึ่งนาที",
  "Typing…": "กำลังพิมพ์…",
- "Type a message": "พิมพ์ข้อความ"
+ "Type a message": "พิมพ์ข้อความ",
+ "Still loading (the server may be waking up after a quiet spell): showing the copy saved on this phone ({when}).": "ยังโหลดอยู่ (เซิร์ฟเวอร์อาจกำลังตื่นหลังจากไม่ได้ใช้งานสักพัก): กำลังแสดงสำเนาที่บันทึกไว้ในโทรศัพท์เครื่องนี้ ({when})",
+ "The server is waking up after a quiet spell: showing the copy saved on this phone ({when}) for now.": "เซิร์ฟเวอร์กำลังตื่นหลังจากไม่ได้ใช้งานสักพัก: แสดงสำเนาที่บันทึกไว้ในโทรศัพท์เครื่องนี้ ({when}) ไปก่อน",
+ "Up to date again: tap to see the latest.": "อัปเดตแล้ว: แตะเพื่อดูข้อมูลล่าสุด",
+ "Waking up the server after a quiet spell: this can take up to a minute…": "กำลังปลุกเซิร์ฟเวอร์หลังจากไม่ได้ใช้งานสักพัก: อาจใช้เวลาถึงหนึ่งนาที…"
 }

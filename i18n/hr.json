@@ -2224,7 +2224,6 @@
  "What works with no signal: your home page, and in Learning the lessons, rules and handbook saved on this phone.": "Što radi bez signala: tvoja početna stranica te, u odjeljku Učenje, lekcije, pravila i priručnik spremljeni na ovom telefonu.",
  "You're offline, and this page isn't saved on this phone. It opens when there's signal again.": "Nisi na mreži, a ova stranica nije spremljena na ovom telefonu. Otvorit će se kad ponovno bude signala.",
  "You're offline. Pages saved on this phone still open.": "Nisi na mreži. Stranice spremljene na ovom telefonu i dalje se otvaraju.",
- "The connection is slow: showing the copy saved on this phone ({when}).": "Veza je spora: prikazuje se kopija spremljena na ovom telefonu ({when}).",
  "The server isn't answering: showing the copy saved on this phone ({when}).": "Poslužitelj ne odgovara: prikazuje se kopija spremljena na ovom telefonu ({when}).",
  "You're offline: showing the copy saved on this phone ({when}).": "Nisi na mreži: prikazuje se kopija spremljena na ovom telefonu ({when}).",
  "Saved on this phone {when} ({size} MB).": "Spremljeno na ovom telefonu {when} ({size} MB).",
@@ -4449,5 +4448,9 @@
  "The Assistant isn’t set up yet": "Asistent još nije postavljen",
  "The Assistant is waking up after a quiet spell: try again in a minute": "Asistent se budi nakon tišeg razdoblja: pokušajte ponovno za minutu",
  "Typing…": "Piše…",
- "Type a message": "Napišite poruku"
+ "Type a message": "Napišite poruku",
+ "Still loading (the server may be waking up after a quiet spell): showing the copy saved on this phone ({when}).": "Još se učitava (poslužitelj se možda budi nakon tišeg razdoblja): prikazuje se kopija spremljena na ovom telefonu ({when}).",
+ "The server is waking up after a quiet spell: showing the copy saved on this phone ({when}) for now.": "Poslužitelj se budi nakon tišeg razdoblja: zasad se prikazuje kopija spremljena na ovom telefonu ({when}).",
+ "Up to date again: tap to see the latest.": "Ponovno ažurno: dodirnite za najnovije.",
+ "Waking up the server after a quiet spell: this can take up to a minute…": "Buđenje poslužitelja nakon tišeg razdoblja: to može potrajati do minute…"
 }

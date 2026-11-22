@@ -2238,7 +2238,6 @@
  "What works with no signal: your home page, and in Learning the lessons, rules and handbook saved on this phone.": "Co działa bez zasięgu: Twoja strona główna oraz, w sekcji Nauka, lekcje, zasady i podręcznik zapisane na tym telefonie.",
  "You're offline, and this page isn't saved on this phone. It opens when there's signal again.": "Jesteś offline, a ta strona nie jest zapisana na tym telefonie. Otworzy się, gdy znów będzie zasięg.",
  "You're offline. Pages saved on this phone still open.": "Jesteś offline. Strony zapisane na tym telefonie nadal się otwierają.",
- "The connection is slow: showing the copy saved on this phone ({when}).": "Połączenie jest wolne: wyświetlana jest kopia zapisana na tym telefonie ({when}).",
  "The server isn't answering: showing the copy saved on this phone ({when}).": "Serwer nie odpowiada: wyświetlana jest kopia zapisana na tym telefonie ({when}).",
  "You're offline: showing the copy saved on this phone ({when}).": "Jesteś offline: wyświetlana jest kopia zapisana na tym telefonie ({when}).",
  "Saved on this phone {when} ({size} MB).": "Zapisano na tym telefonie {when} ({size} MB).",
@@ -4463,5 +4462,9 @@
  "The Assistant isn’t set up yet": "Asystent nie jest jeszcze skonfigurowany",
  "The Assistant is waking up after a quiet spell: try again in a minute": "Asystent budzi się po okresie bezczynności: spróbuj ponownie za minutę",
  "Typing…": "Pisze…",
- "Type a message": "Napisz wiadomość"
+ "Type a message": "Napisz wiadomość",
+ "Still loading (the server may be waking up after a quiet spell): showing the copy saved on this phone ({when}).": "Wciąż się ładuje (serwer może się budzić po okresie bezczynności): wyświetlana jest kopia zapisana na tym telefonie ({when}).",
+ "The server is waking up after a quiet spell: showing the copy saved on this phone ({when}) for now.": "Serwer budzi się po okresie bezczynności: na razie wyświetlana jest kopia zapisana na tym telefonie ({when}).",
+ "Up to date again: tap to see the latest.": "Znów aktualne: dotknij, aby zobaczyć najnowsze.",
+ "Waking up the server after a quiet spell: this can take up to a minute…": "Budzenie serwera po okresie bezczynności: może to potrwać do minuty…"
 }

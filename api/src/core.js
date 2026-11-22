@@ -214,6 +214,14 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
     return reply(200, { ok: true });
   }
   let learnReady = null;
+  let wokeAt = 0;
+  async function wakeLearn() {
+    if (!learnDb) return reply(200, { awake: false });
+    if (now() - wokeAt < 5 * 60 * 1000) return reply(200, { awake: true });
+    wokeAt = now(); // at once, so several pages opening together wake it once
+    try { await learnUp(); await learnDb.query('SELECT 1 AS up'); return reply(200, { awake: true }); }
+    catch (e) { wokeAt = 0; if (!e.waking) throw e; return reply(503, { awake: false, waking: true }); }
+  }
   const recordings = createRecordings({ store, signer: blobSigner, now, reply, session, isAdmin, membership, fetchFn });
   // Spartan's events (events.js), synced from Spartan's race list; referees book cameras for one
   // bookingUnits false: one booking for the whole organisation, as before events (older tests)
@@ -258,6 +266,10 @@ function createApi({ store, now = Date.now, adminKey = '', adminEmails = [], ver
       if (parts[0] === 'auth' && parts[1] === 'code' && !parts[2] && method === 'POST') r = await authCode(body);
       if (parts[0] === 'auth' && parts[1] === 'code' && parts[2] === 'verify' && method === 'POST') r = await authCodeVerify(body);
       if (parts[0] === 'invite' && parts[1] && parts.length <= 3) r = await invite(method, parts[1], parts[2], body, h);
+      // any page, as it opens (api-base.js): wake the learning database, which sleeps after an hour unused and takes up to a minute to
+      // wake, so it's up by the time someone has signed in or a page asks it something (22 November 2026). Anyone may ask, so it
+      // touches the database at most once every 5 minutes per instance: it can keep it awake, never make it work.
+      if (parts[0] === 'wake' && parts.length === 1) r = await wakeLearn();
       if (parts[0] === 'me' && method === 'GET') r = await me(h);
       if (parts[0] === 'home' && parts.length === 1) r = await assignments.home(method, h, body);
       if (parts[0] === 'event' && parts.length >= 2 && parts.length <= 3) r = await assignments.eventPage(method, parts[1], parts[2], h, body);

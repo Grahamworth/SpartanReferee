@@ -144,3 +144,11 @@ export function bestAttempt(attempts, exercise, mode, bests = {}) {
   if (server) all.push(server);
   return all.sort((x, y) => y.reps - x.reps || x.at - y.at)[0] || null;
 }
+
+// Every page, as it opens, wakes the learning database (it sleeps after an hour unused and takes up to a minute to wake), so it's
+// up by the time you've signed in or a page asks it something. At most once every 5 minutes from this phone (22 November 2026).
+if (typeof window !== 'undefined') {
+  let due = true;
+  try { due = Date.now() - (Number(localStorage.getItem('sr_woke')) || 0) > 5 * 60 * 1000; if (due) localStorage.setItem('sr_woke', String(Date.now())); } catch { /* private mode: wake anyway */ }
+  if (due) call('wake').catch(() => {});
+}

@@ -60,17 +60,18 @@ export async function viaCache(path, get) {
     const d = await fromCopy('offline'); if (d !== null) return d;
     throw notSaved();
   }
-  const net = get().then(async (data) => { await keep(path, data); offlineBar(null); return data; });
+  let shown = false; // a copy was shown while waiting: when the answer comes, the bar offers the latest instead of just going
+  const net = get().then(async (data) => { await keep(path, data); if (shown) freshBar(); else offlineBar(null); return data; });
   let timer;
   const slow = new Promise((res) => { timer = setTimeout(res, 8000, 'slow'); });
   try {
     const first = await Promise.race([net, copy.then((k) => (k ? slow : net))]).finally(() => clearTimeout(timer));
     if (first !== 'slow') return first;
-    net.catch(() => {}); // it may still come: it updates the copy
-    return await fromCopy('slow');
+    net.catch(() => {}); // it may still come: it updates the copy, and the bar offers it
+    const d = await fromCopy('slow'); shown = d !== null; return d;
   } catch (e) {
     if (e.status && e.status < 500) throw e; // the server answered: no
-    const d = await fromCopy(e.status ? 'server' : 'offline'); if (d !== null) return d;
+    const d = await fromCopy(e.status === 503 && /waking/i.test(e.message) ? 'waking' : e.status ? 'server' : 'offline'); if (d !== null) return d;
     throw e.status ? e : notSaved();
   }
 }
@@ -102,7 +103,7 @@ export function flush(send) {
 
 // ---------------------------------------------------------------- the bar at the top
 let barAt = null;
-/** at: when the copy shown was kept (null: hide the bar); why: offline, slow or server */
+/** at: when the copy shown was kept (null: hide the bar); why: offline, slow (still loading: often the database waking), waking or server */
 export function offlineBar(at, why = 'offline') {
   if (typeof document === 'undefined') return;
   let bar = document.getElementById('offlineBar');
@@ -114,10 +115,21 @@ export function offlineBar(at, why = 'offline') {
   }
   const when = barAt ? new Date(barAt).toLocaleString((window.SR_I18N && SR_I18N.lang) || undefined, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '';
   bar.textContent = !when ? tr('You\'re offline. Pages saved on this phone still open.')
-    : why === 'slow' ? tr('The connection is slow: showing the copy saved on this phone ({when}).', { when })
+    : why === 'slow' ? tr('Still loading (the server may be waking up after a quiet spell): showing the copy saved on this phone ({when}).', { when })
+      : why === 'waking' ? tr('The server is waking up after a quiet spell: showing the copy saved on this phone ({when}) for now.', { when })
       : why === 'server' ? tr('The server isn\'t answering: showing the copy saved on this phone ({when}).', { when })
         : tr('You\'re offline: showing the copy saved on this phone ({when}).', { when });
   bar.hidden = false;
+}
+/** the answer came after all: the bar becomes a button to see the latest (the page isn't redrawn under someone's thumb) */
+function freshBar() {
+  if (typeof document === 'undefined') return;
+  const bar = document.getElementById('offlineBar'); if (!bar || bar.hidden) return;
+  barAt = null; bar.textContent = '';
+  const b = document.createElement('button'); b.type = 'button'; b.className = 'freshBtn';
+  b.textContent = tr('Up to date again: tap to see the latest.');
+  b.addEventListener('click', () => { bar.hidden = true; if (location.pathname.includes('/learn')) dispatchEvent(new Event('learn:redraw')); else location.reload(); });
+  bar.append(b);
 }
 if (typeof window !== 'undefined') {
   addEventListener('offline', () => offlineBar(0));
