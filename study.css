@@ -6,21 +6,29 @@
    - Sentence-case headings in Barlow, not italic capitals; rounder cards; a little more space between lines.
    Loaded after headjudge.css (and learn.css), on home.html, learn/ and offline.html only. */
 :root {
-  --brand: #e2231a; --bg: #111418; --panel: #1a1e24; --text: #eef1f4; --muted: #a5adb8; --line: #333a43;
-  --primary: #3566d6; --on-primary: #ffffff; --primary-text: #92b2ff; --accent: #3ddc97; --bad: #ff8a80; --warn: #f2b33d;
-  --soft: #232933; --display: Barlow, -apple-system, "Segoe UI", system-ui, sans-serif; color-scheme: dark;
+  --brand: #e2231a; --bg: #0b1018; --panel: #131a24; --text: #eef2f7; --muted: #9ba7b7; --line: #283344;
+  --primary: #2f6bff; --on-primary: #ffffff; --primary-text: #8fb4ff; --accent: #3ddc97; --bad: #ff8a80; --warn: #f2b33d;
+  --soft: #1a2230; --display: Barlow, -apple-system, "Segoe UI", system-ui, sans-serif; color-scheme: dark;
+  --grad: linear-gradient(135deg, #12b4ff 0%, #2f6bff 55%, #6a4dff 100%); --glow: 0 4px 16px rgba(47, 107, 255, .32);
+  --tint: rgba(47, 107, 255, .14); --ring: 0 0 0 3px rgba(25, 184, 255, .25);
+  --shadow: inset 0 1px 0 rgba(255, 255, 255, .03), 0 8px 24px rgba(0, 0, 0, .28);
+  --wash: radial-gradient(1100px 520px at 0% -8%, rgba(47, 107, 255, .11), transparent 60%), radial-gradient(800px 480px at 105% 0%, rgba(140, 80, 255, .08), transparent 60%);
 }
 @media (prefers-color-scheme: light) {
   :root:not([data-look="dark"]) {
-    --bg: #f4f5f7; --panel: #ffffff; --text: #1b1f24; --muted: #59626e; --line: #d8dce2;
-    --primary: #2457c5; --on-primary: #ffffff; --primary-text: #1f4fb8; --accent: #17784a; --bad: #b3261e; --warn: #8a5300;
-    --soft: #eef1f5; color-scheme: light;
+    --bg: #eef2f7; --panel: #ffffff; --text: #141a22; --muted: #556070; --line: #dbe2eb;
+    --primary: #2457e6; --on-primary: #ffffff; --primary-text: #1f4fd0; --accent: #17784a; --bad: #b3261e; --warn: #8a5300;
+    --soft: #f3f6fa; color-scheme: light; --tint: rgba(36, 87, 230, .09); --glow: 0 4px 14px rgba(36, 87, 230, .25);
+    --shadow: 0 1px 2px rgba(20, 30, 50, .05), 0 6px 20px rgba(20, 30, 50, .06);
+    --wash: radial-gradient(1100px 520px at 0% -8%, rgba(47, 107, 255, .08), transparent 60%), radial-gradient(800px 480px at 105% 0%, rgba(140, 80, 255, .05), transparent 60%);
   }
 }
 :root[data-look="light"] {
-  --bg: #f4f5f7; --panel: #ffffff; --text: #1b1f24; --muted: #59626e; --line: #d8dce2;
-  --primary: #2457c5; --on-primary: #ffffff; --primary-text: #1f4fb8; --accent: #17784a; --bad: #b3261e; --warn: #8a5300;
-  --soft: #eef1f5; color-scheme: light;
+  --bg: #eef2f7; --panel: #ffffff; --text: #141a22; --muted: #556070; --line: #dbe2eb;
+  --primary: #2457e6; --on-primary: #ffffff; --primary-text: #1f4fd0; --accent: #17784a; --bad: #b3261e; --warn: #8a5300;
+  --soft: #f3f6fa; color-scheme: light; --tint: rgba(36, 87, 230, .09); --glow: 0 4px 14px rgba(36, 87, 230, .25);
+  --shadow: 0 1px 2px rgba(20, 30, 50, .05), 0 6px 20px rgba(20, 30, 50, .06);
+  --wash: radial-gradient(1100px 520px at 0% -8%, rgba(47, 107, 255, .08), transparent 60%), radial-gradient(800px 480px at 105% 0%, rgba(140, 80, 255, .05), transparent 60%);
 }
 
 body { line-height: 1.6; }
@@ -151,3 +159,72 @@ html[dir="rtl"] .events svg { transform: scaleX(-1); }
 /* Manage Events: the sync line for admins (learn/events.js) */
 .syncBox { padding: 10px 12px; margin: 10px 0 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--soft); }
 .syncBox p { margin: 0 0 6px; }
+
+/* The modern look (22 November 2026), in the style of the Referee Assistant's chat: a soft blue wash behind the page, rounder cards
+   that float a little, blue gradient buttons that glow, light tinted buttons for the second choice, pill-shaped tags, inputs that
+   light up blue when you're in them, and the official Spartan helmet in red on black at the top. */
+body { background: var(--wash), var(--bg); background-repeat: no-repeat; }
+.top { background: color-mix(in srgb, var(--panel) 90%, transparent); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  border-bottom: 2px solid; border-image: linear-gradient(90deg, var(--brand), #ff7a3d 30%, color-mix(in srgb, var(--brand) 25%, transparent) 70%, transparent) 1; }
+.mark:not(#company)::before { width: 1.3em; height: 1.3em; vertical-align: -.28em; border-radius: 50%; background: url(icons/spartanreferee/logo-red.png) center / contain no-repeat;
+  box-shadow: 0 0 0 1px rgba(226, 35, 26, .35), 0 0 12px rgba(226, 35, 26, .25); }
+h1 { font-weight: 800; letter-spacing: -.01em; }
+.card { border-radius: 18px; box-shadow: var(--shadow); }
+.card.narrow { border-radius: 18px; }
+@media (max-width: 640px) { .card { padding: 18px 16px; border-radius: 16px; } }
+
+/* buttons: the main action in the blue gradient, the second choice tinted, small ones soft */
+.primary, .practiceBtn, .iconBtn, .small.primaryish, .chip.head, .chip.now, .demoTag { background: var(--grad); border-color: transparent; color: #fff; }
+.primary, .practiceBtn { border-radius: 14px; box-shadow: var(--glow); font: 700 1.08rem var(--display); text-transform: none; font-style: normal; letter-spacing: .01em; transition: filter .15s, box-shadow .15s, transform .1s; }
+.primary:hover:not(:disabled), .practiceBtn:hover:not(:disabled) { filter: brightness(1.08); box-shadow: 0 6px 22px rgba(47, 107, 255, .42); }
+.primary:active:not(:disabled), .practiceBtn:active:not(:disabled), .ghost:active, .btnLink:active, .small:active { transform: translateY(1px); }
+.iconBtn { box-shadow: var(--glow); }
+.ghost { border-radius: 14px; border: 1px solid var(--line); background: var(--soft); font: 700 1.08rem var(--display); text-transform: none; font-style: normal; }
+.ghost:hover:not(:disabled) { border-color: var(--primary); }
+.btnLink { border: 1px solid color-mix(in srgb, var(--primary) 45%, transparent); background: var(--tint); color: var(--primary-text); border-radius: 12px; }
+.btnLink:hover { border-color: var(--primary); background: color-mix(in srgb, var(--primary) 20%, transparent); }
+.small, button.small { border-radius: 10px; background: var(--soft); border-color: var(--line); }
+.small:hover:not(:disabled) { border-color: var(--primary); }
+.small.primaryish { box-shadow: var(--glow); }
+.menuBtn, .lookBtn, .profileBtn { background: var(--soft); border-color: var(--line); }
+.menuBtn { border-radius: 12px; }
+.top.menuOpen .menuBtn { background: var(--tint); color: var(--primary-text); border-color: var(--primary); }
+.top.menuOpen .topRight .langPick { border-radius: 12px; }
+
+/* typing: rounded boxes that glow blue while you're in them */
+input:not([type=color]):not([type=radio]):not([type=file]):not([type=checkbox]):not([type=range]), textarea, select { border-radius: 12px; background: var(--soft); transition: border-color .15s, box-shadow .15s; }
+input:not([type=color]):not([type=radio]):not([type=file]):not([type=checkbox]):not([type=range]):focus-visible, textarea:focus-visible, select:focus-visible { outline: none; border-color: #19b8ff; box-shadow: var(--ring); }
+.prefixed, .suffixed { border-radius: 12px; background: var(--soft); overflow: hidden; }
+.prefixed:focus-within, .suffixed:focus-within { outline: none; border-color: #19b8ff; box-shadow: var(--ring); }
+.prefixed input, .suffixed input, .prefixed input:focus-visible, .suffixed input:focus-visible, .asField textarea, .asField textarea:focus-visible { box-shadow: none; background: transparent; border-radius: 0; }
+input[type=checkbox], input[type=radio] { accent-color: var(--primary); }
+
+/* tags, bars, lists and the small blocks the pages are built from */
+.chip, .badge, .demoTag { border-radius: 999px; }
+.badge { padding: 2px 10px; }
+.chip.head, .chip.now { box-shadow: 0 2px 8px rgba(47, 107, 255, .3); }
+.bar { height: 8px; border-radius: 999px; border: 0; background: var(--soft); }
+.bar > span { background: var(--grad); border-radius: 999px; }
+.ltMeter { border-radius: 999px; }
+.langGrid button { border-radius: 12px; background: var(--soft); transition: border-color .15s, background .15s; }
+.langGrid button.suggested { border-color: var(--primary); background: var(--tint); }
+.toc a { border-radius: 999px; background: var(--soft); }
+.toc a:hover { border-color: var(--primary); }
+.homeProgs a, .myProgHead { border-radius: 14px; background: var(--soft); }
+.events a { border-radius: 12px; }
+.tile { border-radius: 16px; box-shadow: var(--shadow); }
+.tile2 { border-radius: 14px; background: var(--soft); }
+.tile2 b { font-style: normal; font-family: var(--display); font-weight: 800; }
+.lpFig, .previewBanner, .syncBox, .quote, .sums, .serverRow, .trackCard, .totals > div, .finalSet { border-radius: 14px; }
+.trackCard canvas { border-radius: 10px; }
+.customer { border-radius: 16px; }
+.segments { border-radius: 12px; }
+.toast { border-radius: 999px; box-shadow: 0 10px 30px rgba(0, 0, 0, .3); }
+.drop { border-radius: 14px; background: var(--soft); }
+.colour input[type=color] { border-radius: 12px 0 0 12px; }
+.demoBar { background: color-mix(in srgb, var(--panel) 70%, transparent); }
+.learnNav a.on { color: var(--text); border-image: var(--grad) 1; }
+.loader .spin { border-top-color: #19b8ff; }
+.tick.done { background: var(--accent); }
+@media (prefers-reduced-motion: reduce) { .primary, .practiceBtn, .ghost, .btnLink, .small { transition: none; } }
+.segments input:checked + span { background: var(--grad); color: #fff; }

@@ -4,25 +4,33 @@
    The pictures (cameras, recordings, the AI judge over them) stay on black whatever the look.
    The colours are study.css's, copied: this page is also served by the camera servers, which don't have study.css. */
 :root {
-  --brand: #e2231a; --bg: #111418; --panel: #1a1e24; --text: #eef1f4; --muted: #a5adb8; --line: #333a43;
-  --primary: #3566d6; --on-primary: #ffffff; --primary-text: #92b2ff; --accent: #3ddc97; --bad: #ff8a80; --warn: #f2b33d;
-  --soft: #232933; --display: Barlow, -apple-system, "Segoe UI", system-ui, sans-serif; color-scheme: dark;
+  --brand: #e2231a; --bg: #0b1018; --panel: #131a24; --text: #eef2f7; --muted: #9ba7b7; --line: #283344;
+  --primary: #2f6bff; --on-primary: #ffffff; --primary-text: #8fb4ff; --accent: #3ddc97; --bad: #ff8a80; --warn: #f2b33d;
+  --soft: #1a2230; --display: Barlow, -apple-system, "Segoe UI", system-ui, sans-serif; color-scheme: dark;
+  --grad: linear-gradient(135deg, #12b4ff 0%, #2f6bff 55%, #6a4dff 100%); --glow: 0 4px 16px rgba(47, 107, 255, .32);
+  --tint: rgba(47, 107, 255, .14); --ring: 0 0 0 3px rgba(25, 184, 255, .25);
+  --shadow: inset 0 1px 0 rgba(255, 255, 255, .03), 0 8px 24px rgba(0, 0, 0, .28);
+  --wash: radial-gradient(1100px 520px at 0% -8%, rgba(47, 107, 255, .11), transparent 60%), radial-gradient(800px 480px at 105% 0%, rgba(140, 80, 255, .08), transparent 60%);
   /* the review's own: a button's face and edge, a field, the phone's tab bar, a shadow */
-  --btn: #232933; --btn-line: #444c57; --btn-hover: #2c333e; --field: #14181d; --bar: #15191e; --lift: 0 0 0 transparent;
+  --btn: #1a2230; --btn-line: #334055; --btn-hover: #222c3c; --field: #0f151e; --bar: #121821; --lift: 0 0 0 transparent;
   --ink: var(--panel); --green: var(--accent); --amber: var(--warn);
 }
 @media (prefers-color-scheme: light) {
   :root:not([data-look="dark"]) {
-    --bg: #f4f5f7; --panel: #ffffff; --text: #1b1f24; --muted: #59626e; --line: #d8dce2;
-    --primary: #2457c5; --on-primary: #ffffff; --primary-text: #1f4fb8; --accent: #17784a; --bad: #b3261e; --warn: #8a5300;
-    --soft: #eef1f5; color-scheme: light;
+    --bg: #eef2f7; --panel: #ffffff; --text: #141a22; --muted: #556070; --line: #dbe2eb;
+    --primary: #2457e6; --on-primary: #ffffff; --primary-text: #1f4fd0; --accent: #17784a; --bad: #b3261e; --warn: #8a5300;
+    --soft: #f3f6fa; color-scheme: light; --tint: rgba(36, 87, 230, .09); --glow: 0 4px 14px rgba(36, 87, 230, .25);
+    --shadow: 0 1px 2px rgba(20, 30, 50, .05), 0 6px 20px rgba(20, 30, 50, .06);
+    --wash: radial-gradient(1100px 520px at 0% -8%, rgba(47, 107, 255, .08), transparent 60%), radial-gradient(800px 480px at 105% 0%, rgba(140, 80, 255, .05), transparent 60%);
     --btn: #ffffff; --btn-line: #c9cfd7; --btn-hover: #eef1f5; --field: #ffffff; --bar: #ffffff; --lift: 0 1px 2px rgba(20, 30, 50, .06);
   }
 }
 :root[data-look="light"] {
-  --bg: #f4f5f7; --panel: #ffffff; --text: #1b1f24; --muted: #59626e; --line: #d8dce2;
-  --primary: #2457c5; --on-primary: #ffffff; --primary-text: #1f4fb8; --accent: #17784a; --bad: #b3261e; --warn: #8a5300;
-  --soft: #eef1f5; color-scheme: light;
+  --bg: #eef2f7; --panel: #ffffff; --text: #141a22; --muted: #556070; --line: #dbe2eb;
+  --primary: #2457e6; --on-primary: #ffffff; --primary-text: #1f4fd0; --accent: #17784a; --bad: #b3261e; --warn: #8a5300;
+  --soft: #f3f6fa; color-scheme: light; --tint: rgba(36, 87, 230, .09); --glow: 0 4px 14px rgba(36, 87, 230, .25);
+  --shadow: 0 1px 2px rgba(20, 30, 50, .05), 0 6px 20px rgba(20, 30, 50, .06);
+  --wash: radial-gradient(1100px 520px at 0% -8%, rgba(47, 107, 255, .08), transparent 60%), radial-gradient(800px 480px at 105% 0%, rgba(140, 80, 255, .05), transparent 60%);
   --btn: #ffffff; --btn-line: #c9cfd7; --btn-hover: #eef1f5; --field: #ffffff; --bar: #ffffff; --lift: 0 1px 2px rgba(20, 30, 50, .06);
 }
 * { box-sizing: border-box; }

@@ -6,19 +6,19 @@
    reading in sunlight (#stage, .hud and the whole-screen tick or cross, below). The names are the race-day ones: --black is the page,
    --ink a card, --white the writing. */
 :root {
-  --black: #111418;
-  --ink: #1a1e24;
-  --steel: #232933;
-  --line: #333a43;
-  --white: #eef1f4;
-  --muted: #a5adb8;
+  --black: #0b1018;
+  --ink: #131a24;
+  --steel: #1a2230;
+  --line: #283344;
+  --white: #eef2f7;
+  --muted: #9ba7b7;
   --red: #e2231a;
   --red-deep: #a8150f;
   --good: #22c55e;
   --warn: #ffb020;
-  --primary: #3566d6;
+  --primary: #2f6bff;
   --on-primary: #ffffff;
-  --primary-text: #92b2ff;
+  --primary-text: #8fb4ff;
   --bad: #ff8a80;
   --display: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", Impact, sans-serif;
   --body: "Barlow", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -27,13 +27,13 @@
 }
 @media (prefers-color-scheme: light) {
   :root:not([data-look="dark"]) {
-    --black: #f4f5f7; --ink: #ffffff; --steel: #eef1f5; --line: #d8dce2; --white: #1b1f24; --muted: #59626e;
-    --primary: #2457c5; --primary-text: #1f4fb8; --bad: #b3261e; --warn: #8a5300; color-scheme: light;
+    --black: #eef2f7; --ink: #ffffff; --steel: #f3f6fa; --line: #dbe2eb; --white: #141a22; --muted: #556070;
+    --primary: #2457e6; --primary-text: #1f4fd0; --bad: #b3261e; --warn: #8a5300; color-scheme: light;
   }
 }
 :root[data-look="light"] {
-  --black: #f4f5f7; --ink: #ffffff; --steel: #eef1f5; --line: #d8dce2; --white: #1b1f24; --muted: #59626e;
-  --primary: #2457c5; --primary-text: #1f4fb8; --bad: #b3261e; --warn: #8a5300; color-scheme: light;
+  --black: #eef2f7; --ink: #ffffff; --steel: #f3f6fa; --line: #dbe2eb; --white: #141a22; --muted: #556070;
+  --primary: #2457e6; --primary-text: #1f4fd0; --bad: #b3261e; --warn: #8a5300; color-scheme: light;
 }
 /* the race-day look, over the camera: always dark. As is the whole judge inside a camera or an analysis in the video review. */
 #stage, .hud, .done-screen, .rep-flash, .loader, .exit-btn, .mute-btn, html:root.embedded, html:root.analysis {
