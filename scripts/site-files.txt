@@ -33,6 +33,7 @@ icons/spartanreferee/icon-180.png
 icons/spartanreferee/icon-192.png
 icons/spartanreferee/icon-512.png
 icons/spartanreferee/icon-maskable-512.png
+icons/spartanreferee/logo-red.png
 index.html
 judge-gate.js
 judge.html

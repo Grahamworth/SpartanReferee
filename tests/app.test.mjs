@@ -134,3 +134,6 @@ test('lesson progress made offline waits, the latest per lesson, and goes when t
   assert.deepStrictEqual(sent.map((x) => x.body), [{ slide: 5 }, {}]);
   assert.strictEqual(o.waiting(), 0, 'sent, or refused by the server and dropped');
 });
+test('every picture the shared stylesheets use is deployed (the red helmet at the top, 22 November 2026)', () => {
+  for (const f of ['headjudge.css', 'study.css']) for (const [, u] of read(f).matchAll(/url\(([^)'"]+)\)/g)) assert.ok(siteFiles.includes(u), `${f}: ${u}`);
+});
