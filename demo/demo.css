@@ -131,3 +131,13 @@ body.mktOn { padding-bottom: 24px; }
 .photo figcaption { position: absolute; left: 0; right: 0; bottom: 0; display: grid; padding: 18px 10px 8px; color: #fff; background: linear-gradient(transparent, rgba(0, 0, 0, .78)); line-height: 1.25; }
 .photo figcaption b { font: 800 1rem var(--display); }
 .photo figcaption span { font-size: .85rem; opacity: .9; }
+/* the executive summary at the top */
+.exec { border: 1px solid color-mix(in srgb, var(--brand) 45%, var(--line)); background: linear-gradient(160deg, color-mix(in srgb, var(--brand) 9%, var(--panel)), var(--panel) 55%); }
+.exec .kicker { color: #ff7a3d; }
+.exec h2 { margin: 0 0 10px; font-size: clamp(1.4rem, 5vw, 1.7rem); }
+.execList { margin: 0; display: grid; gap: 10px; }
+.execList div { display: grid; grid-template-columns: 7.2em minmax(0, 1fr); gap: 10px; padding-top: 10px; border-top: 1px solid var(--line); }
+.execList div:first-child { border-top: 0; padding-top: 0; }
+.execList dt { font-weight: 800; color: var(--primary-text); }
+.execList dd { margin: 0; line-height: 1.5; }
+@media (max-width: 420px) { .execList div { grid-template-columns: minmax(0, 1fr); gap: 2px; } }
